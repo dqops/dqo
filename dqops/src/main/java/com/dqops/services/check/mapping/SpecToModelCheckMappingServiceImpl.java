@@ -725,6 +725,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setQualityDimension(checkSpec.getEffectiveDataQualityDimension());
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataGroupingConfiguration(checkSpec.getDataGrouping());
+        checkModel.setAlwaysCollectErrorSamples(checkSpec.isAlwaysCollectErrorSamples());
         checkModel.setCheckSpec(checkSpec);
         checkModel.setCheckTarget(CheckTargetModel.fromCheckTarget(checkTarget));
 

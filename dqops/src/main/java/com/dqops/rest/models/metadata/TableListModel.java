@@ -90,6 +90,18 @@ public class TableListModel {
     private String filter;
 
     /**
+     * Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks.
+     */
+    @JsonPropertyDescription("Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks.")
+    private boolean doNotCollectErrorSamplesInProfiling;
+
+    /**
+     * Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor.
+     */
+    @JsonPropertyDescription("Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor.")
+    private boolean alwaysCollectErrorSamplesInMonitoring;
+
+    /**
      * Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.
      */
     @JsonPropertyDescription("Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.")
@@ -251,6 +263,8 @@ public class TableListModel {
             setTarget(tableSpec.getPhysicalTableName());
             setLabels(tableSpec.getLabels() != null ? tableSpec.getLabels().toArray(String[]::new) : null);
             setDisabled(tableSpec.isDisabled());
+            setDoNotCollectErrorSamplesInProfiling(tableSpec.isDoNotCollectErrorSamplesInProfiling());
+            setAlwaysCollectErrorSamplesInMonitoring(tableSpec.isAlwaysCollectErrorSamplesInMonitoring());
             setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
@@ -323,6 +337,8 @@ public class TableListModel {
             setPriority(tableSpec.getPriority());
             setOwner(tableSpec.getOwner());
             setFileFormat(tableSpec.getFileFormat());
+            setDoNotCollectErrorSamplesInProfiling(tableSpec.isDoNotCollectErrorSamplesInProfiling());
+            setAlwaysCollectErrorSamplesInMonitoring(tableSpec.isAlwaysCollectErrorSamplesInMonitoring());
             setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
@@ -387,6 +403,8 @@ public class TableListModel {
         targetTableSpec.setDisabled(this.isDisabled());
         targetTableSpec.setStage(this.getStage());
         targetTableSpec.setFilter(this.getFilter());
+        targetTableSpec.setDoNotCollectErrorSamplesInProfiling(targetTableSpec.isDoNotCollectErrorSamplesInProfiling());
+        targetTableSpec.setAlwaysCollectErrorSamplesInMonitoring(targetTableSpec.isAlwaysCollectErrorSamplesInMonitoring());
         targetTableSpec.setPriority(this.getPriority());
         targetTableSpec.setOwner(this.getOwner());
         targetTableSpec.setFileFormat(this.getFileFormat());

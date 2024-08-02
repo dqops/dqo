@@ -19259,6 +19259,10 @@
           "type" : "string",
           "description" : "The name of a data grouping configuration defined at a table that should be used for this check."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "check_target" : {
           "type" : "string",
           "description" : "Type of the check's target (column, table).",
@@ -19290,13 +19294,13 @@
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
         },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
+        },
         "check_hash" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
-        },
-        "similar_profiling_check" : {
-          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."
@@ -20306,6 +20310,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
           "$ref" : "#/definitions/ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec"
@@ -20378,6 +20386,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
@@ -20452,6 +20464,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
           "$ref" : "#/definitions/ColumnAccuracyTotalMinMatchPercentSensorParametersSpec"
@@ -20525,6 +20541,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
           "$ref" : "#/definitions/ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec"
@@ -20597,6 +20617,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
@@ -21127,6 +21151,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sum sensor parameters.",
           "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -21183,6 +21211,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sum sensor parameters.",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -21238,6 +21270,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sum sensor parameters.",
@@ -21413,6 +21449,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sum sensor parameters.",
           "$ref" : "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -21468,6 +21508,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sum sensor parameters.",
@@ -21564,6 +21608,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sum sensor parameters.",
@@ -22177,6 +22225,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
@@ -22302,6 +22354,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnDateInRangePercentSensorParametersSpec"
@@ -22376,6 +22432,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -22601,6 +22661,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
@@ -22656,6 +22720,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -22713,6 +22781,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -22768,6 +22840,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -22825,6 +22901,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -22880,6 +22960,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -22937,6 +23021,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -22992,6 +23080,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -23049,6 +23141,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -23104,6 +23200,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -23161,6 +23261,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -23216,6 +23320,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -23273,6 +23381,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -23328,6 +23440,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -23385,6 +23501,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDuplicateCountSensorParametersSpec"
@@ -23440,6 +23560,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -23497,6 +23621,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected numeric values that must be present in the column.",
           "$ref" : "#/definitions/ColumnNumericExpectedNumbersInUseCountSensorParametersSpec"
@@ -23552,6 +23680,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected text values that must be present in the column.",
@@ -23609,6 +23741,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected most popular text values that should be found in the column. The second parameter is 'top', which is the limit of the most popular column values to find in the tested column.",
           "$ref" : "#/definitions/ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec"
@@ -23665,6 +23801,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnBoolFalsePercentSensorParametersSpec"
@@ -23720,6 +23860,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -23817,6 +23961,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec"
@@ -23906,6 +24054,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query",
@@ -24023,6 +24175,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidEmailFormatCountSensorParametersSpec"
@@ -24078,6 +24234,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24135,6 +24295,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec"
@@ -24190,6 +24354,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24247,6 +24415,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericInvalidLatitudeCountSensorParametersSpec"
@@ -24303,6 +24475,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericInvalidLongitudeCountSensorParametersSpec"
@@ -24358,6 +24534,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24521,6 +24701,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -24576,6 +24760,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24633,6 +24821,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -24688,6 +24880,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24745,6 +24941,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -24800,6 +25000,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24857,6 +25061,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -24912,6 +25120,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24969,6 +25181,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -25024,6 +25240,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25081,6 +25301,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -25136,6 +25360,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25193,6 +25421,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -25248,6 +25480,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25305,6 +25541,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -25360,6 +25600,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25417,6 +25661,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMinSensorParametersSpec"
@@ -25472,6 +25720,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25735,6 +25987,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNegativeCountSensorParametersSpec"
@@ -25790,6 +26046,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25847,6 +26107,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNonNegativeCountSensorParametersSpec"
@@ -25902,6 +26166,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25959,6 +26227,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -26015,21 +26287,25 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNotNullsPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set percentage of rows with null values in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
         }
       }
     },
@@ -26070,6 +26346,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26127,6 +26407,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -26182,6 +26466,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26239,6 +26527,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -26294,6 +26586,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26351,6 +26647,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsCountSensorParametersSpec"
@@ -26396,7 +26696,7 @@
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_not_nulls_percent" : {
-          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
         "daily_empty_column_found" : {
@@ -26448,7 +26748,7 @@
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_partition_not_nulls_percent" : {
-          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
         "daily_partition_empty_column_found" : {
@@ -26496,7 +26796,7 @@
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_not_nulls_percent" : {
-          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
         "monthly_empty_column_found" : {
@@ -26528,7 +26828,7 @@
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_partition_not_nulls_percent" : {
-          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
         "monthly_partition_empty_column_found" : {
@@ -26663,6 +26963,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -26708,7 +27012,7 @@
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "profile_not_nulls_percent" : {
-          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage.",
+          "description" : "Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
         "profile_empty_column_found" : {
@@ -26792,6 +27096,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNumberAboveMaxValueCountSensorParametersSpec"
@@ -26847,6 +27155,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26904,6 +27216,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNumberBelowMinValueCountSensorParametersSpec"
@@ -26959,6 +27275,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27016,6 +27336,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected values that are compared to the values in the tested numeric column.",
           "$ref" : "#/definitions/ColumnNumericNumberFoundInSetPercentSensorParametersSpec"
@@ -27071,6 +27395,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28514,6 +28842,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPercentile10SensorParametersSpec"
@@ -28569,6 +28901,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28626,6 +28962,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPercentile75SensorParametersSpec"
@@ -28681,6 +29021,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28738,6 +29082,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPercentileSensorParametersSpec"
@@ -28793,6 +29141,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28859,6 +29211,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentSensorParametersSpec"
@@ -28923,6 +29279,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28989,6 +29349,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentSensorParametersSpec"
@@ -29053,6 +29417,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
@@ -29279,6 +29647,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPopulationStddevSensorParametersSpec"
@@ -29334,6 +29706,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -29569,6 +29945,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSampleStddevSensorParametersSpec"
@@ -29624,6 +30004,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -29716,6 +30100,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters for a column exists sensor",
@@ -29833,6 +30221,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Column data type hash sensor parameters",
           "$ref" : "#/definitions/ColumnColumnTypeHashSensorParametersSpec"
@@ -29940,6 +30332,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL aggregate expression that is evaluated on a column",
           "$ref" : "#/definitions/ColumnSqlAggregatedExpressionSensorParametersSpec"
@@ -30008,6 +30404,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row, using a {column} placeholder to reference the current column.",
@@ -30078,6 +30478,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row for the given column, using a {column} placeholder to reference the current column.",
           "$ref" : "#/definitions/ColumnSqlConditionPassedPercentSensorParametersSpec"
@@ -30146,6 +30550,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL SELECT statement that queries a log table to get a result of a custom query that retrieves results from other data quality libraries.",
@@ -30331,6 +30739,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -30386,6 +30798,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -30443,6 +30859,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -30498,6 +30918,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -30555,6 +30979,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -30611,6 +31039,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -30666,6 +31098,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -30811,6 +31247,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected values that are compared to the values in the tested text column.",
           "$ref" : "#/definitions/ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec"
@@ -30866,6 +31306,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -30923,6 +31367,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec"
@@ -30978,6 +31426,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31035,6 +31487,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec"
@@ -31091,6 +31547,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextLengthInRangePercentSensorParametersSpec"
@@ -31146,6 +31606,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31217,6 +31681,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec"
@@ -31272,6 +31740,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31329,6 +31801,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextMaxLengthSensorParametersSpec"
@@ -31385,6 +31861,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextMeanLengthSensorParametersSpec"
@@ -31440,6 +31920,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31585,6 +32069,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec"
@@ -31640,6 +32128,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31697,6 +32189,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextParsableToBooleanPercentSensorParametersSpec"
@@ -31752,6 +32248,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31809,6 +32309,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextParsableToFloatPercentSensorParametersSpec"
@@ -31864,6 +32368,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -32194,6 +32702,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextValidCountryCodePercentSensorParametersSpec"
@@ -32249,6 +32761,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -32306,6 +32822,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec"
@@ -32361,6 +32881,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -32835,6 +33359,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericValidLatitudePercentSensorParametersSpec"
@@ -32891,6 +33419,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericValidLongitudePercentSensorParametersSpec"
@@ -32946,6 +33478,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33118,6 +33654,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
@@ -33173,6 +33713,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33327,6 +33871,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
@@ -33382,6 +33930,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33492,6 +34044,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
@@ -33547,6 +34103,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33622,6 +34182,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
@@ -33677,6 +34241,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -34224,6 +34792,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "sensor_name" : {
           "type" : "string",
@@ -35429,6 +36001,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -37460,7 +38036,7 @@
         },
         "collect_error_samples" : {
           "type" : "boolean",
-          "description" : "Set the value to true to collect error samples for failed data quality checks."
+          "description" : "Set the value to true to collect error samples for failed data quality checks. Set the value to false to disable error sampling collection despite any other settings on the table or check level."
         },
         "dummy_execution" : {
           "type" : "boolean",
@@ -38430,6 +39006,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table.",
           "$ref" : "#/definitions/TableAccuracyTotalRowCountMatchPercentSensorParametersSpec"
@@ -38498,6 +39078,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Table availability sensor parameters",
@@ -38676,6 +39260,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Column count data quality sensor.",
@@ -39078,6 +39666,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Row count data quality sensor.",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -39437,6 +40029,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Max days since most recent event sensor parameters",
           "$ref" : "#/definitions/TableTimelinessDataFreshnessSensorParametersSpec"
@@ -39492,6 +40088,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Max days since most recent event sensor parameters",
@@ -39549,6 +40149,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Max number of days between event and ingestion sensor parameters",
           "$ref" : "#/definitions/TableTimelinessDataIngestionDelaySensorParametersSpec"
@@ -39604,6 +40208,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Min number of days between event and ingestion sensor parameters",
@@ -39714,6 +40322,14 @@
         "filter" : {
           "type" : "string",
           "description" : "SQL WHERE clause added to the sensor queries."
+        },
+        "do_not_collect_error_samples_in_profiling" : {
+          "type" : "boolean",
+          "description" : "Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks."
+        },
+        "always_collect_error_samples_in_monitoring" : {
+          "type" : "boolean",
+          "description" : "Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor."
         },
         "priority" : {
           "type" : "integer",
@@ -39969,6 +40585,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Partition reload lag sensor parameters",
           "$ref" : "#/definitions/TableTimelinessPartitionReloadLagSensorParametersSpec"
@@ -40112,6 +40732,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -40167,6 +40791,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -40224,6 +40852,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -40279,6 +40911,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -40336,6 +40972,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -40391,6 +41031,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -40448,6 +41092,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Row count sensor parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -40504,6 +41152,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Column count sensor parameters",
           "$ref" : "#/definitions/TableColumnCountSensorParametersSpec"
@@ -40559,6 +41211,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Column count sensor parameters",
@@ -40629,6 +41285,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Column list hash sensor parameters",
           "$ref" : "#/definitions/TableColumnListUnorderedHashSensorParametersSpec"
@@ -40685,6 +41345,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Column list and order sensor parameters",
           "$ref" : "#/definitions/TableColumnListOrderedHashSensorParametersSpec"
@@ -40740,6 +41404,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Column list and types sensor parameters",
@@ -40884,6 +41552,14 @@
           "type" : "string",
           "description" : "SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name."
         },
+        "do_not_collect_error_samples_in_profiling" : {
+          "type" : "boolean",
+          "description" : "Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks."
+        },
+        "always_collect_error_samples_in_monitoring" : {
+          "type" : "boolean",
+          "description" : "Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor."
+        },
         "timestamp_columns" : {
           "description" : "Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).",
           "$ref" : "#/definitions/TimestampColumnsSpec"
@@ -41003,6 +41679,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL aggregate expression that is evaluated on a table. Use an {alias} token to reference the tested table.",
           "$ref" : "#/definitions/TableSqlAggregatedExpressionSensorParametersSpec"
@@ -41071,6 +41751,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row.",
@@ -41141,6 +41825,10 @@
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row",
           "$ref" : "#/definitions/TableSqlConditionPassedPercentSensorParametersSpec"
@@ -41209,6 +41897,10 @@
         "data_grouping" : {
           "type" : "string",
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL SELECT statement that queries a log table to get a result of a custom query that retrieves results from other data quality libraries.",

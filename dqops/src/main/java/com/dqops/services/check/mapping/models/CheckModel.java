@@ -232,6 +232,13 @@ public class CheckModel implements Cloneable {
     private String dataGroupingConfiguration;
 
     /**
+     * Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.
+     */
+    @JsonPropertyDescription("Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean alwaysCollectErrorSamples;
+
+    /**
      * Type of the check's target (column, table).
      */
     @JsonPropertyDescription("Type of the check's target (column, table).")

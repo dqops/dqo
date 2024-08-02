@@ -16369,6 +16369,12 @@ definitions:
         type: "string"
         description: "The name of a data grouping configuration defined at a table\
           \ that should be used for this check."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       check_target:
         type: "string"
         description: "Type of the check's target (column, table)."
@@ -16397,12 +16403,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
@@ -17523,6 +17529,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters. Fill the parameters to provide\
           \ the name of the referenced table and the referenced column."
@@ -17605,6 +17617,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters. Fill the parameters to provide\
           \ the name of the referenced table and the referenced column."
@@ -17687,6 +17705,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters. Fill the parameters to provide\
           \ the name of the referenced table and the referenced column."
@@ -17769,6 +17793,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters. Fill the parameters to provide\
           \ the name of the referenced table and the referenced column."
@@ -17851,6 +17881,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters. Fill the parameters to provide\
           \ the name of the referenced table and the referenced column."
@@ -18435,6 +18471,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sum sensor parameters."
         $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -18505,6 +18547,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sum sensor parameters."
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -18575,6 +18623,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sum sensor parameters."
         $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
@@ -18809,6 +18863,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sum sensor parameters."
         $ref: "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -18879,6 +18939,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sum sensor parameters."
         $ref: "#/definitions/ColumnNullsNullsCountSensorParametersSpec"
@@ -19000,6 +19066,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sum sensor parameters."
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -19706,6 +19778,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "The sensor parameters for a sensor that returns a value that\
           \ identifies the detected type of column data: 1 - integers, 2 - floats,\
@@ -19864,6 +19942,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnDateInRangePercentSensorParametersSpec"
@@ -19941,6 +20025,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec"
@@ -20207,6 +20297,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "The sensor parameters for a sensor that returns a value that\
           \ identifies the detected type of column data: 1 - integers, 2 - floats,\
@@ -20274,6 +20370,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20335,6 +20437,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20396,6 +20504,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20457,6 +20571,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20518,6 +20638,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20579,6 +20705,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20640,6 +20772,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -20701,6 +20839,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -20762,6 +20906,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -20823,6 +20973,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -20884,6 +21040,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -20945,6 +21107,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -21006,6 +21174,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -21067,6 +21241,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDuplicateCountSensorParametersSpec"
@@ -21128,6 +21308,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnUniquenessDuplicatePercentSensorParametersSpec"
@@ -21189,6 +21375,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters that specify a list of expected\
           \ numeric values that must be present in the column."
@@ -21251,6 +21443,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters that specify a list of expected\
           \ text values that must be present in the column."
@@ -21313,6 +21511,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters that specify a list of expected\
           \ most popular text values that should be found in the column. The second\
@@ -21380,6 +21584,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnBoolFalsePercentSensorParametersSpec"
@@ -21441,6 +21651,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericIntegerInRangePercentSensorParametersSpec"
@@ -21546,6 +21762,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters with the name of the foreign table\
           \ and the column where the lookup is performed by running an outer join\
@@ -21644,6 +21866,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters with the name of the foreign table\
           \ and the column where the lookup is performed by running an outer join\
@@ -21772,6 +22000,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsInvalidEmailFormatCountSensorParametersSpec"
@@ -21833,6 +22067,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec"
@@ -21894,6 +22134,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec"
@@ -21955,6 +22201,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec"
@@ -22016,6 +22268,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericInvalidLatitudeCountSensorParametersSpec"
@@ -22077,6 +22335,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericInvalidLongitudeCountSensorParametersSpec"
@@ -22138,6 +22402,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsInvalidUuidFormatCountSensorParametersSpec"
@@ -22302,6 +22572,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -22363,6 +22639,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -22424,6 +22706,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -22485,6 +22773,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22546,6 +22840,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22607,6 +22907,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22668,6 +22974,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22729,6 +23041,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22790,6 +23108,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22851,6 +23175,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -22912,6 +23242,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -22973,6 +23309,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -23034,6 +23376,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -23095,6 +23443,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -23156,6 +23510,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -23217,6 +23577,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
@@ -23278,6 +23644,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
@@ -23339,6 +23711,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
@@ -23566,6 +23944,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNegativeCountSensorParametersSpec"
@@ -23627,6 +24011,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNegativePercentSensorParametersSpec"
@@ -23688,6 +24078,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNonNegativeCountSensorParametersSpec"
@@ -23749,6 +24145,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNonNegativePercentSensorParametersSpec"
@@ -23810,6 +24212,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -23871,21 +24279,27 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNotNullsPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ null values in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnNullPercentAnomalyStationaryCheckSpec:
     type: "object"
     properties:
@@ -23932,6 +24346,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -23993,6 +24413,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -24054,6 +24480,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -24115,6 +24547,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -24176,6 +24614,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -24237,6 +24681,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsCountSensorParametersSpec"
@@ -24289,11 +24739,9 @@ definitions:
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
       daily_not_nulls_percent:
-        description: "Detects incomplete columns that contain too few non-null values.\
-          \ Measures the percentage of rows that have non-null values. Raises a data\
-          \ quality issue when the percentage of non-null values is below min_percentage.\
-          \ Stores the most recent captured value for each day when the data quality\
-          \ check was evaluated."
+        description: "Detects columns that contain too many non-null values. Measures\
+          \ the percentage of rows that have non-null values. Raises a data quality\
+          \ issue when the percentage of non-null values is above max_percentage."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
       daily_empty_column_found:
         description: "Detects empty columns that contain only null values. Counts\
@@ -24353,9 +24801,9 @@ definitions:
           \ data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
       daily_partition_not_nulls_percent:
-        description: "Detects incomplete columns that contain too few non-null values.\
-          \ Measures the percentage of rows that have non-null values. Raises a data\
-          \ quality issue when the percentage of non-null values is below min_percentage.\
+        description: "Detects columns that contain too many non-null values. Measures\
+          \ the percentage of rows that have non-null values. Raises a data quality\
+          \ issue when the percentage of non-null values is above max_percentage.\
           \ Stores a separate data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
       daily_partition_empty_column_found:
@@ -24413,9 +24861,9 @@ definitions:
           \ recent check result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
       monthly_not_nulls_percent:
-        description: "Detects incomplete columns that contain too few non-null values.\
-          \ Measures the percentage of rows that have non-null values. Raises a data\
-          \ quality issue when the percentage of non-null values is below min_percentage.\
+        description: "Detects columns that contain too many non-null values. Measures\
+          \ the percentage of rows that have non-null values. Raises a data quality\
+          \ issue when the percentage of non-null values is above max_percentage.\
           \ Stores the most recent check result for each month when the data quality\
           \ check was evaluated."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
@@ -24456,9 +24904,9 @@ definitions:
           \ data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
       monthly_partition_not_nulls_percent:
-        description: "Detects incomplete columns that contain too few non-null values.\
-          \ Measures the percentage of rows that have non-null values. Raises a data\
-          \ quality issue when the percentage of non-null values is below min_percentage.\
+        description: "Detects columns that contain too many non-null values. Measures\
+          \ the percentage of rows that have non-null values. Raises a data quality\
+          \ issue when the percentage of non-null values is above max_percentage.\
           \ Stores a separate data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
       monthly_partition_empty_column_found:
@@ -24581,6 +25029,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -24629,9 +25083,9 @@ definitions:
           \ when the count of non-null values is below min_count."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
       profile_not_nulls_percent:
-        description: "Detects incomplete columns that contain too few non-null values.\
-          \ Measures the percentage of rows that have non-null values. Raises a data\
-          \ quality issue when the percentage of non-null values is below min_percentage."
+        description: "Detects columns that contain too many non-null values. Measures\
+          \ the percentage of rows that have non-null values. Raises a data quality\
+          \ issue when the percentage of non-null values is above max_percentage."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
       profile_empty_column_found:
         description: "Detects empty columns that contain only null values. Counts\
@@ -24717,6 +25171,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNumberAboveMaxValueCountSensorParametersSpec"
@@ -24779,6 +25239,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec"
@@ -24841,6 +25307,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNumberBelowMinValueCountSensorParametersSpec"
@@ -24903,6 +25375,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNumberBelowMinValuePercentSensorParametersSpec"
@@ -24965,6 +25443,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters that specify a list of expected\
           \ values that are compared to the values in the tested numeric column."
@@ -25033,6 +25517,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericNumberInRangePercentSensorParametersSpec"
@@ -26509,6 +26999,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPercentile10SensorParametersSpec"
@@ -26570,6 +27066,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPercentile25SensorParametersSpec"
@@ -26631,6 +27133,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPercentile75SensorParametersSpec"
@@ -26692,6 +27200,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPercentile90SensorParametersSpec"
@@ -26753,6 +27267,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPercentileSensorParametersSpec"
@@ -26814,6 +27334,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPiiContainsEmailPercentSensorParametersSpec"
@@ -26883,6 +27409,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPiiContainsIp4PercentSensorParametersSpec"
@@ -26952,6 +27484,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPiiContainsIp6PercentSensorParametersSpec"
@@ -27021,6 +27559,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Numerical value in range percent sensor parameters"
         $ref: "#/definitions/ColumnPiiContainsUsaPhonePercentSensorParametersSpec"
@@ -27090,6 +27634,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Numerical value in range percent sensor parameters"
         $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentSensorParametersSpec"
@@ -27359,6 +27909,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPopulationStddevSensorParametersSpec"
@@ -27420,6 +27976,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericPopulationVarianceSensorParametersSpec"
@@ -27625,6 +28187,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSampleStddevSensorParametersSpec"
@@ -27686,6 +28254,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSampleVarianceSensorParametersSpec"
@@ -27776,6 +28350,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters for a column exists sensor"
         $ref: "#/definitions/ColumnColumnExistsSensorParametersSpec"
@@ -27900,6 +28480,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column data type hash sensor parameters"
         $ref: "#/definitions/ColumnColumnTypeHashSensorParametersSpec"
@@ -28025,6 +28611,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL aggregate expression that\
           \ is evaluated on a column"
@@ -28101,6 +28693,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL condition (an expression\
           \ that returns true/false) which is evaluated on a each row, using a {column}\
@@ -28181,6 +28779,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL condition (an expression\
           \ that returns true/false) which is evaluated on a each row for the given\
@@ -28261,6 +28865,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL SELECT statement that\
           \ queries a log table to get a result of a custom query that retrieves results\
@@ -28440,6 +29050,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28501,6 +29117,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28562,6 +29184,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28623,6 +29251,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28684,6 +29318,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28745,6 +29385,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28806,6 +29452,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -28984,6 +29636,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters that specify a list of expected\
           \ values that are compared to the values in the tested text column."
@@ -29052,6 +29710,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpec"
@@ -29114,6 +29778,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec"
@@ -29176,6 +29846,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextLengthBelowMinLengthCountSensorParametersSpec"
@@ -29238,6 +29914,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec"
@@ -29300,6 +29982,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextLengthInRangePercentSensorParametersSpec"
@@ -29362,6 +30050,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextMatchDateFormatPercentSensorParametersSpec"
@@ -29440,6 +30134,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec"
@@ -29502,6 +30202,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec"
@@ -29564,6 +30270,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextMaxLengthSensorParametersSpec"
@@ -29625,6 +30337,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextMeanLengthSensorParametersSpec"
@@ -29686,6 +30404,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextMinLengthSensorParametersSpec"
@@ -29864,6 +30588,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec"
@@ -29925,6 +30655,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec"
@@ -29986,6 +30722,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextParsableToBooleanPercentSensorParametersSpec"
@@ -30048,6 +30790,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextParsableToDatePercentSensorParametersSpec"
@@ -30109,6 +30857,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextParsableToFloatPercentSensorParametersSpec"
@@ -30171,6 +30925,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextParsableToIntegerPercentSensorParametersSpec"
@@ -30463,6 +31223,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextValidCountryCodePercentSensorParametersSpec"
@@ -30525,6 +31291,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnTextTextValidCurrencyCodePercentSensorParametersSpec"
@@ -30587,6 +31359,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec"
@@ -30648,6 +31426,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnBoolTruePercentSensorParametersSpec"
@@ -31109,6 +31893,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericValidLatitudePercentSensorParametersSpec"
@@ -31170,6 +31960,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNumericValidLongitudePercentSensorParametersSpec"
@@ -31231,6 +32027,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnPatternsValidUuidFormatPercentSensorParametersSpec"
@@ -31440,6 +32242,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
@@ -31501,6 +32309,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentSensorParametersSpec"
@@ -31696,6 +32510,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
@@ -31758,6 +32578,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec"
@@ -31884,6 +32710,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
@@ -31946,6 +32778,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec"
@@ -32022,6 +32860,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
@@ -32083,6 +32927,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec"
@@ -32657,6 +33507,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       sensor_name:
         type: "string"
         description: "Optional custom sensor name. It is a folder name inside the\
@@ -33843,6 +34699,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -35752,7 +36614,8 @@ definitions:
       collect_error_samples:
         type: "boolean"
         description: "Set the value to true to collect error samples for failed data\
-          \ quality checks."
+          \ quality checks. Set the value to false to disable error sampling collection\
+          \ despite any other settings on the table or check level."
       dummy_execution:
         type: "boolean"
         description: "Set the value to true when the data quality checks should be\
@@ -36726,6 +37589,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters. Fill the parameters to provide\
           \ the name of the referenced table."
@@ -36803,6 +37672,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Table availability sensor parameters"
         $ref: "#/definitions/TableAvailabilitySensorParametersSpec"
@@ -36970,6 +37845,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column count data quality sensor."
         $ref: "#/definitions/TableColumnCountSensorParametersSpec"
@@ -37429,6 +38310,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Row count data quality sensor."
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -37834,6 +38721,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Max days since most recent event sensor parameters"
         $ref: "#/definitions/TableTimelinessDataFreshnessSensorParametersSpec"
@@ -37895,6 +38788,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Max days since most recent event sensor parameters"
         $ref: "#/definitions/TableTimelinessDataFreshnessSensorParametersSpec"
@@ -37956,6 +38855,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Max number of days between event and ingestion sensor parameters"
         $ref: "#/definitions/TableTimelinessDataIngestionDelaySensorParametersSpec"
@@ -38017,6 +38922,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Min number of days between event and ingestion sensor parameters"
         $ref: "#/definitions/TableTimelinessDataStalenessSensorParametersSpec"
@@ -38132,6 +39043,17 @@ definitions:
       filter:
         type: "string"
         description: "SQL WHERE clause added to the sensor queries."
+      do_not_collect_error_samples_in_profiling:
+        type: "boolean"
+        description: "Disable automatic collection of error samples in the profiling\
+          \ section. The profiling checks by default always collect error samples\
+          \ for failed data quality checks."
+      always_collect_error_samples_in_monitoring:
+        type: "boolean"
+        description: "Always collect error samples for failed monitoring checks. DQOps\
+          \ will not collect error samples automatically when the checks are executed\
+          \ by a scheduler or by running checks from the metadata tree. Error samples\
+          \ are always collected only when the checks are run from the check editor."
       priority:
         type: "integer"
         format: "int32"
@@ -38386,6 +39308,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Partition reload lag sensor parameters"
         $ref: "#/definitions/TableTimelinessPartitionReloadLagSensorParametersSpec"
@@ -38537,6 +39465,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38598,6 +39532,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38659,6 +39599,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38720,6 +39666,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38781,6 +39733,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38842,6 +39800,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Data quality check parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38903,6 +39867,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Row count sensor parameters"
         $ref: "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -38964,6 +39934,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column count sensor parameters"
         $ref: "#/definitions/TableColumnCountSensorParametersSpec"
@@ -39025,6 +40001,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column count sensor parameters"
         $ref: "#/definitions/TableColumnCountSensorParametersSpec"
@@ -39096,6 +40078,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column list hash sensor parameters"
         $ref: "#/definitions/TableColumnListUnorderedHashSensorParametersSpec"
@@ -39157,6 +40145,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column list and order sensor parameters"
         $ref: "#/definitions/TableColumnListOrderedHashSensorParametersSpec"
@@ -39218,6 +40212,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Column list and types sensor parameters"
         $ref: "#/definitions/TableColumnTypesHashSensorParametersSpec"
@@ -39401,6 +40401,17 @@ definitions:
           \ tokens {table} to replace the content with the full table name, {alias}\
           \ to replace the content with the table alias of an analyzed table or {column}\
           \ to replace the content with the analyzed column name."
+      do_not_collect_error_samples_in_profiling:
+        type: "boolean"
+        description: "Disable automatic collection of error samples in the profiling\
+          \ section. The profiling checks by default always collect error samples\
+          \ for failed data quality checks."
+      always_collect_error_samples_in_monitoring:
+        type: "boolean"
+        description: "Always collect error samples for failed monitoring checks. DQOps\
+          \ will not collect error samples automatically when the checks are executed\
+          \ by a scheduler or by running checks from the metadata tree. Error samples\
+          \ are always collected only when the checks are run from the check editor."
       timestamp_columns:
         description: "Column names that store the timestamps that identify the event\
           \ (transaction) timestamp and the ingestion (inserted / loaded at) timestamps.\
@@ -39556,6 +40567,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL aggregate expression that\
           \ is evaluated on a table. Use an {alias} token to reference the tested\
@@ -39632,6 +40649,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL condition (an expression\
           \ that returns true/false) which is evaluated on a each row."
@@ -39710,6 +40733,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL condition (an expression\
           \ that returns true/false) which is evaluated on a each row"
@@ -39788,6 +40817,12 @@ definitions:
           \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
       parameters:
         description: "Sensor parameters with the custom SQL SELECT statement that\
           \ queries a log table to get a result of a custom query that retrieves results\

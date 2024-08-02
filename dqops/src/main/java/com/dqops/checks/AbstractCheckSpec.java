@@ -112,6 +112,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String dataGrouping;
 
+    @JsonPropertyDescription("Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean alwaysCollectErrorSamples;
+
     /**
      * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
      */
@@ -252,7 +256,25 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @param dataGrouping Data stream name.
      */
     public void setDataGrouping(String dataGrouping) {
+        this.setDirtyIf(!Objects.equals(this.dataGrouping, dataGrouping));
         this.dataGrouping = dataGrouping;
+    }
+
+    /**
+     * Returns a value of a flag which says that this check should always collect error samples when it fails.
+     * @return Always collect error samples.
+     */
+    public boolean isAlwaysCollectErrorSamples() {
+        return alwaysCollectErrorSamples;
+    }
+
+    /**
+     * Sets a flag that this check should always collect error samples when it fails.
+     * @param alwaysCollectErrorSamples True when error samples should be always collected.
+     */
+    public void setAlwaysCollectErrorSamples(boolean alwaysCollectErrorSamples) {
+        this.setDirtyIf(this.alwaysCollectErrorSamples != alwaysCollectErrorSamples);
+        this.alwaysCollectErrorSamples = alwaysCollectErrorSamples;
     }
 
     /**

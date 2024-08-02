@@ -253,6 +253,7 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
         checkSpec.setIncludeInSla(checkModel.isIncludeInSla());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
         checkSpec.setDataGrouping(checkModel.getDataGroupingConfiguration());
+        checkSpec.setAlwaysCollectErrorSamples(checkModel.isAlwaysCollectErrorSamples());
 
         updateFieldValues(checkModel.getSensorParameters(), checkSpec.getParameters());
 
@@ -281,6 +282,7 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
         checkSpec.setIncludeInSla(checkModel.isIncludeInSla());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
         checkSpec.setDataGrouping(checkModel.getDataGroupingConfiguration());
+        checkSpec.setAlwaysCollectErrorSamples(checkModel.isAlwaysCollectErrorSamples());
 
         updateFieldValues(checkModel.getSensorParameters(), checkSpec.getParameters());
 
