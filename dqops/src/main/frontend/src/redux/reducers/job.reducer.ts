@@ -29,6 +29,7 @@ import { JOB_ACTION } from '../types';
 export interface IJobAllert {
   activeTab?: string;
   action?: string;
+  tooltipMessage?: string;
 }
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
