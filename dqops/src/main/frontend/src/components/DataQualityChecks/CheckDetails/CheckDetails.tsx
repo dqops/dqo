@@ -356,6 +356,7 @@ const CheckDetails = ({
       isDisabled: check?.supports_error_sampling !== true
     }
   ];
+
   return (
     <div
       style={{
