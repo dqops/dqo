@@ -96,7 +96,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose minimum row count"
+            label="Minimum row count"
             checked={configuration.propose_minimum_row_count}
             onChange={(e) =>
               onChangeConfiguration({ propose_minimum_row_count: e })
@@ -104,7 +104,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose column count check"
+            label="Column count"
             checked={configuration.propose_column_count_check}
             onChange={(e) =>
               onChangeConfiguration({ propose_column_count_check: e })
@@ -112,7 +112,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose timeliness checks"
+            label="Timeliness checks"
             checked={configuration.propose_timeliness_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_timeliness_checks: e })
@@ -120,13 +120,19 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose null checks"
-            checked={configuration.propose_null_checks}
-            onChange={(e) => onChangeConfiguration({ propose_null_checks: e })}
+            label="Nulls percent"
+            checked={configuration.propose_nulls_percent}
+            onChange={(e) => onChangeConfiguration({ propose_nulls_percent: e })}
           />
           <Checkbox
             className="p-2"
-            label="Propose uniqueness checks"
+            label="Not nulls percent (require nulls)"
+            checked={configuration.propose_not_nulls_percent}
+            onChange={(e) => onChangeConfiguration({ propose_not_nulls_percent: e })}
+          />
+          <Checkbox
+            className="p-2"
+            label="Uniqueness checks"
             checked={configuration.propose_uniqueness_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_uniqueness_checks: e })
@@ -134,7 +140,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose numeric ranges"
+            label="Numeric ranges"
             checked={configuration.propose_numeric_ranges}
             onChange={(e) =>
               onChangeConfiguration({ propose_numeric_ranges: e })
@@ -142,7 +148,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose text length ranges"
+            label="Text length ranges"
             checked={configuration.propose_text_length_ranges}
             onChange={(e) =>
               onChangeConfiguration({ propose_text_length_ranges: e })
@@ -150,7 +156,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Propose accepted values checks"
+            label="Accepted values"
             checked={configuration.propose_accepted_values_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_accepted_values_checks: e })

@@ -225,8 +225,15 @@ public class ColumnNotNullsPercentCheckSpec
                                              DataTypeCategory columnTypeCategory,
                                              DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer) {
+        if (!miningParameters.isProposeNotNullsPercent()) {
+            return false;
+        }
+
+        CheckMiningParametersModel miningParametersWithoutAutoFailing = miningParameters.clone();
+        miningParametersWithoutAutoFailing.setFailChecksAtPercentErrorRows(0.0); // disable failing when a column is sparse and has only a few values, because this check is meant to detect it
+
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
-                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                tableSpec, parentCheckRootContainer, myCheckModel, miningParametersWithoutAutoFailing,
                 columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer);
     }
 }

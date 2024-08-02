@@ -38,6 +38,7 @@ import com.dqops.services.check.mining.CheckMiningParametersModel;
 import com.dqops.services.check.mining.DataAssetProfilingResults;
 import com.dqops.services.check.mining.ProfilingCheckResult;
 import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -571,40 +572,59 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             DataTypeCategory columnTypeCategory,
             DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
             JsonSerializer jsonSerializer) {
-        if (sourceProfilingCheck == null || sourceProfilingCheck.getProfilingCheckModel() == null) {
-            return false; // no profiling check to copy information from
+        if (sourceProfilingCheck == null) {
+            return false; // no previous results from a profiling check or statistics
         }
 
-        if (sourceProfilingCheck.getActualValue() != null && !sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+        if (sourceProfilingCheck.getActualValue() != null && (sourceProfilingCheck.getProfilingCheckModel() == null ||
+                !sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured())) {
             // profiling check that has no rules configured is not a good source to copy from, unless it is a percentage or count check, which we can automatically configure
 
-            String ruleName = sourceProfilingCheck.getProfilingCheckModel().getRule().findFirstNotNullRule().getRuleName();
+            String ruleName = myCheckModel.getRule().findFirstNotNullRule().getRuleName();
             if (Objects.equals(ruleName, MinPercentRuleParametersSpec.RULE_NAME)) {
                 double differenceTo100Pct = 100.0 - sourceProfilingCheck.getActualValue();
-                double expectedMinPercent = sourceProfilingCheck.getActualValue() -
-                        (differenceTo100Pct * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+                double expectedMinPercent = 100.0;
 
-                if (differenceTo100Pct < miningParameters.getFailChecksAtPercentErrorRows()) {
-                    expectedMinPercent = 100.0;
+                if (differenceTo100Pct > miningParameters.getFailChecksAtPercentErrorRows()) {
+                    expectedMinPercent = sourceProfilingCheck.getActualValue() -
+                            (differenceTo100Pct * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+
+                    if (expectedMinPercent < checkMiningConfigurationProperties.getPercentCheckDeltaRate()) {
+                        expectedMinPercent = sourceProfilingCheck.getActualValue() -
+                                (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+                    }
+
+                    if (differenceTo100Pct < miningParameters.getFailChecksAtPercentErrorRows()) {
+                        expectedMinPercent = 100.0;
+                    }
                 }
 
-                setRule(miningParameters.getSeverityLevel(), new MinPercentRuleParametersSpec(expectedMinPercent), jsonSerializer);
+                setRule(miningParameters.getSeverityLevel(), new MinPercentRuleParametersSpec(DoubleRounding.roundToKeepEffectiveDigits(expectedMinPercent)), jsonSerializer);
                 return true;
             }
 
             if (Objects.equals(ruleName, MaxPercentRuleParametersSpec.RULE_NAME)) {
-                double expectedMaxPercent = sourceProfilingCheck.getActualValue() +
-                        (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+                double expectedMaxPercent = 0.0;
 
-                if (sourceProfilingCheck.getActualValue() < miningParameters.getFailChecksAtPercentErrorRows()) {
-                    expectedMaxPercent = 0.0;
+                if (sourceProfilingCheck.getActualValue() > miningParameters.getFailChecksAtPercentErrorRows()) {
+                    expectedMaxPercent = sourceProfilingCheck.getActualValue() +
+                            (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+
+                    if (expectedMaxPercent > (100.0 * (1.0 - checkMiningConfigurationProperties.getPercentCheckDeltaRate()))) {
+                        expectedMaxPercent = sourceProfilingCheck.getActualValue() +
+                                ((100.0 - sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+                    }
                 }
 
-                setRule(miningParameters.getSeverityLevel(), new MaxPercentRuleParametersSpec(expectedMaxPercent), jsonSerializer);
+                setRule(miningParameters.getSeverityLevel(), new MaxPercentRuleParametersSpec(DoubleRounding.roundToKeepEffectiveDigits(expectedMaxPercent)), jsonSerializer);
                 return true;
             }
 
             // TODO: the same for max count checks, but look at the count of not-null values, the count must be a fraction of not null count
+        }
+
+        if (sourceProfilingCheck.getProfilingCheckModel() == null) {
+            return false; // no source profiling check to copy from
         }
 
         if (parentCheckRootContainer.getCheckType() == CheckType.profiling) {

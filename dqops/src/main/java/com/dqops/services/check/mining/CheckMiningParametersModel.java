@@ -17,6 +17,7 @@
 package com.dqops.services.check.mining;
 
 import com.dqops.rules.TargetRuleSeverityLevel;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -31,7 +32,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckMiningParametersModel", description = "Data quality check rule mining parameters. Configure what type of checks should be configured.")
-public class CheckMiningParametersModel {
+public class CheckMiningParametersModel implements Cloneable {
     /**
      * The default severity level for rules that are proposed by the rule mining engine. The default value is 'error'.
      */
@@ -87,10 +88,16 @@ public class CheckMiningParametersModel {
     private boolean proposeTimelinessChecks = true;
 
     /**
-     * Proposes the default configuration null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.
+     * Proposes the default configuration the maximum null percent checks that validate the percentage of nulls. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.")
-    private boolean proposeNullChecks = true;
+    @JsonPropertyDescription("Proposes the default configuration the maximum null percent checks that validate the percentage of nulls. The default value of this parameter is 'true'.")
+    private boolean proposeNullsPercent = true;
+
+    /**
+     * Proposes the default configuration the minimum null percent checks that validate the percentage of nulls (require null values). The default value of this parameter is 'false'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the minimum null percent checks that validate the percentage of nulls (require null values). The default value of this parameter is 'false'.")
+    private boolean proposeNotNullsPercent = false;
 
     /**
      * Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.
@@ -121,4 +128,18 @@ public class CheckMiningParametersModel {
      */
     @JsonPropertyDescription("The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).")
     private Double failChecksAtPercentErrorRows;
+
+    /**
+     * Creates and returns a copy of this object.
+     * @return Cloned instance.
+     */
+    @Override
+    public CheckMiningParametersModel clone() {
+        try {
+            return (CheckMiningParametersModel)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
 }

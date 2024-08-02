@@ -19087,9 +19087,13 @@
           "type" : "boolean",
           "description" : "Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'."
         },
-        "propose_null_checks" : {
+        "propose_nulls_percent" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration the null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'."
+          "description" : "Proposes the default configuration the maximum null percent checks that validate the percentage of nulls. The default value of this parameter is 'true'."
+        },
+        "propose_not_nulls_percent" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration the minimum null percent checks that validate the percentage of nulls (require null values). The default value of this parameter is 'false'."
         },
         "propose_uniqueness_checks" : {
           "type" : "boolean",
