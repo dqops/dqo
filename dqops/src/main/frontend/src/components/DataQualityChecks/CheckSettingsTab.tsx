@@ -37,6 +37,11 @@ const CheckSettingsTab = ({
   const history = useHistory();
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const {
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+  } = useDecodedParams();
 
   useEffect(() => {
     if (isDefaultEditing !== true) {
@@ -155,6 +160,21 @@ const CheckSettingsTab = ({
                 </td>
               </tr>
             )}
+            {checkTypes !== CheckTypes.PARTITIONED &&
+            <tr>
+              <td className="px-4 py-2">Always collect error samples</td>
+              <td className="px-4 py-2">
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.always_collect_error_samples}
+                    onChange={(value) =>
+                      onChange({ ...check, always_collect_error_samples: value })
+                    }
+                  />
+                </div>
+              </td>
+            </tr>
+            }
             <tr>
               <td className="px-4 py-2">Exclude from KPI</td>
               <td className="px-4 py-2">
