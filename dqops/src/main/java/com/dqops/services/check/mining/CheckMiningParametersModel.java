@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import picocli.CommandLine;
 
 /**
  * Data quality check rule mining parameters. Configure what type of checks should be configured.
@@ -128,6 +129,13 @@ public class CheckMiningParametersModel implements Cloneable {
      */
     @JsonPropertyDescription("The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).")
     private Double failChecksAtPercentErrorRows;
+
+    /**
+     * The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.
+     */
+    @JsonPropertyDescription("The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.")
+    private Double maxPercentErrorRows;
+
 
     /**
      * Creates and returns a copy of this object.

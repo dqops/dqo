@@ -59,7 +59,6 @@ public class RuleMiningController {
     private final CheckMiningService checkMiningService;
     private final ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
-    private final DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties;
 
     /**
      * Dependency injection constructor.
@@ -67,20 +66,17 @@ public class RuleMiningController {
      * @param checkMiningService Check mining service.
      * @param modelToSpecCheckMappingService Check model to specification mapping service, used to save proposed configuration.'
      * @param defaultObservabilityConfigurationService Default data observability check configuration service.
-     * @param checkMiningConfigurationProperties Check mining configuration parameters with the default values.
      */
     @Autowired
     public RuleMiningController(
             ExecutionContextFactory executionContextFactory,
             CheckMiningService checkMiningService,
             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
-            DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
+            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.executionContextFactory = executionContextFactory;
         this.checkMiningService = checkMiningService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
-        this.checkMiningConfigurationProperties = checkMiningConfigurationProperties;
     }
 
     /**
@@ -137,10 +133,6 @@ public class RuleMiningController {
             TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-
-            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
-                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
-            }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
                     connectionWrapper.getSpec(),
@@ -295,10 +287,6 @@ public class RuleMiningController {
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
 
-            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
-                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
-            }
-
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
                     connectionWrapper.getSpec(),
                     clonedTableWithDefaultChecks,
@@ -452,10 +440,6 @@ public class RuleMiningController {
             TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-
-            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
-                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
-            }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
                     connectionWrapper.getSpec(),

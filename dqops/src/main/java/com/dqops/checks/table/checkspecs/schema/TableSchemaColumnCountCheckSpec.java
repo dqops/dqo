@@ -28,10 +28,7 @@ import com.dqops.rules.comparison.EqualsIntegerRuleParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.sensors.table.schema.TableColumnCountSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
-import com.dqops.services.check.mining.CheckMiningParametersModel;
-import com.dqops.services.check.mining.DataAssetProfilingResults;
-import com.dqops.services.check.mining.ProfilingCheckResult;
-import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -211,6 +208,7 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
      * @param columnTypeCategory                 Column type category for column checks.
      * @param checkMiningConfigurationProperties Check mining configuration properties.
      * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule registry.
      * @return True when the check was configured, false when the function decided not to configure the check.
      */
     @Override
@@ -223,7 +221,8 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
                                              CheckMiningParametersModel miningParameters,
                                              DataTypeCategory columnTypeCategory,
                                              DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
-                                             JsonSerializer jsonSerializer) {
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (sourceProfilingCheck == null) {
             return false;
         }
@@ -238,7 +237,7 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
             // copy the results from an already configured profiling checks
             return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
                     tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
-                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer);
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
         }
 
         Double actualValue = sourceProfilingCheck.getActualValue();

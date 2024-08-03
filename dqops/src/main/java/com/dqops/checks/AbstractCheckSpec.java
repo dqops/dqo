@@ -34,10 +34,7 @@ import com.dqops.rules.comparison.MaxPercentRuleParametersSpec;
 import com.dqops.rules.comparison.MinPercentRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
-import com.dqops.services.check.mining.CheckMiningParametersModel;
-import com.dqops.services.check.mining.DataAssetProfilingResults;
-import com.dqops.services.check.mining.ProfilingCheckResult;
-import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
@@ -559,6 +556,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @param columnTypeCategory Column type category for column checks.
      * @param checkMiningConfigurationProperties Check mining configuration properties.
      * @param jsonSerializer JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry Rule mining registry.
      * @return True when the check was configured, false when the function decided not to configure the check.
      */
     public boolean proposeCheckConfiguration(
@@ -571,7 +569,8 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             CheckMiningParametersModel miningParameters,
             DataTypeCategory columnTypeCategory,
             DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
-            JsonSerializer jsonSerializer) {
+            JsonSerializer jsonSerializer,
+            RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (sourceProfilingCheck == null) {
             return false; // no previous results from a profiling check or statistics
         }
@@ -581,46 +580,16 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             // profiling check that has no rules configured is not a good source to copy from, unless it is a percentage or count check, which we can automatically configure
 
             String ruleName = myCheckModel.getRule().findFirstNotNullRule().getRuleName();
-            if (Objects.equals(ruleName, MinPercentRuleParametersSpec.RULE_NAME)) {
-                double differenceTo100Pct = 100.0 - sourceProfilingCheck.getActualValue();
-                double expectedMinPercent = 100.0;
-
-                if (differenceTo100Pct > miningParameters.getFailChecksAtPercentErrorRows()) {
-                    expectedMinPercent = sourceProfilingCheck.getActualValue() -
-                            (differenceTo100Pct * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
-
-                    if (expectedMinPercent < checkMiningConfigurationProperties.getPercentCheckDeltaRate()) {
-                        expectedMinPercent = sourceProfilingCheck.getActualValue() -
-                                (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
-                    }
-
-                    if (differenceTo100Pct < miningParameters.getFailChecksAtPercentErrorRows()) {
-                        expectedMinPercent = 100.0;
-                    }
+            RuleMiningRule ruleMiningRule = ruleMiningRuleRegistry.getRule(ruleName);
+            if (ruleMiningRule != null) {
+                AbstractRuleParametersSpec proposedRuleParameters = ruleMiningRule.proposeCheckConfiguration(
+                        sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults, tableSpec, parentCheckRootContainer,
+                        myCheckModel, miningParameters, columnTypeCategory, checkMiningConfigurationProperties);
+                if (proposedRuleParameters != null) {
+                    setRule(miningParameters.getSeverityLevel(), proposedRuleParameters, jsonSerializer);
+                    return true;
                 }
-
-                setRule(miningParameters.getSeverityLevel(), new MinPercentRuleParametersSpec(DoubleRounding.roundToKeepEffectiveDigits(expectedMinPercent)), jsonSerializer);
-                return true;
             }
-
-            if (Objects.equals(ruleName, MaxPercentRuleParametersSpec.RULE_NAME)) {
-                double expectedMaxPercent = 0.0;
-
-                if (sourceProfilingCheck.getActualValue() > miningParameters.getFailChecksAtPercentErrorRows()) {
-                    expectedMaxPercent = sourceProfilingCheck.getActualValue() +
-                            (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
-
-                    if (expectedMaxPercent > (100.0 * (1.0 - checkMiningConfigurationProperties.getPercentCheckDeltaRate()))) {
-                        expectedMaxPercent = sourceProfilingCheck.getActualValue() +
-                                ((100.0 - sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
-                    }
-                }
-
-                setRule(miningParameters.getSeverityLevel(), new MaxPercentRuleParametersSpec(DoubleRounding.roundToKeepEffectiveDigits(expectedMaxPercent)), jsonSerializer);
-                return true;
-            }
-
-            // TODO: the same for max count checks, but look at the count of not-null values, the count must be a fraction of not null count
         }
 
         if (sourceProfilingCheck.getProfilingCheckModel() == null) {

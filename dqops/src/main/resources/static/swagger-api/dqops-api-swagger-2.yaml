@@ -16210,6 +16210,12 @@ definitions:
           \ 0.03% of errors or 99.97% of valid) that is used to propose a percentage\
           \ rule that will treat the values as errors (i.e., max_percent = 0%, or\
           \ min_percent = 100%)."
+      max_percent_error_rows:
+        type: "number"
+        format: "double"
+        description: "The default maximum percentage of invalid rows for which the\
+          \ rule engine should configure rule values, especially min_percent, min_count\
+          \ or max_percent."
     description: "Data quality check rule mining parameters. Configure what type of\
       \ checks should be configured."
   CheckMiningProposalModel:

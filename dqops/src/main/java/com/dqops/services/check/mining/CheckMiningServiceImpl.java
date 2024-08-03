@@ -55,6 +55,7 @@ public class CheckMiningServiceImpl implements CheckMiningService {
     private final JsonSerializer jsonSerializer;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties;
+    private final RuleMiningRuleRegistry ruleMiningRuleRegistry;
 
     /**
      * Dependency injection constructor that receives dependencies of the service.
@@ -63,18 +64,21 @@ public class CheckMiningServiceImpl implements CheckMiningService {
      * @param jsonSerializer Json serializer, used to convert sensor parameters and rule parameters to the target type by serializing and deserializing.
      * @param connectionProviderRegistry Connection provider registry, used to retrieve the dialect strategies to detect category of column data types.
      * @param checkMiningConfigurationProperties Check mining configuration parameters.
+     * @param ruleMiningRuleRegistry Rule mining registry.
      */
     @Autowired
     public CheckMiningServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService,
                                   TableProfilingResultsReadService tableProfilingResultsReadService,
                                   JsonSerializer jsonSerializer,
                                   ConnectionProviderRegistry connectionProviderRegistry,
-                                  DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
+                                  DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
+                                  RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.tableProfilingResultsReadService = tableProfilingResultsReadService;
         this.jsonSerializer = jsonSerializer;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.checkMiningConfigurationProperties = checkMiningConfigurationProperties;
+        this.ruleMiningRuleRegistry = ruleMiningRuleRegistry;
     }
 
     /**
@@ -97,6 +101,14 @@ public class CheckMiningServiceImpl implements CheckMiningService {
             CheckMiningParametersModel miningParameters) {
         CheckMiningProposalModel checkProposalModel = new CheckMiningProposalModel();
         TableSpec clonedTableSpec = tableSpec.deepClone();
+
+        if (miningParameters.getFailChecksAtPercentErrorRows() == null) {
+            miningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getDefaultFailChecksAtPercentErrorRows());
+        }
+
+        if (miningParameters.getMaxPercentErrorRows() == null) {
+            miningParameters.setMaxPercentErrorRows(this.checkMiningConfigurationProperties.getDefaultMaxPercentErrorRows());
+        }
 
         TableProfilingResults tableProfilingResults = this.tableProfilingResultsReadService.loadTableProfilingResults(
                 executionContext, connectionSpec, clonedTableSpec);
@@ -220,7 +232,7 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                         checkConfigurationWasGenerated = checkSpec.proposeCheckConfiguration(
                                 profilingCheckByCheckName, dataAssetProfilingResults, tableProfilingResults, tableSpec,
                                 targetCheckRootContainer, checkModel, miningParameters, columnTypeCategory,
-                                this.checkMiningConfigurationProperties, this.jsonSerializer);
+                                this.checkMiningConfigurationProperties, this.jsonSerializer, this.ruleMiningRuleRegistry);
 
                         checkConfigurationWasGenerated = checkConfigurationWasGenerated && checkSpec.hasAnyRulesEnabled(); // verify that the rule thresholds were proposed
                     } catch (Exception ex) {

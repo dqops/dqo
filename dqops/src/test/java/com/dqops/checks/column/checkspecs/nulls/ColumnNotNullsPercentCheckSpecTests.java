@@ -35,10 +35,7 @@ import com.dqops.rules.comparison.MaxPercentRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.CheckModelObjectMother;
-import com.dqops.services.check.mining.CheckMiningParametersModel;
-import com.dqops.services.check.mining.DataAssetProfilingResults;
-import com.dqops.services.check.mining.ProfilingCheckResult;
-import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.JsonSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +54,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
     private TableProfilingResults tableProfilingResults;
     private DqoCheckMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
+    private RuleMiningRuleRegistry ruleMiningRuleRegistry;
 
     @BeforeEach
     void setUp() {
@@ -74,10 +72,9 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
         this.dataAssetProfilingResults = new DataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
-        this.checkMiningParametersModel = new CheckMiningParametersModel();
-        this.checkMiningParametersModel.setSeverityLevel(TargetRuleSeverityLevel.error);
-        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.1);
+        this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();
         this.checkMiningParametersModel.setProposeNotNullsPercent(true); // special
+        this.ruleMiningRuleRegistry = RuleMiningRuleRegistryObjectMother.getDefault();
     }
 
     @Test
@@ -87,14 +84,32 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(10.0);
         this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
+        this.checkMiningParametersModel.setMaxPercentErrorRows(20.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
         Assertions.assertEquals(13.0, this.sut.getError().getMaxPercent());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenNotNullPercentPresentFromStatisticsIsAboveMaxErrorRows_thenDoesNotConfigureCheck() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(10.0);
+        this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
+        this.checkMiningParametersModel.setMaxPercentErrorRows(5.0);
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertFalse(proposed);
+        Assertions.assertNull(this.sut.getError());
     }
 
     @Test
@@ -104,10 +119,11 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(11.2345678901);
         this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
+        this.checkMiningParametersModel.setMaxPercentErrorRows(20.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -124,7 +140,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -142,7 +158,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
@@ -159,10 +175,11 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(10.0);
         this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
+        this.checkMiningParametersModel.setMaxPercentErrorRows(20.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -180,11 +197,11 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(0.01);
         this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
-        this.checkMiningConfiguration.setFailChecksAtPercentErrorRows(0.1);
+        this.checkMiningConfiguration.setDefaultFailChecksAtPercentErrorRows(0.1);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -216,7 +233,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, targetCheckRootContainer,
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());

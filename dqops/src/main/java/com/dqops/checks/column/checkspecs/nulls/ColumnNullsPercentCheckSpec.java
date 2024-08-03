@@ -28,10 +28,7 @@ import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
-import com.dqops.services.check.mining.CheckMiningParametersModel;
-import com.dqops.services.check.mining.DataAssetProfilingResults;
-import com.dqops.services.check.mining.ProfilingCheckResult;
-import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -214,6 +211,7 @@ public class ColumnNullsPercentCheckSpec
      * @param columnTypeCategory                 Column type category for column checks.
      * @param checkMiningConfigurationProperties Check mining configuration properties.
      * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule registry.
      * @return True when the check was configured, false when the function decided not to configure the check.
      */
     @Override
@@ -226,13 +224,17 @@ public class ColumnNullsPercentCheckSpec
                                              CheckMiningParametersModel miningParameters,
                                              DataTypeCategory columnTypeCategory,
                                              DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
-                                             JsonSerializer jsonSerializer) {
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (!miningParameters.isProposeNullsPercent()) {
             return false;
         }
 
+        CheckMiningParametersModel clonedMiningParameters = miningParameters.clone();
+        clonedMiningParameters.setMaxPercentErrorRows(100.0); // always configure max null percent
+
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
-                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
-                columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer);
+                tableSpec, parentCheckRootContainer, myCheckModel, clonedMiningParameters,
+                columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }

@@ -26,10 +26,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.nulls.ColumnNullsNotNullsPercentSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
-import com.dqops.services.check.mining.CheckMiningParametersModel;
-import com.dqops.services.check.mining.DataAssetProfilingResults;
-import com.dqops.services.check.mining.ProfilingCheckResult;
-import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -212,6 +209,7 @@ public class ColumnNotNullsPercentCheckSpec
      * @param columnTypeCategory                 Column type category for column checks.
      * @param checkMiningConfigurationProperties Check mining configuration properties.
      * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule registry.
      * @return True when the check was configured, false when the function decided not to configure the check.
      */
     @Override
@@ -224,7 +222,8 @@ public class ColumnNotNullsPercentCheckSpec
                                              CheckMiningParametersModel miningParameters,
                                              DataTypeCategory columnTypeCategory,
                                              DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
-                                             JsonSerializer jsonSerializer) {
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (!miningParameters.isProposeNotNullsPercent()) {
             return false;
         }
@@ -234,6 +233,6 @@ public class ColumnNotNullsPercentCheckSpec
 
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
                 tableSpec, parentCheckRootContainer, myCheckModel, miningParametersWithoutAutoFailing,
-                columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer);
+                columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }

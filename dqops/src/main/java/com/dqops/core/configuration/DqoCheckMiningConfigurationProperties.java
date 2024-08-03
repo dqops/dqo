@@ -71,14 +71,21 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     private double percentCheckDeltaRate = 0.3;
 
     /**
-     * The percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) that is used to propose a percentage rule that
+     * The default percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) that is used to propose a percentage rule that
      * will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%).
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.fail-checks-at-percent-error-rows"},
-            description = "The percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) " +
+    @CommandLine.Option(names = {"--dqo.check-mining.default-fail-checks-at-percent-error-rows"},
+            description = "The default percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) " +
                     "that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%)." +
                     "The default value is 0.1.", defaultValue = "0.1")
-    private double failChecksAtPercentErrorRows = 0.1;
+    private double defaultFailChecksAtPercentErrorRows = 0.1;
+
+    /**
+     * The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.
+     */
+    @CommandLine.Option(names = {"--dqo.check-mining.default-max-percent-error-rows"},
+            description = "The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.", defaultValue = "5.0")
+    private double defaultMaxPercentErrorRows = 5.0;
 
     /**
      * Creates a clone of the object.
