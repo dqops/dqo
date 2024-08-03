@@ -16189,6 +16189,11 @@ definitions:
         description: "Proposes the default configuration the detected data type of\
           \ values in a text column check, when text columns contain an uniform type\
           \ such as integers or dates. The default value of this parameter is 'true'."
+      propose_column_exists:
+        type: "boolean"
+        description: "Enables a rule on the column's schema check that verifies if\
+          \ the column exists. It is enabled on columns that were detected as existing\
+          \ during data profiling. The default value of this parameter is 'true'."
       propose_uniqueness_checks:
         type: "boolean"
         description: "Proposes the default configuration the uniqueness checks that\
@@ -16419,12 +16424,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
