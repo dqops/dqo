@@ -19,6 +19,7 @@ package com.dqops.services.check.mining;
 import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -100,6 +101,47 @@ public class TableProfilingResults {
         for (Map.Entry<String, StatisticsResultsForColumnModel> columnModelEntry : columnStatistics.entrySet()) {
             DataAssetProfilingResults columnProfilingResults = this.getColumnProfilingResults(columnModelEntry.getKey());
             columnProfilingResults.importStatistics(columnModelEntry.getValue().getMetrics());
+        }
+    }
+
+    /**
+     * Retrieves the row count of the table from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
+     * @return Returns the row count.
+     */
+    public Long getRowCount() {
+        ProfilingCheckResult rowCountCheckResults = this.getTableProfilingResults().getProfilingCheckByCheckName("profile_row_count", false);
+        if (rowCountCheckResults.getActualValue() == null) {
+            return null;
+        }
+
+        return rowCountCheckResults.getActualValue().longValue();
+    }
+
+    /**
+     * Fill the value of the profile_not_nulls_count check, because it is not run by default as a profiling check, and we cannot depend on the value
+     * captured from basic statistics, because it could be old. It is better to calculate it as a difference between the row count and null count that is always captured.
+     */
+    public void calculateMissingNotNullCounts() {
+        Long rowCount = this.getRowCount();
+        if (rowCount == null) {
+            return;
+        }
+
+        for (DataAssetProfilingResults columnProfilingResults : this.columns.values()) {
+            ProfilingCheckResult notNullsCountResult = columnProfilingResults.getProfilingCheckByCheckName("profile_not_nulls_count", false);
+            ProfilingCheckResult nullsCountResult = columnProfilingResults.getProfilingCheckByCheckName("profile_nulls_count", false);
+
+            if (notNullsCountResult.getActualValue() != null && nullsCountResult.getExecutedAt() != null && notNullsCountResult.getExecutedAt() != null &&
+                    notNullsCountResult.getExecutedAt().plus(2, ChronoUnit.DAYS).isAfter(nullsCountResult.getExecutedAt())) {
+                continue; // the not-nulls count is good enough to use it
+            }
+
+            if (nullsCountResult.getActualValue() == null) {
+                continue; // the nulls count is unknown, no way to make the math
+            }
+
+            notNullsCountResult.setActualValue(rowCount.doubleValue() - nullsCountResult.getActualValue());
+            notNullsCountResult.setExecutedAt(nullsCountResult.getExecutedAt());
         }
     }
 }

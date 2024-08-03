@@ -128,6 +128,22 @@ public class ProfilingCheckResult {
     }
 
     /**
+     * Returns the timestamp when the sensor was executed, it is the timestamp of running the profiling check, or collecting basic statistics.
+     * @return Timestamp of capturing the actual value.
+     */
+    public Instant getExecutedAt() {
+        return executedAt;
+    }
+
+    /**
+     * Updates the executed at timestamp with a new value.
+     * @param executedAt New executed at timestamp.
+     */
+    public void setExecutedAt(Instant executedAt) {
+        this.executedAt = executedAt;
+    }
+
+    /**
      * Returns the result of the check overview with the most recent value.
      * @return Check overview with the most recent value.
      */

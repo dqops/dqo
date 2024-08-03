@@ -15,16 +15,28 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
+import com.dqops.utils.conversion.DoubleRounding;
+import com.dqops.utils.conversion.LongRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
@@ -34,7 +46,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec implements RuleMiningRule {
     private static final ChildHierarchyNodeFieldMapImpl<BetweenPercentRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
@@ -47,6 +61,19 @@ public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec
     @JsonPropertyDescription("Maximum accepted percentage of rows passing the check (inclusive).")
     @SampleValues(values = "90.0")
     private Double maxPercent;
+
+    public BetweenPercentRuleParametersSpec() {
+    }
+
+    /**
+     * Constructor with parameters.
+     * @param minPercent Minimum percent.
+     * @param maxPercent Maximum percent.
+     */
+    public BetweenPercentRuleParametersSpec(Double minPercent, Double maxPercent) {
+        this.minPercent = minPercent;
+        this.maxPercent = maxPercent;
+    }
 
     /**
      * Returns a minimum value for a data quality check readout, a minimum percentage.
@@ -113,15 +140,82 @@ public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec
         if (this.minPercent != null) {
             double minActualValue = checkResultsSingleCheck.getActualValueColumn().min();
             if (minActualValue < this.minPercent) {
-                this.minPercent = minActualValue;
+                this.minPercent = minActualValue - Math.min((this.minPercent - minActualValue) * 0.3, minActualValue * 0.3);
             }
         }
 
         if (this.maxPercent != null) {
             double maxActualValue = checkResultsSingleCheck.getActualValueColumn().max();
             if (maxActualValue > this.maxPercent) {
-                this.maxPercent = maxActualValue;
+                this.maxPercent = maxActualValue + Math.min((maxActualValue - this.maxPercent) * 0.3, (100.0 - maxActualValue) * 0.3);
             }
         }
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @return A configured rule parameters class that should be converted to the target type (by serialization to JSON and back) when parameters were proposed, or null when on parameters were proposed.
+     */
+    @Override
+    public AbstractRuleParametersSpec proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                                                DataAssetProfilingResults dataAssetProfilingResults,
+                                                                TableProfilingResults tableProfilingResults,
+                                                                TableSpec tableSpec,
+                                                                AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                                                CheckModel myCheckModel,
+                                                                CheckMiningParametersModel miningParameters,
+                                                                DataTypeCategory columnTypeCategory,
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
+        if (sourceProfilingCheck.getActualValue() == 0.0) {
+            return null; // current percent is zero
+        }
+
+        Long rowCount = tableProfilingResults.getRowCount();
+        if (rowCount == null) {
+            return null; // cannot assess how many records the table has
+        }
+
+        if (parentCheckRootContainer.getCheckTarget() == CheckTarget.column) {
+            Long notNullCount = dataAssetProfilingResults.getNotNullCount();
+            if (notNullCount == null) {
+                return null;
+            }
+
+            if (notNullCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
+                return null; // not enough not-null values to call it reasonable
+            }
+        } else {
+            if (rowCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
+                return null;
+            }
+        }
+
+        if (sourceProfilingCheck.getActualValue() > miningParameters.getFailChecksAtPercentErrorRows()) {
+            return null; // the percent is too high, no need to assert it
+        }
+
+        double delta = Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getPercentCheckDeltaRate();
+        double expectedMinPercent = DoubleRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue() - delta);
+        double expectedMaxPercent = DoubleRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue() + delta);
+
+        if (expectedMinPercent < 0.0) {
+            expectedMinPercent = 0.0;
+        }
+
+        if (expectedMaxPercent < expectedMinPercent) {
+            expectedMaxPercent = expectedMinPercent;
+        }
+
+        return new BetweenPercentRuleParametersSpec(expectedMinPercent, expectedMaxPercent);
     }
 }

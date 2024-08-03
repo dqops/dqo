@@ -151,7 +151,7 @@ public class MaxValueRuleParametersSpec extends AbstractRuleParametersSpec imple
                                                                 DataTypeCategory columnTypeCategory,
                                                                 DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
         double expectedMinValue = DoubleRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue() +
-                Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getDefaultMinMaxValueRateDelta());
+                Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getMinMaxValueRateDelta());
 
         return new MaxValueRuleParametersSpec(expectedMinValue);
     }

@@ -238,7 +238,7 @@ public class TableDataStalenessCheckSpec extends AbstractCheckSpec<TableTimeline
             return false;
         }
 
-        Double maxDelay = DoubleRounding.roundToKeepEffectiveDigits(actualValue * checkMiningConfigurationProperties.getStalenessMaxDaysMultiplier());
+        Double maxDelay = DoubleRounding.roundToKeepEffectiveDigits(actualValue * checkMiningConfigurationProperties.getTimelinessMaxDaysMultiplier());
 
         switch (miningParameters.getSeverityLevel()) {
             case warning:

@@ -239,7 +239,7 @@ public class TableDataIngestionDelayCheckSpec extends AbstractCheckSpec<TableTim
             return false;
         }
 
-        Double maxDelay = DoubleRounding.roundToKeepEffectiveDigits(actualValue * checkMiningConfigurationProperties.getIngestionDelayMaxDaysMultiplier());
+        Double maxDelay = DoubleRounding.roundToKeepEffectiveDigits(actualValue * checkMiningConfigurationProperties.getTimelinessMaxDaysMultiplier());
 
         switch (miningParameters.getSeverityLevel()) {
             case warning:

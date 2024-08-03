@@ -38,28 +38,12 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     private double minimumRowCountRate = 0.99;
 
     /**
-     * The multiplier of the last known table freshness that is used to propose the configuration of the table freshness rule threshold by the rule mining engine.
+     * The multiplier of the last known table timeliness checks (freshness, staleness, ingestion delay) that is used to propose the configuration of the max days rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.rule-mining.freshness-max-days-multiplier"},
-            description = "The multiplier of the last known table freshness that is used to propose the configuration of the table freshness rule threshold by the rule mining engine." +
+    @CommandLine.Option(names = {"--dqo.rule-mining.timeliness-max-days-multiplier"},
+            description = "he multiplier of the last known table timeliness checks (freshness, staleness, ingestion delay) that is used to propose the configuration of the max days rule threshold by the rule mining engine." +
                     "The default value is 2.0x the last known delay.", defaultValue = "2.0")
-    private double freshnessMaxDaysMultiplier = 2.0;
-
-    /**
-     * The multiplier of the last known table staleness that is used to propose the configuration of the table staleness rule threshold by the rule mining engine.
-     */
-    @CommandLine.Option(names = {"--dqo.rule-mining.staleness-max-days-multiplier"},
-            description = "The multiplier of the last known table staleness that is used to propose the configuration of the table staleness rule threshold by the rule mining engine." +
-                    "The default value is 2.0x the last known delay.", defaultValue = "2.0")
-    private double stalenessMaxDaysMultiplier = 2.0;
-
-    /**
-     * The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine.
-     */
-    @CommandLine.Option(names = {"--dqo.rule-mining.ingestion-delay-max-days-multiplier"},
-            description = "The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine." +
-                    "The default value is 2.0x the last known delay.", defaultValue = "2.0")
-    private double ingestionDelayMaxDaysMultiplier = 2.0;
+    private double timelinessMaxDaysMultiplier = 2.0;
 
     /**
      * The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine.
@@ -90,10 +74,26 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     /**
      * The default delta that is added to the proposed maximum value, or subtracted from a proposed minimum value. It is calculated as a rate of the current value. The default value is 0.1, which means that when the detected minimum value is 5.0, the proposed minimum value in the rule will be 4.5.
      */
-    @CommandLine.Option(names = {"--dqo.rule-mining.default-min-max-value-rate-delta"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.min-max-value-rate-delta"},
             description = "The default delta that is added to the proposed maximum value, or subtracted from a proposed minimum value. It is calculated as a rate of the current value. " +
                     "The default value is 0.1, which means that when the detected minimum value is 5.0, the proposed minimum value in the rule will be 4.5.", defaultValue = "0.1")
-    private double defaultMinMaxValueRateDelta = 0.1;
+    private double minMaxValueRateDelta = 0.1;
+
+    /**
+     * The default rate (fraction) of the number of rows with not-null values that must contain distinct values to apply the distinct count between check. The default is 0.1, which is 10%% of the count of not-null values.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.not-null-count-rate-for-duplicate-count"},
+            description = "The default rate (fraction) of the number of rows with not-null values that must contain distinct values to apply the distinct count between check. " +
+                    "The default is 0.1, which is 10%% of the count of not-null values.", defaultValue = "0.1")
+    private double notNullCountRateForDuplicateCount = 0.1;
+
+    /**
+     * The default minimum reasonable count of not-null values that must be satisfied to apply some checks that validate a range of row counts (like a distinct count between).
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.min-reasonable-not-null-count"},
+            description = "The default minimum reasonable count of not-null values that must be satisfied to apply some checks " +
+                    "that validate a range of row counts (like a distinct count between).", defaultValue = "100")
+    private long minReasonableNotNullsCount = 100; // not shown in the documentation (no CLI parameter)
 
     /**
      * Creates a clone of the object.

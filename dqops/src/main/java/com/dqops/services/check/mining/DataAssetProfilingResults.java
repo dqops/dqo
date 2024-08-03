@@ -24,6 +24,7 @@ import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.QualityCategoryModel;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
 
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -155,5 +156,35 @@ public class DataAssetProfilingResults {
                 this.sampleValues.add(sampleValue);
             }
         }
+    }
+
+    /**
+     * Retrieves the count of not-null values in a column from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
+     * This call works only on the column data assets.
+     * @return Returns the count of not null values.
+     */
+    public Long getNotNullCount() {
+        ProfilingCheckResult notNullCountResult = this.getProfilingCheckByCheckName("profile_not_nulls_count", true);
+
+        if (notNullCountResult.getActualValue() != null) {
+            return notNullCountResult.getActualValue().longValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves the count of null values in a column from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
+     * This call works only on the column data assets.
+     * @return Returns the count of null values.
+     */
+    public Long getNullCount() {
+        ProfilingCheckResult nullCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
+
+        if (nullCountResult.getActualValue() != null) {
+            return nullCountResult.getActualValue().longValue();
+        }
+
+        return null;
     }
 }

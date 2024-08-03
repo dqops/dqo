@@ -78,7 +78,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(10.0);
-        this.checkMiningConfiguration.setIngestionDelayMaxDaysMultiplier(2.0);
+        this.checkMiningConfiguration.setTimelinessMaxDaysMultiplier(2.0);
         this.checkMiningParametersModel.setProposeTimelinessChecks(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -99,7 +99,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(10.0);
-        this.checkMiningConfiguration.setIngestionDelayMaxDaysMultiplier(2.0);
+        this.checkMiningConfiguration.setTimelinessMaxDaysMultiplier(2.0);
         this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -121,7 +121,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(11.1234567);
-        this.checkMiningConfiguration.setIngestionDelayMaxDaysMultiplier(2.0);
+        this.checkMiningConfiguration.setTimelinessMaxDaysMultiplier(2.0);
         this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -143,7 +143,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(-10.0);
-        this.checkMiningConfiguration.setIngestionDelayMaxDaysMultiplier(2.0);
+        this.checkMiningConfiguration.setTimelinessMaxDaysMultiplier(2.0);
         this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -173,7 +173,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(10.0);
         this.profilingCheckResult.setSeverityLevel(CheckResultStatus.valid);
-        this.checkMiningConfiguration.setIngestionDelayMaxDaysMultiplier(2.0);
+        this.checkMiningConfiguration.setTimelinessMaxDaysMultiplier(2.0);
         this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,

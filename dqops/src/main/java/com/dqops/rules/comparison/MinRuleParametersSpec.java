@@ -153,7 +153,7 @@ public class MinRuleParametersSpec extends AbstractRuleParametersSpec implements
                                                                 DataTypeCategory columnTypeCategory,
                                                                 DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
         double expectedMinValue = DoubleRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue() -
-                Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getDefaultMinMaxValueRateDelta());
+                Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getMinMaxValueRateDelta());
 
         return new MinRuleParametersSpec(expectedMinValue);
     }
