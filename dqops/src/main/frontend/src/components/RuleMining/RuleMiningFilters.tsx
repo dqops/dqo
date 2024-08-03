@@ -63,7 +63,7 @@ export default function RuleMiningFilters({
           className="text-sm"
         />
         <Input
-          label="The percentage value captured by a profiling check"
+          label="Fail checks below the percent of wrong rows"
           value={configuration.fail_checks_at_percent_error_rows}
           type="number"
           onChange={(e) =>
@@ -74,7 +74,7 @@ export default function RuleMiningFilters({
                   : Number(e.target.value)
             })
           }
-        />
+        /> %
       </div>
       <div className="flex justify-between">
         <div className="flex flex-wrap gap-x-5 mb-4">
@@ -129,6 +129,12 @@ export default function RuleMiningFilters({
             label="Not nulls percent (require nulls)"
             checked={configuration.propose_not_nulls_percent}
             onChange={(e) => onChangeConfiguration({ propose_not_nulls_percent: e })}
+          />
+          <Checkbox
+            className="p-2"
+            label="Validate detected data type in text columns"
+            checked={configuration.propose_text_values_data_type}
+            onChange={(e) => onChangeConfiguration({ propose_text_values_data_type: e })}
           />
           <Checkbox
             className="p-2"

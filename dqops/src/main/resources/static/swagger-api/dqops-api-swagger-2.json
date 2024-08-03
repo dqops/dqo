@@ -19095,6 +19095,10 @@
           "type" : "boolean",
           "description" : "Proposes the default configuration the minimum null percent checks that validate the percentage of nulls (require null values). The default value of this parameter is 'false'."
         },
+        "propose_text_values_data_type" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'."
+        },
         "propose_uniqueness_checks" : {
           "type" : "boolean",
           "description" : "Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'."

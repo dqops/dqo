@@ -68,6 +68,7 @@ export default function RuleMining({
         propose_timeliness_checks: true,
         propose_nulls_percent: true,
         propose_not_nulls_percent: false,
+        propose_text_values_data_type: true,
         propose_uniqueness_checks: true,
         propose_numeric_ranges: true,
         propose_text_length_ranges: true,
