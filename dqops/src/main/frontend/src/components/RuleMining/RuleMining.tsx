@@ -5,6 +5,7 @@ import {
   CheckMiningProposalModel
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setJobAllert } from '../../redux/actions/job.actions';
 import { setRuleParametersConfigured } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
@@ -124,6 +125,36 @@ export default function RuleMining({
       );
     };
 
+    const getShouldUserCollectStatisitcs = (
+      checksUI: CheckMiningProposalModel
+    ) => {
+      if (
+        checksUI &&
+        checksUI.table_checks?.categories?.length === 0 &&
+        Object.keys(checksUI?.column_checks ?? {}).length === 0
+      ) {
+        if (checkTypes === CheckTypes.PROFILING) {
+          dispatch(
+            setJobAllert({
+              activeTab: firstLevelActiveTab,
+              action: 'statistics',
+              tooltipMessage:
+                'The rule miner cannot propose rules because the statistics about the table were not collected. Please go to the profiling section and collect statistics for the table'
+            })
+          );
+        } else {
+          dispatch(
+            setJobAllert({
+              activeTab: firstLevelActiveTab,
+              action: 'profiling',
+              tooltipMessage:
+                'Mising basic data statistics and the rule minner is limited to copying configured profiling checks. Please go to the profiling section and collect statistics for the table'
+            })
+          );
+        }
+      }
+    };
+
     const configurationWithPrefix: CheckMiningParametersModel = {
       ...configuration,
       category_filter: addPrefix(configuration.category_filter ?? ''),
@@ -140,6 +171,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
+            getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
           .finally(() => {
@@ -155,6 +187,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
+            getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
           .finally(() => {
@@ -170,6 +203,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
+            getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
           .finally(() => {

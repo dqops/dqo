@@ -103,7 +103,8 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
             setJobAllert({
               activeTab,
               action: 'rule-mining',
-              tooltipMessage: 'tooltip'
+              tooltipMessage:
+                'No custom data quality rules configurated. Use the data quality rule miner to get a proposal of data quality checks.'
             })
           );
         }
@@ -121,7 +122,8 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
             setJobAllert({
               activeTab,
               action: 'rule-mining',
-              tooltipMessage: 'tooltip'
+              tooltipMessage:
+                'No custom data quality rules configurated. Use the data quality rule miner to get a proposal of data quality checks.'
             })
           );
         }
@@ -139,7 +141,8 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
             setJobAllert({
               activeTab,
               action: 'rule-mining',
-              tooltipMessage: 'tooltip'
+              tooltipMessage:
+                'No custom data quality rules configurated. Use the data quality rule miner to get a proposal of data quality checks.'
             })
           );
         }
