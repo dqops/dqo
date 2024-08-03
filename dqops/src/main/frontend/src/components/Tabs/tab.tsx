@@ -30,7 +30,6 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
       onClose();
     }
   };
-  console.log(job_allert);
   const handleClick = () => {
     if (onChange) {
       onChange(tab);
