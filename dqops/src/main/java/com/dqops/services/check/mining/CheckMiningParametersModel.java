@@ -107,6 +107,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeTextValuesDataType = true;
 
     /**
+     * Enables a rule on the column's schema check that verifies if the column exists. It is enabled on columns that were detected as existing during data profiling. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Enables a rule on the column's schema check that verifies if the column exists. It is enabled on columns that were detected as existing during data profiling. The default value of this parameter is 'true'.")
+    private boolean proposeColumnExists = true;
+
+    /**
      * Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.")

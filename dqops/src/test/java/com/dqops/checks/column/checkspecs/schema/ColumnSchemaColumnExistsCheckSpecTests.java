@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.checks.column.checkspecs.datatype;
+package com.dqops.checks.column.checkspecs.schema;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
@@ -22,16 +22,15 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
-import com.dqops.checks.column.profiling.ColumnDatatypeProfilingChecksSpec;
+import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.column.profiling.ColumnSchemaProfilingChecksSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.metadata.sources.*;
-import com.dqops.rules.comparison.DetectedDatatypeCategory;
-import com.dqops.rules.comparison.DetectedDatatypeEqualsRuleParametersSpec;
+import com.dqops.rules.comparison.Equals1RuleParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.CheckModelObjectMother;
 import com.dqops.services.check.mining.*;
@@ -42,12 +41,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
-    private ColumnDetectedDatatypeInTextCheckSpec sut;
+public class ColumnSchemaColumnExistsCheckSpecTests extends BaseTest {
+    private ColumnSchemaColumnExistsCheckSpec sut;
     private TableSpec tableSpec;
     private ColumnSpec columnSpec;
     private ConnectionSpec connectionSpec;
-    private ColumnDetectedDatatypeInTextCheckSpec profilingSut;
+    private ColumnSchemaColumnExistsCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
     private DataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
@@ -57,7 +56,7 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnDetectedDatatypeInTextCheckSpec();
+        this.sut = new ColumnSchemaColumnExistsCheckSpec();
         this.profilingSut = this.sut;
         this.tableSpec = TableSpecObjectMother.create("public", "tab");
         this.columnSpec = new ColumnSpec();
@@ -65,8 +64,8 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
         this.tableSpec.getColumns().put("col", this.columnSpec);
         this.connectionSpec = ConnectionSpecObjectMother.createSampleConnectionSpec(this.tableSpec.getHierarchyId().getConnectionName());
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec());
-        this.columnSpec.getProfilingChecks().setDatatype(new ColumnDatatypeProfilingChecksSpec());
-        this.columnSpec.getProfilingChecks().getDatatype().setProfileDetectedDatatypeInText(this.profilingSut);
+        this.columnSpec.getProfilingChecks().setSchema(new ColumnSchemaProfilingChecksSpec());
+        this.columnSpec.getProfilingChecks().getSchema().setProfileColumnExists(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.dataAssetProfilingResults = new DataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
@@ -76,11 +75,11 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDetectDatatypeInTextPresentFromStatisticsButNoProfilingCheckAndValueIsNotMixed_thenProposesRuleRule() {
+    void proposeCheckConfiguration_whenColumnExistsPresentFromStatisticsButNoProfilingCheckAndValueIsExists_thenProposesRuleRule() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue((double)DetectedDatatypeCategory.integers.getCode());
+        this.profilingCheckResult.setActualValue(1.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
@@ -88,15 +87,30 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(DetectedDatatypeCategory.integers, this.sut.getError().getExpectedDatatype());
     }
 
     @Test
-    void proposeCheckConfiguration_whenDetectDatatypeInTextPresentFromStatisticsIsMixedType_thenDoesNotConfigureCheck() {
+    void proposeCheckConfiguration_whenColumnExistsPresentFromStatisticsAndColumnIsCalculatedButReferencesSelf_thenProposesRuleRule() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue((double)DetectedDatatypeCategory.mixed.getCode());
+        this.profilingCheckResult.setActualValue(1.0);
+        this.columnSpec.setSqlExpression("cast({column} as int)");
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenColumnExistsPresentFromStatisticsIsZero_thenDoesNotConfigureCheck() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(0.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
@@ -107,12 +121,12 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDetectDatatypeInTextPresentFromStatisticsButMiningParametersDisabledCheck_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenColumnExistsPresentFromStatisticsButMiningParametersDisabledCheck_thenNotProposesRules() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue((double)DetectedDatatypeCategory.integers.getCode());
-        this.checkMiningParametersModel.setProposeTextValuesDataType(false);
+        this.profilingCheckResult.setActualValue((1.0));
+        this.checkMiningParametersModel.setProposeColumnExists(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
@@ -123,7 +137,23 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDetectDatatypeInTextPresentFromProfilingCheckThatHasNoRules_thenProposesRules() {
+    void proposeCheckConfiguration_whenColumnExistsPresentFromStatisticsButColumnIsCalculated_thenNotProposesRules() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue((1.0));
+        this.columnSpec.setSqlExpression("age*2");
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertFalse(proposed);
+        Assertions.assertNull(this.sut.getError());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenColumnExistsPresentFromProfilingCheckThatHasNoRules_thenProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -131,7 +161,7 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue((double)DetectedDatatypeCategory.integers.getCode());
+        this.profilingCheckResult.setActualValue(1.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
@@ -139,15 +169,14 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(DetectedDatatypeCategory.integers, this.sut.getError().getExpectedDatatype());
     }
 
     @Test
-    void proposeCheckConfiguration_whenDetectDatatypeInTextPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
-        this.profilingSut = new ColumnDetectedDatatypeInTextCheckSpec();
-        this.columnSpec.getProfilingChecks().getDatatype().setProfileDetectedDatatypeInText(this.profilingSut);
-        this.profilingSut.setWarning(new DetectedDatatypeEqualsRuleParametersSpec(DetectedDatatypeCategory.integers));
-        this.profilingSut.setError(new DetectedDatatypeEqualsRuleParametersSpec(DetectedDatatypeCategory.integers));
+    void proposeCheckConfiguration_whenColumnExistsPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
+        this.profilingSut = new ColumnSchemaColumnExistsCheckSpec();
+        this.columnSpec.getProfilingChecks().getSchema().setProfileColumnExists(this.profilingSut);
+        this.profilingSut.setWarning(new Equals1RuleParametersSpec());
+        this.profilingSut.setError(new Equals1RuleParametersSpec());
 
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
@@ -156,22 +185,20 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
         AbstractRootChecksContainerSpec targetCheckRootContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
         this.columnSpec.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().setDaily(new ColumnDailyMonitoringCheckCategoriesSpec());
-        this.columnSpec.getMonitoringChecks().getDaily().setDatatype(new ColumnDatatypeDailyMonitoringChecksSpec());
-        this.columnSpec.getMonitoringChecks().getDaily().getDatatype().setDailyDetectedDatatypeInText(this.sut);
+        this.columnSpec.getMonitoringChecks().getDaily().setSchema(new ColumnSchemaDailyMonitoringChecksSpec());
+        this.columnSpec.getMonitoringChecks().getDaily().getSchema().setDailyColumnExists(this.sut);
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(1.0);
         this.profilingCheckResult.setSeverityLevel(CheckResultStatus.valid);
-        this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, targetCheckRootContainer,
                 myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getWarning());
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(DetectedDatatypeCategory.integers, this.sut.getWarning().getExpectedDatatype());
-        Assertions.assertEquals(DetectedDatatypeCategory.integers, this.sut.getError().getExpectedDatatype());
     }
 }

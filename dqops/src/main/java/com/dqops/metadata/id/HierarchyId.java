@@ -91,7 +91,7 @@ public class HierarchyId {
      * @return Hierarchy id for a table.
      */
     public static HierarchyId makeHierarchyIdForTable(String connectionName, PhysicalTableName physicalTableName) {
-        HierarchyId hierarchyId = new HierarchyId("connections", connectionName, "tables", physicalTableName);
+        HierarchyId hierarchyId = new HierarchyId("connections", connectionName, "tables", physicalTableName, "spec");
         return hierarchyId;
     }
 
