@@ -17,7 +17,7 @@ package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -150,7 +150,7 @@ public class DetectedDatatypeEqualsRuleParametersSpec extends AbstractRuleParame
                                                                 CheckModel myCheckModel,
                                                                 CheckMiningParametersModel miningParameters,
                                                                 DataTypeCategory columnTypeCategory,
-                                                                DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
         int actualValueAsInt = sourceProfilingCheck.getActualValue().intValue();
         DetectedDatatypeCategory detectedDatatypeCategory = DetectedDatatypeCategory.fromCode(actualValueAsInt);
         if (detectedDatatypeCategory == null || detectedDatatypeCategory == DetectedDatatypeCategory.mixed) {

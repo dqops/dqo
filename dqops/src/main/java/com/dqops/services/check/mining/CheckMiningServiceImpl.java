@@ -21,7 +21,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.connectors.*;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -54,7 +54,7 @@ public class CheckMiningServiceImpl implements CheckMiningService {
     private final TableProfilingResultsReadService tableProfilingResultsReadService;
     private final JsonSerializer jsonSerializer;
     private final ConnectionProviderRegistry connectionProviderRegistry;
-    private final DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties;
+    private final DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties;
     private final RuleMiningRuleRegistry ruleMiningRuleRegistry;
 
     /**
@@ -71,7 +71,7 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                                   TableProfilingResultsReadService tableProfilingResultsReadService,
                                   JsonSerializer jsonSerializer,
                                   ConnectionProviderRegistry connectionProviderRegistry,
-                                  DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
+                                  DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                   RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.tableProfilingResultsReadService = tableProfilingResultsReadService;

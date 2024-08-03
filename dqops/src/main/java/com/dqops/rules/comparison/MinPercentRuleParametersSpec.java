@@ -17,7 +17,7 @@ package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -155,7 +155,7 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec imp
                                                                 CheckModel myCheckModel,
                                                                 CheckMiningParametersModel miningParameters,
                                                                 DataTypeCategory columnTypeCategory,
-                                                                DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
         double differenceTo100Pct = 100.0 - sourceProfilingCheck.getActualValue();
         double expectedMinPercent = 100.0;
 

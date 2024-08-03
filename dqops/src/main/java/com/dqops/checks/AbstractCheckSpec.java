@@ -17,7 +17,7 @@ package com.dqops.checks;
 
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -30,12 +30,9 @@ import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.TargetRuleSeverityLevel;
-import com.dqops.rules.comparison.MaxPercentRuleParametersSpec;
-import com.dqops.rules.comparison.MinPercentRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
-import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -568,7 +565,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             CheckModel myCheckModel,
             CheckMiningParametersModel miningParameters,
             DataTypeCategory columnTypeCategory,
-            DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
+            DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
             JsonSerializer jsonSerializer,
             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (sourceProfilingCheck == null) {

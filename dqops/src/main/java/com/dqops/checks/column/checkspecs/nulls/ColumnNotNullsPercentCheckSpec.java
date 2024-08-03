@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
@@ -221,7 +221,7 @@ public class ColumnNotNullsPercentCheckSpec
                                              CheckModel myCheckModel,
                                              CheckMiningParametersModel miningParameters,
                                              DataTypeCategory columnTypeCategory,
-                                             DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (!miningParameters.isProposeNotNullsPercent()) {

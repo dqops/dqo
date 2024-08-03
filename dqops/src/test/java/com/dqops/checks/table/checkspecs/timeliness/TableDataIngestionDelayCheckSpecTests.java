@@ -22,14 +22,13 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitoringChecksSpec;
 import com.dqops.checks.table.profiling.TableTimelinessProfilingChecksSpec;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionSpecObjectMother;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableSpecObjectMother;
-import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.rules.comparison.MaxDaysRule1ParametersSpec;
 import com.dqops.rules.comparison.MaxDaysRule2ParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
@@ -50,7 +49,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
     private ProfilingCheckResult profilingCheckResult;
     private DataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
-    private DqoCheckMiningConfigurationProperties checkMiningConfiguration;
+    private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
     private RuleMiningRuleRegistry ruleMiningRuleRegistry;
 

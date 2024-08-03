@@ -19,13 +19,12 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.Equals1RuleParametersSpec;
-import com.dqops.rules.comparison.EqualsInteger1RuleParametersSpec;
 import com.dqops.sensors.column.schema.ColumnColumnExistsSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
@@ -223,7 +222,7 @@ public class ColumnSchemaColumnExistsCheckSpec
                                              CheckModel myCheckModel,
                                              CheckMiningParametersModel miningParameters,
                                              DataTypeCategory columnTypeCategory,
-                                             DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (!miningParameters.isProposeColumnExists()) {

@@ -18,7 +18,7 @@ package com.dqops.services.check.mining;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
@@ -49,7 +49,7 @@ public interface RuleMiningRule {
                                                          CheckModel myCheckModel,
                                                          CheckMiningParametersModel miningParameters,
                                                          DataTypeCategory columnTypeCategory,
-                                                         DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties);
+                                                         DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties);
 
     /**
      * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.

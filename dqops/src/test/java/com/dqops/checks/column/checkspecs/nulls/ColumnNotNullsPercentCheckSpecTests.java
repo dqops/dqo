@@ -26,11 +26,10 @@ import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecks
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.metadata.sources.*;
-import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.rules.comparison.MaxPercentRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
@@ -52,7 +51,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
     private ProfilingCheckResult profilingCheckResult;
     private DataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
-    private DqoCheckMiningConfigurationProperties checkMiningConfiguration;
+    private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
     private RuleMiningRuleRegistry ruleMiningRuleRegistry;
 

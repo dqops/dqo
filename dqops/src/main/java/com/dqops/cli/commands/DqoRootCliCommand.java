@@ -30,7 +30,7 @@ import com.dqops.cli.commands.settings.SettingsCliCommand;
 import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
@@ -476,7 +476,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
      * Check mining mixin - to configure parameters there.
      */
     @CommandLine.Mixin
-    private DqoCheckMiningConfigurationProperties dqoCheckMining = new DqoCheckMiningConfigurationProperties();
+    private DqoRuleMiningConfigurationProperties dqoCheckMining = new DqoRuleMiningConfigurationProperties();
 
     @CommandLine.Option(names = {"--dqo.error-sampling.truncated-strings-length"},
             description = "The maximum length of error samples captured from text columns (varchar, string, text, etc.) that are stored as error samples table. " +

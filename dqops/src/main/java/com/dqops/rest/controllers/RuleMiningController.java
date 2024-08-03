@@ -20,7 +20,6 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.ExecutionContext;

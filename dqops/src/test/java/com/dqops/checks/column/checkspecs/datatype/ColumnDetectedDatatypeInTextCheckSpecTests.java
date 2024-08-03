@@ -26,7 +26,7 @@ import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoring
 import com.dqops.checks.column.profiling.ColumnDatatypeProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.metadata.sources.*;
@@ -51,7 +51,7 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
     private ProfilingCheckResult profilingCheckResult;
     private DataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
-    private DqoCheckMiningConfigurationProperties checkMiningConfiguration;
+    private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
     private RuleMiningRuleRegistry ruleMiningRuleRegistry;
 

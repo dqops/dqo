@@ -22,14 +22,13 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionSpecObjectMother;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableSpecObjectMother;
-import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.CheckModelObjectMother;
@@ -49,7 +48,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
     private ProfilingCheckResult profilingCheckResult;
     private DataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
-    private DqoCheckMiningConfigurationProperties checkMiningConfiguration;
+    private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
     private RuleMiningRuleRegistry ruleMiningRuleRegistry;
 

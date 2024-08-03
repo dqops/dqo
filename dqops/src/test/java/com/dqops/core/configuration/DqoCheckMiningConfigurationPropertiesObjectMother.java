@@ -19,14 +19,14 @@ package com.dqops.core.configuration;
 import com.dqops.utils.BeanFactoryObjectMother;
 
 /**
- * Object mother for {@link DqoCheckMiningConfigurationProperties}
+ * Object mother for {@link DqoRuleMiningConfigurationProperties}
  */
 public class DqoCheckMiningConfigurationPropertiesObjectMother {
     /**
      * Returns the default check mining configuration.
      * @return Default (but cloned) check mining configuration.
      */
-    public static DqoCheckMiningConfigurationProperties getDefault() {
-        return BeanFactoryObjectMother.getBeanFactory().getBean(DqoCheckMiningConfigurationProperties.class).clone();
+    public static DqoRuleMiningConfigurationProperties getDefault() {
+        return BeanFactoryObjectMother.getBeanFactory().getBean(DqoRuleMiningConfigurationProperties.class).clone();
     }
 }

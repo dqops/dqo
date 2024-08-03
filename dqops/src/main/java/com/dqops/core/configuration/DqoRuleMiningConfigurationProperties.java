@@ -22,17 +22,17 @@ import org.springframework.context.annotation.Configuration;
 import picocli.CommandLine;
 
 /**
- * Configuration POJO with the configuration for the dqo.check-mining that configures how the rule mining engine suggests rules.
+ * Configuration POJO with the configuration for the dqo.rule-mining that configures how the rule mining engine suggests rules.
  */
 @Configuration
-@ConfigurationProperties(prefix = "dqo.check-mining")
+@ConfigurationProperties(prefix = "dqo.rule-mining")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DqoCheckMiningConfigurationProperties implements Cloneable {
+public class DqoRuleMiningConfigurationProperties implements Cloneable {
     /**
      * The rate of the current row count obtained from statistics that is used to configure the row_count check value by the check mining engine. The default value is 0.99 of the current row count.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.minimum-row-count-rate"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.minimum-row-count-rate"},
             description = "The rate of the current row count obtained from statistics that is used to configure the row_count check value by the check mining engine. " +
                     "The default value is 0.99 of the current row count.", defaultValue = "0.99")
     private double minimumRowCountRate = 0.99;
@@ -40,7 +40,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The multiplier of the last known table freshness that is used to propose the configuration of the table freshness rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.freshness-max-days-multiplier"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.freshness-max-days-multiplier"},
             description = "The multiplier of the last known table freshness that is used to propose the configuration of the table freshness rule threshold by the rule mining engine." +
                     "The default value is 2.0x the last known delay.", defaultValue = "2.0")
     private double freshnessMaxDaysMultiplier = 2.0;
@@ -48,7 +48,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The multiplier of the last known table staleness that is used to propose the configuration of the table staleness rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.staleness-max-days-multiplier"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.staleness-max-days-multiplier"},
             description = "The multiplier of the last known table staleness that is used to propose the configuration of the table staleness rule threshold by the rule mining engine." +
                     "The default value is 2.0x the last known delay.", defaultValue = "2.0")
     private double stalenessMaxDaysMultiplier = 2.0;
@@ -56,7 +56,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.ingestion-delay-max-days-multiplier"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.ingestion-delay-max-days-multiplier"},
             description = "The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine." +
                     "The default value is 2.0x the last known delay.", defaultValue = "2.0")
     private double ingestionDelayMaxDaysMultiplier = 2.0;
@@ -64,7 +64,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.percent-check-delta-rate"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.percent-check-delta-rate"},
             description = "The multiplier of the last known percent that is extended by this delta (as a rate/proportion of the percentage) to configure a passing percentage check." +
                     "The default value is 0.3. For this value and when the last known max_percent was 10%%, DQOps rule mining engine will propose a save max_count 13%%. " +
                     "The additional 3%% of the delta is 0.3 * 10%%.", defaultValue = "0.3")
@@ -74,7 +74,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
      * The default percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) that is used to propose a percentage rule that
      * will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%).
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.default-fail-checks-at-percent-error-rows"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.default-fail-checks-at-percent-error-rows"},
             description = "The default percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) " +
                     "that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%)." +
                     "The default value is 0.1.", defaultValue = "0.1")
@@ -83,18 +83,26 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.default-max-percent-error-rows"},
+    @CommandLine.Option(names = {"--dqo.rule-mining.default-max-percent-error-rows"},
             description = "The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.", defaultValue = "5.0")
     private double defaultMaxPercentErrorRows = 5.0;
+
+    /**
+     * The default delta that is added to the proposed maximum value, or subtracted from a proposed minimum value. It is calculated as a rate of the current value. The default value is 0.1, which means that when the detected minimum value is 5.0, the proposed minimum value in the rule will be 4.5.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.default-min-max-value-rate-delta"},
+            description = "The default delta that is added to the proposed maximum value, or subtracted from a proposed minimum value. It is calculated as a rate of the current value. " +
+                    "The default value is 0.1, which means that when the detected minimum value is 5.0, the proposed minimum value in the rule will be 4.5.", defaultValue = "0.1")
+    private double defaultMinMaxValueRateDelta = 0.1;
 
     /**
      * Creates a clone of the object.
      * @return Cloned instance.
      */
     @Override
-    public DqoCheckMiningConfigurationProperties clone() {
+    public DqoRuleMiningConfigurationProperties clone() {
         try {
-            DqoCheckMiningConfigurationProperties cloned = (DqoCheckMiningConfigurationProperties) super.clone();
+            DqoRuleMiningConfigurationProperties cloned = (DqoRuleMiningConfigurationProperties) super.clone();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

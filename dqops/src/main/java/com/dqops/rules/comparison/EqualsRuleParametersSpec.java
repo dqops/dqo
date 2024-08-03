@@ -17,7 +17,7 @@ package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -184,7 +184,7 @@ public class EqualsRuleParametersSpec extends AbstractRuleParametersSpec impleme
                                                                 CheckModel myCheckModel,
                                                                 CheckMiningParametersModel miningParameters,
                                                                 DataTypeCategory columnTypeCategory,
-                                                                DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
         if (!Objects.equals(sourceProfilingCheck.getActualValue(), 0.0)) {
             return null;
         }

@@ -20,12 +20,11 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.EqualsIntegerRuleParametersSpec;
-import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.sensors.table.schema.TableColumnCountSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
@@ -220,7 +219,7 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
                                              CheckModel myCheckModel,
                                              CheckMiningParametersModel miningParameters,
                                              DataTypeCategory columnTypeCategory,
-                                             DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (sourceProfilingCheck == null) {

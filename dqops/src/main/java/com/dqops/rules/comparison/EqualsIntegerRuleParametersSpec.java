@@ -17,7 +17,7 @@ package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -142,7 +142,7 @@ public class EqualsIntegerRuleParametersSpec extends AbstractRuleParametersSpec 
                                                                 CheckModel myCheckModel,
                                                                 CheckMiningParametersModel miningParameters,
                                                                 DataTypeCategory columnTypeCategory,
-                                                                DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
         long expectedLongValue = sourceProfilingCheck.getActualValue().longValue();
         if ((double)expectedLongValue != sourceProfilingCheck.getActualValue()) {
             return null; // the value is not round

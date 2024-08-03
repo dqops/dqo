@@ -16,7 +16,7 @@
 
 package com.dqops.services.check.mining;
 
-import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
 import com.dqops.rules.TargetRuleSeverityLevel;
 
@@ -29,7 +29,7 @@ public class CheckMiningParametersModelObjectMother {
      * @return Default configuration.
      */
     public static CheckMiningParametersModel create() {
-        DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
+        DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
 
         CheckMiningParametersModel checkMiningParametersModel = new CheckMiningParametersModel();
         checkMiningParametersModel.setFailChecksAtPercentErrorRows(checkMiningConfigurationProperties.getDefaultFailChecksAtPercentErrorRows());
