@@ -149,7 +149,7 @@ export default function RuleMining({
               activeTab: firstLevelActiveTab,
               action: 'profiling',
               tooltipMessage:
-                'Mising basic data statistics and the rule minner is limited to copying configured profiling checks. Please go to the profiling section and collect statistics for the table'
+                'Missing basic data statistics and the rule minner is limited to copying configured profiling checks. Please go to the profiling section and collect statistics for the table'
             })
           );
         }
