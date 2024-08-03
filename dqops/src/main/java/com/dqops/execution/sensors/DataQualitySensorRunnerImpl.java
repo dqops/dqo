@@ -79,7 +79,7 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         SensorDefinitionFindResult sensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
                 executionContext, sensorName, providerType);
 
-        if(sensorDefinition == null) {
+        if (sensorDefinition == null) {
             return SensorPrepareResult.createForPrepareException(sensorRunParameters, null,
                     new RuntimeException("The sensorDefinition is null. The sensor name: " + sensorName)
             );
