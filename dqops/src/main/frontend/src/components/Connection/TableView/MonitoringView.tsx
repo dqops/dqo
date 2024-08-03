@@ -86,25 +86,36 @@ const MonitoringView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    dispatch(
-      getTableDailyMonitoringChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-    dispatch(
-      getTableMonthlyMonitoringChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
+    if (secondTab === 'daily') {
+      dispatch(
+        getTableDailyMonitoringChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+    if (secondTab === 'monthly') {
+      dispatch(
+        getTableMonthlyMonitoringChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    tableName,
+    secondTab
+  ]);
 
   const onUpdate = async () => {
     if (secondTab === 'daily') {

@@ -26,6 +26,7 @@ import {
 import { IError } from '../../contexts/errrorContext';
 import { JobApiClient } from '../../services/apiClient';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
+import { IJobAllert } from '../reducers/job.reducer';
 import { JOB_ACTION } from '../types';
 
 export const getJobsRequest = () => ({
@@ -158,4 +159,9 @@ export const setNotificationCount = (notificationCount: number) => ({
 export const setNewNotification = (newNotification: boolean) => ({
   type: JOB_ACTION.SET_NEW_NOTIFIACTION,
   newNotification
+});
+
+export const setJobAllert = (job_allert: IJobAllert) => ({
+  type: JOB_ACTION.SET_JOB_ALLERT,
+  job_allert
 });

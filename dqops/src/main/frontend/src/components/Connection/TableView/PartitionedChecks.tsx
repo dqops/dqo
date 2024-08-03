@@ -87,25 +87,36 @@ const TablePartitionedChecksView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    dispatch(
-      getTableDailyPartitionedChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-    dispatch(
-      getTableMonthlyPartitionedChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
+    if (secondTab === 'daily') {
+      dispatch(
+        getTableDailyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+    if (secondTab == 'monthly') {
+      dispatch(
+        getTableMonthlyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    tableName,
+    secondTab
+  ]);
 
   const onUpdate = async () => {
     if (secondTab === 'daily') {

@@ -874,3 +874,16 @@ export const getRuleParametersConfigured = (checksUI?: CheckContainerModel) => {
     });
   return param;
 };
+export const getIsAnyChecksEnabled = (checksUI?: CheckContainerModel) => {
+  const checks: CheckModel[] = [];
+  checksUI?.categories?.forEach((category) => {
+    checks.push(...(category.checks || []));
+  });
+  const param = checks?.find((x) => {
+    if (x.configured === true) {
+      return true;
+    }
+  });
+  console.log(checks, param);
+  return !!param;
+};
