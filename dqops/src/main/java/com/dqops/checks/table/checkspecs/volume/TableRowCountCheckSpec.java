@@ -251,7 +251,7 @@ public class TableRowCountCheckSpec
                 return false;
             }
 
-            long minimumRowCount = (long)(actualValue * checkMiningConfigurationProperties.getMinimumRowCountRate());
+            long minimumRowCount = (long)(actualValue * checkMiningConfigurationProperties.getMinCountRate());
             if (minimumRowCount < 1L) {
                 minimumRowCount = 1L;
             }

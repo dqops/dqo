@@ -70,7 +70,7 @@ export default function RuleMining({
         propose_column_count: true,
         propose_timeliness_checks: true,
         propose_nulls_checks: true,
-        propose_not_nulls_checks: false,
+        propose_not_nulls_checks: true,
         propose_column_exists: true,
         propose_text_values_data_type: true,
         propose_uniqueness_checks: true,

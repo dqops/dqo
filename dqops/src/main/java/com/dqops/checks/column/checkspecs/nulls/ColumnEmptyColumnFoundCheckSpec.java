@@ -24,7 +24,6 @@ import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleConstant1ParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
@@ -50,10 +49,10 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class EmptyColumnFoundCheckSpec
+public class ColumnEmptyColumnFoundCheckSpec
         extends AbstractCheckSpec<ColumnNullsNotNullsCountSensorParametersSpec, MinCountRuleConstant1ParametersSpec, MinCountRuleConstant1ParametersSpec, MinCountRuleConstant1ParametersSpec>
         implements ReapplyMinedRules {
-    public static final ChildHierarchyNodeFieldMapImpl<EmptyColumnFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnEmptyColumnFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -232,7 +231,7 @@ public class EmptyColumnFoundCheckSpec
             return false;
         }
 
-        if (!miningParameters.isProposeNullsChecks()) {
+        if (!miningParameters.isProposeNotNullsChecks()) {
             return false;
         }
 

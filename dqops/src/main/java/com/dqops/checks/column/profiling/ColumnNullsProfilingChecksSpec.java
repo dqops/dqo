@@ -75,7 +75,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     private ColumnNotNullsPercentCheckSpec profileNotNullsPercent;
 
     @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty.")
-    private EmptyColumnFoundCheckSpec profileEmptyColumnFound;
+    private ColumnEmptyColumnFoundCheckSpec profileEmptyColumnFound;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
     private ColumnNullPercentChangeCheckSpec profileNullsPercentChange;
@@ -187,7 +187,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns an empty column found check specification.
      * @return Empty column found check specification.
      */
-    public EmptyColumnFoundCheckSpec getProfileEmptyColumnFound() {
+    public ColumnEmptyColumnFoundCheckSpec getProfileEmptyColumnFound() {
         return profileEmptyColumnFound;
     }
 
@@ -195,7 +195,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Sets an empty column found check specification
      * @param profileEmptyColumnFound Empty column found check specification.
      */
-    public void setProfileEmptyColumnFound(EmptyColumnFoundCheckSpec profileEmptyColumnFound) {
+    public void setProfileEmptyColumnFound(ColumnEmptyColumnFoundCheckSpec profileEmptyColumnFound) {
         this.setDirtyIf(!Objects.equals(this.profileEmptyColumnFound, profileEmptyColumnFound));
         this.profileEmptyColumnFound = profileEmptyColumnFound;
         propagateHierarchyIdToField(profileEmptyColumnFound, "profile_empty_column_found");

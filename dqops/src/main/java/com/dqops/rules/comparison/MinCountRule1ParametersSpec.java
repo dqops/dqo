@@ -16,6 +16,7 @@
 package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
@@ -172,7 +173,17 @@ public class MinCountRule1ParametersSpec extends AbstractRuleParametersSpec impl
             return null; // delay is negative, must be a wrong column
         }
 
-        return new MinCountRule1ParametersSpec(1L); // always configured with 1
+        if (parentCheckRootContainer.getCheckType() == CheckType.partitioned) {
+            return null; // do not propose partitioned checks with a min count obtained from profiling the whole table, because they will definitely fail, we need to use partitioned results from partitioned checks
+        }
+
+        long minimumCount = LongRounding.roundToKeepEffectiveDigits(
+                (long) (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getMinCountRate()));
+        if (minimumCount < 0L) {
+            minimumCount = 1L;
+        }
+
+        return new MinCountRule1ParametersSpec(minimumCount);
     }
 
     public static class MinCountRule1ParametersSpecSampleFactory implements SampleValueFactory<MinCountRule1ParametersSpec> {

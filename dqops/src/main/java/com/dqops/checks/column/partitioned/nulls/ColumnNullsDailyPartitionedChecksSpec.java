@@ -75,7 +75,7 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
 
     @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores a separate data quality check result for each daily partition.")
-    private EmptyColumnFoundCheckSpec dailyPartitionEmptyColumnFound;
+    private ColumnEmptyColumnFoundCheckSpec dailyPartitionEmptyColumnFound;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
     private ColumnNullPercentChangeCheckSpec dailyPartitionNullsPercentChange;
@@ -186,7 +186,7 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Returns an empty column found check specification.
      * @return Empty column found check specification.
      */
-    public EmptyColumnFoundCheckSpec getDailyPartitionEmptyColumnFound() {
+    public ColumnEmptyColumnFoundCheckSpec getDailyPartitionEmptyColumnFound() {
         return dailyPartitionEmptyColumnFound;
     }
 
@@ -194,7 +194,7 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Sets an empty column found check specification
      * @param dailyPartitionEmptyColumnFound Empty column found check specification.
      */
-    public void setDailyPartitionEmptyColumnFound(EmptyColumnFoundCheckSpec dailyPartitionEmptyColumnFound) {
+    public void setDailyPartitionEmptyColumnFound(ColumnEmptyColumnFoundCheckSpec dailyPartitionEmptyColumnFound) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionEmptyColumnFound, dailyPartitionEmptyColumnFound));
         this.dailyPartitionEmptyColumnFound = dailyPartitionEmptyColumnFound;
         propagateHierarchyIdToField(dailyPartitionEmptyColumnFound, "daily_partition_empty_column_found");

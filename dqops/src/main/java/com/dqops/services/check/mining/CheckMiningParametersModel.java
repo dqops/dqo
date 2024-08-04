@@ -100,10 +100,10 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeNullsChecks = true;
 
     /**
-     * Proposes the default configuration the not-null checks that validate scale of not-nulls (require some null values). The default value of this parameter is 'false'.
+     * Proposes the default configuration the not-null checks that validate scale of not-nulls (require some null values, and require some not-null values). The default value of this parameter is 'false'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the not-null checks that validate scale of not-nulls (require some null values).The default value of this parameter is 'false'.")
-    private boolean proposeNotNullsChecks = false;
+    @JsonPropertyDescription("Proposes the default configuration the not-null checks that validate scale of not-nulls (require a mix of some not-null and null values).The default value of this parameter is 'false'.")
+    private boolean proposeNotNullsChecks = true;
 
     /**
      * Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.

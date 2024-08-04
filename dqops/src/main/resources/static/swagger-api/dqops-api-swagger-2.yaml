@@ -16187,8 +16187,8 @@ definitions:
       propose_not_nulls_checks:
         type: "boolean"
         description: "Proposes the default configuration the not-null checks that\
-          \ validate scale of not-nulls (require some null values).The default value\
-          \ of this parameter is 'false'."
+          \ validate scale of not-nulls (require a mix of some not-null and null values).The\
+          \ default value of this parameter is 'false'."
       propose_text_values_data_type:
         type: "boolean"
         description: "Proposes the default configuration the detected data type of\
@@ -21359,6 +21359,73 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxPercentRule5ParametersSpec"
+  ColumnEmptyColumnFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with not\
+          \ null values in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
   ColumnExpectedNumbersInUseCountCheckSpec:
     type: "object"
     properties:
@@ -24778,7 +24845,7 @@ definitions:
           \ the number of rows that have non-null values. Raises a data quality issue\
           \ when the column is empty. Stores the most recent captured value for each\
           \ day when the data quality check was evaluated."
-        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
+        $ref: "#/definitions/ColumnEmptyColumnFoundCheckSpec"
       daily_nulls_percent_change:
         description: "Verifies that the null percent value in a column changed in\
           \ a fixed rate since the last readout."
@@ -24841,7 +24908,7 @@ definitions:
           \ the number of rows that have non-null values. Raises a data quality issue\
           \ when the column is empty. Stores a separate data quality check result\
           \ for each daily partition."
-        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
+        $ref: "#/definitions/ColumnEmptyColumnFoundCheckSpec"
       daily_partition_nulls_percent_change:
         description: "Verifies that the null percent value in a column changed in\
           \ a fixed rate since last readout."
@@ -24902,7 +24969,7 @@ definitions:
           \ the number of rows that have non-null values. Raises a data quality issue\
           \ when the column is empty. Stores the most recent check result for each\
           \ month when the data quality check was evaluated."
-        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
+        $ref: "#/definitions/ColumnEmptyColumnFoundCheckSpec"
   ColumnNullsMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -24944,7 +25011,7 @@ definitions:
           \ the number of rows that have non-null values. Raises a data quality issue\
           \ when the column is empty. Stores a separate data quality check result\
           \ for each monthly partition."
-        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
+        $ref: "#/definitions/ColumnEmptyColumnFoundCheckSpec"
   ColumnNullsNotNullsCountSensorParametersSpec:
     type: "object"
     properties:
@@ -25121,7 +25188,7 @@ definitions:
         description: "Detects empty columns that contain only null values. Counts\
           \ the number of rows that have non-null values. Raises a data quality issue\
           \ when the column is empty."
-        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
+        $ref: "#/definitions/ColumnEmptyColumnFoundCheckSpec"
       profile_nulls_percent_change:
         description: "Verifies that the null percent value in a column changed in\
           \ a fixed rate since last readout."
@@ -34697,73 +34764,6 @@ definitions:
     description: "Model of a configured schedule (enabled on connection or table)\
       \ or schedule override (on check). Describes the CRON expression and the time\
       \ of the upcoming execution, as well as the duration until this time."
-  EmptyColumnFoundCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      always_collect_error_samples:
-        type: "boolean"
-        description: "Forces collecting error samples for this check whenever it fails,\
-          \ even if it is a monitoring check that is run by a scheduler, and running\
-          \ an additional query to collect error samples will impose additional load\
-          \ on the data source."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
-      error:
-        description: "Default alerting threshold for a set number of rows with not\
-          \ null values in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
   Equals1RuleParametersSpec:
     type: "object"
   EqualsIntegerRuleParametersSpec:

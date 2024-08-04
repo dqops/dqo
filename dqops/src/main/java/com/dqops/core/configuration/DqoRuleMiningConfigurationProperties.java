@@ -32,10 +32,10 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     /**
      * The rate of the current row count obtained from statistics that is used to configure the row_count check value by the check mining engine. The default value is 0.99 of the current row count.
      */
-    @CommandLine.Option(names = {"--dqo.rule-mining.minimum-row-count-rate"},
-            description = "The rate of the current row count obtained from statistics that is used to configure the row_count check value by the check mining engine. " +
-                    "The default value is 0.99 of the current row count.", defaultValue = "0.99")
-    private double minimumRowCountRate = 0.99;
+    @CommandLine.Option(names = {"--dqo.rule-mining.min-count-rate"},
+            description = "The rate of the current min_count value, such as the row count, or the count of not-null values, obtained from statistics that is used to configure the row_count and not_nulls_count checks by the check mining engine. " +
+                    "The default value is 0.90 of the current count captured by the statistics (row count, not-nulls count).", defaultValue = "0.90")
+    private double minCountRate = 0.90;
 
     /**
      * The multiplier of the last known table timeliness checks (freshness, staleness, ingestion delay) that is used to propose the configuration of the max days rule threshold by the rule mining engine.
@@ -94,6 +94,7 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
             description = "The default minimum reasonable count of not-null values that must be satisfied to apply some checks " +
                     "that validate a range of row counts (like a distinct count between).", defaultValue = "100")
     private long minReasonableNotNullsCount = 100; // not shown in the documentation (no CLI parameter)
+
 
     /**
      * Creates a clone of the object.

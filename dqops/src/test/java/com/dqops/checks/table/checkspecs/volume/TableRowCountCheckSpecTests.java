@@ -74,7 +74,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.checkMiningConfiguration.setMinCountRate(0.99);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
@@ -91,7 +91,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.checkMiningConfiguration.setMinCountRate(0.99);
         this.checkMiningParametersModel.setProposeMinimumRowCount(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -112,7 +112,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.checkMiningConfiguration.setMinCountRate(0.99);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
@@ -133,7 +133,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(0.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.checkMiningConfiguration.setMinCountRate(0.99);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
@@ -163,7 +163,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(100.0);
         this.profilingCheckResult.setSeverityLevel(CheckResultStatus.valid);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.checkMiningConfiguration.setMinCountRate(0.99);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, targetCheckRootContainer,
