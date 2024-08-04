@@ -90,7 +90,7 @@ public interface CheckExecutionService {
                                                        PhysicalTableName targetTable,
                                                        CheckSearchFilters checkSearchFilters,
                                                        TimeWindowFilterParameters userTimeWindowFilters,
-                                                       boolean collectErrorSamples,
+                                                       Boolean collectErrorSamples,
                                                        CheckExecutionProgressListener progressListener,
                                                        boolean dummySensorExecution,
                                                        JobCancellationToken jobCancellationToken);
