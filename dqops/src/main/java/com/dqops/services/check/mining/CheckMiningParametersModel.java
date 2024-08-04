@@ -70,6 +70,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean copyDisabledProfilingChecks;
 
     /**
+     * Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.")
+    private boolean proposeDefaultChecks = true;
+
+    /**
      * Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")

@@ -51,7 +51,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableRowCountCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec> {
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec>
+        implements ReapplyMinedRulesCheck {
     public static final ChildHierarchyNodeFieldMapImpl<TableRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }

@@ -65,6 +65,7 @@ export default function RuleMining({
         fail_checks_at_percent_error_rows: 0.1,
         copy_failed_profiling_checks: false,
         copy_disabled_profiling_checks: false,
+        propose_default_checks: true,
         propose_minimum_row_count: true,
         propose_column_count: true,
         propose_timeliness_checks: true,

@@ -30,6 +30,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
@@ -220,19 +221,38 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                     continue; // skip proposing checks that are disabled, they are disabled for a reason, even if they are disabled by policies
                 }
 
+                if (checkModel.isDefaultCheck() && !miningParameters.isProposeDefaultChecks()) {
+                    continue; // skip default checks
+                }
+
                 AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
                 SimilarCheckModel similarProfilingCheck = checkModel.getSimilarProfilingCheck();
                 ProfilingCheckResult profilingCheckByCheckName = similarProfilingCheck != null ?
                         dataAssetProfilingResults.getProfilingCheckByCheckName(similarProfilingCheck.getCheckName(), true) : null;
                 boolean checkConfigurationWasGenerated = false;
 
-                if (!checkSpec.hasAnyRulesEnabled()) {
+                if (!checkSpec.hasAnyRulesEnabled() || checkSpec instanceof ReapplyMinedRulesCheck) {
                     try {
                         // let the check configure itself
                         checkConfigurationWasGenerated = checkSpec.proposeCheckConfiguration(
                                 profilingCheckByCheckName, dataAssetProfilingResults, tableProfilingResults, tableSpec,
                                 targetCheckRootContainer, checkModel, miningParameters, columnTypeCategory,
                                 this.checkMiningConfigurationProperties, this.jsonSerializer, this.ruleMiningRuleRegistry);
+
+                        if (checkConfigurationWasGenerated && checkModel.isDefaultCheck()) {
+                            // disable old rules
+                            if (miningParameters.getSeverityLevel() != TargetRuleSeverityLevel.warning) {
+                                checkSpec.setWarning(null);
+                            }
+
+                            if (miningParameters.getSeverityLevel() != TargetRuleSeverityLevel.error) {
+                                checkSpec.setError(null);
+                            }
+
+                            if (miningParameters.getSeverityLevel() != TargetRuleSeverityLevel.fatal) {
+                                checkSpec.setFatal(null);
+                            }
+                        }
 
                         checkConfigurationWasGenerated = checkConfigurationWasGenerated && checkSpec.hasAnyRulesEnabled(); // verify that the rule thresholds were proposed
                     } catch (Exception ex) {

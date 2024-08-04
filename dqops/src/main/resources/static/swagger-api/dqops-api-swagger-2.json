@@ -19075,6 +19075,10 @@
           "type" : "boolean",
           "description" : "Copy also the configuration of profiling checks that are disabled."
         },
+        "propose_default_checks" : {
+          "type" : "boolean",
+          "description" : "Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'."
+        },
         "propose_minimum_row_count" : {
           "type" : "boolean",
           "description" : "Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'."
