@@ -72,6 +72,14 @@ public class ProfilingCheckResult {
     }
 
     /**
+     * Sets a sensor name. It should be called from unit tests, because the sensor name is imported from the check definition or a collector definition.
+     * @param sensorName Sensor name.
+     */
+    public void setSensorName(String sensorName) {
+        this.sensorName = sensorName;
+    }
+
+    /**
      * Returns a check hash, it is the hash of the hierarchy ID of the check model instance.
      * @return Check hash.
      */

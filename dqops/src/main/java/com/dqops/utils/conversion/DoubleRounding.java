@@ -45,35 +45,37 @@ public final class DoubleRounding {
 
         String text = String.format(Locale.ENGLISH, "%.13f", value);
 
-        int indexOfDot = text.indexOf('.');
-        if (indexOfDot < 0) {
-            return value;
-        }
+        char[] digits = text.toCharArray();
+        int charIndex = 0;
 
-        if (indexOfDot > maxDigits + (text.charAt(0) == '-' ? 1 : 0)) {
-            text = text.substring(0, indexOfDot);
-            return Double.valueOf(text); // truncate to the nearest integer value
-        }
-
-        int indexOfFirstNotZero = 0;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            if (Character.isDigit(c) && c != '0') {
-                indexOfFirstNotZero = i;
+        // skipping preceding zeroes
+        for (; charIndex < digits.length; charIndex++) {
+            char currentChar = digits[charIndex];
+            if (currentChar != '0' && currentChar != '-' && currentChar != '.') {
                 break;
             }
         }
 
-        if (text.length() < indexOfFirstNotZero + maxDigits) {
-            return value;
+        for (int digitsCount = 0; charIndex < digits.length; charIndex++) {
+            char currentChar = digits[charIndex];
+            if (Character.isDigit(currentChar)) {
+                digitsCount++;
+
+                if (digitsCount == maxDigits) {
+                    charIndex++;
+                    break;
+                }
+            }
         }
 
-        if (indexOfDot > indexOfFirstNotZero && indexOfDot <= indexOfFirstNotZero + maxDigits) {
-            text = text.substring(0, indexOfFirstNotZero + maxDigits + 1);
-        } else {
-            text = text.substring(0, indexOfFirstNotZero + maxDigits);
+        for (; charIndex < digits.length; charIndex++) {
+            char currentChar = digits[charIndex];
+            if (Character.isDigit(currentChar)) {
+                digits[charIndex] = '0'; // clearing
+            }
         }
 
-        return Double.valueOf(text);
+        String fixedDigits = new String(digits);
+        return Double.valueOf(fixedDigits);
     }
 }

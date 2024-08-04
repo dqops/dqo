@@ -160,7 +160,7 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec imp
         double expectedMinPercent = 100.0;
 
         if (differenceTo100Pct > miningParameters.getFailChecksAtPercentErrorRows()) {
-            if (differenceTo100Pct > miningParameters.getMaxPercentErrorRows()) {
+            if (differenceTo100Pct > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
                 return null;
             }
 

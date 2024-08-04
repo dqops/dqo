@@ -16220,7 +16220,7 @@ definitions:
           \ 0.03% of errors or 99.97% of valid) that is used to propose a percentage\
           \ rule that will treat the values as errors (i.e., max_percent = 0%, or\
           \ min_percent = 100%)."
-      max_percent_error_rows:
+      max_percent_error_rows_for_percent_checks:
         type: "number"
         format: "double"
         description: "The default maximum percentage of invalid rows for which the\

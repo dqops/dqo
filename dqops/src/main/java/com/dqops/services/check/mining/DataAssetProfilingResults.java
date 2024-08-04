@@ -24,6 +24,7 @@ import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.QualityCategoryModel;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -174,6 +175,19 @@ public class DataAssetProfilingResults {
     }
 
     /**
+     * Sets a not null count value as it was coming from a different source. This method is meant to be called from unit tests.
+     * @param notNullCount New not null count.
+     */
+    public void setNotNullCount(Long notNullCount) {
+        ProfilingCheckResult notNullCountResult = this.getProfilingCheckByCheckName("profile_not_nulls_count", true);
+
+        if (notNullCountResult.getActualValue() == null) {
+            notNullCountResult.setActualValue(notNullCount == null ? null : notNullCount.doubleValue());
+            notNullCountResult.setExecutedAt(Instant.now());
+        }
+    }
+
+    /**
      * Retrieves the count of null values in a column from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
      * This call works only on the column data assets.
      * @return Returns the count of null values.
@@ -186,5 +200,18 @@ public class DataAssetProfilingResults {
         }
 
         return null;
+    }
+
+    /**
+     * Sets a null count value as it was coming from a different source. This method is meant to be called from unit tests.
+     * @param nullCount New null count.
+     */
+    public void setNullCount(Long nullCount) {
+        ProfilingCheckResult nullCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
+
+        if (nullCountResult.getActualValue() == null) {
+            nullCountResult.setActualValue(nullCount == null ? null : nullCount.doubleValue());
+            nullCountResult.setExecutedAt(Instant.now());
+        }
     }
 }

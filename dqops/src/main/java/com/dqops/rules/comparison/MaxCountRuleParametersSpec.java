@@ -17,6 +17,7 @@ package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
+import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
@@ -25,6 +26,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
 import com.dqops.utils.conversion.LongRounding;
@@ -119,12 +121,21 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec imple
             return;
         }
 
-        if (this.maxCount < 5) {
+        if (this.maxCount < 5L) {
             this.maxCount = 5L;
             return;
         }
 
-        this.maxCount = (long)(maxCount * 1.5);
+        if (this.maxCount == 0L) {
+            // disabling the check
+            if (!checkResultsSingleCheck.getActualValueColumn().isNotMissing().isEmpty()) {
+                double maximumValue = checkResultsSingleCheck.getActualValueColumn().max();
+                this.maxCount = (long)maximumValue; // catch up to the current value and increased to accept the issue
+                return;
+            }
+        }
+
+        this.maxCount = (long)(maxCount * 1.3);
     }
 
     /**
@@ -161,31 +172,35 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec imple
         }
 
         if (parentCheckRootContainer.getCheckTarget() == CheckTarget.column) {
-            Long notNullCount = dataAssetProfilingResults.getNotNullCount();
-            if (notNullCount == null) {
-                return null;
-            }
+            if (Objects.equals(sourceProfilingCheck.getSensorName(), ColumnNullsNullsCountSensorParametersSpec.SENSOR_NAME)) {
+                if (sourceProfilingCheck.getActualValue() > rowCount * miningParameters.getFailChecksAtPercentErrorRows() / 100.0) {
+                    return null; // too many null values, we should not measure them with a hard count
+                }
+            } else {
+                // all regular checks
+                Long notNullCount = dataAssetProfilingResults.getNotNullCount();
+                if (notNullCount == null) {
+                    return null;
+                }
 
-            if (notNullCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
-                return null; // not enough not-null values to call it reasonable
-            }
+                if (notNullCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
+                    return null; // not enough not-null values to call it reasonable
+                }
 
-            if (sourceProfilingCheck.getActualValue() > notNullCount.doubleValue() * miningParameters.getFailChecksAtPercentErrorRows()) {
-                return null; // too many errors, probably this count is counting profiled values to detect them, and it is a false-positive failure
+                if (sourceProfilingCheck.getActualValue() > notNullCount.doubleValue() * miningParameters.getFailChecksAtPercentErrorRows() / 100.0) {
+                    return null; // too many errors, probably this count is counting profiled values to detect them, and it is a false-positive failure
+                }
             }
         } else {
-            if (rowCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
-                return null;
+            if (sourceProfilingCheck.getActualValue() > rowCount * miningParameters.getFailChecksAtPercentErrorRows() / 100.0) {
+                return null; // too many errors, we will not create a check
             }
         }
 
-        long delta = (long)(Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getMinMaxValueRateDelta());
-        long expectedMaxCount = LongRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue().longValue() + delta);
-
-        if (expectedMaxCount > rowCount * miningParameters.getFailChecksAtPercentErrorRows()) {
-            expectedMaxCount = LongRounding.roundToKeepEffectiveDigits((long)(rowCount * miningParameters.getFailChecksAtPercentErrorRows()));
+        if (rowCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
+            return null; // second verification, do not configure this check for a low row count table, they are not representative
         }
 
-        return new MaxCountRuleParametersSpec(expectedMaxCount);
+        return new MaxCountRuleParametersSpec(0L); // always fail, "count" check are meant to detect problems
     }
 }

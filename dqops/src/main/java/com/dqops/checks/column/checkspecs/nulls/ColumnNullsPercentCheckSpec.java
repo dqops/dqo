@@ -231,7 +231,7 @@ public class ColumnNullsPercentCheckSpec
         }
 
         CheckMiningParametersModel clonedMiningParameters = miningParameters.clone();
-        clonedMiningParameters.setMaxPercentErrorRows(100.0); // always configure max null percent
+        clonedMiningParameters.setMaxPercentErrorRowsForPercentChecks(100.0); // always configure max null percent
 
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
                 tableSpec, parentCheckRootContainer, myCheckModel, clonedMiningParameters,

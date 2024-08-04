@@ -33,7 +33,7 @@ public class CheckMiningParametersModelObjectMother {
 
         CheckMiningParametersModel checkMiningParametersModel = new CheckMiningParametersModel();
         checkMiningParametersModel.setFailChecksAtPercentErrorRows(checkMiningConfigurationProperties.getDefaultFailChecksAtPercentErrorRows());
-        checkMiningParametersModel.setMaxPercentErrorRows(checkMiningConfigurationProperties.getDefaultMaxPercentErrorRows());
+        checkMiningParametersModel.setMaxPercentErrorRowsForPercentChecks(checkMiningConfigurationProperties.getDefaultMaxPercentErrorRows());
         checkMiningParametersModel.setSeverityLevel(TargetRuleSeverityLevel.error);
         return checkMiningParametersModel;
     }

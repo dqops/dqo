@@ -19,6 +19,7 @@ package com.dqops.services.check.mining;
 import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -115,6 +116,18 @@ public class TableProfilingResults {
         }
 
         return rowCountCheckResults.getActualValue().longValue();
+    }
+
+    /**
+     * Sets a row count in a way as it as assigned from a separate source. This method is mostly meant to be called from unit test.
+     * @param rowCount Row count.
+     */
+    public void setRowCount(Long rowCount) {
+        ProfilingCheckResult rowCountCheckResults = this.getTableProfilingResults().getProfilingCheckByCheckName("profile_row_count", true);
+        if (rowCountCheckResults.getActualValue() == null) {
+            rowCountCheckResults.setActualValue(rowCount == null ? null : rowCount.doubleValue());
+            rowCountCheckResults.setExecutedAt(Instant.now());
+        }
     }
 
     /**

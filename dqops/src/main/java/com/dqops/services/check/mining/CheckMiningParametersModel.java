@@ -145,7 +145,7 @@ public class CheckMiningParametersModel implements Cloneable {
      * The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.
      */
     @JsonPropertyDescription("The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.")
-    private Double maxPercentErrorRows;
+    private Double maxPercentErrorRowsForPercentChecks;
 
 
     /**

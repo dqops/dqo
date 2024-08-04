@@ -167,7 +167,7 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec imp
         double expectedMaxPercent = 0.0;
 
         if (sourceProfilingCheck.getActualValue() > miningParameters.getFailChecksAtPercentErrorRows()) {
-            if (sourceProfilingCheck.getActualValue() > miningParameters.getMaxPercentErrorRows()) {
+            if (sourceProfilingCheck.getActualValue() > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
                 return null;
             }
 

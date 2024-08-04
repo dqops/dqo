@@ -106,8 +106,8 @@ public class CheckMiningServiceImpl implements CheckMiningService {
             miningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getDefaultFailChecksAtPercentErrorRows());
         }
 
-        if (miningParameters.getMaxPercentErrorRows() == null) {
-            miningParameters.setMaxPercentErrorRows(this.checkMiningConfigurationProperties.getDefaultMaxPercentErrorRows());
+        if (miningParameters.getMaxPercentErrorRowsForPercentChecks() == null) {
+            miningParameters.setMaxPercentErrorRowsForPercentChecks(this.checkMiningConfigurationProperties.getDefaultMaxPercentErrorRows());
         }
 
         TableProfilingResults tableProfilingResults = this.tableProfilingResultsReadService.loadTableProfilingResults(
