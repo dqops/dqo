@@ -75,7 +75,8 @@ export default function RuleMining({
         propose_uniqueness_checks: true,
         propose_numeric_ranges: true,
         propose_text_length_ranges: true,
-        propose_accepted_values_checks: true
+        propose_accepted_values_checks: true,
+        propose_custom_checks: true
       } as CheckMiningParametersModel
     );
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});

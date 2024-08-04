@@ -16226,6 +16226,10 @@ definitions:
         description: "The default maximum percentage of invalid rows for which the\
           \ rule engine should configure rule values, especially min_percent, min_count\
           \ or max_percent."
+      propose_custom_checks:
+        type: "boolean"
+        description: "Proposes the default configuration for custom checks that use\
+          \ built-in data quality rules. The default value of this parameter is 'true'."
     description: "Data quality check rule mining parameters. Configure what type of\
       \ checks should be configured."
   CheckMiningProposalModel:

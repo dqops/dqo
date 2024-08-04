@@ -141,7 +141,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Detected data type in texts"
+            label="Detected datatype in texts"
             checked={configuration.propose_text_values_data_type}
             onChange={(e) => onChangeConfiguration({ propose_text_values_data_type: e })}
           />
@@ -175,6 +175,15 @@ export default function RuleMiningFilters({
             checked={configuration.propose_accepted_values_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_accepted_values_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Custom data quality checks must use DQOps built-in data quality rules, such as max_percent, min_percent or max_count to find invalid values."
+            label="Custom checks"
+            checked={configuration.propose_custom_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_custom_checks: e })
             }
           />
         </div>
