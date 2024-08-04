@@ -84,8 +84,8 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
      */
     @CommandLine.Option(names = {"--dqo.rule-mining.not-null-count-rate-for-duplicate-count"},
             description = "The default rate (fraction) of the number of rows with not-null values that must contain distinct values to apply the distinct count between check. " +
-                    "The default is 0.1, which is 10%% of the count of not-null values.", defaultValue = "0.1")
-    private double notNullCountRateForDuplicateCount = 0.1;
+                    "The default is 0.01, which is 1%% of the count of not-null values.", defaultValue = "0.01")
+    private double notNullCountRateForDuplicateCount = 0.01;
 
     /**
      * The default minimum reasonable count of not-null values that must be satisfied to apply some checks that validate a range of row counts (like a distinct count between).
