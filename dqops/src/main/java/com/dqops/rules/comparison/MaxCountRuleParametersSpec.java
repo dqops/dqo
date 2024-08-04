@@ -171,14 +171,16 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec imple
             return null; // cannot assess how many records the table has
         }
 
-        if (parentCheckRootContainer.getCheckTarget() == CheckTarget.column) {
+        if (dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults) {
+            ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults)dataAssetProfilingResults;
+
             if (Objects.equals(sourceProfilingCheck.getSensorName(), ColumnNullsNullsCountSensorParametersSpec.SENSOR_NAME)) {
                 if (sourceProfilingCheck.getActualValue() > rowCount * miningParameters.getFailChecksAtPercentErrorRows() / 100.0) {
                     return null; // too many null values, we should not measure them with a hard count
                 }
             } else {
                 // all regular checks
-                Long notNullCount = dataAssetProfilingResults.getNotNullCount();
+                Long notNullCount = columnDataAssetProfilingResults.getNotNullCount();
                 if (notNullCount == null) {
                     return null;
                 }

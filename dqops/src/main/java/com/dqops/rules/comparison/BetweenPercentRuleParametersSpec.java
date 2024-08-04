@@ -185,8 +185,9 @@ public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec
             return null; // cannot assess how many records the table has
         }
 
-        if (parentCheckRootContainer.getCheckTarget() == CheckTarget.column) {
-            Long notNullCount = dataAssetProfilingResults.getNotNullCount();
+        if (dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults) {
+            ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults)dataAssetProfilingResults;
+            Long notNullCount = columnDataAssetProfilingResults.getNotNullCount();
             if (notNullCount == null) {
                 return null;
             }

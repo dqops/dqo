@@ -45,11 +45,6 @@ public class DataAssetProfilingResults {
     private Map<String, ProfilingCheckResult> profilingCheckResults = new LinkedHashMap<>();
 
     /**
-     * A list of sample values for the data asset. Provided only for column data assets, and filled from the results of the column sampling sensor.
-     */
-    private List<Object> sampleValues = new ArrayList<>();
-
-    /**
      * Verifies if any results for profiling checks are present.
      * @return True when there are any results from profiling checks, false when no results.
      */
@@ -150,68 +145,6 @@ public class DataAssetProfilingResults {
                     profilingCheckResult.importStatistics(statisticsMetricModel);
                 }
             }
-
-            if (Objects.equals(sensorName, ColumnSamplingColumnSamplesStatisticsCollectorSpec.SENSOR_NAME)) {
-                // column sampling sensor
-                Object sampleValue = statisticsMetricModel.getResult();
-                this.sampleValues.add(sampleValue);
-            }
-        }
-    }
-
-    /**
-     * Retrieves the count of not-null values in a column from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
-     * This call works only on the column data assets.
-     * @return Returns the count of not null values.
-     */
-    public Long getNotNullCount() {
-        ProfilingCheckResult notNullCountResult = this.getProfilingCheckByCheckName("profile_not_nulls_count", true);
-
-        if (notNullCountResult.getActualValue() != null) {
-            return notNullCountResult.getActualValue().longValue();
-        }
-
-        return null;
-    }
-
-    /**
-     * Sets a not null count value as it was coming from a different source. This method is meant to be called from unit tests.
-     * @param notNullCount New not null count.
-     */
-    public void setNotNullCount(Long notNullCount) {
-        ProfilingCheckResult notNullCountResult = this.getProfilingCheckByCheckName("profile_not_nulls_count", true);
-
-        if (notNullCountResult.getActualValue() == null) {
-            notNullCountResult.setActualValue(notNullCount == null ? null : notNullCount.doubleValue());
-            notNullCountResult.setExecutedAt(Instant.now());
-        }
-    }
-
-    /**
-     * Retrieves the count of null values in a column from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
-     * This call works only on the column data assets.
-     * @return Returns the count of null values.
-     */
-    public Long getNullCount() {
-        ProfilingCheckResult nullCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
-
-        if (nullCountResult.getActualValue() != null) {
-            return nullCountResult.getActualValue().longValue();
-        }
-
-        return null;
-    }
-
-    /**
-     * Sets a null count value as it was coming from a different source. This method is meant to be called from unit tests.
-     * @param nullCount New null count.
-     */
-    public void setNullCount(Long nullCount) {
-        ProfilingCheckResult nullCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
-
-        if (nullCountResult.getActualValue() == null) {
-            nullCountResult.setActualValue(nullCount == null ? null : nullCount.doubleValue());
-            nullCountResult.setExecutedAt(Instant.now());
         }
     }
 }

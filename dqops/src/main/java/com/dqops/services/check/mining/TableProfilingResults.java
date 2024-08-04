@@ -29,8 +29,8 @@ import java.util.Map;
  * It is used for mining checks based on previous profiling check results.
  */
 public class TableProfilingResults {
-    private DataAssetProfilingResults tableProfilingResults = new DataAssetProfilingResults();
-    private Map<String, DataAssetProfilingResults> columns = new LinkedHashMap<>();
+    private TableDataAssetProfilingResults tableProfilingResults = new TableDataAssetProfilingResults();
+    private Map<String, ColumnDataAssetProfilingResults> columns = new LinkedHashMap<>();
     private StatisticsResultsForTableModel statistics;
     private boolean missingStatisticsResults;
     private boolean missingProfilingChecksResults;
@@ -39,7 +39,7 @@ public class TableProfilingResults {
      * Returns data profiling results for the table-level statistics and profiling checks.
      * @return Table level profiling results.
      */
-    public DataAssetProfilingResults getTableProfilingResults() {
+    public TableDataAssetProfilingResults getTableProfilingResults() {
         return this.tableProfilingResults;
     }
 
@@ -72,10 +72,10 @@ public class TableProfilingResults {
      * @param columnName Column name.
      * @return Column statistics summary or null, when there are no results for that column.
      */
-    public DataAssetProfilingResults getColumnProfilingResults(String columnName) {
-        DataAssetProfilingResults dataAssetProfilingResults = this.columns.get(columnName);
+    public ColumnDataAssetProfilingResults getColumnProfilingResults(String columnName) {
+        ColumnDataAssetProfilingResults dataAssetProfilingResults = this.columns.get(columnName);
         if (dataAssetProfilingResults == null) {
-            dataAssetProfilingResults = new DataAssetProfilingResults();
+            dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
             this.columns.put(columnName, dataAssetProfilingResults);
         }
         return dataAssetProfilingResults;
