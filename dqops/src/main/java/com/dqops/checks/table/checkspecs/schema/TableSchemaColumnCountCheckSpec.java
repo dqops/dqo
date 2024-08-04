@@ -226,7 +226,7 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
             return false;
         }
 
-        if (!miningParameters.isProposeColumnCountCheck()) {
+        if (!miningParameters.isProposeColumnCount()) {
             return false;
         }
 

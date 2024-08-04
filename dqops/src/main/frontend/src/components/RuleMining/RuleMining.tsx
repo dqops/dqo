@@ -26,7 +26,7 @@ const tabs = [
   }
 ];
 
-const getRuleMiningConfigurationLocalStorage = () => {
+const getRuleMiningConfigurationLocalStorage = () : CheckMiningParametersModel => {
   const configuration = localStorage.getItem('ruleMiningConfiguration');
   return configuration ? JSON.parse(configuration) : null;
 };
@@ -56,7 +56,9 @@ export default function RuleMining({
     schema: string;
     table: string;
   } = useDecodedParams();
+
   const [configuration, setConfiguration] =
+  
     useState<CheckMiningParametersModel>(
       getRuleMiningConfigurationLocalStorage() ?? {
         severity_level: 'error',
@@ -64,16 +66,17 @@ export default function RuleMining({
         copy_failed_profiling_checks: false,
         copy_disabled_profiling_checks: false,
         propose_minimum_row_count: true,
-        propose_column_count_check: true,
+        propose_column_count: true,
         propose_timeliness_checks: true,
-        propose_nulls_percent: true,
-        propose_not_nulls_percent: false,
+        propose_nulls_checks: true,
+        propose_not_nulls_checks: false,
+        propose_column_exists: true,
         propose_text_values_data_type: true,
         propose_uniqueness_checks: true,
         propose_numeric_ranges: true,
         propose_text_length_ranges: true,
         propose_accepted_values_checks: true
-      }
+      } as CheckMiningParametersModel
     );
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);

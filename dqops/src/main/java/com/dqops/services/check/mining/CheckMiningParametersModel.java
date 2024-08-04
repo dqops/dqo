@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import picocli.CommandLine;
 
 /**
  * Data quality check rule mining parameters. Configure what type of checks should be configured.
@@ -80,7 +79,7 @@ public class CheckMiningParametersModel implements Cloneable {
      * Proposes the default configuration of the column count check. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Proposes the default configuration of the column count check. The default value of this parameter is 'true'.")
-    private boolean proposeColumnCountCheck = true;
+    private boolean proposeColumnCount = true;
 
     /**
      * Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.
@@ -89,16 +88,16 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeTimelinessChecks = true;
 
     /**
-     * Proposes the default configuration the maximum null percent checks that validate the percentage of nulls. The default value of this parameter is 'true'.
+     * Proposes the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the maximum null percent checks that validate the percentage of nulls. The default value of this parameter is 'true'.")
-    private boolean proposeNullsPercent = true;
+    @JsonPropertyDescription("Proposes the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.")
+    private boolean proposeNullsChecks = true;
 
     /**
-     * Proposes the default configuration the minimum null percent checks that validate the percentage of nulls (require null values). The default value of this parameter is 'false'.
+     * Proposes the default configuration the not-null checks that validate scale of not-nulls (require some null values). The default value of this parameter is 'false'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the minimum null percent checks that validate the percentage of nulls (require null values). The default value of this parameter is 'false'.")
-    private boolean proposeNotNullsPercent = false;
+    @JsonPropertyDescription("Proposes the default configuration the not-null checks that validate scale of not-nulls (require some null values).The default value of this parameter is 'false'.")
+    private boolean proposeNotNullsChecks = false;
 
     /**
      * Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.

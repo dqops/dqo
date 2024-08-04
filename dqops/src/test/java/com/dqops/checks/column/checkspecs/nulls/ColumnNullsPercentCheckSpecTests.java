@@ -133,7 +133,7 @@ public class ColumnNullsPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(10.0);
         this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
-        this.checkMiningParametersModel.setProposeNullsPercent(false);
+        this.checkMiningParametersModel.setProposeNullsChecks(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),

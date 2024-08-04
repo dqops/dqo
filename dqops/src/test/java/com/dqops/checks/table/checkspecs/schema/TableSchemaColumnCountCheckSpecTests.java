@@ -90,7 +90,7 @@ public class TableSchemaColumnCountCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningParametersModel.setProposeColumnCountCheck(false);
+        this.checkMiningParametersModel.setProposeColumnCount(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),

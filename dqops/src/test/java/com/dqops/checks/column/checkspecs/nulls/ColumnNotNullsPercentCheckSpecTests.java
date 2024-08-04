@@ -72,7 +72,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();
-        this.checkMiningParametersModel.setProposeNotNullsPercent(true); // special
+        this.checkMiningParametersModel.setProposeNotNullsChecks(true); // special
         this.ruleMiningRuleRegistry = RuleMiningRuleRegistryObjectMother.getDefault();
     }
 
@@ -153,7 +153,7 @@ public class ColumnNotNullsPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(10.0);
         this.checkMiningConfiguration.setPercentCheckDeltaRate(0.3);
-        this.checkMiningParametersModel.setProposeNotNullsPercent(false);
+        this.checkMiningParametersModel.setProposeNotNullsChecks(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),

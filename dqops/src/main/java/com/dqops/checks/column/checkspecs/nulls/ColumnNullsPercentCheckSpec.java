@@ -226,7 +226,7 @@ public class ColumnNullsPercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeNullsPercent()) {
+        if (!miningParameters.isProposeNullsChecks()) {
             return false;
         }
 

@@ -63,7 +63,8 @@ export default function RuleMiningFilters({
           className="text-sm"
         />
         <Input
-          label="Fail checks below the percent of wrong rows"
+          label="Error rate (% rows)"
+          tooltipText="The desired percentage of error rows. When a profiling data quality check identifies incorrect rows and their number is below this desired error rate, DQOps rule mining engine will configure the rule threshold make the check fail."
           value={configuration.fail_checks_at_percent_error_rows}
           type="number"
           onChange={(e) =>
@@ -74,7 +75,7 @@ export default function RuleMiningFilters({
                   : Number(e.target.value)
             })
           }
-        /> %
+        />
       </div>
       <div className="flex justify-between">
         <div className="flex flex-wrap gap-x-5 mb-4">
@@ -105,9 +106,17 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2"
             label="Column count"
-            checked={configuration.propose_column_count_check}
+            checked={configuration.propose_column_count}
             onChange={(e) =>
-              onChangeConfiguration({ propose_column_count_check: e })
+              onChangeConfiguration({ propose_column_count: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Column exists"
+            checked={configuration.propose_column_exists}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_column_exists: e })
             }
           />
           <Checkbox
@@ -120,19 +129,19 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            label="Nulls percent"
-            checked={configuration.propose_nulls_percent}
-            onChange={(e) => onChangeConfiguration({ propose_nulls_percent: e })}
+            label="Nulls (prohibit nulls)"
+            checked={configuration.propose_nulls_checks}
+            onChange={(e) => onChangeConfiguration({ propose_nulls_checks: e })}
           />
           <Checkbox
             className="p-2"
-            label="Not nulls percent (require nulls)"
-            checked={configuration.propose_not_nulls_percent}
-            onChange={(e) => onChangeConfiguration({ propose_not_nulls_percent: e })}
+            label="Not nulls (require nulls)"
+            checked={configuration.propose_not_nulls_checks}
+            onChange={(e) => onChangeConfiguration({ propose_not_nulls_checks: e })}
           />
           <Checkbox
             className="p-2"
-            label="Validate detected data type in text columns"
+            label="Detected data type in texts"
             checked={configuration.propose_text_values_data_type}
             onChange={(e) => onChangeConfiguration({ propose_text_values_data_type: e })}
           />
