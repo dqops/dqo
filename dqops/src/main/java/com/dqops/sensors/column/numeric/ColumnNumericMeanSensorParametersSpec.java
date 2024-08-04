@@ -37,6 +37,11 @@ public class ColumnNumericMeanSensorParametersSpec extends AbstractSensorParamet
     };
 
     /**
+     * The sensor name used by this check.
+     */
+    public static final String SENSOR_NAME = "column/numeric/mean";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -53,6 +58,6 @@ public class ColumnNumericMeanSensorParametersSpec extends AbstractSensorParamet
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/numeric/mean";
+        return SENSOR_NAME;
     }
 }

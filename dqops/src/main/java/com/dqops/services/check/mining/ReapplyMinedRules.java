@@ -21,5 +21,5 @@ package com.dqops.services.check.mining;
  * through rule mining again, even if they already have rule thresholds configured, because the rule miner will apply better rules.
  * For example, the {@link com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec} will be recalculated.
  */
-public interface ReapplyMinedRulesCheck {
+public interface ReapplyMinedRules {
 }

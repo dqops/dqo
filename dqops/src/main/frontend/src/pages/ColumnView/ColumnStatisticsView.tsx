@@ -38,7 +38,8 @@ const defaultColumnStatistics: Record<string, TStatistics[]> = {
     { type: 'Min value' },
     { type: 'Max value' },
     { type: 'Median value' },
-    { type: 'Sum value' }
+    { type: 'Sum value' },
+    { type: 'Mean value' },
   ],
   Text: [
     { type: 'Text min length' },
@@ -129,7 +130,8 @@ const ColumnStatisticsView = ({
         { type: 'Min value' },
         { type: 'Max value' },
         { type: 'Median value' },
-        { type: 'Sum value' }
+        { type: 'Sum value' },
+        { type: 'Mean value' },
       ],
       Text: [
         { type: 'Text min length' },

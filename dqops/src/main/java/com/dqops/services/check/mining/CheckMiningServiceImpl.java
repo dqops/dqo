@@ -218,20 +218,23 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                 }
 
                 if (checkModel.isDisabled() && !miningParameters.isCopyDisabledProfilingChecks()) {
+                    listOfChecksInCategory.remove(checkModel);
                     continue; // skip proposing checks that are disabled, they are disabled for a reason, even if they are disabled by policies
                 }
 
-                if (checkModel.isDefaultCheck() && !miningParameters.isProposeDefaultChecks()) {
+                AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
+
+                if (checkModel.isDefaultCheck() && checkSpec.hasAnyRulesEnabled() && !miningParameters.isProposeDefaultChecks()) {
+                    listOfChecksInCategory.remove(checkModel);
                     continue; // skip default checks
                 }
 
-                AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
                 SimilarCheckModel similarProfilingCheck = checkModel.getSimilarProfilingCheck();
                 ProfilingCheckResult profilingCheckByCheckName = similarProfilingCheck != null ?
                         dataAssetProfilingResults.getProfilingCheckByCheckName(similarProfilingCheck.getCheckName(), true) : null;
                 boolean checkConfigurationWasGenerated = false;
 
-                if (!checkSpec.hasAnyRulesEnabled() || checkSpec instanceof ReapplyMinedRulesCheck) {
+                if (!checkSpec.hasAnyRulesEnabled() || checkSpec instanceof ReapplyMinedRules) {
                     try {
                         // let the check configure itself
                         checkConfigurationWasGenerated = checkSpec.proposeCheckConfiguration(
@@ -252,6 +255,9 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                             if (miningParameters.getSeverityLevel() != TargetRuleSeverityLevel.fatal) {
                                 checkSpec.setFatal(null);
                             }
+
+                            checkModel.setDefaultCheck(false); // undefault
+                            checkSpec.setDefaultCheck(false);
                         }
 
                         checkConfigurationWasGenerated = checkConfigurationWasGenerated && checkSpec.hasAnyRulesEnabled(); // verify that the rule thresholds were proposed

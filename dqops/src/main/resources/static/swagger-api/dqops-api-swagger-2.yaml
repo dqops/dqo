@@ -16433,12 +16433,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
@@ -28115,6 +28115,16 @@ definitions:
       parameters:
         description: "Profiler parameters"
         $ref: "#/definitions/ColumnRangeMaxValueSensorParametersSpec"
+  ColumnRangeMeanValueStatisticsCollectorSpec:
+    type: "object"
+    properties:
+      disabled:
+        type: "boolean"
+        description: "Disables this profiler. Only enabled profilers are executed\
+          \ during a profiling process."
+      parameters:
+        description: "Profiler parameters"
+        $ref: "#/definitions/ColumnNumericMeanSensorParametersSpec"
   ColumnRangeMedianValueStatisticsCollectorSpec:
     type: "object"
     properties:
@@ -28157,6 +28167,10 @@ definitions:
         description: "Configuration of the profiler that finds the maximum value in\
           \ the column."
         $ref: "#/definitions/ColumnRangeMaxValueStatisticsCollectorSpec"
+      mean_value:
+        description: "Configuration of the profiler that finds the mean value in the\
+          \ column."
+        $ref: "#/definitions/ColumnRangeMeanValueStatisticsCollectorSpec"
       sum_value:
         description: "Configuration of the profiler that finds the sum value in the\
           \ column."

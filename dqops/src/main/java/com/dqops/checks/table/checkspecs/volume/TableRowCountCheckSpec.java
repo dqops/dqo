@@ -52,7 +52,7 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 public class TableRowCountCheckSpec
         extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec>
-        implements ReapplyMinedRulesCheck {
+        implements ReapplyMinedRules {
     public static final ChildHierarchyNodeFieldMapImpl<TableRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }

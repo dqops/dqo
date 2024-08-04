@@ -16,12 +16,21 @@
 package com.dqops.checks.column.checkspecs.nulls;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleConstant1ParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -42,7 +51,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class EmptyColumnFoundCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNotNullsCountSensorParametersSpec, MinCountRuleConstant1ParametersSpec, MinCountRuleConstant1ParametersSpec, MinCountRuleConstant1ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNullsNotNullsCountSensorParametersSpec, MinCountRuleConstant1ParametersSpec, MinCountRuleConstant1ParametersSpec, MinCountRuleConstant1ParametersSpec>
+        implements ReapplyMinedRules {
     public static final ChildHierarchyNodeFieldMapImpl<EmptyColumnFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -188,5 +198,89 @@ public class EmptyColumnFoundCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Completeness;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (sourceProfilingCheck == null) {
+            return false;
+        }
+
+        if (!miningParameters.isProposeNullsChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType == CheckType.monitoring && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (checkType != CheckType.partitioned) {
+            Double actualValue = sourceProfilingCheck.getActualValue();
+            if (actualValue == null) {
+                return false;
+            }
+
+            if (actualValue > 0.0) {
+                // some values detected, if there are very few values, we will activate this check
+
+                Long rowCount = tableProfilingResults.getRowCount();
+                if (rowCount == null || rowCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
+                    return false; // the table is too small or we don't know the row count
+                }
+
+                if (actualValue > rowCount * miningParameters.getFailChecksAtPercentErrorRows() / 100.0) {
+                    return false; // too many not-null values, we can assume that this column will not turn empty, and there is no reason to configure it
+                }
+            }
+
+            switch (miningParameters.getSeverityLevel()) {
+                case warning:
+                    this.setWarning(new MinCountRuleConstant1ParametersSpec());
+                    break;
+                case error:
+                    this.setError(new MinCountRuleConstant1ParametersSpec());
+                    break;
+                case fatal:
+                    this.setFatal(new MinCountRuleConstant1ParametersSpec());
+                    break;
+            }
+
+            return true;
+        }
+
+        // TODO: consider if we want to configure it for partitioned checks, probably only when the daily row count per partition is above a reasonable limit and we can detect days with no values at all
+
+        return false;
     }
 }
