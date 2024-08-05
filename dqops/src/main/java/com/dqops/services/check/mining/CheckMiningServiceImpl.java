@@ -222,6 +222,11 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                     continue; // skip proposing checks that are disabled, they are disabled for a reason, even if they are disabled by policies
                 }
 
+                if (checkModel.getConfigurationRequirementsErrors() != null && !checkModel.getConfigurationRequirementsErrors().isEmpty()) {
+                    listOfChecksInCategory.remove(checkModel);
+                    continue; // the check cannot be proposed, because it has some configuration issues. Timeliness checks require to configure timestamp columns.
+                }
+
                 AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
 
                 if (checkModel.isDefaultCheck() && checkSpec.hasAnyRulesEnabled() && !miningParameters.isProposeDefaultChecks()) {
