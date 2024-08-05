@@ -477,6 +477,7 @@ from .column_distinct_percent_change_check_spec import (
 from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
 from .column_duplicate_percent_check_spec import ColumnDuplicatePercentCheckSpec
+from .column_empty_column_found_check_spec import ColumnEmptyColumnFoundCheckSpec
 from .column_expected_numbers_in_use_count_check_spec import (
     ColumnExpectedNumbersInUseCountCheckSpec,
 )
@@ -952,6 +953,9 @@ from .column_range_max_value_sensor_parameters_spec import (
 from .column_range_max_value_statistics_collector_spec import (
     ColumnRangeMaxValueStatisticsCollectorSpec,
 )
+from .column_range_mean_value_statistics_collector_spec import (
+    ColumnRangeMeanValueStatisticsCollectorSpec,
+)
 from .column_range_median_value_statistics_collector_spec import (
     ColumnRangeMedianValueStatisticsCollectorSpec,
 )
@@ -1411,7 +1415,6 @@ from .duckdb_storage_type import DuckdbStorageType
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
-from .empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 from .equals_1_rule_parameters_spec import Equals1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_entry_model import ErrorEntryModel
@@ -2166,6 +2169,7 @@ __all__ = (
     "ColumnDistinctPercentCheckSpec",
     "ColumnDuplicateCountCheckSpec",
     "ColumnDuplicatePercentCheckSpec",
+    "ColumnEmptyColumnFoundCheckSpec",
     "ColumnExpectedNumbersInUseCountCheckSpec",
     "ColumnExpectedTextsInTopValuesCountCheckSpec",
     "ColumnExpectedTextValuesInUseCountCheckSpec",
@@ -2351,6 +2355,7 @@ __all__ = (
     "ColumnProfilingCheckCategoriesSpecCustom",
     "ColumnRangeMaxValueSensorParametersSpec",
     "ColumnRangeMaxValueStatisticsCollectorSpec",
+    "ColumnRangeMeanValueStatisticsCollectorSpec",
     "ColumnRangeMedianValueStatisticsCollectorSpec",
     "ColumnRangeMinValueSensorParametersSpec",
     "ColumnRangeMinValueStatisticsCollectorSpec",
@@ -2562,7 +2567,6 @@ __all__ = (
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
-    "EmptyColumnFoundCheckSpec",
     "Equals1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorEntryModel",

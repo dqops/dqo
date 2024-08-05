@@ -33,15 +33,21 @@ Data quality check rule mining parameters. Configure what type of checks should 
 |<span class="no-wrap-code">`column_name_filter`</span>|Optional filter for the column names, supports filtering with prefixes and suffixes defined as a '*' character.|*string*|
 |<span class="no-wrap-code">`copy_failed_profiling_checks`</span>|Copy also the configuration of profiling checks that failed.|*boolean*|
 |<span class="no-wrap-code">`copy_disabled_profiling_checks`</span>|Copy also the configuration of profiling checks that are disabled.|*boolean*|
+|<span class="no-wrap-code">`propose_default_checks`</span>|Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`propose_minimum_row_count`</span>|Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.|*boolean*|
-|<span class="no-wrap-code">`propose_column_count_check`</span>|Proposes the default configuration of the column count check. The default value of this parameter is 'true'.|*boolean*|
+|<span class="no-wrap-code">`propose_column_count`</span>|Proposes the default configuration of the column count check. The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`propose_timeliness_checks`</span>|Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.|*boolean*|
-|<span class="no-wrap-code">`propose_null_checks`</span>|Proposes the default configuration the null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.|*boolean*|
+|<span class="no-wrap-code">`propose_nulls_checks`</span>|Proposes the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.|*boolean*|
+|<span class="no-wrap-code">`propose_not_nulls_checks`</span>|Proposes the default configuration the not-null checks that validate scale of not-nulls (require a mix of some not-null and null values).The default value of this parameter is 'false'.|*boolean*|
+|<span class="no-wrap-code">`propose_text_values_data_type`</span>|Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.|*boolean*|
+|<span class="no-wrap-code">`propose_column_exists`</span>|Enables a rule on the column's schema check that verifies if the column exists. It is enabled on columns that were detected as existing during data profiling. The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`propose_uniqueness_checks`</span>|Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`propose_numeric_ranges`</span>|Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`propose_text_length_ranges`</span>|Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`propose_accepted_values_checks`</span>|Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.|*boolean*|
 |<span class="no-wrap-code">`fail_checks_at_percent_error_rows`</span>|The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).|*double*|
+|<span class="no-wrap-code">`max_percent_error_rows_for_percent_checks`</span>|The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.|*double*|
+|<span class="no-wrap-code">`propose_custom_checks`</span>|Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.|*boolean*|
 
 
 ___

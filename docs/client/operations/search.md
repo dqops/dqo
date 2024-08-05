@@ -586,7 +586,7 @@ http://localhost:8888/api/search/tables
         ```
         [ {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
@@ -634,7 +634,7 @@ http://localhost:8888/api/search/tables
 		  "can_delete_data" : true
 		}, {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
@@ -682,7 +682,7 @@ http://localhost:8888/api/search/tables
 		  "can_delete_data" : true
 		}, {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
@@ -760,7 +760,7 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -813,7 +813,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -866,7 +866,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -950,7 +950,7 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1003,7 +1003,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1056,7 +1056,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1143,7 +1143,7 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1196,7 +1196,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1249,7 +1249,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1336,7 +1336,7 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1389,7 +1389,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
@@ -1442,7 +1442,7 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'

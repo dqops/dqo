@@ -6,6 +6,9 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_empty_column_found_check_spec import (
+        ColumnEmptyColumnFoundCheckSpec,
+    )
     from ..models.column_not_nulls_count_check_spec import ColumnNotNullsCountCheckSpec
     from ..models.column_not_nulls_percent_check_spec import (
         ColumnNotNullsPercentCheckSpec,
@@ -30,7 +33,6 @@ if TYPE_CHECKING:
     from ..models.column_nulls_profiling_checks_spec_custom_checks import (
         ColumnNullsProfilingChecksSpecCustomChecks,
     )
-    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsProfilingChecksSpec")
@@ -48,7 +50,7 @@ class ColumnNullsProfilingChecksSpec:
         profile_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         profile_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         profile_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
-        profile_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
+        profile_empty_column_found (Union[Unset, ColumnEmptyColumnFoundCheckSpec]):
         profile_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         profile_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         profile_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
@@ -63,7 +65,7 @@ class ColumnNullsProfilingChecksSpec:
     ] = UNSET
     profile_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
     profile_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
-    profile_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = UNSET
+    profile_empty_column_found: Union[Unset, "ColumnEmptyColumnFoundCheckSpec"] = UNSET
     profile_nulls_percent_change: Union[Unset, "ColumnNullPercentChangeCheckSpec"] = (
         UNSET
     )
@@ -165,6 +167,9 @@ class ColumnNullsProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_empty_column_found_check_spec import (
+            ColumnEmptyColumnFoundCheckSpec,
+        )
         from ..models.column_not_nulls_count_check_spec import (
             ColumnNotNullsCountCheckSpec,
         )
@@ -191,7 +196,6 @@ class ColumnNullsProfilingChecksSpec:
         from ..models.column_nulls_profiling_checks_spec_custom_checks import (
             ColumnNullsProfilingChecksSpecCustomChecks,
         )
-        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -253,11 +257,11 @@ class ColumnNullsProfilingChecksSpec:
             )
 
         _profile_empty_column_found = d.pop("profile_empty_column_found", UNSET)
-        profile_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        profile_empty_column_found: Union[Unset, ColumnEmptyColumnFoundCheckSpec]
         if isinstance(_profile_empty_column_found, Unset):
             profile_empty_column_found = UNSET
         else:
-            profile_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
+            profile_empty_column_found = ColumnEmptyColumnFoundCheckSpec.from_dict(
                 _profile_empty_column_found
             )
 

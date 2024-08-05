@@ -34,8 +34,7 @@ public class ErrorSamplesColumnNames {
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
 
     /**
-     * Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time.
-     * The parquet files are time partitioned by this column.
+     * Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time. The parquet files are time partitioned by this column.
      */
     public static final String COLLECTED_AT_COLUMN_NAME = "collected_at";
 

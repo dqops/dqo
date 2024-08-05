@@ -89,9 +89,9 @@ class CheckModel:
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
         can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
         can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
+        check_hash (Union[Unset, int]): The check hash code that identifies the check instance.
         similar_profiling_check (Union[Unset, SimilarCheckModel]): Model that identifies a similar check in another
             category or another type of check (monitoring, partition).
-        check_hash (Union[Unset, int]): The check hash code that identifies the check instance.
     """
 
     check_name: Union[Unset, str] = UNSET
@@ -127,8 +127,8 @@ class CheckModel:
     can_edit: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
-    similar_profiling_check: Union[Unset, "SimilarCheckModel"] = UNSET
     check_hash: Union[Unset, int] = UNSET
+    similar_profiling_check: Union[Unset, "SimilarCheckModel"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -216,11 +216,10 @@ class CheckModel:
         can_edit = self.can_edit
         can_run_checks = self.can_run_checks
         can_delete_data = self.can_delete_data
+        check_hash = self.check_hash
         similar_profiling_check: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.similar_profiling_check, Unset):
             similar_profiling_check = self.similar_profiling_check.to_dict()
-
-        check_hash = self.check_hash
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -293,10 +292,10 @@ class CheckModel:
             field_dict["can_run_checks"] = can_run_checks
         if can_delete_data is not UNSET:
             field_dict["can_delete_data"] = can_delete_data
-        if similar_profiling_check is not UNSET:
-            field_dict["similar_profiling_check"] = similar_profiling_check
         if check_hash is not UNSET:
             field_dict["check_hash"] = check_hash
+        if similar_profiling_check is not UNSET:
+            field_dict["similar_profiling_check"] = similar_profiling_check
 
         return field_dict
 
@@ -453,6 +452,8 @@ class CheckModel:
 
         can_delete_data = d.pop("can_delete_data", UNSET)
 
+        check_hash = d.pop("check_hash", UNSET)
+
         _similar_profiling_check = d.pop("similar_profiling_check", UNSET)
         similar_profiling_check: Union[Unset, SimilarCheckModel]
         if isinstance(_similar_profiling_check, Unset):
@@ -461,8 +462,6 @@ class CheckModel:
             similar_profiling_check = SimilarCheckModel.from_dict(
                 _similar_profiling_check
             )
-
-        check_hash = d.pop("check_hash", UNSET)
 
         check_model = cls(
             check_name=check_name,
@@ -498,8 +497,8 @@ class CheckModel:
             can_edit=can_edit,
             can_run_checks=can_run_checks,
             can_delete_data=can_delete_data,
-            similar_profiling_check=similar_profiling_check,
             check_hash=check_hash,
+            similar_profiling_check=similar_profiling_check,
         )
 
         check_model.additional_properties = d

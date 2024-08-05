@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_range_max_value_statistics_collector_spec import (
         ColumnRangeMaxValueStatisticsCollectorSpec,
     )
+    from ..models.column_range_mean_value_statistics_collector_spec import (
+        ColumnRangeMeanValueStatisticsCollectorSpec,
+    )
     from ..models.column_range_median_value_statistics_collector_spec import (
         ColumnRangeMedianValueStatisticsCollectorSpec,
     )
@@ -30,12 +33,14 @@ class ColumnRangeStatisticsCollectorsSpec:
         min_value (Union[Unset, ColumnRangeMinValueStatisticsCollectorSpec]):
         median_value (Union[Unset, ColumnRangeMedianValueStatisticsCollectorSpec]):
         max_value (Union[Unset, ColumnRangeMaxValueStatisticsCollectorSpec]):
+        mean_value (Union[Unset, ColumnRangeMeanValueStatisticsCollectorSpec]):
         sum_value (Union[Unset, ColumnRangeSumValueStatisticsCollectorSpec]):
     """
 
     min_value: Union[Unset, "ColumnRangeMinValueStatisticsCollectorSpec"] = UNSET
     median_value: Union[Unset, "ColumnRangeMedianValueStatisticsCollectorSpec"] = UNSET
     max_value: Union[Unset, "ColumnRangeMaxValueStatisticsCollectorSpec"] = UNSET
+    mean_value: Union[Unset, "ColumnRangeMeanValueStatisticsCollectorSpec"] = UNSET
     sum_value: Union[Unset, "ColumnRangeSumValueStatisticsCollectorSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -52,6 +57,10 @@ class ColumnRangeStatisticsCollectorsSpec:
         if not isinstance(self.max_value, Unset):
             max_value = self.max_value.to_dict()
 
+        mean_value: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.mean_value, Unset):
+            mean_value = self.mean_value.to_dict()
+
         sum_value: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.sum_value, Unset):
             sum_value = self.sum_value.to_dict()
@@ -65,6 +74,8 @@ class ColumnRangeStatisticsCollectorsSpec:
             field_dict["median_value"] = median_value
         if max_value is not UNSET:
             field_dict["max_value"] = max_value
+        if mean_value is not UNSET:
+            field_dict["mean_value"] = mean_value
         if sum_value is not UNSET:
             field_dict["sum_value"] = sum_value
 
@@ -74,6 +85,9 @@ class ColumnRangeStatisticsCollectorsSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.column_range_max_value_statistics_collector_spec import (
             ColumnRangeMaxValueStatisticsCollectorSpec,
+        )
+        from ..models.column_range_mean_value_statistics_collector_spec import (
+            ColumnRangeMeanValueStatisticsCollectorSpec,
         )
         from ..models.column_range_median_value_statistics_collector_spec import (
             ColumnRangeMedianValueStatisticsCollectorSpec,
@@ -109,6 +123,15 @@ class ColumnRangeStatisticsCollectorsSpec:
         else:
             max_value = ColumnRangeMaxValueStatisticsCollectorSpec.from_dict(_max_value)
 
+        _mean_value = d.pop("mean_value", UNSET)
+        mean_value: Union[Unset, ColumnRangeMeanValueStatisticsCollectorSpec]
+        if isinstance(_mean_value, Unset):
+            mean_value = UNSET
+        else:
+            mean_value = ColumnRangeMeanValueStatisticsCollectorSpec.from_dict(
+                _mean_value
+            )
+
         _sum_value = d.pop("sum_value", UNSET)
         sum_value: Union[Unset, ColumnRangeSumValueStatisticsCollectorSpec]
         if isinstance(_sum_value, Unset):
@@ -120,6 +143,7 @@ class ColumnRangeStatisticsCollectorsSpec:
             min_value=min_value,
             median_value=median_value,
             max_value=max_value,
+            mean_value=mean_value,
             sum_value=sum_value,
         )
 

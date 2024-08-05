@@ -651,6 +651,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`min_value`](./TableYaml.md#columnrangeminvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the minimum value in the column.|*[ColumnRangeMinValueStatisticsCollectorSpec](./TableYaml.md#columnrangeminvaluestatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`median_value`](./TableYaml.md#columnrangemedianvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the median value in the column.|*[ColumnRangeMedianValueStatisticsCollectorSpec](./TableYaml.md#columnrangemedianvaluestatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`max_value`](./TableYaml.md#columnrangemaxvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the maximum value in the column.|*[ColumnRangeMaxValueStatisticsCollectorSpec](./TableYaml.md#columnrangemaxvaluestatisticscollectorspec)*| | | |
+|<span class="no-wrap-code ">[`mean_value`](./TableYaml.md#columnrangemeanvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the mean value in the column.|*[ColumnRangeMeanValueStatisticsCollectorSpec](./TableYaml.md#columnrangemeanvaluestatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`sum_value`](./TableYaml.md#columnrangesumvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the sum value in the column.|*[ColumnRangeSumValueStatisticsCollectorSpec](./TableYaml.md#columnrangesumvaluestatisticscollectorspec)*| | | |
 
 
@@ -727,6 +728,21 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`filter`</span>|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|*string*| | | |
+
+
+
+___
+
+## ColumnRangeMeanValueStatisticsCollectorSpec
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`parameters`](../sensors/column/numeric-column-sensors.md#mean)</span>|Profiler parameters|*[ColumnNumericMeanSensorParametersSpec](../sensors/column/numeric-column-sensors.md#mean)*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
 
 
 

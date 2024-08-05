@@ -27,6 +27,7 @@ class FilteredNotificationSpec:
             allows to send next notification from the list in priority order that matches the filter.
         disabled (Union[Unset, bool]): Flag to turn off the notification filter.
         description (Union[Unset, str]): Description.
+        do_not_create_incidents (Union[Unset, bool]): Flag to remove incident that match the filters.
     """
 
     filter_: Union[Unset, "NotificationFilterSpec"] = UNSET
@@ -35,6 +36,7 @@ class FilteredNotificationSpec:
     process_additional_filters: Union[Unset, bool] = UNSET
     disabled: Union[Unset, bool] = UNSET
     description: Union[Unset, str] = UNSET
+    do_not_create_incidents: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -50,6 +52,7 @@ class FilteredNotificationSpec:
         process_additional_filters = self.process_additional_filters
         disabled = self.disabled
         description = self.description
+        do_not_create_incidents = self.do_not_create_incidents
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -66,6 +69,8 @@ class FilteredNotificationSpec:
             field_dict["disabled"] = disabled
         if description is not UNSET:
             field_dict["description"] = description
+        if do_not_create_incidents is not UNSET:
+            field_dict["do_not_create_incidents"] = do_not_create_incidents
 
         return field_dict
 
@@ -99,6 +104,8 @@ class FilteredNotificationSpec:
 
         description = d.pop("description", UNSET)
 
+        do_not_create_incidents = d.pop("do_not_create_incidents", UNSET)
+
         filtered_notification_spec = cls(
             filter_=filter_,
             target=target,
@@ -106,6 +113,7 @@ class FilteredNotificationSpec:
             process_additional_filters=process_additional_filters,
             disabled=disabled,
             description=description,
+            do_not_create_incidents=do_not_create_incidents,
         )
 
         filtered_notification_spec.additional_properties = d

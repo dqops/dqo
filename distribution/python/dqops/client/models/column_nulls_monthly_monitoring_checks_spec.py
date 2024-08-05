@@ -6,6 +6,9 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_empty_column_found_check_spec import (
+        ColumnEmptyColumnFoundCheckSpec,
+    )
     from ..models.column_not_nulls_count_check_spec import ColumnNotNullsCountCheckSpec
     from ..models.column_not_nulls_percent_check_spec import (
         ColumnNotNullsPercentCheckSpec,
@@ -15,7 +18,6 @@ if TYPE_CHECKING:
         ColumnNullsMonthlyMonitoringChecksSpecCustomChecks,
     )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
-    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsMonthlyMonitoringChecksSpec")
@@ -32,7 +34,7 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
         monthly_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
         monthly_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         monthly_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
-        monthly_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
+        monthly_empty_column_found (Union[Unset, ColumnEmptyColumnFoundCheckSpec]):
     """
 
     custom_checks: Union[
@@ -42,7 +44,7 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
     monthly_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     monthly_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
     monthly_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
-    monthly_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = UNSET
+    monthly_empty_column_found: Union[Unset, "ColumnEmptyColumnFoundCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -90,6 +92,9 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_empty_column_found_check_spec import (
+            ColumnEmptyColumnFoundCheckSpec,
+        )
         from ..models.column_not_nulls_count_check_spec import (
             ColumnNotNullsCountCheckSpec,
         )
@@ -101,7 +106,6 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
             ColumnNullsMonthlyMonitoringChecksSpecCustomChecks,
         )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
-        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -152,11 +156,11 @@ class ColumnNullsMonthlyMonitoringChecksSpec:
             )
 
         _monthly_empty_column_found = d.pop("monthly_empty_column_found", UNSET)
-        monthly_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        monthly_empty_column_found: Union[Unset, ColumnEmptyColumnFoundCheckSpec]
         if isinstance(_monthly_empty_column_found, Unset):
             monthly_empty_column_found = UNSET
         else:
-            monthly_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
+            monthly_empty_column_found = ColumnEmptyColumnFoundCheckSpec.from_dict(
                 _monthly_empty_column_found
             )
 

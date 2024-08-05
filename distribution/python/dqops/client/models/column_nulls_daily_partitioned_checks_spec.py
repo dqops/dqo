@@ -6,6 +6,9 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_empty_column_found_check_spec import (
+        ColumnEmptyColumnFoundCheckSpec,
+    )
     from ..models.column_not_nulls_count_check_spec import ColumnNotNullsCountCheckSpec
     from ..models.column_not_nulls_percent_check_spec import (
         ColumnNotNullsPercentCheckSpec,
@@ -30,7 +33,6 @@ if TYPE_CHECKING:
         ColumnNullsDailyPartitionedChecksSpecCustomChecks,
     )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
-    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsDailyPartitionedChecksSpec")
@@ -48,7 +50,7 @@ class ColumnNullsDailyPartitionedChecksSpec:
         daily_partition_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         daily_partition_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         daily_partition_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
-        daily_partition_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
+        daily_partition_empty_column_found (Union[Unset, ColumnEmptyColumnFoundCheckSpec]):
         daily_partition_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         daily_partition_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         daily_partition_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
@@ -69,9 +71,9 @@ class ColumnNullsDailyPartitionedChecksSpec:
     daily_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
     ] = UNSET
-    daily_partition_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = (
-        UNSET
-    )
+    daily_partition_empty_column_found: Union[
+        Unset, "ColumnEmptyColumnFoundCheckSpec"
+    ] = UNSET
     daily_partition_nulls_percent_change: Union[
         Unset, "ColumnNullPercentChangeCheckSpec"
     ] = UNSET
@@ -197,6 +199,9 @@ class ColumnNullsDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_empty_column_found_check_spec import (
+            ColumnEmptyColumnFoundCheckSpec,
+        )
         from ..models.column_not_nulls_count_check_spec import (
             ColumnNotNullsCountCheckSpec,
         )
@@ -223,7 +228,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
             ColumnNullsDailyPartitionedChecksSpecCustomChecks,
         )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
-        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -295,12 +299,16 @@ class ColumnNullsDailyPartitionedChecksSpec:
         _daily_partition_empty_column_found = d.pop(
             "daily_partition_empty_column_found", UNSET
         )
-        daily_partition_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        daily_partition_empty_column_found: Union[
+            Unset, ColumnEmptyColumnFoundCheckSpec
+        ]
         if isinstance(_daily_partition_empty_column_found, Unset):
             daily_partition_empty_column_found = UNSET
         else:
-            daily_partition_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
-                _daily_partition_empty_column_found
+            daily_partition_empty_column_found = (
+                ColumnEmptyColumnFoundCheckSpec.from_dict(
+                    _daily_partition_empty_column_found
+                )
             )
 
         _daily_partition_nulls_percent_change = d.pop(
