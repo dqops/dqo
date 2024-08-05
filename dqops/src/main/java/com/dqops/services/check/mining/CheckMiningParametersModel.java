@@ -142,6 +142,18 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeAcceptedValuesChecks = true;
 
     /**
+     * Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")
+    private boolean proposeCustomChecks = true;
+
+    /**
+     * Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'. The default value of this parameter is 'true'.")
+    private boolean proposeBoolPercentChecks = true;
+
+    /**
      * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).
      */
     @JsonPropertyDescription("The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).")
@@ -152,12 +164,6 @@ public class CheckMiningParametersModel implements Cloneable {
      */
     @JsonPropertyDescription("The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.")
     private Double maxPercentErrorRowsForPercentChecks;
-
-    /**
-     * Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
-     */
-    @JsonPropertyDescription("Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")
-    private boolean proposeCustomChecks = true;
 
     /**
      * Creates and returns a copy of this object.

@@ -19123,6 +19123,14 @@
           "type" : "boolean",
           "description" : "Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'."
         },
+        "propose_custom_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'."
+        },
+        "propose_bool_percent_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'. The default value of this parameter is 'true'."
+        },
         "fail_checks_at_percent_error_rows" : {
           "type" : "number",
           "format" : "double",
@@ -19132,10 +19140,6 @@
           "type" : "number",
           "format" : "double",
           "description" : "The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent."
-        },
-        "propose_custom_checks" : {
-          "type" : "boolean",
-          "description" : "Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'."
         }
       },
       "description" : "Data quality check rule mining parameters. Configure what type of checks should be configured."
