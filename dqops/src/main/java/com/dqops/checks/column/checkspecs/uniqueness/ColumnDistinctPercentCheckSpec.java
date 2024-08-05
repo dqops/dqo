@@ -24,6 +24,7 @@ import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.rules.comparison.BetweenPercentRuleParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
@@ -43,14 +44,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value.
+ * This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum and maximum values.
  * The default value of 100% distinct values ensures the column has no duplicate values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnDistinctPercentCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, BetweenPercentRuleParametersSpec, BetweenPercentRuleParametersSpec, BetweenPercentRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -64,17 +65,17 @@ public class ColumnDistinctPercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100WarningParametersSpec warning;
+    private BetweenPercentRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with unique value in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ErrorParametersSpec error;
+    private BetweenPercentRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private BetweenPercentRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -101,7 +102,7 @@ public class ColumnDistinctPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100WarningParametersSpec getWarning() {
+    public BetweenPercentRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -109,7 +110,7 @@ public class ColumnDistinctPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100WarningParametersSpec warning) {
+    public void setWarning(BetweenPercentRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -121,7 +122,7 @@ public class ColumnDistinctPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule100ErrorParametersSpec getError() {
+    public BetweenPercentRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -129,7 +130,7 @@ public class ColumnDistinctPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule100ErrorParametersSpec error) {
+    public void setError(BetweenPercentRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -141,7 +142,7 @@ public class ColumnDistinctPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public BetweenPercentRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -149,7 +150,7 @@ public class ColumnDistinctPercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(BetweenPercentRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

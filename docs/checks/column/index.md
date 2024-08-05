@@ -831,7 +831,7 @@ This check counts distinct values and verifies if the distinct count is within a
 
 
 ### [distinct percent](./uniqueness/distinct-percent.md)
-This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value.
+This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum and maximum values.
  The default value of 100% distinct values ensures the column has no duplicate values.
 
 

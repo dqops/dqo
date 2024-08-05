@@ -16,6 +16,7 @@
 package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
@@ -178,9 +179,8 @@ public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec
             return null; // current percent is zero
         }
 
-        Long rowCount = tableProfilingResults.getRowCount();
-        if (rowCount == null) {
-            return null; // cannot assess how many records the table has
+        if (sourceProfilingCheck.getActualValue() < 0.0 || sourceProfilingCheck.getActualValue() > 100.0) {
+            return null; // invalid value, the sensor must be corrupted
         }
 
         if (dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults) {
@@ -193,22 +193,46 @@ public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec
             if (notNullCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
                 return null; // not enough not-null values to call it reasonable
             }
+
+            if (100.0 - sourceProfilingCheck.getActualValue() < miningParameters.getFailChecksAtPercentErrorRows()) {
+                return new BetweenPercentRuleParametersSpec(100.0, 100.0); // so close to 100.0 that it falls within the limit of raising an error
+            }
+
+            if (myCheckModel.getCheckSpec() instanceof ColumnDistinctPercentCheckSpec) {
+                if (sourceProfilingCheck.getActualValue() * notNullCount / 100.0 <= checkMiningConfigurationProperties.getMaxDistinctCount()) {
+                    return null; // this is a distinct percent check, it has soo little distinct values that the distinct count check will be configured instead
+                }
+            }
         } else {
+            Long rowCount = tableProfilingResults.getRowCount();
+            if (rowCount == null) {
+                return null; // cannot assess how many records the table has
+            }
+
             if (rowCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
                 return null;
             }
         }
 
-        if (sourceProfilingCheck.getActualValue() > miningParameters.getFailChecksAtPercentErrorRows()) {
-            return null; // the percent is too high, no need to assert it
+        double referencePercent = Math.abs(sourceProfilingCheck.getActualValue());
+        if (referencePercent > 50.0) {
+            referencePercent = 100.0 - referencePercent; // if we are close to zero percent, we will propose around 0 percent, when we are close to 100.0, we will propose around 100.0
         }
-
-        double delta = Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getPercentCheckDeltaRate();
+        double delta = referencePercent * checkMiningConfigurationProperties.getPercentCheckDeltaRate();
         double expectedMinPercent = DoubleRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue() - delta);
         double expectedMaxPercent = DoubleRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue() + delta);
 
         if (expectedMinPercent < 0.0) {
             expectedMinPercent = 0.0;
+        }
+
+        if (expectedMaxPercent > 100.0) {
+            expectedMaxPercent = 100.0;
+        }
+
+        if (sourceProfilingCheck.getActualValue() == 100.0) {
+            expectedMinPercent = 100.0;
+            expectedMaxPercent = 100.0; // special case, to fix too big values
         }
 
         if (expectedMaxPercent < expectedMinPercent) {

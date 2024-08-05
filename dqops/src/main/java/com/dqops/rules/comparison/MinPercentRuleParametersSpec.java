@@ -156,6 +156,10 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec imp
                                                                 CheckMiningParametersModel miningParameters,
                                                                 DataTypeCategory columnTypeCategory,
                                                                 DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
+        if (sourceProfilingCheck.getActualValue() < 0.0 || sourceProfilingCheck.getActualValue() > 100.0) {
+            return null; // invalid value, the sensor must be corrupted
+        }
+
         double differenceTo100Pct = 100.0 - sourceProfilingCheck.getActualValue();
         double expectedMinPercent = 100.0;
 

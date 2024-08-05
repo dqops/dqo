@@ -46,7 +46,8 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     private double timelinessMaxDaysMultiplier = 2.0;
 
     /**
-     * The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine.
+     * The multiplier of the last known percent that is extended by this delta (as a rate/proportion of the percentage) to configure a passing percentage check.
+     * The default value is 0.3. For this value and when the last known max_percent was 10%%, DQOps rule mining engine will propose a save max_count 13%%.
      */
     @CommandLine.Option(names = {"--dqo.rule-mining.percent-check-delta-rate"},
             description = "The multiplier of the last known percent that is extended by this delta (as a rate/proportion of the percentage) to configure a passing percentage check." +
@@ -61,8 +62,8 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     @CommandLine.Option(names = {"--dqo.rule-mining.default-fail-checks-at-percent-error-rows"},
             description = "The default percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) " +
                     "that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%)." +
-                    "The default value is 0.1.", defaultValue = "0.1")
-    private double defaultFailChecksAtPercentErrorRows = 0.1;
+                    "The default value is 2%%.", defaultValue = "2")
+    private double defaultFailChecksAtPercentErrorRows = 2.0;
 
     /**
      * The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.

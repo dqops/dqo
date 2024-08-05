@@ -164,6 +164,10 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec imp
                                                                 CheckMiningParametersModel miningParameters,
                                                                 DataTypeCategory columnTypeCategory,
                                                                 DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
+        if (sourceProfilingCheck.getActualValue() < 0.0 || sourceProfilingCheck.getActualValue() > 100.0) {
+            return null; // invalid value, the sensor must be corrupted
+        }
+
         double expectedMaxPercent = 0.0;
 
         if (sourceProfilingCheck.getActualValue() > miningParameters.getFailChecksAtPercentErrorRows()) {

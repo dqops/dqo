@@ -62,7 +62,7 @@ export default function RuleMining({
     useState<CheckMiningParametersModel>(
       getRuleMiningConfigurationLocalStorage() ?? {
         severity_level: 'error',
-        fail_checks_at_percent_error_rows: 0.1,
+        fail_checks_at_percent_error_rows: 2.0,
         copy_failed_profiling_checks: false,
         copy_disabled_profiling_checks: false,
         propose_default_checks: true,

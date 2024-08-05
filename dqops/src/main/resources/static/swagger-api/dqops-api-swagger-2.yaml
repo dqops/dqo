@@ -21216,15 +21216,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with unique value in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
   ColumnDuplicateCountCheckSpec:
     type: "object"
     properties:

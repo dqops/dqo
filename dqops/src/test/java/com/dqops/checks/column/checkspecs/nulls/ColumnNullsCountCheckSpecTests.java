@@ -102,7 +102,7 @@ public class ColumnNullsCountCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(12.0); // more than 0.1% of rows
         this.tableProfilingResults.setRowCount(10000L);
-        this.checkMiningParametersModel.setMaxPercentErrorRowsForPercentChecks(0.1);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.1);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
