@@ -1,4 +1,8 @@
 {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-{%- call lib.render_error_sampler() -%}
+({%- call lib.render_error_sampler(value_order_by = 'ASC', sample_index='false', order_by_value_first = 'true') -%}
     1=1
-{%- endcall -%}
+{%- endcall -%})
+UNION
+({%- call lib.render_error_sampler(value_order_by = 'DESC', sample_index='false', order_by_value_first = 'true') -%}
+    1=1
+{%- endcall -%})
