@@ -273,8 +273,11 @@ public class ColumnTruePercentCheckSpec
             return false; // we will configure the "false percent" check instead, we always configure the check for a less popular value
         }
 
+        CheckMiningParametersModel clonedMiningParameters = miningParameters.clone();
+        clonedMiningParameters.setFailChecksAtPercentErrorRows(0.0); // to avoid creating failing tests when there are very few true values
+
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
-                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters, columnTypeCategory,
+                tableSpec, parentCheckRootContainer, myCheckModel, clonedMiningParameters, columnTypeCategory,
                 checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }
