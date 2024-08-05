@@ -16,8 +16,6 @@
 package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
@@ -29,7 +27,6 @@ import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
-import com.dqops.utils.conversion.LongRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -180,7 +177,7 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec imple
                 }
             } else {
                 // all regular checks
-                Long notNullCount = columnDataAssetProfilingResults.getNotNullCount();
+                Long notNullCount = columnDataAssetProfilingResults.getNotNullsCount();
                 if (notNullCount == null) {
                     return null;
                 }

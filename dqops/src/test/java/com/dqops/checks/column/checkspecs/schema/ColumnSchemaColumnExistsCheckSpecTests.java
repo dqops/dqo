@@ -48,7 +48,7 @@ public class ColumnSchemaColumnExistsCheckSpecTests extends BaseTest {
     private ConnectionSpec connectionSpec;
     private ColumnSchemaColumnExistsCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
-    private DataAssetProfilingResults dataAssetProfilingResults;
+    private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
     private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
@@ -67,7 +67,7 @@ public class ColumnSchemaColumnExistsCheckSpecTests extends BaseTest {
         this.columnSpec.getProfilingChecks().setSchema(new ColumnSchemaProfilingChecksSpec());
         this.columnSpec.getProfilingChecks().getSchema().setProfileColumnExists(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
-        this.dataAssetProfilingResults = new DataAssetProfilingResults();
+        this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();

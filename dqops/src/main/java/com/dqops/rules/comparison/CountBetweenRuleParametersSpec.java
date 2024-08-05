@@ -16,7 +16,6 @@
 package com.dqops.rules.comparison;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.CheckTarget;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
@@ -180,14 +179,9 @@ public class CountBetweenRuleParametersSpec extends AbstractRuleParametersSpec i
             return null; // not enough information or the value would be wrong
         }
 
-        Long rowCount = tableProfilingResults.getRowCount();
-        if (rowCount == null) {
-            return null; // cannot assess how many records the table has
-        }
-
         if (dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults) {
             ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults)dataAssetProfilingResults;
-            Long notNullCount = columnDataAssetProfilingResults.getNotNullCount();
+            Long notNullCount = columnDataAssetProfilingResults.getNotNullsCount();
             if (notNullCount == null) {
                 return null;
             }
@@ -196,10 +190,19 @@ public class CountBetweenRuleParametersSpec extends AbstractRuleParametersSpec i
                 return null; // not enough not-null values to call it reasonable
             }
 
-            if (sourceProfilingCheck.getActualValue() < notNullCount.doubleValue() * checkMiningConfigurationProperties.getNotNullCountRateForDuplicateCount()) {
+            if (sourceProfilingCheck.getActualValue() > checkMiningConfigurationProperties.getMaxDistinctCount()) {
+                return null; // too many distinct values, use percent checks
+            }
+
+            if (sourceProfilingCheck.getActualValue() > notNullCount.doubleValue() * checkMiningConfigurationProperties.getNotNullCountRateForDuplicateCount()) {
                 return null; // the count of values is too close to the total number of rows containing not-null values, the range will be too close
             }
         } else {
+            Long rowCount = tableProfilingResults.getRowCount();
+            if (rowCount == null) {
+                return null; // cannot assess how many records the table has
+            }
+
             if (rowCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
                 return null;
             }

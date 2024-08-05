@@ -49,7 +49,7 @@ public class ColumnNullsPercentCheckSpecTests extends BaseTest {
     private ConnectionSpec connectionSpec;
     private ColumnNullsPercentCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
-    private DataAssetProfilingResults dataAssetProfilingResults;
+    private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
     private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
@@ -68,7 +68,7 @@ public class ColumnNullsPercentCheckSpecTests extends BaseTest {
         this.columnSpec.getProfilingChecks().setNulls(new ColumnNullsProfilingChecksSpec());
         this.columnSpec.getProfilingChecks().getNulls().setProfileNullsPercent(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
-        this.dataAssetProfilingResults = new DataAssetProfilingResults();
+        this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();

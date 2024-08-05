@@ -49,7 +49,7 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
     private ConnectionSpec connectionSpec;
     private ColumnDetectedDatatypeInTextCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
-    private DataAssetProfilingResults dataAssetProfilingResults;
+    private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
     private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
@@ -68,7 +68,7 @@ public class ColumnDetectedDatatypeInTextCheckSpecTests extends BaseTest {
         this.columnSpec.getProfilingChecks().setDatatype(new ColumnDatatypeProfilingChecksSpec());
         this.columnSpec.getProfilingChecks().getDatatype().setProfileDetectedDatatypeInText(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
-        this.dataAssetProfilingResults = new DataAssetProfilingResults();
+        this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();

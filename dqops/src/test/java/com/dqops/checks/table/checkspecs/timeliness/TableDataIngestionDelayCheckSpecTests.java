@@ -47,7 +47,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
     private ConnectionSpec connectionSpec;
     private TableDataIngestionDelayCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
-    private DataAssetProfilingResults dataAssetProfilingResults;
+    private TableDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
     private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
@@ -62,7 +62,7 @@ public class TableDataIngestionDelayCheckSpecTests extends BaseTest {
         this.tableSpec.getProfilingChecks().setTimeliness(new TableTimelinessProfilingChecksSpec());
         this.tableSpec.getProfilingChecks().getTimeliness().setProfileDataIngestionDelay(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
-        this.dataAssetProfilingResults = new DataAssetProfilingResults();
+        this.dataAssetProfilingResults = new TableDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();

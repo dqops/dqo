@@ -88,12 +88,20 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     private double notNullCountRateForDuplicateCount = 0.01;
 
     /**
+     * The default maximum distinct count that is used to activate the distinct_count check. Above the limit, DQOps will configure the distinct_percent check. The default value is 1000 rows.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.max-distinct-count"},
+            description = "The default maximum distinct count that is used to activate the distinct_count check. " +
+                    "Above the limit, DQOps will configure the distinct_percent check. The default value is 1000 rows.", defaultValue = "1000")
+    private long maxDistinctCount = 1000;
+
+    /**
      * The default minimum reasonable count of not-null values that must be satisfied to apply some checks that validate a range of row counts (like a distinct count between).
      */
     @CommandLine.Option(names = {"--dqo.rule-mining.min-reasonable-not-null-count"},
             description = "The default minimum reasonable count of not-null values that must be satisfied to apply some checks " +
                     "that validate a range of row counts (like a distinct count between).", defaultValue = "100")
-    private long minReasonableNotNullsCount = 100; // not shown in the documentation (no CLI parameter)
+    private long minReasonableNotNullsCount = 100;
 
 
     /**

@@ -32,7 +32,7 @@ import java.util.*;
  * Summary information with the recent basic statistics and profiling check results extracted for one target data asset.
  * The target data asset is a single column, or a whole table. The results for a whole table are limited to the table-level statistics and profiling checks.
  */
-public class DataAssetProfilingResults {
+public abstract class DataAssetProfilingResults {
     /**
      * Basic statistic values. The key of the dictionary is a sensor name. The list contains collected values.
      * For example, when a MIN sensor finds a result, it is just one value in the list. But a data samplings sensor returns multiple values.

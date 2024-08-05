@@ -46,7 +46,7 @@ public class TableSchemaColumnCountCheckSpecTests extends BaseTest {
     private ConnectionSpec connectionSpec;
     private TableSchemaColumnCountCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
-    private DataAssetProfilingResults dataAssetProfilingResults;
+    private TableDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
     private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
@@ -61,7 +61,7 @@ public class TableSchemaColumnCountCheckSpecTests extends BaseTest {
         this.tableSpec.getProfilingChecks().setSchema(new TableSchemaProfilingChecksSpec());
         this.tableSpec.getProfilingChecks().getSchema().setProfileColumnCount(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
-        this.dataAssetProfilingResults = new DataAssetProfilingResults();
+        this.dataAssetProfilingResults = new TableDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();

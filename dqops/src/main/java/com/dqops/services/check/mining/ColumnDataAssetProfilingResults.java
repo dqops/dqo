@@ -65,7 +65,7 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
      * This call works only on the column data assets.
      * @return Returns the count of not null values.
      */
-    public Long getNotNullCount() {
+    public Long getNotNullsCount() {
         ProfilingCheckResult notNullCountResult = this.getProfilingCheckByCheckName("profile_not_nulls_count", true);
 
         if (notNullCountResult.getActualValue() != null) {
@@ -79,7 +79,7 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
      * Sets a not null count value as it was coming from a different source. This method is meant to be called from unit tests.
      * @param notNullCount New not null count.
      */
-    public void setNotNullCount(Long notNullCount) {
+    public void setNotNullsCount(Long notNullCount) {
         ProfilingCheckResult notNullCountResult = this.getProfilingCheckByCheckName("profile_not_nulls_count", true);
 
         if (notNullCountResult.getActualValue() == null) {
@@ -93,11 +93,11 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
      * This call works only on the column data assets.
      * @return Returns the count of null values.
      */
-    public Long getNullCount() {
-        ProfilingCheckResult nullCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
+    public Long getNullsCount() {
+        ProfilingCheckResult nullsCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
 
-        if (nullCountResult.getActualValue() != null) {
-            return nullCountResult.getActualValue().longValue();
+        if (nullsCountResult.getActualValue() != null) {
+            return nullsCountResult.getActualValue().longValue();
         }
 
         return null;
@@ -107,12 +107,40 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
      * Sets a null count value as it was coming from a different source. This method is meant to be called from unit tests.
      * @param nullCount New null count.
      */
-    public void setNullCount(Long nullCount) {
-        ProfilingCheckResult nullCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
+    public void setNullsCount(Long nullCount) {
+        ProfilingCheckResult nullsCountResult = this.getProfilingCheckByCheckName("profile_nulls_count", true);
 
-        if (nullCountResult.getActualValue() == null) {
-            nullCountResult.setActualValue(nullCount == null ? null : nullCount.doubleValue());
-            nullCountResult.setExecutedAt(Instant.now());
+        if (nullsCountResult.getActualValue() == null) {
+            nullsCountResult.setActualValue(nullCount == null ? null : nullCount.doubleValue());
+            nullsCountResult.setExecutedAt(Instant.now());
+        }
+    }
+
+    /**
+     * Retrieves the count of distinct values in a column from either the profiling check, or statistics. Because statistics are stored in the profiling checks, it takes the statistics.
+     * This call works only on the column data assets.
+     * @return Returns the count of distinct values.
+     */
+    public Long getDistinctCount() {
+        ProfilingCheckResult distinctCountResult = this.getProfilingCheckByCheckName("profile_distinct_count", true);
+
+        if (distinctCountResult.getActualValue() != null) {
+            return distinctCountResult.getActualValue().longValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets a distinct count value as it was coming from a different source. This method is meant to be called from unit tests.
+     * @param distinctCount New distinct count.
+     */
+    public void setDistinctCount(Long distinctCount) {
+        ProfilingCheckResult distinctCountResult = this.getProfilingCheckByCheckName("profile_distinct_count", true);
+
+        if (distinctCountResult.getActualValue() == null) {
+            distinctCountResult.setActualValue(distinctCount == null ? null : distinctCount.doubleValue());
+            distinctCountResult.setExecutedAt(Instant.now());
         }
     }
 }

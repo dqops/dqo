@@ -51,7 +51,7 @@ public class ColumnEmptyColumnFoundCheckSpecTests extends BaseTest {
     private ConnectionSpec connectionSpec;
     private ColumnEmptyColumnFoundCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
-    private DataAssetProfilingResults dataAssetProfilingResults;
+    private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
     private DqoRuleMiningConfigurationProperties checkMiningConfiguration;
     private CheckMiningParametersModel checkMiningParametersModel;
@@ -71,7 +71,7 @@ public class ColumnEmptyColumnFoundCheckSpecTests extends BaseTest {
         this.columnSpec.getProfilingChecks().getNulls().setProfileEmptyColumnFound(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.profilingCheckResult.setSensorName(ColumnNullsNotNullsCountSensorParametersSpec.SENSOR_NAME);
-        this.dataAssetProfilingResults = new DataAssetProfilingResults();
+        this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
         this.checkMiningConfiguration = DqoCheckMiningConfigurationPropertiesObjectMother.getDefault();
         this.checkMiningParametersModel = CheckMiningParametersModelObjectMother.create();
