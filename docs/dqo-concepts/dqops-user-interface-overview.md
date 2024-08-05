@@ -353,7 +353,7 @@ The buttons and icons located on the left side of each check name allow you to p
 
 - **Check schedule status:** Gives information about the status of the check schedule status (disabled or enabled schedule).
 - **Run data quality checks:** Trigger manual execution of checks.
-- **View Check Results:** Access detailed results for checks, sensor readouts, and execution errors, as well as error sampling for column checks
+- **View Check Results:** Access detailed results for checks, sensor readouts, and execution errors, as well as [error sampling](data-quality-error-sampling.md) for column checks
 
     ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results2.png){ loading=lazy; width="1200px" }
 
