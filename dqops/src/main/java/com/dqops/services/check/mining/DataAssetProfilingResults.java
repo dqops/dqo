@@ -25,6 +25,7 @@ import com.dqops.services.check.mapping.models.QualityCategoryModel;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -129,8 +130,9 @@ public abstract class DataAssetProfilingResults {
     /**
      * Import results from the statistics.
      * @param statistics Statistics models.
+     * @param timeZoneId Time zone id.
      */
-    public void importStatistics(List<StatisticsMetricModel> statistics) {
+    public void importStatistics(List<StatisticsMetricModel> statistics, ZoneId timeZoneId) {
         for (StatisticsMetricModel statisticsMetricModel : statistics) {
             String sensorName = statisticsMetricModel.getSensorName();
             List<StatisticsMetricModel> statisticsModelBySensor = this.basicStatistics.get(sensorName);

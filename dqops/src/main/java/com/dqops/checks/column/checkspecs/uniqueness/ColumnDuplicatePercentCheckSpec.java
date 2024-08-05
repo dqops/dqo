@@ -214,12 +214,6 @@ public class ColumnDuplicatePercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeUniquenessChecks()) {
-            return false;
-        }
-
-        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
-                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
-                columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        return false; // not suggested, because when we analyze the distinct percent, we are getting a similar information
     }
 }

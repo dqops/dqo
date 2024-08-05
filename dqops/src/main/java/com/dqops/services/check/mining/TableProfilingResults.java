@@ -20,6 +20,7 @@ import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -92,16 +93,17 @@ public class TableProfilingResults {
     /**
      * Imports statistics into the profiling results, matching check names.
      * @param mostRecentStatisticsForTable Most recent statistics for the table.
+     * @param timeZoneId Time zone id.
      */
-    public void importStatistics(StatisticsResultsForTableModel mostRecentStatisticsForTable) {
+    public void importStatistics(StatisticsResultsForTableModel mostRecentStatisticsForTable, ZoneId timeZoneId) {
         this.statistics = mostRecentStatisticsForTable;
         this.missingStatisticsResults = mostRecentStatisticsForTable == null || mostRecentStatisticsForTable.isEmpty();
-        this.tableProfilingResults.importStatistics(mostRecentStatisticsForTable.getMetrics());
+        this.tableProfilingResults.importStatistics(mostRecentStatisticsForTable.getMetrics(), timeZoneId);
 
         Map<String, StatisticsResultsForColumnModel> columnStatistics = mostRecentStatisticsForTable.getColumns();
         for (Map.Entry<String, StatisticsResultsForColumnModel> columnModelEntry : columnStatistics.entrySet()) {
             DataAssetProfilingResults columnProfilingResults = this.getColumnProfilingResults(columnModelEntry.getKey());
-            columnProfilingResults.importStatistics(columnModelEntry.getValue().getMetrics());
+            columnProfilingResults.importStatistics(columnModelEntry.getValue().getMetrics(), timeZoneId);
         }
     }
 

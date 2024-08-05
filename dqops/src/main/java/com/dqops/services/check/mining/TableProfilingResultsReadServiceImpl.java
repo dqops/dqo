@@ -30,8 +30,11 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.ZoneId;
 
 /**
  * Service that loads the results from profiling checks and statistics, to be used for data quality rule mining (suggesting the rule thresholds for checks).
@@ -41,21 +44,25 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
     private final SpecToModelCheckMappingService specToModelCheckMappingService;
     private final StatisticsDataService statisticsDataService;
     private final CheckResultsDataService checkResultsDataService;
+    private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * DI constructor.
      * @param specToModelCheckMappingService Specification to check model mapping service.
      * @param statisticsDataService Statistics loading service.
      * @param checkResultsDataService Check results loading service.
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public TableProfilingResultsReadServiceImpl(
             SpecToModelCheckMappingService specToModelCheckMappingService,
             StatisticsDataService statisticsDataService,
-            CheckResultsDataService checkResultsDataService) {
+            CheckResultsDataService checkResultsDataService,
+            DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.statisticsDataService = statisticsDataService;
         this.checkResultsDataService = checkResultsDataService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -104,7 +111,8 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
                 tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
 
-        tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId(executionContext.getUserHomeContext());
+        tableProfilingResults.importStatistics(mostRecentStatisticsForTable, defaultTimeZoneId);
         tableProfilingResults.calculateMissingNotNullCounts();
 
         return tableProfilingResults;

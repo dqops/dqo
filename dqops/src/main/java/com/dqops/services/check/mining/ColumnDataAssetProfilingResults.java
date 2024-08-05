@@ -19,7 +19,7 @@ package com.dqops.services.check.mining;
 import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
 
-import java.time.Instant;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,30 +32,37 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
     /**
      * A list of sample values for the data asset. Provided only for column data assets, and filled from the results of the column sampling sensor.
      */
-    private List<Object> sampleValues = new ArrayList<>();
+    private List<ProfilingSampleValue> sampleValues = new ArrayList<>();
 
     /**
      * Returns a list of sample values collected by the value sampling statistics collector. That is the top 100 most common values.
      * @return List of sample values from the basic statistics.
      */
-    public List<Object> getSampleValues() {
+    public List<ProfilingSampleValue> getSampleValues() {
         return sampleValues;
     }
 
     /**
      * Import results from the statistics.
      * @param statistics Statistics models.
+     * @param timeZoneId Time zone id.
      */
     @Override
-    public void importStatistics(List<StatisticsMetricModel> statistics) {
-        super.importStatistics(statistics);
+    public void importStatistics(List<StatisticsMetricModel> statistics, ZoneId timeZoneId) {
+        super.importStatistics(statistics, timeZoneId);
 
         for (StatisticsMetricModel statisticsMetricModel : statistics) {
             String sensorName = statisticsMetricModel.getSensorName();
             if (Objects.equals(sensorName, ColumnSamplingColumnSamplesStatisticsCollectorSpec.SENSOR_NAME)) {
                 // column sampling sensor
                 Object sampleValue = statisticsMetricModel.getResult();
-                this.sampleValues.add(sampleValue);
+                long sampleCount = statisticsMetricModel.getSampleCount() != null ? statisticsMetricModel.getSampleCount().longValue() : 0L;
+                Instant instantValue =
+                        (sampleValue instanceof Instant) ? (Instant)sampleValue :
+                        (sampleValue instanceof LocalDateTime) ? ((LocalDateTime)sampleValue).atZone(timeZoneId).toInstant() :
+                        (sampleValue instanceof LocalDate) ? ((LocalDate)sampleValue).atStartOfDay().atZone(timeZoneId).toInstant() : null;
+
+                this.sampleValues.add(new ProfilingSampleValue(sampleValue, sampleCount, instantValue));
             }
         }
     }
