@@ -177,7 +177,7 @@ public class DuckdbColumnNumericNumberInRangePercentSensorParametersSpecIntegrat
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals(20, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
