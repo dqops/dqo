@@ -174,7 +174,7 @@ public class OracleColumnNumericNegativePercentSensorParametersSpecIntegrationTe
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains(-4));
+        Assertions.assertTrue(sampleValues.contains(-4.0));
     }
 
     @Test
