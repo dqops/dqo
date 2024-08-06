@@ -16226,7 +16226,12 @@ definitions:
         type: "boolean"
         description: "Proposes the default configuration for the checks that measure\
           \ the percentage of boolean values. The default value of this parameter\
-          \ is 'true'. The default value of this parameter is 'true'."
+          \ is 'true'."
+      propose_date_checks:
+        type: "boolean"
+        description: "Proposes the default configuration for the date and datetime\
+          \ checks that detect invalid dates. The default value of this parameter\
+          \ is 'true'."
       fail_checks_at_percent_error_rows:
         type: "number"
         format: "double"
@@ -16438,12 +16443,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:

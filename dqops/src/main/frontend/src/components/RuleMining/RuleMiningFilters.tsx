@@ -201,6 +201,15 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
+            tooltipText="Configure the checks that detect invalid dates that are far in the past, or far in the future."
+            label="Dates out of range"
+            checked={configuration.propose_date_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_date_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
             tooltipText="Configure the checks in the 'Accepted values' category to validate that the values in the column come from a predefined dictionary. DQOps will find columns with a low number of unique values and will propose a data dictionary which matches almost all found values. In order to detect data quality issues, DQOps will not include values that represent less than the 'Error rate (% rows)' rows, assuming that these rare values are invalid values."
             label="Accepted values"
             checked={configuration.propose_accepted_values_checks}

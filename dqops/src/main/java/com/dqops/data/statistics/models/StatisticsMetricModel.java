@@ -36,6 +36,15 @@ import java.time.ZoneOffset;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class StatisticsMetricModel {
+    public StatisticsMetricModel() {
+    }
+
+    public StatisticsMetricModel(Object result, Instant executedAt, Long sampleCount) {
+        this.result = result;
+        this.executedAt = executedAt;
+        this.sampleCount = sampleCount;
+    }
+
     /**
      * Statistic category.
      */

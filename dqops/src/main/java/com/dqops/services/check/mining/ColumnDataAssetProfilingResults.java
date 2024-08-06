@@ -18,6 +18,7 @@ package com.dqops.services.check.mining;
 
 import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
+import com.dqops.utils.conversion.DateTypesConverter;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -57,11 +58,7 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
                 // column sampling sensor
                 Object sampleValue = statisticsMetricModel.getResult();
                 long sampleCount = statisticsMetricModel.getSampleCount() != null ? statisticsMetricModel.getSampleCount().longValue() : 0L;
-                Instant instantValue =
-                        (sampleValue instanceof Instant) ? (Instant)sampleValue :
-                        (sampleValue instanceof LocalDateTime) ? ((LocalDateTime)sampleValue).atZone(timeZoneId).toInstant() :
-                        (sampleValue instanceof LocalDate) ? ((LocalDate)sampleValue).atStartOfDay().atZone(timeZoneId).toInstant() : null;
-
+                Instant instantValue = DateTypesConverter.toInstant(sampleValue, timeZoneId);
                 this.sampleValues.add(new ProfilingSampleValue(sampleValue, sampleCount, instantValue));
             }
         }
