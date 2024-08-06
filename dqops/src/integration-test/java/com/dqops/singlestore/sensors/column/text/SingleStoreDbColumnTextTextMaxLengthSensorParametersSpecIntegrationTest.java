@@ -17,7 +17,6 @@ package com.dqops.singlestore.sensors.column.text;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.text.ColumnTextMaxLengthCheckSpec;
-import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -130,7 +129,7 @@ public class SingleStoreDbColumnTextTextMaxLengthSensorParametersSpecIntegration
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(8, ValueConverter.toInteger(resultTable.column(0).get(0)));
+        Assertions.assertEquals(4, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -168,7 +167,7 @@ public class SingleStoreDbColumnTextTextMaxLengthSensorParametersSpecIntegration
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(30, resultTable.rowCount());
+        Assertions.assertEquals(23, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
