@@ -112,7 +112,8 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
                 tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
 
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId(executionContext.getUserHomeContext());
-        tableProfilingResults.importStatistics(mostRecentStatisticsForTable, defaultTimeZoneId);
+        tableProfilingResults.setTimeZoneId(defaultTimeZoneId);
+        tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
         tableProfilingResults.calculateMissingNotNullCounts();
 
         return tableProfilingResults;
