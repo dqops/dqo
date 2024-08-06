@@ -1,4 +1,7 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+
+WITH
+
 (
 {%- call lib.render_error_sampler(render_null_check = false, override_samples_limit = 5) -%} {# nulls - null #}
     {{ lib.render_target_column('analyzed_table') }} IS NULL
