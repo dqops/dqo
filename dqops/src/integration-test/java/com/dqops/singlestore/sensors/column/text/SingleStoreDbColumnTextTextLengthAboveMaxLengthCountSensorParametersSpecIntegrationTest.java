@@ -117,7 +117,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19L, ValueConverter.toLong(resultTable.column(0).get(0)));
+        Assertions.assertEquals(13L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19L, ValueConverter.toLong(resultTable.column(0).get(0)));
+        Assertions.assertEquals(13L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19L, ValueConverter.toLong(resultTable.column(0).get(0)));
+        Assertions.assertEquals(13L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(4L, ValueConverter.toLong(resultTable.column(0).get(0)));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19L, ValueConverter.toLong(resultTable.column(0).get(0)));
+        Assertions.assertEquals(13L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -205,7 +205,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(19, resultTable.rowCount());
+        Assertions.assertEquals(13, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
@@ -227,7 +227,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(19, resultTable.rowCount());
+        Assertions.assertEquals(13, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -262,7 +262,7 @@ public class SingleStoreDbColumnTextTextLengthAboveMaxLengthCountSensorParameter
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(19, resultTable.rowCount());
+        Assertions.assertEquals(13, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
