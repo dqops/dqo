@@ -15,6 +15,7 @@
  */
 package com.dqops.sensors.column.datetime;
 
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -40,8 +41,13 @@ public class ColumnDateInRangePercentSensorParametersSpec extends AbstractSensor
         }
     };
 
+    /**
+     * Sensor name.
+     */
+    public static final String SENSOR_NAME = "column/datetime/date_in_range_percent";
+
     @JsonPropertyDescription("The earliest accepted date.")
-    private LocalDate minDate = LocalDate.of(1900, 01, 02);
+    private LocalDate minDate = ColumnDateInRangePercentCheckSpec.EARLIEST_ACCEPTED_DATE_BY_RULE_MINER;
 
     @JsonPropertyDescription("The latest accepted date.")
     private LocalDate maxDate = LocalDate.of(2099, 12, 30);
@@ -63,7 +69,7 @@ public class ColumnDateInRangePercentSensorParametersSpec extends AbstractSensor
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datetime/date_in_range_percent";
+        return SENSOR_NAME;
     }
 
     /**

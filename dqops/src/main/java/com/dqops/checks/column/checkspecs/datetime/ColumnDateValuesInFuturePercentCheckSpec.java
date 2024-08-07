@@ -260,7 +260,7 @@ public class ColumnDateValuesInFuturePercentCheckSpec
         boolean isDateType = columnTypeCategory == DataTypeCategory.datetime_date ||
                 columnTypeCategory == DataTypeCategory.datetime_datetime ||
                 columnTypeCategory == DataTypeCategory.datetime_timestamp ||
-                (columnTypeCategory == DataTypeCategory.text && !columnDataAssetProfilingResults.getSampleValues().isEmpty() ||
+                ((columnTypeCategory == DataTypeCategory.text || columnTypeCategory == null) && !columnDataAssetProfilingResults.getSampleValues().isEmpty() ||
                         columnDataAssetProfilingResults.getSampleValues().stream().anyMatch(sample -> sample.getInstantValue() != null));
 
         if (sourceProfilingCheck.getActualValue() == null) {

@@ -59,4 +59,38 @@ public final class DateTypesConverter {
 
         return instantValue;
     }
+
+    /**
+     * Converts a value to a java {@link LocalDate} data type. Also parses dates in ISO format.
+     * @param value Value of a possible timestamp.
+     * @param timeZoneId Default timezone to apply to local dates.
+     * @return Parsed local date value or null, when the value is not a local date, or cannot be converted to such.
+     */
+    public static LocalDate toLocalDate(Object value, ZoneId timeZoneId) {
+        if (value instanceof String) {
+            try {
+                value = LocalDate.parse(value.toString());
+            }
+            catch (DateTimeParseException ex1) {
+                try {
+                    value = LocalDateTime.parse(value.toString());
+                }
+                catch (DateTimeParseException ex2) {
+                    try {
+                        value = Instant.parse(value.toString());
+                    }
+                    catch (DateTimeParseException ex3) {
+                        // ignore
+                    }
+                }
+            }
+        }
+
+        LocalDate dateValue =
+                (value instanceof LocalDate) ? (LocalDate)value :
+                ((value instanceof LocalDateTime) ? ((LocalDateTime)value).toLocalDate() :
+                ((value instanceof Instant) ? ((Instant)value).atZone(timeZoneId).toLocalDate() : null));
+
+        return dateValue;
+    }
 }

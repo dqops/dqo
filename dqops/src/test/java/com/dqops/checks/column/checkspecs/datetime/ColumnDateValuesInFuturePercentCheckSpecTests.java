@@ -205,7 +205,7 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -227,7 +227,7 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -248,7 +248,7 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
@@ -279,7 +279,7 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, targetCheckRootContainer,
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
