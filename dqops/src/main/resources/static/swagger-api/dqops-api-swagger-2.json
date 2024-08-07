@@ -19075,6 +19075,10 @@
           "type" : "boolean",
           "description" : "Copy also the configuration of profiling checks that are disabled."
         },
+        "copy_profiling_checks" : {
+          "type" : "boolean",
+          "description" : "Copy the configuration of valid profiling checks."
+        },
         "propose_default_checks" : {
           "type" : "boolean",
           "description" : "Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'."
@@ -19327,13 +19331,13 @@
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
         },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
+        },
         "check_hash" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
-        },
-        "similar_profiling_check" : {
-          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."
@@ -31749,7 +31753,7 @@
         "date_format" : {
           "type" : "string",
           "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
-          "enum" : [ "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY", "YYYY-MM-DD" ]
+          "enum" : [ "YYYY-MM-DD", "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY" ]
         }
       }
     },

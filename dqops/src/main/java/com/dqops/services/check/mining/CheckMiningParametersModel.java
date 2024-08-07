@@ -70,6 +70,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean copyDisabledProfilingChecks;
 
     /**
+     * Copy the configuration of valid profiling checks.
+     */
+    @JsonPropertyDescription("Copy the configuration of valid profiling checks.")
+    private boolean copyProfilingChecks = true;
+
+    /**
      * Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.")

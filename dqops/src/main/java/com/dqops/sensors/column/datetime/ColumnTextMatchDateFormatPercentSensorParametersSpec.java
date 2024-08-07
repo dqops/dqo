@@ -38,9 +38,14 @@ public class ColumnTextMatchDateFormatPercentSensorParametersSpec extends Abstra
         }
     };
 
+    /**
+     * Sensor name.
+     */
+    public static final String SENSOR_NAME = "column/datetime/text_match_date_format_percent";
+
     @JsonPropertyDescription("Expected date format. The sensor will try to parse the column records and cast the data using this format.")
     @RequiredField
-    private DatetimeBuiltInDateFormats dateFormat = DatetimeBuiltInDateFormats.DaySlashMonthSlashYear;
+    private DatetimeBuiltInDateFormats dateFormat = DatetimeBuiltInDateFormats.ISO8601;
 
     /**
      * Returns a desired format to parse the date.
@@ -76,7 +81,7 @@ public class ColumnTextMatchDateFormatPercentSensorParametersSpec extends Abstra
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datetime/text_match_date_format_percent";
+        return SENSOR_NAME;
     }
 }
 

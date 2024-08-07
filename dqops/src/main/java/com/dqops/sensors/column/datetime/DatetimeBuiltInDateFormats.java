@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Predefined date formats.
  */
 public enum DatetimeBuiltInDateFormats {
+    @JsonProperty("YYYY-MM-DD")
+    ISO8601,
+
     @JsonProperty("DD/MM/YYYY")
     DaySlashMonthSlashYear,
 
@@ -29,7 +32,4 @@ public enum DatetimeBuiltInDateFormats {
 
     @JsonProperty("DD.MM.YYYY")
     DayDotMonthDotYear,
-
-    @JsonProperty("YYYY-MM-DD")
-    ISO8601
 }

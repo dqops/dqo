@@ -16160,6 +16160,9 @@ definitions:
       copy_disabled_profiling_checks:
         type: "boolean"
         description: "Copy also the configuration of profiling checks that are disabled."
+      copy_profiling_checks:
+        type: "boolean"
+        description: "Copy the configuration of valid profiling checks."
       propose_default_checks:
         type: "boolean"
         description: "Propose the rules for default checks that were activated using\
@@ -16443,12 +16446,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
@@ -30205,10 +30208,10 @@ definitions:
         description: "Expected date format. The sensor will try to parse the column\
           \ records and cast the data using this format."
         enum:
+        - "YYYY-MM-DD"
         - "DD/MM/YYYY"
         - "DD-MM-YYYY"
         - "DD.MM.YYYY"
-        - "YYYY-MM-DD"
   ColumnTextMatchingDatePatternPercentCheckSpec:
     type: "object"
     properties:

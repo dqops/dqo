@@ -20,10 +20,13 @@ import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
 import com.dqops.utils.conversion.DateTypesConverter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Summary information with the recent basic statistics and profiling check results extracted for one target column (a type of a data asset).
@@ -146,5 +149,61 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
             distinctCountResult.setActualValue(distinctCount == null ? null : distinctCount.doubleValue());
             distinctCountResult.setExecutedAt(Instant.now());
         }
+    }
+
+    /**
+     * Calculates the percentage (0.0 .. 100.0) of samples that pass a predicate.
+     * @param matchPredicate Predicate to validate for each value.
+     * @return The percentage of samples that match the predicate or null when no samples are present.
+     */
+    public Double matchPercentageOfSamples(Predicate<Object> matchPredicate) {
+        if (this.sampleValues.isEmpty()) {
+            return null;
+        }
+
+        long totalCount = 0L;
+        long totalMatch = 0L;
+
+        for (ProfilingSampleValue profilingSampleValue : this.sampleValues) {
+            totalCount += profilingSampleValue.getCount();
+            try {
+                if (matchPredicate.test(profilingSampleValue.getValue())) {
+                    totalMatch += profilingSampleValue.getCount();
+                }
+            }
+            catch (Exception ex) {
+                // ignore to allow brutal testing
+            }
+        }
+
+        if (totalCount == 0L) {
+            return null;
+        }
+
+        return (double)totalMatch * 100.0 / (double)totalCount;
+    }
+
+    /**
+     * Measures how many sample values are strings that can be parsed by a given simple date format to a date.
+     * @param dateFormat Date format.
+     * @return Percent of matching samples or null when not enough samples or wrong values.
+     */
+    public Double measurePercentOfSamplesMatchingDateFormat(SimpleDateFormat dateFormat) {
+        dateFormat.setLenient(false);
+        Double percentMatch = this.matchPercentageOfSamples(value -> {
+            if (!(value instanceof String)) {
+                return false;
+            }
+
+            try {
+                dateFormat.parse(value.toString());
+                return true;
+            }
+            catch (ParseException ex) {
+                return false;
+            }
+        });
+
+        return percentMatch;
     }
 }
