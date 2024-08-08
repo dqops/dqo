@@ -320,7 +320,7 @@ public class ColumnDateInRangePercentCheckSpec
             sourceProfilingCheck.setExecutedAt(Instant.now());
         }
 
-        if (sourceProfilingCheck.getActualValue() != null && (100.0 - sourceProfilingCheck.getActualValue()) > miningParameters.getFailChecksAtPercentErrorRows()) {
+        if (sourceProfilingCheck.getActualValue() != null && (100.0 - sourceProfilingCheck.getActualValue()) > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
             return false; // do not configure this check, when the value was captured and there are too many future values
         }
 
