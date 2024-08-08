@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
- @Data
+@Data
 public class ErrorSampleEntryModel {
     /**
      * Unique ID of the error sample value.

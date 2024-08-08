@@ -20,7 +20,9 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.errorsamples.models.ErrorSampleEntryModel;
 import com.dqops.data.errorsamples.models.ErrorSamplesListModel;
+import com.dqops.data.errorsamples.services.ErrorSamplesCsvCreator;
 import com.dqops.data.errorsamples.services.ErrorSamplesDataService;
 import com.dqops.data.errorsamples.services.ErrorSamplesFilterParameters;
 import com.dqops.metadata.sources.*;
@@ -29,7 +31,9 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -39,6 +43,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -52,17 +57,22 @@ import java.util.concurrent.CompletableFuture;
 public class ErrorSamplesController {
     private UserHomeContextFactory userHomeContextFactory;
     private ErrorSamplesDataService errorSamplesDataService;
+    private final ErrorSamplesCsvCreator errorSamplesCsvCreator;
 
     /**
      * Dependency injection constructor.
-     * @param userHomeContextFactory User home context factory.
+     *
+     * @param userHomeContextFactory  User home context factory.
      * @param errorSamplesDataService Error samples data service.
+     * @param errorSamplesCsvCreator  CSV creator for the error samples.
      */
     @Autowired
     public ErrorSamplesController(UserHomeContextFactory userHomeContextFactory,
-                                  ErrorSamplesDataService errorSamplesDataService) {
+                                  ErrorSamplesDataService errorSamplesDataService,
+                                  ErrorSamplesCsvCreator errorSamplesCsvCreator) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.errorSamplesDataService = errorSamplesDataService;
+        this.errorSamplesCsvCreator = errorSamplesCsvCreator;
     }
 
     /**
@@ -537,4 +547,108 @@ public class ErrorSamplesController {
             return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
         }));
     }
+
+    /**
+     * Retrieves the error samples in CSV format related to check on a table given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param dataGroup      Data group.
+     * @param monthStart     Month start boundary.
+     * @param monthEnd       Month end boundary.
+     * @return CSV formatted error samples for the first matching check.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errorsamples/download", produces = "application/json")
+    @ApiOperation(value = "getColumnProfilingErrorSamplesDownload", notes = "Returns the error samples in CSV format related to a check for one of table level data quality profiling checks on a column",
+            response = ErrorSamplesListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Error samples related to the check for table level data quality profiling checks on a column returned",
+                    response = ErrorSamplesListModel[].class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Flux<String>>> getColumnProfilingErrorSamplesDownload(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName,
+            @ApiParam(name = "dataGroup", value = "Data group", required = false) @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "monthStart", value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(name = "monthEnd", value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd,
+            @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
+                    ErrorSamplesFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+            ErrorSamplesFilterParameters loadParams = new ErrorSamplesFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+
+            ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
+                    checks, loadParams, principal.getDataDomainIdentity());
+
+            ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
+            List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
+
+            StringBuilder fileNameBuilder = new StringBuilder();
+            fileNameBuilder.append("Error_samples_").append("_")
+                    .append(connectionName).append("_")
+                    .append(schemaName).append("_")
+                    .append(tableName).append("_")
+                    .append(columnName).append("_")
+                    .append(firstErrorSamplesListModel.getCheckCategory()).append("_")
+                    .append(firstErrorSamplesListModel.getCheckName()).append("_")
+                    .append(DateTime.now().toDateTimeISO()).append(".csv");
+            String fileName = fileNameBuilder.toString();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+            headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+
+            ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                    .headers(headers)
+                    .body(this.errorSamplesCsvCreator.createCsvData(errorSamples));
+
+            return response;
+        }));
+    }
+
 }
