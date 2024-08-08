@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
-import com.dqops.sensors.column.patterns.ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,7 +42,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnInvalidUsaPhoneFoundCheckSpec
-        extends AbstractCheckSpec<ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidUsaPhoneFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -52,7 +52,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
     @JsonPropertyDescription("Numerical value in range percent sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec parameters = new ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec();
+    private ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec parameters = new ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -74,7 +74,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec getParameters() {
+    public ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -82,7 +82,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

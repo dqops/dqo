@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
-import com.dqops.sensors.column.patterns.ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,7 +42,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnInvalidUsaZipcodeFoundCheckSpec
-        extends AbstractCheckSpec<ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidUsaZipcodeFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -52,7 +52,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
     @JsonPropertyDescription("Numerical value in range percent sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec parameters = new ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec();
+    private ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec parameters = new ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -74,7 +74,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec getParameters() {
+    public ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -82,7 +82,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
