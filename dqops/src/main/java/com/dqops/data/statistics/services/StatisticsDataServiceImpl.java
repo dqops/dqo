@@ -123,8 +123,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                 if (columnModel.getMetrics().stream()
                         .noneMatch(m -> Objects.equal(m.getCategory(), category) &&
                                 Objects.equal(m.getCollector(), collectorName) &&
-                                !Objects.equal(m.getCollectedAt(), collectedAt) && // a newer result was already added, so we are skipping
-                                Objects.equal(m.getSampleIndex(), sampleIndex))) {
+                                !Objects.equal(m.getCollectedAt(), collectedAt))) { // a newer result was already added, so we are skipping
                     columnModel.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }
