@@ -32,14 +32,14 @@ public class ErrorSamplesCsvCreatorImpl implements ErrorSamplesCsvCreator {
         row.add(errorSampleEntryModel.getResult().toString());
         row.add(errorSampleEntryModel.getResultDataType().toString());
         row.add(errorSampleEntryModel.getDataGroup());
-        row.add(errorSampleEntryModel.getRowId1());
-        row.add(errorSampleEntryModel.getRowId2());
-        row.add(errorSampleEntryModel.getRowId3());
-        row.add(errorSampleEntryModel.getRowId4());
-        row.add(errorSampleEntryModel.getRowId5());
+        row.add(errorSampleEntryModel.getRowId1() != null ? errorSampleEntryModel.getRowId1() : "");
+        row.add(errorSampleEntryModel.getRowId2() != null ? errorSampleEntryModel.getRowId2() : "");
+        row.add(errorSampleEntryModel.getRowId3() != null ? errorSampleEntryModel.getRowId3() : "");
+        row.add(errorSampleEntryModel.getRowId4() != null ? errorSampleEntryModel.getRowId4() : "");
+        row.add(errorSampleEntryModel.getRowId5() != null ? errorSampleEntryModel.getRowId5() : "");
         row.add(errorSampleEntryModel.getId());
-        row.add("\n");
-        String csvRow = String.join(",", row);
+        String joinedRow = String.join(",", row) + "\n";
+        String csvRow = joinedRow.replace("\"", "\"\"");
         return csvRow;
     }
 
@@ -56,8 +56,7 @@ public class ErrorSamplesCsvCreatorImpl implements ErrorSamplesCsvCreator {
         header.add("ID Column 4");
         header.add("ID Column 5");
         header.add("Id");
-        header.add("\n");
-        String csvHeader = String.join(",", header);
+        String csvHeader = String.join(",", header) + "\n";
         return csvHeader;
     }
 
