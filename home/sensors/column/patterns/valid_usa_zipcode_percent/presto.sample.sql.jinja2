@@ -1,5 +1,5 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-{%- call lib.render_error_sampler() -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
     REGEXP_LIKE(
                         CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
                         '^[0-9]{5}(?:-[0-9]{4})?$'
