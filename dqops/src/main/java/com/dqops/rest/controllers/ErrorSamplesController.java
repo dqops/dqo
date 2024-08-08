@@ -620,14 +620,50 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                StringBuilder fileNameBuilder = new StringBuilder();
+                fileNameBuilder.append("Error_samples_").append(CheckType.profiling).append("_")
+                        .append(connectionName).append("_")
+                        .append(schemaName).append("_")
+                        .append(tableName).append("_");
+
+                if(dataGroup.isPresent()){
+                    fileNameBuilder.append(dataGroup).append("_");
+                }
+                if(monthStart.isPresent()){
+                    fileNameBuilder.append(monthStart).append("_");
+                }
+                if(monthEnd.isPresent()){
+                    fileNameBuilder.append(monthEnd).append("_");
+                }
+                if(checkName.isPresent()){
+                    fileNameBuilder.append(checkName).append("_");
+                }
+                if(category.isPresent()){
+                    fileNameBuilder.append(category).append("_");
+                }
+                if(tableComparison.isPresent()){
+                    fileNameBuilder.append(tableComparison).append("_");
+                }
+                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
+                String fileName = fileNameBuilder.toString();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+                headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+                headers.add(HttpHeaders.CONTENT_LENGTH, "0");
+
+                ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                        .headers(headers)
+                        .body(null);
+
+                return response;
             }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_").append(CheckType.profiling).append("_")
+            fileNameBuilder.append("Error_samples_")
                     .append(connectionName).append("_")
                     .append(schemaName).append("_")
                     .append(tableName).append("_")
@@ -722,14 +758,51 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                StringBuilder fileNameBuilder = new StringBuilder();
+                fileNameBuilder.append("Error_samples_").append(CheckType.monitoring).append("_")
+                        .append(connectionName).append("_")
+                        .append(schemaName).append("_")
+                        .append(tableName).append("_")
+                        .append(timeScale).append("_");
+
+                if(dataGroup.isPresent()){
+                    fileNameBuilder.append(dataGroup).append("_");
+                }
+                if(monthStart.isPresent()){
+                    fileNameBuilder.append(monthStart).append("_");
+                }
+                if(monthEnd.isPresent()){
+                    fileNameBuilder.append(monthEnd).append("_");
+                }
+                if(checkName.isPresent()){
+                    fileNameBuilder.append(checkName).append("_");
+                }
+                if(category.isPresent()){
+                    fileNameBuilder.append(category).append("_");
+                }
+                if(tableComparison.isPresent()){
+                    fileNameBuilder.append(tableComparison).append("_");
+                }
+                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
+                String fileName = fileNameBuilder.toString();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+                headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+                headers.add(HttpHeaders.CONTENT_LENGTH, "0");
+
+                ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                        .headers(headers)
+                        .body(null);
+
+                return response;
             }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_").append(CheckType.monitoring).append("_")
+            fileNameBuilder.append("Error_samples_")
                     .append(connectionName).append("_")
                     .append(schemaName).append("_")
                     .append(tableName).append("_")
@@ -823,15 +896,52 @@ public class ErrorSamplesController {
             ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
 
+            if(errorSamplesListModels.length == 0){
+                StringBuilder fileNameBuilder = new StringBuilder();
+                fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
+                        .append(connectionName).append("_")
+                        .append(schemaName).append("_")
+                        .append(tableName).append("_")
+                        .append(timeScale).append("_");
+
+                if(dataGroup.isPresent()){
+                    fileNameBuilder.append(dataGroup).append("_");
+                }
+                if(monthStart.isPresent()){
+                    fileNameBuilder.append(monthStart).append("_");
+                }
+                if(monthEnd.isPresent()){
+                    fileNameBuilder.append(monthEnd).append("_");
+                }
+                if(checkName.isPresent()){
+                    fileNameBuilder.append(checkName).append("_");
+                }
+                if(category.isPresent()){
+                    fileNameBuilder.append(category).append("_");
+                }
+                if(tableComparison.isPresent()){
+                    fileNameBuilder.append(tableComparison).append("_");
+                }
+                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
+                String fileName = fileNameBuilder.toString();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+                headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+                headers.add(HttpHeaders.CONTENT_LENGTH, "0");
+
+                ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                        .headers(headers)
+                        .body(null);
+
+                return response;
+            }
+
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
-            if(errorSamplesListModels.length == 0){
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-            }
-
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
+            fileNameBuilder.append("Error_samples_")
                     .append(connectionName).append("_")
                     .append(schemaName).append("_")
                     .append(tableName).append("_")
@@ -931,14 +1041,51 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                StringBuilder fileNameBuilder = new StringBuilder();
+                fileNameBuilder.append("Error_samples_").append(CheckType.profiling).append("_")
+                        .append(connectionName).append("_")
+                        .append(schemaName).append("_")
+                        .append(tableName).append("_")
+                        .append(columnName).append("_");
+
+                if(dataGroup.isPresent()){
+                    fileNameBuilder.append(dataGroup).append("_");
+                }
+                if(monthStart.isPresent()){
+                    fileNameBuilder.append(monthStart).append("_");
+                }
+                if(monthEnd.isPresent()){
+                    fileNameBuilder.append(monthEnd).append("_");
+                }
+                if(checkName.isPresent()){
+                    fileNameBuilder.append(checkName).append("_");
+                }
+                if(category.isPresent()){
+                    fileNameBuilder.append(category).append("_");
+                }
+                if(tableComparison.isPresent()){
+                    fileNameBuilder.append(tableComparison).append("_");
+                }
+                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
+                String fileName = fileNameBuilder.toString();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+                headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+                headers.add(HttpHeaders.CONTENT_LENGTH, "0");
+
+                ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                        .headers(headers)
+                        .body(null);
+
+                return response;
             }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_").append(CheckType.profiling).append("_")
+            fileNameBuilder.append("Error_samples_")
                     .append(connectionName).append("_")
                     .append(schemaName).append("_")
                     .append(tableName).append("_")
@@ -1040,14 +1187,52 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                StringBuilder fileNameBuilder = new StringBuilder();
+                fileNameBuilder.append("Error_samples_").append(CheckType.monitoring).append("_")
+                        .append(connectionName).append("_")
+                        .append(schemaName).append("_")
+                        .append(tableName).append("_")
+                        .append(columnName).append("_")
+                        .append(timeScale).append("_");
+
+                if(dataGroup.isPresent()){
+                    fileNameBuilder.append(dataGroup).append("_");
+                }
+                if(monthStart.isPresent()){
+                    fileNameBuilder.append(monthStart).append("_");
+                }
+                if(monthEnd.isPresent()){
+                    fileNameBuilder.append(monthEnd).append("_");
+                }
+                if(checkName.isPresent()){
+                    fileNameBuilder.append(checkName).append("_");
+                }
+                if(category.isPresent()){
+                    fileNameBuilder.append(category).append("_");
+                }
+                if(tableComparison.isPresent()){
+                    fileNameBuilder.append(tableComparison).append("_");
+                }
+                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
+                String fileName = fileNameBuilder.toString();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+                headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+                headers.add(HttpHeaders.CONTENT_LENGTH, "0");
+
+                ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                        .headers(headers)
+                        .body(null);
+
+                return response;
             }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_").append(CheckType.monitoring).append("_")
+            fileNameBuilder.append("Error_samples_")
                     .append(connectionName).append("_")
                     .append(schemaName).append("_")
                     .append(tableName).append("_")
@@ -1150,14 +1335,52 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                StringBuilder fileNameBuilder = new StringBuilder();
+                fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
+                        .append(connectionName).append("_")
+                        .append(schemaName).append("_")
+                        .append(tableName).append("_")
+                        .append(columnName).append("_")
+                        .append(timeScale).append("_");
+
+                if(dataGroup.isPresent()){
+                    fileNameBuilder.append(dataGroup).append("_");
+                }
+                if(monthStart.isPresent()){
+                    fileNameBuilder.append(monthStart).append("_");
+                }
+                if(monthEnd.isPresent()){
+                    fileNameBuilder.append(monthEnd).append("_");
+                }
+                if(checkName.isPresent()){
+                    fileNameBuilder.append(checkName).append("_");
+                }
+                if(category.isPresent()){
+                    fileNameBuilder.append(category).append("_");
+                }
+                if(tableComparison.isPresent()){
+                    fileNameBuilder.append(tableComparison).append("_");
+                }
+                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
+                String fileName = fileNameBuilder.toString();
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+                headers.add(HttpHeaders.CONTENT_TYPE, "text/csv");
+                headers.add(HttpHeaders.CONTENT_LENGTH, "0");
+
+                ResponseEntity<Flux<String>> response = ResponseEntity.ok() // 200
+                        .headers(headers)
+                        .body(null);
+
+                return response;
             }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
             StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
+            fileNameBuilder.append("Error_samples_")
                     .append(connectionName).append("_")
                     .append(schemaName).append("_")
                     .append(tableName).append("_")
