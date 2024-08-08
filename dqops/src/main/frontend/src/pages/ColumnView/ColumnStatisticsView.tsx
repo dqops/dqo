@@ -174,14 +174,14 @@ const ColumnStatisticsView = ({
             }
           } else {
             table_statistics_array.push({
-              type: 'Detected Datatype:',
+              type: 'Detected data type:',
               result: getDetectedDatatype(item.result)
             });
           }
         }
       );
       table_statistics_array.push({
-        type: 'Datatype:',
+        type: 'Data type:',
         result: String(fetchedColumnsStatistics.type_snapshot?.column_type)
       });
 
