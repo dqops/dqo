@@ -23,6 +23,10 @@ import com.dqops.checks.column.checkspecs.patterns.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -53,6 +57,11 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
             put("monthly_partition_valid_uuid_format_percent", o -> o.monthlyPartitionValidUuidFormatPercent);
             put("monthly_partition_invalid_ip4_address_format_found", o -> o.monthlyPartitionInvalidIp4AddressFormatFound);
             put("monthly_partition_invalid_ip6_address_format_found", o -> o.monthlyPartitionInvalidIp6AddressFormatFound);
+
+            put("monthly_partition_invalid_usa_phone_format_found", o -> o.monthlyPartitionInvalidUsaPhoneFormatFound);
+            put("monthly_partition_invalid_usa_zipcode_format_found", o -> o.monthlyPartitionInvalidUsaZipcodeFormatFound);
+            put("monthly_partition_valid_usa_phone_format_percent", o -> o.monthlyPartitionValidUsaPhoneFormatFound);
+            put("monthly_partition_valid_usa_zipcode_format_percent", o -> o.monthlyPartitionValidUsaZipcodeFormatFound);
         }
     };
 
@@ -88,6 +97,18 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp6AddressFormatFoundCheckSpec monthlyPartitionInvalidIp6AddressFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.")
+    private ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec monthlyPartitionInvalidUsaPhoneFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
+    private ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec monthlyPartitionInvalidUsaZipcodeFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
+    private ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec monthlyPartitionValidUsaPhoneFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
+    private ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec monthlyPartitionValidUsaZipcodeFormatFound;
 
     /**
      * Returns a maximum not match regex count check.
@@ -287,6 +308,78 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
         propagateHierarchyIdToField(monthlyPartitionInvalidIp6AddressFormatFound, "monthly_partition_invalid_ip6_address_format_found");
     }
 
+
+    /**
+     * Returns a maximum invalid USA phone numbers count check.
+     * @return Maximum invalid USA phone numbers count check.
+     */
+    public ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec getMonthlyPartitionInvalidUsaPhoneFormatFound() {
+        return monthlyPartitionInvalidUsaPhoneFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phone numbers count check.
+     * @param monthlyPartitionInvalidUsaPhoneFormatFound Invalid USA phone numbers count check.
+     */
+    public void setMonthlyPartitionInvalidUsaPhoneFormatFound(ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec monthlyPartitionInvalidUsaPhoneFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidUsaPhoneFormatFound, monthlyPartitionInvalidUsaPhoneFormatFound));
+        this.monthlyPartitionInvalidUsaPhoneFormatFound = monthlyPartitionInvalidUsaPhoneFormatFound;
+        propagateHierarchyIdToField(monthlyPartitionInvalidUsaPhoneFormatFound, "monthly_partition_invalid_usa_phone_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid USA zip codes count check.
+     * @return Maximum invalid USA zip codes count check.
+     */
+    public ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec getMonthlyPartitionInvalidUsaZipcodeFormatFound() {
+        return monthlyPartitionInvalidUsaZipcodeFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip codes count check.
+     * @param monthlyPartitionInvalidUsaZipcodeFormatFound Invalid USA zip codes count check.
+     */
+    public void setMonthlyPartitionInvalidUsaZipcodeFormatFound(ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec monthlyPartitionInvalidUsaZipcodeFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidUsaZipcodeFormatFound, monthlyPartitionInvalidUsaZipcodeFormatFound));
+        this.monthlyPartitionInvalidUsaZipcodeFormatFound = monthlyPartitionInvalidUsaZipcodeFormatFound;
+        propagateHierarchyIdToField(monthlyPartitionInvalidUsaZipcodeFormatFound, "monthly_partition_invalid_usa_zipcode_format_found");
+    }
+
+    /**
+     * Returns a valid USA phones number percent check.
+     * @return Valid USA phones number percent check.
+     */
+    public ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec getMonthlyPartitionValidUsaPhoneFormatFound() {
+        return monthlyPartitionValidUsaPhoneFormatFound;
+    }
+
+    /**
+     * Sets a new definition of a valid USA phones number percent check.
+     * @param monthlyPartitionValidUsaPhoneFormatFound Valid USA phones number percent check.
+     */
+    public void setMonthlyPartitionValidUsaPhoneFormatFound(ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec monthlyPartitionValidUsaPhoneFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidUsaPhoneFormatFound, monthlyPartitionValidUsaPhoneFormatFound));
+        this.monthlyPartitionValidUsaPhoneFormatFound = monthlyPartitionValidUsaPhoneFormatFound;
+        propagateHierarchyIdToField(monthlyPartitionValidUsaPhoneFormatFound, "monthly_partition_valid_usa_phone_format_percent");
+    }
+
+    /**
+     * Returns a valid USA zip code percent check.
+     * @return Valid USA zip code percent check.
+     */
+    public ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec getMonthlyPartitionValidUsaZipcodeFormatFound() {
+        return monthlyPartitionValidUsaZipcodeFormatFound;
+    }
+
+    /**
+     * Sets a new definition of a valid USA zip code percent check.
+     * @param monthlyPartitionValidUsaZipcodeFormatFound Valid USA zip code percent check.
+     */
+    public void setMonthlyPartitionValidUsaZipcodeFormatFound(ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec monthlyPartitionValidUsaZipcodeFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidUsaPhoneFormatFound, monthlyPartitionValidUsaZipcodeFormatFound));
+        this.monthlyPartitionValidUsaZipcodeFormatFound = monthlyPartitionValidUsaZipcodeFormatFound;
+        propagateHierarchyIdToField(monthlyPartitionValidUsaZipcodeFormatFound, "monthly_partition_valid_usa_zipcode_format_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
