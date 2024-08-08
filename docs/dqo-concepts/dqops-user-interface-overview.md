@@ -170,7 +170,7 @@ Clicking the vertical dots at the end of each element in the tree view reveals a
 
 ![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu3.png){ loading=lazy; width="1200px" }
 
-The available options depend on the selected element type.
+The available options depend on the selected element type and section.
 
 - **Run checks:** Launches a dialog to execute checks on specific connections, tables, or columns.
 - **Collect statistics:** Launches a dialog to gathers statistics for specific connections, tables, or columns.
