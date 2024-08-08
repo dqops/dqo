@@ -16446,12 +16446,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:

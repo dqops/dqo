@@ -181,20 +181,22 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                                 ? newLocalFolderIndex.detachEmptyFolders() : null;
 
                 if (emptyLocalFolders != null) {
-                    for (FolderMetadata emptySourceFolder : emptyLocalFolders) {
-                        sourceFileSystemSynchronizationOperations.deleteFolderAsync(sourceFileSystemRoot, emptySourceFolder.getRelativePath(), false)
-                                .subscribeOn(Schedulers.parallel())
-                                .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
-                    }
+                    Flux.fromIterable(emptyLocalFolders)
+                            .parallel(this.dqoCloudConfigurationProperties.getParallelFileUploads())
+                            .flatMap(emptySourceFolder ->sourceFileSystemSynchronizationOperations.deleteFolderAsync(
+                                    sourceFileSystemRoot, emptySourceFolder.getRelativePath(), false))
+                            .then()
+                            .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                 }
                 newLocalFolderIndex.freeze();
 
                 if (emptyRemoteFolders != null) {
-                    for (FolderMetadata emptyTargetFolder : emptyRemoteFolders) {
-                        targetFileSystemSynchronizationOperations.deleteFolderAsync(targetFileSystemRoot, emptyTargetFolder.getRelativePath(), false)
-                                .subscribeOn(Schedulers.parallel())
-                                .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
-                    }
+                    Flux.fromIterable(emptyRemoteFolders)
+                            .parallel(this.dqoCloudConfigurationProperties.getParallelFileUploads())
+                            .flatMap(emptyTargetFolder -> targetFileSystemSynchronizationOperations.deleteFolderAsync(
+                                    targetFileSystemRoot, emptyTargetFolder.getRelativePath(), false))
+                            .then()
+                            .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                 }
                 newTargetFolderIndex.freeze();
             }
@@ -235,6 +237,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         Set<Path> synchronizedSourceChanges = Collections.synchronizedSet(new LinkedHashSet<>());
 
         Mono<Set<Path>> monoResult = Flux.fromIterable(localChanges)
+                .parallel(this.dqoCloudConfigurationProperties.getParallelFileUploads())
                 .flatMap((FileDifference localChange) -> {
                     Mono<FileMetadata> fileExchangeOperationMono = null;
 
@@ -265,7 +268,8 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                             .then();
 
                     return finishedMono;
-                }, this.dqoCloudConfigurationProperties.getParallelFileUploads(), this.dqoCloudConfigurationProperties.getParallelFileUploads())
+                })
+                .then()
                 .then(Mono.just(synchronizedSourceChanges));
 
         return monoResult;
@@ -298,6 +302,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                                                  Set<Path> synchronizedSourceChanges,
                                                  FolderMetadata newLocalFolderIndex) {
         Mono<Void> monoResult = Flux.fromIterable(unsyncedTargetChanges)
+                .parallel(this.dqoCloudConfigurationProperties.getParallelFileDownloads())
                 .flatMap((FileDifference otherChange) -> {
                     Path otherChangePath = otherChange.getRelativePath();
                     if (synchronizedSourceChanges.contains(otherChangePath)) {
@@ -331,7 +336,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                             })
                             .then();
                     return finishedMono;
-                }, this.dqoCloudConfigurationProperties.getParallelFileDownloads(), this.dqoCloudConfigurationProperties.getParallelFileDownloads())
+                })
                 .then();
 
         return monoResult;
