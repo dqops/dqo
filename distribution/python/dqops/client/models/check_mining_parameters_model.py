@@ -24,6 +24,7 @@ class CheckMiningParametersModel:
         copy_failed_profiling_checks (Union[Unset, bool]): Copy also the configuration of profiling checks that failed.
         copy_disabled_profiling_checks (Union[Unset, bool]): Copy also the configuration of profiling checks that are
             disabled.
+        copy_profiling_checks (Union[Unset, bool]): Copy the configuration of valid profiling checks.
         propose_default_checks (Union[Unset, bool]): Propose the rules for default checks that were activated using data
             quality check patterns (policies). The default value of this parameter is 'true'.
         propose_minimum_row_count (Union[Unset, bool]): Proposes the default configuration of the minimum row count for
@@ -52,13 +53,17 @@ class CheckMiningParametersModel:
             The default value of this parameter is 'true'.
         propose_accepted_values_checks (Union[Unset, bool]): Proposes the default configuration the accepted values
             checks. The default value of this parameter is 'true'.
+        propose_custom_checks (Union[Unset, bool]): Proposes the default configuration for custom checks that use built-
+            in data quality rules. The default value of this parameter is 'true'.
+        propose_bool_percent_checks (Union[Unset, bool]): Proposes the default configuration for the checks that measure
+            the percentage of boolean values. The default value of this parameter is 'true'.
+        propose_date_checks (Union[Unset, bool]): Proposes the default configuration for the date and datetime checks
+            that detect invalid dates. The default value of this parameter is 'true'.
         fail_checks_at_percent_error_rows (Union[Unset, float]): The percentage value captured by a profiling check (for
             example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values
             as errors (i.e., max_percent = 0%, or min_percent = 100%).
         max_percent_error_rows_for_percent_checks (Union[Unset, float]): The default maximum percentage of invalid rows
             for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.
-        propose_custom_checks (Union[Unset, bool]): Proposes the default configuration for custom checks that use built-
-            in data quality rules. The default value of this parameter is 'true'.
     """
 
     severity_level: Union[Unset, TargetRuleSeverityLevel] = UNSET
@@ -67,6 +72,7 @@ class CheckMiningParametersModel:
     column_name_filter: Union[Unset, str] = UNSET
     copy_failed_profiling_checks: Union[Unset, bool] = UNSET
     copy_disabled_profiling_checks: Union[Unset, bool] = UNSET
+    copy_profiling_checks: Union[Unset, bool] = UNSET
     propose_default_checks: Union[Unset, bool] = UNSET
     propose_minimum_row_count: Union[Unset, bool] = UNSET
     propose_column_count: Union[Unset, bool] = UNSET
@@ -79,9 +85,11 @@ class CheckMiningParametersModel:
     propose_numeric_ranges: Union[Unset, bool] = UNSET
     propose_text_length_ranges: Union[Unset, bool] = UNSET
     propose_accepted_values_checks: Union[Unset, bool] = UNSET
+    propose_custom_checks: Union[Unset, bool] = UNSET
+    propose_bool_percent_checks: Union[Unset, bool] = UNSET
+    propose_date_checks: Union[Unset, bool] = UNSET
     fail_checks_at_percent_error_rows: Union[Unset, float] = UNSET
     max_percent_error_rows_for_percent_checks: Union[Unset, float] = UNSET
-    propose_custom_checks: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -94,6 +102,7 @@ class CheckMiningParametersModel:
         column_name_filter = self.column_name_filter
         copy_failed_profiling_checks = self.copy_failed_profiling_checks
         copy_disabled_profiling_checks = self.copy_disabled_profiling_checks
+        copy_profiling_checks = self.copy_profiling_checks
         propose_default_checks = self.propose_default_checks
         propose_minimum_row_count = self.propose_minimum_row_count
         propose_column_count = self.propose_column_count
@@ -106,11 +115,13 @@ class CheckMiningParametersModel:
         propose_numeric_ranges = self.propose_numeric_ranges
         propose_text_length_ranges = self.propose_text_length_ranges
         propose_accepted_values_checks = self.propose_accepted_values_checks
+        propose_custom_checks = self.propose_custom_checks
+        propose_bool_percent_checks = self.propose_bool_percent_checks
+        propose_date_checks = self.propose_date_checks
         fail_checks_at_percent_error_rows = self.fail_checks_at_percent_error_rows
         max_percent_error_rows_for_percent_checks = (
             self.max_percent_error_rows_for_percent_checks
         )
-        propose_custom_checks = self.propose_custom_checks
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -129,6 +140,8 @@ class CheckMiningParametersModel:
             field_dict["copy_disabled_profiling_checks"] = (
                 copy_disabled_profiling_checks
             )
+        if copy_profiling_checks is not UNSET:
+            field_dict["copy_profiling_checks"] = copy_profiling_checks
         if propose_default_checks is not UNSET:
             field_dict["propose_default_checks"] = propose_default_checks
         if propose_minimum_row_count is not UNSET:
@@ -155,6 +168,12 @@ class CheckMiningParametersModel:
             field_dict["propose_accepted_values_checks"] = (
                 propose_accepted_values_checks
             )
+        if propose_custom_checks is not UNSET:
+            field_dict["propose_custom_checks"] = propose_custom_checks
+        if propose_bool_percent_checks is not UNSET:
+            field_dict["propose_bool_percent_checks"] = propose_bool_percent_checks
+        if propose_date_checks is not UNSET:
+            field_dict["propose_date_checks"] = propose_date_checks
         if fail_checks_at_percent_error_rows is not UNSET:
             field_dict["fail_checks_at_percent_error_rows"] = (
                 fail_checks_at_percent_error_rows
@@ -163,8 +182,6 @@ class CheckMiningParametersModel:
             field_dict["max_percent_error_rows_for_percent_checks"] = (
                 max_percent_error_rows_for_percent_checks
             )
-        if propose_custom_checks is not UNSET:
-            field_dict["propose_custom_checks"] = propose_custom_checks
 
         return field_dict
 
@@ -187,6 +204,8 @@ class CheckMiningParametersModel:
         copy_failed_profiling_checks = d.pop("copy_failed_profiling_checks", UNSET)
 
         copy_disabled_profiling_checks = d.pop("copy_disabled_profiling_checks", UNSET)
+
+        copy_profiling_checks = d.pop("copy_profiling_checks", UNSET)
 
         propose_default_checks = d.pop("propose_default_checks", UNSET)
 
@@ -212,6 +231,12 @@ class CheckMiningParametersModel:
 
         propose_accepted_values_checks = d.pop("propose_accepted_values_checks", UNSET)
 
+        propose_custom_checks = d.pop("propose_custom_checks", UNSET)
+
+        propose_bool_percent_checks = d.pop("propose_bool_percent_checks", UNSET)
+
+        propose_date_checks = d.pop("propose_date_checks", UNSET)
+
         fail_checks_at_percent_error_rows = d.pop(
             "fail_checks_at_percent_error_rows", UNSET
         )
@@ -220,8 +245,6 @@ class CheckMiningParametersModel:
             "max_percent_error_rows_for_percent_checks", UNSET
         )
 
-        propose_custom_checks = d.pop("propose_custom_checks", UNSET)
-
         check_mining_parameters_model = cls(
             severity_level=severity_level,
             category_filter=category_filter,
@@ -229,6 +252,7 @@ class CheckMiningParametersModel:
             column_name_filter=column_name_filter,
             copy_failed_profiling_checks=copy_failed_profiling_checks,
             copy_disabled_profiling_checks=copy_disabled_profiling_checks,
+            copy_profiling_checks=copy_profiling_checks,
             propose_default_checks=propose_default_checks,
             propose_minimum_row_count=propose_minimum_row_count,
             propose_column_count=propose_column_count,
@@ -241,9 +265,11 @@ class CheckMiningParametersModel:
             propose_numeric_ranges=propose_numeric_ranges,
             propose_text_length_ranges=propose_text_length_ranges,
             propose_accepted_values_checks=propose_accepted_values_checks,
+            propose_custom_checks=propose_custom_checks,
+            propose_bool_percent_checks=propose_bool_percent_checks,
+            propose_date_checks=propose_date_checks,
             fail_checks_at_percent_error_rows=fail_checks_at_percent_error_rows,
             max_percent_error_rows_for_percent_checks=max_percent_error_rows_for_percent_checks,
-            propose_custom_checks=propose_custom_checks,
         )
 
         check_mining_parameters_model.additional_properties = d

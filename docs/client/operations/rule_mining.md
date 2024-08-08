@@ -709,7 +709,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_text_length_ranges\":true,\"propose_accepted_values_checks\":true,\"propose_custom_checks\":true}"
+		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_text_length_ranges\":true,\"propose_accepted_values_checks\":true,\"propose_custom_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true}"
 	
     ```
 
@@ -746,6 +746,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -758,7 +759,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = propose_table_monitoring_checks.sync(
@@ -807,6 +810,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -819,7 +823,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = await propose_table_monitoring_checks.asyncio(
@@ -871,6 +877,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -883,7 +890,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = propose_table_monitoring_checks.sync(
@@ -935,6 +944,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -947,7 +957,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = await propose_table_monitoring_checks.asyncio(
@@ -1032,7 +1044,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_text_length_ranges\":true,\"propose_accepted_values_checks\":true,\"propose_custom_checks\":true}"
+		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_text_length_ranges\":true,\"propose_accepted_values_checks\":true,\"propose_custom_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true}"
 	
     ```
 
@@ -1069,6 +1081,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1081,7 +1094,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = propose_table_partitioned_checks.sync(
@@ -1130,6 +1145,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1142,7 +1158,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = await propose_table_partitioned_checks.asyncio(
@@ -1194,6 +1212,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1206,7 +1225,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = propose_table_partitioned_checks.sync(
@@ -1258,6 +1279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1270,7 +1292,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = await propose_table_partitioned_checks.asyncio(
@@ -1354,7 +1378,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_text_length_ranges\":true,\"propose_accepted_values_checks\":true,\"propose_custom_checks\":true}"
+		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_text_length_ranges\":true,\"propose_accepted_values_checks\":true,\"propose_custom_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true}"
 	
     ```
 
@@ -1390,6 +1414,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1402,7 +1427,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = propose_table_profiling_checks.sync(
@@ -1449,6 +1476,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1461,7 +1489,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = await propose_table_profiling_checks.asyncio(
@@ -1511,6 +1541,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1523,7 +1554,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = propose_table_profiling_checks.sync(
@@ -1573,6 +1606,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		severity_level=TargetRuleSeverityLevel.ERROR,
 		copy_failed_profiling_checks=False,
 		copy_disabled_profiling_checks=False,
+		copy_profiling_checks=True,
 		propose_default_checks=True,
 		propose_minimum_row_count=True,
 		propose_column_count=True,
@@ -1585,7 +1619,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_text_length_ranges=True,
 		propose_accepted_values_checks=True,
-		propose_custom_checks=True
+		propose_custom_checks=True,
+		propose_bool_percent_checks=True,
+		propose_date_checks=True
 	)
 	
 	call_result = await propose_table_profiling_checks.asyncio(

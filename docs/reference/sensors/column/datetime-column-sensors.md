@@ -793,7 +793,7 @@ The text match date format percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`date_format`</span>|Expected date format. The sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>*YYYY-MM-DD*<br/>|
+|<span class="no-wrap-code">`date_format`</span>|Expected date format. The sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>|
 
 
 

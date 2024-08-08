@@ -35,6 +35,7 @@ import tech.tablesaw.api.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 /**
  * Service that provides access to read requested data statistics results.
@@ -120,10 +121,13 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                     tableStatisticsResults.getColumns().put(columnName, columnModel);
                 }
 
-                if (columnModel.getMetrics().stream()
-                        .noneMatch(m -> Objects.equal(m.getCategory(), category) &&
-                                Objects.equal(m.getCollector(), collectorName) &&
-                                !Objects.equal(m.getCollectedAt(), collectedAt))) { // a newer result was already added, so we are skipping
+                Optional<StatisticsMetricModel> firstMetric = columnModel.getMetrics()
+                        .stream()
+                        .filter(m -> Objects.equal(m.getCategory(), category) &&
+                                Objects.equal(m.getCollector(), collectorName))
+                        .findFirst();
+
+                if (firstMetric.isEmpty() || Objects.equal(firstMetric.get().getCollectedAt(), collectedAt)) {
                     columnModel.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }

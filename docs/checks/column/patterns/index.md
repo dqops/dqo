@@ -176,6 +176,66 @@ This check detects invalid IP6 internet addresses in text columns using a regula
 
 
 
+### [invalid usa phone format found](./invalid-usa-phone-format-found.md)
+This check validates the format of USA phone numbers inside text columns.
+ It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_invalid_usa_phone_format_found`</span>](./invalid-usa-phone-format-found.md#profile-invalid-usa-phone-format-found)|Maximum count of rows containing USA phone number values|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_invalid_usa_phone_format_found`</span>](./invalid-usa-phone-format-found.md#daily-invalid-usa-phone-format-found)|Maximum count of rows containing USA phone number values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_invalid_usa_phone_format_found`</span>](./invalid-usa-phone-format-found.md#monthly-invalid-usa-phone-format-found)|Maximum count of rows containing USA phone number values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_invalid_usa_phone_format_found`</span>](./invalid-usa-phone-format-found.md#daily-partition-invalid-usa-phone-format-found)|Maximum count of rows containing USA phone number values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_invalid_usa_phone_format_found`</span>](./invalid-usa-phone-format-found.md#monthly-partition-invalid-usa-phone-format-found)|Maximum count of rows containing USA phone number values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+
+
+
+### [invalid usa zipcode format found](./invalid-usa-zipcode-format-found.md)
+This check validates the format of a USA zip code inside text columns.
+ It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_invalid_usa_zipcode_format_found`</span>](./invalid-usa-zipcode-format-found.md#profile-invalid-usa-zipcode-format-found)|Maximum count of rows containing USA zip code values|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.| |
+|[<span class="no-wrap-code">`daily_invalid_usa_zipcode_format_found`</span>](./invalid-usa-zipcode-format-found.md#daily-invalid-usa-zipcode-format-found)|Maximum count of rows containing USA zip code values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.| |
+|[<span class="no-wrap-code">`monthly_invalid_usa_zipcode_format_found`</span>](./invalid-usa-zipcode-format-found.md#monthly-invalid-usa-zipcode-format-found)|Maximum count of rows containing USA zip code values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.| |
+|[<span class="no-wrap-code">`daily_partition_invalid_usa_zipcode_format_found`</span>](./invalid-usa-zipcode-format-found.md#daily-partition-invalid-usa-zipcode-format-found)|Maximum count of rows containing USA zip code values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.| |
+|[<span class="no-wrap-code">`monthly_partition_invalid_usa_zipcode_format_found`</span>](./invalid-usa-zipcode-format-found.md#monthly-partition-invalid-usa-zipcode-format-found)|Maximum count of rows containing USA zip code values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.| |
+
+
+
+### [valid usa phone format percent](./valid-usa-phone-format-percent.md)
+This check validates the format of USA phone numbers inside text columns.
+ It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_valid_usa_phone_format_percent`</span>](./valid-usa-phone-format-percent.md#profile-valid-usa-phone-format-percent)|Minimum percentage of rows containing USA phone number values|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_valid_usa_phone_format_percent`</span>](./valid-usa-phone-format-percent.md#daily-valid-usa-phone-format-percent)|Minimum percentage of rows containing USA phone number values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_valid_usa_phone_format_percent`</span>](./valid-usa-phone-format-percent.md#monthly-valid-usa-phone-format-percent)|Minimum percentage of rows containing USA phone number values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_valid_usa_phone_format_percent`</span>](./valid-usa-phone-format-percent.md#daily-partition-valid-usa-phone-format-percent)|Minimum percentage of rows containing USA phone number values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_valid_usa_phone_format_percent`</span>](./valid-usa-phone-format-percent.md#monthly-partition-valid-usa-phone-format-percent)|Minimum percentage of rows containing USA phone number values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.|:material-check-bold:|
+
+
+
+### [valid usa zipcode format percent](./valid-usa-zipcode-format-percent.md)
+This check validates the format of a USA zip code inside text columns.
+ It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_valid_usa_zipcode_format_percent`</span>](./valid-usa-zipcode-format-percent.md#profile-valid-usa-zipcode-format-percent)|Minimum percentage of rows containing USA zip code values|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.| |
+|[<span class="no-wrap-code">`daily_valid_usa_zipcode_format_percent`</span>](./valid-usa-zipcode-format-percent.md#daily-valid-usa-zipcode-format-percent)|Minimum percentage of rows containing USA zip code values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.| |
+|[<span class="no-wrap-code">`monthly_valid_usa_zipcode_format_percent`</span>](./valid-usa-zipcode-format-percent.md#monthly-valid-usa-zipcode-format-percent)|Minimum percentage of rows containing USA zip code values|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.| |
+|[<span class="no-wrap-code">`daily_partition_valid_usa_zipcode_format_percent`</span>](./valid-usa-zipcode-format-percent.md#daily-partition-valid-usa-zipcode-format-percent)|Minimum percentage of rows containing USA zip code values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.| |
+|[<span class="no-wrap-code">`monthly_partition_valid_usa_zipcode_format_percent`</span>](./valid-usa-zipcode-format-percent.md#monthly-partition-valid-usa-zipcode-format-percent)|Minimum percentage of rows containing USA zip code values|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.| |
+
+
+
 
 
 

@@ -23,10 +23,6 @@ import com.dqops.checks.column.checkspecs.patterns.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec;
-import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec;
-import com.dqops.sensors.column.patterns.ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec;
-import com.dqops.sensors.column.patterns.ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -60,8 +56,8 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
 
             put("monthly_invalid_usa_phone_format_found", o -> o.monthlyInvalidUsaPhoneFormatFound);
             put("monthly_invalid_usa_zipcode_format_found", o -> o.monthlyInvalidUsaZipcodeFormatFound);
-            put("monthly_valid_usa_phone_format_percent", o -> o.monthlyValidUsaPhoneFormatFound);
-            put("monthly_valid_usa_zipcode_format_percent", o -> o.monthlyValidUsaZipcodeFormatFound);
+            put("monthly_valid_usa_phone_format_percent", o -> o.monthlyValidUsaPhoneFormatPercent);
+            put("monthly_valid_usa_zipcode_format_percent", o -> o.monthlyValidUsaZipcodeFormatPercent);
         }
     };
 
@@ -99,16 +95,16 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
     private ColumnInvalidIp6AddressFormatFoundCheckSpec monthlyInvalidIp6AddressFormatFound;
 
     @JsonPropertyDescription("Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.")
-    private ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec monthlyInvalidUsaPhoneFormatFound;
+    private ColumnInvalidUsaPhoneFoundCheckSpec monthlyInvalidUsaPhoneFormatFound;
 
     @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
-    private ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec monthlyInvalidUsaZipcodeFormatFound;
+    private ColumnInvalidUsaZipcodeFoundCheckSpec monthlyInvalidUsaZipcodeFormatFound;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
-    private ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec monthlyValidUsaPhoneFormatFound;
+    private ColumnValidUsaPhonePercentCheckSpec monthlyValidUsaPhoneFormatPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
-    private ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec monthlyValidUsaZipcodeFormatFound;
+    private ColumnValidUsaZipcodePercentCheckSpec monthlyValidUsaZipcodeFormatPercent;
 
     /**
      * Returns a maximum not match regex count check.
@@ -313,7 +309,7 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
      * Returns a maximum invalid USA phone numbers count check.
      * @return Maximum invalid USA phone numbers count check.
      */
-    public ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec getMonthlyInvalidUsaPhoneFormatFound() {
+    public ColumnInvalidUsaPhoneFoundCheckSpec getMonthlyInvalidUsaPhoneFormatFound() {
         return monthlyInvalidUsaPhoneFormatFound;
     }
 
@@ -321,7 +317,7 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
      * Sets a new definition of an invalid USA phone numbers count check.
      * @param monthlyInvalidUsaPhoneFormatFound Invalid USA phone numbers count check.
      */
-    public void setMonthlyInvalidUsaPhoneFormatFound(ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec monthlyInvalidUsaPhoneFormatFound) {
+    public void setMonthlyInvalidUsaPhoneFormatFound(ColumnInvalidUsaPhoneFoundCheckSpec monthlyInvalidUsaPhoneFormatFound) {
         this.setDirtyIf(!Objects.equals(this.monthlyInvalidUsaPhoneFormatFound, monthlyInvalidUsaPhoneFormatFound));
         this.monthlyInvalidUsaPhoneFormatFound = monthlyInvalidUsaPhoneFormatFound;
         propagateHierarchyIdToField(monthlyInvalidUsaPhoneFormatFound, "monthly_invalid_usa_phone_format_found");
@@ -331,7 +327,7 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
      * Returns a maximum invalid USA zip codes count check.
      * @return Maximum invalid USA zip codes count check.
      */
-    public ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec getMonthlyInvalidUsaZipcodeFormatFound() {
+    public ColumnInvalidUsaZipcodeFoundCheckSpec getMonthlyInvalidUsaZipcodeFormatFound() {
         return monthlyInvalidUsaZipcodeFormatFound;
     }
 
@@ -339,7 +335,7 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
      * Sets a new definition of an invalid USA zip codes count check.
      * @param monthlyInvalidUsaZipcodeFormatFound Invalid USA zip codes count check.
      */
-    public void setMonthlyInvalidUsaZipcodeFormatFound(ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec monthlyInvalidUsaZipcodeFormatFound) {
+    public void setMonthlyInvalidUsaZipcodeFormatFound(ColumnInvalidUsaZipcodeFoundCheckSpec monthlyInvalidUsaZipcodeFormatFound) {
         this.setDirtyIf(!Objects.equals(this.monthlyInvalidUsaZipcodeFormatFound, monthlyInvalidUsaZipcodeFormatFound));
         this.monthlyInvalidUsaZipcodeFormatFound = monthlyInvalidUsaZipcodeFormatFound;
         propagateHierarchyIdToField(monthlyInvalidUsaZipcodeFormatFound, "monthly_invalid_usa_zipcode_format_found");
@@ -349,36 +345,36 @@ public class ColumnPatternsMonthlyMonitoringChecksSpec extends AbstractCheckCate
      * Returns a valid USA phones number percent check.
      * @return Valid USA phones number percent check.
      */
-    public ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec getMonthlyValidUsaPhoneFormatFound() {
-        return monthlyValidUsaPhoneFormatFound;
+    public ColumnValidUsaPhonePercentCheckSpec getMonthlyValidUsaPhoneFormatPercent() {
+        return monthlyValidUsaPhoneFormatPercent;
     }
 
     /**
      * Sets a new definition of a valid USA phones number percent check.
-     * @param monthlyValidUsaPhoneFormatFound Valid USA phones number percent check.
+     * @param monthlyValidUsaPhoneFormatPercent Valid USA phones number percent check.
      */
-    public void setMonthlyValidUsaPhoneFormatFound(ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec monthlyValidUsaPhoneFormatFound) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValidUsaPhoneFormatFound, monthlyValidUsaPhoneFormatFound));
-        this.monthlyValidUsaPhoneFormatFound = monthlyValidUsaPhoneFormatFound;
-        propagateHierarchyIdToField(monthlyValidUsaPhoneFormatFound, "monthly_valid_usa_phone_format_percent");
+    public void setMonthlyValidUsaPhoneFormatPercent(ColumnValidUsaPhonePercentCheckSpec monthlyValidUsaPhoneFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyValidUsaPhoneFormatPercent, monthlyValidUsaPhoneFormatPercent));
+        this.monthlyValidUsaPhoneFormatPercent = monthlyValidUsaPhoneFormatPercent;
+        propagateHierarchyIdToField(monthlyValidUsaPhoneFormatPercent, "monthly_valid_usa_phone_format_percent");
     }
 
     /**
      * Returns a valid USA zip code percent check.
      * @return Valid USA zip code percent check.
      */
-    public ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec getMonthlyValidUsaZipcodeFormatFound() {
-        return monthlyValidUsaZipcodeFormatFound;
+    public ColumnValidUsaZipcodePercentCheckSpec getMonthlyValidUsaZipcodeFormatPercent() {
+        return monthlyValidUsaZipcodeFormatPercent;
     }
 
     /**
      * Sets a new definition of a valid USA zip code percent check.
-     * @param monthlyValidUsaZipcodeFormatFound Valid USA zip code percent check.
+     * @param monthlyValidUsaZipcodeFormatPercent Valid USA zip code percent check.
      */
-    public void setMonthlyValidUsaZipcodeFormatFound(ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec monthlyValidUsaZipcodeFormatFound) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValidUsaPhoneFormatFound, monthlyValidUsaZipcodeFormatFound));
-        this.monthlyValidUsaZipcodeFormatFound = monthlyValidUsaZipcodeFormatFound;
-        propagateHierarchyIdToField(monthlyValidUsaZipcodeFormatFound, "monthly_valid_usa_zipcode_format_percent");
+    public void setMonthlyValidUsaZipcodeFormatPercent(ColumnValidUsaZipcodePercentCheckSpec monthlyValidUsaZipcodeFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyValidUsaPhoneFormatPercent, monthlyValidUsaZipcodeFormatPercent));
+        this.monthlyValidUsaZipcodeFormatPercent = monthlyValidUsaZipcodeFormatPercent;
+        propagateHierarchyIdToField(monthlyValidUsaZipcodeFormatPercent, "monthly_valid_usa_zipcode_format_percent");
     }
 
 

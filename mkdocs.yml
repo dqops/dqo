@@ -430,6 +430,10 @@ nav:
         - valid uuid format percent: 'checks/column/patterns/valid-uuid-format-percent.md'
         - invalid ip4 address format found: 'checks/column/patterns/invalid-ip4-address-format-found.md'
         - invalid ip6 address format found: 'checks/column/patterns/invalid-ip6-address-format-found.md'
+        - invalid usa phone format found: 'checks/column/patterns/invalid-usa-phone-format-found.md'
+        - invalid usa zipcode format found: 'checks/column/patterns/invalid-usa-zipcode-format-found.md'
+        - valid usa phone format percent: 'checks/column/patterns/valid-usa-phone-format-percent.md'
+        - valid usa zipcode format percent: 'checks/column/patterns/valid-usa-zipcode-format-percent.md'
       - pii:
         - 'checks/column/pii/index.md'
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
