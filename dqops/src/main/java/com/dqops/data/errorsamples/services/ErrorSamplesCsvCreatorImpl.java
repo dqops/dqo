@@ -20,6 +20,9 @@ public class ErrorSamplesCsvCreatorImpl implements ErrorSamplesCsvCreator {
      */
     public Flux<String> createCsvData(List<ErrorSampleEntryModel> errorSamples){
         Flux<String> header = Flux.just(createCsvHeader());
+        if(errorSamples == null || errorSamples.isEmpty()){
+            return header;
+        }
         Flux<String> rows = Flux.fromIterable(errorSamples)
                 .map(this::createCsvRow);
         return Flux.concat(header, rows);

@@ -619,6 +619,10 @@ public class ErrorSamplesController {
             ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
 
+            if(errorSamplesListModels.length == 0){
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
@@ -716,6 +720,10 @@ public class ErrorSamplesController {
 
             ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
+
+            if(errorSamplesListModels.length == 0){
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
@@ -818,6 +826,10 @@ public class ErrorSamplesController {
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
+            if(errorSamplesListModels.length == 0){
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
             StringBuilder fileNameBuilder = new StringBuilder();
             fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
                     .append(connectionName).append("_")
@@ -917,6 +929,10 @@ public class ErrorSamplesController {
 
             ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
+
+            if(errorSamplesListModels.length == 0){
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
@@ -1023,6 +1039,10 @@ public class ErrorSamplesController {
             ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
 
+            if(errorSamplesListModels.length == 0){
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
@@ -1128,6 +1148,10 @@ public class ErrorSamplesController {
 
             ErrorSamplesListModel[] errorSamplesListModels = this.errorSamplesDataService.readErrorSamplesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
+
+            if(errorSamplesListModels.length == 0){
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
