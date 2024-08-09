@@ -6,6 +6,12 @@ SELECT
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
                 WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
                 WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
                 WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
                 WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
