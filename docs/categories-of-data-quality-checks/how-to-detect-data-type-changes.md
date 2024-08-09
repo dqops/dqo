@@ -147,7 +147,7 @@ DQOps uses the historical data quality results for change detection.
 The [*detected_datatype_in_text_changed*](../checks/column/datatype/detected-datatype-in-text-changed.md)
 check uses parameterless data quality rules to select the severity level for reported issues.
 
-![Detect data type changed in text column data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-data-type-changed-check-min.png){ loading=lazy; width="1200px" }
+![Detect data type changed in text column data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-data-type-changed-check-min2.png){ loading=lazy; width="1200px" }
 
 The example above shows the first execution of the check when historical results are not yet present. 
 Hence, the *expected_value* is missing. 
@@ -172,7 +172,7 @@ spec:
         daily:
           datatype:
             daily_detected_datatype_in_text_changed:
-              error: {}
+              warning: {}
 ```
 
 ## Detecting data types across partitions
@@ -184,7 +184,7 @@ By using a partitioned version of the data type detection checks, it is possible
 The following example shows that the last five daily partitions contained only integer values in the *street_number* column, 
 and the detected data type has not changed day-to-day.
 
-![Data type detection in daily partitions](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-type-detection-in-partitioned-data-min.png){ loading=lazy; width="1200px" }
+![Data type detection in daily partitions](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-type-detection-in-partitioned-data-min2.png){ loading=lazy; width="1200px" }
 
 
 ## List of datatype checks at a column level
