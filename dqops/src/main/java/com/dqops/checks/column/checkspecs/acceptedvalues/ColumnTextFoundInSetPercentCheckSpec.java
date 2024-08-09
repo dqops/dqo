@@ -16,12 +16,20 @@
 package com.dqops.checks.column.checkspecs.acceptedvalues;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.acceptedvalues.ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -30,7 +38,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A column-level check that calculates the percentage of rows for which the tested text column contains a value from a set of expected values.
@@ -190,5 +200,128 @@ public class ColumnTextFoundInSetPercentCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Validity;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule mining registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (!miningParameters.isProposeAcceptedValuesChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        if (sourceProfilingCheck.getActualValue() == null && (this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty())) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
+            if (columnDataAssetProfilingResults.getSampleValues().size() > checkMiningConfigurationProperties.getMaxColumnSamplesToProposeAcceptedValues()) {
+                return false; // to many values, we will not analyze it
+            }
+
+            Double percentOfStringValues = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                if (!(value instanceof String)) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            if (percentOfStringValues == null || percentOfStringValues < 100.0) {
+                return false; // mixed values, not text values
+            }
+
+            // match to an existing dictionary
+            String bestDictionaryName = null;
+            double bestDictionaryMatchScore = 0.0;
+
+            for (Map.Entry<String, Set<String>> dictionaryKeyValue : tableProfilingResults.getDictionaries().entrySet()) {
+                Set<String> dictionaryValues = dictionaryKeyValue.getValue();
+
+                if (dictionaryValues.size() > checkMiningConfigurationProperties.getMaxColumnSamplesToProposeAcceptedValues() * 2) {
+                    continue; // we will ignore this dictionary, because it has too many values, more than the number of unique values in the sample data
+                }
+
+                Double percentOfValuesInDictionary = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                    return dictionaryValues.contains(value.toString());
+                });
+
+                if (percentOfValuesInDictionary != null && percentOfValuesInDictionary > bestDictionaryMatchScore) {
+                    bestDictionaryMatchScore = percentOfValuesInDictionary;
+                    bestDictionaryName = dictionaryKeyValue.getKey();
+                }
+            }
+
+            if ((100.0 - bestDictionaryMatchScore) <= miningParameters.getFailChecksAtPercentErrorRows()) {
+                this.parameters.setExpectedValues(List.of("${dictionary://" + bestDictionaryName + "}")); // match to a dictionary
+            } else {
+                Long totalCountOfSamples = columnDataAssetProfilingResults.getSampleValues()
+                        .stream()
+                        .map(profilingSampleValue -> profilingSampleValue.getCount())
+                        .reduce((a, b) -> a + b)
+                        .get();
+
+                List<String> topExpectedValues = new ArrayList<>();
+                long totalValuesInExpectedSet = 0L;
+                for (ProfilingSampleValue profilingSampleValue : columnDataAssetProfilingResults.getSampleValues()) {
+                    topExpectedValues.add(profilingSampleValue.getValue().toString());
+                    totalValuesInExpectedSet += profilingSampleValue.getCount();
+
+                    if (100.0 - (100.0 * totalValuesInExpectedSet / totalCountOfSamples) <= miningParameters.getFailChecksAtPercentErrorRows()) {
+                        break; // the remaining values in the samples represent very rare values, probably invalid
+                    }
+                }
+                this.parameters.setExpectedValues(topExpectedValues);
+            }
+
+            sourceProfilingCheck.setActualValue(100.0); // just fake number like there were no values to enable a check, even if it fails, we cannot calculate a correct value from the samples
+            sourceProfilingCheck.setExecutedAt(Instant.now());
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && (100.0 - sourceProfilingCheck.getActualValue()) > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
+            return false; // do not configure this check, when the value was captured and there are too many future values
+        }
+
+        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters, columnTypeCategory,
+                checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }
