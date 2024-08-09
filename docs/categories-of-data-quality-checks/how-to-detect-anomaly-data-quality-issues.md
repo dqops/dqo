@@ -18,11 +18,11 @@ which stores the latitude of the reported incident's location.
 
 The following screen shows the data profiling summary captured by DQOps for the latitude column, showing the top 10 most common values.
 
-![Data profiling column result of a latitude column with sample values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-profile-min.png){ loading=lazy; width="1200px" }
+![Data profiling column result of a latitude column with sample values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-profile-min2.png){ loading=lazy; width="1200px" }
 
 We are expecting that the majority of service requests are reported in Austin, whose coordinates is 30°16′2″N 97°44′35″W.
 The city center is at  30°16′2″N, so the values in the latitude column should be around that value.
-Indeed, the profiling results show that the mean latitude is 30.28, which is 30° 16' 48"N, and it is not far away.
+Indeed, the profiling results show that the median latitude is 30.28, which is 30° 16' 48"N, and it is not far away.
 
 ## Data outliers
 Data outliers are new minimum or maximum values outside the regular range.
@@ -47,19 +47,19 @@ If the value 3.44 is indeed an invalid value, it should be detected using
 the [number_below_min_value](../checks/column/numeric/number-below-min-value.md#daily-partition-number-below-min-value)
 data quality checks that find values below a minimum accepted value.
 
-![Minimum value anomalies in daily partitions chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-min.png){ loading=lazy; width="1200px" }
+![Minimum value anomalies in daily partitions chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-min2.png){ loading=lazy; width="1200px" }
 
 We can confirm that the minimum values in daily partitions are around 30.28 or 3.44 on the table with all data quality check results.
 
-![Minimum value anomalies in daily partitions results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-results-min.png){ loading=lazy; width="1200px" }
+![Minimum value anomalies in daily partitions results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-results-min2.png){ loading=lazy; width="1200px" }
 
 ### New maximum
 We can also detect abnormal maximum values. A similar 
 [daily_partition_max_anomaly](../checks/column/anomaly/max-anomaly.md#daily-partition-max-anomaly) data quality check
 detects new maximum values and compares them to other maximum values for earlier daily partitions.
-The chart shows three outliers of the maximum latitude (services outside the city area) found for the last three months.
+The chart shows two outliers of the maximum latitude (services outside the city area) found for the last three months.
 
-![New maximum value anomaly in daily partitioned data chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-maximum-value-outliers-partitions-min.png){ loading=lazy; width="1200px" }
+![New maximum value anomaly in daily partitioned data chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-maximum-value-outliers-partitions-min2.png){ loading=lazy; width="1200px" }
 
 ## Aggregate value changed 
 A significant change in an aggregate value, such as an average or sum of values, is another type of data anomaly.
@@ -69,13 +69,23 @@ Another type of anomaly is a shift of the typical value, such as the mean (avera
 The mean and median values will change when we load many new values above or below the usual value (the old mean or median) into a table.
 
 The following screen shows the mean (average) values of the latitude column calculated for each daily partition. We can interpret it as the average latitude of the location of the service request.
-An anomaly was detected on January 24th, 2024, highlighted with a yellow background on the table.
+An anomaly was detected on July 18th, 2024, highlighted with a yellow background on the table.
 
-![Data anomalies in a mean value of latitude in partitions table view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-result-table-min.png){ loading=lazy; width="1200px" }
+![Data anomalies in a mean value of latitude in partitions table view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-result-table-min2.png){ loading=lazy; width="1200px" }
 
 The chart view shows all anomalies of the maximum value in the latitude column.
 
-![Data anomalies in a mean value of latitude in partitions chart view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min.png){ loading=lazy; width="1200px" }
+![Data anomalies in a mean value of latitude in partitions chart view](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min2.png){ loading=lazy; width="1200px" }
+
+### Mean values anomaly error sampling
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section. For the Partition checks, samples are collected from entire table, not specific partition.
+
+![Data anomalies in a mean value of latitude in partitions chart view - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-error-sampling.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
 
 
 ### Sum of values anomalies
@@ -95,7 +105,7 @@ Self-calibration is not a desired behavior because DQOps will detect false-posit
 DQOps supports another type of anomaly. DQOps can calculate a measure such as a sum, mean, and median daily or for every daily partition.
 Anomalies are detected by comparing the current aggregate value to a reference value at a given point in time. 
 The data quality rule uses a fixed threshold and raises a data quality issue when the current metric differs
-more than X% from a past value.
+more than X% from a past value. 
 
 The type of reference point is identified at the end of the name of the data quality check.
 
@@ -115,12 +125,15 @@ The type of reference point is identified at the end of the name of the data qua
 - `_change_30_days` data quality checks compare the value with a value captured thirty days ago.
   This type of check is designed for measures with seasonal dynamics in monthly periods.
 
+The `_change` data quality checks are categorized as non-standard checks.  To display non-standard checks,
+select the **Show advanced checks** checkbox at the top left of the Check editor table.
+
 The following chart shows the changes in the mean value day-to-day.
 The [daily_partition_mean_change_1_day](../checks/column/anomaly/mean-change-1-day.md#daily-partition-mean-change-1-day)
 data quality check captures a mean (average) value in every daily partition. 
 DQOps identifies a data quality issue when the mean value difference since the last day is more than 1 percent.
 
-![One day change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-1-day-chart-min.png){ loading=lazy; width="1200px" }
+![One day change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-1-day-chart-min2.png){ loading=lazy; width="1200px" }
 
 The blue line shows the current value of the mean measure. The gray line is the reference value, called the "expected value".
 The two lines are shifted by one day because DQOps compares values to a measure from the previous day.
@@ -129,17 +142,21 @@ The shift of the expected values by seven days is also visible on the
 chart of the [daily_partition_mean_change_7_days](../checks/column/anomaly/mean-change-7-days.md#daily-partition-mean-change-7-days)
 data quality check.
 
-![Seven days change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-7-day-chart-min.png){ loading=lazy; width="1200px" }
+![Seven days change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-7-day-chart-min2.png){ loading=lazy; width="1200px" }
 
 ## Anomalies at multiple severity levels
 DQOps supports configuration of the data quality rules for a [data quality check](../dqo-concepts/definition-of-data-quality-checks/index.md)
 at three [issue severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels): *warning*, *error*, and *fatal*.
 Each severity level has its own threshold value.
 
-DQOps analyzes the measure (the mean value for this example) using three [data quality rules](../dqo-concepts/definition-of-data-quality-rules.md),
-passing different parameters to the rule. Because the historical data is limited to ninety days, and the measures do not fit
+You can set up multiple thresholds in the advanced Check editor mode.
+To switch to the Advanced mode, choose the **Multiple levels** option from the **Issue severity level** dropdown menu in
+the simplified Check editor. You can find more information about the Check editor modes in the [DQOps user interface overview section](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-![Mean anomaly chart at three severity levels](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-chart-at-multiple-severity-levels-min.png){ loading=lazy; width="1200px" }
+DQOps analyzes the measure (the mean value for this example) using three [data quality rules](../dqo-concepts/definition-of-data-quality-rules.md),
+passing different parameters to the rule.
+
+![Mean anomaly chart at three severity levels](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-chart-at-multiple-severity-levels-min2.png){ loading=lazy; width="1200px" }
 
 DQOps raises more data quality issues than the expected percent of anomalies.
 The reason is that the historical data is limited to ninety days, and the measures do not fit a Gaussian distribution.
