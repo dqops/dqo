@@ -32,18 +32,21 @@ public class ErrorSamplesCsvCreatorImpl implements ErrorSamplesCsvCreator {
         List<String> row = new ArrayList<>();
         row.add(errorSampleEntryModel.getSampleIndex().toString());
         row.add(errorSampleEntryModel.getCollectedAt().toString());
-        row.add(errorSampleEntryModel.getResult().toString());
-        row.add(errorSampleEntryModel.getResultDataType().toString());
-        row.add(errorSampleEntryModel.getDataGroup());
-        row.add(errorSampleEntryModel.getRowId1() != null ? errorSampleEntryModel.getRowId1() : "");
-        row.add(errorSampleEntryModel.getRowId2() != null ? errorSampleEntryModel.getRowId2() : "");
-        row.add(errorSampleEntryModel.getRowId3() != null ? errorSampleEntryModel.getRowId3() : "");
-        row.add(errorSampleEntryModel.getRowId4() != null ? errorSampleEntryModel.getRowId4() : "");
-        row.add(errorSampleEntryModel.getRowId5() != null ? errorSampleEntryModel.getRowId5() : "");
-        row.add(errorSampleEntryModel.getId());
-        String joinedRow = String.join(",", row) + "\n";
-        String csvRow = joinedRow.replace("\"", "\"\"");
+        row.add(errorSampleEntryModel.getResult() != null && !errorSampleEntryModel.getResult().toString().isEmpty() ? quoteValue(errorSampleEntryModel.getResult().toString()) : "");
+        row.add(quoteValue(errorSampleEntryModel.getResultDataType().toString()));
+        row.add(quoteValue(errorSampleEntryModel.getDataGroup()));
+        row.add(errorSampleEntryModel.getRowId1() != null ? quoteValue(errorSampleEntryModel.getRowId1()) : "");
+        row.add(errorSampleEntryModel.getRowId2() != null ? quoteValue(errorSampleEntryModel.getRowId2()) : "");
+        row.add(errorSampleEntryModel.getRowId3() != null ? quoteValue(errorSampleEntryModel.getRowId3()) : "");
+        row.add(errorSampleEntryModel.getRowId4() != null ? quoteValue(errorSampleEntryModel.getRowId4()) : "");
+        row.add(errorSampleEntryModel.getRowId5() != null ? quoteValue(errorSampleEntryModel.getRowId5()) : "");
+        row.add(quoteValue(errorSampleEntryModel.getId()));
+        String csvRow = String.join(",", row) + "\n";
         return csvRow;
+    }
+
+    private String quoteValue(String value){
+        return "\"" + value.replace("\"", "\"\"") + "\"";
     }
 
     private String createCsvHeader() {
