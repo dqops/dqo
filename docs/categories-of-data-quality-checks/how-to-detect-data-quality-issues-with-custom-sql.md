@@ -25,9 +25,10 @@ Ad-hoc SQL checks are helpful in several use cases.
 ## Evaluate a custom condition
 We can use a custom SQL expression to assert a condition on a column or a table. 
 The following example detects one type of data quality problem that we noticed in the *city* column in 
-the 311 Austin municipal services call history table. The data profiling results show that the city names are written in lower and upper case, leading to duplicates.
+the 311 Austin municipal services call history table. Data profiling results indicate that the city names are 
+inconsistently written in both lower and upper case.
 
-![Data profiling example for city names in lower and upper case](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/city-profile-statistics-example-min.png){ loading=lazy; width="300px" }
+![Data profiling example for city names in lower and upper case](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/city-profile-statistics-example-min2.png){ loading=lazy; width="1200px" }
 
 An upper case variant "AUSTIN" is dominant. We want to detect invalid names that are written in lowercase.
 The SQL expression valid (uppercase) values must pass is `city IS NULL OR city = UPPER(city)`.
@@ -75,9 +76,9 @@ and [`sql_condition_failed_on_table`](../checks/table/custom_sql/sql-condition-f
 data quality checks assert that all rows pass the condition. 
 We want to accept a maximum number of rows that fail the condition by setting the `max_count` parameter.
 
-The example of running the check on the *311_service_requests* table found 41276 rows that are not uppercase.
+The example of running the check on the *311_service_requests* table found 45 059 rows that are not uppercase.
 
-![SQL condition failed data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-failed-count-data-quality-check-editor-min.png){ loading=lazy; width="1200px" }
+![SQL condition failed data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-failed-count-data-quality-check-editor-min2.png){ loading=lazy; width="1200px" }
 
 ### Activating failed check in YAML
 The [`sql_condition_failed_on_column`](../checks/column/custom_sql/sql-condition-failed-on-column.md) 
@@ -111,9 +112,10 @@ It is usable on tables with data quality issues that are impossible to fix, main
 The [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
 and [`sql_condition_passed_percent_on_table`](../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)
 data quality checks measure the percentage of rows passing the SQL condition. 
-The percentage is compared to a minimum accepted percentage by a data quality rule.
+The percentage is compared to a minimum accepted percentage by a data quality rule. These data quality checks are 
+categorized as non-standard checks. To display non-standard checks, select the **Show advanced checks** checkbox at the top left of the Check editor table.
 
-![SQL condition passed percent data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-passed-percent-check-editor-min.png){ loading=lazy; width="1200px" }
+![SQL condition passed percent data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-condition-passed-percent-check-editor-min2.png){ loading=lazy; width="1200px" }
 
 ### Activating percent check in YAML
 The [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
@@ -135,7 +137,7 @@ spec:
           custom_sql:
             daily_sql_condition_passed_percent_on_column:
               parameters:
-                sql_condition: "{column} IS NULL OR {column} = UPPER({column})"
+                sql_condition: "{alias}.city IS NULL OR {alias}.city = UPPER({alias}.city)"
               error:
                 min_percent: 97.0
 ```
@@ -162,7 +164,18 @@ The following example uses the
 [`sql_condition_passed_percent_on_column`](../checks/column/custom_sql/sql-condition-passed-percent-on-column.md)
 daily monitoring data quality check.
 
-![Compare columns in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-min.png){ loading=lazy; width="1200px" }
+![Compare columns in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-min2.png){ loading=lazy; width="1200px" }
+
+### Compare checks error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section.
+
+![Compare columns in a data quality check - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-error-sampling.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
+
 
 ### Activate compare check in YAML
 The following example uses the
@@ -212,7 +225,7 @@ Please turn on advanced checks to see it in the check editor.
 The following example shows running the check on the *state_plane_x_coordinate* column, 
 which is a text column and needs casting to a float value. The aggregate expression is `AVG(SAFE_CAST({column} as FLOAT64))`.
 
-![SQL aggregate expression value in range data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-aggregate-expression-in-range-data-quality-check-min.png){ loading=lazy; width="1200px" }
+![SQL aggregate expression value in range data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/sql-aggregate-expression-in-range-data-quality-check-min2.png){ loading=lazy; width="1200px" }
 
 ### Activating aggregate check in YAML
 The [`sql_aggregate_expression_on_column`](../checks/column/custom_sql/sql-aggregate-expression-on-column.md)

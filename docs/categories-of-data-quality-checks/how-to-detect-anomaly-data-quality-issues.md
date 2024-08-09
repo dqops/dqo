@@ -125,7 +125,7 @@ The type of reference point is identified at the end of the name of the data qua
 - `_change_30_days` data quality checks compare the value with a value captured thirty days ago.
   This type of check is designed for measures with seasonal dynamics in monthly periods.
 
-The `_change` data quality checks are categorized as non-standard checks.  To display non-standard checks,
+The `_change` data quality checks are categorized as non-standard checks. To display non-standard checks,
 select the **Show advanced checks** checkbox at the top left of the Check editor table.
 
 The following chart shows the changes in the mean value day-to-day.
