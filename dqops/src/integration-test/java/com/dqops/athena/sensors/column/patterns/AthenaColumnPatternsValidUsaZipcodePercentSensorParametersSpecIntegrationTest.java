@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.duckdb.sensors.column.patterns;
+package com.dqops.athena.sensors.column.patterns;
 
+import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.patterns.ColumnValidUsaZipcodePercentCheckSpec;
-import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
-import com.dqops.duckdb.BaseDuckdbIntegrationTest;
+import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -30,6 +29,7 @@ import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -46,30 +46,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class DuckdbColumnPatternsValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
+public class AthenaColumnPatternsValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseAthenaIntegrationTest {
     private ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnValidUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
-        String csvFileName = SampleCsvFileNames.nulls_and_uniqueness;
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
-                csvFileName, connectionSpec);
-		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec();
-		this.checkSpec = new ColumnValidUsaZipcodePercentCheckSpec();
+        this.connectionSpec = AthenaConnectionSpecObjectMother.create();
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, connectionSpec);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec();
+        this.checkSpec = new ColumnValidUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_onNullData_thenReturnsValues() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.only_nulls;
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 csvFileName, connectionSpec);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(

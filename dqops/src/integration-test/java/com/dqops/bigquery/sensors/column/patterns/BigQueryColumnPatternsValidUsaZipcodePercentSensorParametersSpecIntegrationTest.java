@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.duckdb.sensors.column.patterns;
+package com.dqops.bigquery.sensors.column.patterns;
 
+import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.patterns.ColumnValidUsaZipcodePercentCheckSpec;
-import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
-import com.dqops.duckdb.BaseDuckdbIntegrationTest;
+import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -27,9 +26,9 @@ import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingDimensionSource;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
-import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -46,7 +45,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class DuckdbColumnPatternsValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
+public class BigQueryColumnPatternsValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnValidUsaZipcodePercentCheckSpec checkSpec;
@@ -54,22 +53,20 @@ public class DuckdbColumnPatternsValidUsaZipcodePercentSensorParametersSpecInteg
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
-        String csvFileName = SampleCsvFileNames.nulls_and_uniqueness;
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
-                csvFileName, connectionSpec);
-		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec();
-		this.checkSpec = new ColumnValidUsaZipcodePercentCheckSpec();
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec();
+        this.checkSpec = new ColumnValidUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_onNullData_thenReturnsValues() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.only_nulls;
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
-                csvFileName, connectionSpec);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
