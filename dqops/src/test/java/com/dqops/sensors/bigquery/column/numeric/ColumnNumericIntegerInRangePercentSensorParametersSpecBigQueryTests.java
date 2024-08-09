@@ -500,6 +500,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE (%5$s)
                   AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            ORDER BY analyzed_table.`negative` ASC
             LIMIT 50""";
 
         Assertions.assertEquals(String.format(target_query,
@@ -582,6 +583,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE (%5$s)
                   AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            ORDER BY analyzed_table.`negative` ASC
             LIMIT 50""";
 
         Assertions.assertEquals(String.format(target_query,
@@ -613,6 +615,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE (%5$s)
                   AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            ORDER BY analyzed_table.`negative` ASC
             LIMIT 50""";
 
         Assertions.assertEquals(String.format(target_query,
