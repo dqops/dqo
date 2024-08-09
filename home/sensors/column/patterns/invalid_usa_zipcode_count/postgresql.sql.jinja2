@@ -2,8 +2,7 @@
 SELECT
     SUM(
         CASE
-            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                 '^[0-9]{5}(?:-[0-9]{4})?$') IS NOT NULL
+            WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^[0-9]{5}(?:-[0-9]{4})?$'
                 THEN 1
             ELSE 0
         END
