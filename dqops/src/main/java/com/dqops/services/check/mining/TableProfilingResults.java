@@ -24,6 +24,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Data container object that contains profiling results for the table, and for all its columns.
@@ -32,6 +33,7 @@ import java.util.Map;
 public class TableProfilingResults {
     private TableDataAssetProfilingResults tableProfilingResults = new TableDataAssetProfilingResults();
     private Map<String, ColumnDataAssetProfilingResults> columns = new LinkedHashMap<>();
+    private Map<String, Set<String>> dictionaries = new LinkedHashMap<>();
     private StatisticsResultsForTableModel statistics;
     private boolean missingStatisticsResults;
     private boolean missingProfilingChecksResults;
@@ -43,6 +45,14 @@ public class TableProfilingResults {
      */
     public TableDataAssetProfilingResults getTableProfilingResults() {
         return this.tableProfilingResults;
+    }
+
+    /**
+     * Returns a map of dictionaries. The checks that map the accepted values checks will use these dictionaries.
+     * @return Map of dictionaries, indexed by the dictionary name. The content are the dictionary entries.
+     */
+    public Map<String, Set<String>> getDictionaries() {
+        return dictionaries;
     }
 
     /**

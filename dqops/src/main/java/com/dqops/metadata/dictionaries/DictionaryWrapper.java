@@ -20,7 +20,7 @@ import com.dqops.metadata.basespecs.ObjectName;
 import com.dqops.metadata.basespecs.PojoElementWrapper;
 
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Data dictionary file wrapper.
@@ -54,5 +54,5 @@ public interface DictionaryWrapper extends PojoElementWrapper<FileContent>, Obje
      * Parses the data dictionary and returns a flat list of entries.
      * @return A list of dictionary entries.
      */
-    List<String> getDictionaryEntries();
+    Set<String> getDictionaryEntries();
 }

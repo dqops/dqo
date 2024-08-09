@@ -24,10 +24,12 @@ import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.metadata.dictionaries.DictionaryWrapper;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
+import java.util.Set;
 
 /**
  * Service that loads the results from profiling checks and statistics, to be used for data quality rule mining (suggesting the rule thresholds for checks).
@@ -76,7 +79,8 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
     public TableProfilingResults loadTableProfilingResults(ExecutionContext executionContext,
                                                            ConnectionSpec connectionSpec,
                                                            TableSpec tableSpec) {
-        UserDomainIdentity userDomainIdentity = executionContext.getUserHomeContext().getUserIdentity();
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserDomainIdentity userDomainIdentity = userHomeContext.getUserIdentity();
         TableProfilingResults tableProfilingResults = this.checkResultsDataService.loadProfilingChecksResultsForTable(
                 tableSpec, userDomainIdentity);
         tableProfilingResults.setMissingProfilingChecksResults(true); // we will change it to false when we find any profiling results
@@ -111,10 +115,16 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
                 tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
 
-        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId(executionContext.getUserHomeContext());
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId(userHomeContext);
         tableProfilingResults.setTimeZoneId(defaultTimeZoneId);
         tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
         tableProfilingResults.calculateMissingNotNullCounts();
+
+        for (DictionaryWrapper dictionaryWrapper : userHomeContext.getUserHome().getDictionaries()) {
+            String dictionaryName = dictionaryWrapper.getDictionaryName();
+            Set<String> dictionaryEntries = dictionaryWrapper.getDictionaryEntries();
+            tableProfilingResults.getDictionaries().put(dictionaryName, dictionaryEntries);
+        }
 
         return tableProfilingResults;
     }
