@@ -256,6 +256,10 @@ public class ColumnTextMatchDateFormatPercentCheckSpec
 
         ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
         if (sourceProfilingCheck.getActualValue() == null) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
             Double percentDaySlashMonthSlashYear = columnDataAssetProfilingResults.measurePercentOfSamplesMatchingDateFormat(
                     new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH));
             if (percentDaySlashMonthSlashYear != null && (100.0 - percentDaySlashMonthSlashYear) <= miningParameters.getFailChecksAtPercentErrorRows()){
@@ -286,7 +290,7 @@ public class ColumnTextMatchDateFormatPercentCheckSpec
             sourceProfilingCheck.setExecutedAt(Instant.now());
         }
 
-        if (sourceProfilingCheck.getActualValue() != null && (100.0 - sourceProfilingCheck.getActualValue()) > miningParameters.getFailChecksAtPercentErrorRows()) {
+        if (sourceProfilingCheck.getActualValue() != null && (100.0 - sourceProfilingCheck.getActualValue()) > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
             return false; // do not configure this check, when the value was captured and there are too many future values
         }
 

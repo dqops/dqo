@@ -716,6 +716,30 @@ This check detects invalid IP6 internet addresses in text columns using a regula
 
 
 
+### [invalid usa phone format found](./patterns/invalid-usa-phone-format-found.md)
+This check validates the format of USA phone numbers inside text columns.
+ It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+
+
+
+### [invalid usa zipcode format found](./patterns/invalid-usa-zipcode-format-found.md)
+This check validates the format of a USA zip code inside text columns.
+ It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+
+
+
+### [valid usa phone format percent](./patterns/valid-usa-phone-format-percent.md)
+This check validates the format of USA phone numbers inside text columns.
+ It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+
+
+
+### [valid usa zipcode format percent](./patterns/valid-usa-zipcode-format-percent.md)
+This check validates the format of a USA zip code inside text columns.
+ It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+
+
+
 
 
 

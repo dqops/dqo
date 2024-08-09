@@ -53,6 +53,11 @@ public class ColumnPatternsDailyMonitoringChecksSpec extends AbstractCheckCatego
             put("daily_valid_uuid_format_percent", o -> o.dailyValidUuidFormatPercent);
             put("daily_invalid_ip4_address_format_found", o -> o.dailyInvalidIp4AddressFormatFound);
             put("daily_invalid_ip6_address_format_found", o -> o.dailyInvalidIp6AddressFormatFound);
+
+            put("daily_invalid_usa_phone_format_found", o -> o.dailyInvalidUsaPhoneFormatFound);
+            put("daily_invalid_usa_zipcode_format_found", o -> o.dailyInvalidUsaZipcodeFormatFound);
+            put("daily_valid_usa_phone_format_percent", o -> o.dailyValidUsaPhoneFormatPercent);
+            put("daily_valid_usa_zipcode_format_percent", o -> o.dailyValidUsaZipcodeFormatPercent);
         }
     };
 
@@ -88,6 +93,18 @@ public class ColumnPatternsDailyMonitoringChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp6AddressFormatFoundCheckSpec dailyInvalidIp6AddressFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaPhoneFoundCheckSpec dailyInvalidUsaPhoneFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaZipcodeFoundCheckSpec dailyInvalidUsaZipcodeFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
+    private ColumnValidUsaPhonePercentCheckSpec dailyValidUsaPhoneFormatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
+    private ColumnValidUsaZipcodePercentCheckSpec dailyValidUsaZipcodeFormatPercent;
 
     /**
      * Returns a maximum not match regex count check.
@@ -285,6 +302,78 @@ public class ColumnPatternsDailyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyInvalidIp6AddressFormatFound, dailyInvalidIp6AddressFormatFound));
         this.dailyInvalidIp6AddressFormatFound = dailyInvalidIp6AddressFormatFound;
         propagateHierarchyIdToField(dailyInvalidIp6AddressFormatFound, "daily_invalid_ip6_address_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid USA phone numbers count check.
+     * @return Maximum invalid USA phone numbers count check.
+     */
+    public ColumnInvalidUsaPhoneFoundCheckSpec getDailyInvalidUsaPhoneFormatFound() {
+        return dailyInvalidUsaPhoneFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phone numbers count check.
+     * @param dailyInvalidUsaPhoneFormatFound Invalid USA phone numbers count check.
+     */
+    public void setDailyInvalidUsaPhoneFormatFound(ColumnInvalidUsaPhoneFoundCheckSpec dailyInvalidUsaPhoneFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyInvalidUsaPhoneFormatFound, dailyInvalidUsaPhoneFormatFound));
+        this.dailyInvalidUsaPhoneFormatFound = dailyInvalidUsaPhoneFormatFound;
+        propagateHierarchyIdToField(dailyInvalidUsaPhoneFormatFound, "daily_invalid_usa_phone_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid USA zip codes count check.
+     * @return Maximum invalid USA zip codes count check.
+     */
+    public ColumnInvalidUsaZipcodeFoundCheckSpec getDailyInvalidUsaZipcodeFormatFound() {
+        return dailyInvalidUsaZipcodeFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip codes count check.
+     * @param dailyInvalidUsaZipcodeFormatFound Invalid USA zip codes count check.
+     */
+    public void setDailyInvalidUsaZipcodeFormatFound(ColumnInvalidUsaZipcodeFoundCheckSpec dailyInvalidUsaZipcodeFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyInvalidUsaZipcodeFormatFound, dailyInvalidUsaZipcodeFormatFound));
+        this.dailyInvalidUsaZipcodeFormatFound = dailyInvalidUsaZipcodeFormatFound;
+        propagateHierarchyIdToField(dailyInvalidUsaZipcodeFormatFound, "daily_invalid_usa_zipcode_format_found");
+    }
+
+    /**
+     * Returns a valid USA phones number percent check.
+     * @return Valid USA phones number percent check.
+     */
+    public ColumnValidUsaPhonePercentCheckSpec getDailyValidUsaPhoneFormatPercent() {
+        return dailyValidUsaPhoneFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid USA phones number percent check.
+     * @param dailyValidUsaPhoneFormatPercent Valid USA phones number percent check.
+     */
+    public void setDailyValidUsaPhoneFormatPercent(ColumnValidUsaPhonePercentCheckSpec dailyValidUsaPhoneFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyValidUsaPhoneFormatPercent, dailyValidUsaPhoneFormatPercent));
+        this.dailyValidUsaPhoneFormatPercent = dailyValidUsaPhoneFormatPercent;
+        propagateHierarchyIdToField(dailyValidUsaPhoneFormatPercent, "daily_valid_usa_phone_format_percent");
+    }
+
+    /**
+     * Returns a valid USA zip code percent check.
+     * @return Valid USA zip code percent check.
+     */
+    public ColumnValidUsaZipcodePercentCheckSpec getDailyValidUsaZipcodeFormatPercent() {
+        return dailyValidUsaZipcodeFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid USA zip code percent check.
+     * @param dailyValidUsaZipcodeFormatPercent Valid USA zip code percent check.
+     */
+    public void setDailyValidUsaZipcodeFormatPercent(ColumnValidUsaZipcodePercentCheckSpec dailyValidUsaZipcodeFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyValidUsaPhoneFormatPercent, dailyValidUsaZipcodeFormatPercent));
+        this.dailyValidUsaZipcodeFormatPercent = dailyValidUsaZipcodeFormatPercent;
+        propagateHierarchyIdToField(dailyValidUsaZipcodeFormatPercent, "daily_valid_usa_zipcode_format_percent");
     }
 
 

@@ -297,12 +297,16 @@ title: Sensors
 |[*invalid_email_format_percent*](./column/patterns-column-sensors.md#invalid-email-format-percent)|Column level sensor that calculates the number of rows with an invalid emails value in a column.|
 |[*invalid_ip4_address_format_count*](./column/patterns-column-sensors.md#invalid-ip4-address-format-count)|Column level sensor that calculates the number of rows with an invalid IP4 address value in a column.|
 |[*invalid_ip6_address_format_count*](./column/patterns-column-sensors.md#invalid-ip6-address-format-count)|Column level sensor that calculates the number of rows with an invalid IP6 address value in a column.|
+|[*invalid_usa_phone_count*](./column/patterns-column-sensors.md#invalid-usa-phone-count)|Column level sensor that calculates the number of rows with a valid UUID value in a column.|
+|[*invalid_usa_zipcode_count*](./column/patterns-column-sensors.md#invalid-usa-zipcode-count)|Column level sensor that calculates the number of rows with a valid UUID value in a column.|
 |[*invalid_uuid_format_count*](./column/patterns-column-sensors.md#invalid-uuid-format-count)|Column level sensor that calculates the number of rows with an invalid uuid value in a column.|
 |[*text_matching_date_patterns_percent*](./column/patterns-column-sensors.md#text-matching-date-patterns-percent)|Column level sensor that calculates the percentage of values that does fit a given date regex in a column.|
 |[*text_matching_name_pattern_percent*](./column/patterns-column-sensors.md#text-matching-name-pattern-percent)|Column level sensor that calculates the percentage of values that does fit a given name regex in a column.|
 |[*text_not_matching_date_pattern_count*](./column/patterns-column-sensors.md#text-not-matching-date-pattern-count)|Column level sensor that calculates the number of values that does not fit to a date regex in a column.|
 |[*text_not_matching_regex_count*](./column/patterns-column-sensors.md#text-not-matching-regex-count)|Column level sensor that calculates the number of values that does not fit to a regex in a column.|
 |[*texts_matching_regex_percent*](./column/patterns-column-sensors.md#texts-matching-regex-percent)|Column level sensor that calculates the percent of values that fit to a regex in a column.|
+|[*valid_usa_phone_percent*](./column/patterns-column-sensors.md#valid-usa-phone-percent)|Column level sensor that calculates the percentage of rows with a valid UUID value in a column.|
+|[*valid_usa_zipcode_percent*](./column/patterns-column-sensors.md#valid-usa-zipcode-percent)|Column level sensor that calculates the percentage of rows with a valid UUID value in a column.|
 |[*valid_uuid_format_percent*](./column/patterns-column-sensors.md#valid-uuid-format-percent)|Column level sensor that calculates the percentage of rows with a valid UUID value in a column.|
 
 

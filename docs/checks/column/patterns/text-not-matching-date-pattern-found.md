@@ -357,7 +357,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -378,7 +378,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -945,7 +945,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -965,7 +965,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -1623,7 +1623,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -1644,7 +1644,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -2212,7 +2212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -2232,7 +2232,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -2890,7 +2890,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -2911,7 +2911,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -3479,7 +3479,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -3499,7 +3499,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -4189,7 +4189,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -4210,7 +4210,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -4834,7 +4834,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -4854,7 +4854,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -5560,7 +5560,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -5581,7 +5581,7 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1
@@ -6205,7 +6205,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                                 THEN 1
@@ -6225,7 +6225,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS FALSE
                                 THEN 1

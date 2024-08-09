@@ -18,6 +18,12 @@ if TYPE_CHECKING:
     from ..models.column_invalid_ip_6_address_format_found_check_spec import (
         ColumnInvalidIp6AddressFormatFoundCheckSpec,
     )
+    from ..models.column_invalid_usa_phone_found_check_spec import (
+        ColumnInvalidUsaPhoneFoundCheckSpec,
+    )
+    from ..models.column_invalid_usa_zipcode_found_check_spec import (
+        ColumnInvalidUsaZipcodeFoundCheckSpec,
+    )
     from ..models.column_invalid_uuid_format_found_check_spec import (
         ColumnInvalidUuidFormatFoundCheckSpec,
     )
@@ -38,6 +44,12 @@ if TYPE_CHECKING:
     )
     from ..models.column_texts_matching_regex_percent_check_spec import (
         ColumnTextsMatchingRegexPercentCheckSpec,
+    )
+    from ..models.column_valid_usa_phone_percent_check_spec import (
+        ColumnValidUsaPhonePercentCheckSpec,
+    )
+    from ..models.column_valid_usa_zipcode_percent_check_spec import (
+        ColumnValidUsaZipcodePercentCheckSpec,
     )
     from ..models.column_valid_uuid_format_percent_check_spec import (
         ColumnValidUuidFormatPercentCheckSpec,
@@ -65,6 +77,10 @@ class ColumnPatternsProfilingChecksSpec:
         profile_valid_uuid_format_percent (Union[Unset, ColumnValidUuidFormatPercentCheckSpec]):
         profile_invalid_ip4_address_format_found (Union[Unset, ColumnInvalidIp4AddressFormatFoundCheckSpec]):
         profile_invalid_ip6_address_format_found (Union[Unset, ColumnInvalidIp6AddressFormatFoundCheckSpec]):
+        profile_invalid_usa_phone_format_found (Union[Unset, ColumnInvalidUsaPhoneFoundCheckSpec]):
+        profile_invalid_usa_zipcode_format_found (Union[Unset, ColumnInvalidUsaZipcodeFoundCheckSpec]):
+        profile_valid_usa_phone_format_percent (Union[Unset, ColumnValidUsaPhonePercentCheckSpec]):
+        profile_valid_usa_zipcode_format_percent (Union[Unset, ColumnValidUsaZipcodePercentCheckSpec]):
     """
 
     custom_checks: Union[Unset, "ColumnPatternsProfilingChecksSpecCustomChecks"] = UNSET
@@ -100,6 +116,18 @@ class ColumnPatternsProfilingChecksSpec:
     ] = UNSET
     profile_invalid_ip6_address_format_found: Union[
         Unset, "ColumnInvalidIp6AddressFormatFoundCheckSpec"
+    ] = UNSET
+    profile_invalid_usa_phone_format_found: Union[
+        Unset, "ColumnInvalidUsaPhoneFoundCheckSpec"
+    ] = UNSET
+    profile_invalid_usa_zipcode_format_found: Union[
+        Unset, "ColumnInvalidUsaZipcodeFoundCheckSpec"
+    ] = UNSET
+    profile_valid_usa_phone_format_percent: Union[
+        Unset, "ColumnValidUsaPhonePercentCheckSpec"
+    ] = UNSET
+    profile_valid_usa_zipcode_format_percent: Union[
+        Unset, "ColumnValidUsaZipcodePercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -176,6 +204,30 @@ class ColumnPatternsProfilingChecksSpec:
                 self.profile_invalid_ip6_address_format_found.to_dict()
             )
 
+        profile_invalid_usa_phone_format_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_invalid_usa_phone_format_found, Unset):
+            profile_invalid_usa_phone_format_found = (
+                self.profile_invalid_usa_phone_format_found.to_dict()
+            )
+
+        profile_invalid_usa_zipcode_format_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_invalid_usa_zipcode_format_found, Unset):
+            profile_invalid_usa_zipcode_format_found = (
+                self.profile_invalid_usa_zipcode_format_found.to_dict()
+            )
+
+        profile_valid_usa_phone_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_valid_usa_phone_format_percent, Unset):
+            profile_valid_usa_phone_format_percent = (
+                self.profile_valid_usa_phone_format_percent.to_dict()
+            )
+
+        profile_valid_usa_zipcode_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_valid_usa_zipcode_format_percent, Unset):
+            profile_valid_usa_zipcode_format_percent = (
+                self.profile_valid_usa_zipcode_format_percent.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -225,6 +277,22 @@ class ColumnPatternsProfilingChecksSpec:
             field_dict["profile_invalid_ip6_address_format_found"] = (
                 profile_invalid_ip6_address_format_found
             )
+        if profile_invalid_usa_phone_format_found is not UNSET:
+            field_dict["profile_invalid_usa_phone_format_found"] = (
+                profile_invalid_usa_phone_format_found
+            )
+        if profile_invalid_usa_zipcode_format_found is not UNSET:
+            field_dict["profile_invalid_usa_zipcode_format_found"] = (
+                profile_invalid_usa_zipcode_format_found
+            )
+        if profile_valid_usa_phone_format_percent is not UNSET:
+            field_dict["profile_valid_usa_phone_format_percent"] = (
+                profile_valid_usa_phone_format_percent
+            )
+        if profile_valid_usa_zipcode_format_percent is not UNSET:
+            field_dict["profile_valid_usa_zipcode_format_percent"] = (
+                profile_valid_usa_zipcode_format_percent
+            )
 
         return field_dict
 
@@ -241,6 +309,12 @@ class ColumnPatternsProfilingChecksSpec:
         )
         from ..models.column_invalid_ip_6_address_format_found_check_spec import (
             ColumnInvalidIp6AddressFormatFoundCheckSpec,
+        )
+        from ..models.column_invalid_usa_phone_found_check_spec import (
+            ColumnInvalidUsaPhoneFoundCheckSpec,
+        )
+        from ..models.column_invalid_usa_zipcode_found_check_spec import (
+            ColumnInvalidUsaZipcodeFoundCheckSpec,
         )
         from ..models.column_invalid_uuid_format_found_check_spec import (
             ColumnInvalidUuidFormatFoundCheckSpec,
@@ -262,6 +336,12 @@ class ColumnPatternsProfilingChecksSpec:
         )
         from ..models.column_texts_matching_regex_percent_check_spec import (
             ColumnTextsMatchingRegexPercentCheckSpec,
+        )
+        from ..models.column_valid_usa_phone_percent_check_spec import (
+            ColumnValidUsaPhonePercentCheckSpec,
+        )
+        from ..models.column_valid_usa_zipcode_percent_check_spec import (
+            ColumnValidUsaZipcodePercentCheckSpec,
         )
         from ..models.column_valid_uuid_format_percent_check_spec import (
             ColumnValidUuidFormatPercentCheckSpec,
@@ -442,6 +522,66 @@ class ColumnPatternsProfilingChecksSpec:
                 )
             )
 
+        _profile_invalid_usa_phone_format_found = d.pop(
+            "profile_invalid_usa_phone_format_found", UNSET
+        )
+        profile_invalid_usa_phone_format_found: Union[
+            Unset, ColumnInvalidUsaPhoneFoundCheckSpec
+        ]
+        if isinstance(_profile_invalid_usa_phone_format_found, Unset):
+            profile_invalid_usa_phone_format_found = UNSET
+        else:
+            profile_invalid_usa_phone_format_found = (
+                ColumnInvalidUsaPhoneFoundCheckSpec.from_dict(
+                    _profile_invalid_usa_phone_format_found
+                )
+            )
+
+        _profile_invalid_usa_zipcode_format_found = d.pop(
+            "profile_invalid_usa_zipcode_format_found", UNSET
+        )
+        profile_invalid_usa_zipcode_format_found: Union[
+            Unset, ColumnInvalidUsaZipcodeFoundCheckSpec
+        ]
+        if isinstance(_profile_invalid_usa_zipcode_format_found, Unset):
+            profile_invalid_usa_zipcode_format_found = UNSET
+        else:
+            profile_invalid_usa_zipcode_format_found = (
+                ColumnInvalidUsaZipcodeFoundCheckSpec.from_dict(
+                    _profile_invalid_usa_zipcode_format_found
+                )
+            )
+
+        _profile_valid_usa_phone_format_percent = d.pop(
+            "profile_valid_usa_phone_format_percent", UNSET
+        )
+        profile_valid_usa_phone_format_percent: Union[
+            Unset, ColumnValidUsaPhonePercentCheckSpec
+        ]
+        if isinstance(_profile_valid_usa_phone_format_percent, Unset):
+            profile_valid_usa_phone_format_percent = UNSET
+        else:
+            profile_valid_usa_phone_format_percent = (
+                ColumnValidUsaPhonePercentCheckSpec.from_dict(
+                    _profile_valid_usa_phone_format_percent
+                )
+            )
+
+        _profile_valid_usa_zipcode_format_percent = d.pop(
+            "profile_valid_usa_zipcode_format_percent", UNSET
+        )
+        profile_valid_usa_zipcode_format_percent: Union[
+            Unset, ColumnValidUsaZipcodePercentCheckSpec
+        ]
+        if isinstance(_profile_valid_usa_zipcode_format_percent, Unset):
+            profile_valid_usa_zipcode_format_percent = UNSET
+        else:
+            profile_valid_usa_zipcode_format_percent = (
+                ColumnValidUsaZipcodePercentCheckSpec.from_dict(
+                    _profile_valid_usa_zipcode_format_percent
+                )
+            )
+
         column_patterns_profiling_checks_spec = cls(
             custom_checks=custom_checks,
             profile_text_not_matching_regex_found=profile_text_not_matching_regex_found,
@@ -455,6 +595,10 @@ class ColumnPatternsProfilingChecksSpec:
             profile_valid_uuid_format_percent=profile_valid_uuid_format_percent,
             profile_invalid_ip4_address_format_found=profile_invalid_ip4_address_format_found,
             profile_invalid_ip6_address_format_found=profile_invalid_ip6_address_format_found,
+            profile_invalid_usa_phone_format_found=profile_invalid_usa_phone_format_found,
+            profile_invalid_usa_zipcode_format_found=profile_invalid_usa_zipcode_format_found,
+            profile_valid_usa_phone_format_percent=profile_valid_usa_phone_format_percent,
+            profile_valid_usa_zipcode_format_percent=profile_valid_usa_zipcode_format_percent,
         )
 
         column_patterns_profiling_checks_spec.additional_properties = d

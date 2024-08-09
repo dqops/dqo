@@ -122,6 +122,16 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
                     "The default configuration sets a date that is 2 days before.", defaultValue = "2")
     private long daysInRangeMinDateDaysBefore = 2;
 
+
+    /**
+     * The maximum number of samples in the sample values to use when generating a proposed configuration of the accepted_values checks.
+     * If a column has more than this number of distinct values, DQOps will not configure the found in set checks. The default value is 50 samples.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.max-column-samples-to-propose-accepted-values"},
+            description = "The maximum number of samples in the sample values to use when generating a proposed configuration of the accepted_values checks. " +
+                    "If a column has more than this number of distinct values, DQOps will not configure the found in set checks. The default value is 50 samples.", defaultValue = "50")
+    private int maxColumnSamplesToProposeAcceptedValues = 50;
+
     /**
      * Creates a clone of the object.
      * @return Cloned instance.

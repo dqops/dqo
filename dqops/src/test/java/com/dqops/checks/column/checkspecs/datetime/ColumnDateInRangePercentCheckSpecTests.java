@@ -319,6 +319,28 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
+    void proposeCheckConfiguration_whenDateInRangePercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
+        CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+        this.profilingCheckResult.importCheckModel(profilingCheckModel);
+
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(1.0);
+        this.dataAssetProfilingResults.setNotNullsCount(10001L);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
+        this.checkMiningParametersModel.setProposeDateChecks(false);
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertFalse(proposed);
+        Assertions.assertNull(this.sut.getError());
+    }
+
+    @Test
     void proposeCheckConfiguration_whenDateInRangePercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
         this.profilingSut = new ColumnDateInRangePercentCheckSpec();
         this.columnSpec.getProfilingChecks().getDatetime().setProfileDateInRangePercent(this.profilingSut);
