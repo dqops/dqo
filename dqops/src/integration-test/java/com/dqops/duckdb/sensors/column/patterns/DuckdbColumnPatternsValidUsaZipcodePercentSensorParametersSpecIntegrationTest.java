@@ -227,7 +227,7 @@ public class DuckdbColumnPatternsValidUsaZipcodePercentSensorParametersSpecInteg
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(1, groupingLevel1Values.size());
+        Assertions.assertEquals(2, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(1));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())

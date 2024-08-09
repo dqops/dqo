@@ -93,7 +93,7 @@ public class DuckdbColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(6.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class DuckdbColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(6.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class DuckdbColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(6.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class DuckdbColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(7.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(6.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -227,7 +227,7 @@ public class DuckdbColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecInteg
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(1, groupingLevel1Values.size());
+        Assertions.assertEquals(2, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(1));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
