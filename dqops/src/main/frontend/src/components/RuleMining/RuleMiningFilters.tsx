@@ -99,6 +99,15 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
+            label="Copy enabled profiling checks"
+            tooltipText="Copy the configuration of enabled profiling checks to the monitoring and partitioned checks. This option is effective for monitoring and partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks."
+            checked={configuration.copy_profiling_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ copy_profiling_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
             label="Reconfigure default checks"
             tooltipText="Reconfigure the rule thresholds of data quality checks that were activated using data observability rule patterns (data quality policies)"
             checked={configuration.propose_default_checks}
@@ -197,6 +206,15 @@ export default function RuleMiningFilters({
             checked={configuration.propose_bool_percent_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_bool_percent_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Configure the checks that detect invalid dates that are far in the past, or far in the future."
+            label="Dates out of range"
+            checked={configuration.propose_date_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_date_checks: e })
             }
           />
           <Checkbox

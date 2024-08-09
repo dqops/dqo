@@ -19075,6 +19075,10 @@
           "type" : "boolean",
           "description" : "Copy also the configuration of profiling checks that are disabled."
         },
+        "copy_profiling_checks" : {
+          "type" : "boolean",
+          "description" : "Copy the configuration of valid profiling checks."
+        },
         "propose_default_checks" : {
           "type" : "boolean",
           "description" : "Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'."
@@ -19129,7 +19133,11 @@
         },
         "propose_bool_percent_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'. The default value of this parameter is 'true'."
+          "description" : "Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'."
+        },
+        "propose_date_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'."
         },
         "fail_checks_at_percent_error_rows" : {
           "type" : "number",
@@ -24586,6 +24594,126 @@
         }
       }
     },
+    "ColumnInvalidUsaPhoneFoundCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Numerical value in range percent sensor parameters",
+          "$ref" : "#/definitions/ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for the minimum percentage of rows that contains a USA phone number in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
+        }
+      }
+    },
+    "ColumnInvalidUsaZipcodeFoundCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Numerical value in range percent sensor parameters",
+          "$ref" : "#/definitions/ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for the minimum percentage of rows that contains a USA zip code number in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+        }
+      }
+    },
     "ColumnInvalidUuidFormatFoundCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -28549,6 +28677,22 @@
         "daily_invalid_ip6_address_format_found" : {
           "description" : "Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+        },
+        "daily_invalid_usa_phone_format_found" : {
+          "description" : "Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaPhoneFoundCheckSpec"
+        },
+        "daily_invalid_usa_zipcode_format_found" : {
+          "description" : "Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaZipcodeFoundCheckSpec"
+        },
+        "daily_valid_usa_phone_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaPhonePercentCheckSpec"
+        },
+        "daily_valid_usa_zipcode_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaZipcodePercentCheckSpec"
         }
       }
     },
@@ -28605,6 +28749,22 @@
         "daily_partition_invalid_ip6_address_format_found" : {
           "description" : "Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+        },
+        "daily_partition_invalid_usa_phone_format_found" : {
+          "description" : "Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaPhoneFoundCheckSpec"
+        },
+        "daily_partition_invalid_usa_zipcode_format_found" : {
+          "description" : "Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaZipcodeFoundCheckSpec"
+        },
+        "daily_partition_valid_usa_phone_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaPhonePercentCheckSpec"
+        },
+        "daily_partition_valid_usa_zipcode_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaZipcodePercentCheckSpec"
         }
       }
     },
@@ -28636,6 +28796,24 @@
       }
     },
     "ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec" : {
       "type" : "object",
       "properties" : {
         "filter" : {
@@ -28706,6 +28884,22 @@
         "monthly_invalid_ip6_address_format_found" : {
           "description" : "Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+        },
+        "monthly_invalid_usa_phone_format_found" : {
+          "description" : "Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaPhoneFoundCheckSpec"
+        },
+        "monthly_invalid_usa_zipcode_format_found" : {
+          "description" : "Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaZipcodeFoundCheckSpec"
+        },
+        "monthly_valid_usa_phone_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaPhonePercentCheckSpec"
+        },
+        "monthly_valid_usa_zipcode_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaZipcodePercentCheckSpec"
         }
       }
     },
@@ -28762,6 +28956,22 @@
         "monthly_partition_invalid_ip6_address_format_found" : {
           "description" : "Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+        },
+        "monthly_partition_invalid_usa_phone_format_found" : {
+          "description" : "Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaPhoneFoundCheckSpec"
+        },
+        "monthly_partition_invalid_usa_zipcode_format_found" : {
+          "description" : "Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaZipcodeFoundCheckSpec"
+        },
+        "monthly_partition_valid_usa_phone_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaPhonePercentCheckSpec"
+        },
+        "monthly_partition_valid_usa_zipcode_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaZipcodePercentCheckSpec"
         }
       }
     },
@@ -28818,6 +29028,22 @@
         "profile_invalid_ip6_address_format_found" : {
           "description" : "Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+        },
+        "profile_invalid_usa_phone_format_found" : {
+          "description" : "Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaPhoneFoundCheckSpec"
+        },
+        "profile_invalid_usa_zipcode_format_found" : {
+          "description" : "Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnInvalidUsaZipcodeFoundCheckSpec"
+        },
+        "profile_valid_usa_phone_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaPhonePercentCheckSpec"
+        },
+        "profile_valid_usa_zipcode_format_percent" : {
+          "description" : "Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnValidUsaZipcodePercentCheckSpec"
         }
       }
     },
@@ -28881,6 +29107,24 @@
         "regex" : {
           "type" : "string",
           "description" : "This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null"
+        }
+      }
+    },
+    "ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },
@@ -31745,7 +31989,7 @@
         "date_format" : {
           "type" : "string",
           "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
-          "enum" : [ "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY", "YYYY-MM-DD" ]
+          "enum" : [ "YYYY-MM-DD", "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY" ]
         }
       }
     },
@@ -33539,6 +33783,126 @@
         },
         "error" : {
           "description" : "Default alerting threshold for a set percentage of rows with valid longitude value in a column that raises a data quality alert",
+          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+        }
+      }
+    },
+    "ColumnValidUsaPhonePercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Numerical value in range percent sensor parameters",
+          "$ref" : "#/definitions/ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for the minimum percentage of rows that contains a USA phone number in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+        }
+      }
+    },
+    "ColumnValidUsaZipcodePercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Numerical value in range percent sensor parameters",
+          "$ref" : "#/definitions/ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for the minimum percentage of rows that contains a USA zip code number in a column that raises a data quality error (alert).",
           "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
         },
         "fatal" : {

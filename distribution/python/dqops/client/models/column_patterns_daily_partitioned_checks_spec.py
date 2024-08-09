@@ -18,6 +18,12 @@ if TYPE_CHECKING:
     from ..models.column_invalid_ip_6_address_format_found_check_spec import (
         ColumnInvalidIp6AddressFormatFoundCheckSpec,
     )
+    from ..models.column_invalid_usa_phone_found_check_spec import (
+        ColumnInvalidUsaPhoneFoundCheckSpec,
+    )
+    from ..models.column_invalid_usa_zipcode_found_check_spec import (
+        ColumnInvalidUsaZipcodeFoundCheckSpec,
+    )
     from ..models.column_invalid_uuid_format_found_check_spec import (
         ColumnInvalidUuidFormatFoundCheckSpec,
     )
@@ -38,6 +44,12 @@ if TYPE_CHECKING:
     )
     from ..models.column_texts_matching_regex_percent_check_spec import (
         ColumnTextsMatchingRegexPercentCheckSpec,
+    )
+    from ..models.column_valid_usa_phone_percent_check_spec import (
+        ColumnValidUsaPhonePercentCheckSpec,
+    )
+    from ..models.column_valid_usa_zipcode_percent_check_spec import (
+        ColumnValidUsaZipcodePercentCheckSpec,
     )
     from ..models.column_valid_uuid_format_percent_check_spec import (
         ColumnValidUuidFormatPercentCheckSpec,
@@ -68,6 +80,10 @@ class ColumnPatternsDailyPartitionedChecksSpec:
         daily_partition_valid_uuid_format_percent (Union[Unset, ColumnValidUuidFormatPercentCheckSpec]):
         daily_partition_invalid_ip4_address_format_found (Union[Unset, ColumnInvalidIp4AddressFormatFoundCheckSpec]):
         daily_partition_invalid_ip6_address_format_found (Union[Unset, ColumnInvalidIp6AddressFormatFoundCheckSpec]):
+        daily_partition_invalid_usa_phone_format_found (Union[Unset, ColumnInvalidUsaPhoneFoundCheckSpec]):
+        daily_partition_invalid_usa_zipcode_format_found (Union[Unset, ColumnInvalidUsaZipcodeFoundCheckSpec]):
+        daily_partition_valid_usa_phone_format_percent (Union[Unset, ColumnValidUsaPhonePercentCheckSpec]):
+        daily_partition_valid_usa_zipcode_format_percent (Union[Unset, ColumnValidUsaZipcodePercentCheckSpec]):
     """
 
     custom_checks: Union[
@@ -105,6 +121,18 @@ class ColumnPatternsDailyPartitionedChecksSpec:
     ] = UNSET
     daily_partition_invalid_ip6_address_format_found: Union[
         Unset, "ColumnInvalidIp6AddressFormatFoundCheckSpec"
+    ] = UNSET
+    daily_partition_invalid_usa_phone_format_found: Union[
+        Unset, "ColumnInvalidUsaPhoneFoundCheckSpec"
+    ] = UNSET
+    daily_partition_invalid_usa_zipcode_format_found: Union[
+        Unset, "ColumnInvalidUsaZipcodeFoundCheckSpec"
+    ] = UNSET
+    daily_partition_valid_usa_phone_format_percent: Union[
+        Unset, "ColumnValidUsaPhonePercentCheckSpec"
+    ] = UNSET
+    daily_partition_valid_usa_zipcode_format_percent: Union[
+        Unset, "ColumnValidUsaZipcodePercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -201,6 +229,38 @@ class ColumnPatternsDailyPartitionedChecksSpec:
                 self.daily_partition_invalid_ip6_address_format_found.to_dict()
             )
 
+        daily_partition_invalid_usa_phone_format_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
+        if not isinstance(self.daily_partition_invalid_usa_phone_format_found, Unset):
+            daily_partition_invalid_usa_phone_format_found = (
+                self.daily_partition_invalid_usa_phone_format_found.to_dict()
+            )
+
+        daily_partition_invalid_usa_zipcode_format_found: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
+        if not isinstance(self.daily_partition_invalid_usa_zipcode_format_found, Unset):
+            daily_partition_invalid_usa_zipcode_format_found = (
+                self.daily_partition_invalid_usa_zipcode_format_found.to_dict()
+            )
+
+        daily_partition_valid_usa_phone_format_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
+        if not isinstance(self.daily_partition_valid_usa_phone_format_percent, Unset):
+            daily_partition_valid_usa_phone_format_percent = (
+                self.daily_partition_valid_usa_phone_format_percent.to_dict()
+            )
+
+        daily_partition_valid_usa_zipcode_format_percent: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
+        if not isinstance(self.daily_partition_valid_usa_zipcode_format_percent, Unset):
+            daily_partition_valid_usa_zipcode_format_percent = (
+                self.daily_partition_valid_usa_zipcode_format_percent.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -250,6 +310,22 @@ class ColumnPatternsDailyPartitionedChecksSpec:
             field_dict["daily_partition_invalid_ip6_address_format_found"] = (
                 daily_partition_invalid_ip6_address_format_found
             )
+        if daily_partition_invalid_usa_phone_format_found is not UNSET:
+            field_dict["daily_partition_invalid_usa_phone_format_found"] = (
+                daily_partition_invalid_usa_phone_format_found
+            )
+        if daily_partition_invalid_usa_zipcode_format_found is not UNSET:
+            field_dict["daily_partition_invalid_usa_zipcode_format_found"] = (
+                daily_partition_invalid_usa_zipcode_format_found
+            )
+        if daily_partition_valid_usa_phone_format_percent is not UNSET:
+            field_dict["daily_partition_valid_usa_phone_format_percent"] = (
+                daily_partition_valid_usa_phone_format_percent
+            )
+        if daily_partition_valid_usa_zipcode_format_percent is not UNSET:
+            field_dict["daily_partition_valid_usa_zipcode_format_percent"] = (
+                daily_partition_valid_usa_zipcode_format_percent
+            )
 
         return field_dict
 
@@ -266,6 +342,12 @@ class ColumnPatternsDailyPartitionedChecksSpec:
         )
         from ..models.column_invalid_ip_6_address_format_found_check_spec import (
             ColumnInvalidIp6AddressFormatFoundCheckSpec,
+        )
+        from ..models.column_invalid_usa_phone_found_check_spec import (
+            ColumnInvalidUsaPhoneFoundCheckSpec,
+        )
+        from ..models.column_invalid_usa_zipcode_found_check_spec import (
+            ColumnInvalidUsaZipcodeFoundCheckSpec,
         )
         from ..models.column_invalid_uuid_format_found_check_spec import (
             ColumnInvalidUuidFormatFoundCheckSpec,
@@ -287,6 +369,12 @@ class ColumnPatternsDailyPartitionedChecksSpec:
         )
         from ..models.column_texts_matching_regex_percent_check_spec import (
             ColumnTextsMatchingRegexPercentCheckSpec,
+        )
+        from ..models.column_valid_usa_phone_percent_check_spec import (
+            ColumnValidUsaPhonePercentCheckSpec,
+        )
+        from ..models.column_valid_usa_zipcode_percent_check_spec import (
+            ColumnValidUsaZipcodePercentCheckSpec,
         )
         from ..models.column_valid_uuid_format_percent_check_spec import (
             ColumnValidUuidFormatPercentCheckSpec,
@@ -471,6 +559,66 @@ class ColumnPatternsDailyPartitionedChecksSpec:
                 )
             )
 
+        _daily_partition_invalid_usa_phone_format_found = d.pop(
+            "daily_partition_invalid_usa_phone_format_found", UNSET
+        )
+        daily_partition_invalid_usa_phone_format_found: Union[
+            Unset, ColumnInvalidUsaPhoneFoundCheckSpec
+        ]
+        if isinstance(_daily_partition_invalid_usa_phone_format_found, Unset):
+            daily_partition_invalid_usa_phone_format_found = UNSET
+        else:
+            daily_partition_invalid_usa_phone_format_found = (
+                ColumnInvalidUsaPhoneFoundCheckSpec.from_dict(
+                    _daily_partition_invalid_usa_phone_format_found
+                )
+            )
+
+        _daily_partition_invalid_usa_zipcode_format_found = d.pop(
+            "daily_partition_invalid_usa_zipcode_format_found", UNSET
+        )
+        daily_partition_invalid_usa_zipcode_format_found: Union[
+            Unset, ColumnInvalidUsaZipcodeFoundCheckSpec
+        ]
+        if isinstance(_daily_partition_invalid_usa_zipcode_format_found, Unset):
+            daily_partition_invalid_usa_zipcode_format_found = UNSET
+        else:
+            daily_partition_invalid_usa_zipcode_format_found = (
+                ColumnInvalidUsaZipcodeFoundCheckSpec.from_dict(
+                    _daily_partition_invalid_usa_zipcode_format_found
+                )
+            )
+
+        _daily_partition_valid_usa_phone_format_percent = d.pop(
+            "daily_partition_valid_usa_phone_format_percent", UNSET
+        )
+        daily_partition_valid_usa_phone_format_percent: Union[
+            Unset, ColumnValidUsaPhonePercentCheckSpec
+        ]
+        if isinstance(_daily_partition_valid_usa_phone_format_percent, Unset):
+            daily_partition_valid_usa_phone_format_percent = UNSET
+        else:
+            daily_partition_valid_usa_phone_format_percent = (
+                ColumnValidUsaPhonePercentCheckSpec.from_dict(
+                    _daily_partition_valid_usa_phone_format_percent
+                )
+            )
+
+        _daily_partition_valid_usa_zipcode_format_percent = d.pop(
+            "daily_partition_valid_usa_zipcode_format_percent", UNSET
+        )
+        daily_partition_valid_usa_zipcode_format_percent: Union[
+            Unset, ColumnValidUsaZipcodePercentCheckSpec
+        ]
+        if isinstance(_daily_partition_valid_usa_zipcode_format_percent, Unset):
+            daily_partition_valid_usa_zipcode_format_percent = UNSET
+        else:
+            daily_partition_valid_usa_zipcode_format_percent = (
+                ColumnValidUsaZipcodePercentCheckSpec.from_dict(
+                    _daily_partition_valid_usa_zipcode_format_percent
+                )
+            )
+
         column_patterns_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             daily_partition_text_not_matching_regex_found=daily_partition_text_not_matching_regex_found,
@@ -484,6 +632,10 @@ class ColumnPatternsDailyPartitionedChecksSpec:
             daily_partition_valid_uuid_format_percent=daily_partition_valid_uuid_format_percent,
             daily_partition_invalid_ip4_address_format_found=daily_partition_invalid_ip4_address_format_found,
             daily_partition_invalid_ip6_address_format_found=daily_partition_invalid_ip6_address_format_found,
+            daily_partition_invalid_usa_phone_format_found=daily_partition_invalid_usa_phone_format_found,
+            daily_partition_invalid_usa_zipcode_format_found=daily_partition_invalid_usa_zipcode_format_found,
+            daily_partition_valid_usa_phone_format_percent=daily_partition_valid_usa_phone_format_percent,
+            daily_partition_valid_usa_zipcode_format_percent=daily_partition_valid_usa_zipcode_format_percent,
         )
 
         column_patterns_daily_partitioned_checks_spec.additional_properties = d

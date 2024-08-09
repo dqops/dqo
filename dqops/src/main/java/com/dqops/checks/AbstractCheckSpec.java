@@ -607,6 +607,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             return false; // do not copy configuration of failed profiling checks, they were tested for data quality assessment only
         }
 
+        if (!miningParameters.isCopyProfilingChecks()) {
+            return false;
+        }
+
         ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
         AbstractCheckSpec<?, ?, ?, ?> profilingCheckSpec = sourceProfilingCheck.getProfilingCheckModel().getCheckSpec();
         AbstractSensorParametersSpec sensorParametersFromProfilingCheck = profilingCheckSpec.getParameters();

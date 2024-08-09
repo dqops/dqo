@@ -35,6 +35,7 @@ public class TableProfilingResults {
     private StatisticsResultsForTableModel statistics;
     private boolean missingStatisticsResults;
     private boolean missingProfilingChecksResults;
+    private ZoneId timeZoneId;
 
     /**
      * Returns data profiling results for the table-level statistics and profiling checks.
@@ -69,6 +70,22 @@ public class TableProfilingResults {
     }
 
     /**
+     * Returns the time zone of the data source. Used to convert dates and local datetimes to timestamps.
+     * @return Time zone id of the data sources.
+     */
+    public ZoneId getTimeZoneId() {
+        return timeZoneId;
+    }
+
+    /**
+     * Sets the time zone of the data source.
+     * @param timeZoneId Time zone of the data source.
+     */
+    public void setTimeZoneId(ZoneId timeZoneId) {
+        this.timeZoneId = timeZoneId;
+    }
+
+    /**
      * Retrieves statistics and recent profiling check results for a given column.
      * @param columnName Column name.
      * @return Column statistics summary or null, when there are no results for that column.
@@ -93,17 +110,16 @@ public class TableProfilingResults {
     /**
      * Imports statistics into the profiling results, matching check names.
      * @param mostRecentStatisticsForTable Most recent statistics for the table.
-     * @param timeZoneId Time zone id.
      */
-    public void importStatistics(StatisticsResultsForTableModel mostRecentStatisticsForTable, ZoneId timeZoneId) {
+    public void importStatistics(StatisticsResultsForTableModel mostRecentStatisticsForTable) {
         this.statistics = mostRecentStatisticsForTable;
         this.missingStatisticsResults = mostRecentStatisticsForTable == null || mostRecentStatisticsForTable.isEmpty();
-        this.tableProfilingResults.importStatistics(mostRecentStatisticsForTable.getMetrics(), timeZoneId);
+        this.tableProfilingResults.importStatistics(mostRecentStatisticsForTable.getMetrics(), this.timeZoneId);
 
         Map<String, StatisticsResultsForColumnModel> columnStatistics = mostRecentStatisticsForTable.getColumns();
         for (Map.Entry<String, StatisticsResultsForColumnModel> columnModelEntry : columnStatistics.entrySet()) {
             DataAssetProfilingResults columnProfilingResults = this.getColumnProfilingResults(columnModelEntry.getKey());
-            columnProfilingResults.importStatistics(columnModelEntry.getValue().getMetrics(), timeZoneId);
+            columnProfilingResults.importStatistics(columnModelEntry.getValue().getMetrics(), this.timeZoneId);
         }
     }
 

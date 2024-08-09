@@ -39,6 +39,11 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
         }
     };
 
+    /**
+     * Sensor name.
+     */
+    public static final String SENSOR_NAME = "column/datetime/date_values_in_future_percent";
+
     @JsonPropertyDescription("Maximum accepted number of days from now that are not treated as days from future. If value is not defined by user then default value is 0.0.")
     private Double maxFutureDays = 0.0;
 
@@ -76,7 +81,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datetime/date_values_in_future_percent";
+        return SENSOR_NAME;
     }
 
 }

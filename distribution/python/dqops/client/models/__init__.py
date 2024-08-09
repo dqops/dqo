@@ -549,6 +549,12 @@ from .column_invalid_latitude_count_check_spec import (
 from .column_invalid_longitude_count_check_spec import (
     ColumnInvalidLongitudeCountCheckSpec,
 )
+from .column_invalid_usa_phone_found_check_spec import (
+    ColumnInvalidUsaPhoneFoundCheckSpec,
+)
+from .column_invalid_usa_zipcode_found_check_spec import (
+    ColumnInvalidUsaZipcodeFoundCheckSpec,
+)
 from .column_invalid_uuid_format_found_check_spec import (
     ColumnInvalidUuidFormatFoundCheckSpec,
 )
@@ -836,6 +842,12 @@ from .column_patterns_invalid_ip_4_address_format_count_sensor_parameters_spec i
 from .column_patterns_invalid_ip_6_address_format_count_sensor_parameters_spec import (
     ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec,
 )
+from .column_patterns_invalid_usa_phone_format_found_sensor_parameters_spec import (
+    ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec,
+)
+from .column_patterns_invalid_usa_zipcode_format_found_sensor_parameters_spec import (
+    ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec,
+)
 from .column_patterns_invalid_uuid_format_count_sensor_parameters_spec import (
     ColumnPatternsInvalidUuidFormatCountSensorParametersSpec,
 )
@@ -869,6 +881,12 @@ from .column_patterns_text_not_matching_regex_count_sensor_parameters_spec impor
 )
 from .column_patterns_texts_matching_regex_percent_sensor_parameters_spec import (
     ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec,
+)
+from .column_patterns_valid_usa_phone_format_percent_sensor_parameters_spec import (
+    ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec,
+)
+from .column_patterns_valid_usa_zipcode_format_percent_sensor_parameters_spec import (
+    ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec,
 )
 from .column_patterns_valid_uuid_format_percent_sensor_parameters_spec import (
     ColumnPatternsValidUuidFormatPercentSensorParametersSpec,
@@ -1249,6 +1267,12 @@ from .column_valid_latitude_percent_check_spec import (
 )
 from .column_valid_longitude_percent_check_spec import (
     ColumnValidLongitudePercentCheckSpec,
+)
+from .column_valid_usa_phone_percent_check_spec import (
+    ColumnValidUsaPhonePercentCheckSpec,
+)
+from .column_valid_usa_zipcode_percent_check_spec import (
+    ColumnValidUsaZipcodePercentCheckSpec,
 )
 from .column_valid_uuid_format_percent_check_spec import (
     ColumnValidUuidFormatPercentCheckSpec,
@@ -2195,6 +2219,8 @@ __all__ = (
     "ColumnInvalidIp6AddressFormatFoundCheckSpec",
     "ColumnInvalidLatitudeCountCheckSpec",
     "ColumnInvalidLongitudeCountCheckSpec",
+    "ColumnInvalidUsaPhoneFoundCheckSpec",
+    "ColumnInvalidUsaZipcodeFoundCheckSpec",
     "ColumnInvalidUuidFormatFoundCheckSpec",
     "ColumnListModel",
     "ColumnMaxAnomalyDifferencingCheckSpec",
@@ -2310,6 +2336,8 @@ __all__ = (
     "ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec",
     "ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec",
     "ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec",
+    "ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec",
     "ColumnPatternsInvalidUuidFormatCountSensorParametersSpec",
     "ColumnPatternsMonthlyMonitoringChecksSpec",
     "ColumnPatternsMonthlyMonitoringChecksSpecCustomChecks",
@@ -2322,6 +2350,8 @@ __all__ = (
     "ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec",
     "ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec",
     "ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec",
+    "ColumnPatternsValidUsaPhoneFormatPercentSensorParametersSpec",
+    "ColumnPatternsValidUsaZipcodeFormatPercentSensorParametersSpec",
     "ColumnPatternsValidUuidFormatPercentSensorParametersSpec",
     "ColumnPercentile10InRangeCheckSpec",
     "ColumnPercentile25InRangeCheckSpec",
@@ -2468,6 +2498,8 @@ __all__ = (
     "ColumnUniquenessStatisticsCollectorsSpec",
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
+    "ColumnValidUsaPhonePercentCheckSpec",
+    "ColumnValidUsaZipcodePercentCheckSpec",
     "ColumnValidUuidFormatPercentCheckSpec",
     "ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec",
     "ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec",

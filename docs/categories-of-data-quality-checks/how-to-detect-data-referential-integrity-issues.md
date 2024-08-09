@@ -145,10 +145,20 @@ The checks use two parameters to identify the dictionary table and the key colum
 The [*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md) check also takes a **max_count** rule parameter, 
 and the [*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md) check takes a **max_percent** rule parameter.
 
-![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min.png){ loading=lazy; width="1200px" }
+![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min2.png){ loading=lazy; width="1200px" }
 
-Both data quality checks failed, showing that 1982 records use unknown country codes., which accounts for 0.0087% of the dataset. 
+Both data quality checks failed, showing that 1982 records use unknown country codes., which accounts for 0.0087% of the dataset.
 Our target of 100% rows containing valid country codes was missed by 0.0087%.
+
+### Key lookup checks error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section.
+
+![Detecting missing keys using a lookup data quality check in DQOps - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min-error-sampling.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
 
 ### Configure key lookup check in YAML
 The configuration of the [*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md) check is straightforward.

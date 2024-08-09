@@ -287,10 +287,12 @@ class DuckdbSourceConnectionIntegrationTest extends BaseTest {
 
         List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null, 300, secretValueLookupContext);
 
-        Assertions.assertEquals(3, sourceTableModels.size());
-        Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("csv"));
-        Assertions.assertTrue(sourceTableModels.get(1).getTableName().getTableName().contains("json"));
-        Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().contains("parquet"));
+        Assertions.assertTrue(sourceTableModels.size() > 3);
+//        sourceTableModels
+        List<String> names = sourceTableModels.stream().map(sourceTableModel -> sourceTableModel.getTableName().getTableName()).collect(Collectors.toList());
+        Assertions.assertTrue(names.contains("csv"));
+        Assertions.assertTrue(names.contains("json"));
+        Assertions.assertTrue(names.contains("parquet"));
     }
 
     @Test

@@ -57,29 +57,35 @@ export default function RuleMining({
     table: string;
   } = useDecodedParams();
 
+  const defaultParameters : CheckMiningParametersModel =  {
+    severity_level: 'error',
+    fail_checks_at_percent_error_rows: 2.0,
+    copy_failed_profiling_checks: false,
+    copy_disabled_profiling_checks: false,
+    copy_profiling_checks: true,
+    propose_default_checks: true,
+    propose_minimum_row_count: true,
+    propose_column_count: true,
+    propose_timeliness_checks: true,
+    propose_nulls_checks: true,
+    propose_not_nulls_checks: true,
+    propose_column_exists: true,
+    propose_text_values_data_type: true,
+    propose_uniqueness_checks: true,
+    propose_numeric_ranges: true,
+    propose_text_length_ranges: true,
+    propose_date_checks: true,
+    propose_bool_percent_checks: true,
+    propose_accepted_values_checks: true,
+    propose_custom_checks: true
+  };
+
   const [configuration, setConfiguration] =
-  
-    useState<CheckMiningParametersModel>(
-      getRuleMiningConfigurationLocalStorage() ?? {
-        severity_level: 'error',
-        fail_checks_at_percent_error_rows: 2.0,
-        copy_failed_profiling_checks: false,
-        copy_disabled_profiling_checks: false,
-        propose_default_checks: true,
-        propose_minimum_row_count: true,
-        propose_column_count: true,
-        propose_timeliness_checks: true,
-        propose_nulls_checks: true,
-        propose_not_nulls_checks: true,
-        propose_column_exists: true,
-        propose_text_values_data_type: true,
-        propose_uniqueness_checks: true,
-        propose_numeric_ranges: true,
-        propose_text_length_ranges: true,
-        propose_bool_percent_checks: true,
-        propose_accepted_values_checks: true,
-        propose_custom_checks: true
-      } as CheckMiningParametersModel
+      useState<CheckMiningParametersModel>(
+        {
+          ...defaultParameters,
+          ...(getRuleMiningConfigurationLocalStorage() ?? {})
+        }
     );
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);

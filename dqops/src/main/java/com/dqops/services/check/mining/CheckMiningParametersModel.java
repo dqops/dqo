@@ -70,6 +70,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean copyDisabledProfilingChecks;
 
     /**
+     * Copy the configuration of valid profiling checks.
+     */
+    @JsonPropertyDescription("Copy the configuration of valid profiling checks.")
+    private boolean copyProfilingChecks = true;
+
+    /**
      * Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.")
@@ -150,8 +156,14 @@ public class CheckMiningParametersModel implements Cloneable {
     /**
      * Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.")
     private boolean proposeBoolPercentChecks = true;
+
+    /**
+     * Proposes the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.")
+    private boolean proposeDateChecks = true;
 
     /**
      * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).

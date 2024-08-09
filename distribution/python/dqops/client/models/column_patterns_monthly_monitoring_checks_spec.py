@@ -18,6 +18,12 @@ if TYPE_CHECKING:
     from ..models.column_invalid_ip_6_address_format_found_check_spec import (
         ColumnInvalidIp6AddressFormatFoundCheckSpec,
     )
+    from ..models.column_invalid_usa_phone_found_check_spec import (
+        ColumnInvalidUsaPhoneFoundCheckSpec,
+    )
+    from ..models.column_invalid_usa_zipcode_found_check_spec import (
+        ColumnInvalidUsaZipcodeFoundCheckSpec,
+    )
     from ..models.column_invalid_uuid_format_found_check_spec import (
         ColumnInvalidUuidFormatFoundCheckSpec,
     )
@@ -38,6 +44,12 @@ if TYPE_CHECKING:
     )
     from ..models.column_texts_matching_regex_percent_check_spec import (
         ColumnTextsMatchingRegexPercentCheckSpec,
+    )
+    from ..models.column_valid_usa_phone_percent_check_spec import (
+        ColumnValidUsaPhonePercentCheckSpec,
+    )
+    from ..models.column_valid_usa_zipcode_percent_check_spec import (
+        ColumnValidUsaZipcodePercentCheckSpec,
     )
     from ..models.column_valid_uuid_format_percent_check_spec import (
         ColumnValidUuidFormatPercentCheckSpec,
@@ -65,6 +77,10 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
         monthly_valid_uuid_format_percent (Union[Unset, ColumnValidUuidFormatPercentCheckSpec]):
         monthly_invalid_ip4_address_format_found (Union[Unset, ColumnInvalidIp4AddressFormatFoundCheckSpec]):
         monthly_invalid_ip6_address_format_found (Union[Unset, ColumnInvalidIp6AddressFormatFoundCheckSpec]):
+        monthly_invalid_usa_phone_format_found (Union[Unset, ColumnInvalidUsaPhoneFoundCheckSpec]):
+        monthly_invalid_usa_zipcode_format_found (Union[Unset, ColumnInvalidUsaZipcodeFoundCheckSpec]):
+        monthly_valid_usa_phone_format_percent (Union[Unset, ColumnValidUsaPhonePercentCheckSpec]):
+        monthly_valid_usa_zipcode_format_percent (Union[Unset, ColumnValidUsaZipcodePercentCheckSpec]):
     """
 
     custom_checks: Union[
@@ -102,6 +118,18 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
     ] = UNSET
     monthly_invalid_ip6_address_format_found: Union[
         Unset, "ColumnInvalidIp6AddressFormatFoundCheckSpec"
+    ] = UNSET
+    monthly_invalid_usa_phone_format_found: Union[
+        Unset, "ColumnInvalidUsaPhoneFoundCheckSpec"
+    ] = UNSET
+    monthly_invalid_usa_zipcode_format_found: Union[
+        Unset, "ColumnInvalidUsaZipcodeFoundCheckSpec"
+    ] = UNSET
+    monthly_valid_usa_phone_format_percent: Union[
+        Unset, "ColumnValidUsaPhonePercentCheckSpec"
+    ] = UNSET
+    monthly_valid_usa_zipcode_format_percent: Union[
+        Unset, "ColumnValidUsaZipcodePercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -178,6 +206,30 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
                 self.monthly_invalid_ip6_address_format_found.to_dict()
             )
 
+        monthly_invalid_usa_phone_format_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_invalid_usa_phone_format_found, Unset):
+            monthly_invalid_usa_phone_format_found = (
+                self.monthly_invalid_usa_phone_format_found.to_dict()
+            )
+
+        monthly_invalid_usa_zipcode_format_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_invalid_usa_zipcode_format_found, Unset):
+            monthly_invalid_usa_zipcode_format_found = (
+                self.monthly_invalid_usa_zipcode_format_found.to_dict()
+            )
+
+        monthly_valid_usa_phone_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_valid_usa_phone_format_percent, Unset):
+            monthly_valid_usa_phone_format_percent = (
+                self.monthly_valid_usa_phone_format_percent.to_dict()
+            )
+
+        monthly_valid_usa_zipcode_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_valid_usa_zipcode_format_percent, Unset):
+            monthly_valid_usa_zipcode_format_percent = (
+                self.monthly_valid_usa_zipcode_format_percent.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -227,6 +279,22 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
             field_dict["monthly_invalid_ip6_address_format_found"] = (
                 monthly_invalid_ip6_address_format_found
             )
+        if monthly_invalid_usa_phone_format_found is not UNSET:
+            field_dict["monthly_invalid_usa_phone_format_found"] = (
+                monthly_invalid_usa_phone_format_found
+            )
+        if monthly_invalid_usa_zipcode_format_found is not UNSET:
+            field_dict["monthly_invalid_usa_zipcode_format_found"] = (
+                monthly_invalid_usa_zipcode_format_found
+            )
+        if monthly_valid_usa_phone_format_percent is not UNSET:
+            field_dict["monthly_valid_usa_phone_format_percent"] = (
+                monthly_valid_usa_phone_format_percent
+            )
+        if monthly_valid_usa_zipcode_format_percent is not UNSET:
+            field_dict["monthly_valid_usa_zipcode_format_percent"] = (
+                monthly_valid_usa_zipcode_format_percent
+            )
 
         return field_dict
 
@@ -243,6 +311,12 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
         )
         from ..models.column_invalid_ip_6_address_format_found_check_spec import (
             ColumnInvalidIp6AddressFormatFoundCheckSpec,
+        )
+        from ..models.column_invalid_usa_phone_found_check_spec import (
+            ColumnInvalidUsaPhoneFoundCheckSpec,
+        )
+        from ..models.column_invalid_usa_zipcode_found_check_spec import (
+            ColumnInvalidUsaZipcodeFoundCheckSpec,
         )
         from ..models.column_invalid_uuid_format_found_check_spec import (
             ColumnInvalidUuidFormatFoundCheckSpec,
@@ -264,6 +338,12 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
         )
         from ..models.column_texts_matching_regex_percent_check_spec import (
             ColumnTextsMatchingRegexPercentCheckSpec,
+        )
+        from ..models.column_valid_usa_phone_percent_check_spec import (
+            ColumnValidUsaPhonePercentCheckSpec,
+        )
+        from ..models.column_valid_usa_zipcode_percent_check_spec import (
+            ColumnValidUsaZipcodePercentCheckSpec,
         )
         from ..models.column_valid_uuid_format_percent_check_spec import (
             ColumnValidUuidFormatPercentCheckSpec,
@@ -448,6 +528,66 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
                 )
             )
 
+        _monthly_invalid_usa_phone_format_found = d.pop(
+            "monthly_invalid_usa_phone_format_found", UNSET
+        )
+        monthly_invalid_usa_phone_format_found: Union[
+            Unset, ColumnInvalidUsaPhoneFoundCheckSpec
+        ]
+        if isinstance(_monthly_invalid_usa_phone_format_found, Unset):
+            monthly_invalid_usa_phone_format_found = UNSET
+        else:
+            monthly_invalid_usa_phone_format_found = (
+                ColumnInvalidUsaPhoneFoundCheckSpec.from_dict(
+                    _monthly_invalid_usa_phone_format_found
+                )
+            )
+
+        _monthly_invalid_usa_zipcode_format_found = d.pop(
+            "monthly_invalid_usa_zipcode_format_found", UNSET
+        )
+        monthly_invalid_usa_zipcode_format_found: Union[
+            Unset, ColumnInvalidUsaZipcodeFoundCheckSpec
+        ]
+        if isinstance(_monthly_invalid_usa_zipcode_format_found, Unset):
+            monthly_invalid_usa_zipcode_format_found = UNSET
+        else:
+            monthly_invalid_usa_zipcode_format_found = (
+                ColumnInvalidUsaZipcodeFoundCheckSpec.from_dict(
+                    _monthly_invalid_usa_zipcode_format_found
+                )
+            )
+
+        _monthly_valid_usa_phone_format_percent = d.pop(
+            "monthly_valid_usa_phone_format_percent", UNSET
+        )
+        monthly_valid_usa_phone_format_percent: Union[
+            Unset, ColumnValidUsaPhonePercentCheckSpec
+        ]
+        if isinstance(_monthly_valid_usa_phone_format_percent, Unset):
+            monthly_valid_usa_phone_format_percent = UNSET
+        else:
+            monthly_valid_usa_phone_format_percent = (
+                ColumnValidUsaPhonePercentCheckSpec.from_dict(
+                    _monthly_valid_usa_phone_format_percent
+                )
+            )
+
+        _monthly_valid_usa_zipcode_format_percent = d.pop(
+            "monthly_valid_usa_zipcode_format_percent", UNSET
+        )
+        monthly_valid_usa_zipcode_format_percent: Union[
+            Unset, ColumnValidUsaZipcodePercentCheckSpec
+        ]
+        if isinstance(_monthly_valid_usa_zipcode_format_percent, Unset):
+            monthly_valid_usa_zipcode_format_percent = UNSET
+        else:
+            monthly_valid_usa_zipcode_format_percent = (
+                ColumnValidUsaZipcodePercentCheckSpec.from_dict(
+                    _monthly_valid_usa_zipcode_format_percent
+                )
+            )
+
         column_patterns_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_text_not_matching_regex_found=monthly_text_not_matching_regex_found,
@@ -461,6 +601,10 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
             monthly_valid_uuid_format_percent=monthly_valid_uuid_format_percent,
             monthly_invalid_ip4_address_format_found=monthly_invalid_ip4_address_format_found,
             monthly_invalid_ip6_address_format_found=monthly_invalid_ip6_address_format_found,
+            monthly_invalid_usa_phone_format_found=monthly_invalid_usa_phone_format_found,
+            monthly_invalid_usa_zipcode_format_found=monthly_invalid_usa_zipcode_format_found,
+            monthly_valid_usa_phone_format_percent=monthly_valid_usa_phone_format_percent,
+            monthly_valid_usa_zipcode_format_percent=monthly_valid_usa_zipcode_format_percent,
         )
 
         column_patterns_monthly_monitoring_checks_spec.additional_properties = d

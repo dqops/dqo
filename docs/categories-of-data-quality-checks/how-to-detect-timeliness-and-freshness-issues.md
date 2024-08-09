@@ -166,7 +166,7 @@ To configure the event and/or ingestion timestamp columns:
 
 4. Click the Save button in the upper right corner.
 
-![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks.png){ loading=lazy; width="1200px" }
+![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### Configuring timestamp columns in YAML
@@ -207,17 +207,17 @@ We advise configuring the check for warning and error severity levels.
   These issues should be reviewed and reported to the data engineering team or the data owner.
 
 ### Configuring table freshness in UI
-The data timeliness checks are configured on the table level, as shown in the following screenshot.
+The data timeliness checks are configured on the table level, as shown in the following screenshot. Data freshness is a standard check. 
+If you want to display additional data timeliness checks, select the **Show advanced checks** checkbox.
 
-![Data freshness data quality check configured in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-freshness-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Data freshness data quality check configured in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-freshness-data-quality-check-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ### Configuring table freshness in YAML
 The configuration of [*data_freshness*](../checks/table/timeliness/data-freshness.md) is straightforward in YAML.
 
-A warning is raised when the table freshness lag exceeds 2 days,
-or an error is raised when the table freshness lag exceeds 3 days.
+An error is raised when the table freshness lag exceeds 1.5 days.
 
-``` { .yaml linenums="1" hl_lines="12 14" }
+``` { .yaml linenums="1" hl_lines="12" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -228,10 +228,8 @@ spec:
     daily:
       timeliness:
         daily_data_freshness:
-          warning:
-            max_days: 2.0
           error:
-            max_days: 3.0
+            max_days: 1.5
 ```
 
 ## Tracking data timeliness on dashboards

@@ -15,9 +15,10 @@
  */
 package com.dqops.athena.sensors.column.numeric;
 
+import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativePercentCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -25,6 +26,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingDimensionSource;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -32,9 +34,6 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.numeric.ColumnNumericNegativePercentSensorParametersSpec;
-import com.dqops.athena.BaseAthenaIntegrationTest;
-import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
-import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -171,14 +170,14 @@ public class AthenaColumnNumericNegativePercentSensorParametersSpecIntegrationTe
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(16, resultTable.rowCount());
+        Assertions.assertEquals(9, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains(91.0));
+        Assertions.assertTrue(sampleValues.contains(-4.0));
     }
 
     @Test
@@ -192,7 +191,7 @@ public class AthenaColumnNumericNegativePercentSensorParametersSpecIntegrationTe
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(16, resultTable.rowCount());
+        Assertions.assertEquals(9, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -200,12 +199,12 @@ public class AthenaColumnNumericNegativePercentSensorParametersSpecIntegrationTe
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains(91.0));
+        Assertions.assertTrue(sampleValues.contains(-4.0));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(24));
+        Assertions.assertTrue(rowId1Values.contains(7));
     }
 
     @Test
@@ -226,7 +225,7 @@ public class AthenaColumnNumericNegativePercentSensorParametersSpecIntegrationTe
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(16, resultTable.rowCount());
+        Assertions.assertEquals(9, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -236,7 +235,7 @@ public class AthenaColumnNumericNegativePercentSensorParametersSpecIntegrationTe
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains(91.0));
+        Assertions.assertTrue(sampleValues.contains(-4.0));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
@@ -249,6 +248,6 @@ public class AthenaColumnNumericNegativePercentSensorParametersSpecIntegrationTe
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(24));
+        Assertions.assertTrue(rowId1Values.contains(7));
     }
 }

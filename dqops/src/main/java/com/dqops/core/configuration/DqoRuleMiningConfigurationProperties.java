@@ -104,6 +104,33 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
                     "that validate a range of row counts (like a distinct count between).", defaultValue = "100")
     private long minReasonableNotNullsCount = 100;
 
+    /**
+     * The number of days to add to the current system date that DQOps rule mining engine uses to set the maximum date in the date_in_range data quality check.
+     * The default configuration sets a date that is 10 years ahead.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.days-in-range-max-date-days-ahead"},
+            description = "The number of days to add to the current system date that DQOps rule mining engine uses to set the maximum date in the date_in_range data quality check. " +
+                    "The default configuration sets a date that is 10 years ahead.", defaultValue = "3650")
+    private long daysInRangeMaxDateDaysAhead = 356 * 10;
+
+    /**
+     * The number of days to subtract from the earliest found date in a column that DQOps rule mining engine uses to set the minimum date in the date_in_range data quality check.
+     * The default configuration sets a date that is 2 days before.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.days-in-range-min-date-days-before"},
+            description = "The number of days to subtract from the earliest found date in a column that DQOps rule mining engine uses to set the minimum date in the date_in_range data quality check. " +
+                    "The default configuration sets a date that is 2 days before.", defaultValue = "2")
+    private long daysInRangeMinDateDaysBefore = 2;
+
+
+    /**
+     * The maximum number of samples in the sample values to use when generating a proposed configuration of the accepted_values checks.
+     * If a column has more than this number of distinct values, DQOps will not configure the found in set checks. The default value is 50 samples.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.max-column-samples-to-propose-accepted-values"},
+            description = "The maximum number of samples in the sample values to use when generating a proposed configuration of the accepted_values checks. " +
+                    "If a column has more than this number of distinct values, DQOps will not configure the found in set checks. The default value is 50 samples.", defaultValue = "50")
+    private int maxColumnSamplesToProposeAcceptedValues = 50;
 
     /**
      * Creates a clone of the object.

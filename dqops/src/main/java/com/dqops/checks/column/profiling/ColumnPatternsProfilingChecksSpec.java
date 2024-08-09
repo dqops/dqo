@@ -53,6 +53,11 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
             put("profile_valid_uuid_format_percent", o -> o.profileValidUuidFormatPercent);
             put("profile_invalid_ip4_address_format_found", o -> o.profileInvalidIp4AddressFormatFound);
             put("profile_invalid_ip6_address_format_found", o -> o.profileInvalidIp6AddressFormatFound);
+
+            put("profile_invalid_usa_phone_format_found", o -> o.profileInvalidUsaPhoneFormatFound);
+            put("profile_invalid_usa_zipcode_format_found", o -> o.profileInvalidUsaZipcodeFormatFound);
+            put("profile_valid_usa_phone_format_percent", o -> o.profileValidUsaPhoneFormatPercent);
+            put("profile_valid_usa_zipcode_format_percent", o -> o.profileValidUsaZipcodeFormatPercent);
         }
     };
 
@@ -88,6 +93,18 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp6AddressFormatFoundCheckSpec profileInvalidIp6AddressFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaPhoneFoundCheckSpec profileInvalidUsaPhoneFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaZipcodeFoundCheckSpec profileInvalidUsaZipcodeFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
+    private ColumnValidUsaPhonePercentCheckSpec profileValidUsaPhoneFormatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
+    private ColumnValidUsaZipcodePercentCheckSpec profileValidUsaZipcodeFormatPercent;
 
     /**
      * Returns a maximum not match regex count check.
@@ -287,6 +304,77 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
         propagateHierarchyIdToField(profileInvalidIp6AddressFormatFound, "profile_invalid_ip6_address_format_found");
     }
 
+    /**
+     * Returns a maximum invalid USA phone numbers count check.
+     * @return Maximum invalid USA phone numbers count check.
+     */
+    public ColumnInvalidUsaPhoneFoundCheckSpec getProfileInvalidUsaPhoneFormatFound() {
+        return profileInvalidUsaPhoneFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phone numbers count check.
+     * @param profileInvalidUsaPhoneFormatFound Invalid USA phone numbers count check.
+     */
+    public void setProfileInvalidUsaPhoneFormatFound(ColumnInvalidUsaPhoneFoundCheckSpec profileInvalidUsaPhoneFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUsaPhoneFormatFound, profileInvalidUsaPhoneFormatFound));
+        this.profileInvalidUsaPhoneFormatFound = profileInvalidUsaPhoneFormatFound;
+        propagateHierarchyIdToField(profileInvalidUsaPhoneFormatFound, "profile_invalid_usa_phone_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid USA zip codes count check.
+     * @return Maximum invalid USA zip codes count check.
+     */
+    public ColumnInvalidUsaZipcodeFoundCheckSpec getProfileInvalidUsaZipcodeFormatFound() {
+        return profileInvalidUsaZipcodeFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip codes count check.
+     * @param profileInvalidUsaZipcodeFormatFound Invalid USA zip codes count check.
+     */
+    public void setProfileInvalidUsaZipcodeFormatFound(ColumnInvalidUsaZipcodeFoundCheckSpec profileInvalidUsaZipcodeFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUsaZipcodeFormatFound, profileInvalidUsaZipcodeFormatFound));
+        this.profileInvalidUsaZipcodeFormatFound = profileInvalidUsaZipcodeFormatFound;
+        propagateHierarchyIdToField(profileInvalidUsaZipcodeFormatFound, "profile_invalid_usa_zipcode_format_found");
+    }
+
+    /**
+     * Returns a valid USA phones number percent check.
+     * @return Valid USA phones number percent check.
+     */
+    public ColumnValidUsaPhonePercentCheckSpec getProfileValidUsaPhoneFormatPercent() {
+        return profileValidUsaPhoneFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid USA phones number percent check.
+     * @param profileValidUsaPhoneFormatPercent Valid USA phones number percent check.
+     */
+    public void setProfileValidUsaPhoneFormatPercent(ColumnValidUsaPhonePercentCheckSpec profileValidUsaPhoneFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidUsaPhoneFormatPercent, profileValidUsaPhoneFormatPercent));
+        this.profileValidUsaPhoneFormatPercent = profileValidUsaPhoneFormatPercent;
+        propagateHierarchyIdToField(profileValidUsaPhoneFormatPercent, "profile_valid_usa_phone_format_percent");
+    }
+
+    /**
+     * Returns a valid USA zip code percent check.
+     * @return Valid USA zip code percent check.
+     */
+    public ColumnValidUsaZipcodePercentCheckSpec getProfileValidUsaZipcodeFormatPercent() {
+        return profileValidUsaZipcodeFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid USA zip code percent check.
+     * @param profileValidUsaZipcodeFormatPercent Valid USA zip code percent check.
+     */
+    public void setProfileValidUsaZipcodeFormatPercent(ColumnValidUsaZipcodePercentCheckSpec profileValidUsaZipcodeFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileValidUsaPhoneFormatPercent, profileValidUsaZipcodeFormatPercent));
+        this.profileValidUsaZipcodeFormatPercent = profileValidUsaZipcodeFormatPercent;
+        propagateHierarchyIdToField(profileValidUsaZipcodeFormatPercent, "profile_valid_usa_zipcode_format_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
