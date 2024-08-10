@@ -222,7 +222,7 @@ public class ColumnTextValidCurrencyCodePercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeAcceptedValuesChecks()) {
+        if (!miningParameters.isProposeValuesInSetChecks()) {
             return false;
         }
 

@@ -40,7 +40,6 @@ import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A column-level check that calculates the percentage of rows for which the tested text column contains a value from a set of expected values.
@@ -230,7 +229,7 @@ public class ColumnTextFoundInSetPercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeAcceptedValuesChecks()) {
+        if (!miningParameters.isProposeValuesInSetChecks()) {
             return false;
         }
 
@@ -276,7 +275,8 @@ public class ColumnTextFoundInSetPercentCheckSpec
             for (Map.Entry<String, Set<String>> dictionaryKeyValue : tableProfilingResults.getDictionaries().entrySet()) {
                 Set<String> dictionaryValues = dictionaryKeyValue.getValue();
 
-                if (dictionaryValues.size() > checkMiningConfigurationProperties.getMaxColumnSamplesToProposeAcceptedValues() * 2) {
+                if (dictionaryValues.size() > checkMiningConfigurationProperties.getMaxColumnSamplesToProposeAcceptedValues() * 2 ||
+                        columnDataAssetProfilingResults.getSampleValues().size() * 2 < dictionaryValues.size()) {
                     continue; // we will ignore this dictionary, because it has too many values, more than the number of unique values in the sample data
                 }
 
@@ -290,7 +290,8 @@ public class ColumnTextFoundInSetPercentCheckSpec
                 }
             }
 
-            if ((100.0 - bestDictionaryMatchScore) <= miningParameters.getFailChecksAtPercentErrorRows()) {
+            if (!miningParameters.isValuesInSetTreatRareValuesAsInvalid() && bestDictionaryMatchScore == 100.0 ||
+                    miningParameters.isValuesInSetTreatRareValuesAsInvalid() && (100.0 - bestDictionaryMatchScore) <= miningParameters.getFailChecksAtPercentErrorRows()) {
                 this.parameters.setExpectedValues(List.of("${dictionary://" + bestDictionaryName + "}")); // match to a dictionary
             } else {
                 Long totalCountOfSamples = columnDataAssetProfilingResults.getSampleValues()
@@ -305,7 +306,8 @@ public class ColumnTextFoundInSetPercentCheckSpec
                     topExpectedValues.add(profilingSampleValue.getValue().toString());
                     totalValuesInExpectedSet += profilingSampleValue.getCount();
 
-                    if (100.0 - (100.0 * totalValuesInExpectedSet / totalCountOfSamples) <= miningParameters.getFailChecksAtPercentErrorRows()) {
+                    if (miningParameters.isValuesInSetTreatRareValuesAsInvalid() &&
+                            100.0 - (100.0 * totalValuesInExpectedSet / totalCountOfSamples) <= miningParameters.getFailChecksAtPercentErrorRows()) {
                         break; // the remaining values in the samples represent very rare values, probably invalid
                     }
                 }

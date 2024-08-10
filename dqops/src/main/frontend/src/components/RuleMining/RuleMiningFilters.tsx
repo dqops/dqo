@@ -219,11 +219,29 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            tooltipText="Configure the checks in the 'Accepted values' category to validate that the values in the column come from a predefined dictionary. DQOps will find columns with a low number of unique values and will propose a data dictionary which matches almost all found values. In order to detect data quality issues, DQOps will not include values that represent less than the 'Error rate (% rows)' rows, assuming that these rare values are invalid values."
-            label="Accepted values"
-            checked={configuration.propose_accepted_values_checks}
+            tooltipText="Proposes the configuration the categorical values checks 'value_in_set_percent' from the 'accepted_values' category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling."
+            label="Values in set"
+            checked={configuration.propose_values_in_set_checks}
             onChange={(e) =>
-              onChangeConfiguration({ propose_accepted_values_checks: e })
+              onChangeConfiguration({ propose_values_in_set_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Configure the 'value_in_set_percent' checks from the 'accepted_values' category to raise data quality issues for rare values. DQOps will not add rare categorical values to the list of expected values."
+            label="Treat rare values as invalid"
+            checked={configuration.values_in_set_treat_rare_values_as_invalid}
+            onChange={(e) =>
+              onChangeConfiguration({ values_in_set_treat_rare_values_as_invalid: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Proposes the configuration the texts_in_top_values check from the 'accepted_values' category. This check find the most common values in a table and ensures that they are the same values that were identified during data profiling."
+            label="Texts in top values"
+            checked={configuration.propose_top_values_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_top_values_checks: e })
             }
           />
           <Checkbox

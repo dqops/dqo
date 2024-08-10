@@ -18,6 +18,7 @@ package com.dqops.services.check.mining;
 
 import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -142,10 +143,22 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeTextLengthRanges = true;
 
     /**
-     * Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.
+     * Proposes the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.")
-    private boolean proposeAcceptedValuesChecks = true;
+    @JsonPropertyDescription("Proposes the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.")
+    private boolean proposeValuesInSetChecks = true;
+
+    /**
+     * Configure the values in set checks from the accepted values category to raise data quality issues for rare values. DQOps will not add rare categorical values to the list of expected values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Configure the values in set checks from the accepted values category to raise data quality issues for rare values. DQOps will not add rare categorical values to the list of expected values. The default value of this parameter is 'true'.")
+    private boolean valuesInSetTreatRareValuesAsInvalid = true;
+
+    /**
+     * Proposes the configuration the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the configuration the text values in the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'.")
+    private boolean proposeTopValuesChecks = true;
 
     /**
      * Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
@@ -176,6 +189,16 @@ public class CheckMiningParametersModel implements Cloneable {
      */
     @JsonPropertyDescription("The default maximum percentage of invalid rows for which the rule engine should configure rule values, especially min_percent, min_count or max_percent.")
     private Double maxPercentErrorRowsForPercentChecks;
+
+
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text. Does nothing, just present to allow accepting old parameter names.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    private void handleUndeclaredProperty(String name, Object value) {
+    }
 
     /**
      * Creates and returns a copy of this object.

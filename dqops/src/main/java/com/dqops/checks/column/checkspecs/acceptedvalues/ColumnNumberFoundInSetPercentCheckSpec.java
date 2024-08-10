@@ -39,8 +39,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -231,7 +231,7 @@ public class ColumnNumberFoundInSetPercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeAcceptedValuesChecks()) {
+        if (!miningParameters.isProposeValuesInSetChecks()) {
             return false;
         }
 
@@ -291,17 +291,29 @@ public class ColumnNumberFoundInSetPercentCheckSpec
                 return false; // mixed values, not integers
             }
 
-            List<Long> uniqueCodes = columnDataAssetProfilingResults.getSampleValues()
+            Long totalCountOfSamples = columnDataAssetProfilingResults.getSampleValues()
                     .stream()
-                    .map(profilingSampleValue -> {
-                        if (profilingSampleValue.getValue() instanceof String) {
-                            return Long.valueOf(profilingSampleValue.getValue().toString());
-                        } else {
-                            return ((Number) profilingSampleValue.getValue()).longValue();
-                        }
-                    })
-                    .collect(Collectors.toList());
-            this.parameters.setExpectedValues(uniqueCodes);
+                    .map(profilingSampleValue -> profilingSampleValue.getCount())
+                    .reduce((a, b) -> a + b)
+                    .get();
+
+            List<Long> topExpectedValues = new ArrayList<>();
+            long totalValuesInExpectedSet = 0L;
+            for (ProfilingSampleValue profilingSampleValue : columnDataAssetProfilingResults.getSampleValues()) {
+                if (profilingSampleValue.getValue() instanceof String) {
+                    topExpectedValues.add(Long.valueOf(profilingSampleValue.getValue().toString()));
+                } else {
+                    topExpectedValues.add(((Number) profilingSampleValue.getValue()).longValue());
+                }
+
+                totalValuesInExpectedSet += profilingSampleValue.getCount();
+
+                if (miningParameters.isValuesInSetTreatRareValuesAsInvalid() &&
+                        100.0 - (100.0 * totalValuesInExpectedSet / totalCountOfSamples) <= miningParameters.getFailChecksAtPercentErrorRows()) {
+                    break; // the remaining values in the samples represent very rare values, probably invalid
+                }
+            }
+            this.parameters.setExpectedValues(topExpectedValues);
 
             sourceProfilingCheck.setActualValue(100.0); // just fake number like there were no dates, to enable a check, even if it fails, we cannot calculate a correct value from the samples
             sourceProfilingCheck.setExecutedAt(Instant.now());

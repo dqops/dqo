@@ -16217,10 +16217,24 @@ definitions:
         type: "boolean"
         description: "Proposes the default configuration of the text length checks.\
           \ The default value of this parameter is 'true'."
-      propose_accepted_values_checks:
+      propose_values_in_set_checks:
         type: "boolean"
-        description: "Proposes the default configuration the accepted values checks.\
-          \ The default value of this parameter is 'true'."
+        description: "Proposes the configuration the categorical values checks from\
+          \ the accepted values category. These checks will be configured to ensure\
+          \ that the column contains only sample values that were identified during\
+          \ data profiling. The default value of this parameter is 'true'."
+      values_in_set_treat_rare_values_as_invalid:
+        type: "boolean"
+        description: "Configure the values in set checks from the accepted values\
+          \ category to raise data quality issues for rare values. DQOps will not\
+          \ add rare categorical values to the list of expected values. The default\
+          \ value of this parameter is 'true'."
+      propose_top_values_checks:
+        type: "boolean"
+        description: "Proposes the configuration the text values in the top values\
+          \ checks from the accepted values category. These checks find the most common\
+          \ values in a table and ensure that they are the same values that were identified\
+          \ during data profiling. The default value of this parameter is 'true'."
       propose_custom_checks:
         type: "boolean"
         description: "Proposes the default configuration for custom checks that use\
@@ -16446,12 +16460,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:

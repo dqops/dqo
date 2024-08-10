@@ -263,7 +263,7 @@ public class ColumnTextValidCurrencyCodePercentCheckSpecTests extends BaseTest {
         this.profilingCheckResult.setActualValue(1.0);
         this.dataAssetProfilingResults.setNotNullsCount(10001L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
-        this.checkMiningParametersModel.setProposeAcceptedValuesChecks(false);
+        this.checkMiningParametersModel.setProposeValuesInSetChecks(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),

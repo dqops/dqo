@@ -76,7 +76,9 @@ export default function RuleMining({
     propose_text_length_ranges: true,
     propose_date_checks: true,
     propose_bool_percent_checks: true,
-    propose_accepted_values_checks: true,
+    propose_values_in_set_checks: true,
+    propose_top_values_checks: true,
+    values_in_set_treat_rare_values_as_invalid: true,
     propose_custom_checks: true
   };
 

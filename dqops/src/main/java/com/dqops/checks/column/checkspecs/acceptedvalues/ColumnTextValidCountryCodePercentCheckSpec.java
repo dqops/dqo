@@ -28,7 +28,6 @@ import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.sensors.column.acceptedvalues.ColumnTextTextValidCountryCodePercentSensorParametersSpec;
-import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -41,7 +40,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
 
@@ -224,7 +222,7 @@ public class ColumnTextValidCountryCodePercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeAcceptedValuesChecks()) {
+        if (!miningParameters.isProposeValuesInSetChecks()) {
             return false;
         }
 

@@ -42,14 +42,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.ZoneId;
+import java.util.Set;
 
 @SpringBootTest
-public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
-    private ColumnNumberFoundInSetPercentCheckSpec sut;
+public class ColumnTextFoundInSetPercentCheckSpecTests extends BaseTest {
+    private ColumnTextFoundInSetPercentCheckSpec sut;
     private TableSpec tableSpec;
     private ColumnSpec columnSpec;
     private ConnectionSpec connectionSpec;
-    private ColumnNumberFoundInSetPercentCheckSpec profilingSut;
+    private ColumnTextFoundInSetPercentCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
     private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
@@ -59,7 +60,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnNumberFoundInSetPercentCheckSpec();
+        this.sut = new ColumnTextFoundInSetPercentCheckSpec();
         this.profilingSut = this.sut;
         this.tableSpec = TableSpecObjectMother.create("public", "tab");
         this.columnSpec = new ColumnSpec();
@@ -68,7 +69,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
         this.connectionSpec = ConnectionSpecObjectMother.createSampleConnectionSpec(this.tableSpec.getHierarchyId().getConnectionName());
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec());
         this.columnSpec.getProfilingChecks().setAcceptedValues(new ColumnAcceptedValuesProfilingChecksSpec());
-        this.columnSpec.getProfilingChecks().getAcceptedValues().setProfileNumberFoundInSetPercent(this.profilingSut);
+        this.columnSpec.getProfilingChecks().getAcceptedValues().setProfileTextFoundInSetPercent(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
@@ -79,7 +80,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -89,14 +90,14 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -106,92 +107,20 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyIntegers_thenProposesCheckSelectedConfiguration() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyTexts_thenProposesCheckSelectedConfiguration() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(300, 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(400, 1000L, null));
-        this.dataAssetProfilingResults.setNotNullsCount(5000L);
-        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
-
-        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
-                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
-
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
-        Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(300L));
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(400L));
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
-    }
-
-    @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyLongs_thenProposesCheckSelectedConfiguration() {
-        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
-                this.connectionSpec, this.tableSpec);
-
-        this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(300L, 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(400L, 1000L, null));
-        this.dataAssetProfilingResults.setNotNullsCount(5000L);
-        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
-
-        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
-                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
-
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
-        Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(300L));
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(400L));
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
-    }
-
-    @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyLongsDoubles_thenProposesCheckSelectedConfiguration() {
-        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
-                this.connectionSpec, this.tableSpec);
-
-        this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(300.0, 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(400.0, 1000L, null));
-        this.dataAssetProfilingResults.setNotNullsCount(5000L);
-        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
-
-        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
-                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
-
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
-        Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(300L));
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(400L));
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
-    }
-
-    @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyTextsThatAreIntegers_thenProposesCheckSelectedConfiguration() {
-        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
-                this.connectionSpec, this.tableSpec);
-
-        this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("300", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("400", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1000L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
 
@@ -203,19 +132,93 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
         Assertions.assertNotNull(this.sut.getError());
         Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
         Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(300L));
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(400L));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("UK"));
         Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndAcceptsErrorsAndShouldTreatRareValuesAsWrongAndSomeRareValues_thenProposesCheckButSkipsRareValues() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndAllSamplesFoundInDictionary_thenProposesCheckUsingDictionary() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("300", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("400", 1L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1000L, null));
+        this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
+        this.tableProfilingResults.getDictionaries().put("dict1", Set.of("US", "UK", "PL"));
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
+        Assertions.assertEquals(1, this.sut.getParameters().getExpectedValues().size());
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("${dictionary://dict1}"));
+        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndNotAllSamplesFoundInDictionaries_thenProposesCheckSelectedConfigurationWithExpectedValues() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(null);
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1000L, null));
+        this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
+        this.tableProfilingResults.getDictionaries().put("dict1", Set.of("US",     "PL"));
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
+        Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("UK"));
+        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndNotAllSamplesFoundInDictionaryButDictionaryIsTooBig_thenProposesCheckSelectedConfigurationWithExpectedValues() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(null);
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1000L, null));
+        this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
+        this.tableProfilingResults.getDictionaries().put("dict1", Set.of("US", "UK", "FR", "DE", "IN", "SP", "PL"));
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
+        Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("UK"));
+        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndAcceptsErrorsAndShouldTreatRareValuesAsWrongAndSomeRareValues_thenProposesCheckButSkipsRareValues() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(null);
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
         this.checkMiningParametersModel.setValuesInSetTreatRareValuesAsInvalid(true);
@@ -228,18 +231,69 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
         Assertions.assertNotNull(this.sut.getError());
         Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
         Assertions.assertEquals(1, this.sut.getParameters().getExpectedValues().size());
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(300L));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
         Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndAcceptsErrorsAndShouldTreatRareValuesAsWrongIsFalseAndSomeRareValues_thenProposesCheckWithAllValues() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndAcceptsErrorsAndShouldTreatRareValuesAsWrongAndDictionaryFoundWithSomeMissingValuesButUnderErrorPct_thenProposesCheckUsingIncompleteDictionary() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("300", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("400", 1L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1L, null));
+        this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
+        this.checkMiningParametersModel.setValuesInSetTreatRareValuesAsInvalid(true);
+        this.tableProfilingResults.getDictionaries().put("dict1", Set.of("US", "PL"));
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
+        Assertions.assertEquals(1, this.sut.getParameters().getExpectedValues().size());
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("${dictionary://dict1}"));
+        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndAcceptsErrorsAndShouldNotTreatRareValuesAsWrongAndDictionaryFoundWithSomeMissingValuesButUnderErrorPct_thenProposesDirectExpectedValues() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(null);
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1L, null));
+        this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
+        this.checkMiningParametersModel.setValuesInSetTreatRareValuesAsInvalid(false);
+        this.tableProfilingResults.getDictionaries().put("dict1", Set.of("US", "PL"));
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+        Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
+        Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("UK"));
+        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndAcceptsErrorsAndShouldTreatRareValuesAsWrongIsFalseAndSomeRareValues_thenProposesCheckWithAllValues() {
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(null);
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("US", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("UK", 1L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
         this.checkMiningParametersModel.setValuesInSetTreatRareValuesAsInvalid(false);
@@ -252,13 +306,13 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
         Assertions.assertNotNull(this.sut.getError());
         Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
         Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(300L));
-        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains(400L));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
+        Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("UK"));
         Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainNonNumericValues_thenNotProposesCheckBecauseValuesNotNumeric() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainNonTextValues_thenNotProposesCheckBecauseValuesNotNumeric() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -277,25 +331,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainFloatValuesWithFractionPart_thenNotProposesCheckBecauseValuesNotInteger() {
-        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
-                this.connectionSpec, this.tableSpec);
-
-        this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(100.5, 1000L, null));
-        this.dataAssetProfilingResults.setNotNullsCount(5000L);
-        this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
-
-        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
-                tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
-
-        Assertions.assertFalse(proposed);
-        Assertions.assertNull(this.sut.getError());
-    }
-
-    @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -309,7 +345,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -317,7 +353,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -330,14 +366,14 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -350,7 +386,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
@@ -358,33 +394,33 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentNoProfilingCheckAndValidSampleValueTooManySampleValues_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentNoProfilingCheckAndValidSampleValueTooManySampleValues_thenNotProposesRules() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         for (int i = 0; i < 100; i++) {
-            this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(i, 10L, null));
+            this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(Integer.toString(i), 10L, null));
         }
         this.dataAssetProfilingResults.setNotNullsCount(1001L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentNoProfilingCheckAndValidSampleValueButColumnTypeDate_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentNoProfilingCheckAndValidSampleValueButColumnTypeDate_thenNotProposesRules() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         for (int i = 0; i < 10; i++) {
-            this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(i, 10L, null));
+            this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(Integer.toString(i), 10L, null));
         }
         this.dataAssetProfilingResults.setNotNullsCount(1001L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
@@ -398,7 +434,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenTextFoundInSetPercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -413,15 +449,15 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
     }
     @Test
-    void proposeCheckConfiguration_whenNumberFoundInSetPercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
-        this.profilingSut = new ColumnNumberFoundInSetPercentCheckSpec();
-        this.columnSpec.getProfilingChecks().getAcceptedValues().setProfileNumberFoundInSetPercent(this.profilingSut);
+    void proposeCheckConfiguration_whenTextFoundInSetPercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
+        this.profilingSut = new ColumnTextFoundInSetPercentCheckSpec();
+        this.columnSpec.getProfilingChecks().getAcceptedValues().setProfileTextFoundInSetPercent(this.profilingSut);
         this.profilingSut.setWarning(new MinPercentRule100WarningParametersSpec(10.0));
         this.profilingSut.setError(new MinPercentRule100ErrorParametersSpec(20.0));
 
@@ -433,7 +469,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
         this.columnSpec.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().setDaily(new ColumnDailyMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().getDaily().setAcceptedValues(new ColumnAcceptedValuesDailyMonitoringChecksSpec());
-        this.columnSpec.getMonitoringChecks().getDaily().getAcceptedValues().setDailyNumberFoundInSetPercent(this.sut);
+        this.columnSpec.getMonitoringChecks().getDaily().getAcceptedValues().setDailyTextFoundInSetPercent(this.sut);
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
@@ -443,7 +479,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, targetCheckRootContainer,
-                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.numeric_integer, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
+                myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
