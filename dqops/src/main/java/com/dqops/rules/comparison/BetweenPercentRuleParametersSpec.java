@@ -139,14 +139,14 @@ public class BetweenPercentRuleParametersSpec extends AbstractRuleParametersSpec
         if (this.minPercent != null) {
             double minActualValue = checkResultsSingleCheck.getActualValueColumn().min();
             if (minActualValue < this.minPercent) {
-                this.minPercent = minActualValue - Math.min((this.minPercent - minActualValue) * 0.3, minActualValue * 0.3);
+                this.minPercent = DoubleRounding.roundToKeepEffectiveDigits(minActualValue - Math.min((this.minPercent - minActualValue) * 0.3, minActualValue * 0.3));
             }
         }
 
         if (this.maxPercent != null) {
             double maxActualValue = checkResultsSingleCheck.getActualValueColumn().max();
             if (maxActualValue > this.maxPercent) {
-                this.maxPercent = maxActualValue + Math.min((maxActualValue - this.maxPercent) * 0.3, (100.0 - maxActualValue) * 0.3);
+                this.maxPercent = DoubleRounding.roundToKeepEffectiveDigits(maxActualValue + Math.min((maxActualValue - this.maxPercent) * 0.3, (100.0 - maxActualValue) * 0.3));
             }
         }
     }

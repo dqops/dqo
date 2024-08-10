@@ -27,6 +27,7 @@ import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
 import com.dqops.utils.conversion.DoubleRounding;
+import com.dqops.utils.conversion.LongRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -135,14 +136,34 @@ public class BetweenFloatsRuleParametersSpec extends AbstractRuleParametersSpec 
      */
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
-        if (this.from == null || this.to == null) {
-            return;
+        Double spread = null;
+        if (this.from != null && this.to != null) {
+            spread = this.to - this.from;
         }
 
-        double difference = this.to - this.from;
+        if (!checkResultsSingleCheck.getActualValueColumn().isEmpty()) {
+            if (this.from != null) {
+                double minValue = checkResultsSingleCheck.getActualValueColumn().min();
+                if (minValue < this.from) {
+                    if (spread != null) {
+                        this.from = DoubleRounding.roundToKeepEffectiveDigits(this.from - spread * 0.15);
+                    } else {
+                        this.from = DoubleRounding.roundToKeepEffectiveDigits(minValue);
+                    }
+                }
+            }
 
-        this.from = DoubleRounding.roundToKeepEffectiveDigits(this.from - difference * 0.15);
-        this.to = DoubleRounding.roundToKeepEffectiveDigits(this.to + difference * 0.15);
+            if (this.to != null) {
+                double maxValue = checkResultsSingleCheck.getActualValueColumn().max();
+                if (maxValue > this.to) {
+                    if (spread != null) {
+                        this.to = DoubleRounding.roundToKeepEffectiveDigits(this.to + spread * 0.15);
+                    } else {
+                        this.to = DoubleRounding.roundToKeepEffectiveDigits(maxValue);
+                    }
+                }
+            }
+        }
     }
 
     /**

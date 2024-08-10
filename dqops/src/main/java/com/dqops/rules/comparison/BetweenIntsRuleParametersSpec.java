@@ -135,14 +135,34 @@ public class BetweenIntsRuleParametersSpec extends AbstractRuleParametersSpec im
      */
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
-        if (this.from == null || this.to == null) {
-            return;
+        Double spread = null;
+        if (this.from != null && this.to != null) {
+            spread = this.to.doubleValue() - this.from.doubleValue();
         }
 
-        double difference = this.to - this.from;
+        if (!checkResultsSingleCheck.getActualValueColumn().isEmpty()) {
+            if (this.from != null) {
+                double minValue = checkResultsSingleCheck.getActualValueColumn().min();
+                if (minValue < this.from) {
+                    if (spread != null) {
+                        this.from = LongRounding.roundToKeepEffectiveDigits((long) (this.from - spread * 0.15) + 1L);
+                    } else {
+                        this.from = LongRounding.roundToKeepEffectiveDigits((long) minValue);
+                    }
+                }
+            }
 
-        this.from = (long)(this.from - difference * 0.15);
-        this.to = (long)(this.to + difference * 0.15);
+            if (this.to != null) {
+                double maxValue = checkResultsSingleCheck.getActualValueColumn().max();
+                if (maxValue > this.to) {
+                    if (spread != null) {
+                        this.to = LongRounding.roundToKeepEffectiveDigits((long) (this.to + spread * 0.15) + 1L);
+                    } else {
+                        this.to = LongRounding.roundToKeepEffectiveDigits((long) maxValue);
+                    }
+                }
+            }
+        }
     }
 
     /**

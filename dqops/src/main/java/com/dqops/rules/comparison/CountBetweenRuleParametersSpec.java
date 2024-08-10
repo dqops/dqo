@@ -136,7 +136,7 @@ public class CountBetweenRuleParametersSpec extends AbstractRuleParametersSpec i
         if (this.minCount != null) {
             double minActualValue = checkResultsSingleCheck.getActualValueColumn().min();
             if (minActualValue < this.minCount) {
-                this.minCount = (long)minActualValue - (long)((this.minCount - (long)minActualValue) * 0.3); // NOTE: this calibrator will disable the check and add some space to avoid the error for a while
+                this.minCount = LongRounding.roundToKeepEffectiveDigits((long)minActualValue - (long)((this.minCount - (long)minActualValue) * 0.3)); // NOTE: this calibrator will disable the check and add some space to avoid the error for a while
                 if (this.minCount < 0L) {
                     this.minCount = 0L;
                 }
@@ -146,7 +146,7 @@ public class CountBetweenRuleParametersSpec extends AbstractRuleParametersSpec i
         if (this.maxCount != null) {
             double maxActualValue = checkResultsSingleCheck.getActualValueColumn().max();
             if (maxActualValue > this.maxCount) {
-                this.maxCount = (long)maxActualValue + (long)(((long)maxActualValue - this.maxCount )* 0.3); // NOTE: this calibrator will disable the check and add some space to avoid the error for a while
+                this.maxCount = LongRounding.roundToKeepEffectiveDigits((long)maxActualValue + (long)(((long)maxActualValue - this.maxCount )* 0.3)); // NOTE: this calibrator will disable the check and add some space to avoid the error for a while
             }
         }
     }
