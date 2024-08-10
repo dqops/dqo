@@ -133,6 +133,13 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     private int maxColumnSamplesToProposeAcceptedValues = 50;
 
     /**
+     * The maximum number of top (most common) text values that are added to the expected_texts_in_top_values check. The default value is 5 top text values.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.max-expected-texts-in-top-values"},
+            description = "The maximum number of top (most common) text values that are added to the expected_texts_in_top_values check. The default value is 5 top text values.", defaultValue = "5")
+    private int maxExpectedTextsInTopValues = 5;
+
+    /**
      * Creates a clone of the object.
      * @return Cloned instance.
      */

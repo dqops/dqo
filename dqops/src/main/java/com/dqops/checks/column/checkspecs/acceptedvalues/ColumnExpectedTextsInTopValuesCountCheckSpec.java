@@ -16,12 +16,20 @@
 package com.dqops.checks.column.checkspecs.acceptedvalues;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.acceptedvalues.ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -30,7 +38,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * A column-level check that counts how many expected text values are among the TOP most popular values in the column.
@@ -48,6 +57,17 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpec
         {
         }
     };
+
+    /**
+     * The multiplier applied to find the most common values when the rule is proposed.
+     */
+    public static final double MIN_RATE_OF_TOP_PROPOSED_VALUE = 0.05;
+
+    /**
+     * The multiplier of the count of two adjacent samples (when sorted descending by count of occurrence) to consider as a significant drop of the values
+     * to be used as the cliff (the index of the last sample value that is added to the expected values).
+     */
+    public static final double CLIFF_SAMPLE_COUNT_DROP_MULTIPLIER = 4.0;
 
     @JsonPropertyDescription("Data quality check parameters that specify a list of expected most popular text values that should be found in the column. The second parameter is 'top', which is the limit of the most popular column values to find in the tested column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -177,5 +197,124 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Reasonableness;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule mining registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (!miningParameters.isProposeTopValuesChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        if (sourceProfilingCheck.getActualValue() == null && (this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty())) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
+            Double percentOfStringValues = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                if (!(value instanceof String)) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            if (percentOfStringValues == null || percentOfStringValues < 100.0) {
+                return false; // mixed values, not text values
+            }
+
+            Long notNullsCount = columnDataAssetProfilingResults.getNotNullsCount();
+            if (notNullsCount == null || notNullsCount < checkMiningConfigurationProperties.getMinReasonableNotNullsCount()) {
+                return false; // too little non-null values
+            }
+
+            List<String> topExpectedValues = new ArrayList<>();
+            long previousCountOfValues = columnDataAssetProfilingResults.getSampleValues().get(0).getCount();
+            Integer cliffIndex = null;
+            for (int i = 0; i < checkMiningConfigurationProperties.getMaxExpectedTextsInTopValues() + 1 && i < columnDataAssetProfilingResults.getSampleValues().size(); i++) {
+                ProfilingSampleValue sampleValue = columnDataAssetProfilingResults.getSampleValues().get(i);
+
+                if (previousCountOfValues > sampleValue.getCount() * CLIFF_SAMPLE_COUNT_DROP_MULTIPLIER) {
+                    cliffIndex = i - 1;
+                }
+                previousCountOfValues = sampleValue.getCount();
+
+                Double rateOfTotalValues = sampleValue.getCount() / (double) notNullsCount;
+                if (rateOfTotalValues < 1.0 / checkMiningConfigurationProperties.getMaxExpectedTextsInTopValues() * MIN_RATE_OF_TOP_PROPOSED_VALUE) {
+                    break; // do not add this value, it is too rare, stopping here
+                }
+            }
+
+            if (cliffIndex == null) {
+                // there is no cliff, all most common values are present at the same intervals, cannot apply top values
+                return false;
+            }
+
+            for (int i = 0; i <= cliffIndex && i < checkMiningConfigurationProperties.getMaxExpectedTextsInTopValues(); i++) {
+                ProfilingSampleValue profilingSampleValue = columnDataAssetProfilingResults.getSampleValues().get(i);
+                topExpectedValues.add(profilingSampleValue.getValue().toString());
+            }
+
+            this.parameters.setExpectedValues(topExpectedValues);
+
+            switch (miningParameters.getSeverityLevel()) {
+                case warning: {
+                    this.setWarning(new MaxMissingRule0WarningParametersSpec(0));
+                    break;
+                }
+                case error: {
+                    this.setError(new MaxMissingRule0ErrorParametersSpec(0));
+                    break;
+                }
+                case fatal: {
+                    this.setFatal(new MaxMissingRule2ParametersSpec(0));
+                }
+            }
+
+            return true;
+        }
+
+        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters, columnTypeCategory,
+                checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }
