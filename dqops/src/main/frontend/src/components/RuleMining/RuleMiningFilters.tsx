@@ -127,7 +127,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2"
             tooltipText="Configure a table schema check that ensures that the count of column stays the same as the count of columns detected during data profiling."
-            label="Column count"
+            label="Expected columns count"
             checked={configuration.propose_column_count}
             onChange={(e) =>
               onChangeConfiguration({ propose_column_count: e })
@@ -184,7 +184,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2"
             tooltipText="Validate the values in numeric columns to detect if the values fall within the ranges that were observed during data profiling. DQOps will try to configure the 'min', 'max', 'mean' and 'median' checks."
-            label="Numeric ranges"
+            label="Numeric values ranges"
             checked={configuration.propose_numeric_ranges}
             onChange={(e) =>
               onChangeConfiguration({ propose_numeric_ranges: e })
@@ -220,7 +220,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2"
             tooltipText="Proposes the configuration the categorical values checks 'value_in_set_percent' from the 'accepted_values' category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling."
-            label="Values in set"
+            label="Values in a set (dictionary)"
             checked={configuration.propose_values_in_set_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_values_in_set_checks: e })
@@ -251,6 +251,15 @@ export default function RuleMiningFilters({
             checked={configuration.propose_text_conversion_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_text_conversion_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Propose the default configuration for the patterns check that validate the format of popular text patterns, such as UUIDs, phone numbers, or emails. DQOps will configure these data quality checks when analyzed columns contain enough values matching a standard pattern."
+            label="Standard text patterns"
+            checked={configuration.propose_standard_pattern_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_standard_pattern_checks: e })
             }
           />
           <Checkbox

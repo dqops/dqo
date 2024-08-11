@@ -167,12 +167,6 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeTextConversionChecks = true;
 
     /**
-     * Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
-     */
-    @JsonPropertyDescription("Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")
-    private boolean proposeCustomChecks = true;
-
-    /**
      * Propose the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.")
@@ -183,6 +177,18 @@ public class CheckMiningParametersModel implements Cloneable {
      */
     @JsonPropertyDescription("Propose the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.")
     private boolean proposeDateChecks = true;
+
+    /**
+     * Propose the default configuration for the patterns check that validate the format of popular text patterns, such as UUIDs, phone numbers, or emails. DQOps will configure these data quality checks when analyzed columns contain enough values matching a standard pattern. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Propose the default configuration for the patterns check that validate the format of popular text patterns, such as UUIDs, phone numbers, or emails. DQOps will configure these data quality checks when analyzed columns contain enough values matching a standard pattern. The default value of this parameter is 'true'.")
+    private boolean proposeStandardPatternChecks = true;
+
+    /**
+     * Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")
+    private boolean proposeCustomChecks = true;
 
     /**
      * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).

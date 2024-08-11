@@ -16242,10 +16242,6 @@ definitions:
           \ as boolean, date, float or integer. This type of checks are used to verify\
           \ raw tables in the landing zones. The default value of this parameter is\
           \ 'true'."
-      propose_custom_checks:
-        type: "boolean"
-        description: "Propose the default configuration for custom checks that use\
-          \ built-in data quality rules. The default value of this parameter is 'true'."
       propose_bool_percent_checks:
         type: "boolean"
         description: "Propose the default configuration for the checks that measure\
@@ -16256,6 +16252,17 @@ definitions:
         description: "Propose the default configuration for the date and datetime\
           \ checks that detect invalid dates. The default value of this parameter\
           \ is 'true'."
+      propose_standard_pattern_checks:
+        type: "boolean"
+        description: "Propose the default configuration for the patterns check that\
+          \ validate the format of popular text patterns, such as UUIDs, phone numbers,\
+          \ or emails. DQOps will configure these data quality checks when analyzed\
+          \ columns contain enough values matching a standard pattern. The default\
+          \ value of this parameter is 'true'."
+      propose_custom_checks:
+        type: "boolean"
+        description: "Propose the default configuration for custom checks that use\
+          \ built-in data quality rules. The default value of this parameter is 'true'."
       fail_checks_at_percent_error_rows:
         type: "number"
         format: "double"
@@ -16467,12 +16474,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:

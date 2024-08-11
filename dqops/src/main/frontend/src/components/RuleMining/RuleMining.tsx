@@ -79,6 +79,7 @@ export default function RuleMining({
     propose_values_in_set_checks: true,
     propose_top_values_checks: true,
     propose_text_conversion_checks: true,
+    propose_standard_pattern_checks: true,
     values_in_set_treat_rare_values_as_invalid: true,
     propose_custom_checks: true
   };
