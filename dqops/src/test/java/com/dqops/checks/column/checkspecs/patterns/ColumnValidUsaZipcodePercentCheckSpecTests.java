@@ -44,12 +44,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.ZoneId;
 
 @SpringBootTest
-public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
-    private ColumnValidUsaPhonePercentCheckSpec sut;
+public class ColumnValidUsaZipcodePercentCheckSpecTests extends BaseTest {
+    private ColumnValidUsaZipcodePercentCheckSpec sut;
     private TableSpec tableSpec;
     private ColumnSpec columnSpec;
     private ConnectionSpec connectionSpec;
-    private ColumnValidUsaPhonePercentCheckSpec profilingSut;
+    private ColumnValidUsaZipcodePercentCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
     private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
@@ -59,7 +59,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnValidUsaPhonePercentCheckSpec();
+        this.sut = new ColumnValidUsaZipcodePercentCheckSpec();
         this.profilingSut = this.sut;
         this.tableSpec = TableSpecObjectMother.create("public", "tab");
         this.columnSpec = new ColumnSpec();
@@ -68,7 +68,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
         this.connectionSpec = ConnectionSpecObjectMother.createSampleConnectionSpec(this.tableSpec.getHierarchyId().getConnectionName());
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec());
         this.columnSpec.getProfilingChecks().setPatterns(new ColumnPatternsProfilingChecksSpec());
-        this.columnSpec.getProfilingChecks().getPatterns().setProfileValidUsaPhoneFormatPercent(this.profilingSut);
+        this.columnSpec.getProfilingChecks().getPatterns().setProfileValidUsaZipcodeFormatPercent(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
@@ -79,7 +79,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenValidZipcodePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -96,7 +96,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -113,13 +113,13 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyValidValues_thenProposesCheckSelectedConfiguration() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyValidValues_thenProposesCheckSelectedConfiguration() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("(906)6259999", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("+1 (906) 6259999", 4000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("12345", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("34567-2443", 4000L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
 
@@ -133,12 +133,12 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlySomeValidValues_thenNotProposesCheckBecauseErrorsAlreadyFound() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlySomeValidValues_thenNotProposesCheckBecauseErrorsAlreadyFound() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("(906)6259999", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("12345", 1000L, null));
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("invalid value", 100L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
@@ -152,12 +152,12 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentWithNoProfilingCheckResultAndMaxErrors5PctAndSamplesContainEnoughValidValues_thenProposesCheckSelectedConfiguration() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentWithNoProfilingCheckResultAndMaxErrors5PctAndSamplesContainEnoughValidValues_thenProposesCheckSelectedConfiguration() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("(906)6259999", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("12345", 1000L, null));
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("invalid value", 10L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(5.0);
@@ -172,7 +172,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -194,7 +194,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -214,7 +214,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -235,7 +235,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhoneFormatPercentNoProfilingCheckAndValidSampleValueButColumnTypeNotText_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenValidUsaZipcodeFormatPercentNoProfilingCheckAndValidSampleValueButColumnTypeNotText_thenNotProposesRules() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -253,7 +253,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -274,9 +274,9 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
         Assertions.assertNull(this.sut.getError());
     }
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
-        this.profilingSut = new ColumnValidUsaPhonePercentCheckSpec();
-        this.columnSpec.getProfilingChecks().getPatterns().setProfileValidUsaPhoneFormatPercent(this.profilingSut);
+    void proposeCheckConfiguration_whenValidUsaZipcodePercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
+        this.profilingSut = new ColumnValidUsaZipcodePercentCheckSpec();
+        this.columnSpec.getProfilingChecks().getPatterns().setProfileValidUsaZipcodeFormatPercent(this.profilingSut);
         this.profilingSut.setWarning(new MinPercentRule100WarningParametersSpec(10.0));
         this.profilingSut.setError(new MinPercentRule100ErrorParametersSpec(20.0));
 
@@ -288,7 +288,7 @@ public class ColumnValidUsaPhonePercentCheckSpecTests extends BaseTest {
         this.columnSpec.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().setDaily(new ColumnDailyMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().getDaily().setPatterns(new ColumnPatternsDailyMonitoringChecksSpec());
-        this.columnSpec.getMonitoringChecks().getDaily().getPatterns().setDailyValidUsaPhoneFormatPercent(this.sut);
+        this.columnSpec.getMonitoringChecks().getDaily().getPatterns().setDailyValidUsaZipcodeFormatPercent(this.sut);
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
