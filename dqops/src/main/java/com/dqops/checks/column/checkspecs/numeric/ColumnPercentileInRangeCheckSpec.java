@@ -17,6 +17,7 @@ package com.dqops.checks.column.checkspecs.numeric;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
@@ -212,6 +213,20 @@ public class ColumnPercentileInRangeCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        return false; // not suggested until we capture also multiple percentile values of the column
+        if (!miningParameters.isProposeNumericRanges()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling &&
+                sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        return false; // we are not automatically proposing any rules, because the sum value will change over time
     }
 }
