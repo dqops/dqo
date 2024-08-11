@@ -19155,6 +19155,10 @@
           "type" : "boolean",
           "description" : "Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of this parameter is 'true'."
         },
+        "apply_pii_checks" : {
+          "type" : "boolean",
+          "description" : "Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'."
+        },
         "propose_custom_checks" : {
           "type" : "boolean",
           "description" : "Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'."

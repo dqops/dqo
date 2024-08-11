@@ -191,6 +191,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeWhitespaceChecks = true;
 
     /**
+     * Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.")
+    private boolean applyPiiChecks = true;
+
+    /**
      * Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")

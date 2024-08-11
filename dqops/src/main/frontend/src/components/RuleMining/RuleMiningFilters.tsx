@@ -264,6 +264,24 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
+            tooltipText="Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values."
+            label="Whitespace checks"
+            checked={configuration.propose_whitespace_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_whitespace_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data."
+            label="Apply PII check rules"
+            checked={configuration.apply_pii_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ apply_pii_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
             tooltipText="Custom data quality checks must use DQOps built-in data quality rules, such as max_percent, min_percent or max_count to find invalid values."
             label="Custom checks"
             checked={configuration.propose_custom_checks}
