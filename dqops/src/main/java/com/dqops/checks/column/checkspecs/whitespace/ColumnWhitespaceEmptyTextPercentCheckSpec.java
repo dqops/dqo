@@ -238,7 +238,7 @@ public class ColumnWhitespaceEmptyTextPercentCheckSpec
         }
 
         ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
-        if (sourceProfilingCheck.getActualValue() == null) {
+        if (sourceProfilingCheck.getActualValue() == null && miningParameters.getFailChecksAtPercentErrorRows() > 0.0) {
             if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
                 return false;
             }
@@ -265,7 +265,7 @@ public class ColumnWhitespaceEmptyTextPercentCheckSpec
                     return false;
                 }
 
-                sourceProfilingCheck.setActualValue(percentOfEmptyValuesInSamples); // just fake number like there were no invalid values, to enable a check, even if it fails, we cannot calculate a correct value from the samples
+                sourceProfilingCheck.setActualValue(miningParameters.getFailChecksAtPercentErrorRows()); // just fake number like there were no invalid values, to enable a check, even if it fails, we cannot calculate a correct value from the samples
             }
 
             sourceProfilingCheck.setExecutedAt(Instant.now());
