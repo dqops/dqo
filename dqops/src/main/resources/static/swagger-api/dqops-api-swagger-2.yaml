@@ -16259,6 +16259,13 @@ definitions:
           \ or emails. DQOps will configure these data quality checks when analyzed\
           \ columns contain enough values matching a standard pattern. The default\
           \ value of this parameter is 'true'."
+      propose_whitespace_checks:
+        type: "boolean"
+        description: "Propose the default configuration for the whitespace detection\
+          \ checks. Whitespace checks detect common data quality issues with storing\
+          \ text representations of null values, such as 'null', 'None', 'n/a' and\
+          \ other texts that should be stored as regular NULL values. The default\
+          \ value of this parameter is 'true'."
       propose_custom_checks:
         type: "boolean"
         description: "Propose the default configuration for custom checks that use\

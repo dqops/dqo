@@ -268,7 +268,7 @@ public class ColumnTextParsableToIntegerPercentCheckSpec
                 return false;
             }
 
-            sourceProfilingCheck.setActualValue(100.0); // just fake number like there were no dates, to enable a check, even if it fails, we cannot calculate a correct value from the samples
+            sourceProfilingCheck.setActualValue(100.0); // just fake number like there were no invalid values, to enable a check, even if it fails, we cannot calculate a correct value from the samples
             sourceProfilingCheck.setExecutedAt(Instant.now());
         }
 

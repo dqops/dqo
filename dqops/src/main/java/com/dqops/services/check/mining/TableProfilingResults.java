@@ -139,7 +139,7 @@ public class TableProfilingResults {
      */
     public Long getRowCount() {
         ProfilingCheckResult rowCountCheckResults = this.getTableProfilingResults().getProfilingCheckByCheckName("profile_row_count", false);
-        if (rowCountCheckResults.getActualValue() == null) {
+        if (rowCountCheckResults == null || rowCountCheckResults.getActualValue() == null) {
             return null;
         }
 

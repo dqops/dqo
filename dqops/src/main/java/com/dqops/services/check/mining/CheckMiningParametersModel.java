@@ -185,6 +185,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeStandardPatternChecks = true;
 
     /**
+     * Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of this parameter is 'true'.")
+    private boolean proposeWhitespaceChecks = true;
+
+    /**
      * Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")

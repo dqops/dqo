@@ -30,8 +30,8 @@ import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectM
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.metadata.sources.*;
-import com.dqops.rules.comparison.MaxPercentRule0ErrorParametersSpec;
-import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.CheckModelObjectMother;
 import com.dqops.services.check.mining.*;
@@ -44,12 +44,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.ZoneId;
 
 @SpringBootTest
-public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
-    private ColumnInvalidEmailFormatPercentCheckSpec sut;
+public class ColumnInvalidIp4AddressFormatFoundCheckSpecTests extends BaseTest {
+    private ColumnInvalidIp4AddressFormatFoundCheckSpec sut;
     private TableSpec tableSpec;
     private ColumnSpec columnSpec;
     private ConnectionSpec connectionSpec;
-    private ColumnInvalidEmailFormatPercentCheckSpec profilingSut;
+    private ColumnInvalidIp4AddressFormatFoundCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
     private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
@@ -59,7 +59,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnInvalidEmailFormatPercentCheckSpec();
+        this.sut = new ColumnInvalidIp4AddressFormatFoundCheckSpec();
         this.profilingSut = this.sut;
         this.tableSpec = TableSpecObjectMother.create("public", "tab");
         this.columnSpec = new ColumnSpec();
@@ -68,7 +68,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
         this.connectionSpec = ConnectionSpecObjectMother.createSampleConnectionSpec(this.tableSpec.getHierarchyId().getConnectionName());
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec());
         this.columnSpec.getProfilingChecks().setPatterns(new ColumnPatternsProfilingChecksSpec());
-        this.columnSpec.getProfilingChecks().getPatterns().setProfileInvalidEmailFormatPercent(this.profilingSut);
+        this.columnSpec.getProfilingChecks().getPatterns().setProfileInvalidIp4AddressFormatFound(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
@@ -79,12 +79,13 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.tableProfilingResults.setRowCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -96,12 +97,13 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.tableProfilingResults.setRowCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(5.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -113,14 +115,15 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyValidValues_thenProposesCheckSelectedConfiguration() {
+    void proposeCheckConfiguration_whenInvaliIP4AddressCountWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlyValidValues_thenProposesCheckSelectedConfiguration() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("contact@dqops.com", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("john.smith@company.com", 4000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("1.1.1.1", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("254.254.254.254", 4000L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.tableProfilingResults.setRowCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -129,18 +132,19 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(0L, this.sut.getError().getMaxCount());
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlySomeValidValues_thenNotProposesCheckBecauseErrorsAlreadyFound() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlySomeValidValues_thenNotProposesCheckBecauseErrorsAlreadyFound() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("contact@dqops.com", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("254.254.254.254", 1000L, null));
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("invalid value", 100L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.tableProfilingResults.setRowCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -152,14 +156,15 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentWithNoProfilingCheckResultAndMaxErrors5PctAndSamplesContainEnoughValidValues_thenProposesCheckSelectedConfiguration() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountWithNoProfilingCheckResultAndMaxErrors5PctAndSamplesContainEnoughValidValues_thenProposesCheckSelectedConfiguration() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("contact@dqops.com", 1000L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("254.254.254.254", 1000L, null));
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("invalid value", 10L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
+        this.tableProfilingResults.setRowCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(5.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -168,11 +173,11 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(0L, this.sut.getError().getMaxCount());
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -182,6 +187,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(1.0);
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
+        this.tableProfilingResults.setRowCount(50000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -190,11 +196,11 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(0L, this.sut.getError().getMaxCount());
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -202,8 +208,11 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(this.checkMiningParametersModel.getMaxPercentErrorRowsForPercentChecks() + 1);
-        this.dataAssetProfilingResults.setNotNullsCount(10000L);
+        long notNullCount = 10000L;
+        this.profilingCheckResult.setActualValue(notNullCount * this.checkMiningParametersModel.getMaxPercentErrorRowsForPercentChecks() + 10.0);
+        this.dataAssetProfilingResults.setNotNullsCount(notNullCount);
+        this.tableProfilingResults.setRowCount(50000L);
+
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
@@ -214,7 +223,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -222,26 +231,29 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(this.checkMiningParametersModel.getFailChecksAtPercentErrorRows() + 1);
-        this.dataAssetProfilingResults.setNotNullsCount(10000L);
+        long notNullCount = 10000L;
+        this.profilingCheckResult.setActualValue(notNullCount * this.checkMiningParametersModel.getFailChecksAtPercentErrorRows() + 1);
+        this.dataAssetProfilingResults.setNotNullsCount(notNullCount);
+        this.tableProfilingResults.setRowCount(50000L);
+
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(3.9, this.sut.getError().getMaxPercent());
+        Assertions.assertFalse(proposed);
+        Assertions.assertNull(this.sut.getError());
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentNoProfilingCheckAndValidSampleValueButColumnTypeNotText_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountNoProfilingCheckAndValidSampleValueButColumnTypeNotText_thenNotProposesRules() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue(1.0, 1000L, null));
         this.dataAssetProfilingResults.setNotNullsCount(1001L);
+        this.tableProfilingResults.setRowCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -253,7 +265,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -263,6 +275,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
         this.profilingCheckResult.setActualValue(1.0);
         this.dataAssetProfilingResults.setNotNullsCount(10001L);
+        this.tableProfilingResults.setRowCount(20000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
         this.checkMiningParametersModel.setProposeStandardPatternChecks(false);
 
@@ -274,11 +287,11 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
         Assertions.assertNull(this.sut.getError());
     }
     @Test
-    void proposeCheckConfiguration_whenInvalidEmailFormatPercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
-        this.profilingSut = new ColumnInvalidEmailFormatPercentCheckSpec();
-        this.columnSpec.getProfilingChecks().getPatterns().setProfileInvalidEmailFormatPercent(this.profilingSut);
-        this.profilingSut.setWarning(new MaxPercentRule0WarningParametersSpec(10.0));
-        this.profilingSut.setError(new MaxPercentRule0ErrorParametersSpec(20.0));
+    void proposeCheckConfiguration_whenInvalidIP4AddressCountPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
+        this.profilingSut = new ColumnInvalidIp4AddressFormatFoundCheckSpec();
+        this.columnSpec.getProfilingChecks().getPatterns().setProfileInvalidIp4AddressFormatFound(this.profilingSut);
+        this.profilingSut.setWarning(new MaxCountRule0WarningParametersSpec(10L));
+        this.profilingSut.setError(new MaxCountRule0ErrorParametersSpec(20L));
 
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
@@ -288,12 +301,13 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
         this.columnSpec.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().setDaily(new ColumnDailyMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().getDaily().setPatterns(new ColumnPatternsDailyMonitoringChecksSpec());
-        this.columnSpec.getMonitoringChecks().getDaily().getPatterns().setDailyInvalidEmailFormatPercent(this.sut);
+        this.columnSpec.getMonitoringChecks().getDaily().getPatterns().setDailyInvalidIp4AddressFormatFound(this.sut);
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(80.0);
         this.dataAssetProfilingResults.setNotNullsCount(100000L);
+        this.tableProfilingResults.setRowCount(50000L);
         this.profilingCheckResult.setSeverityLevel(CheckResultStatus.valid);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -302,7 +316,7 @@ public class ColumnInvalidEmailFormatPercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(10.0, this.sut.getWarning().getMaxPercent());
-        Assertions.assertEquals(20.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(10L, this.sut.getWarning().getMaxCount());
+        Assertions.assertEquals(20L, this.sut.getError().getMaxCount());
     }
 }
