@@ -659,7 +659,9 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 String serializedWarningParameters = jsonSerializer.serialize(sourceRuleParameters);
                 Object convertedWarningParameters = jsonSerializer.deserialize(serializedWarningParameters, warningFieldInfo.getClazz());
                 //noinspection unchecked
-                this.setWarning((RWarning) convertedWarningParameters);
+                RWarning convertedWarningParametersCasted = (RWarning) convertedWarningParameters;
+                convertedWarningParametersCasted.setAdditionalProperties(null);
+                this.setWarning(convertedWarningParametersCasted);
                 break;
             }
 
@@ -673,7 +675,9 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 String serializedErrorParameters = jsonSerializer.serialize(sourceRuleParameters);
                 Object convertedErrorParameters = jsonSerializer.deserialize(serializedErrorParameters, errorFieldInfo.getClazz());
                 //noinspection unchecked
-                this.setError((RError) convertedErrorParameters);
+                RError convertedErrorParametersCasted = (RError) convertedErrorParameters;
+                convertedErrorParametersCasted.setAdditionalProperties(null);
+                this.setError(convertedErrorParametersCasted);
                 break;
             }
 
@@ -687,7 +691,9 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 String serializedFatalParameters = jsonSerializer.serialize(sourceRuleParameters);
                 Object convertedFatalParameters = jsonSerializer.deserialize(serializedFatalParameters, fatalFieldInfo.getClazz());
                 //noinspection unchecked
-                this.setFatal((RFatal) convertedFatalParameters);
+                RFatal convertedFatalParametersCasted = (RFatal) convertedFatalParameters;
+                convertedFatalParametersCasted.setAdditionalProperties(null);
+                this.setFatal(convertedFatalParametersCasted);
                 break;
             }
         }

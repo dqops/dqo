@@ -237,11 +237,20 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2"
-            tooltipText="Proposes the configuration the texts_in_top_values check from the 'accepted_values' category. This check find the most common values in a table and ensures that they are the same values that were identified during data profiling."
+            tooltipText="Propose the configuration the texts_in_top_values check from the 'accepted_values' category. This check find the most common values in a table and ensures that they are the same values that were identified during data profiling."
             label="Texts in top values"
             checked={configuration.propose_top_values_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_top_values_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            tooltipText="Proposes the configuration the data type conversion checks that verify if text values can be converted to more specific data types such as boolean, date, float or integer. This type of checks are used to verify raw tables in the landing zones."
+            label="Texts parsable to data types"
+            checked={configuration.propose_text_conversion_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_text_conversion_checks: e })
             }
           />
           <Checkbox

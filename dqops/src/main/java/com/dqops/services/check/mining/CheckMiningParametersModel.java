@@ -83,39 +83,39 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeDefaultChecks = true;
 
     /**
-     * Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
+     * Propose the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")
     private boolean proposeMinimumRowCount = true;
 
     /**
-     * Proposes the default configuration of the column count check. The default value of this parameter is 'true'.
+     * Propose the default configuration of the column count check. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration of the column count check. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration of the column count check. The default value of this parameter is 'true'.")
     private boolean proposeColumnCount = true;
 
     /**
-     * Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.
+     * Propose the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.")
     private boolean proposeTimelinessChecks = true;
 
     /**
-     * Proposes the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.
+     * Propose the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'.")
     private boolean proposeNullsChecks = true;
 
     /**
-     * Proposes the default configuration the not-null checks that validate scale of not-nulls (require some null values, and require some not-null values). The default value of this parameter is 'false'.
+     * Propose the default configuration the not-null checks that validate scale of not-nulls (require some null values, and require some not-null values). The default value of this parameter is 'false'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the not-null checks that validate scale of not-nulls (require a mix of some not-null and null values).The default value of this parameter is 'false'.")
+    @JsonPropertyDescription("Propose the default configuration the not-null checks that validate scale of not-nulls (require a mix of some not-null and null values).The default value of this parameter is 'false'.")
     private boolean proposeNotNullsChecks = true;
 
     /**
-     * Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.
+     * Propose the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'.")
     private boolean proposeTextValuesDataType = true;
 
     /**
@@ -125,27 +125,27 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeColumnExists = true;
 
     /**
-     * Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.
+     * Propose the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.")
     private boolean proposeUniquenessChecks = true;
 
     /**
-     * Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.
+     * Propose the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.")
     private boolean proposeNumericRanges = true;
 
     /**
-     * Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.
+     * Propose the default configuration of the text length checks. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration of the text length checks. The default value of this parameter is 'true'.")
     private boolean proposeTextLengthRanges = true;
 
     /**
-     * Proposes the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.
+     * Propose the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.")
     private boolean proposeValuesInSetChecks = true;
 
     /**
@@ -157,25 +157,31 @@ public class CheckMiningParametersModel implements Cloneable {
     /**
      * Proposes the configuration the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the configuration the text values in the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the configuration the text values in the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'.")
     private boolean proposeTopValuesChecks = true;
 
     /**
-     * Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
+     * Propose the configuration the data type conversion checks that verify if text values can be converted to more specific data types such as boolean, date, float or integer. This type of checks are used to verify raw tables in the landing zones. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the configuration the data type conversion checks that verify if text values can be converted to more specific data types such as boolean, date, float or integer. This type of checks are used to verify raw tables in the landing zones. The default value of this parameter is 'true'.")
+    private boolean proposeTextConversionChecks = true;
+
+    /**
+     * Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'.")
     private boolean proposeCustomChecks = true;
 
     /**
-     * Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.
+     * Propose the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'.")
     private boolean proposeBoolPercentChecks = true;
 
     /**
-     * Proposes the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.
+     * Propose the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Proposes the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Propose the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'.")
     private boolean proposeDateChecks = true;
 
     /**

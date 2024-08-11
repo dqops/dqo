@@ -19085,27 +19085,27 @@
         },
         "propose_minimum_row_count" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'."
         },
         "propose_column_count" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration of the column count check. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration of the column count check. The default value of this parameter is 'true'."
         },
         "propose_timeliness_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'."
         },
         "propose_nulls_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration the null checks that verify that there are no null values. The default value of this parameter is 'true'."
         },
         "propose_not_nulls_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration the not-null checks that validate scale of not-nulls (require a mix of some not-null and null values).The default value of this parameter is 'false'."
+          "description" : "Propose the default configuration the not-null checks that validate scale of not-nulls (require a mix of some not-null and null values).The default value of this parameter is 'false'."
         },
         "propose_text_values_data_type" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration the detected data type of values in a text column check, when text columns contain an uniform type such as integers or dates. The default value of this parameter is 'true'."
         },
         "propose_column_exists" : {
           "type" : "boolean",
@@ -19113,19 +19113,19 @@
         },
         "propose_uniqueness_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'."
         },
         "propose_numeric_ranges" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'."
         },
         "propose_text_length_ranges" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration of the text length checks. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration of the text length checks. The default value of this parameter is 'true'."
         },
         "propose_values_in_set_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'."
+          "description" : "Propose the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'."
         },
         "values_in_set_treat_rare_values_as_invalid" : {
           "type" : "boolean",
@@ -19133,19 +19133,23 @@
         },
         "propose_top_values_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the configuration the text values in the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'."
+          "description" : "Propose the configuration the text values in the top values checks from the accepted values category. These checks find the most common values in a table and ensure that they are the same values that were identified during data profiling. The default value of this parameter is 'true'."
+        },
+        "propose_text_conversion_checks" : {
+          "type" : "boolean",
+          "description" : "Propose the configuration the data type conversion checks that verify if text values can be converted to more specific data types such as boolean, date, float or integer. This type of checks are used to verify raw tables in the landing zones. The default value of this parameter is 'true'."
         },
         "propose_custom_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration for custom checks that use built-in data quality rules. The default value of this parameter is 'true'."
         },
         "propose_bool_percent_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration for the checks that measure the percentage of boolean values. The default value of this parameter is 'true'."
         },
         "propose_date_checks" : {
           "type" : "boolean",
-          "description" : "Proposes the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'."
+          "description" : "Propose the default configuration for the date and datetime checks that detect invalid dates. The default value of this parameter is 'true'."
         },
         "fail_checks_at_percent_error_rows" : {
           "type" : "number",
