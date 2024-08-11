@@ -259,6 +259,10 @@ public class ColumnTextParsableToBooleanPercentCheckSpec
             }
 
             Double percentOfValidValues = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                if (!(value instanceof String)) {
+                    return false;
+                }
+
                 String lowerCaseName = value.toString().toLowerCase(Locale.ENGLISH);
                 return BOOLEAN_TEXTS.contains(lowerCaseName);
             });
