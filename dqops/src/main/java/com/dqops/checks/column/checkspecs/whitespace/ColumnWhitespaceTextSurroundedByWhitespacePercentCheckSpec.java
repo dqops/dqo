@@ -18,9 +18,11 @@ package com.dqops.checks.column.checkspecs.whitespace;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
+import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
@@ -30,6 +32,8 @@ import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.whitespace.ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
+import com.dqops.statistics.column.text.ColumnTextTextMinLengthStatisticsCollectorSpec;
+import com.dqops.utils.conversion.NumericTypeConverter;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,6 +44,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -217,6 +223,45 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (!miningParameters.isProposeWhitespaceChecks()) {
             return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        if (sourceProfilingCheck.getActualValue() == null && miningParameters.getFailChecksAtPercentErrorRows() > 0.0) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
+            Double percentOfTextsSurroundedWithWhitespaceInSamples = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                if (!(value instanceof String)) {
+                    return false;
+                }
+
+                return value.toString().length() != value.toString().trim().length();
+            });
+
+            if (percentOfTextsSurroundedWithWhitespaceInSamples == null || percentOfTextsSurroundedWithWhitespaceInSamples == 0.0) {
+                return false;
+            }
+
+            sourceProfilingCheck.setActualValue(miningParameters.getFailChecksAtPercentErrorRows()); // just fake number like there were no invalid values, to enable a check, even if it fails, we cannot calculate a correct value from the samples
+            sourceProfilingCheck.setExecutedAt(Instant.now());
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && sourceProfilingCheck.getActualValue() > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
+            return false; // do not configure this check, when the value was captured and there are too many future values
         }
 
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
