@@ -44,12 +44,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.ZoneId;
 
 @SpringBootTest
-public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests extends BaseTest {
-    private ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec sut;
+public class ColumnWhitespaceWhitespaceTextPercentCheckSpecTests extends BaseTest {
+    private ColumnWhitespaceWhitespaceTextPercentCheckSpec sut;
     private TableSpec tableSpec;
     private ColumnSpec columnSpec;
     private ConnectionSpec connectionSpec;
-    private ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec profilingSut;
+    private ColumnWhitespaceWhitespaceTextPercentCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
     private ColumnDataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
@@ -59,7 +59,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec();
+        this.sut = new ColumnWhitespaceWhitespaceTextPercentCheckSpec();
         this.profilingSut = this.sut;
         this.tableSpec = TableSpecObjectMother.create("public", "tab");
         this.columnSpec = new ColumnSpec();
@@ -68,7 +68,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
         this.connectionSpec = ConnectionSpecObjectMother.createSampleConnectionSpec(this.tableSpec.getHierarchyId().getConnectionName());
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec());
         this.columnSpec.getProfilingChecks().setWhitespace(new ColumnWhitespaceProfilingChecksSpec());
-        this.columnSpec.getProfilingChecks().getWhitespace().setProfileTextSurroundedByWhitespacePercent(this.profilingSut);
+        this.columnSpec.getProfilingChecks().getWhitespace().setProfileWhitespaceTextPercent(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.dataAssetProfilingResults = new ColumnDataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
@@ -79,7 +79,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -96,7 +96,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentWithNoProfilingCheckResultAndAcceptsAboveZeroErrorsErrorsAndNoSamples_thenNotProposesCheckBecauseNoSamples() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -113,7 +113,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentWithNoProfilingCheckResultAndNoMinTextLengthStatisticsAndMaxErrors0PctAndSamplesContainOnlyValidValues_thenNotProposesCheck() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentWithNoProfilingCheckResultAndNoMinTextLengthStatisticsAndMaxErrors0PctAndSamplesContainOnlyValidValues_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -132,13 +132,13 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_wheTextSurroundedByWhitespacePercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlySomeInvalidValues_thenNotProposesCheckBecauseErrorsAlreadyFound() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentWithNoProfilingCheckResultAndMaxErrors0PctAndSamplesContainOnlySomeInvalidValues_thenNotProposesCheckBecauseErrorsAlreadyFound() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("contact@dqops.com", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("info@dqops.com ", 100L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("  ", 100L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(0.0);
 
@@ -151,13 +151,13 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentWithNoProfilingCheckResultAndMaxErrors5PctAndSamplesContainSomeEmptyValues_thenProposesCheckSelectedConfiguration() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentWithNoProfilingCheckResultAndMaxErrors5PctAndSamplesContainSomeEmptyValues_thenProposesCheckSelectedConfiguration() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(null);
         this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("contact@dqops.com", 1000L, null));
-        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("hello space ", 10L, null));
+        this.dataAssetProfilingResults.getSampleValues().add(new ProfilingSampleValue("  ", 10L, null));
         this.dataAssetProfilingResults.setNotNullsCount(5000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(5.0);
 
@@ -171,7 +171,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -193,7 +193,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAccepted_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -213,7 +213,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentPresentFromProfilingCheckThatHasNoRulesAndPercentBelowMaxPercentErrorsAcceptedButAboveMaxExpectedError_thenProposesRulesWithMaxPercentToFit() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -234,7 +234,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentNoProfilingCheckAndValidSampleValueButColumnTypeNotText_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentNoProfilingCheckAndValidSampleValueButColumnTypeNotText_thenNotProposesRules() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -252,7 +252,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
     }
 
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
+    void proposeCheckConfiguration_whenWhitespaceTextPercentPresentFromProfilingCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -273,9 +273,9 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
         Assertions.assertNull(this.sut.getError());
     }
     @Test
-    void proposeCheckConfiguration_whenTextSurroundedByWhitespacePercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
-        this.profilingSut = new ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec();
-        this.columnSpec.getProfilingChecks().getWhitespace().setProfileTextSurroundedByWhitespacePercent(this.profilingSut);
+    void proposeCheckConfiguration_whenWhitespaceTextPercentPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
+        this.profilingSut = new ColumnWhitespaceWhitespaceTextPercentCheckSpec();
+        this.columnSpec.getProfilingChecks().getWhitespace().setProfileWhitespaceTextPercent(this.profilingSut);
         this.profilingSut.setWarning(new MaxPercentRule0WarningParametersSpec(10.0));
         this.profilingSut.setError(new MaxPercentRule0ErrorParametersSpec(20.0));
 
@@ -287,7 +287,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpecTests ext
         this.columnSpec.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().setDaily(new ColumnDailyMonitoringCheckCategoriesSpec());
         this.columnSpec.getMonitoringChecks().getDaily().setWhitespace(new ColumnWhitespaceDailyMonitoringChecksSpec());
-        this.columnSpec.getMonitoringChecks().getDaily().getWhitespace().setDailyTextSurroundedByWhitespacePercent(this.sut);
+        this.columnSpec.getMonitoringChecks().getDaily().getWhitespace().setDailyWhitespaceTextPercent(this.sut);
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
