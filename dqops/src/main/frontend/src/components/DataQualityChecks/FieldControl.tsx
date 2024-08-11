@@ -199,7 +199,7 @@ const FieldControl = ({
           }
           tooltipText={tooltip}
           triggerClassName={clsx(
-            '!h-8 !text-xs !min-w-30 !max-w-30 ',
+            '!h-8 !text-xs !min-w-30 !max-w-30 !bg-white',
             className ? className : '!min-w-30 !max-w-30'
           )}
           menuClassName="!top-13"
