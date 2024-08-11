@@ -164,7 +164,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishJobRunningEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+            log.error("publishJobRunningEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -181,7 +181,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishJobParkedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+            log.error("publishJobParkedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -217,7 +217,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishJobSucceededEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+            log.error("publishJobSucceededEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -235,7 +235,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishJobFailedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+            log.error("publishJobFailedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -253,7 +253,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishJobCancellationRequestedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+            log.error("publishJobCancellationRequestedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -271,7 +271,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishJobFullyCancelledEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+            log.error("publishJobFullyCancelledEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -296,7 +296,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(synchronizationStatus), emitFailureHandler);
         }
         catch (Exception ex) {
-            log.error("publishFolderSynchronizationStatus failed, error: " + ex.getMessage());
+            log.error("publishFolderSynchronizationStatus failed, error: " + ex.getMessage(), ex);
         }
     }
 
@@ -457,7 +457,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
         catch (Exception ex) {
             log.error("onJobChange failed" + ((changeNotificationEntry.getJobChange() != null) ?
-                    "for job:" + changeNotificationEntry.getJobChange().getJobId() : "") + ", error: " + ex.getMessage());
+                    " for job:" + changeNotificationEntry.getJobChange().getJobId() : "") + ", error: " + ex.getMessage(), ex);
         }
     }
 
@@ -509,6 +509,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         // clean up old jobs
         List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
+                .filter(e -> e.getValue() != null)
                 .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobsHistoryThresholdTimestamp) < 1)
                 .filter(e -> e.getValue().getStatus() == DqoJobStatus.finished ||
                         e.getValue().getStatus() == DqoJobStatus.failed ||
@@ -535,6 +536,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
         List<Long> oldChangeIdsToDelete = this.jobChanges.entrySet()
                 .stream()
+                .filter(e -> e.getValue() != null)
                 .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobChangesThresholdTimestamp) < 1)
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
