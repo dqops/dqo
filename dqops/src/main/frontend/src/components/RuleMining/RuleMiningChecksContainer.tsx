@@ -196,26 +196,32 @@ const RuleMiningChecksContainer = ({
         minWidth: '100%'
       }}
     >
-      <table className="w-full">
+      <table className="w-full ">
         <RuleMiningChecksContainerHeader
           ruleParamenterConfigured={!!ruleParametersConfigured}
         />
         {checksUI?.table_checks?.categories &&
           checksUI?.table_checks?.categories?.length > 0 && (
-            <div
-              onClick={() => onChangeIsExtended('Table level checks')}
-              className="w-full flex items-center gap-x-3 font-bold text-md py-4 pl-4"
-            >
-              <SvgIcon
-                name={
-                  !isExtendedArray.includes('Table level checks')
-                    ? 'chevron-right'
-                    : 'chevron-down'
-                }
-                className="w-5 h-5 text-gray-700"
-              />
-              Table level checks
-            </div>
+            <tbody>
+              <tr
+                onClick={() => onChangeIsExtended('Table level checks')}
+                className=" cursor-pointer"
+              >
+                <td colSpan={100} className="w-full">
+                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-50">
+                    <SvgIcon
+                      name={
+                        !isExtendedArray.includes('Table level checks')
+                          ? 'chevron-right'
+                          : 'chevron-down'
+                      }
+                      className="w-5 h-5 text-gray-700"
+                    />
+                    <span>Table level checks</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           )}
         {(checksUI?.table_checks?.categories ?? []).map((category, index) => (
           <tbody key={index}>
@@ -244,27 +250,35 @@ const RuleMiningChecksContainer = ({
           </tbody>
         ))}
         {Object.entries(checksUI?.column_checks ?? {}).length > 0 && (
-          <tr className="w-full flex items-center gap-x-3 font-bold text-md py-4 pl-4">
-            Column level checks
+          <tr className="w-full">
+            <td colSpan={100} className="w-full ">
+              <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-50">
+                Column level checks
+              </div>
+            </td>
           </tr>
         )}
         {Object.entries(checksUI?.column_checks ?? {}).map(
           ([key, category], index) => (
             <tbody key={index}>
-              <div
-                className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4"
+              <tr
                 onClick={() => onChangeIsExtended(key)}
+                className=" cursor-pointer"
               >
-                <SvgIcon
-                  name={
-                    !isExtendedArray.includes(key)
-                      ? 'chevron-right'
-                      : 'chevron-down'
-                  }
-                  className="w-5 h-5 text-gray-700"
-                />
-                {key} {`(${getConfiguredChecksCount(category)})`}
-              </div>
+                <td colSpan={100} className="w-full">
+                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-50">
+                    <SvgIcon
+                      name={
+                        !isExtendedArray.includes(key)
+                          ? 'chevron-right'
+                          : 'chevron-down'
+                      }
+                      className="w-5 h-5 text-gray-700"
+                    />
+                    {key} {`(${getConfiguredChecksCount(category)})`}
+                  </div>
+                </td>
+              </tr>
               {isExtendedArray.includes(key) &&
                 category?.categories?.map((x, jindex) => (
                   <RuleMiningChecksContainerCategory
