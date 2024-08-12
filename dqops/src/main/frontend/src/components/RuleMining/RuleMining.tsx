@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckMiningParametersModel,
-  CheckMiningProposalModel
+  CheckMiningProposalModel,
+  CheckSearchFilters
 } from '../../api';
+import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setJobAllert } from '../../redux/actions/job.actions';
+import { setJobAllert, toggleMenu } from '../../redux/actions/job.actions';
 import { setRuleParametersConfigured } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
@@ -14,6 +16,7 @@ import { CheckTypes } from '../../shared/routes';
 import { getRuleParametersConfigured, useDecodedParams } from '../../utils';
 import Tabs from '../Tabs';
 import RuleMiningChecksContainer from './RuleMiningChecksContainer';
+import RuleMiningConfirmDialog from './RuleMiningConfirmDialog';
 import RuleMiningFilters from './RuleMiningFilters';
 const tabs = [
   {
@@ -87,16 +90,21 @@ export default function RuleMining({
     values_in_set_treat_rare_values_as_invalid: true,
     propose_custom_checks: true
   };
+  const { runPartitionedChecks } = useTree();
 
   const [configuration, setConfiguration] =
     useState<CheckMiningParametersModel>({
       ...defaultParameters,
       ...(getRuleMiningConfigurationLocalStorage() ?? {})
     });
+  const [runChecksDialogOpened, setRunChecksDialogOpened] = useState(false);
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [runChecksJobTemplate, setRunChecksJobTemplate] = useState<
+    CheckSearchFilters | undefined
+  >({});
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const dispatch = useActionDispatch();
@@ -112,7 +120,14 @@ export default function RuleMining({
     setIsUpdated(true);
   };
 
-  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const { userProfile, isOpen } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const toggleOpen = () => {
+    if (!isOpen) {
+      dispatch(toggleMenu(true));
+    }
+  };
 
   const proposeChecks = async () => {
     const addPrefix = (key: string) => {
@@ -199,6 +214,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
+            setRunChecksJobTemplate(response.data.run_checks_job);
             getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
@@ -215,6 +231,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
+            setRunChecksJobTemplate(response.data.run_checks_job);
             getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
@@ -231,6 +248,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
+            setRunChecksJobTemplate(response.data.run_checks_job);
             getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
@@ -250,7 +268,7 @@ export default function RuleMining({
           table,
           checksUI
         ).then(() => {
-          proposeChecks();
+          setRunChecksDialogOpened(true);
         });
         break;
       case CheckTypes.PARTITIONED:
@@ -261,7 +279,7 @@ export default function RuleMining({
           timePartitioned ?? 'daily',
           checksUI
         ).then(() => {
-          proposeChecks();
+          setRunChecksDialogOpened(true);
         });
         break;
       case CheckTypes.MONITORING:
@@ -272,12 +290,12 @@ export default function RuleMining({
           timePartitioned ?? 'daily',
           checksUI
         ).then(() => {
-          proposeChecks();
+          setRunChecksDialogOpened(true);
         });
     }
-
     setIsUpdated(false);
   };
+
   useEffect(() => {
     proposeChecks();
   }, [checkTypes, connection, schema, table, timePartitioned]);
@@ -326,6 +344,23 @@ export default function RuleMining({
           setTimePartitioned={setTimePartitioned}
         />
       )}
+      <RuleMiningConfirmDialog
+        open={runChecksDialogOpened}
+        onClose={() => {
+          proposeChecks();
+          setRunChecksDialogOpened(false);
+        }}
+        message="Do you want to run the checks?"
+        onConfirm={() => {
+          setRunChecksDialogOpened(false);
+          runPartitionedChecks({
+            check_search_filters: runChecksJobTemplate
+          }).then(() => {
+            proposeChecks();
+          });
+          toggleOpen();
+        }}
+      />
     </div>
   );
 }
