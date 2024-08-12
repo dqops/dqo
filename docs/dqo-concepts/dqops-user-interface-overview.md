@@ -201,11 +201,11 @@ last 15 days (including today) in brackets. The connections with new incidents a
 ### **Configuration tree view**
 
 In the **Configuration** section, the tree view displays a list of all built-in data quality **Sensors**, **Rules** and 
-**Data quality checks** that can be customized. 
+**Data quality checks** that can be customized. Go to the working with DQOps section, to learn how to [create custom data quality checks](../working-with-dqo/creating-custom-data-quality-checks.md). 
 
 The tree view in this section also provides access to the configuration of the following:
 
-- **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
+- **Default checks configuration:** This allows you to configure default data quality checks patterns that are automatically activated after importing new tables. [Learn how to configure check patterns](data-observability.md#configuring-check-patterns-in-ui).
 - **Manage users:** This allows you to add new users and manage their roles.
 - **Default schedules:** This allows you to [configure schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) that are automatically set after importing new tables.
 - **Default notifications:** This allows you to [configure webhooks](../integrations/webhooks/index.md).
