@@ -309,6 +309,27 @@ const CheckDetails = ({
     refetch(value, filters.dataGroup);
   };
 
+  const createDownloadLink = () => {
+    const queryFilters = [];
+    
+    const { startDate, endDate } = calculateDateRange(filters.month);
+
+    filters.dataGroup !== undefined  && queryFilters.push(`dataGroup=${filters.dataGroup}`)
+    startDate !== undefined          && queryFilters.push(`monthStart=${startDate}`)
+    endDate !== undefined            && queryFilters.push(`monthEnd=${endDate}`)
+    checkName !== undefined          && queryFilters.push(`checkName=${checkName}`)
+    category !== undefined           && queryFilters.push(`category=${category}`)
+
+    const queryString = `?` + queryFilters.join('&');
+
+    return `/api/connections/${connection}/schemas/${schema}/tables/${table}`
+      + (column !== undefined && `/columns/${column}`)
+      + `/${checkTypes}`
+      + (timeScale !== undefined && `/${timeScale}`)
+      + `/errorsamples/download`
+      + queryString
+  };
+
   const refetch = (month: string, name?: string) => {
     fetchCheckErrors(month, name);
     fetchCheckResults(month, name);
@@ -424,6 +445,7 @@ const CheckDetails = ({
               month={filters.month}
               onChangeMonth={onChangeMonth}
               onChangeDataGroup={onChangeDataGroup}
+              downloadLink={createDownloadLink()}
             />
           )}
         </div>
