@@ -205,6 +205,8 @@ export default function RuleMining({
             if (runChecks) {
               runPartitionedChecks({
                 check_search_filters: response.data.run_checks_job
+              }).then(() => {
+                proposeChecks();
               });
             }
             getShouldUserCollectStatisitcs(response.data);
@@ -226,6 +228,8 @@ export default function RuleMining({
             if (runChecks) {
               runPartitionedChecks({
                 check_search_filters: response.data.run_checks_job
+              }).then(() => {
+                proposeChecks();
               });
             }
             getShouldUserCollectStatisitcs(response.data);
@@ -247,6 +251,8 @@ export default function RuleMining({
             if (runChecks) {
               runPartitionedChecks({
                 check_search_filters: response.data.run_checks_job
+              }).then(() => {
+                proposeChecks();
               });
             }
             getShouldUserCollectStatisitcs(response.data);
