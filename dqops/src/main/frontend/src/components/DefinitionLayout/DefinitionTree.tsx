@@ -19,7 +19,6 @@ import {
   toggleFirstLevelFolder
 } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
-import { ROUTES } from '../../shared/routes';
 import { urlencodeEncoder } from '../../utils';
 import SvgIcon from '../SvgIcon';
 import DataQualityContextMenu from './DataQualityContextMenu';
@@ -474,7 +473,12 @@ export const DefinitionTree = () => {
                     <div
                       className={clsx(
                         'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
-                        activeTab === ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(x)
+                        x.includes('Column') &&
+                          activeTab?.includes('default-check/column')
+                          ? 'bg-gray-300'
+                          : '',
+                        x.includes('Table') &&
+                          activeTab?.includes('default-check/table')
                           ? 'bg-gray-300'
                           : ''
                         // check.custom ? 'font-bold' : '',

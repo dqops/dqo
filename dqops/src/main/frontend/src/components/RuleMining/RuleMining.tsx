@@ -26,10 +26,11 @@ const tabs = [
   }
 ];
 
-const getRuleMiningConfigurationLocalStorage = () : CheckMiningParametersModel => {
-  const configuration = localStorage.getItem('ruleMiningConfiguration');
-  return configuration ? JSON.parse(configuration) : null;
-};
+const getRuleMiningConfigurationLocalStorage =
+  (): CheckMiningParametersModel => {
+    const configuration = localStorage.getItem('ruleMiningConfiguration');
+    return configuration ? JSON.parse(configuration) : null;
+  };
 const setRuleMiningConfigurationLocalStorage = (
   configuration: CheckMiningParametersModel
 ) => {
@@ -57,7 +58,7 @@ export default function RuleMining({
     table: string;
   } = useDecodedParams();
 
-  const defaultParameters : CheckMiningParametersModel =  {
+  const defaultParameters: CheckMiningParametersModel = {
     severity_level: 'error',
     fail_checks_at_percent_error_rows: 2.0,
     copy_failed_profiling_checks: false,
@@ -87,12 +88,10 @@ export default function RuleMining({
   };
 
   const [configuration, setConfiguration] =
-      useState<CheckMiningParametersModel>(
-        {
-          ...defaultParameters,
-          ...(getRuleMiningConfigurationLocalStorage() ?? {})
-        }
-    );
+    useState<CheckMiningParametersModel>({
+      ...defaultParameters,
+      ...(getRuleMiningConfigurationLocalStorage() ?? {})
+    });
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
@@ -113,6 +112,7 @@ export default function RuleMining({
   };
 
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const proposeChecks = async () => {
     const addPrefix = (key: string) => {
       if (key.includes('*') || key.length === 0) {
@@ -125,7 +125,14 @@ export default function RuleMining({
     const getRuleParametersConfiguredChecks = (
       checks: CheckMiningProposalModel
     ) => {
-      setChecksUI(checks);
+      const sortedColumns = Object.keys(checks.column_checks ?? {})
+        .sort()
+        .reduce((sortedObj, key) => {
+          if (!checks.column_checks) return {};
+          (sortedObj as any)[key] = checks.column_checks[key];
+          return sortedObj;
+        }, {});
+      setChecksUI({ ...checks, column_checks: sortedColumns });
       const tableChecksChecked = getRuleParametersConfigured(
         checks.table_checks
       );
@@ -215,7 +222,7 @@ export default function RuleMining({
           });
         break;
       case CheckTypes.MONITORING:
-        await RuleMiningApiClient.proposeTablePartitionedChecks(
+        await RuleMiningApiClient.proposeTableMonitoringChecks(
           connection,
           schema,
           table,
