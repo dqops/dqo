@@ -8,7 +8,7 @@ This guide introduces the concept of DQOps user interface, how the screen is org
 
 The DQOps web interface is divided into three main areas.
 
-![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview3.png){ loading=lazy; width="1200px" }
+![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview4.png){ loading=lazy; width="1200px" }
 
 1. The [navigation bar](#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
@@ -200,16 +200,19 @@ last 15 days (including today) in brackets. The connections with new incidents a
 
 ### **Configuration tree view**
 
-In the **Configuration** section, the tree view displays a list of all built-in data quality sensors, rules and data 
-quality checks that can be customized. The tree view in this section also provides access to the configuration of the following:
+In the **Configuration** section, the tree view displays a list of all built-in data quality **Sensors**, **Rules** and 
+**Data quality checks** that can be customized. 
+
+The tree view in this section also provides access to the configuration of the following:
 
 - **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
 - **Manage users:** This allows you to add new users and manage their roles.
 - **Default schedules:** This allows you to [configure schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) that are automatically set after importing new tables.
-- **Defaults webhooks:** This allows you to [configure webhooks](../integrations/webhooks/index.md).
-- **Shared credentials:** This allows you to add and manage shared credentials.
+- **Default notifications:** This allows you to [configure webhooks](../integrations/webhooks/index.md).
+- **Shared credentials:** This allows you to add and manage [shared credentials](configuring-data-sources.md#using-shared-credentials).
+- **Data dictionaries:** This allows you to add and manage [dictionaries](configuring-data-quality-checks-and-rules.md#referencing-data-dictionaries).
 
-![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration.png)
+![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration2.png)
 
 ## Main workspace
 
