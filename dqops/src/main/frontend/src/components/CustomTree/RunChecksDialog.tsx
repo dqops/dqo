@@ -24,6 +24,7 @@ import SectionWrapper from '../Dashboard/SectionWrapper';
 import Input from '../Input';
 import SelectInput from '../SelectInput';
 import SvgIcon from '../SvgIcon';
+
 type TRunChecksDialogProps = {
   checkType: CheckTypes;
   onClick: (
@@ -100,13 +101,17 @@ export default function RunChecksDialog({
       : true;
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-300 p-4">
-      <DialogHeader className="font-bold text-center justify-center">
+    <Dialog
+      open={open}
+      handler={onClose}
+      className="min-w-300 p-4 max-h-[96vh] overflow-y-auto"
+    >
+      <DialogHeader className="font-bold text-center justify-center !py-2">
         Run checks
       </DialogHeader>
-      <DialogBody className="text-sm flex flex-col mb-20">
+      <DialogBody className="text-sm flex flex-col overflow-y-auto">
         {checkType === CheckTypes.PARTITIONED && (
-          <div className="flex justify-between border-b pb-4 border-gray-300 text-black  ">
+          <div className="flex justify-between border-b pb-4 border-gray-300 text-black">
             <div className="w-[45%] ml-2">
               From
               <Input
@@ -142,7 +147,7 @@ export default function RunChecksDialog({
             <div></div>
           </div>
         )}
-        <div className="flex justify-between border-b py-4 border-gray-300 text-black  ">
+        <div className="flex justify-between border-b py-4 border-gray-300 text-black">
           <div className="w-[45%] ml-2">
             Connection
             <Input
@@ -165,7 +170,7 @@ export default function RunChecksDialog({
           </div>
           <div></div>
         </div>
-        <div className="flex justify-between py-4 text-black   items-center">
+        <div className="flex justify-between py-4 text-black items-center">
           <div className="w-1/3 ml-2">
             Column name
             <Input
@@ -209,7 +214,7 @@ export default function RunChecksDialog({
             svgIcon={true}
             className="cursor-default"
           >
-            <div className="flex justify-between py-4 text-black  ">
+            <div className="flex justify-between py-4 text-black">
               <div className="w-1/4 ml-2">
                 Check target
                 <SelectInput
@@ -268,7 +273,7 @@ export default function RunChecksDialog({
                 />
               </div>
             </div>
-            <div className="flex justify-between pt-4 text-black  ">
+            <div className="flex justify-between pt-4 text-black">
               <div className="w-1/3 ml-2">
                 Check name
                 <Input
@@ -300,13 +305,14 @@ export default function RunChecksDialog({
                 />
               </div>
             </div>
-            <div className="flex justify-between pt-4 text-black  ">
+            <div className="flex justify-between pt-4 text-black">
               <LabelsView
                 labels={filters.labels ?? []}
                 onChange={(labels: string[]) =>
                   onChangeFilters({ labels: labels })
                 }
                 titleClassName="font-normal"
+                className="!px-2"
               />
               <LabelsView
                 labels={filters.tags ?? []}
@@ -318,7 +324,7 @@ export default function RunChecksDialog({
           </SectionWrapper>
         )}
       </DialogBody>
-      <DialogFooter className="flex gap-6 items-center absolute bottom-5 right-5">
+      <DialogFooter className="flex gap-6 items-center">
         <Button
           color="primary"
           variant="outlined"
