@@ -222,7 +222,7 @@ export default function RuleMining({
           });
         break;
       case CheckTypes.MONITORING:
-        await RuleMiningApiClient.proposeTablePartitionedChecks(
+        await RuleMiningApiClient.proposeTableMonitoringChecks(
           connection,
           schema,
           table,
