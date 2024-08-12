@@ -28,6 +28,11 @@ public class ErrorSamplesCsvCreatorImpl implements ErrorSamplesCsvCreator {
         return Flux.concat(header, rows);
     }
 
+    /**
+     * Creates a CSV row formed from the ErrorSampleEntryModel.
+     * @param errorSampleEntryModel An ErrorSampleEntryModel.
+     * @return CSV row formed from ErrorSampleEntryModel.
+     */
     private String createCsvRow(ErrorSampleEntryModel errorSampleEntryModel){
         List<String> row = new ArrayList<>();
         row.add(errorSampleEntryModel.getSampleIndex().toString());
@@ -45,10 +50,19 @@ public class ErrorSamplesCsvCreatorImpl implements ErrorSamplesCsvCreator {
         return csvRow;
     }
 
+    /**
+     * Quotes the string value for the CSV, double-quoting all quotes of the string.
+     * @param value The input string.
+     * @return Quoted string.
+     */
     private String quoteValue(String value){
         return "\"" + value.replace("\"", "\"\"") + "\"";
     }
 
+    /**
+     * Creates a CSV header row.
+     * @return CSV header row.
+     */
     private String createCsvHeader() {
         List<String> header = new ArrayList<>();
         header.add("Sample Index");
