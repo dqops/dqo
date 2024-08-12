@@ -59,7 +59,9 @@ const RuleMiningChecksContainer = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
-  const [isExtendedArray, setIsExtendedArray] = useState<string[]>([]);
+  const [isExtendedArray, setIsExtendedArray] = useState<string[]>([
+    'Table level checks'
+  ]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { ruleParametersConfigured } = useSelector(
     getFirstLevelState(checkTypes)
@@ -172,6 +174,20 @@ const RuleMiningChecksContainer = ({
     );
   };
 
+  const getConfiguredChecksCount = (checks: CheckContainerModel) => {
+    let count = 0;
+    if (!checks?.categories) return;
+    checks?.categories.forEach((category) => {
+      if (!category?.checks) return;
+      category?.checks.forEach((check) => {
+        if (check.configured) {
+          count++;
+        }
+      });
+    });
+    return count;
+  };
+
   return (
     <div
       className={clsx(className, ' overflow-y-auto')}
@@ -192,7 +208,7 @@ const RuleMiningChecksContainer = ({
             >
               <SvgIcon
                 name={
-                  isExtendedArray.includes('Table level checks')
+                  !isExtendedArray.includes('Table level checks')
                     ? 'chevron-right'
                     : 'chevron-down'
                 }
@@ -203,7 +219,7 @@ const RuleMiningChecksContainer = ({
           )}
         {(checksUI?.table_checks?.categories ?? []).map((category, index) => (
           <tbody key={index}>
-            {!isExtendedArray.includes('Table level checks') && (
+            {isExtendedArray.includes('Table level checks') && (
               <RuleMiningChecksContainerCategory
                 category={category}
                 timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
@@ -241,15 +257,15 @@ const RuleMiningChecksContainer = ({
               >
                 <SvgIcon
                   name={
-                    isExtendedArray.includes(key)
+                    !isExtendedArray.includes(key)
                       ? 'chevron-right'
                       : 'chevron-down'
                   }
                   className="w-5 h-5 text-gray-700"
                 />
-                {key}
+                {key} {`(${getConfiguredChecksCount(category)})`}
               </div>
-              {!isExtendedArray.includes(key) &&
+              {isExtendedArray.includes(key) &&
                 category?.categories?.map((x, jindex) => (
                   <RuleMiningChecksContainerCategory
                     key={x.category && x?.category + jindex}
