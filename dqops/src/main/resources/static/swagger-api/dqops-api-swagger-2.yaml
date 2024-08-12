@@ -3463,6 +3463,99 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errorsamples/download
+  : get:
+      tags:
+      - "ErrorSamples"
+      summary: "getMonitoringProfilingErrorSamplesDownload"
+      description: "Returns error samples in CSV format related to a column level\
+        \ monitoring checks at a requested time scale"
+      operationId: "getMonitoringProfilingErrorSamplesDownload"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "columnName"
+        in: "path"
+        description: "Column name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "View of error samples for the monitoring checks at a requested\
+            \ time scale on a column returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model:
     get:
       tags:
@@ -4345,6 +4438,99 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errorsamples/download
+  : get:
+      tags:
+      - "ErrorSamples"
+      summary: "getPartitionedProfilingErrorSamplesDownload"
+      description: "Returns the error samples in CSV format related to column level\
+        \ partitioned checks for a requested time scale"
+      operationId: "getPartitionedProfilingErrorSamplesDownload"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "columnName"
+        in: "path"
+        description: "Column name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "View of error samples related to column level partitioned\
+            \ checks for a requested time scale on a column returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model:
     get:
       tags:
@@ -5094,6 +5280,91 @@ paths:
         200:
           description: "Error samples related to a check runs for column level data\
             \ quality profiling checks on a column returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errorsamples/download:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getColumnProfilingErrorSamplesDownload"
+      description: "Returns the error samples in CSV format related to a check for\
+        \ one of table level data quality profiling checks on a column"
+      operationId: "getColumnProfilingErrorSamplesDownload"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "columnName"
+        in: "path"
+        description: "Column name"
+        required: true
+        type: "string"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Error samples related to the check for table level data quality\
+            \ profiling checks on a column returned"
           schema:
             type: "array"
             items:
@@ -6711,6 +6982,94 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errorsamples/download:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getTableMonitoringErrorSamplesDownload"
+      description: "Returns the error samples in CSV format related to a table level\
+        \ monitoring check a requested time scale"
+      operationId: "getTableMonitoringErrorSamplesDownload"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Error samples in CSV format related to a monitoring check\
+            \ at a requested time scale on a table returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model:
     get:
       tags:
@@ -7700,6 +8059,94 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errorsamples/download:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getTablePartitionedErrorSamplesDownload"
+      description: "Returns error samples in CSV format related to a table level partitioned\
+        \ check for a requested time scale"
+      operationId: "getTablePartitionedErrorSamplesDownload"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "The error samples in CSV format related to a partitioned check\
+            \ a requested time scale on a table returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model:
     get:
       tags:
@@ -8579,6 +9026,86 @@ paths:
       description: "Returns the error samples related to a check for all table level\
         \ data quality profiling checks on a table"
       operationId: "getTableProfilingErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Error samples related to the check for table level data quality\
+            \ profiling checks on a table returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errorsamples/download:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getTableProfilingErrorSamplesDownload"
+      description: "Returns the error samples in CSV format related to a check for\
+        \ one of table level data quality profiling checks on a table"
+      operationId: "getTableProfilingErrorSamplesDownload"
       produces:
       - "application/json"
       parameters:
