@@ -32,6 +32,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.models.DeleteStoredDataResult;
@@ -58,10 +59,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.check.CheckTemplate;
-import com.dqops.rest.models.metadata.TableListModel;
-import com.dqops.rest.models.metadata.TableModel;
-import com.dqops.rest.models.metadata.TablePartitioningModel;
-import com.dqops.rest.models.metadata.TableStatisticsModel;
+import com.dqops.rest.models.metadata.*;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
@@ -105,6 +103,7 @@ public class TablesController {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
+    private CheckResultsDataService checkResultsDataService;
     private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
     private TableStatusCache tableStatusCache;
@@ -119,6 +118,7 @@ public class TablesController {
      * @param specToModelCheckMappingService   Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
+     * @param checkResultsDataService          Check results data service, to verify if there are any check results present.
      * @param defaultObservabilityConfigurationService The service that applies the configuration of the default checks to a table.
      * @param hierarchyNodeTreeSearcher        Node searcher, used to search for tables using filters.
      * @param tableStatusCache                 The cache of last known data quality status for a table.
@@ -132,6 +132,7 @@ public class TablesController {
                             SpecToModelCheckMappingService specToModelCheckMappingService,
                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                             StatisticsDataService statisticsDataService,
+                            CheckResultsDataService checkResultsDataService,
                             DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
                             HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
                             TableStatusCache tableStatusCache,
@@ -143,6 +144,7 @@ public class TablesController {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
+        this.checkResultsDataService = checkResultsDataService;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.tableStatusCache = tableStatusCache;
@@ -365,6 +367,70 @@ public class TablesController {
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
             return new ResponseEntity<>(Mono.just(tableListModel), HttpStatus.OK); // 200
+        }));
+    }
+
+    /**
+     * Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Table profiling status information for the requested table.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profilingstatus", produces = "application/json")
+    @ApiOperation(value = "getTableProfilingStatus", notes = "Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed", response = TableProfilingSetupStatusModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Table profiling status information returned", response = TableProfilingSetupStatusModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Mono<TableProfilingSetupStatusModel>>> getTableProfilingStatus(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableSpec tableSpec = tableWrapper.getSpec();
+
+            TableProfilingSetupStatusModel statusModel = new TableProfilingSetupStatusModel();
+            statusModel.setConnectionName(connectionWrapper.getName());
+            statusModel.setTableHash(tableSpec.getHierarchyId().hashCode64());
+            statusModel.setTarget(tableSpec.getPhysicalTableName());
+
+            statusModel.setProfilingChecksConfigured(tableSpec.hasAnyChecksConfigured(CheckType.profiling) ||
+                    tableSpec.getColumns().values().stream().anyMatch(columnSpec -> columnSpec.hasAnyChecksConfigured(CheckType.profiling)));
+            statusModel.setMonitoringChecksConfigured(tableSpec.hasAnyChecksConfigured(CheckType.monitoring) ||
+                    tableSpec.getColumns().values().stream().anyMatch(columnSpec -> columnSpec.hasAnyChecksConfigured(CheckType.monitoring)));
+            statusModel.setMonitoringChecksConfigured(tableSpec.getTimestampColumns() == null || Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()) ||
+                    tableSpec.hasAnyChecksConfigured(CheckType.partitioned) ||
+                    tableSpec.getColumns().values().stream().anyMatch(columnSpec -> columnSpec.hasAnyChecksConfigured(CheckType.partitioned)));
+
+            statusModel.setBasicStatisticsCollected(this.statisticsDataService.hasAnyRecentStatisticsResults(
+                    connectionWrapper.getName(), tableSpec.getPhysicalTableName(), principal.getDataDomainIdentity()));
+            statusModel.setCheckResultsPresent(this.checkResultsDataService.hasAnyRecentCheckResults(
+                    connectionWrapper.getName(), tableSpec.getPhysicalTableName(), principal.getDataDomainIdentity()));
+
+            return new ResponseEntity<>(Mono.just(statusModel), HttpStatus.OK); // 200
         }));
     }
 

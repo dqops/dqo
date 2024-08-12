@@ -11492,6 +11492,54 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profilingstatus" : {
+      "get" : {
+        "tags" : [ "Tables" ],
+        "summary" : "getTableProfilingStatus",
+        "description" : "Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed",
+        "operationId" : "getTableProfilingStatus",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Table profiling status information returned",
+            "schema" : {
+              "$ref" : "#/definitions/TableProfilingSetupStatusModel"
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -41761,6 +41809,45 @@
           }
         }
       }
+    },
+    "TableProfilingSetupStatusModel" : {
+      "type" : "object",
+      "properties" : {
+        "connection_name" : {
+          "type" : "string",
+          "description" : "Connection name."
+        },
+        "table_hash" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Table hash that identifies the table using a unique hash code."
+        },
+        "target" : {
+          "description" : "Physical table details (a physical schema name and a physical table name).",
+          "$ref" : "#/definitions/PhysicalTableName"
+        },
+        "basic_statistics_collected" : {
+          "type" : "boolean",
+          "description" : "The basic statistics were collected for this table. If this field returns false, the statistics were not collected and the user should collect basic statistics again."
+        },
+        "profiling_checks_configured" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any profiling checks configured on the table, or any of its column. Returns false when the user should first generate a configuration of the profiling checks using the rule miner."
+        },
+        "monitoring_checks_configured" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any monitoring checks configured on the table, or any of its column. Returns false when the user should first generate a configuration of the monitoring checks using the rule miner."
+        },
+        "partition_checks_configured" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any partition checks configured on the table, or any of its column. The value is true also when the table is not configured to support partitioned checks, so asking the user to configure partition checks is useless. Returns false when the user should first generate a configuration of the partition checks using the rule miner."
+        },
+        "check_results_present" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any recent data quality check results. Returns false when the user should run any checks to get any results."
+        }
+      },
+      "description" : "Table status model that identifies which type of information is already collected, such as data quality checks are configured, or statistics collected."
     },
     "TableRowCountAnomalyDifferencingCheckSpec" : {
       "type" : "object",
