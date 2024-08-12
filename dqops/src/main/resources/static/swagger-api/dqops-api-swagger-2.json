@@ -19741,6 +19741,10 @@
           "type" : "boolean",
           "description" : "Propose the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'."
         },
+        "propose_percentile_ranges" : {
+          "type" : "boolean",
+          "description" : "Propose the default configuration of the median and percentile in range checks that validate the value at a given percentile, such as a value in middle of all column values. The default value of this parameter is 'false' because calculating the median requires running a separate query on the data source, which is not advisable for data observability."
+        },
         "propose_text_length_ranges" : {
           "type" : "boolean",
           "description" : "Propose the default configuration of the text length checks. The default value of this parameter is 'true'."

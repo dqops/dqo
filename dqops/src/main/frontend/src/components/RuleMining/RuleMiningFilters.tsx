@@ -194,6 +194,15 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2 !w-62"
+            tooltipText="Propose the default configuration of the median and percentile in range checks that validate the value at a given percentile, such as a value in middle of all column values. The default value of this parameter is 'false' because calculating the median requires running a separate query on the data source, which is not advisable for data observability."
+            label="Median and percentile ranges"
+            checked={configuration.propose_percentile_ranges}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_percentile_ranges: e })
+            }
+          />
+          <Checkbox
+            className="p-2 !w-62"
             tooltipText="Configure the checks that analyze text statistics of text columns, such as the minimum and maximum length of text values."
             label="Text length ranges"
             checked={configuration.propose_text_length_ranges}
