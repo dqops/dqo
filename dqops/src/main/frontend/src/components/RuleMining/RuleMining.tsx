@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckMiningParametersModel,
-  CheckMiningProposalModel
+  CheckMiningProposalModel,
+  CheckSearchFilters
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setJobAllert } from '../../redux/actions/job.actions';
+import { setJobAllert, toggleMenu } from '../../redux/actions/job.actions';
 import { setRuleParametersConfigured } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
@@ -89,6 +90,7 @@ export default function RuleMining({
     propose_custom_checks: true
   };
   const { runPartitionedChecks } = useTree();
+
   const [configuration, setConfiguration] =
     useState<CheckMiningParametersModel>({
       ...defaultParameters,
@@ -99,6 +101,9 @@ export default function RuleMining({
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [runChecksJobTemplate, setRunChecksJobTemplate] = useState<
+    CheckSearchFilters | undefined
+  >({});
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const dispatch = useActionDispatch();
@@ -114,9 +119,16 @@ export default function RuleMining({
     setIsUpdated(true);
   };
 
-  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const { userProfile, isOpen } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const toggleOpen = () => {
+    if (!isOpen) {
+      dispatch(toggleMenu(true));
+    }
+  };
 
-  const proposeChecks = async (runChecks?: boolean) => {
+  const proposeChecks = async () => {
     const addPrefix = (key: string) => {
       if (key.includes('*') || key.length === 0) {
         return key;
@@ -201,14 +213,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
-            console.log(response, runChecks);
-            if (runChecks) {
-              runPartitionedChecks({
-                check_search_filters: response.data.run_checks_job
-              }).then(() => {
-                proposeChecks();
-              });
-            }
+            setRunChecksJobTemplate(response.data.run_checks_job);
             getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
@@ -225,13 +230,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
-            if (runChecks) {
-              runPartitionedChecks({
-                check_search_filters: response.data.run_checks_job
-              }).then(() => {
-                proposeChecks();
-              });
-            }
+            setRunChecksJobTemplate(response.data.run_checks_job);
             getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
@@ -248,13 +247,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
-            if (runChecks) {
-              runPartitionedChecks({
-                check_search_filters: response.data.run_checks_job
-              }).then(() => {
-                proposeChecks();
-              });
-            }
+            setRunChecksJobTemplate(response.data.run_checks_job);
             getShouldUserCollectStatisitcs(response.data);
             getRuleParametersConfiguredChecks(response.data);
           })
@@ -301,6 +294,7 @@ export default function RuleMining({
     }
     setIsUpdated(false);
   };
+
   useEffect(() => {
     proposeChecks();
   }, [checkTypes, connection, schema, table, timePartitioned]);
@@ -358,7 +352,12 @@ export default function RuleMining({
         message="Do you want to run the checks?"
         onConfirm={() => {
           setRunChecksDialogOpened(false);
-          proposeChecks(true);
+          runPartitionedChecks({
+            check_search_filters: runChecksJobTemplate
+          }).then(() => {
+            proposeChecks();
+          });
+          toggleOpen();
         }}
       />
     </div>
