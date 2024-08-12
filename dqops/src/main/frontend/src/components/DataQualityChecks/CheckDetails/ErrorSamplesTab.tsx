@@ -44,7 +44,7 @@ const ErrorSamplesTab = ({
         </span>
       ),
       value: 'sampleIndex',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-30 text-right'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-20 text-right'
     },
     {
       label: 'Collected at',
@@ -72,7 +72,7 @@ const ErrorSamplesTab = ({
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
     }
   ];
 

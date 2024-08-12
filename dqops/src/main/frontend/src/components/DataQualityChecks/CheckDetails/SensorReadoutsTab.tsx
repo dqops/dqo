@@ -76,7 +76,7 @@ const SensorReadoutsTab = ({
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
     }
   ];
 
