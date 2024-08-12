@@ -93,7 +93,7 @@ const ErrorSamplesTab = ({
 
   return (
     <div
-      className="pt-3 overflow-auto"
+      className="py-3 overflow-auto"
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
     >
       <div className="flex space-x-8 items-center">
