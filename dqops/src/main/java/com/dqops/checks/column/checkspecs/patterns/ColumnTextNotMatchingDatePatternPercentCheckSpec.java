@@ -23,10 +23,8 @@ import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
-import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec;
+import com.dqops.rules.comparison.*;
+import com.dqops.sensors.column.patterns.ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -42,46 +40,45 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * This check validates the format of USA phone numbers inside text columns.
- * It counts the number of invalid phone number and raises a data quality issue when too many rows contain phone numbers.
+ * This check validates the date format of dates stored in text columns.
+ * It measures the percentage of incorrectly formatted dates and raises a data quality issue when the rate is above a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnInvalidUsaPhoneFoundCheckSpec
-        extends AbstractCheckSpec<ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
-
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidUsaPhoneFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnTextNotMatchingDatePatternPercentCheckSpec
+        extends AbstractCheckSpec<ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec, MaxPercentRule0WarningParametersSpec, MaxPercentRule0ErrorParametersSpec, MaxPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnTextNotMatchingDatePatternPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Numerical value in range percent sensor parameters")
+    @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec parameters = new ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec();
+    private ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec parameters = new ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0WarningParametersSpec warning;
+    private MaxPercentRule0WarningParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for the minimum percentage of rows that contains a USA phone number in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with matching date regex in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ErrorParametersSpec error;
+    private MaxPercentRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule100ParametersSpec fatal;
+    private MaxPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec getParameters() {
+    public ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -89,7 +86,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec parameters) {
+    public void setParameters(ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -101,7 +98,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule0WarningParametersSpec getWarning() {
+    public MaxPercentRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -109,7 +106,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
+    public void setWarning(MaxPercentRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -121,7 +118,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ErrorParametersSpec getError() {
+    public MaxPercentRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -129,7 +126,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ErrorParametersSpec error) {
+    public void setError(MaxPercentRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -141,7 +138,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule100ParametersSpec getFatal() {
+    public MaxPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -149,7 +146,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule100ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -166,18 +163,6 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
     }
 
     /**
-     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
-     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
-     *
-     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
-     */
-    @Override
-    @JsonIgnore
-    public boolean isStandard() {
-        return true;
-    }
-
-    /**
      * Returns an alternative check's friendly name that is shown on the check editor.
      *
      * @return An alternative name, or null when the check has no alternative name to show.
@@ -185,7 +170,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Maximum count of rows containing invalid USA phone number values";
+        return "Maximum percentage of rows containing texts not matching an expected date pattern";
     }
 
     /**
