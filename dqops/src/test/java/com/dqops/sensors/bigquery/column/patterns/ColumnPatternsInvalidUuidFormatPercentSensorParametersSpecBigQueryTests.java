@@ -89,7 +89,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/patterns/valid_uuid_format_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/invalid_uuid_format_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -140,7 +140,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -174,7 +174,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -204,7 +204,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -245,7 +245,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -281,7 +281,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -317,7 +317,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -365,7 +365,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -407,7 +407,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -447,7 +447,7 @@ public class ColumnPatternsInvalidUuidFormatPercentSensorParametersSpecBigQueryT
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
+                            WHEN NOT REGEXP_CONTAINS(SAFE_CAST(%1$s AS STRING), %2$s)
                                 THEN 1
                             ELSE 0
                         END
