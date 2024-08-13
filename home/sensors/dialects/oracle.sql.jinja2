@@ -484,15 +484,16 @@ FROM
                     {%- endwith %}
                 {%- endfor %}
             ORDER BY
-                {% if order_by_expression is not none and (order_by_expression | length() > 0) %} {{ order_by_expression | replace('{column}', 'analyzed_table.' ~ quote_identifier(column_name)) ~ ' ' ~ value_order_by ~ ', ' }} {% endif -%}
-                {% if order_by_value_first %} {{ render_target_column('analyzed_table') ~ ' ' ~ value_order_by ~ ', ' }} {% endif -%}
+                {% if order_by_expression is not none and (order_by_expression | length() > 0) %}{{ order_by_expression | replace('{column}', 'analyzed_table.' ~ quote_identifier(column_name)) ~ ' ' ~ value_order_by ~ ', ' }}{% endif -%}
+                {% if order_by_value_first %} {{ render_target_column('analyzed_table') ~ ' ' ~ value_order_by }} {% endif -%}
+                {{ ', ' if order_by_value_first and (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -}}
                 {% if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
                     {%- for id_column in error_sampling.id_columns -%}
                         {{ ', ' if not loop.first }}
                         {{- render_column(id_column, 'analyzed_table') }} ASC
                     {%- endfor %}
                 {%- endif -%}
-                {% if not order_by_value_first %} {{ ', ' ~ render_target_column('analyzed_table') ~ ' ' ~ value_order_by }} {% endif -%}
+                {% if not order_by_value_first %} {{ ', ' ~ render_target_column('analyzed_table') ~ ' ' ~ value_order_by }} {% endif %}
         ) AS sample_index
     {%- endif %}
     FROM
