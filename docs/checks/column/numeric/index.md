@@ -403,7 +403,7 @@ This check verifies that numeric values are valid longitude coordinates. A valid
 
 
 ### [non negative values](./non-negative-values.md)
-This check finds and counts non0negative values in a numeric column. It raises a data quality issue when the count of non-negative values is above the maximum accepted count.
+This check finds and counts non negative values in a numeric column. It raises a data quality issue when the count of non-negative values is above the maximum accepted count.
 
 
 | Data quality check name | Friendly name | Check type | Description | Standard |

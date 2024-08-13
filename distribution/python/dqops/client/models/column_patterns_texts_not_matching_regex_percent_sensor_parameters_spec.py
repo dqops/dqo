@@ -5,11 +5,11 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec")
+T = TypeVar("T", bound="ColumnPatternsTextsNotMatchingRegexPercentSensorParametersSpec")
 
 
 @_attrs_define
-class ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec:
+class ColumnPatternsTextsNotMatchingRegexPercentSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
@@ -43,15 +43,15 @@ class ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec:
 
         regex = d.pop("regex", UNSET)
 
-        column_patterns_texts_matching_regex_percent_sensor_parameters_spec = cls(
+        column_patterns_texts_not_matching_regex_percent_sensor_parameters_spec = cls(
             filter_=filter_,
             regex=regex,
         )
 
-        column_patterns_texts_matching_regex_percent_sensor_parameters_spec.additional_properties = (
+        column_patterns_texts_not_matching_regex_percent_sensor_parameters_spec.additional_properties = (
             d
         )
-        return column_patterns_texts_matching_regex_percent_sensor_parameters_spec
+        return column_patterns_texts_not_matching_regex_percent_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

@@ -245,9 +245,15 @@ Operations that return the error samples collected when data quality checks were
 |<span class="no-wrap-code">[`get_column_monitoring_error_samples`</span>](./error_samples.md#get_column_monitoring_error_samples)|GET|Returns error samples related to a column level monitoring checks at a requested time scale|
 |<span class="no-wrap-code">[`get_column_partitioned_error_samples`</span>](./error_samples.md#get_column_partitioned_error_samples)|GET|Returns the error samples related to column level partitioned checks for a requested time scale|
 |<span class="no-wrap-code">[`get_column_profiling_error_samples`</span>](./error_samples.md#get_column_profiling_error_samples)|GET|Returns the error samples related to a profiling check for all column level data quality profiling checks on a column|
+|<span class="no-wrap-code">[`get_column_profiling_error_samples_download`</span>](./error_samples.md#get_column_profiling_error_samples_download)|GET|Returns the error samples in CSV format related to a check for one of table level data quality profiling checks on a column|
+|<span class="no-wrap-code">[`get_monitoring_profiling_error_samples_download`</span>](./error_samples.md#get_monitoring_profiling_error_samples_download)|GET|Returns error samples in CSV format related to a column level monitoring checks at a requested time scale|
+|<span class="no-wrap-code">[`get_partitioned_profiling_error_samples_download`</span>](./error_samples.md#get_partitioned_profiling_error_samples_download)|GET|Returns the error samples in CSV format related to column level partitioned checks for a requested time scale|
 |<span class="no-wrap-code">[`get_table_monitoring_error_samples`</span>](./error_samples.md#get_table_monitoring_error_samples)|GET|Returns the error samples related to a table level monitoring check a requested time scale|
+|<span class="no-wrap-code">[`get_table_monitoring_error_samples_download`</span>](./error_samples.md#get_table_monitoring_error_samples_download)|GET|Returns the error samples in CSV format related to a table level monitoring check a requested time scale|
 |<span class="no-wrap-code">[`get_table_partitioned_error_samples`</span>](./error_samples.md#get_table_partitioned_error_samples)|GET|Returns error samples related to a table level partitioned check for a requested time scale|
+|<span class="no-wrap-code">[`get_table_partitioned_error_samples_download`</span>](./error_samples.md#get_table_partitioned_error_samples_download)|GET|Returns error samples in CSV format related to a table level partitioned check for a requested time scale|
 |<span class="no-wrap-code">[`get_table_profiling_error_samples`</span>](./error_samples.md#get_table_profiling_error_samples)|GET|Returns the error samples related to a check for all table level data quality profiling checks on a table|
+|<span class="no-wrap-code">[`get_table_profiling_error_samples_download`</span>](./error_samples.md#get_table_profiling_error_samples_download)|GET|Returns the error samples in CSV format related to a check for one of table level data quality profiling checks on a table|
 
 
 ## errors
@@ -510,6 +516,7 @@ Operations related to manage the metadata of imported tables, and managing the c
 |<span class="no-wrap-code">[`get_table_profiling_checks_model`</span>](./tables.md#get_table_profiling_checks_model)|GET|Return a UI friendly model of configurations for all table level data quality profiling checks on a table|
 |<span class="no-wrap-code">[`get_table_profiling_checks_model_filter`</span>](./tables.md#get_table_profiling_checks_model_filter)|GET|Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter|
 |<span class="no-wrap-code">[`get_table_profiling_checks_templates`</span>](./tables.md#get_table_profiling_checks_templates)|GET|Return available data quality checks on a requested table.|
+|<span class="no-wrap-code">[`get_table_profiling_status`</span>](./tables.md#get_table_profiling_status)|GET|Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed|
 |<span class="no-wrap-code">[`get_table_scheduling_group_override`</span>](./tables.md#get_table_scheduling_group_override)|GET|Return the schedule override configuration for a table|
 |<span class="no-wrap-code">[`get_table_statistics`</span>](./tables.md#get_table_statistics)|GET|Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.|
 |<span class="no-wrap-code">[`get_tables`</span>](./tables.md#get_tables)|GET|Returns a list of tables inside a connection/schema|

@@ -920,7 +920,7 @@ This check verifies that numeric values are valid longitude coordinates. A valid
 
 
 ### [non negative values](./column/numeric/non-negative-values.md)
-This check finds and counts non0negative values in a numeric column. It raises a data quality issue when the count of non-negative values is above the maximum accepted count.
+This check finds and counts non negative values in a numeric column. It raises a data quality issue when the count of non-negative values is above the maximum accepted count.
 
 
 
@@ -942,9 +942,9 @@ This check validates text values using a pattern defined as a regular expression
 
 
 
-### [texts matching regex percent](./column/patterns/texts-matching-regex-percent.md)
+### [texts not matching regex percent](./column/patterns/texts-not-matching-regex-percent.md)
 This check validates text values using a pattern defined as a regular expression.
- It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.
+ It measures the percentage of invalid values and raises a data quality issue when the rate is above a threshold.
 
 
 
@@ -966,15 +966,15 @@ This check detects dates in the wrong format inside text columns using a regular
 
 
 
-### [text matching date pattern percent](./column/patterns/text-matching-date-pattern-percent.md)
+### [text not matching date pattern percent](./column/patterns/text-not-matching-date-pattern-percent.md)
 This check validates the date format of dates stored in text columns.
- It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.
+ It measures the percentage of incorrectly formatted dates and raises a data quality issue when the rate is above a threshold.
 
 
 
-### [text matching name pattern percent](./column/patterns/text-matching-name-pattern-percent.md)
+### [text not matching name pattern percent](./column/patterns/text-not-matching-name-pattern-percent.md)
 This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.
- It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.
+ It measures the percentage of invalid literal identifiers and raises a data quality issue when the rate is above a threshold.
 
 
 
@@ -984,9 +984,9 @@ This check detects invalid UUID identifiers in text columns using a regular expr
 
 
 
-### [valid uuid format percent](./column/patterns/valid-uuid-format-percent.md)
+### [invalid uuid format percent](./column/patterns/invalid-uuid-format-percent.md)
 This check validates the format of UUID values in text columns.
- It measures the percentage of valid UUIDs and raises a data quality issue when the rate is below a threshold.
+ It measures the percentage of invalid UUIDs and raises a data quality issue when the rate is above a threshold.
 
 
 
@@ -1004,25 +1004,25 @@ This check detects invalid IP6 internet addresses in text columns using a regula
 
 ### [invalid usa phone format found](./column/patterns/invalid-usa-phone-format-found.md)
 This check validates the format of USA phone numbers inside text columns.
- It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+ It counts the number of invalid phone number and raises a data quality issue when too many rows contain phone numbers.
 
 
 
 ### [invalid usa zipcode format found](./column/patterns/invalid-usa-zipcode-format-found.md)
 This check validates the format of a USA zip code inside text columns.
- It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+ It counts the number of invalid zip code and raises a data quality issue when the rate is below a threshold.
 
 
 
-### [valid usa phone format percent](./column/patterns/valid-usa-phone-format-percent.md)
+### [invalid usa phone format percent](./column/patterns/invalid-usa-phone-format-percent.md)
 This check validates the format of USA phone numbers inside text columns.
- It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+ It measures the percentage of columns containing invalid phone numbers and raises a data quality issue when the rate is above a threshold.
 
 
 
-### [valid usa zipcode format percent](./column/patterns/valid-usa-zipcode-format-percent.md)
+### [invalid usa zipcode format percent](./column/patterns/invalid-usa-zipcode-format-percent.md)
 This check validates the format of a USA zip code inside text columns.
- It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+ It measures the percentage of columns containing invalid zip codes and raises a data quality issue when the rate is above a threshold.
 
 
 

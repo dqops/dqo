@@ -6,27 +6,27 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_patterns_text_matching_name_pattern_percent_sensor_parameters_spec import (
-        ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec,
+    from ..models.column_patterns_invalid_uuid_format_percent_sensor_parameters_spec import (
+        ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
+    from ..models.max_percent_rule_0_error_parameters_spec import (
+        MaxPercentRule0ErrorParametersSpec,
     )
-    from ..models.min_percent_rule_100_error_parameters_spec import (
-        MinPercentRule100ErrorParametersSpec,
+    from ..models.max_percent_rule_0_warning_parameters_spec import (
+        MaxPercentRule0WarningParametersSpec,
     )
-    from ..models.min_percent_rule_100_warning_parameters_spec import (
-        MinPercentRule100WarningParametersSpec,
+    from ..models.max_percent_rule_5_parameters_spec import (
+        MaxPercentRule5ParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
-T = TypeVar("T", bound="ColumnTextMatchingNamePatternPercentCheckSpec")
+T = TypeVar("T", bound="ColumnInvalidUuidFormatPercentCheckSpec")
 
 
 @_attrs_define
-class ColumnTextMatchingNamePatternPercentCheckSpec:
+class ColumnInvalidUuidFormatPercentCheckSpec:
     """
     Attributes:
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
@@ -53,10 +53,10 @@ class ColumnTextMatchingNamePatternPercentCheckSpec:
         always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
-        parameters (Union[Unset, ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
-        error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        parameters (Union[Unset, ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec]):
+        warning (Union[Unset, MaxPercentRule0WarningParametersSpec]):
+        error (Union[Unset, MaxPercentRule0ErrorParametersSpec]):
+        fatal (Union[Unset, MaxPercentRule5ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -69,11 +69,11 @@ class ColumnTextMatchingNamePatternPercentCheckSpec:
     data_grouping: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
     parameters: Union[
-        Unset, "ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec"
+        Unset, "ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxPercentRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxPercentRule0ErrorParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -146,18 +146,18 @@ class ColumnTextMatchingNamePatternPercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_patterns_text_matching_name_pattern_percent_sensor_parameters_spec import (
-            ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec,
+        from ..models.column_patterns_invalid_uuid_format_percent_sensor_parameters_spec import (
+            ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
+        from ..models.max_percent_rule_0_error_parameters_spec import (
+            MaxPercentRule0ErrorParametersSpec,
         )
-        from ..models.min_percent_rule_100_error_parameters_spec import (
-            MinPercentRule100ErrorParametersSpec,
+        from ..models.max_percent_rule_0_warning_parameters_spec import (
+            MaxPercentRule0WarningParametersSpec,
         )
-        from ..models.min_percent_rule_100_warning_parameters_spec import (
-            MinPercentRule100WarningParametersSpec,
+        from ..models.max_percent_rule_5_parameters_spec import (
+            MaxPercentRule5ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -192,37 +192,39 @@ class ColumnTextMatchingNamePatternPercentCheckSpec:
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[
-            Unset, ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec
+            Unset, ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec
         ]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec.from_dict(
-                _parameters
+            parameters = (
+                ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec.from_dict(
+                    _parameters
+                )
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100WarningParametersSpec]
+        warning: Union[Unset, MaxPercentRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100WarningParametersSpec.from_dict(_warning)
+            warning = MaxPercentRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule100ErrorParametersSpec]
+        error: Union[Unset, MaxPercentRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule100ErrorParametersSpec.from_dict(_error)
+            error = MaxPercentRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, MaxPercentRule5ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = MaxPercentRule5ParametersSpec.from_dict(_fatal)
 
-        column_text_matching_name_pattern_percent_check_spec = cls(
+        column_invalid_uuid_format_percent_check_spec = cls(
             schedule_override=schedule_override,
             comments=comments,
             disabled=disabled,
@@ -238,8 +240,8 @@ class ColumnTextMatchingNamePatternPercentCheckSpec:
             fatal=fatal,
         )
 
-        column_text_matching_name_pattern_percent_check_spec.additional_properties = d
-        return column_text_matching_name_pattern_percent_check_spec
+        column_invalid_uuid_format_percent_check_spec.additional_properties = d
+        return column_invalid_uuid_format_percent_check_spec
 
     @property
     def additional_keys(self) -> List[str]:

@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of texts matching the name regular expression
     does not exceed the maximum accepted percentage.
+  friendly_name: Maximum percentage of rows not containing texts that are names (e.g.
+    numeric)
   default_severity: error

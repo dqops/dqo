@@ -8724,6 +8724,253 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 ___
+## get_table_profiling_status
+Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_status.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profilingstatus
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`table_profiling_setup_status_model`](../models/tables.md#tableprofilingsetupstatusmodel)</span>||*[TableProfilingSetupStatusModel](../models/tables.md#tableprofilingsetupstatusmodel)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profilingstatus^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "connection_name" : "sample_connection",
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "basic_statistics_collected" : false,
+		  "profiling_checks_configured" : false,
+		  "monitoring_checks_configured" : false,
+		  "partition_checks_configured" : false,
+		  "check_results_present" : false
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_status.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_status.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_status.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_status.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+
+___
 ## get_table_scheduling_group_override
 Return the schedule override configuration for a table
 

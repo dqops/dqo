@@ -4,7 +4,7 @@ title: invalid usa phone format found data quality checks
 # invalid usa phone format found data quality checks
 
 This check validates the format of USA phone numbers inside text columns.
- It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+ It counts the number of invalid phone number and raises a data quality issue when too many rows contain phone numbers.
 
 
 ___
@@ -21,7 +21,7 @@ Verifies that the number of invalid USA phone numbers in a text column does not 
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_invalid_usa_phone_format_found`</span>|Maximum count of rows containing USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_invalid_usa_phone_format_found`</span>|Maximum count of rows containing invalid USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -137,18 +137,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -160,18 +157,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "Databricks"
@@ -181,18 +175,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -204,18 +195,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "DuckDB"
@@ -225,17 +213,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -247,17 +232,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM  AS analyzed_table
             ```
     ??? example "MySQL"
@@ -266,18 +248,14 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -289,16 +267,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_table>` AS analyzed_table
             ```
     ??? example "Oracle"
@@ -308,17 +283,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -336,17 +308,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -360,17 +329,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -382,17 +347,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Presto"
@@ -402,18 +363,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -432,18 +390,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -457,16 +412,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -478,16 +430,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Snowflake"
@@ -497,15 +446,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -517,15 +463,12 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Spark"
@@ -535,18 +478,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -558,18 +498,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "SQL Server"
@@ -579,20 +516,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -604,20 +545,24 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -627,18 +572,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -657,18 +599,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -729,18 +668,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -751,18 +687,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -775,18 +708,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -797,18 +727,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -821,17 +748,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -842,17 +766,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for DuckDB"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
@@ -864,18 +785,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -886,16 +803,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
@@ -908,17 +822,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -935,17 +846,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -967,17 +875,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -988,17 +892,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1011,18 +911,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1040,18 +937,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1073,16 +967,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1093,16 +984,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1115,15 +1003,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1134,15 +1019,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1155,18 +1037,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1177,18 +1056,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1201,20 +1077,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1225,20 +1105,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1255,18 +1139,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1284,18 +1165,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1324,7 +1202,7 @@ Verifies that the number of invalid USA phone numbers in a text column does not 
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_invalid_usa_phone_format_found`</span>|Maximum count of rows containing USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_invalid_usa_phone_format_found`</span>|Maximum count of rows containing invalid USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1441,18 +1319,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1464,18 +1339,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "Databricks"
@@ -1485,18 +1357,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1508,18 +1377,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "DuckDB"
@@ -1529,17 +1395,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1551,17 +1414,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM  AS analyzed_table
             ```
     ??? example "MySQL"
@@ -1570,18 +1430,14 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1593,16 +1449,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_table>` AS analyzed_table
             ```
     ??? example "Oracle"
@@ -1612,17 +1465,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1640,17 +1490,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -1664,17 +1511,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1686,17 +1529,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Presto"
@@ -1706,18 +1545,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1736,18 +1572,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -1761,16 +1594,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1782,16 +1612,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Snowflake"
@@ -1801,15 +1628,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1821,15 +1645,12 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Spark"
@@ -1839,18 +1660,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1862,18 +1680,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "SQL Server"
@@ -1883,20 +1698,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1908,20 +1727,24 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1931,18 +1754,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1961,18 +1781,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -2034,18 +1851,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2056,18 +1870,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -2080,18 +1891,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2102,18 +1910,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2126,17 +1931,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2147,17 +1949,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for DuckDB"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
@@ -2169,18 +1968,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2191,16 +1986,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
@@ -2213,17 +2005,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2240,17 +2029,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2272,17 +2058,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2293,17 +2075,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2316,18 +2094,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2345,18 +2120,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2378,16 +2150,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2398,16 +2167,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2420,15 +2186,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2439,15 +2202,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2460,18 +2220,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2482,18 +2239,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2506,20 +2260,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2530,20 +2288,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -2560,18 +2322,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2589,18 +2348,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2629,7 +2385,7 @@ Verifies that the number of invalid USA phone numbers in a text column does not 
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_invalid_usa_phone_format_found`</span>|Maximum count of rows containing USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_invalid_usa_phone_format_found`</span>|Maximum count of rows containing invalid USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2746,18 +2502,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2769,18 +2522,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "Databricks"
@@ -2790,18 +2540,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2813,18 +2560,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "DuckDB"
@@ -2834,17 +2578,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2856,17 +2597,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM  AS analyzed_table
             ```
     ??? example "MySQL"
@@ -2875,18 +2613,14 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2898,16 +2632,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_table>` AS analyzed_table
             ```
     ??? example "Oracle"
@@ -2917,17 +2648,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2945,17 +2673,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -2969,17 +2694,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2991,17 +2712,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Presto"
@@ -3011,18 +2728,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3041,18 +2755,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -3066,16 +2777,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3087,16 +2795,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Snowflake"
@@ -3106,15 +2811,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3126,15 +2828,12 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Spark"
@@ -3144,18 +2843,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3167,18 +2863,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
     ??? example "SQL Server"
@@ -3188,20 +2881,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3213,20 +2910,24 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -3236,18 +2937,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3266,18 +2964,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
             FROM (
                 SELECT
                     original_table.*
@@ -3339,18 +3034,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3361,18 +3053,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -3385,18 +3074,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3407,18 +3093,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -3431,17 +3114,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3452,17 +3132,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for DuckDB"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
@@ -3474,18 +3151,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3496,16 +3169,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
@@ -3518,17 +3188,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3545,17 +3212,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3577,17 +3241,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3598,17 +3258,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -3621,18 +3277,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3650,18 +3303,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3683,16 +3333,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3703,16 +3350,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -3725,15 +3369,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3744,15 +3385,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -3765,18 +3403,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3787,18 +3422,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -3811,20 +3443,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3835,20 +3471,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -3865,18 +3505,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3894,18 +3531,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3934,7 +3568,7 @@ Verifies that the number of invalid USA phone numbers in a text column does not 
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_invalid_usa_phone_format_found`</span>|Maximum count of rows containing USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_invalid_usa_phone_format_found`</span>|Maximum count of rows containing invalid USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4061,18 +3695,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4084,18 +3715,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -4109,18 +3737,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4132,18 +3757,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -4157,17 +3779,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4179,17 +3798,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
@@ -4202,18 +3818,14 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4225,16 +3837,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
@@ -4248,17 +3857,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4276,17 +3882,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -4306,17 +3909,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4328,17 +3927,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -4352,18 +3947,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4382,18 +3974,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -4413,16 +4002,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4434,16 +4020,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -4457,15 +4040,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4477,15 +4057,12 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -4499,18 +4076,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4522,18 +4096,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -4547,20 +4118,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4572,20 +4147,24 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -4601,18 +4180,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4631,18 +4207,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -4720,18 +4293,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4742,18 +4312,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -4768,18 +4335,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4790,18 +4354,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -4816,17 +4377,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4837,17 +4395,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for DuckDB"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -4861,18 +4416,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4883,16 +4434,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
@@ -4907,17 +4455,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4934,17 +4479,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -4970,17 +4512,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4991,17 +4529,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -5016,18 +4550,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -5045,18 +4576,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -5082,16 +4610,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5102,16 +4627,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -5126,15 +4648,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5145,15 +4664,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -5168,18 +4684,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5190,18 +4703,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -5216,20 +4726,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5240,20 +4754,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
@@ -5270,18 +4788,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -5299,18 +4814,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -5343,7 +4855,7 @@ Verifies that the number of invalid USA phone numbers in a text column does not 
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_invalid_usa_phone_format_found`</span>|Maximum count of rows containing USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_invalid_usa_phone_format_found`</span>|Maximum count of rows containing invalid USA phone number values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_usa_phone_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-usa-phone-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5470,18 +4982,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5493,18 +5002,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -5518,18 +5024,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5541,18 +5044,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -5566,17 +5066,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5588,17 +5085,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
@@ -5611,18 +5105,14 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5634,16 +5124,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
@@ -5657,17 +5144,14 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -5685,17 +5169,14 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -5715,17 +5196,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5737,17 +5214,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -5761,18 +5234,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -5791,18 +5261,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -5822,16 +5289,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5843,16 +5307,13 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -5866,15 +5327,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5886,15 +5344,12 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -5908,18 +5363,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5931,18 +5383,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -5956,20 +5405,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5981,20 +5434,24 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -6010,18 +5467,15 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -6040,18 +5494,15 @@ spec:
 
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -6129,18 +5580,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6151,18 +5599,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE
-                        CASE
-                            WHEN NOT REGEXP_CONTAINS(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_CONTAINS(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
@@ -6177,18 +5622,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6199,18 +5641,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
@@ -6225,17 +5664,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }},
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }}
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6246,17 +5682,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for DuckDB"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_MATCHES(analyzed_table."target_column",
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS TRUE
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column"
+                                !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -6270,18 +5703,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((((\\\\(\\\\+1\\\\)|(\\\\+1)|(\\\\([0][0][1]\\\\)|([0][0][1]))|\\\\(1\\\\)|(1))[\\\\s.-]?)?(\\\\(?[0-9]{3}\\\\)?[\\\\s.-]?)([0-9]{3}[\\\\s.-]?)([0-9]{4})))$') }}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6292,16 +5721,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?[0-9]{3}\\)?[\\s.-]?)([0-9]{3}[\\s.-]?)([0-9]{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
@@ -6316,17 +5742,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -6343,17 +5766,14 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
-                                    '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
-                                ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column",
+                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[[:space:].-]?)?(\(?\d{3}\)?[[:space:].-]?)(\d{3}[[:space:].-]?)(\d{4})))$'
+                            ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -6379,17 +5799,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6400,17 +5816,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT SUBSTRING(analyzed_table."target_column" from
-                                 '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" !~ '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -6425,18 +5837,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -6454,18 +5863,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -6491,16 +5897,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6511,16 +5914,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP_SUBSTR(replace(replace(replace(analyzed_table."target_column", '(', ''), ')', ''), '-', ''), '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -6535,15 +5935,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6554,15 +5951,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
-                                THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE WHEN NOT (analyzed_table."target_column" REGEXP '^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -6577,18 +5971,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6599,18 +5990,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT REGEXP(
-                                CAST(analyzed_table.`target_column` AS STRING),
-                                "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
@@ -6625,20 +6013,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value
+                SUM(
+                    CASE
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT {{ lib.render_target_column('analyzed_table') }} LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6649,20 +6041,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
-                    ELSE SUM(
-                        CASE
-                            WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
-                            WHEN NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
-                            ELSE 0
-                        END
-                    )
-                END AS actual_value,
+                SUM(
+                    CASE
+                        WHEN NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][-.][0-9][0-9][0-9][-.][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '1 [0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '+1 [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+                                AND NOT analyzed_table.[target_column] LIKE '([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
@@ -6679,18 +6075,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -6708,18 +6101,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
-                    ELSE CAST(SUM(
-                        CASE
-                            WHEN NOT REGEXP_LIKE(
-                                CAST(analyzed_table."target_column" AS VARCHAR),
-                                '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
-                            ) THEN 1
-                            ELSE 0
-                        END
-                    ) AS DOUBLE)
-                END AS actual_value,
+                CAST(SUM(
+                    CASE
+                        WHEN NOT REGEXP_LIKE(
+                            CAST(analyzed_table."target_column" AS VARCHAR),
+                            '^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$'
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

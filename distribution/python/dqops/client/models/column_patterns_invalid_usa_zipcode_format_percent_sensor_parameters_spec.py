@@ -5,11 +5,13 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ColumnPatternsValidUuidFormatPercentSensorParametersSpec")
+T = TypeVar(
+    "T", bound="ColumnPatternsInvalidUsaZipcodeFormatPercentSensorParametersSpec"
+)
 
 
 @_attrs_define
-class ColumnPatternsValidUuidFormatPercentSensorParametersSpec:
+class ColumnPatternsInvalidUsaZipcodeFormatPercentSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
@@ -35,14 +37,14 @@ class ColumnPatternsValidUuidFormatPercentSensorParametersSpec:
         d = src_dict.copy()
         filter_ = d.pop("filter", UNSET)
 
-        column_patterns_valid_uuid_format_percent_sensor_parameters_spec = cls(
+        column_patterns_invalid_usa_zipcode_format_percent_sensor_parameters_spec = cls(
             filter_=filter_,
         )
 
-        column_patterns_valid_uuid_format_percent_sensor_parameters_spec.additional_properties = (
+        column_patterns_invalid_usa_zipcode_format_percent_sensor_parameters_spec.additional_properties = (
             d
         )
-        return column_patterns_valid_uuid_format_percent_sensor_parameters_spec
+        return column_patterns_invalid_usa_zipcode_format_percent_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

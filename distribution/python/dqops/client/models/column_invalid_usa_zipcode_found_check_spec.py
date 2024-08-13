@@ -10,14 +10,14 @@ if TYPE_CHECKING:
         ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
+    from ..models.max_count_rule_0_error_parameters_spec import (
+        MaxCountRule0ErrorParametersSpec,
     )
-    from ..models.min_percent_rule_100_error_parameters_spec import (
-        MinPercentRule100ErrorParametersSpec,
+    from ..models.max_count_rule_0_warning_parameters_spec import (
+        MaxCountRule0WarningParametersSpec,
     )
-    from ..models.min_percent_rule_100_warning_parameters_spec import (
-        MinPercentRule100WarningParametersSpec,
+    from ..models.max_count_rule_100_parameters_spec import (
+        MaxCountRule100ParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -54,9 +54,9 @@ class ColumnInvalidUsaZipcodeFoundCheckSpec:
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
         parameters (Union[Unset, ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
-        error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        warning (Union[Unset, MaxCountRule0WarningParametersSpec]):
+        error (Union[Unset, MaxCountRule0ErrorParametersSpec]):
+        fatal (Union[Unset, MaxCountRule100ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -71,9 +71,9 @@ class ColumnInvalidUsaZipcodeFoundCheckSpec:
     parameters: Union[
         Unset, "ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxCountRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxCountRule0ErrorParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxCountRule100ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -150,14 +150,14 @@ class ColumnInvalidUsaZipcodeFoundCheckSpec:
             ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
+        from ..models.max_count_rule_0_error_parameters_spec import (
+            MaxCountRule0ErrorParametersSpec,
         )
-        from ..models.min_percent_rule_100_error_parameters_spec import (
-            MinPercentRule100ErrorParametersSpec,
+        from ..models.max_count_rule_0_warning_parameters_spec import (
+            MaxCountRule0WarningParametersSpec,
         )
-        from ..models.min_percent_rule_100_warning_parameters_spec import (
-            MinPercentRule100WarningParametersSpec,
+        from ..models.max_count_rule_100_parameters_spec import (
+            MaxCountRule100ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -202,25 +202,25 @@ class ColumnInvalidUsaZipcodeFoundCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100WarningParametersSpec]
+        warning: Union[Unset, MaxCountRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100WarningParametersSpec.from_dict(_warning)
+            warning = MaxCountRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule100ErrorParametersSpec]
+        error: Union[Unset, MaxCountRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule100ErrorParametersSpec.from_dict(_error)
+            error = MaxCountRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, MaxCountRule100ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = MaxCountRule100ParametersSpec.from_dict(_fatal)
 
         column_invalid_usa_zipcode_found_check_spec = cls(
             schedule_override=schedule_override,

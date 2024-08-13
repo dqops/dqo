@@ -6,4 +6,5 @@ spec:
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of invalid USA phones number in a text column
     does not exceed the maximum accepted percentage.
+  friendly_name: Maximum percentage of rows containing invalid USA zip code values
   default_severity: error

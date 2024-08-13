@@ -7,12 +7,12 @@ from ..models.text_built_in_date_formats import TextBuiltInDateFormats
 from ..types import UNSET, Unset
 
 T = TypeVar(
-    "T", bound="ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec"
+    "T", bound="ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec"
 )
 
 
 @_attrs_define
-class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec:
+class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
@@ -52,15 +52,15 @@ class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec:
         else:
             date_format = TextBuiltInDateFormats(_date_format)
 
-        column_patterns_text_matching_date_pattern_percent_sensor_parameters_spec = cls(
+        column_patterns_text_not_matching_date_pattern_percent_sensor_parameters_spec = cls(
             filter_=filter_,
             date_format=date_format,
         )
 
-        column_patterns_text_matching_date_pattern_percent_sensor_parameters_spec.additional_properties = (
+        column_patterns_text_not_matching_date_pattern_percent_sensor_parameters_spec.additional_properties = (
             d
         )
-        return column_patterns_text_matching_date_pattern_percent_sensor_parameters_spec
+        return column_patterns_text_not_matching_date_pattern_percent_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

@@ -364,7 +364,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -386,7 +386,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -612,7 +612,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -970,7 +970,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -991,7 +991,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1232,7 +1232,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -1666,7 +1666,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1688,7 +1688,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1914,7 +1914,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -2273,7 +2273,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2294,7 +2294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2535,7 +2535,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -2969,7 +2969,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2991,7 +2991,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3217,7 +3217,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -3576,7 +3576,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3597,7 +3597,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3838,7 +3838,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -4304,7 +4304,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4326,7 +4326,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4574,7 +4574,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -4967,7 +4967,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4988,7 +4988,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5241,7 +5241,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -5711,7 +5711,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5733,7 +5733,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5981,7 +5981,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -6374,7 +6374,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6395,7 +6395,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6648,7 +6648,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END

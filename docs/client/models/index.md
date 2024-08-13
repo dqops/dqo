@@ -375,6 +375,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*TablePartitioningModel*](./tables.md#tablepartitioningmodel)|Rest model that returns the configuration of table partitioning information.|
 |[*TableComparisonProfilingChecksSpecMap*](./tables.md#tablecomparisonprofilingchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table.|
 |[*TableProfilingCheckCategoriesSpec*](./tables.md#tableprofilingcheckcategoriesspec)|Container of table level checks that are activated on a table level.|
+|[*TableProfilingSetupStatusModel*](./tables.md#tableprofilingsetupstatusmodel)|Table status model that identifies which type of information is already collected, such as data quality checks are configured, or statistics collected. DQOps user interface uses this information to activate red borders to highlight tabs in the user interface that must be clicked to continue profiling the table.|
 |[*TableStatisticsModel*](./tables.md#tablestatisticsmodel)|Model that returns a summary of the table level statistics (the basic profiling results).|
 
 
