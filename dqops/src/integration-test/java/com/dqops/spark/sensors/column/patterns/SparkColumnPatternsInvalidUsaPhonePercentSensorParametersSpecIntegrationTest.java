@@ -90,7 +90,7 @@ public class SparkColumnPatternsInvalidUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(60.869, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class SparkColumnPatternsInvalidUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(60.869, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class SparkColumnPatternsInvalidUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(60.869, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class SparkColumnPatternsInvalidUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class SparkColumnPatternsInvalidUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(60.869, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
+        Assertions.assertEquals(39.130, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.01);
     }
 
     @Test

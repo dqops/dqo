@@ -94,7 +94,7 @@ public class SingleStoreDbColumnPatternsInvalidUuidFormatPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(25.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class SingleStoreDbColumnPatternsInvalidUuidFormatPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(25.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -120,7 +120,7 @@ public class SingleStoreDbColumnPatternsInvalidUuidFormatPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(25.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class SingleStoreDbColumnPatternsInvalidUuidFormatPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 0.0, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(100.0f, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class SingleStoreDbColumnPatternsInvalidUuidFormatPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 0.0, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(100.0f, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
