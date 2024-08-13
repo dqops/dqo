@@ -3,8 +3,8 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/patterns/invalid_usa_zipcode_count
-  rule_name: comparison/min_percent
+  rule_name: comparison/max_count
   help_text: Verifies that the number of invalid zip codes in a text column does not
     exceed the maximum accepted count.
-  friendly_name: Maximum count of rows containing USA zip code values
+  friendly_name: Maximum count of rows containing invalid USA zip code values
   default_severity: error

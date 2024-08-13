@@ -6,6 +6,6 @@ spec:
   rule_name: comparison/max_count
   help_text: Verifies that the number of invalid USA phone numbers in a text column
     does not exceed the maximum accepted count.
-  friendly_name: Maximum count of rows containing USA phone number values
+  friendly_name: Maximum count of rows containing invalid USA phone number values
   standard: true
   default_severity: error

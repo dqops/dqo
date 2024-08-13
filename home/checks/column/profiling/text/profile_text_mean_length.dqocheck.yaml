@@ -7,4 +7,5 @@ spec:
   help_text: Verifies that the mean (average) length of texts in a column is within
     an accepted range.
   friendly_name: Verify that the mean length of the text is in the range
+  standard: true
   default_severity: error
