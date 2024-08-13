@@ -11,7 +11,7 @@ const DatabaseDetail = () => {
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input label="Server" className="mb-4" />
-        <Input label="Database Name" className="mb-4" />
+        <Input label="Database name" className="mb-4" />
         <Input label="Username" className="mb-4" />
         <Input label="Password" className="mb-4" />
         <Input label="Port" className="mb-4" />

@@ -323,7 +323,7 @@ const DeleteStoredDataExtendedPopUp = ({
                 }
               >
                 <Input
-                  label="Collector Category"
+                  label="Collector category"
                   value={params.collectorCategory}
                   onChange={(e) =>
                     onChangeParams({ collectorCategory: e.target.value })
@@ -336,7 +336,7 @@ const DeleteStoredDataExtendedPopUp = ({
                   }
                 />
                 <Input
-                  label="Collector Name"
+                  label="Collector name"
                   value={params.collectorName}
                   onChange={(e) =>
                     onChangeParams({ collectorName: e.target.value })
@@ -349,7 +349,7 @@ const DeleteStoredDataExtendedPopUp = ({
                   }
                 />
                 <Input
-                  label="Collector Target"
+                  label="Collector target"
                   value={params.collectorTarget}
                   onChange={(e) =>
                     onChangeParams({ collectorTarget: e.target.value })
