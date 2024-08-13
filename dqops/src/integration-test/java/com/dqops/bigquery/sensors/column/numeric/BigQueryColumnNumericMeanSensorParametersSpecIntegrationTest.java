@@ -23,9 +23,6 @@ import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
-import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.groupings.DataGroupingDimensionSource;
-import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -40,7 +37,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,7 +87,7 @@ public class BigQueryColumnNumericMeanSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -104,7 +100,7 @@ public class BigQueryColumnNumericMeanSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -117,7 +113,7 @@ public class BigQueryColumnNumericMeanSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -143,7 +139,7 @@ public class BigQueryColumnNumericMeanSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

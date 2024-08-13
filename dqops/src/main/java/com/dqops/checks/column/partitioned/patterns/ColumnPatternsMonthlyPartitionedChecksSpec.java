@@ -42,30 +42,30 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPatternsMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_text_not_matching_regex_found", o -> o.monthlyPartitionTextNotMatchingRegexFound);
-            put("monthly_partition_texts_matching_regex_percent", o -> o.monthlyPartitionTextsMatchingRegexPercent);
+            put("monthly_partition_texts_not_matching_regex_percent", o -> o.monthlyPartitionTextsNotMatchingRegexPercent);
             put("monthly_partition_invalid_email_format_found", o -> o.monthlyPartitionInvalidEmailFormatFound);
             put("monthly_partition_invalid_email_format_percent", o -> o.monthlyPartitionInvalidEmailFormatPercent);
             put("monthly_partition_text_not_matching_date_pattern_found", o -> o.monthlyPartitionTextNotMatchingDatePatternFound);
-            put("monthly_partition_text_matching_date_pattern_percent", o -> o.monthlyPartitionTextMatchingDatePatternPercent);
-            put("monthly_partition_text_matching_name_pattern_percent", o -> o.monthlyPartitionTextMatchingNamePatternPercent);
+            put("monthly_partition_text_not_matching_date_pattern_percent", o -> o.monthlyPartitionTextNotMatchingDatePatternPercent);
+            put("monthly_partition_text_not_matching_name_pattern_percent", o -> o.monthlyPartitionTextNotMatchingNamePatternPercent);
 
             put("monthly_partition_invalid_uuid_format_found", o -> o.monthlyPartitionInvalidUuidFormatFound);
-            put("monthly_partition_valid_uuid_format_percent", o -> o.monthlyPartitionValidUuidFormatPercent);
+            put("monthly_partition_invalid_uuid_format_percent", o -> o.monthlyPartitionInvalidUuidFormatPercent);
             put("monthly_partition_invalid_ip4_address_format_found", o -> o.monthlyPartitionInvalidIp4AddressFormatFound);
             put("monthly_partition_invalid_ip6_address_format_found", o -> o.monthlyPartitionInvalidIp6AddressFormatFound);
 
             put("monthly_partition_invalid_usa_phone_format_found", o -> o.monthlyPartitionInvalidUsaPhoneFormatFound);
             put("monthly_partition_invalid_usa_zipcode_format_found", o -> o.monthlyPartitionInvalidUsaZipcodeFormatFound);
-            put("monthly_partition_valid_usa_phone_format_percent", o -> o.monthlyPartitionValidUsaPhoneFormatPercent);
-            put("monthly_partition_valid_usa_zipcode_format_percent", o -> o.monthlyPartitionValidUsaZipcodeFormatPercent);
+            put("monthly_partition_invalid_usa_phone_format_percent", o -> o.monthlyPartitionInvalidUsaPhoneFormatPercent);
+            put("monthly_partition_invalid_usa_zipcode_format_percent", o -> o.monthlyPartitionInvalidUsaZipcodeFormatPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingRegexFoundCheckSpec monthlyPartitionTextNotMatchingRegexFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.")
-    private ColumnTextsMatchingRegexPercentCheckSpec monthlyPartitionTextsMatchingRegexPercent;
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regular expression pattern does not exceed the maximum accepted percentage.")
+    private ColumnTextsNotMatchingRegexPercentCheckSpec monthlyPartitionTextsNotMatchingRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec monthlyPartitionInvalidEmailFormatFound;
@@ -76,17 +76,17 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec monthlyPartitionTextNotMatchingDatePatternFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.")
-    private ColumnTextMatchingDatePatternPercentCheckSpec monthlyPartitionTextMatchingDatePatternPercent;
+    @JsonPropertyDescription("Verifies that the percentage of texts matching the date format regular expression in a column does not exceed the maximum accepted percentage.")
+    private ColumnTextNotMatchingDatePatternPercentCheckSpec monthlyPartitionTextNotMatchingDatePatternPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.")
-    private ColumnTextMatchingNamePatternPercentCheckSpec monthlyPartitionTextMatchingNamePatternPercent;
+    @JsonPropertyDescription("Verifies that the percentage of texts matching the name regular expression does not exceed the maximum accepted percentage.")
+    private ColumnTextNotMatchingNamePatternPercentCheckSpec monthlyPartitionTextNotMatchingNamePatternPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidUuidFormatFoundCheckSpec monthlyPartitionInvalidUuidFormatFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.")
-    private ColumnValidUuidFormatPercentCheckSpec monthlyPartitionValidUuidFormatPercent;
+    @JsonPropertyDescription("Verifies that the percentage of invalid UUID in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUuidFormatPercentCheckSpec monthlyPartitionInvalidUuidFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp4AddressFormatFoundCheckSpec monthlyPartitionInvalidIp4AddressFormatFound;
@@ -100,11 +100,11 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidUsaZipcodeFoundCheckSpec monthlyPartitionInvalidUsaZipcodeFormatFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
-    private ColumnValidUsaPhonePercentCheckSpec monthlyPartitionValidUsaPhoneFormatPercent;
+    @JsonPropertyDescription("Verifies that the percentage of invalid USA phones number in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUsaPhonePercentCheckSpec monthlyPartitionInvalidUsaPhoneFormatPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phones number in a text column does not fall below the minimum accepted percentage.")
-    private ColumnValidUsaZipcodePercentCheckSpec monthlyPartitionValidUsaZipcodeFormatPercent;
+    @JsonPropertyDescription("Verifies that the percentage of invalid USA phones number in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUsaZipcodePercentCheckSpec monthlyPartitionInvalidUsaZipcodeFormatPercent;
 
     /**
      * Returns a maximum not match regex count check.
@@ -125,21 +125,21 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     }
 
     /**
-     * Returns a minimum match regex percent check.
-     * @return Minimum match regex percent check.
+     * Returns a maximum not match regex percent check.
+     * @return Maximum not match regex percent check.
      */
-    public ColumnTextsMatchingRegexPercentCheckSpec getMonthlyPartitionTextsMatchingRegexPercent() {
-        return monthlyPartitionTextsMatchingRegexPercent;
+    public ColumnTextsNotMatchingRegexPercentCheckSpec getMonthlyPartitionTextsNotMatchingRegexPercent() {
+        return monthlyPartitionTextsNotMatchingRegexPercent;
     }
 
     /**
-     * Sets a new definition of a minimum match regex percent check.
-     * @param monthlyPartitionTextsMatchingRegexPercent Minimum match regex percent check.
+     * Sets a new definition of a maximum not match regex percent check.
+     * @param monthlyPartitionTextsNotMatchingRegexPercent Maximum not match regex percent check.
      */
-    public void setMonthlyPartitionTextsMatchingRegexPercent(ColumnTextsMatchingRegexPercentCheckSpec monthlyPartitionTextsMatchingRegexPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextsMatchingRegexPercent, monthlyPartitionTextsMatchingRegexPercent));
-        this.monthlyPartitionTextsMatchingRegexPercent = monthlyPartitionTextsMatchingRegexPercent;
-        propagateHierarchyIdToField(monthlyPartitionTextsMatchingRegexPercent, "monthly_partition_texts_matching_regex_percent");
+    public void setMonthlyPartitionTextsNotMatchingRegexPercent(ColumnTextsNotMatchingRegexPercentCheckSpec monthlyPartitionTextsNotMatchingRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextsNotMatchingRegexPercent, monthlyPartitionTextsNotMatchingRegexPercent));
+        this.monthlyPartitionTextsNotMatchingRegexPercent = monthlyPartitionTextsNotMatchingRegexPercent;
+        propagateHierarchyIdToField(monthlyPartitionTextsNotMatchingRegexPercent, "monthly_partition_texts_not_matching_regex_percent");
     }
 
     /**
@@ -197,39 +197,39 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     }
 
     /**
-     * Returns a maximum match date regex percent check.
-     * @return Maximum match date regex percent check.
+     * Returns a maximum not match date regex percent check.
+     * @return Maximum not match date regex percent check.
      */
-    public ColumnTextMatchingDatePatternPercentCheckSpec getMonthlyPartitionTextMatchingDatePatternPercent() {
-        return monthlyPartitionTextMatchingDatePatternPercent;
+    public ColumnTextNotMatchingDatePatternPercentCheckSpec getMonthlyPartitionTextNotMatchingDatePatternPercent() {
+        return monthlyPartitionTextNotMatchingDatePatternPercent;
     }
 
     /**
-     * Sets a new definition of a maximum match date regex percent check.
-     * @param monthlyPartitionTextMatchingDatePatternPercent Maximum match date regex percent check.
+     * Sets a new definition of a maximum not match date regex percent check.
+     * @param monthlyPartitionTextNotMatchingDatePatternPercent Maximum not match date regex percent check.
      */
-    public void setMonthlyPartitionTextMatchingDatePatternPercent(ColumnTextMatchingDatePatternPercentCheckSpec monthlyPartitionTextMatchingDatePatternPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMatchingDatePatternPercent, monthlyPartitionTextMatchingDatePatternPercent));
-        this.monthlyPartitionTextMatchingDatePatternPercent = monthlyPartitionTextMatchingDatePatternPercent;
-        propagateHierarchyIdToField(monthlyPartitionTextMatchingDatePatternPercent, "monthly_partition_text_matching_date_pattern_percent");
+    public void setMonthlyPartitionTextNotMatchingDatePatternPercent(ColumnTextNotMatchingDatePatternPercentCheckSpec monthlyPartitionTextNotMatchingDatePatternPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextNotMatchingDatePatternPercent, monthlyPartitionTextNotMatchingDatePatternPercent));
+        this.monthlyPartitionTextNotMatchingDatePatternPercent = monthlyPartitionTextNotMatchingDatePatternPercent;
+        propagateHierarchyIdToField(monthlyPartitionTextNotMatchingDatePatternPercent, "monthly_partition_text_not_matching_date_pattern_percent");
     }
 
     /**
-     * Returns a maximum match name regex percent check.
-     * @return Maximum match name regex percent check.
+     * Returns a maximum not match name regex percent check.
+     * @return Maximum not match name regex percent check.
      */
-    public ColumnTextMatchingNamePatternPercentCheckSpec getMonthlyPartitionTextMatchingNamePatternPercent() {
-        return monthlyPartitionTextMatchingNamePatternPercent;
+    public ColumnTextNotMatchingNamePatternPercentCheckSpec getMonthlyPartitionTextNotMatchingNamePatternPercent() {
+        return monthlyPartitionTextNotMatchingNamePatternPercent;
     }
 
     /**
-     * Sets a new definition of a maximum match name regex percent check.
-     * @param monthlyPartitionTextMatchingNamePatternPercent Maximum match name regex percent check.
+     * Sets a new definition of a maximum not match name regex percent check.
+     * @param monthlyPartitionTextNotMatchingNamePatternPercent Maximum not match name regex percent check.
      */
-    public void setMonthlyPartitionTextMatchingNamePatternPercent(ColumnTextMatchingNamePatternPercentCheckSpec monthlyPartitionTextMatchingNamePatternPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMatchingNamePatternPercent, monthlyPartitionTextMatchingNamePatternPercent));
-        this.monthlyPartitionTextMatchingNamePatternPercent = monthlyPartitionTextMatchingNamePatternPercent;
-        propagateHierarchyIdToField(monthlyPartitionTextMatchingNamePatternPercent, "monthly_partition_text_matching_name_pattern_percent");
+    public void setMonthlyPartitionTextNotMatchingNamePatternPercent(ColumnTextNotMatchingNamePatternPercentCheckSpec monthlyPartitionTextNotMatchingNamePatternPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextNotMatchingNamePatternPercent, monthlyPartitionTextNotMatchingNamePatternPercent));
+        this.monthlyPartitionTextNotMatchingNamePatternPercent = monthlyPartitionTextNotMatchingNamePatternPercent;
+        propagateHierarchyIdToField(monthlyPartitionTextNotMatchingNamePatternPercent, "monthly_partition_text_not_matching_name_pattern_percent");
     }
 
     /**
@@ -251,21 +251,21 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     }
 
     /**
-     * Returns a valid UUID percent check.
-     * @return Valid UUID percent check.
+     * Returns an invalid UUID percent check.
+     * @return Invalid UUID percent check.
      */
-    public ColumnValidUuidFormatPercentCheckSpec getMonthlyPartitionValidUuidFormatPercent() {
-        return monthlyPartitionValidUuidFormatPercent;
+    public ColumnInvalidUuidFormatPercentCheckSpec getMonthlyPartitionInvalidUuidFormatPercent() {
+        return monthlyPartitionInvalidUuidFormatPercent;
     }
 
     /**
-     * Sets a new definition of a valid UUID percent check.
-     * @param monthlyPartitionValidUuidFormatPercent Valid UUID percent check.
+     * Sets a new definition of an invalid UUID percent check.
+     * @param monthlyPartitionInvalidUuidFormatPercent Invalid UUID percent check.
      */
-    public void setMonthlyPartitionValidUuidFormatPercent(ColumnValidUuidFormatPercentCheckSpec monthlyPartitionValidUuidFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidUuidFormatPercent, monthlyPartitionValidUuidFormatPercent));
-        this.monthlyPartitionValidUuidFormatPercent = monthlyPartitionValidUuidFormatPercent;
-        propagateHierarchyIdToField(monthlyPartitionValidUuidFormatPercent, "monthly_partition_valid_uuid_format_percent");
+    public void setMonthlyPartitionInvalidUuidFormatPercent(ColumnInvalidUuidFormatPercentCheckSpec monthlyPartitionInvalidUuidFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidUuidFormatPercent, monthlyPartitionInvalidUuidFormatPercent));
+        this.monthlyPartitionInvalidUuidFormatPercent = monthlyPartitionInvalidUuidFormatPercent;
+        propagateHierarchyIdToField(monthlyPartitionInvalidUuidFormatPercent, "monthly_partition_invalid_uuid_format_percent");
     }
 
     /**
@@ -342,39 +342,39 @@ public class ColumnPatternsMonthlyPartitionedChecksSpec extends AbstractCheckCat
     }
 
     /**
-     * Returns a valid USA phones number percent check.
-     * @return Valid USA phones number percent check.
+     * Returns an invalid USA phones number percent check.
+     * @return Invalid USA phones number percent check.
      */
-    public ColumnValidUsaPhonePercentCheckSpec getMonthlyPartitionValidUsaPhoneFormatPercent() {
-        return monthlyPartitionValidUsaPhoneFormatPercent;
+    public ColumnInvalidUsaPhonePercentCheckSpec getMonthlyPartitionInvalidUsaPhoneFormatPercent() {
+        return monthlyPartitionInvalidUsaPhoneFormatPercent;
     }
 
     /**
-     * Sets a new definition of a valid USA phones number percent check.
-     * @param monthlyPartitionValidUsaPhoneFormatPercent Valid USA phones number percent check.
+     * Sets a new definition of an invalid USA phones number percent check.
+     * @param monthlyPartitionInvalidUsaPhoneFormatPercent Invalid USA phones number percent check.
      */
-    public void setMonthlyPartitionValidUsaPhoneFormatPercent(ColumnValidUsaPhonePercentCheckSpec monthlyPartitionValidUsaPhoneFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidUsaPhoneFormatPercent, monthlyPartitionValidUsaPhoneFormatPercent));
-        this.monthlyPartitionValidUsaPhoneFormatPercent = monthlyPartitionValidUsaPhoneFormatPercent;
-        propagateHierarchyIdToField(monthlyPartitionValidUsaPhoneFormatPercent, "monthly_partition_valid_usa_phone_format_percent");
+    public void setMonthlyPartitionInvalidUsaPhoneFormatPercent(ColumnInvalidUsaPhonePercentCheckSpec monthlyPartitionInvalidUsaPhoneFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidUsaPhoneFormatPercent, monthlyPartitionInvalidUsaPhoneFormatPercent));
+        this.monthlyPartitionInvalidUsaPhoneFormatPercent = monthlyPartitionInvalidUsaPhoneFormatPercent;
+        propagateHierarchyIdToField(monthlyPartitionInvalidUsaPhoneFormatPercent, "monthly_partition_invalid_usa_phone_format_percent");
     }
 
     /**
-     * Returns a valid USA zip code percent check.
-     * @return Valid USA zip code percent check.
+     * Returns an invalid USA zip code percent check.
+     * @return Invalid USA zip code percent check.
      */
-    public ColumnValidUsaZipcodePercentCheckSpec getMonthlyPartitionValidUsaZipcodeFormatPercent() {
-        return monthlyPartitionValidUsaZipcodeFormatPercent;
+    public ColumnInvalidUsaZipcodePercentCheckSpec getMonthlyPartitionInvalidUsaZipcodeFormatPercent() {
+        return monthlyPartitionInvalidUsaZipcodeFormatPercent;
     }
 
     /**
-     * Sets a new definition of a valid USA zip code percent check.
-     * @param monthlyPartitionValidUsaZipcodeFormatPercent Valid USA zip code percent check.
+     * Sets a new definition of an invalid USA zip code percent check.
+     * @param monthlyPartitionInvalidUsaZipcodeFormatPercent Invalid USA zip code percent check.
      */
-    public void setMonthlyPartitionValidUsaZipcodeFormatPercent(ColumnValidUsaZipcodePercentCheckSpec monthlyPartitionValidUsaZipcodeFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidUsaPhoneFormatPercent, monthlyPartitionValidUsaZipcodeFormatPercent));
-        this.monthlyPartitionValidUsaZipcodeFormatPercent = monthlyPartitionValidUsaZipcodeFormatPercent;
-        propagateHierarchyIdToField(monthlyPartitionValidUsaZipcodeFormatPercent, "monthly_partition_valid_usa_zipcode_format_percent");
+    public void setMonthlyPartitionInvalidUsaZipcodeFormatPercent(ColumnInvalidUsaZipcodePercentCheckSpec monthlyPartitionInvalidUsaZipcodeFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidUsaPhoneFormatPercent, monthlyPartitionInvalidUsaZipcodeFormatPercent));
+        this.monthlyPartitionInvalidUsaZipcodeFormatPercent = monthlyPartitionInvalidUsaZipcodeFormatPercent;
+        propagateHierarchyIdToField(monthlyPartitionInvalidUsaZipcodeFormatPercent, "monthly_partition_invalid_usa_zipcode_format_percent");
     }
 
     /**

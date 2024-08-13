@@ -1,5 +1,0 @@
-{% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
-    SUBSTRING({{ lib.render_target_column('analyzed_table') }} from
-                         '^[0-9]{5}(?:-[0-9]{4})?$') IS NOT NULL
-{%- endcall -%}

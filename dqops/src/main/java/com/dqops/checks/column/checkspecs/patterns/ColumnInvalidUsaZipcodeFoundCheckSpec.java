@@ -23,9 +23,7 @@ import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.patterns.ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
@@ -43,13 +41,13 @@ import java.util.Objects;
 
 /**
  * This check validates the format of a USA zip code inside text columns.
- * It measures the percentage of columns containing a valid zip code and raises a data quality issue when the rate is below a threshold.
+ * It counts the number of invalid zip code and raises a data quality issue when the rate is below a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnInvalidUsaZipcodeFoundCheckSpec
-        extends AbstractCheckSpec<ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidUsaZipcodeFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -64,17 +62,17 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100WarningParametersSpec warning;
+    private MaxCountRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for the minimum percentage of rows that contains a USA zip code number in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ErrorParametersSpec error;
+    private MaxCountRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private MaxCountRule100ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -101,7 +99,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100WarningParametersSpec getWarning() {
+    public MaxCountRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -109,7 +107,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100WarningParametersSpec warning) {
+    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -121,7 +119,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule100ErrorParametersSpec getError() {
+    public MaxCountRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -129,7 +127,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule100ErrorParametersSpec error) {
+    public void setError(MaxCountRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -141,7 +139,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public MaxCountRule100ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -149,7 +147,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(MaxCountRule100ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -173,7 +171,7 @@ public class ColumnInvalidUsaZipcodeFoundCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Maximum count of rows containing USA zip code values";
+        return "Maximum count of rows containing invalid USA zip code values";
     }
 
     /**

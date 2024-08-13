@@ -43,7 +43,7 @@ import java.util.Objects;
 
 /**
  * This check validates the format of USA phone numbers inside text columns.
- * It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
+ * It counts the number of invalid phone number and raises a data quality issue when too many rows contain phone numbers.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -185,7 +185,7 @@ public class ColumnInvalidUsaPhoneFoundCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Maximum count of rows containing USA phone number values";
+        return "Maximum count of rows containing invalid USA phone number values";
     }
 
     /**
