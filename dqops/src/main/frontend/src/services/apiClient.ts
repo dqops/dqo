@@ -33,6 +33,7 @@ import {
   EnvironmentApiFactory,
   ErrorSamplesApiFactory,
   ErrorsApiFactory,
+  FilteredNotificationsConfigurationsApiFactory,
   IncidentsApiFactory,
   JobsApiFactory,
   LabelsApiFactory,
@@ -179,3 +180,6 @@ export const RuleMiningApiClient = RuleMiningApiFactory(
   '',
   axios
 );
+
+export const FilteredNotificationsConfigurationsClient =
+  FilteredNotificationsConfigurationsApiFactory(new Configuration(), '', axios);

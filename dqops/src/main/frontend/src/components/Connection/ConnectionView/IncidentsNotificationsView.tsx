@@ -22,11 +22,10 @@ import { SettingsApi } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import Checkbox from '../../Checkbox';
-import SectionWrapper from '../../Dashboard/SectionWrapper';
-import Input from '../../Input';
 import NumberInput from '../../NumberInput';
 import Select from '../../Select';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import NotificationPattern from './NotificationPattern/NotificationPattern';
 
 const groupLevelOptions = Object.values(
   ConnectionIncidentGroupingSpecGroupingLevelEnum
@@ -177,7 +176,7 @@ export const IncidentsNotificationsView = () => {
           </div>
         </div>
 
-        <SectionWrapper
+        {/* <SectionWrapper
           title="Addresses for notifications of an incident state change"
           className="mt-8"
         >
@@ -231,7 +230,8 @@ export const IncidentsNotificationsView = () => {
               defaultWebhooksConfiguration?.incident_muted_addresses
             }
           />
-        </SectionWrapper>
+        </SectionWrapper> */}
+        <NotificationPattern connection={connection} />
       </div>
     </div>
   );
