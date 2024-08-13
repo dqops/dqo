@@ -107,7 +107,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/patterns/text_matching_date_patterns_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/text_not_matching_date_patterns_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -156,7 +156,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -188,7 +188,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -220,7 +220,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -252,7 +252,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -288,7 +288,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -323,7 +323,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -354,7 +354,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -396,7 +396,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -433,7 +433,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -470,7 +470,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -519,7 +519,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -562,7 +562,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -603,7 +603,7 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
