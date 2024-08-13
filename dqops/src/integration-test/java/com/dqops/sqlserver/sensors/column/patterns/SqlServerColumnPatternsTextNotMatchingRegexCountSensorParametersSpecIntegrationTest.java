@@ -176,7 +176,7 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("invalid@mail@mail.com"));
+        Assertions.assertTrue(sampleValues.contains("invalid.domain@.com"));
     }
 
     @Test
@@ -199,12 +199,12 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("invalid@mail@mail.com"));
+        Assertions.assertTrue(sampleValues.contains("invalid.domain@.com"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(28));
+        Assertions.assertTrue(rowId1Values.contains(25));
     }
 
     @Test
@@ -236,18 +236,18 @@ public class SqlServerColumnPatternsTextNotMatchingRegexCountSensorParametersSpe
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("invalid@mail@mail.com"));
+        Assertions.assertTrue(sampleValues.contains("invalid.domain@.com"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
+        Assertions.assertEquals(1, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(0));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(28));
+        Assertions.assertTrue(rowId1Values.contains(25));
     }
 }

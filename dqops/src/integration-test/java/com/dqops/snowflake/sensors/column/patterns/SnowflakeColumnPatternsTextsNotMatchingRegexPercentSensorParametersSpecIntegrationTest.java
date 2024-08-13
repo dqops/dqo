@@ -95,7 +95,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(66.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(66.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(66.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(16.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(83.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(66.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -164,14 +164,14 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(20, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("local.part.end.with.dot.not.allowed.@gmail.com"));
+        Assertions.assertTrue(sampleValues.contains("invalid@mail@mail.com"));
     }
 
     @Test
@@ -186,7 +186,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(20, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -194,12 +194,12 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("local.part.end.with.dot.not.allowed.@gmail.com"));
+        Assertions.assertTrue(sampleValues.contains("invalid@mail@mail.com"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(17));
+        Assertions.assertTrue(rowId1Values.contains(28));
     }
 
     @Test
@@ -221,7 +221,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(20, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -231,7 +231,7 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("local.part.end.with.dot.not.allowed.@gmail.com"));
+        Assertions.assertTrue(sampleValues.contains("invalid@mail@mail.com"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
@@ -243,6 +243,6 @@ public class SnowflakeColumnPatternsTextsNotMatchingRegexPercentSensorParameters
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(17));
+        Assertions.assertTrue(rowId1Values.contains(28));
     }
 }

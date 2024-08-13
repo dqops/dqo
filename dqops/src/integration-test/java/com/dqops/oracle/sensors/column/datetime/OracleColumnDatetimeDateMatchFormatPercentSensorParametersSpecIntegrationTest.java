@@ -54,7 +54,7 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.oracle);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
@@ -86,14 +86,14 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date_text", this.checkSpec);
+                sampleTableMetadata, "mix_of_values", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -101,79 +101,79 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(50.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsErrorSamples() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
-                sampleTableMetadata, "date_text", this.checkSpec);
+                sampleTableMetadata, "mix_of_values", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(20, resultTable.rowCount());
+        Assertions.assertEquals(18, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("2023-01-11"));
+        Assertions.assertTrue(sampleValues.contains("33"));
     }
 
     @Test
@@ -182,12 +182,12 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         sampleTableMetadata.getTableSpec().getColumns().getAt(1).setId(true);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
-                sampleTableMetadata, "date_text", this.checkSpec);
+                sampleTableMetadata, "mix_of_values", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(20, resultTable.rowCount());
+        Assertions.assertEquals(18, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -195,12 +195,12 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2023-01-11"));
+        Assertions.assertTrue(sampleValues.contains("33"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(7));
+        Assertions.assertTrue(rowId1Values.contains(1));
     }
 
     @Test
@@ -208,7 +208,7 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec() {{
             setLevel1(new DataGroupingDimensionSpec() {{
                 setSource(DataGroupingDimensionSource.column_value);
-                setColumn("result");
+                setColumn("correct");
             }});
         }};
         sampleTableMetadata.getTableSpec().setDefaultDataGroupingConfiguration(dataGroupingConfigurationSpec);
@@ -216,12 +216,12 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         sampleTableMetadata.getTableSpec().getColumns().getAt(1).setId(true);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
-                sampleTableMetadata, "date_text", this.checkSpec);
+                sampleTableMetadata, "mix_of_values", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(20, resultTable.rowCount());
+        Assertions.assertEquals(18, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -231,18 +231,18 @@ public class OracleColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2023-01-11"));
+        Assertions.assertTrue(sampleValues.contains("33"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertEquals(1, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains(0));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(7));
+        Assertions.assertTrue(rowId1Values.contains(1));
     }
 }

@@ -96,7 +96,7 @@ public class SingleStoreDbColumnPatternsTextNotMatchingDatePatternPercentSensorP
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(60.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class SingleStoreDbColumnPatternsTextNotMatchingDatePatternPercentSensorP
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(60.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class SingleStoreDbColumnPatternsTextNotMatchingDatePatternPercentSensorP
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(60.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class SingleStoreDbColumnPatternsTextNotMatchingDatePatternPercentSensorP
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(60.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test

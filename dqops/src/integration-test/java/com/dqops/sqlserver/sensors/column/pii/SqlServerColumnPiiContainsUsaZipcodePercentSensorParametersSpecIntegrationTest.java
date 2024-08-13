@@ -153,7 +153,7 @@ public class SqlServerColumnPiiContainsUsaZipcodePercentSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(18, resultTable.rowCount());
+        Assertions.assertEquals(16, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
@@ -174,7 +174,7 @@ public class SqlServerColumnPiiContainsUsaZipcodePercentSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(18, resultTable.rowCount());
+        Assertions.assertEquals(16, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -208,7 +208,7 @@ public class SqlServerColumnPiiContainsUsaZipcodePercentSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(18, resultTable.rowCount());
+        Assertions.assertEquals(16, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
