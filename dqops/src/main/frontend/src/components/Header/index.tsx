@@ -325,7 +325,7 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-1.5">
                 <SvgIcon name="dashboards" className="!w-4.5 !h-4.5" />
               </div>
-              {!isWindowSmall && <div>Data qality dashboards</div>}
+              {!isWindowSmall && <div>Data quality dashboards</div>}
             </div>
           </Tooltip>
           <Tooltip
