@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FilteredNotificationModel } from '../../../../api';
 import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
-import Button from '../../../Button';
-import SvgIcon from '../../../SvgIcon';
-import CreateNotificationPattern from './CreateNotificationPattern';
-import NotificationPatternTable from './NotificationPatternTable';
 type TNotificationPattern = FilteredNotificationModel & {
   connection?: string;
   schema?: string;
@@ -46,7 +42,7 @@ export default function NotificationPattern({
   };
   return (
     <div>
-      {addNotificationPattern ? (
+      {/* {addNotificationPattern ? (
         <div>
           <div>
             <Button
@@ -76,7 +72,7 @@ export default function NotificationPattern({
             color="primary"
           />
         </>
-      )}
+      )} */}
     </div>
   );
 }

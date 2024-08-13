@@ -5,6 +5,7 @@ import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
   ConnectionIncidentGroupingSpecMinimumSeverityEnum,
+  FilteredNotificationModel,
   IncidentNotificationSpec
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -18,15 +19,26 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { SettingsApi } from '../../../services/apiClient';
+import {
+  FilteredNotificationsConfigurationsClient,
+  SettingsApi
+} from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
+import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import NumberInput from '../../NumberInput';
 import Select from '../../Select';
+import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import NotificationPattern from './NotificationPattern/NotificationPattern';
-
+import CreateNotificationPattern from './NotificationPattern/CreateNotificationPattern';
+import NotificationPatternTable from './NotificationPattern/NotificationPatternTable';
+type TNotificationPattern = FilteredNotificationModel & {
+  connection?: string;
+  schema?: string;
+  table?: string;
+  column?: string;
+};
 const groupLevelOptions = Object.values(
   ConnectionIncidentGroupingSpecGroupingLevelEnum
 ).map((item) => ({
@@ -57,6 +69,35 @@ export const IncidentsNotificationsView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
     useState<IncidentNotificationSpec>();
+
+  const [
+    filteredNotificationsConfigurations,
+    setFilteredNotificationsConfigurations
+  ] = useState<Array<TNotificationPattern>>([]);
+  const [addNotificationPattern, setAddNotificationPattern] = useState(false);
+
+  useEffect(() => {
+    FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationsConfigurations(
+      connection
+    ).then((response) => {
+      const patterns: TNotificationPattern[] = response.data.map((x) => {
+        return {
+          ...x,
+          connection: x.filter?.connection || '',
+          schema: x.filter?.schema || '',
+          table: x.filter?.table || ''
+        };
+      });
+      setFilteredNotificationsConfigurations(patterns);
+    });
+  }, [connection]);
+
+  const createNotificationPattern = () => {
+    setAddNotificationPattern(true);
+  };
+  const onBack = () => {
+    setAddNotificationPattern(false);
+  };
 
   const getDefaultWebhooksConfiguration = async () => {
     await SettingsApi.getDefaultWebhooks().then((res) =>
@@ -115,123 +156,109 @@ export const IncidentsNotificationsView = () => {
           : ''
       )}
     >
-      <ConnectionActionGroup
-        onUpdate={onUpdate}
-        isUpdated={isUpdatedIncidentGroup}
-        isUpdating={isUpdating}
-      />
-      <div className="flex flex-col">
-        <div className="flex mb-4">
-          <Select
-            label="Data quality incident grouping level"
-            options={groupLevelOptions}
-            value={incidentGrouping?.grouping_level}
-            onChange={(value) => onChange({ grouping_level: value })}
-            className="text-sm"
-            menuClassName="!top-14"
-          />
-        </div>
-        <div className="flex mb-4">
-          <Select
-            label="Minimum severity level"
-            options={minimumSeverityOptions}
-            value={incidentGrouping?.minimum_severity}
-            onChange={(value) => onChange({ minimum_severity: value })}
-            className="text-sm"
-            menuClassName="!top-14"
-          />
-        </div>
-        <div className="flex gap-4 items-center mb-4 text-sm">
-          <p>Create separate incidents for each data group</p>
-          <div className="w-6 h-6">
-            <Checkbox
-              checked={incidentGrouping?.divide_by_data_groups}
-              onChange={(value) => onChange({ divide_by_data_groups: value })}
-            />
-          </div>
-        </div>
-        <div className="flex items-center mb-4 gap-2 text-sm">
-          <p>Maximum incident duration</p>
-          <div className="flex gap-2 items-center">
-            <NumberInput
-              value={incidentGrouping?.max_incident_length_days}
-              onChange={(value) =>
-                onChange({ max_incident_length_days: value })
-              }
-            />
-            <span>days. After this time, DQOps creates a new incident.</span>
-          </div>
-        </div>
-        <div className="flex items-center mb-4 gap-2 text-sm">
-          <p>Mute data quality issues for</p>
-          <div className="flex gap-2 items-center">
-            <NumberInput
-              value={incidentGrouping?.mute_for_days}
-              onChange={() => {}}
-            />
-            <span>
-              {' '}
-              days. If the incident is muted, DQOps will not create a new one.
-            </span>
-          </div>
-        </div>
+      {!addNotificationPattern && (
+        <ConnectionActionGroup
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedIncidentGroup}
+          isUpdating={isUpdating}
+        />
+      )}
 
-        {/* <SectionWrapper
-          title="Addresses for notifications of an incident state change"
-          className="mt-8"
-        >
-          <Input
-            className="mb-4"
-            label="A new incident was opened (detected)"
-            value={incidentGrouping?.webhooks?.incident_opened_addresses}
-            onChange={(e) =>
-              onChangeWebhooks({ incident_opened_addresses: e.target.value })
-            }
-            placeholder={
-              defaultWebhooksConfiguration?.incident_opened_addresses
-            }
-          />
-          <Input
-            className="mb-4"
-            label="An incident was acknowledged"
-            value={
-              incidentGrouping?.webhooks?.incident_acknowledged_addresses
-            }
-            onChange={(e) =>
-              onChangeWebhooks({
-                incident_acknowledged_addresses: e.target.value
-              })
-            }
-            placeholder={
-              defaultWebhooksConfiguration?.incident_acknowledged_addresses
-            }
-          />
-          <Input
-            className="mb-4"
-            label="An incident was resolved"
-            value={incidentGrouping?.webhooks?.incident_resolved_addresses}
-            onChange={(e) =>
-              onChangeWebhooks({
-                incident_resolved_addresses: e.target.value
-              })
-            }
-            placeholder={
-              defaultWebhooksConfiguration?.incident_resolved_addresses
-            }
-          />
-          <Input
-            className="mb-4"
-            label="An incident was muted"
-            value={incidentGrouping?.webhooks?.incident_muted_addresses}
-            onChange={(e) =>
-              onChangeWebhooks({ incident_muted_addresses: e.target.value })
-            }
-            placeholder={
-              defaultWebhooksConfiguration?.incident_muted_addresses
-            }
-          />
-        </SectionWrapper> */}
-        <NotificationPattern connection={connection} />
+      <div className="flex flex-col">
+        {addNotificationPattern ? (
+          <div>
+            <div>
+              <Button
+                label="Back"
+                color="primary"
+                variant="text"
+                className="px-0"
+                leftIcon={
+                  <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+                }
+                onClick={onBack}
+              />
+            </div>
+            <CreateNotificationPattern
+              connection={connection}
+              onBack={onBack}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="flex mb-4">
+              <Select
+                label="Data quality incident grouping level"
+                options={groupLevelOptions}
+                value={incidentGrouping?.grouping_level}
+                onChange={(value) => onChange({ grouping_level: value })}
+                className="text-sm"
+                menuClassName="!top-14"
+              />
+            </div>
+            <div className="flex mb-4">
+              <Select
+                label="Minimum severity level"
+                options={minimumSeverityOptions}
+                value={incidentGrouping?.minimum_severity}
+                onChange={(value) => onChange({ minimum_severity: value })}
+                className="text-sm"
+                menuClassName="!top-14"
+              />
+            </div>
+            <div className="flex gap-4 items-center mb-4 text-sm">
+              <p>Create separate incidents for each data group</p>
+              <div className="w-6 h-6">
+                <Checkbox
+                  checked={incidentGrouping?.divide_by_data_groups}
+                  onChange={(value) =>
+                    onChange({ divide_by_data_groups: value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex items-center mb-4 gap-2 text-sm">
+              <p>Maximum incident duration</p>
+              <div className="flex gap-2 items-center">
+                <NumberInput
+                  value={incidentGrouping?.max_incident_length_days}
+                  onChange={(value) =>
+                    onChange({ max_incident_length_days: value })
+                  }
+                />
+                <span>
+                  days. After this time, DQOps creates a new incident.
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center mb-4 gap-2 text-sm">
+              <p>Mute data quality issues for</p>
+              <div className="flex gap-2 items-center">
+                <NumberInput
+                  value={incidentGrouping?.mute_for_days}
+                  onChange={() => {}}
+                />
+                <span>
+                  {' '}
+                  days. If the incident is muted, DQOps will not create a new
+                  one.
+                </span>
+              </div>
+            </div>
+            <NotificationPatternTable
+              filteredNotificationsConfigurations={
+                filteredNotificationsConfigurations
+              }
+              onChange={setFilteredNotificationsConfigurations}
+            />
+            <Button
+              label="Add notification pattern"
+              onClick={createNotificationPattern}
+              color="primary"
+              className="!w-50 !my-5"
+            />
+          </>
+        )}
       </div>
     </div>
   );
