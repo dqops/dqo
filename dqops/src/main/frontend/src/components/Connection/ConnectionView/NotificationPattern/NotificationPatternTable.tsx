@@ -24,10 +24,12 @@ type TNotificationPattern = FilteredNotificationModel & {
 
 export default function NotificationPatternTable({
   filteredNotificationsConfigurations,
-  onChange
+  onChange,
+  setPatternNameEdit
 }: {
   filteredNotificationsConfigurations: Array<TNotificationPattern>;
   onChange: (data: any) => void;
+  setPatternNameEdit: (patternName: string) => void;
 }) {
   const editPattern = (type: string, notificationPattern: string) => {
     // openDefaultCheckPatternFirstLevelTab(type, notificationPattern);
@@ -94,12 +96,9 @@ export default function NotificationPatternTable({
                   'px-4 underline cursor-pointer',
                   notificationPattern.disabled && 'text-gray-200'
                 )}
-                //   onClick={() =>
-                //     editPattern(
-                //       type,
-                //       notificationPattern.notificationPattern_name ?? ''
-                //     )
-                //   }
+                onClick={() =>
+                  setPatternNameEdit(notificationPattern.name ?? '')
+                }
               >
                 {notificationPattern.name}
               </td>

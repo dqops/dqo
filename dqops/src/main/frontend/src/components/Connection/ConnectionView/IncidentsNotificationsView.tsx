@@ -69,6 +69,7 @@ export const IncidentsNotificationsView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
     useState<IncidentNotificationSpec>();
+  const [patternNameEdit, setPatternNameEdit] = useState('');
 
   const [
     filteredNotificationsConfigurations,
@@ -250,6 +251,7 @@ export const IncidentsNotificationsView = () => {
                 filteredNotificationsConfigurations
               }
               onChange={setFilteredNotificationsConfigurations}
+              setPatternNameEdit={setPatternNameEdit}
             />
             <Button
               label="Add notification pattern"
