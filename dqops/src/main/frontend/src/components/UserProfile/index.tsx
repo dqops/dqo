@@ -211,7 +211,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           {apiKey.length !== 0 ? (
             <div className="flex items-center">
               <TextArea
-                label="User API Key:"
+                label="User API key:"
                 value={apiKey}
                 className="select-all text-sm"
                 onClick={copyWhole}
@@ -224,7 +224,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             </div>
           ) : (
             <Button
-              label="Generate API Key"
+              label="Generate API key"
               color="primary"
               variant="outlined"
               onClick={generateApiKey}

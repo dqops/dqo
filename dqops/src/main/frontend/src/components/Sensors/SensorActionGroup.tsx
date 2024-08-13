@@ -42,7 +42,7 @@ export const SensorActionGroup = ({
         <Button
           color="primary"
           variant="outlined"
-          label="Delete Sensor"
+          label="Delete sensor"
           className="w-40 !h-10"
           disabled={userProfile.can_manage_definitions !== true}
           onClick={onDelete}

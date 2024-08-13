@@ -90,7 +90,7 @@ const TableActionGroup = ({
               ? 'outlined'
               : 'contained'
           }
-          label="Add Column"
+          label="Add column"
           onClick={() => setIsAddColumnDialogOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
         />
@@ -108,14 +108,14 @@ const TableActionGroup = ({
               ? 'outlined'
               : 'contained'
           }
-          label="Delete Table"
+          label="Delete table"
           onClick={() => setIsOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {createDataStream && (
         <Button
-          label="Create Data Grouping"
+          label="Create data grouping"
           color={
             !(userProfile.can_manage_data_sources !== true)
               ? 'primary'
@@ -130,7 +130,7 @@ const TableActionGroup = ({
           {' '}
           (You can choose max 9 columns)
           <Button
-            label="Create Data Grouping"
+            label="Create data grouping"
             color="secondary"
             className="text-black "
             disabled={userProfile.can_manage_data_sources !== true}

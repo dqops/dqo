@@ -59,7 +59,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
       <DialogBody className="pt-6 pb-2 px-8">
         <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
-            Add Column
+            Add column
           </h1>
           <div className="mb-6">
             <Input

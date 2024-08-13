@@ -431,7 +431,7 @@ filterPropertiesDirectories(database)
           <Button
             color="primary"
             variant="outlined"
-            label="Test Connection"
+            label="Test connection"
             onClick={onTestConnection}
             disabled={isTesting}
           />
