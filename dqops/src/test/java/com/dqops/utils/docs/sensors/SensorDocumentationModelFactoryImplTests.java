@@ -54,8 +54,8 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertEquals("Column level sensor that calculates the percent of values that fit to a regex in a column.", sensorDocumentation.getSensorParametersJavaDoc());
         Assertions.assertEquals("column", sensorDocumentation.getTarget());
         Assertions.assertEquals("patterns", sensorDocumentation.getCategory());
-        Assertions.assertEquals("texts_matching_regex_percent", sensorDocumentation.getSensorName());
-        Assertions.assertEquals("column/patterns/texts_matching_regex_percent", sensorDocumentation.getFullSensorName());
+        Assertions.assertEquals("texts_not_matching_regex_percent", sensorDocumentation.getSensorName());
+        Assertions.assertEquals("column/patterns/texts_not_matching_regex_percent", sensorDocumentation.getFullSensorName());
 
         Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
         Assertions.assertEquals(12,sensorDocumentation.getSqlTemplates().keySet().size());
