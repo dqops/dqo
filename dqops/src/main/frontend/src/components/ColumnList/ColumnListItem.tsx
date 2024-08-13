@@ -187,7 +187,7 @@ export default function SchemaTableItem({
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
               <Tooltip
-                content={'Data Sources'}
+                content={'Data sources'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
@@ -211,7 +211,7 @@ export default function SchemaTableItem({
                 </div>
               </Tooltip>
               <Tooltip
-                content={'Monitoring Checks'}
+                content={'Monitoring checks'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
@@ -223,7 +223,7 @@ export default function SchemaTableItem({
                 </div>
               </Tooltip>
               <Tooltip
-                content={'Partition Checks'}
+                content={'Partition checks'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>

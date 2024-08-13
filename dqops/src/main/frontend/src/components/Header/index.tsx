@@ -232,7 +232,7 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-2">
                 <SvgIcon name="data_sources" className="w-4.5 h-4.5" />
               </div>
-              {!isWindowSmall && <div>Data Sources</div>}
+              {!isWindowSmall && <div>Data sources</div>}
             </div>
           </Tooltip>
           <Tooltip
@@ -273,7 +273,7 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-2">
                 <SvgIcon name="monitoring_checks" className="!w-4.5 !h-4.5" />
               </div>
-              {!isWindowSmall && <div>Monitoring Checks</div>}
+              {!isWindowSmall && <div>Monitoring checks</div>}
             </div>
           </Tooltip>
           <Tooltip
@@ -305,7 +305,7 @@ const Header = () => {
                 <div
                   className={clsx(isTextWrapped && !isWindowSmall && 'ml-2')}
                 >
-                  Partition Checks
+                  Partition checks
                 </div>
               )}
             </div>
@@ -325,7 +325,7 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-1.5">
                 <SvgIcon name="dashboards" className="!w-4.5 !h-4.5" />
               </div>
-              {!isWindowSmall && <div>Data Quality Dashboards</div>}
+              {!isWindowSmall && <div>Data qality dashboards</div>}
             </div>
           </Tooltip>
           <Tooltip

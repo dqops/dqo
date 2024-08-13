@@ -494,7 +494,7 @@ const DataQualityChecks = ({
               </div>
             ) : (
               <div className="text-red-500">
-                Warning: Data Quality Checks will not be scheduled, please
+                Warning: Data quality checks will not be scheduled, please
                 configure the scheduling
               </div>
             )}

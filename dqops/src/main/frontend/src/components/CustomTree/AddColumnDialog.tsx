@@ -63,7 +63,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           </h1>
           <div className="mb-6">
             <Input
-              label="Column Name"
+              label="Column name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />

@@ -57,7 +57,7 @@ const initSourceTabs = [
     value: 'data-groupings'
   },
   {
-    label: 'Incidents and Notifications',
+    label: 'Incidents and notifications',
     value: 'incidents'
   }
 ];

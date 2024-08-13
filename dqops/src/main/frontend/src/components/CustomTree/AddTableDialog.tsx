@@ -215,7 +215,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           <h1 className="text-center mb-4 text-gray-700 text-2xl">Add table</h1>
           <div>
             <Input
-              label="Table Name"
+              label="Table name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={name.length ? '' : 'border border-red-500'}

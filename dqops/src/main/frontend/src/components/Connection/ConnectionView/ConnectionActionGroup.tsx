@@ -78,7 +78,7 @@ const ConnectionActionGroup = ({
                 ? 'primary'
                 : 'secondary'
             }
-            label="Add Schema"
+            label="Add schema"
             onClick={() => setAddSchemaDialogOpen(true)}
             disabled={userProfile.can_manage_data_sources !== true}
           />
@@ -94,7 +94,7 @@ const ConnectionActionGroup = ({
                 ? 'primary'
                 : 'secondary'
             }
-            label="Delete Connection"
+            label="Delete connection"
             onClick={() => setIsOpen(true)}
             disabled={userProfile.can_manage_data_sources !== true}
           />

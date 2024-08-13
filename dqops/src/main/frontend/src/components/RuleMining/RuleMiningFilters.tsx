@@ -142,7 +142,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2 !w-62"
-            tooltipText="Configure all types of table's timeliness checks (freshness, staleness, ingestion delay). This option works only when the table is correctly configured to be analyzable by timeliness check, and has the timestamp column selected in the configuration of the table in the Data Sources section."
+            tooltipText="Configure all types of table's timeliness checks (freshness, staleness, ingestion delay). This option works only when the table is correctly configured to be analyzable by timeliness check, and has the timestamp column selected in the configuration of the table in the Data sources section."
             label="Timeliness checks"
             checked={configuration.propose_timeliness_checks}
             onChange={(e) =>
