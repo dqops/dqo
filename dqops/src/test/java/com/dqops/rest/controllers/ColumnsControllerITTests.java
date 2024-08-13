@@ -89,7 +89,7 @@ public class ColumnsControllerITTests extends BaseTest {
                 .block();
 
         response.onStatus(status -> true, r -> {
-            Assertions.assertEquals(200, r.rawStatusCode());
+            Assertions.assertEquals(200, r.statusCode().value());
             return Mono.empty();
         });
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
