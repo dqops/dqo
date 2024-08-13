@@ -213,7 +213,7 @@ public class ColumnPercentile75InRangeCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeNumericRanges()) {
+        if (!miningParameters.isProposePercentileRanges()) {
             return false;
         }
 

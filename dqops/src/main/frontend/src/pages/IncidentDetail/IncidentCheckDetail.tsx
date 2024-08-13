@@ -234,6 +234,29 @@ const IncidentCheckDetails = ({
     refetch(value, dataGroup);
   };
 
+  const createDownloadLink = () => {
+    const queryFilters = [];
+    
+    const { startDate, endDate } = calculateDateRange(month);
+
+    dataGroup !== undefined       && queryFilters.push(`dataGroup=${dataGroup}`)
+    startDate !== undefined       && queryFilters.push(`monthStart=${startDate}`)
+    endDate !== undefined         && queryFilters.push(`monthEnd=${endDate}`)
+    checkName !== undefined       && queryFilters.push(`checkName=${checkName}`)
+    category !== undefined        && queryFilters.push(`category=${category}`)
+    comparisonName !== undefined  && queryFilters.push(`tableComparison=${comparisonName}`)
+
+    const queryString = `?` + queryFilters.join('&');
+
+    return `/api/connections/${connection}/schemas/${schema}/tables/${table}`
+        + (column !== undefined && `/columns/${column}`)
+        + `/${checkTypes}`
+        + (timeScale !== undefined && `/${timeScale}`)
+        + `/errorsamples/download`
+        + queryString
+      ;
+  };
+
   const refetch = (month: string, name?: string) => {
     fetchCheckErrors(month, name);
     fetchCheckResults(month, name);
@@ -337,6 +360,7 @@ const IncidentCheckDetails = ({
               month={month}
               onChangeMonth={onChangeMonth}
               onChangeDataGroup={onChangeDataGroup}
+              downloadLink={createDownloadLink()}
             />
           )}
         </div>

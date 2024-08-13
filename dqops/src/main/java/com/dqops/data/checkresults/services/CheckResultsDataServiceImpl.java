@@ -1314,4 +1314,31 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         return ruleResultsData;
     }
 
+    /**
+     * Checks if there are any recent partition files with the results of check results for the given table.
+     * This operation is used to propose the user to run checks.
+     *
+     * @param connectionName     Connection name.
+     * @param physicalTableName  Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return True when there are any results, false when there are no results.
+     */
+    @Override
+    public boolean hasAnyRecentCheckResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
+
+        LocalDate todayDate = LocalDate.now();
+        int monthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
+        LocalDate startDate = todayDate.minus(monthsToLoad, ChronoUnit.MONTHS);
+        checkResultsSnapshot.ensureNRecentMonthsAreLoaded(startDate, todayDate, 1);
+
+        for (LoadedMonthlyPartition loadedMonthlyPartition : checkResultsSnapshot.getLoadedMonthlyPartitions().values()) {
+            if (loadedMonthlyPartition != null && loadedMonthlyPartition.getData() != null && loadedMonthlyPartition.getData().rowCount() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

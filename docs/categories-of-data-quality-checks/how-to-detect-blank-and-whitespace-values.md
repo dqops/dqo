@@ -175,7 +175,7 @@ The [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-s
 When the default value 0% is used, DQOps will raise a data quality issue when any value surrounded by whitespace is found.
 
 Please note that the [DQOps data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor)
-shows this check after clicking the *Show advanced checks* checkbox.
+shows this check after clicking the **Show advanced checks** checkbox.
 
 ![Detect texts surrounded by whitespace characters using DQOps data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-text-surrounded-with-whitespace-data-quality-check-in-dqops-min2.png){ loading=lazy; width="1200px" }
 

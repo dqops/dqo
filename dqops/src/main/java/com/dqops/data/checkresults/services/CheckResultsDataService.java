@@ -143,4 +143,14 @@ public interface CheckResultsDataService {
     TableCurrentDataQualityStatusModel analyzeTableMostRecentQualityStatus(
             TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters,
             UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Checks if there are any recent partition files with the results of check results for the given table.
+     * This operation is used to propose the user to run checks.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return True when there are any results, false when there are no results.
+     */
+    boolean hasAnyRecentCheckResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
 }

@@ -5,6 +5,8 @@ import { useTree } from '../../../contexts/treeContext';
 import { getLocalDateInUserTimeZone } from '../../../utils';
 import SelectTailwind from '../../Select/SelectTailwind';
 import { Table } from '../../Table';
+import SvgIcon from '../../SvgIcon';
+import { IconButton } from '@material-tailwind/react';
 
 interface ErrorSamplesTabProps {
   errorSamples: ErrorSamplesListModel[];
@@ -12,6 +14,7 @@ interface ErrorSamplesTabProps {
   month?: string;
   onChangeMonth: (month: string) => void;
   onChangeDataGroup: (name: string) => void;
+  downloadLink: string;
 }
 const getRowIds = () => {
   const idColumns = [];
@@ -30,7 +33,8 @@ const ErrorSamplesTab = ({
   dataGroup,
   onChangeDataGroup,
   month,
-  onChangeMonth
+  onChangeMonth,
+  downloadLink
 }: ErrorSamplesTabProps) => {
   const { sidebarWidth } = useTree();
 
@@ -119,6 +123,22 @@ const ErrorSamplesTab = ({
             onChange={onChangeMonth}
           />
         </div>
+        <IconButton
+          size="sm"
+          className={'bg-white border border-teal-500 '}
+        >
+          <a
+            href={downloadLink}
+            rel="noreferrer"
+            target="_blank"
+            className="text-teal-500"
+          >
+            <SvgIcon
+              name="download"
+              className={'w-4 h-4 cursor-pointer font-bold text-teal-500'}
+            />
+          </a>
+        </IconButton>
       </div>
       {errorSamples.length === 0 && (
         <div className="text-gray-700 mt-5 text-sm">No Data</div>

@@ -137,6 +137,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeNumericRanges = true;
 
     /**
+     * Propose the default configuration of the median and percentile in range checks that validate the value at a given percentile, such as a value in middle of all column values. The default value of this parameter is 'false' because calculating the median requires running a separate query on the data source, which is not advisable for data observability.
+     */
+    @JsonPropertyDescription("Propose the default configuration of the median and percentile in range checks that validate the value at a given percentile, such as a value in middle of all column values. The default value of this parameter is 'false' because calculating the median requires running a separate query on the data source, which is not advisable for data observability.")
+    private boolean proposePercentileRanges = true;
+
+    /**
      * Propose the default configuration of the text length checks. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the default configuration of the text length checks. The default value of this parameter is 'true'.")

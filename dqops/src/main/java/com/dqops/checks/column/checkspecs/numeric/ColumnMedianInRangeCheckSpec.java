@@ -212,7 +212,7 @@ public class ColumnMedianInRangeCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeNumericRanges()) {
+        if (!miningParameters.isProposePercentileRanges()) {
             return false;
         }
 

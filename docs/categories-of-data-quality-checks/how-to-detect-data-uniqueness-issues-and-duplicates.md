@@ -322,7 +322,7 @@ spec:
 ```
 
 ## Configuring other uniqueness checks
-The DQOps data quality check editor shows the remaining uniqueness checks after clicking the *Show advanced checks* checkbox.
+The DQOps data quality check editor shows the remaining uniqueness checks after clicking the **Show advanced checks** checkbox.
 
 ![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min2.png){ loading=lazy; width="800px" }
 

@@ -4185,6 +4185,115 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errorsamples/download" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getMonitoringProfilingErrorSamplesDownload",
+        "description" : "Returns error samples in CSV format related to a column level monitoring checks at a requested time scale",
+        "operationId" : "getMonitoringProfilingErrorSamplesDownload",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "columnName",
+          "in" : "path",
+          "description" : "Column name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "type" : "string",
+          "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "View of error samples for the monitoring checks at a requested time scale on a column returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ErrorSamplesListModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Columns" ],
@@ -5217,6 +5326,115 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errorsamples/download" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getPartitionedProfilingErrorSamplesDownload",
+        "description" : "Returns the error samples in CSV format related to column level partitioned checks for a requested time scale",
+        "operationId" : "getPartitionedProfilingErrorSamplesDownload",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "columnName",
+          "in" : "path",
+          "description" : "Column name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "type" : "string",
+          "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "View of error samples related to column level partitioned checks for a requested time scale on a column returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ErrorSamplesListModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Columns" ],
@@ -6089,6 +6307,108 @@
         "responses" : {
           "200" : {
             "description" : "Error samples related to a check runs for column level data quality profiling checks on a column returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ErrorSamplesListModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errorsamples/download" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getColumnProfilingErrorSamplesDownload",
+        "description" : "Returns the error samples in CSV format related to a check for one of table level data quality profiling checks on a column",
+        "operationId" : "getColumnProfilingErrorSamplesDownload",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "columnName",
+          "in" : "path",
+          "description" : "Column name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Error samples related to the check for table level data quality profiling checks on a column returned",
             "schema" : {
               "type" : "array",
               "items" : {
@@ -8062,6 +8382,109 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errorsamples/download" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getTableMonitoringErrorSamplesDownload",
+        "description" : "Returns the error samples in CSV format related to a table level monitoring check a requested time scale",
+        "operationId" : "getTableMonitoringErrorSamplesDownload",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "type" : "string",
+          "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Error samples in CSV format related to a monitoring check at a requested time scale on a table returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ErrorSamplesListModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -9214,6 +9637,109 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errorsamples/download" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getTablePartitionedErrorSamplesDownload",
+        "description" : "Returns error samples in CSV format related to a table level partitioned check for a requested time scale",
+        "operationId" : "getTablePartitionedErrorSamplesDownload",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "type" : "string",
+          "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The error samples in CSV format related to a partitioned check a requested time scale on a table returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ErrorSamplesListModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -10338,6 +10864,102 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errorsamples/download" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getTableProfilingErrorSamplesDownload",
+        "description" : "Returns the error samples in CSV format related to a check for one of table level data quality profiling checks on a table",
+        "operationId" : "getTableProfilingErrorSamplesDownload",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Error samples related to the check for table level data quality profiling checks on a table returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ErrorSamplesListModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -10853,6 +11475,54 @@
               "items" : {
                 "$ref" : "#/definitions/CheckResultsListModel"
               }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profilingstatus" : {
+      "get" : {
+        "tags" : [ "Tables" ],
+        "summary" : "getTableProfilingStatus",
+        "description" : "Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed",
+        "operationId" : "getTableProfilingStatus",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Table profiling status information returned",
+            "schema" : {
+              "$ref" : "#/definitions/TableProfilingSetupStatusModel"
             }
           },
           "404" : {
@@ -19118,6 +19788,10 @@
         "propose_numeric_ranges" : {
           "type" : "boolean",
           "description" : "Propose the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'."
+        },
+        "propose_percentile_ranges" : {
+          "type" : "boolean",
+          "description" : "Propose the default configuration of the median and percentile in range checks that validate the value at a given percentile, such as a value in middle of all column values. The default value of this parameter is 'false' because calculating the median requires running a separate query on the data source, which is not advisable for data observability."
         },
         "propose_text_length_ranges" : {
           "type" : "boolean",
@@ -41135,6 +41809,45 @@
           }
         }
       }
+    },
+    "TableProfilingSetupStatusModel" : {
+      "type" : "object",
+      "properties" : {
+        "connection_name" : {
+          "type" : "string",
+          "description" : "Connection name."
+        },
+        "table_hash" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Table hash that identifies the table using a unique hash code."
+        },
+        "target" : {
+          "description" : "Physical table details (a physical schema name and a physical table name).",
+          "$ref" : "#/definitions/PhysicalTableName"
+        },
+        "basic_statistics_collected" : {
+          "type" : "boolean",
+          "description" : "The basic statistics were collected for this table. If this field returns false, the statistics were not collected and the user should collect basic statistics again."
+        },
+        "profiling_checks_configured" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any profiling checks configured on the table, or any of its column. Returns false when the user should first generate a configuration of the profiling checks using the rule miner."
+        },
+        "monitoring_checks_configured" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any monitoring checks configured on the table, or any of its column. Returns false when the user should first generate a configuration of the monitoring checks using the rule miner."
+        },
+        "partition_checks_configured" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any partition checks configured on the table, or any of its column. The value is true also when the table is not configured to support partitioned checks, so asking the user to configure partition checks is useless. Returns false when the user should first generate a configuration of the partition checks using the rule miner."
+        },
+        "check_results_present" : {
+          "type" : "boolean",
+          "description" : "Returns true if the table has any recent data quality check results. Returns false when the user should run any checks to get any results."
+        }
+      },
+      "description" : "Table status model that identifies which type of information is already collected, such as data quality checks are configured, or statistics collected."
     },
     "TableRowCountAnomalyDifferencingCheckSpec" : {
       "type" : "object",
