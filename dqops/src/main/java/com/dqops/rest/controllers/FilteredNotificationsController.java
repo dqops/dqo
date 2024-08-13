@@ -545,10 +545,12 @@ public class FilteredNotificationsController {
         IncidentNotificationSpec incidentNotification = incidentGrouping.getIncidentNotification();
         if (incidentNotification == null) {
             incidentNotification = new IncidentNotificationSpec();
+            incidentGrouping.setIncidentNotification(incidentNotification);
         }
         FilteredNotificationSpecMap filteredNotificationMap = incidentNotification.getFilteredNotifications();
         if (filteredNotificationMap == null) {
-            incidentNotification.setFilteredNotifications(new FilteredNotificationSpecMap());
+            filteredNotificationMap = new FilteredNotificationSpecMap();
+            incidentNotification.setFilteredNotifications(filteredNotificationMap);
         }
         return filteredNotificationMap;
     }
