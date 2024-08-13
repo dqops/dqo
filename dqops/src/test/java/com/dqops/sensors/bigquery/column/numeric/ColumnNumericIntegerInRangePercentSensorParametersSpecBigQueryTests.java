@@ -658,7 +658,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                             analyzed_table.`mix_of_values`,
                             analyzed_table.`nulls_ok`
                         ORDER BY
-                            analyzed_table.`id` ASC, analyzed_table.`nulls` ASC, analyzed_table.`negative` ASC
+                            analyzed_table.`negative` ASC, analyzed_table.`id` ASC, analyzed_table.`nulls` ASC
                     ) AS sample_index
                 FROM
                     `%2$s`.`%3$s`.`%4$s` AS analyzed_table
