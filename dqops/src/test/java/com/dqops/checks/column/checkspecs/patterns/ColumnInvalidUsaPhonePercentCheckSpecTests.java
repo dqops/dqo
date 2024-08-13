@@ -129,7 +129,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(100.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
     }
 
     @Test
@@ -168,11 +168,11 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(100.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMinPercent100() {
+    void proposeCheckConfiguration_whenValidUsaPhonePercentPresentFromProfilingCheckThatHasNoRulesAndPercentLowAndBelowMaxErrorRate_thenProposesRulesWithMaxPercent0() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -180,7 +180,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(99.0);
+        this.profilingCheckResult.setActualValue(1.0);
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
 
@@ -190,7 +190,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(100.0, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
     }
 
     @Test
@@ -202,7 +202,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(100.0 - this.checkMiningParametersModel.getMaxPercentErrorRowsForPercentChecks() - 1);
+        this.profilingCheckResult.setActualValue(this.checkMiningParametersModel.getMaxPercentErrorRowsForPercentChecks() + 1);
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -222,7 +222,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(100.0 - this.checkMiningParametersModel.getFailChecksAtPercentErrorRows() - 1);
+        this.profilingCheckResult.setActualValue(this.checkMiningParametersModel.getFailChecksAtPercentErrorRows() + 1);
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -231,7 +231,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(96.1, this.sut.getError().getMaxPercent());
+        Assertions.assertEquals(3.9, this.sut.getError().getMaxPercent());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(99.0);
+        this.profilingCheckResult.setActualValue(1.0);
         this.dataAssetProfilingResults.setNotNullsCount(10001L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
         this.checkMiningParametersModel.setProposeStandardPatternChecks(false);
@@ -292,7 +292,7 @@ public class ColumnInvalidUsaPhonePercentCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(80.0);
+        this.profilingCheckResult.setActualValue(1.0);
         this.dataAssetProfilingResults.setNotNullsCount(100000L);
         this.profilingCheckResult.setSeverityLevel(CheckResultStatus.valid);
 
