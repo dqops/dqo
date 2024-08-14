@@ -7,9 +7,9 @@ import {
 } from '../../../../api';
 import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
 import Button from '../../../Button';
+import Loader from '../../../Loader';
 import AddressesNotificationsWrapper from './AddressesNotificationsWrapper';
 import DefaultPatternTarget from './DefaultPatternTarget';
-import Loader from '../../../Loader';
 
 export default function CreateNotificationPattern({
   connection,
@@ -151,6 +151,12 @@ export default function CreateNotificationPattern({
           onChange={onChangePattern}
           onChangePatternFilter={onChangePatternFilter}
         />
+      )}
+      {isDefaultPattern && (
+        <div className="text-xl font-semibold my-5">
+          Default notification addresses for incidents that did not match any
+          other patterns
+        </div>
       )}
       <AddressesNotificationsWrapper
         target={isDefaultPattern ? defaultConnectionAdressess : pattern.target}
