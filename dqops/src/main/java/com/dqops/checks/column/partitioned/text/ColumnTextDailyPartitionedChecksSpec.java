@@ -49,6 +49,9 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
             put("daily_partition_text_length_above_max_length", o -> o.dailyPartitionTextLengthAboveMaxLength);
             put("daily_partition_text_length_above_max_length_percent", o -> o.dailyPartitionTextLengthAboveMaxLengthPercent);
             put("daily_partition_text_length_in_range_percent", o -> o.dailyPartitionTextLengthInRangePercent);
+
+            put("daily_partition_min_word_count", o -> o.dailyPartitionMinWordCount);
+            put("daily_partition_max_word_count", o -> o.dailyPartitionMaxWordCount);
         }
     };
 
@@ -77,6 +80,11 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
     private ColumnTextLengthInRangePercentCheckSpec dailyPartitionTextLengthInRangePercent;
 
+    @JsonPropertyDescription("This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.")
+    private ColumnTextMinWordCountCheckSpec dailyPartitionMinWordCount;
+
+    @JsonPropertyDescription("This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.")
+    private ColumnTextMaxWordCountCheckSpec dailyPartitionMaxWordCount;
 
     /**
      * Returns a minimum string length above check.
@@ -220,6 +228,42 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextLengthInRangePercent, dailyPartitionTextLengthInRangePercent));
         this.dailyPartitionTextLengthInRangePercent = dailyPartitionTextLengthInRangePercent;
         propagateHierarchyIdToField(dailyPartitionTextLengthInRangePercent, "daily_partition_text_length_in_range_percent");
+    }
+
+    /**
+     * Returns a text min word count percent check.
+     * @return Text min word count percent check.
+     */
+    public ColumnTextMinWordCountCheckSpec getDailyPartitionMinWordCount() {
+        return dailyPartitionMinWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text min word count percent check.
+     * @param dailyPartitionMinWordCount Text min word count percent check.
+     */
+    public void setDailyPartitionMinWordCount(ColumnTextMinWordCountCheckSpec dailyPartitionMinWordCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinWordCount, dailyPartitionMinWordCount));
+        this.dailyPartitionMinWordCount = dailyPartitionMinWordCount;
+        propagateHierarchyIdToField(dailyPartitionMinWordCount, "daily_partition_min_word_count");
+    }
+
+    /**
+     * Returns a text max word count percent check.
+     * @return Text max word count percent check.
+     */
+    public ColumnTextMaxWordCountCheckSpec getDailyPartitionMaxWordCount() {
+        return dailyPartitionMaxWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text max word count percent check.
+     * @param dailyPartitionMaxWordCount Text max word count percent check.
+     */
+    public void setDailyPartitionMaxWordCount(ColumnTextMaxWordCountCheckSpec dailyPartitionMaxWordCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxWordCount, dailyPartitionMaxWordCount));
+        this.dailyPartitionMaxWordCount = dailyPartitionMaxWordCount;
+        propagateHierarchyIdToField(dailyPartitionMaxWordCount, "daily_partition_max_word_count");
     }
 
 

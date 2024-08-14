@@ -49,6 +49,9 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
             put("daily_text_length_above_max_length", o -> o.dailyTextLengthAboveMaxLength);
             put("daily_text_length_above_max_length_percent", o -> o.dailyTextLengthAboveMaxLengthPercent);
             put("daily_text_length_in_range_percent", o -> o.dailyTextLengthInRangePercent);
+
+            put("daily_min_word_count", o -> o.dailyMinWordCount);
+            put("daily_max_word_count", o -> o.dailyMaxWordCount);
         }
     };
 
@@ -76,6 +79,11 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTextLengthInRangePercentCheckSpec dailyTextLengthInRangePercent;
 
+    @JsonPropertyDescription("This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.")
+    private ColumnTextMinWordCountCheckSpec dailyMinWordCount;
+
+    @JsonPropertyDescription("This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.")
+    private ColumnTextMaxWordCountCheckSpec dailyMaxWordCount;
 
     /**
      * Returns a minimum string length above check.
@@ -221,6 +229,41 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
         propagateHierarchyIdToField(dailyTextLengthInRangePercent, "daily_text_length_in_range_percent");
     }
 
+    /**
+     * Returns a text min word count percent check.
+     * @return Text min word count percent check.
+     */
+    public ColumnTextMinWordCountCheckSpec getDailyMinWordCount() {
+        return dailyMinWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text min word count percent check.
+     * @param dailyMinWordCount Text min word count percent check.
+     */
+    public void setDailyMinWordCount(ColumnTextMinWordCountCheckSpec dailyMinWordCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyMinWordCount, dailyMinWordCount));
+        this.dailyMinWordCount = dailyMinWordCount;
+        propagateHierarchyIdToField(dailyMinWordCount, "daily_min_word_count");
+    }
+
+    /**
+     * Returns a text max word count percent check.
+     * @return Text max word count percent check.
+     */
+    public ColumnTextMaxWordCountCheckSpec getDailyMaxWordCount() {
+        return dailyMaxWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text max word count percent check.
+     * @param dailyMaxWordCount Text max word count percent check.
+     */
+    public void setDailyMaxWordCount(ColumnTextMaxWordCountCheckSpec dailyMaxWordCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyMaxWordCount, dailyMaxWordCount));
+        this.dailyMaxWordCount = dailyMaxWordCount;
+        propagateHierarchyIdToField(dailyMaxWordCount, "daily_max_word_count");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

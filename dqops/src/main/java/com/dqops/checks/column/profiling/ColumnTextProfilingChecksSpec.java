@@ -49,6 +49,9 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_text_length_above_max_length", o -> o.profileTextLengthAboveMaxLength);
             put("profile_text_length_above_max_length_percent", o -> o.profileTextLengthAboveMaxLengthPercent);
             put("profile_text_length_in_range_percent", o -> o.profileTextLengthInRangePercent);
+
+            put("profile_min_word_count", o -> o.profileMinWordCount);
+            put("profile_max_word_count", o -> o.profileMaxWordCount);
         }
     };
 
@@ -76,6 +79,11 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column.")
     private ColumnTextLengthInRangePercentCheckSpec profileTextLengthInRangePercent;
 
+    @JsonPropertyDescription("This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.")
+    private ColumnTextMinWordCountCheckSpec profileMinWordCount;
+
+    @JsonPropertyDescription("This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.")
+    private ColumnTextMaxWordCountCheckSpec profileMaxWordCount;
 
     /**
      * Returns a minimum string length above check.
@@ -219,6 +227,42 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileTextLengthInRangePercent, profileTextLengthInRangePercent));
         this.profileTextLengthInRangePercent = profileTextLengthInRangePercent;
         propagateHierarchyIdToField(profileTextLengthInRangePercent, "profile_text_length_in_range_percent");
+    }
+
+    /**
+     * Returns a text min word count percent check.
+     * @return Text min word count percent check.
+     */
+    public ColumnTextMinWordCountCheckSpec getProfileMinWordCount() {
+        return profileMinWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text min word count percent check.
+     * @param profileMinWordCount Text min word count percent check.
+     */
+    public void setProfileMinWordCount(ColumnTextMinWordCountCheckSpec profileMinWordCount) {
+        this.setDirtyIf(!Objects.equals(this.profileMinWordCount, profileMinWordCount));
+        this.profileMinWordCount = profileMinWordCount;
+        propagateHierarchyIdToField(profileMinWordCount, "profile_min_word_count");
+    }
+
+    /**
+     * Returns a text max word count percent check.
+     * @return Text max word count percent check.
+     */
+    public ColumnTextMaxWordCountCheckSpec getProfileMaxWordCount() {
+        return profileMaxWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text max word count percent check.
+     * @param profileMaxWordCount Text max word count percent check.
+     */
+    public void setProfileMaxWordCount(ColumnTextMaxWordCountCheckSpec profileMaxWordCount) {
+        this.setDirtyIf(!Objects.equals(this.profileMaxWordCount, profileMaxWordCount));
+        this.profileMaxWordCount = profileMaxWordCount;
+        propagateHierarchyIdToField(profileMaxWordCount, "profile_max_word_count");
     }
 
 

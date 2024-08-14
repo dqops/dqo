@@ -49,6 +49,9 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
             put("monthly_partition_text_length_above_max_length", o -> o.monthlyPartitionTextLengthAboveMaxLength);
             put("monthly_partition_text_length_above_max_length_percent", o -> o.monthlyPartitionTextLengthAboveMaxLengthPercent);
             put("monthly_partition_text_length_in_range_percent", o -> o.monthlyPartitionTextLengthInRangePercent);
+
+            put("monthly_partition_min_word_count", o -> o.monthlyPartitionMinWordCount);
+            put("monthly_partition_max_word_count", o -> o.monthlyPartitionMaxWordCount);
         }
     };
 
@@ -77,6 +80,11 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
     private ColumnTextLengthInRangePercentCheckSpec monthlyPartitionTextLengthInRangePercent;
 
+    @JsonPropertyDescription("This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.")
+    private ColumnTextMinWordCountCheckSpec monthlyPartitionMinWordCount;
+
+    @JsonPropertyDescription("This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.")
+    private ColumnTextMaxWordCountCheckSpec monthlyPartitionMaxWordCount;
 
     /**
      * Returns a minimum string length above check.
@@ -222,6 +230,41 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
         propagateHierarchyIdToField(monthlyPartitionTextLengthInRangePercent, "monthly_partition_text_length_in_range_percent");
     }
 
+    /**
+     * Returns a text min word count percent check.
+     * @return Text min word count percent check.
+     */
+    public ColumnTextMinWordCountCheckSpec getMonthlyPartitionMinWordCount() {
+        return monthlyPartitionMinWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text min word count percent check.
+     * @param monthlyPartitionMinWordCount Text min word count percent check.
+     */
+    public void setMonthlyPartitionMinWordCount(ColumnTextMinWordCountCheckSpec monthlyPartitionMinWordCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinWordCount, monthlyPartitionMinWordCount));
+        this.monthlyPartitionMinWordCount = monthlyPartitionMinWordCount;
+        propagateHierarchyIdToField(monthlyPartitionMinWordCount, "monthly_partition_min_word_count");
+    }
+
+    /**
+     * Returns a text max word count percent check.
+     * @return Text max word count percent check.
+     */
+    public ColumnTextMaxWordCountCheckSpec getMonthlyPartitionMaxWordCount() {
+        return monthlyPartitionMaxWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text max word count percent check.
+     * @param monthlyPartitionMaxWordCount Text max word count percent check.
+     */
+    public void setMonthlyPartitionMaxWordCount(ColumnTextMaxWordCountCheckSpec monthlyPartitionMaxWordCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxWordCount, monthlyPartitionMaxWordCount));
+        this.monthlyPartitionMaxWordCount = monthlyPartitionMaxWordCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxWordCount, "monthly_partition_max_word_count");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

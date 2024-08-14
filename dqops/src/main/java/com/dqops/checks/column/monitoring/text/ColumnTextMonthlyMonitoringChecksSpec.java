@@ -49,6 +49,9 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
             put("monthly_text_length_above_max_length", o -> o.monthlyTextLengthAboveMaxLength);
             put("monthly_text_length_above_max_length_percent", o -> o.monthlyTextLengthAboveMaxLengthPercent);
             put("monthly_text_length_in_range_percent", o -> o.monthlyTextLengthInRangePercent);
+
+            put("monthly_min_word_count", o -> o.monthlyMinWordCount);
+            put("monthly_max_word_count", o -> o.monthlyMaxWordCount);
         }
     };
 
@@ -76,6 +79,12 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextLengthInRangePercentCheckSpec monthlyTextLengthInRangePercent;
+
+    @JsonPropertyDescription("This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.")
+    private ColumnTextMinWordCountCheckSpec monthlyMinWordCount;
+
+    @JsonPropertyDescription("This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.")
+    private ColumnTextMaxWordCountCheckSpec monthlyMaxWordCount;
 
 
     /**
@@ -220,6 +229,42 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyTextLengthInRangePercent, monthlyTextLengthInRangePercent));
         this.monthlyTextLengthInRangePercent = monthlyTextLengthInRangePercent;
         propagateHierarchyIdToField(monthlyTextLengthInRangePercent, "monthly_text_length_in_range_percent");
+    }
+
+    /**
+     * Returns a text min word count percent check.
+     * @return Text min word count percent check.
+     */
+    public ColumnTextMinWordCountCheckSpec getMonthlyMinWordCount() {
+        return monthlyMinWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text min word count percent check.
+     * @param monthlyMinWordCount Text min word count percent check.
+     */
+    public void setMonthlyMinWordCount(ColumnTextMinWordCountCheckSpec monthlyMinWordCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyMinWordCount, monthlyMinWordCount));
+        this.monthlyMinWordCount = monthlyMinWordCount;
+        propagateHierarchyIdToField(monthlyMinWordCount, "monthly_min_word_count");
+    }
+
+    /**
+     * Returns a text max word count percent check.
+     * @return Text max word count percent check.
+     */
+    public ColumnTextMaxWordCountCheckSpec getMonthlyMaxWordCount() {
+        return monthlyMaxWordCount;
+    }
+
+    /**
+     * Sets a new definition of a text max word count percent check.
+     * @param monthlyMaxWordCount Text max word count percent check.
+     */
+    public void setMonthlyMaxWordCount(ColumnTextMaxWordCountCheckSpec monthlyMaxWordCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyMaxWordCount, monthlyMaxWordCount));
+        this.monthlyMaxWordCount = monthlyMaxWordCount;
+        propagateHierarchyIdToField(monthlyMaxWordCount, "monthly_max_word_count");
     }
 
 

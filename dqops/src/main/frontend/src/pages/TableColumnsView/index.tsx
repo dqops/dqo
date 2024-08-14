@@ -170,7 +170,7 @@ const TableColumnsView = () => {
         <div className="flex items-center gap-x-2 justify-center">
           {checkedColumns.length !== 0 && checkedColumns.length <= 9 && (
             <Button
-              label="Create Data Grouping"
+              label="Create data grouping"
               color="primary"
               onClick={postDataStream}
               disabled={userProfile.can_manage_data_sources !== true}
@@ -180,7 +180,7 @@ const TableColumnsView = () => {
             <div className="flex items-center gap-x-2 justify-center text-red-500">
               (You can choose max 9 columns)
               <Button
-                label="Create Data Grouping"
+                label="Create data grouping"
                 color="secondary"
                 className="text-black "
               />

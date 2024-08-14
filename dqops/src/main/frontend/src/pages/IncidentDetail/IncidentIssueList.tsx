@@ -342,7 +342,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
                 <SortableColumn
                   className="justify-start"
-                  label="Column Name"
+                  label="Column name"
                   order="columnName"
                   direction={
                     filters?.order === 'columnName'
@@ -357,7 +357,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
                 <SortableColumn
                   className="justify-start"
-                  label="Check Name"
+                  label="Check name"
                   order="checkName"
                   direction={
                     filters?.order === 'checkName'
@@ -372,7 +372,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
                 <SortableColumn
                   className="justify-start"
-                  label="Executed At"
+                  label="Executed at"
                   order="executedAt"
                   direction={
                     filters?.order === 'executedAt'
@@ -387,7 +387,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
                 <SortableColumn
                   className="justify-start"
-                  label="Time Scale"
+                  label="Time scale"
                   order="timeGradient"
                   direction={
                     filters?.order === 'timeGradient'
@@ -402,7 +402,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
                 <SortableColumn
                   className="justify-start"
-                  label="Time Period"
+                  label="Time period"
                   order="timePeriod"
                   direction={
                     filters?.order === 'timePeriod'
@@ -417,7 +417,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
                 <SortableColumn
                   className="justify-end"
-                  label="Actual Value"
+                  label="Actual value"
                   order="actualValue"
                   direction={
                     filters?.order === 'actualValue'
@@ -432,7 +432,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
                 <SortableColumn
                   className="justify-end"
-                  label="Expected Value"
+                  label="Expected value"
                   order="expectedValue"
                   direction={
                     filters?.order === 'expectedValue'
@@ -447,7 +447,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
                 <SortableColumn
                   className="justify-start"
-                  label="Data Group"
+                  label="Data group"
                   order="dataGroup"
                   direction={
                     filters?.order === 'dataGroup'
@@ -462,7 +462,7 @@ export const IncidentIssueList = ({
               <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
                 <SortableColumn
                   className="justify-start"
-                  label="Issue Severity Level"
+                  label="Issue severity level"
                   order="severity"
                   direction={
                     filters?.order === 'severity'
