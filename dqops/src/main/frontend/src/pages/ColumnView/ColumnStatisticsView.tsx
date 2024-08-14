@@ -39,7 +39,7 @@ const defaultColumnStatistics: Record<string, TStatistics[]> = {
     { type: 'Max value' },
     { type: 'Median value' },
     { type: 'Sum value' },
-    { type: 'Mean value' },
+    { type: 'Mean value' }
   ],
   Text: [
     { type: 'Text min length' },
@@ -131,7 +131,7 @@ const ColumnStatisticsView = ({
         { type: 'Max value' },
         { type: 'Median value' },
         { type: 'Sum value' },
-        { type: 'Mean value' },
+        { type: 'Mean value' }
       ],
       Text: [
         { type: 'Text min length' },
@@ -253,7 +253,7 @@ const ColumnStatisticsView = ({
             key={index}
             title={renderCategory(column)}
             className="text-sm bg-white rounded-lg p-4 border border-gray-200 min-w-100"
-            titleClassName="!z-[999]"
+            titleClassName="!z-[1]"
           >
             <div className="!max-h-120 overflow-auto">
               {columnStatistics[column].map((item, jIndex) => (
