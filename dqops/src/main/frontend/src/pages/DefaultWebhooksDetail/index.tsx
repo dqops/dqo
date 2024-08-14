@@ -117,7 +117,7 @@ export default function DefaultWebhooksDetail() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col px-4">
+          <div className="flex flex-col px-4 py-2">
             <NotificationPatternTable
               filteredNotificationsConfigurations={filteredNotifications}
               onChange={setFilteredNotifications}
