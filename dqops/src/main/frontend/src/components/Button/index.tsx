@@ -79,7 +79,9 @@ const Button = ({
         (!className || className.indexOf('py-') === -1) && 'py-2',
         (!className || className.indexOf('px-') === -1) && 'px-6',
         { 'cursor-not-allowed': disabled },
-        { 'flash-red-border': flashRedBorder }
+        { 'flash-red-border': flashRedBorder },
+        classes === colorsMap.primary.contained && 'hover:bg-[#028770]',
+        classes === colorsMap.primary.outlined && 'hover:bg-[#DDF2EF]'
       )}
       disabled={disabled}
       data-testid={dataTestId}
