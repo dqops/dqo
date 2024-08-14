@@ -28,14 +28,25 @@ The following example shows profiling results of a *delivered_at* column for an 
 The most recent (maximum) date is after the current time when the table was profiled.
 It indicates that the delivery date is in the future.
 
-![Example of a date in the future in a datetime column revealed by profiling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/datetime-column-statistics-date-in-the-future-min.png){ loading=lazy; width="1200px" }
+![Example of a date in the future in a datetime column revealed by profiling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/datetime-column-statistics-date-in-the-future-min2.png){ loading=lazy; width="1200px" }
 
 ### Detecting future dates in UI
 The [*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md) data quality check finds dates in the future
 and measures the percentage of rows having future dates.
 The *max_percent* parameter controls the maximum accepted percentage of invalid rows.
 
-![Date in the future invalid date example](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-future-found-check-editor-min.png){ loading=lazy; width="1200px" }
+![Date in the future invalid date example](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-future-found-check-editor-min2.png){ loading=lazy; width="1200px" }
+
+### Future dates error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section.
+
+![Date in the future invalid date - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-future-found-check-error-samples.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
+
 
 ### Detecting future dates in YAML
 The [*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md) check is easy to enable. 
@@ -89,7 +100,7 @@ The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md
   DQOps measures only the percentage of not null date values. 
   If only two rows store not null values and one value is out of range, the calculated percentage is 50% independent of the table size.
 
-![Date in range percent data quality check with valid date ranges](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-range-percent-check-min.png){ loading=lazy; width="1200px" }
+![Date in range percent data quality check with valid date ranges](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-range-percent-check-min2.png){ loading=lazy; width="1200px" }
 
 ### Configure date in range check in YAML
 The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) check requires the configuration of the parameters described before.
@@ -138,7 +149,7 @@ The following sample shows an extract from a text column that contains dates in 
 ### Asserting date formats in UI
 We will use a sample column that contains dates in the ISO 8601 format. The profiling result shows some samples from the column.
 
-![Text column profiling result with valid ISO 8601 date](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-column-profile-statistics-min.png){ loading=lazy; width="300px" }
+![Text column profiling result with valid ISO 8601 date](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-column-profile-statistics-min2.png){ loading=lazy; width="300px" }
 
 The [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md) 
 examines text columns (char, varchar, string, etc.), trying to match all column values to an expected date format.
@@ -149,7 +160,7 @@ The parameters of the [*text_match_date_format_percent*](../checks/column/dateti
 - **min_percent** is the rule parameter to decide how many percent of non-null column values must match the expected format.
 
 
-![Text column match an expected date format data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-match-date-format-percent-check-min.png){ loading=lazy; width="1200px" }
+![Text column match an expected date format data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-match-date-format-percent-check-min2.png){ loading=lazy; width="1200px" }
 
 ### Asserting date formats in YAML
 The configuration of the [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md) 
@@ -172,7 +183,7 @@ apiVersion: dqo/v1
 kind: table
 spec:
   columns:
-    delivered_at_text:
+    report_date:
       monitoring_checks:
         daily:
           datetime:
