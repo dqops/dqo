@@ -358,6 +358,8 @@ title: Sensors
 
 | Sensor name | Description |
 |-------------|-------------|
+|[*max_word_count*](./column/text-column-sensors.md#max-word-count)|Column level sensor that ensures that the count of words in a column does not exceed the maximum accepted length.|
+|[*min_word_count*](./column/text-column-sensors.md#min-word-count)|Column level sensor that ensures that the count of words in a column does not exceed the minimum accepted length.|
 |[*text_length_above_max_length_count*](./column/text-column-sensors.md#text-length-above-max-length-count)|Column level sensor that calculates the count of text values that are longer than a given length in a column.|
 |[*text_length_above_max_length_percent*](./column/text-column-sensors.md#text-length-above-max-length-percent)|Column level sensor that calculates the percentage of text values that are longer than a given length in a column.|
 |[*text_length_below_min_length_count*](./column/text-column-sensors.md#text-length-below-min-length-count)|Column level sensor that calculates the count of text values that are shorter than a given length in a column.|

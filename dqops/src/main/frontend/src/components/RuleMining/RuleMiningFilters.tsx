@@ -212,6 +212,15 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2 !w-62"
+            tooltipText="Propose the default configuration of the minimum and maximum word count of text columns. DQOps applies this checks when the minimum and maximum row count is at least 3 words."
+            label="Word count in range"
+            checked={configuration.propose_word_count_ranges}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_word_count_ranges: e })
+            }
+          />
+          <Checkbox
+            className="p-2 !w-62"
             tooltipText="Configure the checks that analyze boolean values and will configure a range percent check for the less common value (true or false)."
             label="Percent of true/false"
             checked={configuration.propose_bool_percent_checks}

@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/text/max_word_count
+  rule_name: comparison/between_ints
+  help_text: "This check finds the highest word count of text in a column. Then, it\
+    \ verifies that the maximum length is within an accepted range. It detects that\
+    \ the text contains too many words."
+  default_severity: error

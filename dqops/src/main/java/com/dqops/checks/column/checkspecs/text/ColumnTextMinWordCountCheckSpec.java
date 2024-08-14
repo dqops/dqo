@@ -17,6 +17,7 @@ package com.dqops.checks.column.checkspecs.text;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
@@ -37,7 +38,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.regex.Matcher;
 
 /**
  * This check finds the lowest count of words in text in a column. DQOps validates the shortest length using a range rule.
@@ -223,8 +230,58 @@ public class ColumnTextMinWordCountCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeTextLengthRanges()) {
+        if (!miningParameters.isProposeWordCountRanges()) {
             return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        if (sourceProfilingCheck.getActualValue() == null) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
+            Function<String, Integer> wordCountFunc = textValue -> textValue.length() - textValue.replace(" ", "").length() + 1;
+
+            Double percentOfTextsWithMultipleWordsValues = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                if (!(value instanceof String)) {
+                    return false;
+                }
+
+                String textValue = value.toString().trim();
+                int wordCount = wordCountFunc.apply(textValue);
+                return wordCount >= checkMiningConfigurationProperties.getMinWordCount();
+            });
+
+            if (percentOfTextsWithMultipleWordsValues == null || percentOfTextsWithMultipleWordsValues < 30.0) {
+                return false;
+            }
+
+            Optional<Integer> minRowCount = columnDataAssetProfilingResults
+                    .getSampleValues()
+                    .stream()
+                    .filter(val -> val.getValue() instanceof String)
+                    .map(sampleValue -> wordCountFunc.apply(sampleValue.getValue().toString()))
+                    .min(Comparator.comparingInt(value -> value));
+
+            sourceProfilingCheck.setActualValue(minRowCount.get().doubleValue()); // just fake number like there were no invalid values, to enable a check, even if it fails, we cannot calculate a correct value from the samples
+            sourceProfilingCheck.setExecutedAt(Instant.now());
+        } else {
+            if (sourceProfilingCheck.getActualValue() < checkMiningConfigurationProperties.getMinWordCount()) {
+                return false; // the minimum word count too small to consider evaluation
+            }
         }
 
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,

@@ -1129,6 +1129,18 @@ This check verifies that the minimum and maximum lengths of text values are in t
 
 
 
+### [min word count](./column/text/min-word-count.md)
+This check finds the lowest count of words in text in a column. DQOps validates the shortest length using a range rule.
+ DQOps raises an issue when the minimum word count is outside a range of accepted values.
+
+
+
+### [max word count](./column/text/max-word-count.md)
+This check finds the highest count of words in text in a column. DQOps validates the maximum length using a range rule.
+ DQOps raises an issue when the maximum word count is outside a range of accepted values.
+
+
+
 
 
 

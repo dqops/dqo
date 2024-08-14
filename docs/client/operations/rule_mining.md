@@ -709,7 +709,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_percentile_ranges\":true,\"propose_text_length_ranges\":true,\"propose_values_in_set_checks\":true,\"values_in_set_treat_rare_values_as_invalid\":true,\"propose_top_values_checks\":true,\"propose_text_conversion_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true,\"propose_standard_pattern_checks\":true,\"propose_whitespace_checks\":true,\"apply_pii_checks\":true,\"propose_custom_checks\":true}"
+		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_percentile_ranges\":true,\"propose_text_length_ranges\":true,\"propose_word_count_ranges\":true,\"propose_values_in_set_checks\":true,\"values_in_set_treat_rare_values_as_invalid\":true,\"propose_top_values_checks\":true,\"propose_text_conversion_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true,\"propose_standard_pattern_checks\":true,\"propose_whitespace_checks\":true,\"apply_pii_checks\":true,\"propose_custom_checks\":true}"
 	
     ```
 
@@ -759,6 +759,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -830,6 +831,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -904,6 +906,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -978,6 +981,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1072,7 +1076,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_percentile_ranges\":true,\"propose_text_length_ranges\":true,\"propose_values_in_set_checks\":true,\"values_in_set_treat_rare_values_as_invalid\":true,\"propose_top_values_checks\":true,\"propose_text_conversion_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true,\"propose_standard_pattern_checks\":true,\"propose_whitespace_checks\":true,\"apply_pii_checks\":true,\"propose_custom_checks\":true}"
+		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_percentile_ranges\":true,\"propose_text_length_ranges\":true,\"propose_word_count_ranges\":true,\"propose_values_in_set_checks\":true,\"values_in_set_treat_rare_values_as_invalid\":true,\"propose_top_values_checks\":true,\"propose_text_conversion_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true,\"propose_standard_pattern_checks\":true,\"propose_whitespace_checks\":true,\"apply_pii_checks\":true,\"propose_custom_checks\":true}"
 	
     ```
 
@@ -1122,6 +1126,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1193,6 +1198,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1267,6 +1273,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1341,6 +1348,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1434,7 +1442,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_percentile_ranges\":true,\"propose_text_length_ranges\":true,\"propose_values_in_set_checks\":true,\"values_in_set_treat_rare_values_as_invalid\":true,\"propose_top_values_checks\":true,\"propose_text_conversion_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true,\"propose_standard_pattern_checks\":true,\"propose_whitespace_checks\":true,\"apply_pii_checks\":true,\"propose_custom_checks\":true}"
+		"{\"severity_level\":\"error\",\"copy_failed_profiling_checks\":false,\"copy_disabled_profiling_checks\":false,\"copy_profiling_checks\":true,\"propose_default_checks\":true,\"propose_minimum_row_count\":true,\"propose_column_count\":true,\"propose_timeliness_checks\":true,\"propose_nulls_checks\":true,\"propose_not_nulls_checks\":true,\"propose_text_values_data_type\":true,\"propose_column_exists\":true,\"propose_uniqueness_checks\":true,\"propose_numeric_ranges\":true,\"propose_percentile_ranges\":true,\"propose_text_length_ranges\":true,\"propose_word_count_ranges\":true,\"propose_values_in_set_checks\":true,\"values_in_set_treat_rare_values_as_invalid\":true,\"propose_top_values_checks\":true,\"propose_text_conversion_checks\":true,\"propose_bool_percent_checks\":true,\"propose_date_checks\":true,\"propose_standard_pattern_checks\":true,\"propose_whitespace_checks\":true,\"apply_pii_checks\":true,\"propose_custom_checks\":true}"
 	
     ```
 
@@ -1483,6 +1491,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1552,6 +1561,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1624,6 +1634,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,
@@ -1696,6 +1707,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		propose_numeric_ranges=True,
 		propose_percentile_ranges=True,
 		propose_text_length_ranges=True,
+		propose_word_count_ranges=True,
 		propose_values_in_set_checks=True,
 		values_in_set_treat_rare_values_as_invalid=True,
 		propose_top_values_checks=True,

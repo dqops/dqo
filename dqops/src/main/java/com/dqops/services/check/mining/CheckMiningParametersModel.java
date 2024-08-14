@@ -149,6 +149,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeTextLengthRanges = true;
 
     /**
+     * Propose the default configuration of the minimum and maximum word count of text columns. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Propose the default configuration of the minimum and maximum word count of text columns. The default value of this parameter is 'true'.")
+    private boolean proposeWordCountRanges = true;
+
+    /**
      * Propose the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'.")

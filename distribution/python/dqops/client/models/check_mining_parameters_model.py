@@ -55,6 +55,8 @@ class CheckMiningParametersModel:
             on the data source, which is not advisable for data observability.
         propose_text_length_ranges (Union[Unset, bool]): Propose the default configuration of the text length checks.
             The default value of this parameter is 'true'.
+        propose_word_count_ranges (Union[Unset, bool]): Propose the default configuration of the minimum and maximum
+            word count of text columns. The default value of this parameter is 'true'.
         propose_values_in_set_checks (Union[Unset, bool]): Propose the configuration the categorical values checks from
             the accepted values category. These checks will be configured to ensure that the column contains only sample
             values that were identified during data profiling. The default value of this parameter is 'true'.
@@ -112,6 +114,7 @@ class CheckMiningParametersModel:
     propose_numeric_ranges: Union[Unset, bool] = UNSET
     propose_percentile_ranges: Union[Unset, bool] = UNSET
     propose_text_length_ranges: Union[Unset, bool] = UNSET
+    propose_word_count_ranges: Union[Unset, bool] = UNSET
     propose_values_in_set_checks: Union[Unset, bool] = UNSET
     values_in_set_treat_rare_values_as_invalid: Union[Unset, bool] = UNSET
     propose_top_values_checks: Union[Unset, bool] = UNSET
@@ -149,6 +152,7 @@ class CheckMiningParametersModel:
         propose_numeric_ranges = self.propose_numeric_ranges
         propose_percentile_ranges = self.propose_percentile_ranges
         propose_text_length_ranges = self.propose_text_length_ranges
+        propose_word_count_ranges = self.propose_word_count_ranges
         propose_values_in_set_checks = self.propose_values_in_set_checks
         values_in_set_treat_rare_values_as_invalid = (
             self.values_in_set_treat_rare_values_as_invalid
@@ -209,6 +213,8 @@ class CheckMiningParametersModel:
             field_dict["propose_percentile_ranges"] = propose_percentile_ranges
         if propose_text_length_ranges is not UNSET:
             field_dict["propose_text_length_ranges"] = propose_text_length_ranges
+        if propose_word_count_ranges is not UNSET:
+            field_dict["propose_word_count_ranges"] = propose_word_count_ranges
         if propose_values_in_set_checks is not UNSET:
             field_dict["propose_values_in_set_checks"] = propose_values_in_set_checks
         if values_in_set_treat_rare_values_as_invalid is not UNSET:
@@ -292,6 +298,8 @@ class CheckMiningParametersModel:
 
         propose_text_length_ranges = d.pop("propose_text_length_ranges", UNSET)
 
+        propose_word_count_ranges = d.pop("propose_word_count_ranges", UNSET)
+
         propose_values_in_set_checks = d.pop("propose_values_in_set_checks", UNSET)
 
         values_in_set_treat_rare_values_as_invalid = d.pop(
@@ -344,6 +352,7 @@ class CheckMiningParametersModel:
             propose_numeric_ranges=propose_numeric_ranges,
             propose_percentile_ranges=propose_percentile_ranges,
             propose_text_length_ranges=propose_text_length_ranges,
+            propose_word_count_ranges=propose_word_count_ranges,
             propose_values_in_set_checks=propose_values_in_set_checks,
             values_in_set_treat_rare_values_as_invalid=values_in_set_treat_rare_values_as_invalid,
             propose_top_values_checks=propose_top_values_checks,

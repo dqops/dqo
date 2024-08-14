@@ -498,6 +498,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`text_mean_length`](./TableYaml.md#columntexttextmeanlengthstatisticscollectorspec)</span>|Configuration of the profiler that finds the mean text length.|*[ColumnTextTextMeanLengthStatisticsCollectorSpec](./TableYaml.md#columntexttextmeanlengthstatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`text_min_length`](./TableYaml.md#columntexttextminlengthstatisticscollectorspec)</span>|Configuration of the profiler that finds the min text length.|*[ColumnTextTextMinLengthStatisticsCollectorSpec](./TableYaml.md#columntexttextminlengthstatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`text_datatype_detect`](./TableYaml.md#columntexttextdatatypedetectstatisticscollectorspec)</span>|Configuration of the profiler that detects datatype.|*[ColumnTextTextDatatypeDetectStatisticsCollectorSpec](./TableYaml.md#columntexttextdatatypedetectstatisticscollectorspec)*| | | |
+|<span class="no-wrap-code ">[`text_min_word_count`](./TableYaml.md#columntextminwordcountstatisticscollectorspec)</span>|Configuration of the profiler that finds the estimated minimum word count.|*[ColumnTextMinWordCountStatisticsCollectorSpec](./TableYaml.md#columntextminwordcountstatisticscollectorspec)*| | | |
+|<span class="no-wrap-code ">[`text_max_word_count`](./TableYaml.md#columntextmaxwordcountstatisticscollectorspec)</span>|Configuration of the profiler that finds the estimated maximum word count.|*[ColumnTextMaxWordCountStatisticsCollectorSpec](./TableYaml.md#columntextmaxwordcountstatisticscollectorspec)*| | | |
 
 
 
@@ -557,6 +559,36 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../sensors/column/datatype-column-sensors.md#string-datatype-detect)</span>|Profiler parameters|*[ColumnDatatypeStringDatatypeDetectSensorParametersSpec](../sensors/column/datatype-column-sensors.md#string-datatype-detect)*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
+
+
+
+___
+
+## ColumnTextMinWordCountStatisticsCollectorSpec
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`parameters`](../sensors/column/text-column-sensors.md#min-word-count)</span>|Profiler parameters|*[ColumnTextMinWordCountSensorParametersSpec](../sensors/column/text-column-sensors.md#min-word-count)*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
+
+
+
+___
+
+## ColumnTextMaxWordCountStatisticsCollectorSpec
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`parameters`](../sensors/column/text-column-sensors.md#max-word-count)</span>|Profiler parameters|*[ColumnTextMaxWordCountSensorParametersSpec](../sensors/column/text-column-sensors.md#max-word-count)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
 
 

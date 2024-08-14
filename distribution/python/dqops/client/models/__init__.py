@@ -1108,8 +1108,22 @@ from .column_text_match_date_format_percent_sensor_parameters_spec import (
     ColumnTextMatchDateFormatPercentSensorParametersSpec,
 )
 from .column_text_max_length_check_spec import ColumnTextMaxLengthCheckSpec
+from .column_text_max_word_count_check_spec import ColumnTextMaxWordCountCheckSpec
+from .column_text_max_word_count_sensor_parameters_spec import (
+    ColumnTextMaxWordCountSensorParametersSpec,
+)
+from .column_text_max_word_count_statistics_collector_spec import (
+    ColumnTextMaxWordCountStatisticsCollectorSpec,
+)
 from .column_text_mean_length_check_spec import ColumnTextMeanLengthCheckSpec
 from .column_text_min_length_check_spec import ColumnTextMinLengthCheckSpec
+from .column_text_min_word_count_check_spec import ColumnTextMinWordCountCheckSpec
+from .column_text_min_word_count_sensor_parameters_spec import (
+    ColumnTextMinWordCountSensorParametersSpec,
+)
+from .column_text_min_word_count_statistics_collector_spec import (
+    ColumnTextMinWordCountStatisticsCollectorSpec,
+)
 from .column_text_monthly_monitoring_checks_spec import (
     ColumnTextMonthlyMonitoringChecksSpec,
 )
@@ -2441,8 +2455,14 @@ __all__ = (
     "ColumnTextMatchDateFormatPercentCheckSpec",
     "ColumnTextMatchDateFormatPercentSensorParametersSpec",
     "ColumnTextMaxLengthCheckSpec",
+    "ColumnTextMaxWordCountCheckSpec",
+    "ColumnTextMaxWordCountSensorParametersSpec",
+    "ColumnTextMaxWordCountStatisticsCollectorSpec",
     "ColumnTextMeanLengthCheckSpec",
     "ColumnTextMinLengthCheckSpec",
+    "ColumnTextMinWordCountCheckSpec",
+    "ColumnTextMinWordCountSensorParametersSpec",
+    "ColumnTextMinWordCountStatisticsCollectorSpec",
     "ColumnTextMonthlyMonitoringChecksSpec",
     "ColumnTextMonthlyMonitoringChecksSpecCustomChecks",
     "ColumnTextMonthlyPartitionedChecksSpec",

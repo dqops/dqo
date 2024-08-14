@@ -19797,6 +19797,10 @@
           "type" : "boolean",
           "description" : "Propose the default configuration of the text length checks. The default value of this parameter is 'true'."
         },
+        "propose_word_count_ranges" : {
+          "type" : "boolean",
+          "description" : "Propose the default configuration of the minimum and maximum word count of text columns. The default value of this parameter is 'true'."
+        },
         "propose_values_in_set_checks" : {
           "type" : "boolean",
           "description" : "Propose the configuration the categorical values checks from the accepted values category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling. The default value of this parameter is 'true'."
@@ -20029,13 +20033,13 @@
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
         },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
+        },
         "check_hash" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
-        },
-        "similar_profiling_check" : {
-          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."
@@ -32390,6 +32394,14 @@
         "daily_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+        },
+        "daily_min_word_count" : {
+          "description" : "This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.",
+          "$ref" : "#/definitions/ColumnTextMinWordCountCheckSpec"
+        },
+        "daily_max_word_count" : {
+          "description" : "This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountCheckSpec"
         }
       }
     },
@@ -32434,6 +32446,14 @@
         "daily_partition_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+        },
+        "daily_partition_min_word_count" : {
+          "description" : "This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.",
+          "$ref" : "#/definitions/ColumnTextMinWordCountCheckSpec"
+        },
+        "daily_partition_max_word_count" : {
+          "description" : "This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountCheckSpec"
         }
       }
     },
@@ -32931,6 +32951,88 @@
         }
       }
     },
+    "ColumnTextMaxWordCountCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/BetweenIntsRuleParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold that raises a data quality error (alert).",
+          "$ref" : "#/definitions/BetweenIntsRuleParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/BetweenIntsRuleParametersSpec"
+        }
+      }
+    },
+    "ColumnTextMaxWordCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnTextMaxWordCountStatisticsCollectorSpec" : {
+      "type" : "object",
+      "properties" : {
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables this profiler. Only enabled profilers are executed during a profiling process."
+        },
+        "parameters" : {
+          "description" : "Profiler parameters",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountSensorParametersSpec"
+        }
+      }
+    },
     "ColumnTextMeanLengthCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -33051,6 +33153,88 @@
         }
       }
     },
+    "ColumnTextMinWordCountCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnTextMinWordCountSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/BetweenIntsRuleParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold that raises a data quality error (alert).",
+          "$ref" : "#/definitions/BetweenIntsRuleParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/BetweenIntsRuleParametersSpec"
+        }
+      }
+    },
+    "ColumnTextMinWordCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnTextMinWordCountStatisticsCollectorSpec" : {
+      "type" : "object",
+      "properties" : {
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables this profiler. Only enabled profilers are executed during a profiling process."
+        },
+        "parameters" : {
+          "description" : "Profiler parameters",
+          "$ref" : "#/definitions/ColumnTextMinWordCountSensorParametersSpec"
+        }
+      }
+    },
     "ColumnTextMonthlyMonitoringChecksSpec" : {
       "type" : "object",
       "properties" : {
@@ -33092,6 +33276,14 @@
         "monthly_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+        },
+        "monthly_min_word_count" : {
+          "description" : "This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.",
+          "$ref" : "#/definitions/ColumnTextMinWordCountCheckSpec"
+        },
+        "monthly_max_word_count" : {
+          "description" : "This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountCheckSpec"
         }
       }
     },
@@ -33136,6 +33328,14 @@
         "monthly_partition_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+        },
+        "monthly_partition_min_word_count" : {
+          "description" : "This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.",
+          "$ref" : "#/definitions/ColumnTextMinWordCountCheckSpec"
+        },
+        "monthly_partition_max_word_count" : {
+          "description" : "This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountCheckSpec"
         }
       }
     },
@@ -33660,6 +33860,14 @@
         "profile_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+        },
+        "profile_min_word_count" : {
+          "description" : "This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.",
+          "$ref" : "#/definitions/ColumnTextMinWordCountCheckSpec"
+        },
+        "profile_max_word_count" : {
+          "description" : "This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountCheckSpec"
         }
       }
     },
@@ -33681,6 +33889,14 @@
         "text_datatype_detect" : {
           "description" : "Configuration of the profiler that detects datatype.",
           "$ref" : "#/definitions/ColumnTextTextDatatypeDetectStatisticsCollectorSpec"
+        },
+        "text_min_word_count" : {
+          "description" : "Configuration of the profiler that finds the estimated minimum word count.",
+          "$ref" : "#/definitions/ColumnTextMinWordCountStatisticsCollectorSpec"
+        },
+        "text_max_word_count" : {
+          "description" : "Configuration of the profiler that finds the estimated maximum word count.",
+          "$ref" : "#/definitions/ColumnTextMaxWordCountStatisticsCollectorSpec"
         }
       }
     },

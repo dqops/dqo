@@ -140,6 +140,13 @@ public class DqoRuleMiningConfigurationProperties implements Cloneable {
     private int maxExpectedTextsInTopValues = 5;
 
     /**
+     * The minimum word count that is required to apply word count count in range checks. The default value is 3 words.
+     */
+    @CommandLine.Option(names = {"--dqo.rule-mining.min-word-count"},
+            description = "The minimum word count that is required to apply word count count in range checks. The default value is 3 words.", defaultValue = "3")
+    private int minWordCount = 3;
+
+    /**
      * Creates a clone of the object.
      * @return Cloned instance.
      */

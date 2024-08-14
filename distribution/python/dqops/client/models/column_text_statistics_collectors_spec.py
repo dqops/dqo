@@ -6,6 +6,12 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_text_max_word_count_statistics_collector_spec import (
+        ColumnTextMaxWordCountStatisticsCollectorSpec,
+    )
+    from ..models.column_text_min_word_count_statistics_collector_spec import (
+        ColumnTextMinWordCountStatisticsCollectorSpec,
+    )
     from ..models.column_text_text_datatype_detect_statistics_collector_spec import (
         ColumnTextTextDatatypeDetectStatisticsCollectorSpec,
     )
@@ -31,6 +37,8 @@ class ColumnTextStatisticsCollectorsSpec:
         text_mean_length (Union[Unset, ColumnTextTextMeanLengthStatisticsCollectorSpec]):
         text_min_length (Union[Unset, ColumnTextTextMinLengthStatisticsCollectorSpec]):
         text_datatype_detect (Union[Unset, ColumnTextTextDatatypeDetectStatisticsCollectorSpec]):
+        text_min_word_count (Union[Unset, ColumnTextMinWordCountStatisticsCollectorSpec]):
+        text_max_word_count (Union[Unset, ColumnTextMaxWordCountStatisticsCollectorSpec]):
     """
 
     text_max_length: Union[Unset, "ColumnTextTextMaxLengthStatisticsCollectorSpec"] = (
@@ -44,6 +52,12 @@ class ColumnTextStatisticsCollectorsSpec:
     )
     text_datatype_detect: Union[
         Unset, "ColumnTextTextDatatypeDetectStatisticsCollectorSpec"
+    ] = UNSET
+    text_min_word_count: Union[
+        Unset, "ColumnTextMinWordCountStatisticsCollectorSpec"
+    ] = UNSET
+    text_max_word_count: Union[
+        Unset, "ColumnTextMaxWordCountStatisticsCollectorSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -64,6 +78,14 @@ class ColumnTextStatisticsCollectorsSpec:
         if not isinstance(self.text_datatype_detect, Unset):
             text_datatype_detect = self.text_datatype_detect.to_dict()
 
+        text_min_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.text_min_word_count, Unset):
+            text_min_word_count = self.text_min_word_count.to_dict()
+
+        text_max_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.text_max_word_count, Unset):
+            text_max_word_count = self.text_max_word_count.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -75,11 +97,21 @@ class ColumnTextStatisticsCollectorsSpec:
             field_dict["text_min_length"] = text_min_length
         if text_datatype_detect is not UNSET:
             field_dict["text_datatype_detect"] = text_datatype_detect
+        if text_min_word_count is not UNSET:
+            field_dict["text_min_word_count"] = text_min_word_count
+        if text_max_word_count is not UNSET:
+            field_dict["text_max_word_count"] = text_max_word_count
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_text_max_word_count_statistics_collector_spec import (
+            ColumnTextMaxWordCountStatisticsCollectorSpec,
+        )
+        from ..models.column_text_min_word_count_statistics_collector_spec import (
+            ColumnTextMinWordCountStatisticsCollectorSpec,
+        )
         from ..models.column_text_text_datatype_detect_statistics_collector_spec import (
             ColumnTextTextDatatypeDetectStatisticsCollectorSpec,
         )
@@ -136,11 +168,35 @@ class ColumnTextStatisticsCollectorsSpec:
                 )
             )
 
+        _text_min_word_count = d.pop("text_min_word_count", UNSET)
+        text_min_word_count: Union[Unset, ColumnTextMinWordCountStatisticsCollectorSpec]
+        if isinstance(_text_min_word_count, Unset):
+            text_min_word_count = UNSET
+        else:
+            text_min_word_count = (
+                ColumnTextMinWordCountStatisticsCollectorSpec.from_dict(
+                    _text_min_word_count
+                )
+            )
+
+        _text_max_word_count = d.pop("text_max_word_count", UNSET)
+        text_max_word_count: Union[Unset, ColumnTextMaxWordCountStatisticsCollectorSpec]
+        if isinstance(_text_max_word_count, Unset):
+            text_max_word_count = UNSET
+        else:
+            text_max_word_count = (
+                ColumnTextMaxWordCountStatisticsCollectorSpec.from_dict(
+                    _text_max_word_count
+                )
+            )
+
         column_text_statistics_collectors_spec = cls(
             text_max_length=text_max_length,
             text_mean_length=text_mean_length,
             text_min_length=text_min_length,
             text_datatype_detect=text_datatype_detect,
+            text_min_word_count=text_min_word_count,
+            text_max_word_count=text_max_word_count,
         )
 
         column_text_statistics_collectors_spec.additional_properties = d

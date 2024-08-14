@@ -455,6 +455,8 @@ nav:
         - text length above max length: 'checks/column/text/text-length-above-max-length.md'
         - text length above max length percent: 'checks/column/text/text-length-above-max-length-percent.md'
         - text length in range percent: 'checks/column/text/text-length-in-range-percent.md'
+        - min word count: 'checks/column/text/min-word-count.md'
+        - max word count: 'checks/column/text/max-word-count.md'
       - uniqueness:
         - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'

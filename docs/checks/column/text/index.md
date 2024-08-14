@@ -130,6 +130,36 @@ This check verifies that the minimum and maximum lengths of text values are in t
 
 
 
+### [min word count](./min-word-count.md)
+This check finds the lowest count of words in text in a column. DQOps validates the shortest length using a range rule.
+ DQOps raises an issue when the minimum word count is outside a range of accepted values.
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_min_word_count`</span>](./min-word-count.md#profile-min-word-count)|Verify that the minimum word count of the text column is in the range|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_min_word_count`</span>](./min-word-count.md#daily-min-word-count)|Verify that the minimum word count of the text column is in the range|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_min_word_count`</span>](./min-word-count.md#monthly-min-word-count)|Verify that the minimum word count of the text column is in the range|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_min_word_count`</span>](./min-word-count.md#daily-partition-min-word-count)|Verify that the minimum word count of the text column is in the range|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_min_word_count`</span>](./min-word-count.md#monthly-partition-min-word-count)|Verify that the minimum word count of the text column is in the range|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|This check finds the lowest word count of text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the text contains too less words.|:material-check-bold:|
+
+
+
+### [max word count](./max-word-count.md)
+This check finds the highest count of words in text in a column. DQOps validates the maximum length using a range rule.
+ DQOps raises an issue when the maximum word count is outside a range of accepted values.
+
+
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_max_word_count`</span>](./max-word-count.md#profile-max-word-count)|Verify that the maximum word count of the text is in the range|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_max_word_count`</span>](./max-word-count.md#daily-max-word-count)|Verify that the maximum word count of the text is in the range|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_max_word_count`</span>](./max-word-count.md#monthly-max-word-count)|Verify that the maximum word count of the text is in the range|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_max_word_count`</span>](./max-word-count.md#daily-partition-max-word-count)|Verify that the maximum word count of the text is in the range|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_max_word_count`</span>](./max-word-count.md#monthly-partition-max-word-count)|Verify that the maximum word count of the text is in the range|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|This check finds the highest word count of text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the text contains too many words.|:material-check-bold:|
+
+
+
 
 
 
