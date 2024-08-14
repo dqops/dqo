@@ -19,7 +19,7 @@ export default function CreateNotificationPattern({
   onChangeConnectionDefaultAdresses,
   onUpdateDefaultPattern
 }: {
-  connection: string;
+  connection?: string;
   onBack: () => void;
   patternNameEdit?: string;
   defaultConnectionAdressess: any;
@@ -53,13 +53,20 @@ export default function CreateNotificationPattern({
     // } else {
     if (isDefaultPattern) return;
     setLoading(true);
-    FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationConfiguration(
-      connection,
-      patternNameEdit
-    )
-      .then((res) => setPattern(res.data))
-      .finally(() => setLoading(false));
-    // }
+    if (connection) {
+      FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationConfiguration(
+        connection,
+        patternNameEdit
+      )
+        .then((res) => setPattern(res.data))
+        .finally(() => setLoading(false));
+    } else {
+      FilteredNotificationsConfigurationsClient.getDefaultFilteredNotificationConfiguration(
+        patternNameEdit
+      )
+        .then((res) => setPattern(res.data))
+        .finally(() => setLoading(false));
+    }
   }, [patternNameEdit]);
 
   const onChangePattern = (val: Partial<FilteredNotificationModel>) => {
@@ -92,17 +99,30 @@ export default function CreateNotificationPattern({
   };
 
   const savePattern = () => {
-    if (!patternNameEdit) {
-      FilteredNotificationsConfigurationsClient.createConnectionFilteredNotificationConfiguration(
-        connection,
-        pattern
-      ).then(() => onBack());
+    if (connection) {
+      if (!patternNameEdit) {
+        FilteredNotificationsConfigurationsClient.createConnectionFilteredNotificationConfiguration(
+          connection,
+          pattern
+        ).then(() => onBack());
+      } else {
+        FilteredNotificationsConfigurationsClient.updateConnectionFilteredNotificationConfiguration(
+          connection,
+          patternNameEdit,
+          pattern
+        ).then(() => onBack());
+      }
     } else {
-      FilteredNotificationsConfigurationsClient.updateConnectionFilteredNotificationConfiguration(
-        connection,
-        patternNameEdit,
-        pattern
-      ).then(() => onBack());
+      if (!patternNameEdit) {
+        FilteredNotificationsConfigurationsClient.createDefaultFilteredNotificationConfiguration(
+          pattern
+        ).then(() => onBack());
+      } else {
+        FilteredNotificationsConfigurationsClient.updateDefaultFilteredNotificationConfiguration(
+          patternNameEdit,
+          pattern
+        ).then(() => onBack());
+      }
     }
   };
 
@@ -140,7 +160,7 @@ export default function CreateNotificationPattern({
         <Button
           label="Save"
           color="primary"
-          className="!w-30 !mr-5"
+          className="!w-30 !mr-5 !z-[99]"
           onClick={handleSave}
         />
       </div>

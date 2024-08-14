@@ -41,7 +41,7 @@ export default function NotificationPatternTable({
   filteredNotificationsConfigurations: Array<TNotificationPattern>;
   onChange: (data: any) => void;
   setPatternNameEdit: (patternName: string) => void;
-  connection: string;
+  connection?: string;
 }) {
   const [dir, setDir] = useState<'asc' | 'desc'>('desc');
   const [notificationPatternDelete, setPatternDelete] = useState('');
@@ -64,16 +64,28 @@ export default function NotificationPatternTable({
   };
 
   const deletePattern = (patternName: string) => {
-    FilteredNotificationsConfigurationsClient.deleteConnectionFilteredNotificationConfiguration(
-      connection,
-      patternName
-    ).then(() => {
-      onChange(
-        filteredNotificationsConfigurations.filter(
-          (pattern) => pattern.name !== patternName
-        )
-      );
-    });
+    if (connection) {
+      FilteredNotificationsConfigurationsClient.deleteConnectionFilteredNotificationConfiguration(
+        connection,
+        patternName
+      ).then(() => {
+        onChange(
+          filteredNotificationsConfigurations.filter(
+            (pattern) => pattern.name !== patternName
+          )
+        );
+      });
+    } else {
+      FilteredNotificationsConfigurationsClient.deleteDefaultFilteredNotificationConfiguration(
+        patternName
+      ).then(() => {
+        onChange(
+          filteredNotificationsConfigurations.filter(
+            (pattern) => pattern.name !== patternName
+          )
+        );
+      });
+    }
   };
 
   return (
