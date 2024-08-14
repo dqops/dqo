@@ -44,7 +44,9 @@ const defaultColumnStatistics: Record<string, TStatistics[]> = {
   Text: [
     { type: 'Text min length' },
     { type: 'Text max length' },
-    { type: 'Text mean length' }
+    { type: 'Text mean length' },
+    { type: 'Text min word count' },
+    { type: 'Text max word count' }
   ],
   'Top most common values': Array(0)
 };
@@ -136,7 +138,9 @@ const ColumnStatisticsView = ({
       Text: [
         { type: 'Text min length' },
         { type: 'Text max length' },
-        { type: 'Text mean length' }
+        { type: 'Text mean length' },
+        { type: 'Text min word count' },
+        { type: 'Text max word count' }
       ],
       'Top most common values': Array(0)
     };

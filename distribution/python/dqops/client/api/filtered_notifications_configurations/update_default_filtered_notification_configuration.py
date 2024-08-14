@@ -21,7 +21,7 @@ def _get_kwargs(
 
     return {
         "method": "put",
-        "url": "api/default/filterednotification/{filteredNotificationName}".format(
+        "url": "api/default/filterednotifications/{filteredNotificationName}".format(
             filteredNotificationName=filtered_notification_name,
         ),
         "json": json_json_body,

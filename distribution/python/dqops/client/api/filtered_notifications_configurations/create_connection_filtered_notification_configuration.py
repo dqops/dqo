@@ -21,7 +21,7 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": "api/connections/{connectionName}/filterednotification".format(
+        "url": "api/connections/{connectionName}/filterednotifications".format(
             connectionName=connection_name,
         ),
         "json": json_json_body,

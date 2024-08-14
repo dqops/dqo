@@ -22,7 +22,7 @@ def _get_kwargs(
 
     return {
         "method": "put",
-        "url": "api/connections/{connectionName}/filterednotification/{filteredNotificationName}".format(
+        "url": "api/connections/{connectionName}/filterednotifications/{filteredNotificationName}".format(
             connectionName=connection_name,
             filteredNotificationName=filtered_notification_name,
         ),

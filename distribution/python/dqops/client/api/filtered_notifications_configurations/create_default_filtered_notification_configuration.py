@@ -20,7 +20,7 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": "api/default/filterednotification",
+        "url": "api/default/filterednotifications",
         "json": json_json_body,
     }
 

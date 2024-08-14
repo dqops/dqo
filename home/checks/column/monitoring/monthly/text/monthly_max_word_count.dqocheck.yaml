@@ -7,4 +7,6 @@ spec:
   help_text: "This check finds the highest word count of text in a column. Then, it\
     \ verifies that the maximum length is within an accepted range. It detects that\
     \ the text contains too many words."
+  friendly_name: Verify that the maximum word count of the text is in the range
+  standard: true
   default_severity: error

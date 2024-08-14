@@ -17,7 +17,7 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": "api/default/filterednotification/{filteredNotificationName}".format(
+        "url": "api/default/filterednotifications/{filteredNotificationName}".format(
             filteredNotificationName=filtered_notification_name,
         ),
     }

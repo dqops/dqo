@@ -14,7 +14,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **POST**
 ```
-http://localhost:8888/api/connections/{connectionName}/filterednotification
+http://localhost:8888/api/connections/{connectionName}/filterednotifications
 ```
 
 
@@ -44,7 +44,7 @@ http://localhost:8888/api/connections/{connectionName}/filterednotification
     **Execution**
 
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/filterednotification^
+    curl -X POST http://localhost:8888/api/connections/sample_connection/filterednotifications^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
@@ -171,7 +171,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **POST**
 ```
-http://localhost:8888/api/default/filterednotification
+http://localhost:8888/api/default/filterednotifications
 ```
 
 
@@ -194,7 +194,7 @@ http://localhost:8888/api/default/filterednotification
     **Execution**
 
     ```bash
-    curl -X POST http://localhost:8888/api/default/filterednotification^
+    curl -X POST http://localhost:8888/api/default/filterednotifications^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
@@ -317,7 +317,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **DELETE**
 ```
-http://localhost:8888/api/connections/{connectionName}/filterednotification/{filteredNotificationName}
+http://localhost:8888/api/connections/{connectionName}/filterednotifications/{filteredNotificationName}
 ```
 
 
@@ -341,7 +341,7 @@ http://localhost:8888/api/connections/{connectionName}/filterednotification/{fil
     **Execution**
 
     ```bash
-    curl -X DELETE http://localhost:8888/api/connections/sample_connection/filterednotification/fact*^
+    curl -X DELETE http://localhost:8888/api/connections/sample_connection/filterednotifications/fact*^
 		-H "Accept: application/json"
 	
     ```
@@ -453,7 +453,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **DELETE**
 ```
-http://localhost:8888/api/default/filterednotification/{filteredNotificationName}
+http://localhost:8888/api/default/filterednotifications/{filteredNotificationName}
 ```
 
 
@@ -476,7 +476,7 @@ http://localhost:8888/api/default/filterednotification/{filteredNotificationName
     **Execution**
 
     ```bash
-    curl -X DELETE http://localhost:8888/api/default/filterednotification/fact*^
+    curl -X DELETE http://localhost:8888/api/default/filterednotifications/fact*^
 		-H "Accept: application/json"
 	
     ```
@@ -584,7 +584,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/filterednotification/{filteredNotificationName}
+http://localhost:8888/api/connections/{connectionName}/filterednotifications/{filteredNotificationName}
 ```
 
 **Return value**
@@ -615,7 +615,7 @@ http://localhost:8888/api/connections/{connectionName}/filterednotification/{fil
     **Execution**
 
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/filterednotification/fact*^
+    curl http://localhost:8888/api/connections/sample_connection/filterednotifications/fact*^
 		-H "Accept: application/json"
 	
     ```
@@ -969,7 +969,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **GET**
 ```
-http://localhost:8888/api/default/filterednotification/{filteredNotificationName}
+http://localhost:8888/api/default/filterednotifications/{filteredNotificationName}
 ```
 
 **Return value**
@@ -999,7 +999,7 @@ http://localhost:8888/api/default/filterednotification/{filteredNotificationName
     **Execution**
 
     ```bash
-    curl http://localhost:8888/api/default/filterednotification/fact*^
+    curl http://localhost:8888/api/default/filterednotifications/fact*^
 		-H "Accept: application/json"
 	
     ```
@@ -1338,7 +1338,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/filterednotification/{filteredNotificationName}
+http://localhost:8888/api/connections/{connectionName}/filterednotifications/{filteredNotificationName}
 ```
 
 
@@ -1369,7 +1369,7 @@ http://localhost:8888/api/connections/{connectionName}/filterednotification/{fil
     **Execution**
 
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/filterednotification/fact*^
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/filterednotifications/fact*^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
@@ -1500,7 +1500,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **PUT**
 ```
-http://localhost:8888/api/default/filterednotification/{filteredNotificationName}
+http://localhost:8888/api/default/filterednotifications/{filteredNotificationName}
 ```
 
 
@@ -1530,7 +1530,7 @@ http://localhost:8888/api/default/filterednotification/{filteredNotificationName
     **Execution**
 
     ```bash
-    curl -X PUT http://localhost:8888/api/default/filterednotification/fact*^
+    curl -X PUT http://localhost:8888/api/default/filterednotifications/fact*^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^

@@ -810,7 +810,37 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/connections/{connectionName}/filterednotification:
+  /api/connections/{connectionName}/filterednotifications:
+    get:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "getConnectionFilteredNotificationsConfigurations"
+      description: "Returns the list of filtered notification configurations on a\
+        \ connection"
+      operationId: "getConnectionFilteredNotificationsConfigurations"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FilteredNotificationModel"
+        404:
+          description: "Connection not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
     post:
       tags:
       - "FilteredNotificationsConfigurations"
@@ -854,7 +884,7 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/connections/{connectionName}/filterednotification/{filteredNotificationName}:
+  /api/connections/{connectionName}/filterednotifications/{filteredNotificationName}:
     get:
       tags:
       - "FilteredNotificationsConfigurations"
@@ -965,37 +995,6 @@ paths:
           description: "Connection or filtered notification not found"
         406:
           description: "Invalid request"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/connections/{connectionName}/filterednotifications:
-    get:
-      tags:
-      - "FilteredNotificationsConfigurations"
-      summary: "getConnectionFilteredNotificationsConfigurations"
-      description: "Returns the list of filtered notification configurations on a\
-        \ connection"
-      operationId: "getConnectionFilteredNotificationsConfigurations"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "connectionName"
-        in: "path"
-        description: "Connection name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/FilteredNotificationModel"
-        404:
-          description: "Connection not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -12925,7 +12924,32 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/default/filterednotification:
+  /api/default/filterednotifications:
+    get:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "getDefaultFilteredNotificationsConfigurations"
+      description: "Returns the list of filtered notification configurations on default\
+        \ notifications"
+      operationId: "getDefaultFilteredNotificationsConfigurations"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FilteredNotificationModel"
+        404:
+          description: "Connection not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
     post:
       tags:
       - "FilteredNotificationsConfigurations"
@@ -12963,7 +12987,7 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/default/filterednotification/{filteredNotificationName}:
+  /api/default/filterednotifications/{filteredNotificationName}:
     get:
       tags:
       - "FilteredNotificationsConfigurations"
@@ -13059,32 +13083,6 @@ paths:
           description: "Connection not found"
         406:
           description: "Invalid request"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/filterednotifications:
-    get:
-      tags:
-      - "FilteredNotificationsConfigurations"
-      summary: "getDefaultFilteredNotificationsConfigurations"
-      description: "Returns the list of filtered notification configurations on default\
-        \ notifications"
-      operationId: "getDefaultFilteredNotificationsConfigurations"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/FilteredNotificationModel"
-        404:
-          description: "Connection not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -17065,12 +17063,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:

@@ -114,7 +114,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationName Filtered notification name.
      * @return Model of the filtered notification configuration.
      */
-    @GetMapping(value = "/connections/{connectionName}/filterednotification/{filteredNotificationName}", produces = "application/json")
+    @GetMapping(value = "/connections/{connectionName}/filterednotifications/{filteredNotificationName}", produces = "application/json")
     @ApiOperation(value = "getConnectionFilteredNotificationConfiguration", notes = "Returns a model of the filtered notification configuration",
             response = FilteredNotificationModel.class,
             authorizations = {
@@ -155,7 +155,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationModel Filtered notification model.
      * @return Empty response.
      */
-    @PutMapping(value = "/connections/{connectionName}/filterednotification/{filteredNotificationName}", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/connections/{connectionName}/filterednotifications/{filteredNotificationName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateConnectionFilteredNotificationConfiguration", notes = "Updates a filtered notification configuration according to the provided model", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -216,7 +216,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationModel Filtered notification model.
      * @return Empty response.
      */
-    @PostMapping(value = "/connections/{connectionName}/filterednotification", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/connections/{connectionName}/filterednotifications", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createConnectionFilteredNotificationConfiguration", notes = "Creates a new filtered notification configuration on a connection level", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -266,7 +266,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationName Filtered notification name up until now.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/connections/{connectionName}/filterednotification/{filteredNotificationName}", produces = "application/json")
+    @DeleteMapping(value = "/connections/{connectionName}/filterednotifications/{filteredNotificationName}", produces = "application/json")
     @ApiOperation(value = "deleteConnectionFilteredNotificationConfiguration", notes = "Deletes a filtered notification configuration from a connection", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -347,7 +347,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationName Filtered notification name.
      * @return Model of the filtered notification configuration.
      */
-    @GetMapping(value = "/default/filterednotification/{filteredNotificationName}", produces = "application/json")
+    @GetMapping(value = "/default/filterednotifications/{filteredNotificationName}", produces = "application/json")
     @ApiOperation(value = "getDefaultFilteredNotificationConfiguration", notes = "Returns a model of the filtered notification from default notifications",
             response = FilteredNotificationModel.class,
             authorizations = {
@@ -386,7 +386,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationModel Filtered notification model.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/filterednotification/{filteredNotificationName}", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/default/filterednotifications/{filteredNotificationName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultFilteredNotificationConfiguration", notes = "Updates a filtered notification configuration on default notifications according to the provided model", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -441,7 +441,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationModel Filtered notification model.
      * @return Empty response.
      */
-    @PostMapping(value = "/default/filterednotification", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/default/filterednotifications", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createDefaultFilteredNotificationConfiguration", notes = "Creates a new filtered notification configuration at default notifications", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -486,7 +486,7 @@ public class FilteredNotificationsController {
      * @param filteredNotificationName Filtered notification name up until now.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/default/filterednotification/{filteredNotificationName}", produces = "application/json")
+    @DeleteMapping(value = "/default/filterednotifications/{filteredNotificationName}", produces = "application/json")
     @ApiOperation(value = "deleteDefaultFilteredNotificationConfiguration", notes = "Deletes a filtered notification configuration from default notifications", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -541,12 +541,16 @@ public class FilteredNotificationsController {
         ConnectionIncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
         if (incidentGrouping == null) {
             return null;
+        } else {
+            incidentGrouping = incidentGrouping.deepClone();
         }
+
         IncidentNotificationSpec incidentNotification = incidentGrouping.getIncidentNotification();
         if (incidentNotification == null) {
             incidentNotification = new IncidentNotificationSpec();
             incidentGrouping.setIncidentNotification(incidentNotification);
         }
+
         FilteredNotificationSpecMap filteredNotificationMap = incidentNotification.getFilteredNotifications();
         if (filteredNotificationMap == null) {
             filteredNotificationMap = new FilteredNotificationSpecMap();
