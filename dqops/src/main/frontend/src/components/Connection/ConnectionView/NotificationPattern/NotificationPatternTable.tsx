@@ -72,7 +72,7 @@ export default function NotificationPatternTable({
       <thead>
         <tr>
           {headerElements.map((elem, index) => (
-            <th className="px-4" key={elem.label}>
+            <th className="" key={elem.label}>
               <div className="flex gap-x-1 items-center cursor-default">
                 <div>{elem.label}</div>
                 <div>
@@ -101,36 +101,39 @@ export default function NotificationPatternTable({
         </tr>
       </thead>
       <tbody className=" border-t border-gray-100">
-        {filteredNotificationsConfigurations.map(
-          (notificationPattern, index) => (
-            <tr key={index} className="text-sm">
-              <td
-                className={clsx(
-                  'px-4 underline cursor-pointer',
-                  notificationPattern.disabled && 'text-gray-200'
-                )}
+        {[
+          ...filteredNotificationsConfigurations,
+          {
+            name: 'default'
+          }
+        ].map((notificationPattern, index) => (
+          <tr key={index} className="text-sm">
+            <td
+              className={clsx(
+                'underline cursor-pointer',
+                notificationPattern.disabled && 'text-gray-200'
+              )}
+              onClick={() => setPatternNameEdit(notificationPattern.name ?? '')}
+            >
+              {notificationPattern.name}
+            </td>
+            <td>{notificationPattern.priority}</td>
+            <td>{notificationPattern?.connection}</td>
+            <td>{notificationPattern?.schema}</td>
+            <td>{notificationPattern?.table}</td>
+            <td>{notificationPattern?.column}</td>
+            <td>
+              <Button
+                variant="text"
+                label="edit"
+                color="primary"
                 onClick={() =>
                   setPatternNameEdit(notificationPattern.name ?? '')
                 }
-              >
-                {notificationPattern.name}
-              </td>
-              <td className="px-4">{notificationPattern.priority}</td>
-              <td className="px-4">{notificationPattern?.connection}</td>
-              <td className="px-4">{notificationPattern?.schema}</td>
-              <td className="px-4">{notificationPattern?.table}</td>
-              <td className="px-4">{notificationPattern?.column}</td>
-              <td className="px-4">
-                <Button
-                  variant="text"
-                  label="edit"
-                  color="primary"
-                  onClick={() =>
-                    setPatternNameEdit(notificationPattern.name ?? '')
-                  }
-                />
-              </td>
-              <td className="px-4">
+              />
+            </td>
+            {notificationPattern.name !== 'default' && (
+              <td>
                 <Button
                   variant="text"
                   label="delete"
@@ -140,9 +143,9 @@ export default function NotificationPatternTable({
                   }
                 />
               </td>
-            </tr>
-          )
-        )}
+            )}
+          </tr>
+        ))}
         <ConfirmDialog
           open={notificationPatternDelete.length > 0}
           onConfirm={async () => {

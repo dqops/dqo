@@ -18,6 +18,8 @@ export default function CreateNotificationPattern({
   onBack: () => void;
   patternNameEdit?: string;
 }) {
+  const isDefaultPattern = patternNameEdit === 'default';
+
   const [pattern, setPattern] = useState<FilteredNotificationModel>({});
 
   useEffect(() => {
@@ -74,6 +76,17 @@ export default function CreateNotificationPattern({
     }
   };
 
+  const saveDefaultPattern = () => {
+    FilteredNotificationsConfigurationsClient.updateDefaultFilteredNotificationConfiguration(
+      connection,
+      pattern
+    ).then(() => onBack());
+  };
+
+  const handleSave = () => {
+    isDefaultPattern ? saveDefaultPattern() : savePattern();
+  };
+
   return (
     <div>
       <div className="flex space-x-4 items-center absolute right-2 top-2">
@@ -81,15 +94,17 @@ export default function CreateNotificationPattern({
           label="Save"
           color="primary"
           className="!w-30 !mr-5"
-          onClick={savePattern}
+          onClick={handleSave}
         />
       </div>
-      <DefaultPatternTarget
-        pattern={pattern}
-        create={!patternNameEdit}
-        onChange={onChangePattern}
-        onChangePatternFilter={onChangePatternFilter}
-      />
+      {!isDefaultPattern && (
+        <DefaultPatternTarget
+          pattern={pattern}
+          create={!patternNameEdit}
+          onChange={onChangePattern}
+          onChangePatternFilter={onChangePatternFilter}
+        />
+      )}
       <AddressesNotificationsWrapper
         pattern={pattern}
         onChangePatternTarget={onChangePatternTarget}

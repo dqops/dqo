@@ -77,7 +77,7 @@ export const IncidentsNotificationsView = () => {
   ] = useState<Array<TNotificationPattern>>([]);
   const [addNotificationPattern, setAddNotificationPattern] = useState(false);
 
-  useEffect(() => {
+  const getConnectionFilteredNotificationsConfigurations = async () => {
     FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationsConfigurations(
       connection
     ).then((response) => {
@@ -91,6 +91,10 @@ export const IncidentsNotificationsView = () => {
       });
       setFilteredNotificationsConfigurations(patterns);
     });
+  };
+
+  useEffect(() => {
+    getConnectionFilteredNotificationsConfigurations();
   }, [connection]);
 
   const createNotificationPattern = () => {
@@ -99,6 +103,7 @@ export const IncidentsNotificationsView = () => {
   const onBack = () => {
     setPatternNameEdit('');
     setAddNotificationPattern(false);
+    getConnectionFilteredNotificationsConfigurations();
   };
 
   const getDefaultWebhooksConfiguration = async () => {
