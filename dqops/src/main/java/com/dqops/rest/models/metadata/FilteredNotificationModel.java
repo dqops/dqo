@@ -45,6 +45,7 @@ public class FilteredNotificationModel {
 
     /**
      * Creates a FilteredNotificationModel that represents a single entry of the FilteredNotificationSpecMap.
+     *
      * @param filteredNotificationName The map key.
      * @param filteredNotificationSpec The map value.
      * @return FilteredNotificationModel
@@ -52,7 +53,7 @@ public class FilteredNotificationModel {
     public static FilteredNotificationModel fromFilteredNotificationMapEntry(
             String filteredNotificationName,
             FilteredNotificationSpec filteredNotificationSpec) {
-        return new FilteredNotificationModel(){{
+        return new FilteredNotificationModel() {{
             setName(filteredNotificationName);
             setFilter(filteredNotificationSpec.getFilter());
             setTarget(filteredNotificationSpec.getTarget());
@@ -66,28 +67,33 @@ public class FilteredNotificationModel {
 
     /**
      * Creates a FilteredNotificationSpec from the FilteredNotificationModel.
+     *
      * @return FilteredNotificationSpec
      */
     public FilteredNotificationSpec toSpec() {
-        FilteredNotificationSpec spec = new FilteredNotificationSpec(){{
+        FilteredNotificationSpec spec = new FilteredNotificationSpec() {{
             setFilter(filter);
-            setTarget(target);
             setDescription(description);
+            setTarget(target);
         }};
 
-        if(priority != null){
-            setPriority(priority);
+        if (priority != null) {
+            spec.setPriority(priority);
         }
-        if(processAdditionalFilters != null){
-            setProcessAdditionalFilters(processAdditionalFilters);
+
+        if (processAdditionalFilters != null) {
+            spec.setProcessAdditionalFilters(processAdditionalFilters);
         }
-        if(disabled != null){
-            setDisabled(disabled);
+
+        if (disabled != null) {
+            spec.setDisabled(disabled);
         }
-        if(doNotCreateIncidents != null){
-            setDoNotCreateIncidents(doNotCreateIncidents);
+
+        if (doNotCreateIncidents != null) {
+            spec.setDoNotCreateIncidents(doNotCreateIncidents);
         }
+
         return spec;
     }
-
 }
+

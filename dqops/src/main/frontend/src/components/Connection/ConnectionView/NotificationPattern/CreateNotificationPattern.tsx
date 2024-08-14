@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FilteredNotificationModel,
   IncidentNotificationTargetSpec,
@@ -11,12 +11,24 @@ import DefaultPatternTarget from './DefaultPatternTarget';
 
 export default function CreateNotificationPattern({
   connection,
-  onBack
+  onBack,
+  patternNameEdit
 }: {
   connection: string;
   onBack: () => void;
+  patternNameEdit?: string;
 }) {
   const [pattern, setPattern] = useState<FilteredNotificationModel>({});
+
+  useEffect(() => {
+    if (patternNameEdit) {
+      FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationConfiguration(
+        connection,
+        patternNameEdit
+      ).then((res) => setPattern(res.data));
+    }
+  }, [patternNameEdit]);
+
   const onChangePattern = (val: Partial<FilteredNotificationModel>) => {
     setPattern({
       ...pattern,
@@ -47,10 +59,19 @@ export default function CreateNotificationPattern({
   };
 
   const savePattern = () => {
-    FilteredNotificationsConfigurationsClient.createConnectionFilteredNotificationConfiguration(
-      connection,
-      pattern
-    ).then(() => onBack());
+    console.log(pattern);
+    if (!patternNameEdit) {
+      FilteredNotificationsConfigurationsClient.createConnectionFilteredNotificationConfiguration(
+        connection,
+        pattern
+      ).then(() => onBack());
+    } else {
+      FilteredNotificationsConfigurationsClient.updateConnectionFilteredNotificationConfiguration(
+        connection,
+        patternNameEdit,
+        pattern
+      ).then(() => onBack());
+    }
   };
 
   return (
@@ -65,7 +86,7 @@ export default function CreateNotificationPattern({
       </div>
       <DefaultPatternTarget
         pattern={pattern}
-        create={true}
+        create={!patternNameEdit}
         onChange={onChangePattern}
         onChangePatternFilter={onChangePatternFilter}
       />

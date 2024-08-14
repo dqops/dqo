@@ -97,6 +97,7 @@ export const IncidentsNotificationsView = () => {
     setAddNotificationPattern(true);
   };
   const onBack = () => {
+    setPatternNameEdit('');
     setAddNotificationPattern(false);
   };
 
@@ -157,7 +158,7 @@ export const IncidentsNotificationsView = () => {
           : ''
       )}
     >
-      {!addNotificationPattern && (
+      {!addNotificationPattern && !patternNameEdit && (
         <ConnectionActionGroup
           onUpdate={onUpdate}
           isUpdated={isUpdatedIncidentGroup}
@@ -166,7 +167,7 @@ export const IncidentsNotificationsView = () => {
       )}
 
       <div className="flex flex-col">
-        {addNotificationPattern ? (
+        {addNotificationPattern || patternNameEdit ? (
           <div>
             <div>
               <Button
@@ -183,6 +184,7 @@ export const IncidentsNotificationsView = () => {
             <CreateNotificationPattern
               connection={connection}
               onBack={onBack}
+              patternNameEdit={patternNameEdit}
             />
           </div>
         ) : (
@@ -252,6 +254,7 @@ export const IncidentsNotificationsView = () => {
               }
               onChange={setFilteredNotificationsConfigurations}
               setPatternNameEdit={setPatternNameEdit}
+              connection={connection}
             />
             <Button
               label="Add notification pattern"

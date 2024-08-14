@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FilteredNotificationModel } from '../../../../api';
+import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
 import { sortPatterns } from '../../../../utils';
 import Button from '../../../Button';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
@@ -25,15 +26,14 @@ type TNotificationPattern = FilteredNotificationModel & {
 export default function NotificationPatternTable({
   filteredNotificationsConfigurations,
   onChange,
-  setPatternNameEdit
+  setPatternNameEdit,
+  connection
 }: {
   filteredNotificationsConfigurations: Array<TNotificationPattern>;
   onChange: (data: any) => void;
   setPatternNameEdit: (patternName: string) => void;
+  connection: string;
 }) {
-  const editPattern = (type: string, notificationPattern: string) => {
-    // openDefaultCheckPatternFirstLevelTab(type, notificationPattern);
-  };
   const [dir, setDir] = useState<'asc' | 'desc'>('desc');
   const [notificationPatternDelete, setPatternDelete] = useState('');
   const [indexSortingElement, setIndexSortingElement] = useState(1);
@@ -52,6 +52,19 @@ export default function NotificationPatternTable({
     ),
       setDir(dir === 'asc' ? 'desc' : 'asc'),
       setIndexSortingElement(index);
+  };
+
+  const deletePattern = (patternName: string) => {
+    FilteredNotificationsConfigurationsClient.deleteConnectionFilteredNotificationConfiguration(
+      connection,
+      patternName
+    ).then(() => {
+      onChange(
+        filteredNotificationsConfigurations.filter(
+          (pattern) => pattern.name !== patternName
+        )
+      );
+    });
   };
 
   return (
@@ -112,12 +125,9 @@ export default function NotificationPatternTable({
                   variant="text"
                   label="edit"
                   color="primary"
-                  // onClick={() =>
-                  //   editPattern(
-                  //     type,
-                  //     notificationPattern.notificationPattern_name ?? ''
-                  //   )
-                  // }
+                  onClick={() =>
+                    setPatternNameEdit(notificationPattern.name ?? '')
+                  }
                 />
               </td>
               <td className="px-4">
@@ -136,8 +146,8 @@ export default function NotificationPatternTable({
         <ConfirmDialog
           open={notificationPatternDelete.length > 0}
           onConfirm={async () => {
-            // deletePattern(notificationPatternDelete ?? ''),
-            setPatternDelete('');
+            deletePattern(notificationPatternDelete ?? ''),
+              setPatternDelete('');
           }}
           onClose={() => setPatternDelete('')}
           message={`Are you sure you want to delete the ${notificationPatternDelete} notificationPattern ?`}
