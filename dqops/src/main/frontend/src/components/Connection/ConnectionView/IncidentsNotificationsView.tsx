@@ -19,10 +19,7 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import {
-  FilteredNotificationsConfigurationsClient,
-  SettingsApi
-} from '../../../services/apiClient';
+import { FilteredNotificationsConfigurationsClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
@@ -33,6 +30,7 @@ import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import CreateNotificationPattern from './NotificationPattern/CreateNotificationPattern';
 import NotificationPatternTable from './NotificationPattern/NotificationPatternTable';
+import Loader from '../../Loader';
 type TNotificationPattern = FilteredNotificationModel & {
   connection?: string;
   schema?: string;
@@ -71,9 +69,8 @@ export const IncidentsNotificationsView = () => {
     getFirstLevelState(checkTypes)
   );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
-    useState<IncidentNotificationSpec>();
   const [patternNameEdit, setPatternNameEdit] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [
     filteredNotificationsConfigurations,
@@ -82,24 +79,27 @@ export const IncidentsNotificationsView = () => {
   const [addNotificationPattern, setAddNotificationPattern] = useState(false);
 
   const getConnectionFilteredNotificationsConfigurations = async () => {
+    setLoading(true);
     FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationsConfigurations(
       connection
-    ).then((response) => {
-      const patterns: TNotificationPattern[] = response.data.map((x) => {
-        return {
-          ...x,
-          connection: x.filter?.connection || '',
-          schema: x.filter?.schema || '',
-          table: x.filter?.table || '',
-          qualityDimension: x.filter?.qualityDimension || '',
-          checkCategory: x.filter?.checkCategory || '',
-          checkName: x.filter?.checkName || '',
-          checkType: x.filter?.checkType || '',
-          highestSeverity: x.filter?.highestSeverity
-        };
-      });
-      setFilteredNotificationsConfigurations(patterns);
-    });
+    )
+      .then((response) => {
+        const patterns: TNotificationPattern[] = response.data.map((x) => {
+          return {
+            ...x,
+            connection: x.filter?.connection || '',
+            schema: x.filter?.schema || '',
+            table: x.filter?.table || '',
+            qualityDimension: x.filter?.qualityDimension || '',
+            checkCategory: x.filter?.checkCategory || '',
+            checkName: x.filter?.checkName || '',
+            checkType: x.filter?.checkType || '',
+            highestSeverity: x.filter?.highestSeverity
+          };
+        });
+        setFilteredNotificationsConfigurations(patterns);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -115,21 +115,11 @@ export const IncidentsNotificationsView = () => {
     getConnectionFilteredNotificationsConfigurations();
   };
 
-  const getDefaultWebhooksConfiguration = async () => {
-    await SettingsApi.getDefaultWebhooks().then((res) =>
-      setDefaultWebhooksConfiguration(res.data)
-    );
-  };
-
   useEffect(() => {
     dispatch(
       getConnectionIncidentGrouping(checkTypes, firstLevelActiveTab, connection)
     );
   }, [connection, checkTypes, firstLevelActiveTab]);
-
-  useEffect(() => {
-    getDefaultWebhooksConfiguration();
-  }, []);
 
   const onChange = (obj: Partial<ConnectionIncidentGroupingSpec>) => {
     dispatch(
@@ -166,7 +156,13 @@ export const IncidentsNotificationsView = () => {
   };
 
   const defaultConnectionAdressess = incidentGrouping?.incident_notification;
-
+  if (loading) {
+    return (
+      <div className="flex justify-center h-100">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
   return (
     <div
       className={clsx(

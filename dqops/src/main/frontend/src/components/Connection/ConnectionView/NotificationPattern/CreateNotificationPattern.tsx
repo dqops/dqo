@@ -9,6 +9,7 @@ import { FilteredNotificationsConfigurationsClient } from '../../../../services/
 import Button from '../../../Button';
 import AddressesNotificationsWrapper from './AddressesNotificationsWrapper';
 import DefaultPatternTarget from './DefaultPatternTarget';
+import Loader from '../../../Loader';
 
 export default function CreateNotificationPattern({
   connection,
@@ -31,6 +32,7 @@ export default function CreateNotificationPattern({
 
   const [pattern, setPattern] = useState<FilteredNotificationModel>({});
   const [isNewDefaultPattern, setIsNewDefaultPattern] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!patternNameEdit) return;
@@ -50,10 +52,13 @@ export default function CreateNotificationPattern({
     //     .catch(() => setPattern({}));
     // } else {
     if (isDefaultPattern) return;
+    setLoading(true);
     FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationConfiguration(
       connection,
       patternNameEdit
-    ).then((res) => setPattern(res.data));
+    )
+      .then((res) => setPattern(res.data))
+      .finally(() => setLoading(false));
     // }
   }, [patternNameEdit]);
 
@@ -120,6 +125,14 @@ export default function CreateNotificationPattern({
   const handleSave = () => {
     isDefaultPattern ? saveDefaultPattern() : savePattern();
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center h-100">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   return (
     <div>
