@@ -1,9 +1,9 @@
 import {
-  TableComparisonResultsModel,
-  ComparisonCheckResultModel,
-  TableComparisonModel,
   CheckContainerModel,
-  TableComparisonGroupingColumnPairModel
+  ComparisonCheckResultModel,
+  TableComparisonGroupingColumnPairModel,
+  TableComparisonModel,
+  TableComparisonResultsModel
 } from '../../../../api';
 import { TableComparisonsApi } from '../../../../services/apiClient';
 import { TParameters } from '../../../../shared/constants';
@@ -219,6 +219,12 @@ export const getIsButtonEnabled = (parameters: TParameters): boolean => {
   );
 };
 
-export const validate404Status = (status: number): boolean => {
+export const validate404Status = (
+  status: number,
+  callBack?: () => void
+): boolean => {
+  if (callBack && status === 404) {
+    callBack();
+  }
   return status === 200 || status === 404;
 };

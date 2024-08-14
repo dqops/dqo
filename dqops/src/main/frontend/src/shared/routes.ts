@@ -275,11 +275,11 @@ export const ROUTES = {
   USER_DETAIL: (email: string) =>
     `/definitions/user/${urlencodeDecoder(email)}`,
   SCHEDULES_DEFAULT_DETAIL: () => '/definitions/default-schedules',
-  WEBHOOKS_DEFAULT_DETAIL: () => '/definitions/default-webhooks',
+  WEBHOOKS_DEFAULT_DETAIL: () => '/definitions/default-notifications',
   SHARED_CREDENTIALS_LIST_DETAIL: () => '/definitions/shared-credentials',
   SHARED_CREDENTIALS_DETAIL: (credential: string) =>
     `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
-  DATA_DICTIONARY_LIST_DETAIL: () => '/definitions/data-dictionary',
+  DATA_DICTIONARY_LIST_DETAIL: () => '/definitions/data-dictionaries',
   DATA_DICTIONARY_DETAIL: (dictionary: string) =>
     `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
   DEFAULT_CHECKS_PATTERNS: (pattern: string) =>
@@ -434,11 +434,11 @@ export const ROUTES = {
   USER_DETAIL_VALUE: (email: string) =>
     `/definitions/user/${urlencodeDecoder(email)}`,
   SCHEDULES_DEFAULT_DETAIL_VALUE: () => '/definitions/default-schedules',
-  WEBHOOKS_DEFAULT_DETAIL_VALUE: () => '/definitions/default-webhooks',
+  WEBHOOKS_DEFAULT_DETAIL_VALUE: () => '/definitions/default-notifications',
   SHARED_CREDENTIALS_LIST_DETAIL_VALUE: () => '/definitions/shared-credentials',
   SHARED_CREDENTIALS_DETAIL_VALUE: (credential: string) =>
     `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
-  DATA_DICTIONARY_LIST_VALUE: () => '/definitions/data-dictionary',
+  DATA_DICTIONARY_LIST_VALUE: () => '/definitions/data-dictionaries',
   DATA_DICTIONARY_VALUE: (dictionary: string) =>
     `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
   DEFAULT_CHECKS_PATTERNS_VALUE: (pattern: string) =>
@@ -510,10 +510,10 @@ export const ROUTES = {
     USERS_LIST_DETAIL: '/definitions/manage-users',
     USER_DETAIL: '/definitions/user/:email',
     SCHEDULES_DEFAULT_DETAIL: '/definitions/default-schedules',
-    WEBHOOKS_DEFAULT_DETAIL: '/definitions/default-webhooks',
+    WEBHOOKS_DEFAULT_DETAIL: '/definitions/default-notifications',
     SHARED_CREDENTIALS_LIST_DETAIL: '/definitions/shared-credentials',
     SHARED_CREDENTIALS_DETAIL: '/definitions/shared-credential/:credential',
-    DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionary',
+    DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionaries',
     DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`,
     DEFAULT_CHECKS_PATTERNS: `/definitions/default-check-patterns/:pattern`,
     DEFAULT_CHECK_PATTERN_DETAIL: `/definitions/default-check/:type/:pattern`

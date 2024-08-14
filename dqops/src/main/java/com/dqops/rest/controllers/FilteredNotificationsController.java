@@ -549,7 +549,8 @@ public class FilteredNotificationsController {
         }
         FilteredNotificationSpecMap filteredNotificationMap = incidentNotification.getFilteredNotifications();
         if (filteredNotificationMap == null) {
-            incidentNotification.setFilteredNotifications(new FilteredNotificationSpecMap());
+            filteredNotificationMap = new FilteredNotificationSpecMap();
+            incidentNotification.setFilteredNotifications(filteredNotificationMap);
         }
         return filteredNotificationMap;
     }
