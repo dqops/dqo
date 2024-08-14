@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FilteredNotificationModel } from '../../../../api';
 import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
-import { sortPatterns } from '../../../../utils';
+import { getSeverity, sortPatterns } from '../../../../utils';
 import Button from '../../../Button';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import SvgIcon from '../../../SvgIcon';
@@ -13,7 +13,11 @@ const headerElements = [
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
   { label: 'Table', key: 'table' },
-  { label: 'Column', key: 'column' }
+  { label: 'Quality dimension', key: 'qualityDimension' },
+  { label: 'Check category', key: 'checkCategory' },
+  { label: 'Check name', key: 'checkName' },
+  { label: 'Check type', key: 'checkType' },
+  { label: 'Highest severity', key: 'highestSeverity' }
 ];
 
 type TNotificationPattern = FilteredNotificationModel & {
@@ -21,6 +25,11 @@ type TNotificationPattern = FilteredNotificationModel & {
   schema?: string;
   table?: string;
   column?: string;
+  qualityDimension?: string;
+  checkCategory?: string;
+  checkName?: string;
+  checkType?: string;
+  highestSeverity?: number;
 };
 
 export default function NotificationPatternTable({
@@ -121,7 +130,13 @@ export default function NotificationPatternTable({
             <td>{notificationPattern?.connection}</td>
             <td>{notificationPattern?.schema}</td>
             <td>{notificationPattern?.table}</td>
-            <td>{notificationPattern?.column}</td>
+            <td>{notificationPattern?.qualityDimension}</td>
+            <td>{notificationPattern?.checkCategory}</td>
+            <td>{notificationPattern?.checkName}</td>
+            <td>{notificationPattern?.checkType}</td>
+            <td>
+              {getSeverity(String(notificationPattern?.highestSeverity ?? ''))}
+            </td>
             <td>
               <Button
                 variant="text"

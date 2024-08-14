@@ -6,6 +6,7 @@ import {
 import Checkbox from '../../../Checkbox';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import Input from '../../../Input';
+import Select from '../../../Select';
 import TextArea from '../../../TextArea';
 
 type TDefaultCheckTargetConfigurationProps = {
@@ -141,13 +142,13 @@ export default function DefaultPatternTarget({
             </div>
           </div>
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25">Stage</span>
+            <span className="w-25">Quality dimension</span>
             <div className="w-full">
               {/* FIX THAT (HSOULD BE STAGE PROPERTY) */}
               <Input
-                value={pattern?.filter?.checkType}
+                value={pattern?.filter?.qualityDimension}
                 onChange={(e) =>
-                  onChangePatternFilter({ checkType: e.target.value })
+                  onChangePatternFilter({ qualityDimension: e.target.value })
                 }
               />
             </div>
@@ -167,73 +168,70 @@ export default function DefaultPatternTarget({
             </div>
           </div>
 
-          {/* <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25"> Label</span>
+          <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+            <span className="w-25"> Check category </span>
             <div className="w-full">
               <Input
-                value={pattern?.filter.}
-                onChange={(e) => onChangeTarget({ label: e.target.value })}
+                value={pattern?.filter?.checkCategory}
+                onChange={(e) =>
+                  onChangePatternFilter({ checkCategory: e.target.value })
+                }
               />
             </div>
-          </div> */}
+          </div>
         </div>
 
         <>
-          {/* <div className="flex justify-between  text-black  ">
+          <div className="flex justify-between  text-black  ">
             <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-              <span className="w-25"> Column</span>
+              <span className="w-25"> Check name</span>
               <div className="w-full">
                 <Input
-                  value={pattern?.filter?.['column' as keyof TTargetSpec]}
+                  value={pattern?.filter?.checkName}
                   onChange={(e) =>
-                    onChangeTarget({
-                      ['column' as keyof TTargetSpec]: e.target.value
+                    onChangePatternFilter({
+                      checkName: e.target.value
                     })
                   }
                 />
               </div>
             </div>
             <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-              <span className="w-25"> Data type</span>
+              <span className="w-25"> Check type</span>
               <div className="w-full">
                 <Input
-                  value={pattern?.filter?.['data_type' as keyof TTargetSpec]}
+                  value={pattern?.filter?.checkType}
                   onChange={(e) =>
-                    onChangeTarget({
-                      ['data_type' as keyof TTargetSpec]: e.target.value
+                    onChangePatternFilter({
+                      checkType: e.target.value
                     })
                   }
                 />
               </div>
             </div>
-          </div> */}
-          {/* <div className="flex justify-between  text-black  ">
-              <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-                <span className="w-25"> Data type category</span>
-                <div className="w-full">
-                  <Select
-                    options={[
-                      { label: '', value: '' },
-                      ...Object.keys(
-                        TargetColumnPatternSpecDataTypeCategoryEnum
-                      ).map((x) => ({
-                        label: x,
-                        value: x
-                      }))
-                    ]}
-                    value={
-                      pattern?.filter?
-                    }
-                    onChange={(value) =>
-                      onChangeTarget({
-                        ['data_type_category' as keyof TTargetSpec]: value
-                      })
-                    }
-                    className="w-49"
-                  />
-                </div>
-              </div> 
-            </div> */}
+          </div>
+          <div className="flex justify-between  text-black  ">
+            <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25"> Highest severity</span>
+              <div className="w-full">
+                <Select
+                  options={[
+                    { label: '', value: undefined },
+                    { label: 'Warning', value: 1 },
+                    { label: 'Error', value: 2 },
+                    { label: 'Fatal', value: 3 }
+                  ]}
+                  value={pattern?.filter?.highestSeverity}
+                  onChange={(value) =>
+                    onChangePatternFilter({
+                      highestSeverity: value
+                    })
+                  }
+                  className="w-49"
+                />
+              </div>
+            </div>
+          </div>
         </>
       </SectionWrapper>
     </div>

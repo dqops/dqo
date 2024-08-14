@@ -37,7 +37,11 @@ type TNotificationPattern = FilteredNotificationModel & {
   connection?: string;
   schema?: string;
   table?: string;
-  column?: string;
+  qualityDimension?: string;
+  checkCategory?: string;
+  checkName?: string;
+  checkType?: string;
+  highestSeverity?: number;
 };
 const groupLevelOptions = Object.values(
   ConnectionIncidentGroupingSpecGroupingLevelEnum
@@ -86,7 +90,12 @@ export const IncidentsNotificationsView = () => {
           ...x,
           connection: x.filter?.connection || '',
           schema: x.filter?.schema || '',
-          table: x.filter?.table || ''
+          table: x.filter?.table || '',
+          qualityDimension: x.filter?.qualityDimension || '',
+          checkCategory: x.filter?.checkCategory || '',
+          checkName: x.filter?.checkName || '',
+          checkType: x.filter?.checkType || '',
+          highestSeverity: x.filter?.highestSeverity
         };
       });
       setFilteredNotificationsConfigurations(patterns);
