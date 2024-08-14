@@ -23,9 +23,9 @@ export default function DefaultPatternTarget({
 }: TDefaultCheckTargetConfigurationProps) {
   return (
     <div>
-      <div className="flex justify-between text-black text-sm">
-        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-30">Pattern name</span>
+      <div className="flex items-center text-black text-sm">
+        <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
+          <span>Pattern name</span>
           {create === true ? (
             <Input
               value={pattern.name}
@@ -35,8 +35,8 @@ export default function DefaultPatternTarget({
             <span className="font-bold">{pattern.name}</span>
           )}
         </div>
-        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-25"> Priority</span>
+        <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
+          <span> Priority</span>
           <Input
             value={pattern.priority}
             onChange={(e) =>
@@ -50,18 +50,18 @@ export default function DefaultPatternTarget({
           />
         </div>
       </div>
-      <div className="flex justify-between pb-6 text-black text-sm">
-        <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-30">Description</span>
-          <div className="w-full">
+      <div className="flex items-center pb-6 text-black text-sm">
+        <div className="ml-2 flex items-center gap-x-4 py-2 w-1/2">
+          <span>Description</span>
+          <div className="min-w-60">
             <TextArea
               value={pattern?.description}
               onChange={(e) => onChange({ description: e.target.value })}
             />
           </div>
         </div>
-        <div className="w-[20%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-25">Disabled</span>
+        <div className="flex items-center gap-x-2 py-2 mr-8 min-w-10">
+          <span>Disabled</span>
           <Checkbox
             checked={pattern?.disabled}
             onChange={(value) =>
@@ -71,8 +71,10 @@ export default function DefaultPatternTarget({
             }
           />
         </div>
-        <div className="w-[20%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-25">Process additional notification filters</span>
+        <div className=" ml-2 flex items-center gap-x-2 py-2 mr-8 ">
+          <span className="!min-w-56">
+            Process additional notification filters
+          </span>
           <Checkbox
             checked={pattern?.process_additional_filters}
             onChange={(value) =>
@@ -82,8 +84,8 @@ export default function DefaultPatternTarget({
             }
           />
         </div>
-        <div className="w-[20%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-25">Do not create incidents</span>
+        <div className="] ml-2 flex items-center gap-x-2 py-2">
+          <span className="!min-w-38">Do not create incidents</span>
           <Checkbox
             checked={pattern?.do_not_create_incidents}
             onChange={(value) =>
