@@ -157,7 +157,7 @@ export default function DefaultCheckPatternsTable({
             <td className="px-4">
               <Button
                 variant="text"
-                label="edit"
+                label="Edit"
                 color="primary"
                 onClick={() => editPattern(type, pattern.pattern_name ?? '')}
               />
@@ -165,7 +165,7 @@ export default function DefaultCheckPatternsTable({
             <td className="px-4">
               <Button
                 variant="text"
-                label="delete"
+                label="Delete"
                 color="primary"
                 onClick={() => setPatternDelete(pattern.pattern_name ?? '')}
               />
