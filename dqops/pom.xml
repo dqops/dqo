@@ -454,7 +454,7 @@
 		<dependency>
 			<groupId>com.azure</groupId>
 			<artifactId>azure-identity</artifactId>
-			<version>1.12.2</version>
+			<version>1.8.2</version>	<!-- newer version prevents from logining to azure with service principal due to the java.lang.NoSuchMethodError: 'boolean com.azure.core.credential.TokenRequestContext.isCaeEnabled()' -->
 		</dependency>
 		<dependency>
 			<groupId>com.nimbusds</groupId> <!-- Direct import added on July 6th, 2024 when the artifact was removed from MavenCentral in the version that was referenced by some other libraries. It should be upgraded when this package returns to maven central. -->
