@@ -24,13 +24,13 @@ import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
+import Loader from '../../Loader';
 import NumberInput from '../../NumberInput';
 import Select from '../../Select';
 import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import CreateNotificationPattern from './NotificationPattern/CreateNotificationPattern';
 import NotificationPatternTable from './NotificationPattern/NotificationPatternTable';
-import Loader from '../../Loader';
 type TNotificationPattern = FilteredNotificationModel & {
   connection?: string;
   schema?: string;
@@ -166,7 +166,7 @@ export const IncidentsNotificationsView = () => {
   return (
     <div
       className={clsx(
-        'px-8 py-6',
+        'px-8 py-2',
         userProfile.can_manage_scheduler !== true
           ? 'pointer-events-none cursor-not-allowed'
           : ''
@@ -183,7 +183,7 @@ export const IncidentsNotificationsView = () => {
       <div className="flex flex-col">
         {addNotificationPattern || patternNameEdit ? (
           <div>
-            <div>
+            <div className="flex space-x-4 items-center absolute right-10 top-30">
               <Button
                 label="Back"
                 color="primary"

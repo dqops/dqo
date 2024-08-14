@@ -88,7 +88,7 @@ export default function DefaultWebhooksDetail() {
     <>
       {addNotificationPattern || patternNameEdit ? (
         <div className="relative p-4">
-          <div>
+          <div className="flex space-x-4 items-center absolute right-42">
             <Button
               label="Back"
               color="primary"
@@ -109,8 +109,8 @@ export default function DefaultWebhooksDetail() {
           />
         </div>
       ) : (
-        <div className="py-2">
-          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
+        <div className="">
+          <div className="flex justify-between px-4 border-b border-gray-300 h-14 items-center flex-shrink-0">
             <div className="flex items-center justify-between w-full">
               <div className="text-lg font-semibold truncate">
                 Default incident notification configuration

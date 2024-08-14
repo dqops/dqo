@@ -156,7 +156,7 @@ export default function CreateNotificationPattern({
 
   return (
     <div>
-      <div className="flex space-x-4 items-center absolute right-2 top-2">
+      <div className="flex space-x-4 items-center absolute right-2 top-4">
         <Button
           label="Save"
           color="primary"
