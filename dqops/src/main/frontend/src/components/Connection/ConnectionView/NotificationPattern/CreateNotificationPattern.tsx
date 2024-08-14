@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   FilteredNotificationModel,
+  IncidentNotificationSpec,
   IncidentNotificationTargetSpec,
   NotificationFilterSpec
 } from '../../../../api';
@@ -12,23 +13,48 @@ import DefaultPatternTarget from './DefaultPatternTarget';
 export default function CreateNotificationPattern({
   connection,
   onBack,
-  patternNameEdit
+  patternNameEdit,
+  defaultConnectionAdressess,
+  onChangeConnectionDefaultAdresses,
+  onUpdateDefaultPattern
 }: {
   connection: string;
   onBack: () => void;
   patternNameEdit?: string;
+  defaultConnectionAdressess: any;
+  onChangeConnectionDefaultAdresses: (
+    obj: Partial<IncidentNotificationSpec>
+  ) => void;
+  onUpdateDefaultPattern: () => void;
 }) {
   const isDefaultPattern = patternNameEdit === 'default';
 
   const [pattern, setPattern] = useState<FilteredNotificationModel>({});
+  const [isNewDefaultPattern, setIsNewDefaultPattern] = useState(false);
 
   useEffect(() => {
-    if (patternNameEdit) {
-      FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationConfiguration(
-        connection,
-        patternNameEdit
-      ).then((res) => setPattern(res.data));
-    }
+    if (!patternNameEdit) return;
+
+    // if (isDefaultPattern) {
+    //   FilteredNotificationsConfigurationsClient.getDefaultFilteredNotificationConfiguration(
+    //     connection,
+    //     {
+    //       validateStatus: (status: number) =>
+    //         validate404Status(status, () => setIsNewDefaultPattern(true))
+    //     }
+    //   )
+    //     .then((res) => {
+    //       if (!res.data) return;
+    //       setPattern(res.data);
+    //     })
+    //     .catch(() => setPattern({}));
+    // } else {
+    if (isDefaultPattern) return;
+    FilteredNotificationsConfigurationsClient.getConnectionFilteredNotificationConfiguration(
+      connection,
+      patternNameEdit
+    ).then((res) => setPattern(res.data));
+    // }
   }, [patternNameEdit]);
 
   const onChangePattern = (val: Partial<FilteredNotificationModel>) => {
@@ -61,7 +87,6 @@ export default function CreateNotificationPattern({
   };
 
   const savePattern = () => {
-    console.log(pattern);
     if (!patternNameEdit) {
       FilteredNotificationsConfigurationsClient.createConnectionFilteredNotificationConfiguration(
         connection,
@@ -76,11 +101,20 @@ export default function CreateNotificationPattern({
     }
   };
 
+  // handle saving default pattern for connection
   const saveDefaultPattern = () => {
-    FilteredNotificationsConfigurationsClient.updateDefaultFilteredNotificationConfiguration(
-      connection,
-      pattern
-    ).then(() => onBack());
+    onUpdateDefaultPattern();
+    onBack();
+    // if (isNewDefaultPattern) {
+    //   FilteredNotificationsConfigurationsClient.createDefaultFilteredNotificationConfiguration(
+    //     pattern
+    //   ).then(() => onBack());
+    //   return;
+    // } else {
+    //   FilteredNotificationsConfigurationsClient.updateDefaultFilteredNotificationConfiguration(
+    //     pattern
+    //   ).then(() => onBack());
+    // }
   };
 
   const handleSave = () => {
@@ -106,8 +140,12 @@ export default function CreateNotificationPattern({
         />
       )}
       <AddressesNotificationsWrapper
-        pattern={pattern}
-        onChangePatternTarget={onChangePatternTarget}
+        target={isDefaultPattern ? defaultConnectionAdressess : pattern.target}
+        onChangePatternTarget={
+          isDefaultPattern
+            ? onChangeConnectionDefaultAdresses
+            : onChangePatternTarget
+        }
       />
     </div>
   );

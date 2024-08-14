@@ -131,12 +131,14 @@ export const IncidentsNotificationsView = () => {
     );
   };
 
-  const onChangeWebhooks = (obj: Partial<IncidentNotificationSpec>) => {
+  const onChangeConnectionDefaultAdresses = (
+    obj: Partial<IncidentNotificationSpec>
+  ) => {
     dispatch(
       setUpdateIncidentGroup(checkTypes, firstLevelActiveTab, {
         ...(incidentGrouping || {}),
-        webhooks: {
-          ...(incidentGrouping?.webhooks || {}),
+        incident_notification: {
+          ...(incidentGrouping?.incident_notification || {}),
           ...obj
         }
       })
@@ -153,6 +155,8 @@ export const IncidentsNotificationsView = () => {
       )
     );
   };
+
+  const defaultConnectionAdressess = incidentGrouping?.incident_notification;
 
   return (
     <div
@@ -190,6 +194,11 @@ export const IncidentsNotificationsView = () => {
               connection={connection}
               onBack={onBack}
               patternNameEdit={patternNameEdit}
+              defaultConnectionAdressess={defaultConnectionAdressess}
+              onChangeConnectionDefaultAdresses={
+                onChangeConnectionDefaultAdresses
+              }
+              onUpdateDefaultPattern={onUpdate}
             />
           </div>
         ) : (
