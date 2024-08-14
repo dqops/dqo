@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Button from '../../../Button';
-import { TableComparisonModel } from '../../../../api';
 import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../../../SvgIcon';
+import React, { useState } from 'react';
+import { TableComparisonModel } from '../../../../api';
+import Button from '../../../Button';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
+import SvgIcon from '../../../SvgIcon';
 
 type ProfilingReferenceTableListProps = {
   references: TableComparisonModel[];
@@ -59,7 +59,7 @@ export const ProfilingReferenceTableList = ({
                   {' '}
                   <IconButton
                     size="sm"
-                    className="group bg-teal-500 ml-3"
+                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
                     onClick={() => {
                       setSelectedComparison(
                         reference.table_comparison_configuration_name ?? ''

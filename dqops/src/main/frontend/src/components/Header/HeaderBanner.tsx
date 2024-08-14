@@ -95,7 +95,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
             <IconButton
               color="red"
               size="sm"
-              className="!shadow-none"
+              className="!shadow-none hover:!shadow-none"
               onClick={onClose}
             >
               <SvgIcon name="close" />

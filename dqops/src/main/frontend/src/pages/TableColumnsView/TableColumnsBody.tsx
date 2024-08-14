@@ -388,8 +388,8 @@ export default function TableColumnsBody({
                   disabled={userProfile.can_collect_statistics !== true}
                   className={
                     filteredColumns?.find((x) => x === column.nameOfCol)
-                      ? 'group bg-gray-400 ml-1.5'
-                      : 'group bg-teal-500 ml-1.5'
+                      ? 'group bg-gray-400 ml-1.5 !shadow-none hover:!shadow-none'
+                      : 'group bg-teal-500 ml-1.5 !shadow-none hover:!shadow-none'
                   }
                   onClick={() =>
                     collectStatistics(statistics, column.columnHash)
@@ -404,7 +404,7 @@ export default function TableColumnsBody({
               <div>
                 <IconButton
                   size="sm"
-                  className="group bg-teal-500 ml-3"
+                  className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
                   disabled={userProfile.can_manage_data_sources !== true}
                   onClick={() => {
                     rewriteData(column.columnHash);

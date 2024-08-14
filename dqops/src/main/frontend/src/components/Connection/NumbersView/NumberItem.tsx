@@ -38,12 +38,15 @@ const NumberItem = ({
       </td>
       <td className="px-8 min-w-20 py-2">
         {isLast ? (
-          <IconButton size="sm" className="bg-teal-500">
+          <IconButton
+            size="sm"
+            className="bg-teal-500 !shadow-none hover:!shadow-none"
+          >
             <SvgIcon name="add" className="w-4" />
           </IconButton>
         ) : (
           <IconButton
-            className="bg-teal-500"
+            className="bg-teal-500 !shadow-none hover:!shadow-none"
             size="sm"
             onClick={() => onRemove(idx)}
           >

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { DataGroupingConfigurationListModel } from '../../../api';
-import Button from '../../Button';
+import { IRootState } from '../../../redux/reducers';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import Button from '../../Button';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import RadioButton from '../../RadioButton';
-import SetDefaultDialog from './SetDefaultDialog';
 import SvgIcon from '../../SvgIcon';
-import { IconButton, Tooltip } from '@material-tailwind/react';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import clsx from 'clsx';
+import SetDefaultDialog from './SetDefaultDialog';
 
 interface IDataGroupingConfigurationListViewProps {
   dataGroupingConfigurations: DataGroupingConfigurationListModel[];
@@ -187,7 +187,7 @@ const DataGroupingConfigurationListView = ({
                 >
                   <IconButton
                     size="sm"
-                    className="group bg-teal-500 ml-3"
+                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
                     onClick={() => onEdit(groupingConfiguration)}
                   >
                     <SvgIcon
@@ -203,7 +203,7 @@ const DataGroupingConfigurationListView = ({
                 <Tooltip content="Delete">
                   <IconButton
                     size="sm"
-                    className="group bg-teal-500 ml-3"
+                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
                     onClick={() => {
                       openConfirmDeleteModal(groupingConfiguration);
                     }}

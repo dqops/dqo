@@ -1,9 +1,9 @@
-import { CommentSpec } from '../../../api';
-import React, { useState } from 'react';
-import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../../SvgIcon';
 import moment from 'moment';
+import React, { useState } from 'react';
+import { CommentSpec } from '../../../api';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
 
 interface ICommentItemProps {
   idx: number;
@@ -51,7 +51,7 @@ const CommentItem = ({
             size="sm"
             onClick={isEditing ? onSave : onEdit}
             color="teal"
-            className="!shadow-none"
+            className="!shadow-none hover:!shadow-none"
           >
             <SvgIcon name={isEditing ? 'save' : 'edit'} className="w-4" />
           </IconButton>
@@ -59,7 +59,7 @@ const CommentItem = ({
             size="sm"
             onClick={() => onRemove(idx)}
             color="teal"
-            className="!shadow-none"
+            className="!shadow-none hover:!shadow-none"
           >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>

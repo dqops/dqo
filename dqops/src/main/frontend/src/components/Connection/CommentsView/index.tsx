@@ -1,12 +1,12 @@
-import React, { ChangeEvent } from 'react';
-import CommentItem from './CommentItem';
-import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../../SvgIcon';
-import { CommentSpec } from '../../../api';
 import clsx from 'clsx';
+import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
+import { CommentSpec } from '../../../api';
 import { IRootState } from '../../../redux/reducers';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
+import CommentItem from './CommentItem';
 
 interface ICommentsViewProps {
   comments: CommentSpec[];
@@ -100,7 +100,7 @@ const CommentsView = ({
           <div className="flex justify-center">
             <IconButton
               size="sm"
-              className="bg-teal-500"
+              className="bg-teal-500 shadow-none hover:shadow-none"
               onClick={onAdd}
               disabled={userProfile.can_edit_labels === false}
             >
