@@ -1,0 +1,14 @@
+{% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+WITH TABLE_ASC AS (
+	{%- call lib.render_error_sampler(value_order_by = 'ASC', sample_index='false', order_by_expression = "LENGTH( TRIM({column}) ) - LENGTH( REPLACE(TRIM({column}), ' ', '') )") -%}
+        1=1
+    {%- endcall -%}
+)
+, TABLE_DESC AS (
+	{%- call lib.render_error_sampler(value_order_by = 'DESC', sample_index='false', order_by_expression = "LENGTH( TRIM({column}) ) - LENGTH( REPLACE(TRIM({column}), ' ', '') )") -%}
+        1=1
+    {%- endcall -%}
+)
+SELECT * FROM TABLE_ASC
+UNION
+SELECT * FROM TABLE_DESC
