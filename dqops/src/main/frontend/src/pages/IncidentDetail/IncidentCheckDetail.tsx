@@ -236,25 +236,27 @@ const IncidentCheckDetails = ({
 
   const createDownloadLink = () => {
     const queryFilters = [];
-    
+
     const { startDate, endDate } = calculateDateRange(month);
 
-    dataGroup !== undefined       && queryFilters.push(`dataGroup=${dataGroup}`)
-    startDate !== undefined       && queryFilters.push(`monthStart=${startDate}`)
-    endDate !== undefined         && queryFilters.push(`monthEnd=${endDate}`)
-    checkName !== undefined       && queryFilters.push(`checkName=${checkName}`)
-    category !== undefined        && queryFilters.push(`category=${category}`)
-    comparisonName !== undefined  && queryFilters.push(`tableComparison=${comparisonName}`)
+    dataGroup !== undefined && queryFilters.push(`dataGroup=${dataGroup}`);
+    startDate !== undefined && queryFilters.push(`monthStart=${startDate}`);
+    endDate !== undefined && queryFilters.push(`monthEnd=${endDate}`);
+    checkName !== undefined && queryFilters.push(`checkName=${checkName}`);
+    category !== undefined && queryFilters.push(`category=${category}`);
+    comparisonName !== undefined &&
+      queryFilters.push(`tableComparison=${comparisonName}`);
 
     const queryString = `?` + queryFilters.join('&');
 
-    return `/api/connections/${connection}/schemas/${schema}/tables/${table}`
-        + (column !== undefined && `/columns/${column}`)
-        + `/${checkTypes}`
-        + (timeScale !== undefined && `/${timeScale}`)
-        + `/errorsamples/download`
-        + queryString
-      ;
+    return (
+      `/api/connections/${connection}/schemas/${schema}/tables/${table}` +
+      (column !== undefined && `/columns/${column}`) +
+      `/${checkTypes}` +
+      (timeScale !== undefined && `/${timeScale}`) +
+      `/errorsamples/download` +
+      queryString
+    );
   };
 
   const refetch = (month: string, name?: string) => {
@@ -311,7 +313,7 @@ const IncidentCheckDetails = ({
     >
       <div className="bg-white py-2 border border-gray-200 relative">
         <IconButton
-          className="absolute right-4 top-1.5 w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-700"
+          className="absolute right-4 top-1.5 w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-700 !shadow-none hover:!shadow-none"
           onClick={onClose}
         >
           <SvgIcon name="close" />

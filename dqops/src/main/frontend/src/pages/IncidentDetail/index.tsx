@@ -314,26 +314,30 @@ export const IncidentDetail = () => {
               .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <div className="flex items-center gap-x-2">
               <Tooltip
-                content={'Disable data quality checks related to this check to avoid raising a similar incident again.'}
+                content={
+                  'Disable data quality checks related to this check to avoid raising a similar incident again.'
+                }
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="stop" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={() => setDisableDialog(true)}
                   />
                 </div>
               </Tooltip>
               <Tooltip
-                content={'Recalibrate data quality checks for this incident to decrease the number of data quality issues by around 30%.'}
+                content={
+                  'Recalibrate data quality checks for this incident to decrease the number of data quality issues by around 30%.'
+                }
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="minus" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={() => setRecalibrateDialog(true)}
                   />
@@ -346,7 +350,7 @@ export const IncidentDetail = () => {
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="cog" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={goToConfigure}
                   />
@@ -477,7 +481,7 @@ export const IncidentDetail = () => {
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">
                 Total issues:
-                <span className='inline-flex'>
+                <span className="inline-flex">
                   <Tooltip
                     className="max-w-80 py-2 px-2 bg-gray-800"
                     content={
@@ -523,7 +527,7 @@ export const IncidentDetail = () => {
                         color="teal"
                         size="sm"
                         onClick={() => setOpen(true)}
-                        className="!shadow-none"
+                        className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       >
                         <SvgIcon name="edit" className="w-4" />
                       </IconButton>
@@ -533,7 +537,7 @@ export const IncidentDetail = () => {
                       color="teal"
                       size="sm"
                       onClick={() => setOpen(true)}
-                      className="!shadow-none"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                     >
                       <SvgIcon name="add" className="w-4" />
                     </IconButton>

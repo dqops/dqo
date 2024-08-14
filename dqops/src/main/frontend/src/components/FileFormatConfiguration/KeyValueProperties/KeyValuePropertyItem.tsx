@@ -1,10 +1,9 @@
-import React from 'react';
-import Input from '../../Input';
-import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../../SvgIcon';
+import React from 'react';
 import { SharedCredentialListModel } from '../../../api';
-import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
+import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
 
 interface IKeyValuePropertyItemProps {
   properties: { [key: string]: string }[];
@@ -72,13 +71,17 @@ const KeyValuePropertyItem = ({
       </td>
       <td className="px-8 min-w-20 py-2 text-center gap-x-4">
         {!(index === 0 && properties.length === 1) && (
-          <IconButton className="bg-teal-500 mx-1" size="sm" onClick={onRemove}>
+          <IconButton
+            className="bg-teal-500 mx-1 !shadow-none hover:!shadow-none hover:bg-[#028770]"
+            size="sm"
+            onClick={onRemove}
+          >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
         )}
         {index === properties.length - 1 && (
           <IconButton
-            className="bg-teal-500 mx-1"
+            className="bg-teal-500 mx-1 !shadow-none hover:!shadow-none hover:bg-[#028770]"
             size="sm"
             onClick={onAdd}
             disabled={isKeyRed || isValueRed || areBothEmpty}

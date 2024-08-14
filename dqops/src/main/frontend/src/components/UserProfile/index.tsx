@@ -137,7 +137,7 @@ export default function UserProfile({ name, email }: UserProfile) {
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
         <IconButton
-          className="!mr-3 !bg-transparent"
+          className="!mr-3 !bg-transparent !shadow-none hover:!shadow-none"
           ripple={false}
           variant="text"
         >

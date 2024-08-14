@@ -91,7 +91,7 @@ const LabelsView = ({
           <div className="flex justify-center">
             <IconButton
               size="sm"
-              className="bg-teal-500"
+              className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
               onClick={onAdd}
               disabled={userProfile.can_edit_labels === false}
             >

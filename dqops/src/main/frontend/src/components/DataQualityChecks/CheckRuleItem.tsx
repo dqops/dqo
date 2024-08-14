@@ -90,7 +90,7 @@ const CheckRuleItem = ({
               <IconButton
                 className={clsx(
                   classesMap[type],
-                  'rounded-full w-6 h-6 my-1 !shadow-none mr-2',
+                  'rounded-full w-6 h-6 my-1 !shadow-none hover:!shadow-none mr-2',
                   parameters.rule_parameters?.length !== 0 && 'mt-6'
                 )}
                 ripple={false}

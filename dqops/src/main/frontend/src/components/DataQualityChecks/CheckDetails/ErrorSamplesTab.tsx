@@ -1,12 +1,12 @@
+import { IconButton } from '@material-tailwind/react';
 import moment from 'moment/moment';
 import React, { useMemo } from 'react';
 import { ErrorSamplesListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
 import { getLocalDateInUserTimeZone } from '../../../utils';
 import SelectTailwind from '../../Select/SelectTailwind';
-import { Table } from '../../Table';
 import SvgIcon from '../../SvgIcon';
-import { IconButton } from '@material-tailwind/react';
+import { Table } from '../../Table';
 
 interface ErrorSamplesTabProps {
   errorSamples: ErrorSamplesListModel[];
@@ -125,7 +125,9 @@ const ErrorSamplesTab = ({
         </div>
         <IconButton
           size="sm"
-          className={'bg-white border border-teal-500 '}
+          className={
+            'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+          }
         >
           <a
             href={downloadLink}

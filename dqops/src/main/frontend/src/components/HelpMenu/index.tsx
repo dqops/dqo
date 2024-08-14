@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
 import {
   IconButton,
   Popover,
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
+import React, { useState } from 'react';
 import GitHubButton from 'react-github-btn';
 import SettingsPopUp from '../SettingsPopUp';
+import SvgIcon from '../SvgIcon';
 const HelpMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,7 +19,7 @@ const HelpMenu = () => {
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
         <IconButton
-          className="!mr-3 !bg-transparent"
+          className="!mr-3 !bg-transparent !shadow-none hover:!shadow-none"
           variant="text"
           ripple={false}
         >

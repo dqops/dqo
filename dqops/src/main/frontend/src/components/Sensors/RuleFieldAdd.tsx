@@ -1,16 +1,16 @@
+import { IconButton } from '@material-tailwind/react';
 import React, { useState } from 'react';
 import {
   ParameterDefinitionSpec,
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
-import Input from '../Input';
-import TextArea from '../TextArea';
-import Select from '../Select';
 import Checkbox from '../Checkbox';
+import Input from '../Input';
+import Select from '../Select';
 import StringListField from '../StringListField';
-import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
+import TextArea from '../TextArea';
 
 type RuleFieldAddProps = {
   onAdd: (field: ParameterDefinitionSpec) => void;
@@ -118,7 +118,7 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           color="teal"
           size="sm"
           onClick={handleAdd}
-          className="!shadow-none"
+          className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
         >
           <SvgIcon name="add" className="w-4" />
         </IconButton>
