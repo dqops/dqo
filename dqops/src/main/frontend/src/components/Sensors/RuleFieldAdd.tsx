@@ -118,7 +118,7 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           color="teal"
           size="sm"
           onClick={handleAdd}
-          className="!shadow-none hover:!shadow-none"
+          className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
         >
           <SvgIcon name="add" className="w-4" />
         </IconButton>

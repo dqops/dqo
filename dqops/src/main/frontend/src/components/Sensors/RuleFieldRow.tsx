@@ -129,7 +129,7 @@ const RuleFieldRow = ({
             color="teal"
             size="sm"
             onClick={onDelete}
-            className="!shadow-none hover:!shadow-none"
+            className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
           >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>

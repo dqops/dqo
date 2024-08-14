@@ -39,7 +39,7 @@ export default function FilePath({
                 color="teal"
                 size="sm"
                 onClick={() => onDeletePath(index)}
-                className="!shadow-none hover:!shadow-none"
+                className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
               >
                 <SvgIcon name="delete" className="w-4" />
               </IconButton>
@@ -59,7 +59,7 @@ export default function FilePath({
           <div className="flex justify-center">
             <IconButton
               size="sm"
-              className="bg-teal-500 !shadow-none hover:!shadow-none"
+              className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
               onClick={onAddPath}
               disabled={!paths?.[paths?.length - 1]?.length}
             >

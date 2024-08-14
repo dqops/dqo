@@ -322,7 +322,7 @@ export const IncidentDetail = () => {
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="stop" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={() => setDisableDialog(true)}
                   />
@@ -337,7 +337,7 @@ export const IncidentDetail = () => {
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="minus" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={() => setRecalibrateDialog(true)}
                   />
@@ -350,7 +350,7 @@ export const IncidentDetail = () => {
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="cog" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={goToConfigure}
                   />
@@ -527,7 +527,7 @@ export const IncidentDetail = () => {
                         color="teal"
                         size="sm"
                         onClick={() => setOpen(true)}
-                        className="!shadow-none hover:!shadow-none"
+                        className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       >
                         <SvgIcon name="edit" className="w-4" />
                       </IconButton>
@@ -537,7 +537,7 @@ export const IncidentDetail = () => {
                       color="teal"
                       size="sm"
                       onClick={() => setOpen(true)}
-                      className="!shadow-none hover:!shadow-none"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                     >
                       <SvgIcon name="add" className="w-4" />
                     </IconButton>

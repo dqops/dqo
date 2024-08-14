@@ -187,7 +187,7 @@ const DataGroupingConfigurationListView = ({
                 >
                   <IconButton
                     size="sm"
-                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
+                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                     onClick={() => onEdit(groupingConfiguration)}
                   >
                     <SvgIcon
@@ -203,7 +203,7 @@ const DataGroupingConfigurationListView = ({
                 <Tooltip content="Delete">
                   <IconButton
                     size="sm"
-                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
+                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                     onClick={() => {
                       openConfirmDeleteModal(groupingConfiguration);
                     }}

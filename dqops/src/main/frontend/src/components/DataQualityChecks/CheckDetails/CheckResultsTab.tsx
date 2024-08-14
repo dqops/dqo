@@ -333,8 +333,8 @@ const CheckResultsTab = ({
             size="sm"
             className={
               mode === 'chart'
-                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none'
-                : 'bg-teal-500 !shadow-none hover:!shadow-none'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
             onClick={() => {
               setMode('table');
@@ -352,8 +352,8 @@ const CheckResultsTab = ({
             size="sm"
             className={
               mode === 'table'
-                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none'
-                : 'bg-teal-500 !shadow-none hover:!shadow-none'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
+                : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
             onClick={() => {
               setMode('chart');

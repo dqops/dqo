@@ -59,7 +59,7 @@ export const ProfilingReferenceTableList = ({
                   {' '}
                   <IconButton
                     size="sm"
-                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none"
+                    className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                     onClick={() => {
                       setSelectedComparison(
                         reference.table_comparison_configuration_name ?? ''

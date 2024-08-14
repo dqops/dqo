@@ -70,7 +70,7 @@ const RuleParameters = ({
                       color="teal"
                       size="sm"
                       onClick={() => onDelete(key)}
-                      className="!shadow-none hover:!shadow-none"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       disabled={canUserEdit !== true}
                     >
                       <SvgIcon name="delete" className="w-4" />
@@ -99,7 +99,7 @@ const RuleParameters = ({
                 color="teal"
                 size="sm"
                 onClick={onAdd}
-                className="!shadow-none hover:!shadow-none"
+                className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                 disabled={canUserEdit !== true}
               >
                 <SvgIcon name="add" className="w-4" />

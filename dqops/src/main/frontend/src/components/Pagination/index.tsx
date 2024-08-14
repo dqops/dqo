@@ -65,7 +65,7 @@ export const Pagination = ({
       <div className="flex items-center gap-2">
         <IconButton
           size="sm"
-          className="w-10 h-10 !shadow-none hover:!shadow-none"
+          className="w-10 h-10 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           color="teal"
           onClick={onPrev}
           disabled={page === 1}
@@ -74,7 +74,7 @@ export const Pagination = ({
         </IconButton>
         <IconButton
           size="sm"
-          className="w-10 h-10 !shadow-none hover:!shadow-none"
+          className="w-10 h-10 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           color="teal"
           disabled={true}
         >
@@ -82,7 +82,7 @@ export const Pagination = ({
         </IconButton>
         <IconButton
           size="sm"
-          className="w-10 h-10 !shadow-none hover:!shadow-none"
+          className="w-10 h-10 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           color="teal"
           onClick={onNext}
           disabled={isEnd}

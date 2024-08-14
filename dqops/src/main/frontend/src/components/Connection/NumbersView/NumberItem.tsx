@@ -40,13 +40,13 @@ const NumberItem = ({
         {isLast ? (
           <IconButton
             size="sm"
-            className="bg-teal-500 !shadow-none hover:!shadow-none"
+            className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           >
             <SvgIcon name="add" className="w-4" />
           </IconButton>
         ) : (
           <IconButton
-            className="bg-teal-500 !shadow-none hover:!shadow-none"
+            className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
             size="sm"
             onClick={() => onRemove(idx)}
           >

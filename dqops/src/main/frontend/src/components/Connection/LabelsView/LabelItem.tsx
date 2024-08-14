@@ -44,7 +44,7 @@ const LabelItem = ({
             color="teal"
             size="sm"
             onClick={() => onRemove(idx)}
-            className="!shadow-none hover:!shadow-none"
+            className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
             disabled={canUserEditLabel !== true}
           >
             <SvgIcon name="delete" className="w-4" />

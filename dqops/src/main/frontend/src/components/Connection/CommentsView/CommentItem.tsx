@@ -51,7 +51,7 @@ const CommentItem = ({
             size="sm"
             onClick={isEditing ? onSave : onEdit}
             color="teal"
-            className="!shadow-none hover:!shadow-none"
+            className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
           >
             <SvgIcon name={isEditing ? 'save' : 'edit'} className="w-4" />
           </IconButton>
@@ -59,7 +59,7 @@ const CommentItem = ({
             size="sm"
             onClick={() => onRemove(idx)}
             color="teal"
-            className="!shadow-none hover:!shadow-none"
+            className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
           >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
