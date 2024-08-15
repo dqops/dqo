@@ -51,10 +51,10 @@ const StringListField = ({
                 content={tooltipText}
                 className="max-w-80 py-2 px-2 bg-gray-800"
               >
-                <div>
+                <div className="!min-w-4 !w-4">
                   <SvgIcon
                     name="info"
-                    className="w-4 h-4 text-gray-700 cursor-pointer"
+                    className="!w-4 !h-4 z-10 text-gray-700 cursor-pointer"
                   />
                 </div>
               </Tooltip>
@@ -63,12 +63,17 @@ const StringListField = ({
         )}
       </div>
       <div className="flex space-x-2 items-center">
-        <div className="relative text-sm leading-1">{value?.join(', ')}</div>
-        <SvgIcon
-          name="edit"
-          className="w-4 h-4 text-gray-700 cursor-pointer"
-          onClick={() => !disabled && setOpen(true)}
-        />
+        <div className="relative text-sm leading-1">
+          {value?.join(', ')?.slice(0, 200)}
+          {value.join(', ').length > 200 && '...'}
+        </div>
+        <div className="!min-w-4 !w-4 ">
+          <SvgIcon
+            name="edit"
+            className="w-4 h-4 text-gray-700 cursor-pointer"
+            onClick={() => !disabled && setOpen(true)}
+          />
+        </div>
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>
         <div className="p-4">
