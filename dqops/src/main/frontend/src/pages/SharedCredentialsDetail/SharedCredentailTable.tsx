@@ -78,7 +78,7 @@ export default function SharedCredentailTable({
               target="_blank"
               className="text-teal-500"
             >
-              download
+              Download
             </a>
           </td>
         </tr>
