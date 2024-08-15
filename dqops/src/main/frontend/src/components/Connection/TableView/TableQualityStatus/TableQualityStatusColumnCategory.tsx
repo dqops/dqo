@@ -140,11 +140,11 @@ export default function TableQualityStatusColumnCategory({
           style={{ padding: 0, margin: 0 }}
         >
           {columnStatus.status && (
-            <div className="h-full flex w-34 items-center">
+            <div className="h-full flex w-29 items-center">
               <div className="w-5 h-full"></div>
               <div
                 className={clsx(
-                  'h-8 w-37 flex justify-end',
+                  'h-8 w-32 flex justify-end',
                   getColor(columnStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
                 )}
@@ -232,7 +232,7 @@ export default function TableQualityStatusColumnCategory({
           valign="baseline"
           style={{ padding: 0, margin: 0 }}
         >
-          <div className="w-30">
+          <div className="w-29">
             {(firstLevelChecks[check] ?? []).map((x, index) => {
               if (x.checkType !== customKey) return null;
 
@@ -248,14 +248,14 @@ export default function TableQualityStatusColumnCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-12 p-2 ml-[16.7px]',
+                      'cursor-auto h-12 px-1 ml-[16.7px]',
                       getColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                       )
                     )}
                     style={{
-                      fontSize: '12px',
+                      fontSize: '11px',
                       whiteSpace: 'normal',
                       wordBreak: 'break-word',
                       ...(getColor(severity) === 'bg-gray-150'

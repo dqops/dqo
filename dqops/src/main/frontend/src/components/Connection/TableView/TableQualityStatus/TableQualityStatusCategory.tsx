@@ -89,14 +89,14 @@ export default function TableQualityStatusCategory({
           style={{ padding: '0.5px', paddingBottom: 0, margin: '0.5px' }}
         >
           <div
-            className="h-full flex w-34 items-center justify-end"
+            className="h-full flex w-29 items-center justify-end"
             onClick={() => toggleExtendedChecks(key, 'table')}
           >
             <div className="w-5 h-full"></div>
             {tableStatus.status && (
               <div
                 className={clsx(
-                  'w-37 h-8 flex  justify-end',
+                  'w-32 h-8 flex  justify-end',
                   getColor(tableStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
                 )}
@@ -183,7 +183,7 @@ export default function TableQualityStatusCategory({
           key={`cell_table_level_checks_blank_${key}`}
           style={{ padding: 0, paddingBottom: '0.5px', margin: 0 }}
         >
-          <div className="w-[135.5px]">
+          <div className="w-[117.3px] pr-[1px]">
             {(firstLevelChecks[key] ?? []).map((x, index) => {
               if (x.checkType !== 'table') return null;
 
@@ -199,14 +199,14 @@ export default function TableQualityStatusCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-12 ml-[17.3px] p-2',
+                      'cursor-auto h-12 ml-[16.3px] px-1',
                       getColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                       )
                     )}
                     style={{
-                      fontSize: '12px',
+                      fontSize: '11px',
                       whiteSpace: 'normal',
                       wordBreak: 'break-word',
                       ...(getColor(severity) === 'bg-gray-150'
