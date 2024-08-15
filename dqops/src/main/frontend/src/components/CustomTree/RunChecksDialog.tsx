@@ -16,12 +16,14 @@ import {
   TimeWindowFilterParameters
 } from '../../api';
 import { IRootState } from '../../redux/reducers';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes } from '../../shared/routes';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import LabelsView from '../Connection/LabelsView';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import Input from '../Input';
+import Select from '../Select';
 import SelectInput from '../SelectInput';
 import SvgIcon from '../SvgIcon';
 
@@ -47,7 +49,10 @@ export default function RunChecksDialog({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [filters, setFilters] = useState<
-    CheckSearchFilters & { collectErrorSample?: boolean }
+    CheckSearchFilters & {
+      collectErrorSample?: boolean;
+      timeWindowFilter?: string;
+    }
   >({
     fullTableName: '*.*',
     ...runChecksJobTemplate
@@ -62,7 +67,12 @@ export default function RunChecksDialog({
   const [additionalParams, setAdditionalParams] = useState(false);
 
   const onChangeFilters = (
-    obj: Partial<CheckSearchFilters & { collectErrorSample?: boolean }>
+    obj: Partial<
+      CheckSearchFilters & {
+        collectErrorSample?: boolean;
+        timeWindowFilter?: string;
+      }
+    >
   ) => {
     setFilters((prev) => ({
       ...prev,
@@ -104,12 +114,12 @@ export default function RunChecksDialog({
     <Dialog
       open={open}
       handler={onClose}
-      className="min-w-300 p-4 max-h-[96vh] overflow-y-auto"
+      className="min-w-300 p-4 max-h-[96vh] overflow-y-auto overflow-x-hidden"
     >
       <DialogHeader className="font-bold text-center justify-center !py-2">
         Run checks
       </DialogHeader>
-      <DialogBody className="text-sm flex flex-col overflow-y-auto">
+      <DialogBody className={clsx('text-sm flex flex-col overflow-y-auto')}>
         {checkType === CheckTypes.PARTITIONED && (
           <div className="flex justify-between border-b pb-4 border-gray-300 text-black">
             <div className="w-[45%] ml-2">
@@ -171,7 +181,7 @@ export default function RunChecksDialog({
           <div></div>
         </div>
         <div className="flex justify-between py-4 text-black items-center">
-          <div className="w-1/3 ml-2">
+          <div className="w-1/4 ml-2">
             Column name
             <Input
               value={filters.column}
@@ -180,7 +190,7 @@ export default function RunChecksDialog({
               placeholder="*"
             />
           </div>
-          <div className="w-1/3 ml-2">
+          <div className="w-1/4 ml-2">
             Column datatype
             <Input
               value={filters.columnDataType}
@@ -191,17 +201,36 @@ export default function RunChecksDialog({
               placeholder="*"
             />
           </div>
-          <div className="flex items-center gap-x-2 w-1/3 ml-4 mt-5">
+          <div className="flex items-center gap-x-2 w-1/4 pl-5 mt-5">
             Column nullable
             <Checkbox
               checked={!!filters.columnNullable}
               onChange={(value) => onChangeFilters({ columnNullable: value })}
             />
           </div>
+          {checkType === CheckTypes.PARTITIONED && (
+            <div className="w-1/4">
+              <Select
+                options={Object.keys(RUN_CHECK_TIME_WINDOW_FILTERS).map(
+                  (key) => ({ label: key, value: key })
+                )}
+                value={filters.timeWindowFilter}
+                onChange={(value) =>
+                  onChangeFilters({ timeWindowFilter: value })
+                }
+                label="Time window for partitioned checks"
+                disabled={checkType !== CheckTypes.PARTITIONED}
+                menuClassName="!top-14 !max-h-29 !z-[99]"
+              />
+            </div>
+          )}
         </div>
         {additionalParams === false ? (
           <div
-            className="flex items-center text-black mb-4 cursor-default"
+            className={clsx(
+              'flex items-center text-black mb-4 cursor-default',
+              checkType === CheckTypes.PARTITIONED && 'mb-[62px]'
+            )}
             onClick={() => setAdditionalParams(true)}
           >
             <SvgIcon name="chevron-right" className="w-5 h-5" />
@@ -341,7 +370,10 @@ export default function RunChecksDialog({
             isSaveEnabled
               ? (onClick(
                   prepareFilters(filters),
-                  timeWindowFilter,
+                  (filters.timeWindowFilter &&
+                  checkType === CheckTypes.PARTITIONED
+                    ? RUN_CHECK_TIME_WINDOW_FILTERS[filters.timeWindowFilter]
+                    : timeWindowFilter) ?? undefined,
                   filters.collectErrorSample
                 ),
                 setFilters(runChecksJobTemplate))
