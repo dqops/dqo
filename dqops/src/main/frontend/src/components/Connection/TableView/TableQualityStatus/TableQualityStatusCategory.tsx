@@ -10,10 +10,12 @@ import SvgIcon from '../../../SvgIcon';
 
 import {
   backgroundStyle,
+  secondBackgroundStyle,
   TFirstLevelCheck
 } from './TableQualityStatusConstans';
 import {
   getColor,
+  getSecondColor,
   getTableCircleStatus,
   getTableStatus
 } from './TableQualityStatusUtils';
@@ -200,7 +202,7 @@ export default function TableQualityStatusCategory({
                   <div
                     className={clsx(
                       'cursor-auto h-12 ml-[16.3px] px-1',
-                      getColor(
+                      getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                       )
@@ -210,7 +212,7 @@ export default function TableQualityStatusCategory({
                       whiteSpace: 'normal',
                       wordBreak: 'break-word',
                       ...(getColor(severity) === 'bg-gray-150'
-                        ? backgroundStyle
+                        ? secondBackgroundStyle
                         : {})
                     }}
                   >

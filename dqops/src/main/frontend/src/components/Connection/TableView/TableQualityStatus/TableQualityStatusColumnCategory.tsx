@@ -14,12 +14,14 @@ import { useDecodedParams } from '../../../../utils';
 import SvgIcon from '../../../SvgIcon';
 import {
   TFirstLevelCheck,
-  backgroundStyle
+  backgroundStyle,
+  secondBackgroundStyle
 } from './TableQualityStatusConstans';
 import {
   getColor,
   getColumnCircleStatus,
-  getColumnStatus
+  getColumnStatus,
+  getSecondColor
 } from './TableQualityStatusUtils';
 
 interface IExtendedCheck {
@@ -249,7 +251,7 @@ export default function TableQualityStatusColumnCategory({
                   <div
                     className={clsx(
                       'cursor-auto h-12 px-1 ml-[16.7px]',
-                      getColor(
+                      getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                       )
@@ -259,7 +261,7 @@ export default function TableQualityStatusColumnCategory({
                       whiteSpace: 'normal',
                       wordBreak: 'break-word',
                       ...(getColor(severity) === 'bg-gray-150'
-                        ? backgroundStyle
+                        ? secondBackgroundStyle
                         : {})
                     }}
                   >
