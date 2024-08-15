@@ -66,11 +66,13 @@ const IntegerListField = ({
           {value?.slice(0, 10)?.join(', ')}
           {value?.length > 10 && '...'}
         </div>
-        <SvgIcon
-          name="edit"
-          className="w-4 h-4 text-gray-700 cursor-pointer"
-          onClick={() => !disabled && setOpen(true)}
-        />
+        <div className="!min-w-4 !w-4 ">
+          <SvgIcon
+            name="edit"
+            className="w-4 h-4 text-gray-700 cursor-pointer"
+            onClick={() => !disabled && setOpen(true)}
+          />
+        </div>
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>
         <div className="p-4">
