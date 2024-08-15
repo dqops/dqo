@@ -228,9 +228,9 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
                 }}
               >
                 Run checks
-                {checkTypes === CheckTypes.PARTITIONED && (
+                {/* {checkTypes === CheckTypes.PARTITIONED && (
                   <SvgIcon name="options" className="w-5 h-5" />
-                )}
+                )} */}
               </div>
             </>
           )}
