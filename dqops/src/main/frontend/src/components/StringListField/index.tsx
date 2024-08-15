@@ -51,7 +51,7 @@ const StringListField = ({
                 content={tooltipText}
                 className="max-w-80 py-2 px-2 bg-gray-800"
               >
-                <div>
+                <div className="!min-w-4">
                   <SvgIcon
                     name="info"
                     className="w-4 h-4 text-gray-700 cursor-pointer"
@@ -63,7 +63,10 @@ const StringListField = ({
         )}
       </div>
       <div className="flex space-x-2 items-center">
-        <div className="relative text-sm leading-1">{value?.join(', ')}</div>
+        <div className="relative text-sm leading-1">
+          {value.slice(0, 10)?.join(', ')}
+          {value?.length > 10 && '...'}
+        </div>
         <SvgIcon
           name="edit"
           className="w-4 h-4 text-gray-700 cursor-pointer"

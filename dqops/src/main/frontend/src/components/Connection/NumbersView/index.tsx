@@ -35,8 +35,10 @@ const NumbersView = ({ values, onChange }: INumbersViewProps) => {
       <table className="my-3 w-full">
         <thead>
           <tr>
-            <th className="text-left min-w-40 w-full pr-4 py-2">Integer Value</th>
-            <th className="px-8 min-w-40 text-left py-2">Action</th>
+            <th className="text-left min-w-40 w-full pr-4 py-2 text-black">
+              Integer Value
+            </th>
+            <th className="px-8 min-w-40 text-left py-2 text-black">Action</th>
           </tr>
         </thead>
         <tbody>
