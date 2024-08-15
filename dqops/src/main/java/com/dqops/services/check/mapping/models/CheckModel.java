@@ -38,7 +38,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -257,6 +259,12 @@ public class CheckModel implements Cloneable {
     private List<SimilarCheckModel> similarChecks;
 
     /**
+     * The check hash code that identifies the check instance.
+     */
+    @JsonPropertyDescription("The check hash code that identifies the check instance.")
+    private Long checkHash;
+
+    /**
      * Boolean flag that decides if the current user can edit the check.
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can edit the check.")
@@ -291,15 +299,6 @@ public class CheckModel implements Cloneable {
      */
     @JsonIgnore
     private CheckRunScheduleGroup scheduleGroup;
-
-    /**
-     * Returns the check hash code that identifies the check instance.
-     * @return Check hash or null.
-     */
-    @JsonPropertyDescription("The check hash code that identifies the check instance.")
-    public Long getCheckHash() {
-        return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
-    }
 
     /**
      * Creates a selective deep/shallow clone of the object. Definition objects are not cloned, but all other editable objects are.
