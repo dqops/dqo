@@ -54,7 +54,7 @@ export default function DataDictionaryItemOverview() {
   return (
     <>
       <div className="w-full border-b border-b-gray-400 flex justify-between ">
-        <div className="text-lg font-semibold truncate flex items-center pl-5 space-x-2">
+        <div className="text-sm font-semibold truncate flex items-center pl-5 space-x-2">
           <div>Dictionary:</div>
           <Input
             value={dictionaryName}
