@@ -69,7 +69,11 @@ const IntegerListField = ({
           onClick={() => !disabled && setOpen(true)}
         />
       </div>
-      <Dialog open={open} handler={() => setOpen(false)}>
+      <Dialog
+        open={open}
+        handler={() => setOpen(false)}
+        className=" max-h-[96vh] text-sm flex flex-col overflow-y-auto "
+      >
         <div className="p-4">
           <NumbersView values={numbers} onChange={handleChange} />
           <div className="flex space-x-4 p-4 justify-end">
