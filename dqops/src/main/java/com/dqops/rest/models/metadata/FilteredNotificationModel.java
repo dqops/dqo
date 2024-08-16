@@ -58,10 +58,10 @@ public class FilteredNotificationModel {
             setFilter(filteredNotificationSpec.getFilter());
             setTarget(filteredNotificationSpec.getTarget());
             setPriority(filteredNotificationSpec.getPriority());
-            setProcessAdditionalFilters(filteredNotificationSpec.getProcessAdditionalFilters());
-            setDisabled(filteredNotificationSpec.getDisabled());
+            setProcessAdditionalFilters(filteredNotificationSpec.isProcessAdditionalFilters());
+            setDisabled(filteredNotificationSpec.isDisabled());
             setDescription(filteredNotificationSpec.getDescription());
-            setDoNotCreateIncidents(filteredNotificationSpec.getDoNotCreateIncidents());
+            setDoNotCreateIncidents(filteredNotificationSpec.isDoNotCreateIncidents());
         }};
     }
 

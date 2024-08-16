@@ -166,10 +166,9 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     incidentNotificationConfigurations.getGlobalNotifications().getFilteredNotifications().entrySet().stream().sorted(Comparator.comparingInt(n -> n.getValue().getPriority())))
                 .filter(stringFilteredNotificationSpecEntry -> {
                     FilteredNotificationSpec notification = stringFilteredNotificationSpecEntry.getValue();
-                    return !notification.getDisabled() &&
+                    return !notification.isDisabled() &&
                             notification.getFilter().isMatch(message);
                 })
-                .takeWhile(notification -> notification.getValue().getProcessAdditionalFilters())
                 .collect(Collectors.toList());
 
         List<FilteredNotificationSpec> filteredNotificationsList = filteredNotifications.stream().map(Map.Entry::getValue).collect(Collectors.toList());
@@ -177,7 +176,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         int processAdditionalFiltersNumber = 0;
         for (FilteredNotificationSpec filteredNotification : filteredNotificationsList) {
             filteredNotificationsToSend.add(filteredNotification);
-            if (!filteredNotification.getProcessAdditionalFilters()) {
+            if (!filteredNotification.isProcessAdditionalFilters()) {
                 break;
             }
             processAdditionalFiltersNumber++;

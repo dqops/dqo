@@ -49,7 +49,6 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Data quality incident import service. Works in the background and imports new data quality incidents.
@@ -496,7 +495,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     }};
 
                     FilteredNotificationSpec firstMatchingNotification = notificationConfigurations.findFirstMatchingNotification(notificationMessageForFilterCheck);
-                    boolean shouldExcludeIncident = firstMatchingNotification != null && firstMatchingNotification.getDoNotCreateIncidents();
+                    boolean shouldExcludeIncident = firstMatchingNotification != null && firstMatchingNotification.isDoNotCreateIncidents();
                     if (shouldExcludeIncident) {
                         continue;
                     }

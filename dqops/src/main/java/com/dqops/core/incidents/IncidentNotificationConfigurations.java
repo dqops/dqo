@@ -75,9 +75,8 @@ public class IncidentNotificationConfigurations {
         Optional<FilteredNotificationSpec> firstFilteredNotification = Stream.concat(
                         connectionNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
                         globalNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
-                .filter(notification -> !notification.getDisabled() &&
+                .filter(notification -> !notification.isDisabled() &&
                         notification.getFilter().isMatch(message))
-                .takeWhile(notification -> notification.getProcessAdditionalFilters())
                 .findFirst();
 
         return firstFilteredNotification.orElse(null);
@@ -98,9 +97,8 @@ public class IncidentNotificationConfigurations {
         Optional<FilteredNotificationSpec> firstFilteredNotification = Stream.concat(
                         connectionNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
                         globalNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
-                .filter(notification -> !notification.getDisabled() &&
+                .filter(notification -> !notification.isDisabled() &&
                         notification.getFilter().isMatch(incidentDetails))
-                .takeWhile(notification -> notification.getProcessAdditionalFilters())
                 .findFirst();
 
         return firstFilteredNotification.orElse(null);

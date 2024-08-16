@@ -113,7 +113,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Returns a process additional filters flag.
      * @return Process additional filters flag.
      */
-    public boolean getProcessAdditionalFilters() {
+    public boolean isProcessAdditionalFilters() {
         return processAdditionalFilters;
     }
 
@@ -130,7 +130,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Returns a disabled flag.
      * @return Disabled flag.
      */
-    public boolean getDisabled() {
+    public boolean isDisabled() {
         return disabled;
     }
 
@@ -164,7 +164,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Returns a doNotCreateIncidents flag.
      * @return doNotCreateIncidents flag.
      */
-    public boolean getDoNotCreateIncidents() {
+    public boolean isDoNotCreateIncidents() {
         return doNotCreateIncidents;
     }
 
