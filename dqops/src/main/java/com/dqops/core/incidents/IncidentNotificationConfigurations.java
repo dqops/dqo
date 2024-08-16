@@ -21,6 +21,7 @@ import com.dqops.data.incidents.models.IncidentModel;
 import com.dqops.metadata.incidents.FilteredNotificationSpec;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
 
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -65,8 +66,8 @@ public class IncidentNotificationConfigurations {
      */
     public FilteredNotificationSpec findFirstMatchingNotification(IncidentNotificationMessage message) {
         Optional<FilteredNotificationSpec> firstFilteredNotification = Stream.concat(
-                        this.connectionNotifications.getFilteredNotifications().values().stream(),
-                        this.globalNotifications.getFilteredNotifications().values().stream())
+                        this.connectionNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
+                        this.globalNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
                 .filter(notification -> !notification.getDisabled() &&
                         notification.getFilter().isMatch(message))
                 .takeWhile(notification -> notification.getProcessAdditionalFilters())
@@ -83,8 +84,8 @@ public class IncidentNotificationConfigurations {
      */
     public FilteredNotificationSpec findFirstMatchingNotification(IncidentModel incidentDetails) {
         Optional<FilteredNotificationSpec> firstFilteredNotification = Stream.concat(
-                        this.connectionNotifications.getFilteredNotifications().values().stream(),
-                        this.globalNotifications.getFilteredNotifications().values().stream())
+                        this.connectionNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
+                        this.globalNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
                 .filter(notification -> !notification.getDisabled() &&
                         notification.getFilter().isMatch(incidentDetails))
                 .takeWhile(notification -> notification.getProcessAdditionalFilters())

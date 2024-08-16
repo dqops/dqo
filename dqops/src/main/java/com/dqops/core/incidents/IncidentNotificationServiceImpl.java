@@ -162,16 +162,14 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     public List<MessageAddressPair> filterNotifications(IncidentNotificationMessage message, IncidentNotificationConfigurations incidentNotificationConfigurations) {
         List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications =
                 Stream.concat(
-                    incidentNotificationConfigurations.getConnectionNotifications().getFilteredNotifications().entrySet().stream(),
-                    incidentNotificationConfigurations.getGlobalNotifications().getFilteredNotifications().entrySet().stream())
+                    incidentNotificationConfigurations.getConnectionNotifications().getFilteredNotifications().entrySet().stream().sorted(Comparator.comparingInt(n -> n.getValue().getPriority())),
+                    incidentNotificationConfigurations.getGlobalNotifications().getFilteredNotifications().entrySet().stream().sorted(Comparator.comparingInt(n -> n.getValue().getPriority())))
                 .filter(stringFilteredNotificationSpecEntry -> {
                     FilteredNotificationSpec notification = stringFilteredNotificationSpecEntry.getValue();
-                    NotificationFilterSpec filter = notification.getFilter();
-
                     return !notification.getDisabled() &&
-                            filter.isMatch(message);
+                            notification.getFilter().isMatch(message);
                 })
-                .sorted(Comparator.comparing(value -> value.getValue().getPriority()))
+                .takeWhile(notification -> notification.getValue().getProcessAdditionalFilters())
                 .collect(Collectors.toList());
 
         List<FilteredNotificationSpec> filteredNotificationsList = filteredNotifications.stream().map(Map.Entry::getValue).collect(Collectors.toList());
