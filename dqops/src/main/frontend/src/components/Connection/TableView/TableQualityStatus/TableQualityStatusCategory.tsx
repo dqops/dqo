@@ -91,7 +91,7 @@ export default function TableQualityStatusCategory({
           style={{ padding: '0.5px', paddingBottom: 0, margin: '0.5px' }}
         >
           <div
-            className="h-full flex w-29 items-center justify-end"
+            className="h-full flex w-29 items-center justify-end "
             onClick={() => toggleExtendedChecks(key, 'table')}
           >
             <div className="w-5 h-full"></div>
@@ -120,7 +120,7 @@ export default function TableQualityStatusCategory({
                   >
                     <div
                       className={clsx(
-                        'h-4 w-4 mr-0.5 mt-2 ml-2',
+                        'h-4 w-4 mr-0.5 mt-2 ml-2 ',
                         getColor(tableCircleStatus.status)
                       )}
                       style={{
@@ -185,7 +185,7 @@ export default function TableQualityStatusCategory({
           key={`cell_table_level_checks_blank_${key}`}
           style={{ padding: 0, paddingBottom: '0.5px', margin: 0 }}
         >
-          <div className="w-[117.3px] pr-[1px]">
+          <div className="w-[200px] pr-[1px]">
             {(firstLevelChecks[key] ?? []).map((x, index) => {
               if (x.checkType !== 'table') return null;
 
@@ -201,7 +201,7 @@ export default function TableQualityStatusCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-12 ml-[16.3px] px-1',
+                      'cursor-auto h-5 ml-[16.3px] px-1 truncate',
                       getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -209,8 +209,6 @@ export default function TableQualityStatusCategory({
                     )}
                     style={{
                       fontSize: '11px',
-                      whiteSpace: 'normal',
-                      wordBreak: 'break-word',
                       ...(getColor(severity) === 'bg-gray-150'
                         ? secondBackgroundStyle
                         : {})
@@ -232,7 +230,7 @@ export default function TableQualityStatusCategory({
       <tr key="row_table_level_checks" style={{ margin: 0 }}>
         <td
           key="cell_table_level_checks_title"
-          className="font-bold px-4 whitespace-nowrap"
+          className="font-bold px-4 whitespace-nowrap text-xs"
         >
           Table level checks
         </td>

@@ -134,6 +134,12 @@ export default function TableQualityStatusColumnCategory({
       const showTooltip = columnCircleStatus.lastExecutedAt !== null;
       const showIcon = columnStatus.status !== null;
 
+      const isExtended = extendedChecks.some(
+        (x) =>
+          x.checkType === customKey &&
+          x.categoryDimension === firstLevelChecksKey
+      );
+
       return (
         <td
           key={`cell_column_${customKey}_${firstLevelChecksKey}`}
@@ -142,13 +148,19 @@ export default function TableQualityStatusColumnCategory({
           style={{ padding: 0, margin: 0 }}
         >
           {columnStatus.status && (
-            <div className="h-full flex w-29 items-center">
+            <div
+              className={clsx(
+                'h-full flex w-29 items-center'
+                // isExtended && 'w-50'
+              )}
+            >
               <div className="w-5 h-full"></div>
               <div
                 className={clsx(
                   'h-8 w-32 flex justify-end',
                   getColor(columnStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
+                  // isExtended && 'w-50'
                 )}
                 style={
                   getColor(columnStatus.status) === 'bg-gray-150'
@@ -234,7 +246,7 @@ export default function TableQualityStatusColumnCategory({
           valign="baseline"
           style={{ padding: 0, margin: 0 }}
         >
-          <div className="w-29">
+          <div className="w-50">
             {(firstLevelChecks[check] ?? []).map((x, index) => {
               if (x.checkType !== customKey) return null;
 
@@ -250,7 +262,7 @@ export default function TableQualityStatusColumnCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-12 px-1 ml-[16.7px]',
+                      'cursor-auto h-5 px-1 ml-[16.7px] truncate',
                       getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -259,7 +271,6 @@ export default function TableQualityStatusColumnCategory({
                     style={{
                       fontSize: '11px',
                       whiteSpace: 'normal',
-                      wordBreak: 'break-word',
                       ...(getColor(severity) === 'bg-gray-150'
                         ? secondBackgroundStyle
                         : {})
@@ -281,7 +292,7 @@ export default function TableQualityStatusColumnCategory({
       <tr key={`column_row_${customKey}`} style={{ padding: 0, margin: 0 }}>
         <td
           key={`column_cell_${customKey}`}
-          className="p-2 px-4 underline cursor-pointer"
+          className="p-2 px-4 underline cursor-pointer text-xs"
           onClick={() => openFirstLevelColumnTab(customKey)}
         >
           {customKey}

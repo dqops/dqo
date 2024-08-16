@@ -129,7 +129,7 @@ export default function TableQualityStatusOverview({
           <th
             key={`header_${key}`}
             className={clsx(
-              ' border-b border-gray-300 font-bold text-sm text-center'
+              ' border-b border-gray-300 font-bold text-xs text-center'
             )}
             // onClick={() =>
             //   openFirstLevelTableTab(
