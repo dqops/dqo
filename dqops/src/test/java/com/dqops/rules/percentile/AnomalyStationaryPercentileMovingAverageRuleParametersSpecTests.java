@@ -58,7 +58,7 @@ public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests ext
     }
 
     @Test
-    void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
+    void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentChangeOnOddDays_thenReturnsPassed() {
         this.sut.setAnomalyPercent(20.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
@@ -79,6 +79,94 @@ public class AnomalyStationaryPercentileMovingAverageRuleParametersSpecTests ext
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(13.55, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(26.44, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsAboveMaxValueAndAllPastValuesArePresentAndChangeOnOddDays_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            if(i % 2 == 0) {
+                this.sensorReadouts[i] = 15.0;
+            } else {
+                this.sensorReadouts[i] = 25.0;
+            }
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(40.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(13.55, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(26.44, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsBelowMinValueAndAllPastValuesArePresentAndChangeOnOddDays_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            if(i % 2 == 0) {
+                this.sensorReadouts[i] = 15.0;
+            } else {
+                this.sensorReadouts[i] = 25.0;
+            }
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(13.55, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(26.44, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsEqualToLastValueAndAllPastValuesArePresentChangeAndEqual_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            this.sensorReadouts[i] = 20.0;
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNotEqualToLastValueAndAllPastValuesArePresentChangeAndEqual_thenReturnsFailed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            this.sensorReadouts[i] = 20.0;
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
