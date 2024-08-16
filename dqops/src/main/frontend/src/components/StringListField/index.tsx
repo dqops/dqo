@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Dialog, Tooltip } from '@material-tailwind/react';
+import { DataDictionaryApiClient } from '../../services/apiClient';
 import Button from '../Button';
 import LabelsView from '../Connection/LabelsView';
+import Input from '../Input';
 import SvgIcon from '../SvgIcon';
 
 interface IStringListFieldProps {
@@ -24,6 +26,9 @@ const StringListField = ({
 }: IStringListFieldProps) => {
   const [open, setOpen] = useState(false);
   const [labels, setLabels] = useState<string[]>([]);
+  const [convertToDictionary, setConvertToDictionary] = useState(false);
+  const [dictionary, setDictionary] = useState<string | null>(null);
+  const [dictionaryExistError, setDictionaryExistError] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -33,12 +38,34 @@ const StringListField = ({
 
   const handleSave = () => {
     onChange(labels);
-    setOpen(false);
+    if (convertToDictionary) {
+      saveDictionary();
+    } else {
+      setOpen(false);
+    }
+    setConvertToDictionary(false);
+    setDictionaryExistError(false);
+    setDictionary(null);
   };
 
   const handleChange = useCallback((values: string[]) => {
     setLabels(values);
   }, []);
+
+  const saveDictionary = async () => {
+    await DataDictionaryApiClient.createDictionary({
+      dictionary_name: '${dictionary://' + dictionary! + '}'
+    })
+      .then(() => {
+        setOpen(false);
+      })
+      .catch((err) => {
+        if (err.response?.status === 409) {
+          setDictionaryExistError(true);
+        }
+        console.error(err);
+      });
+  };
 
   return (
     <div>
@@ -87,22 +114,45 @@ const StringListField = ({
             hasAdd
             title="Text values"
           />
-          <div className="flex space-x-4 p-4 justify-end">
-            <Button
-              color="primary"
-              variant="outlined"
-              label="Cancel"
-              className="w-40"
-              onClick={() => setOpen(false)}
-            />
-            <Button
-              variant="contained"
-              label="Save"
-              color="primary"
-              className="w-40"
-              onClick={handleSave}
-            />
+          <div className="flex space-x-4 p-4 justify-between">
+            <div>
+              {!convertToDictionary ? (
+                <Button
+                  label="Convert to dictionary"
+                  onClick={() => setConvertToDictionary(true)}
+                  color="primary"
+                />
+              ) : (
+                <Input
+                  label="Dictionary name"
+                  value={dictionary || ''}
+                  onChange={(e) => setDictionary(e.target.value)}
+                  containerClassName="mb-5"
+                />
+              )}
+            </div>
+            <div className="flex items-center gap-x-4">
+              <Button
+                color="primary"
+                variant="outlined"
+                label="Cancel"
+                className="w-40"
+                onClick={() => setOpen(false)}
+              />
+              <Button
+                variant="contained"
+                label="Save"
+                color="primary"
+                className="w-40"
+                onClick={handleSave}
+              />
+            </div>
           </div>
+          {dictionaryExistError && (
+            <div className="text-red-500 text-sm">
+              Dictionary name is in use by another dictionary
+            </div>
+          )}
         </div>
       </Dialog>
     </div>
