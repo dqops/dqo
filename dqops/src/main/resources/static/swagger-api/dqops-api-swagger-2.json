@@ -38146,6 +38146,15 @@
           "type" : "string",
           "description" : "Incident status.",
           "enum" : [ "open", "acknowledged", "resolved", "muted" ]
+        },
+        "notificationName" : {
+          "type" : "string",
+          "description" : "Matching filtered notification for this incident."
+        },
+        "notificationLocation" : {
+          "type" : "string",
+          "description" : "If this incident has a matching filtered notification, this field will tell whether the filtered notification is defined on a connection level, or a global level.",
+          "enum" : [ "connection_notification", "global_notification" ]
         }
       }
     },

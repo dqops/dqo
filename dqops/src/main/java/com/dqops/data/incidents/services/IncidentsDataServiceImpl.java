@@ -16,6 +16,7 @@
 package com.dqops.data.incidents.services;
 
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
+import com.dqops.core.incidents.IncidentNotificationConfigurations;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
@@ -29,6 +30,10 @@ import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
 import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.data.storage.ParquetPartitionId;
+import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.incidents.FilteredNotificationSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -264,6 +269,14 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      */
     @Override
     public IncidentModel loadIncident(String connectionName, int year, int month, String incidentId, UserDomainIdentity userDomainIdentity) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
+        ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
+        ConnectionWrapper connectionWrapper = connectionList.getByObjectName(connectionName, true);
+
+        if (connectionWrapper == null) {
+            return null;
+        }
+
         IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName, userDomainIdentity);
         LocalDate incidentMonth = LocalDate.of(year, month, 1);
         LoadedMonthlyPartition monthPartition = incidentsSnapshot.getMonthPartition(incidentMonth, true);
@@ -280,6 +293,21 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
 
         int rowIndex = incidentIdSelection.get(0);
         IncidentModel incidentModel = IncidentModel.fromIncidentRow(incidentMonthData.row(rowIndex), connectionName);
+
+        ConnectionIncidentGroupingSpec connectionIncidentGroupingSpec = connectionWrapper.getSpec().getIncidentGrouping();
+        IncidentNotificationSpec connectionNotifications = connectionIncidentGroupingSpec != null ?
+                connectionIncidentGroupingSpec.getIncidentNotification() : new IncidentNotificationSpec();
+
+        DefaultIncidentNotificationsWrapper defaultIncidentNotifications = userHomeContext.getUserHome().getDefaultIncidentNotifications();
+        IncidentNotificationSpec defaultNotifications = defaultIncidentNotifications.getSpec() != null ? defaultIncidentNotifications.getSpec() : new IncidentNotificationSpec();
+
+        IncidentNotificationConfigurations incidentNotificationConfigurations = new IncidentNotificationConfigurations(connectionNotifications, defaultNotifications);
+        FilteredNotificationSpec firstMatchingNotification = incidentNotificationConfigurations.findFirstMatchingNotification(incidentModel);
+        if (firstMatchingNotification != null) {
+            incidentModel.setNotificationName(firstMatchingNotification.getNotificationName());
+            incidentModel.setNotificationLocation(firstMatchingNotification.getNotificationLocation());
+        }
+
         return incidentModel;
     }
 

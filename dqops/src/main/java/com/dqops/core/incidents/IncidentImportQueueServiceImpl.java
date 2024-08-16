@@ -28,9 +28,8 @@ import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.incidents.FilteredNotificationSpec;
 import com.dqops.metadata.incidents.IncidentGroupingLevel;
-import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.incidents.NotificationFilterSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -39,7 +38,6 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.scheduler.Schedulers;
@@ -51,6 +49,7 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Data quality incident import service. Works in the background and imports new data quality incidents.
@@ -481,7 +480,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
                     Integer tablePriority = nextTableImportBatch.getTable().getPriority();
 
-                    IncidentNotificationSpec incidentNotificationSpec = incidentNotificationsConfigurationLoader
+                    IncidentNotificationConfigurations notificationConfigurations = incidentNotificationsConfigurationLoader
                             .loadConfiguration(incidentGroupingAtConnection, userIdentity);
                     IncidentNotificationMessage notificationMessageForFilterCheck = new IncidentNotificationMessage(){{
                         setConnection(connectionName);
@@ -496,8 +495,9 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                         setHighestSeverity(severity);
                     }};
 
-                    boolean shouldExcludeIncident = filterIncidents(notificationMessageForFilterCheck, incidentNotificationSpec);
-                    if(shouldExcludeIncident){
+                    FilteredNotificationSpec firstMatchingNotification = notificationConfigurations.findFirstMatchingNotification(notificationMessageForFilterCheck);
+                    boolean shouldExcludeIncident = firstMatchingNotification != null && firstMatchingNotification.getDoNotCreateIncidents();
+                    if (shouldExcludeIncident) {
                         continue;
                     }
 
@@ -595,36 +595,6 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     .collect(Collectors.toList());
 
             return incidentNotificationMessages;
-        }
-
-        /**
-         * Verifies whether the incident should be excluded based on the filters from incident notification configuration with the doNotCreateIncidents flag set.
-         * @param message The incident notification message with its details.
-         * @param notificationSpec The notification spec with the default notification setup and map of filtered notifications used for filtering.
-         * @return Whether the specific incident should be excluded.
-         */
-        private boolean filterIncidents(IncidentNotificationMessage message, IncidentNotificationSpec notificationSpec) {
-            long exclusionFiltersMatchCount = notificationSpec.getFilteredNotifications()
-                    .values().stream()
-                    .filter(notification -> {
-                        NotificationFilterSpec filter = notification.getFilter();
-
-                        return !notification.getDisabled() &&
-                               !notification.getDoNotCreateIncidents() &&
-                               (Strings.isNullOrEmpty(filter.getConnection()) || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
-                               (Strings.isNullOrEmpty(filter.getSchema()) || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
-                               (Strings.isNullOrEmpty(filter.getTable()) || filter.getTableNameSearchPattern().match(message.getTable())) &&
-                               (filter.getTablePriority() == null || filter.getTablePriority().equals(message.getTablePriority())) &&
-                               (Strings.isNullOrEmpty(filter.getDataGroupName()) || filter.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
-                               (Strings.isNullOrEmpty(filter.getQualityDimension()) || filter.getQualityDimension().equals(message.getQualityDimension())) &&
-                               (Strings.isNullOrEmpty(filter.getCheckCategory()) || filter.getCheckCategory().equals(message.getCheckCategory())) &&
-                               (Strings.isNullOrEmpty(filter.getCheckType()) || filter.getCheckType().equals(message.getCheckType())) &&
-                               (Strings.isNullOrEmpty(filter.getCheckName()) || filter.getCheckNameSearchPattern().match(message.getCheckName())) &&
-                               (filter.getHighestSeverity() == null || filter.getHighestSeverity().equals(message.getHighestSeverity())));
-                    })
-                    .count();
-
-            return exclusionFiltersMatchCount == 0;
         }
 
         /**

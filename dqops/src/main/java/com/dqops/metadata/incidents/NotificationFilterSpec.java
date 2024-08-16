@@ -1,5 +1,7 @@
 package com.dqops.metadata.incidents;
 
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
+import com.dqops.data.incidents.models.IncidentModel;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -343,4 +345,40 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
         return cloned;
     }
 
+    /**
+     * Filters a message by the filter parameters and decide if the incident notification message matches the filters.
+     * @param message Message to verify.
+     * @return True if the message matches the filter parameters.
+     */
+    public boolean isMatch(IncidentNotificationMessage message) {
+        return (Strings.isNullOrEmpty(this.getConnection()) || this.getConnectionNameSearchPattern().match(message.getConnection()) &&
+                (Strings.isNullOrEmpty(this.getSchema()) || this.getSchemaNameSearchPattern().match(message.getSchema())) &&
+                (Strings.isNullOrEmpty(this.getTable()) || this.getTableNameSearchPattern().match(message.getTable())) &&
+                (this.getTablePriority() == null || this.getTablePriority().equals(message.getTablePriority())) &&
+                (Strings.isNullOrEmpty(this.getDataGroupName()) || this.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
+                (Strings.isNullOrEmpty(this.getQualityDimension()) || this.getQualityDimension().equals(message.getQualityDimension())) &&
+                (Strings.isNullOrEmpty(this.getCheckCategory()) || this.getCheckCategory().equals(message.getCheckCategory())) &&
+                (Strings.isNullOrEmpty(this.getCheckType()) || this.getCheckType().equals(message.getCheckType())) &&
+                (Strings.isNullOrEmpty(this.getCheckName()) || this.getCheckNameSearchPattern().match(message.getCheckName())) &&
+                (this.getHighestSeverity() == null || this.getHighestSeverity().equals(message.getHighestSeverity())));
+    }
+
+
+    /**
+     * Filters a message by the filter parameters and decide if the incident notification message matches the filters.
+     * @param incidentModel Incident model to verify.
+     * @return True if the message matches the filter parameters.
+     */
+    public boolean isMatch(IncidentModel incidentModel) {
+        return (Strings.isNullOrEmpty(this.getConnection()) || this.getConnectionNameSearchPattern().match(incidentModel.getConnection()) &&
+                (Strings.isNullOrEmpty(this.getSchema()) || this.getSchemaNameSearchPattern().match(incidentModel.getSchema())) &&
+                (Strings.isNullOrEmpty(this.getTable()) || this.getTableNameSearchPattern().match(incidentModel.getTable())) &&
+                (this.getTablePriority() == null || this.getTablePriority().equals(incidentModel.getTablePriority())) &&
+                (Strings.isNullOrEmpty(this.getDataGroupName()) || this.getDataGroupNameSearchPattern().match(incidentModel.getDataGroup())) &&
+                (Strings.isNullOrEmpty(this.getQualityDimension()) || this.getQualityDimension().equals(incidentModel.getQualityDimension())) &&
+                (Strings.isNullOrEmpty(this.getCheckCategory()) || this.getCheckCategory().equals(incidentModel.getCheckCategory())) &&
+                (Strings.isNullOrEmpty(this.getCheckType()) || this.getCheckType().equals(incidentModel.getCheckType())) &&
+                (Strings.isNullOrEmpty(this.getCheckName()) || this.getCheckNameSearchPattern().match(incidentModel.getCheckName())) &&
+                (this.getHighestSeverity() == null || this.getHighestSeverity().equals(incidentModel.getHighestSeverity())));
+    }
 }

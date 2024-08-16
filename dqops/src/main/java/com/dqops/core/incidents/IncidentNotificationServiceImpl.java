@@ -52,6 +52,7 @@ import reactor.netty.http.client.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Incident notification service that sends notifications when new data quality incidents are detected.
@@ -109,23 +110,24 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     public void sendNotifications(List<IncidentNotificationMessage> newMessages,
                                   ConnectionIncidentGroupingSpec incidentGrouping,
                                   UserDomainIdentity userIdentity) {
-        IncidentNotificationSpec incidentNotificationSpec = incidentNotificationsConfigurationLoader.loadConfiguration(incidentGrouping, userIdentity);
-        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentNotificationSpec);
+        IncidentNotificationConfigurations incidentNotificationConfigurations = incidentNotificationsConfigurationLoader.loadConfiguration(incidentGrouping, userIdentity);
+        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentNotificationConfigurations);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
 
     /**
      * Sends all notifications, one by one.
      * @param newMessages Messages with new data quality incidents.
-     * @param notificationSpec Webhook specification.
+     * @param incidentNotificationConfigurations Configuration of incidents notifications for the connection level and global level.
      * @return Awaitable Mono object.
      */
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages,
-                                              IncidentNotificationSpec notificationSpec) {
+                                              IncidentNotificationConfigurations incidentNotificationConfigurations) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
-                .map(message -> filterNotifications(message, notificationSpec))
+                .map(message -> filterNotifications(message, incidentNotificationConfigurations))
                 .flatMap(Flux::fromIterable)
-                .filter(messageAddressPair -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(messageAddressPair.getIncidentNotificationMessage().getStatus())))
+                .filter(messageAddressPair -> !Strings.isNullOrEmpty(
+                        incidentNotificationConfigurations.getConnectionNotifications().getNotificationAddressForStatus(messageAddressPair.getIncidentNotificationMessage().getStatus())))
                 .filter(messageAddressPair -> !Strings.isNullOrEmpty(messageAddressPair.getNotificationAddress()))
                 .flatMap(messageAddressPair -> {
 
@@ -154,27 +156,20 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     /**
      * Builds the list of message and address pairs for notifications based on the filters available in incident notification filters configuration.
      * @param message The incident notification message with its details.
-     * @param notificationSpec The notification spec with the default notification setup and map of filtered notifications used for filtering.
+     * @param incidentNotificationConfigurations The notification spec with the default notification setup and map of filtered notifications used for filtering.
      * @return The notification message and address pair.
      */
-    public List<MessageAddressPair> filterNotifications(IncidentNotificationMessage message, IncidentNotificationSpec notificationSpec) {
-        List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications = notificationSpec.getFilteredNotifications()
-                .entrySet().stream()
+    public List<MessageAddressPair> filterNotifications(IncidentNotificationMessage message, IncidentNotificationConfigurations incidentNotificationConfigurations) {
+        List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications =
+                Stream.concat(
+                    incidentNotificationConfigurations.getConnectionNotifications().getFilteredNotifications().entrySet().stream(),
+                    incidentNotificationConfigurations.getGlobalNotifications().getFilteredNotifications().entrySet().stream())
                 .filter(stringFilteredNotificationSpecEntry -> {
                     FilteredNotificationSpec notification = stringFilteredNotificationSpecEntry.getValue();
                     NotificationFilterSpec filter = notification.getFilter();
 
                     return !notification.getDisabled() &&
-                           (Strings.isNullOrEmpty(filter.getConnection()) || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
-                           (Strings.isNullOrEmpty(filter.getSchema()) || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
-                           (Strings.isNullOrEmpty(filter.getTable()) || filter.getTableNameSearchPattern().match(message.getTable())) &&
-                           (filter.getTablePriority() == null || filter.getTablePriority().equals(message.getTablePriority())) &&
-                           (Strings.isNullOrEmpty(filter.getDataGroupName()) || filter.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
-                           (Strings.isNullOrEmpty(filter.getQualityDimension()) || filter.getQualityDimension().equals(message.getQualityDimension())) &&
-                           (Strings.isNullOrEmpty(filter.getCheckCategory()) || filter.getCheckCategory().equals(message.getCheckCategory())) &&
-                           (Strings.isNullOrEmpty(filter.getCheckType()) || filter.getCheckType().equals(message.getCheckType())) &&
-                           (Strings.isNullOrEmpty(filter.getCheckName()) || filter.getCheckNameSearchPattern().match(message.getCheckName())) &&
-                           (filter.getHighestSeverity() == null || filter.getHighestSeverity().equals(message.getHighestSeverity())));
+                            filter.isMatch(message);
                 })
                 .sorted(Comparator.comparing(value -> value.getValue().getPriority()))
                 .collect(Collectors.toList());
@@ -196,7 +191,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         // all filtered notifications got ProcessAdditionalFilters flag
         if (filteredNotificationsToSend.isEmpty() || filteredNotificationsList.size() == processAdditionalFiltersNumber) {
-            allNotificationsToSend.add(IncidentNotificationTargetSpec.from(notificationSpec));
+            allNotificationsToSend.add(IncidentNotificationTargetSpec.from(incidentNotificationConfigurations.getConnectionNotifications()));
         }
 
         List<String> compoundAddressesList = allNotificationsToSend.stream().map(notificationTarget -> {

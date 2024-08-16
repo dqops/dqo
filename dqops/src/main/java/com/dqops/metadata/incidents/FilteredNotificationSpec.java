@@ -1,9 +1,12 @@
 package com.dqops.metadata.incidents;
 
+import com.dqops.data.incidents.models.IncidentFilteredNotificationLocation;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -204,4 +207,35 @@ public class FilteredNotificationSpec extends AbstractSpec {
         return cloned;
     }
 
+    /**
+     * Retrieves the notification name from the hierarchy.
+     * @return Notification name or null for a standalone notification spec object.
+     */
+    @JsonIgnore
+    public String getNotificationName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Detects where the notification is configured. Is it on the global level, or a connection level.
+     * @return Identification of the location where the notification was found, a global level or a connection level.
+     */
+    @JsonIgnore
+    public IncidentFilteredNotificationLocation getNotificationLocation() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+
+        String connectionName = hierarchyId.getConnectionName();
+        if (connectionName != null) {
+            return IncidentFilteredNotificationLocation.connection_notification;
+        }
+
+        return IncidentFilteredNotificationLocation.global_notification;
+    }
 }
