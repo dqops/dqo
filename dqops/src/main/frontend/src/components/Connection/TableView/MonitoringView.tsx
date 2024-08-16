@@ -245,7 +245,7 @@ const MonitoringView = () => {
       )
     );
   };
-  console.log(activeTab);
+
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       {activeTab === 'check-editor' && (
