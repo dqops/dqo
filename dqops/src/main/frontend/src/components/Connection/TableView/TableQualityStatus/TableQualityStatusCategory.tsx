@@ -7,27 +7,35 @@ import {
   TableCurrentDataQualityStatusModel
 } from '../../../../api';
 import SvgIcon from '../../../SvgIcon';
+
 import {
-  TFirstLevelCheck,
-  backgroundStyle
+  backgroundStyle,
+  secondBackgroundStyle,
+  TFirstLevelCheck
 } from './TableQualityStatusConstans';
 import {
   getColor,
+  getSecondColor,
   getTableCircleStatus,
   getTableStatus
 } from './TableQualityStatusUtils';
+
+interface IExtendedCheck {
+  checkType: string;
+  categoryDimension: string;
+}
 
 interface ITableQualityStatusColumnCategoryProps {
   tableDataQualityStatus: TableCurrentDataQualityStatusModel;
   severityType: 'current' | 'highest';
   categoryDimension: 'category' | 'dimension';
-  extendedChecks: Array<{ checkType: string; categoryDimension: string }>;
-  setExtendedChecks: any;
+  extendedChecks: IExtendedCheck[];
+  setExtendedChecks: React.Dispatch<React.SetStateAction<IExtendedCheck[]>>;
   firstLevelChecks: Record<string, TFirstLevelCheck[]>;
   renderSecondLevelTooltip: (data: TFirstLevelCheck) => React.JSX.Element;
   renderTooltipContent: (
-    lastExecutedAt: any,
-    severity: any,
+    lastExecutedAt: string,
+    severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum | null,
     severityType: 'current' | 'highest'
   ) => React.JSX.Element;
 }
@@ -44,143 +52,189 @@ export default function TableQualityStatusCategory({
     checkType: string,
     categoryDimension: string
   ) => {
-    const array = [...extendedChecks];
-    if (
-      array.find(
-        (item) =>
-          item.checkType === checkType &&
-          item.categoryDimension === categoryDimension
-      )
-    ) {
-      const filteredArray = array.filter(
-        (item) =>
-          !(
-            item.checkType === checkType &&
-            item.categoryDimension === categoryDimension
-          )
+    setExtendedChecks((prevChecks) => {
+      const isAlreadyExtended = prevChecks.some(
+        (check) =>
+          check.checkType === checkType &&
+          check.categoryDimension === categoryDimension
       );
-      setExtendedChecks(filteredArray);
-    } else {
-      array.push({ checkType, categoryDimension });
-      setExtendedChecks(array);
-    }
+
+      if (isAlreadyExtended) {
+        return prevChecks.filter(
+          (check) =>
+            !(
+              check.checkType === checkType &&
+              check.categoryDimension === categoryDimension
+            )
+        );
+      } else {
+        return [...prevChecks, { checkType, categoryDimension }];
+      }
+    });
+  };
+
+  const renderTableLevelCheckCells = () => {
+    return Object.keys(firstLevelChecks).map((key) => {
+      const tableStatus = getTableStatus(severityType, firstLevelChecks[key]);
+      const tableCircleStatus = getTableCircleStatus(
+        severityType,
+        firstLevelChecks[key]
+      );
+
+      const showTooltip = tableCircleStatus.lastExecutedAt !== null;
+      const showIcon = tableStatus.status !== null;
+
+      return (
+        <td
+          key={`cell_table_level_checks_${key}`}
+          className="h-full"
+          style={{ padding: '0.5px', paddingBottom: 0, margin: '0.5px' }}
+        >
+          <div
+            className="h-full flex w-29 items-center justify-end "
+            onClick={() => toggleExtendedChecks(key, 'table')}
+          >
+            <div className="w-5 h-full"></div>
+            {tableStatus.status && (
+              <div
+                className={clsx(
+                  'w-32 h-8 flex  justify-end',
+                  getColor(tableStatus.status),
+                  severityType === 'current' ? '' : 'justify-end'
+                )}
+                style={
+                  getColor(tableStatus.status) === 'bg-gray-150'
+                    ? backgroundStyle
+                    : {}
+                }
+              >
+                {showTooltip && (
+                  <Tooltip
+                    content={renderTooltipContent(
+                      moment(tableCircleStatus.lastExecutedAt).format(
+                        'YYYY-MM-DD HH:mm:ss'
+                      ),
+                      tableCircleStatus.status,
+                      severityType
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'h-4 w-4 mr-0.5 mt-2 ml-2 ',
+                        getColor(tableCircleStatus.status)
+                      )}
+                      style={{
+                        borderRadius: '6px',
+                        ...(getColor(tableCircleStatus.status) === 'bg-gray-150'
+                          ? backgroundStyle
+                          : {})
+                      }}
+                    ></div>
+                  </Tooltip>
+                )}
+                {showIcon && (
+                  <div className="flex justify-center items-center">
+                    <SvgIcon
+                      name={
+                        extendedChecks.some(
+                          (x) =>
+                            x.checkType === key &&
+                            x.categoryDimension === 'table'
+                        )
+                          ? 'chevron-up'
+                          : 'chevron-down'
+                      }
+                      className={clsx(
+                        'h-5 w-5 pr-1',
+                        extendedChecks.some(
+                          (x) =>
+                            x.checkType === key &&
+                            x.categoryDimension === 'table'
+                        )
+                          ? 'mb-1'
+                          : 'mt-1'
+                      )}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </td>
+      );
+    });
+  };
+
+  const renderExtendedChecks = () => {
+    return Object.keys(firstLevelChecks).map((key) => {
+      const isExtended = extendedChecks.some(
+        (x) => x.checkType === key && x.categoryDimension === 'table'
+      );
+
+      if (!isExtended)
+        return (
+          <td
+            key={`cell_table_level_checks_blank_${key}`}
+            style={{ padding: 0, paddingBottom: '0.5px', margin: 0 }}
+          ></td>
+        );
+
+      return (
+        <td
+          valign="baseline"
+          key={`cell_table_level_checks_blank_${key}`}
+          style={{ padding: 0, paddingBottom: '0.5px', margin: 0 }}
+        >
+          <div className="w-[200px] pr-[1px]">
+            {(firstLevelChecks[key] ?? []).map((x, index) => {
+              if (x.checkType !== 'table') return null;
+
+              const severity =
+                severityType === 'current'
+                  ? x.currentSeverity
+                  : x.highestSeverity;
+
+              return (
+                <Tooltip
+                  key={`table_check_${key}_${index}`}
+                  content={renderSecondLevelTooltip(x)}
+                >
+                  <div
+                    className={clsx(
+                      'cursor-auto h-5 ml-[16.3px] px-1 truncate',
+                      getSecondColor(
+                        severity ??
+                          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                      )
+                    )}
+                    style={{
+                      fontSize: '11px',
+                      ...(getColor(severity) === 'bg-gray-150'
+                        ? secondBackgroundStyle
+                        : {})
+                    }}
+                  >
+                    {x.checkName}
+                  </div>
+                </Tooltip>
+              );
+            })}
+          </div>
+        </td>
+      );
+    });
   };
 
   return (
-    <React.Fragment>
+    <>
       <tr key="row_table_level_checks" style={{ margin: 0 }}>
         <td
           key="cell_table_level_checks_title"
-          className="font-bold px-4 whitespace-nowrap"
+          className="font-bold px-4 whitespace-nowrap text-xs"
         >
           Table level checks
         </td>
-        {Object.keys(firstLevelChecks).map((key) => (
-          <td
-            key={`cell_table_level_checks_${key}`}
-            className="h-full"
-            style={{ padding: 0.5, paddingBottom: 0, margin: 0.5 }}
-          >
-            <div
-              className="h-full flex w-40 items-center"
-              onClick={() => {
-                toggleExtendedChecks(key, 'table');
-              }}
-            >
-              <div className="w-5 h-full"></div>
-              {getColor(
-                getTableStatus(severityType, firstLevelChecks[key]).status
-              ) !== '' ? (
-                <div
-                  className={clsx(
-                    'w-43 h-8 flex justify-end',
-                    getColor(
-                      getTableStatus(severityType, firstLevelChecks[key]).status
-                    ),
-                    severityType === 'current' ? '' : 'justify-end'
-                  )}
-                  style={{
-                    ...(getColor(
-                      getTableStatus(severityType, firstLevelChecks[key]).status
-                    ) === 'bg-gray-150'
-                      ? backgroundStyle
-                      : {})
-                  }}
-                >
-                  {getTableCircleStatus(severityType, firstLevelChecks[key])
-                    .lastExecutedAt ? (
-                    <Tooltip
-                      content={renderTooltipContent(
-                        moment(
-                          getTableCircleStatus(
-                            severityType,
-                            firstLevelChecks[key]
-                          ).lastExecutedAt
-                        ).format('YYYY-MM-DD HH:mm:ss'),
-                        getTableCircleStatus(
-                          severityType,
-                          firstLevelChecks[key]
-                        ).status,
-                        severityType
-                      )}
-                    >
-                      <div
-                        className={clsx(
-                          'h-4 w-4 mr-0.5 mt-2 ml-2',
-                          getColor(
-                            getTableCircleStatus(
-                              severityType,
-                              firstLevelChecks[key]
-                            ).status
-                          )
-                        )}
-                        style={{
-                          borderRadius: '6px',
-                          ...(getColor(
-                            getTableCircleStatus(
-                              severityType,
-                              firstLevelChecks[key]
-                            ).status
-                          ) === 'bg-gray-150'
-                            ? backgroundStyle
-                            : {})
-                        }}
-                      ></div>
-                    </Tooltip>
-                  ) : null}
-                  {getColor(
-                    getTableStatus(severityType, firstLevelChecks[key]).status
-                  ) !== '' ? (
-                    <div className="flex justify-center items-center">
-                      <SvgIcon
-                        key={`svg_table_level_checks_${key}`}
-                        name={
-                          extendedChecks.find(
-                            (x) =>
-                              x.checkType === key &&
-                              x.categoryDimension === 'table'
-                          )
-                            ? 'chevron-up'
-                            : 'chevron-down'
-                        }
-                        className={clsx(
-                          'h-5 w-5 pr-1',
-                          extendedChecks.find(
-                            (x) =>
-                              x.checkType === key &&
-                              x.categoryDimension === 'table'
-                          )
-                            ? 'mb-1'
-                            : 'mt-1'
-                        )}
-                      />
-                    </div>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-          </td>
-        ))}
+        {renderTableLevelCheckCells()}
       </tr>
       <tr key="row_table_level_checks_blank" style={{ margin: 0 }}>
         <td
@@ -188,57 +242,7 @@ export default function TableQualityStatusCategory({
           className="font-bold px-4"
           style={{ padding: 0, margin: 0 }}
         ></td>
-        {Object.keys(firstLevelChecks).map((key) => (
-          <td
-            valign="baseline"
-            key={`cell_table_level_checks_blank_${key}`}
-            style={{ padding: 0, paddingBottom: 0.5, margin: 0 }}
-          >
-            {extendedChecks.find(
-              (x) => x.checkType === key && x.categoryDimension === 'table'
-            ) && (
-              <div className="w-[160.5px]">
-                {(firstLevelChecks[key] ?? []).map((x, index) =>
-                  x.checkType === 'table' ? (
-                    <Tooltip
-                      key={`table_check_${key}_${index}`}
-                      content={renderSecondLevelTooltip(x)}
-                    >
-                      <div
-                        className={clsx(
-                          'cursor-auto h-12 ml-[17.3px] p-2',
-                          getColor(
-                            severityType === 'current'
-                              ? x.currentSeverity ??
-                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                              : x.highestSeverity ??
-                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                          )
-                        )}
-                        style={{
-                          fontSize: '12px',
-                          whiteSpace: 'normal',
-                          wordBreak: 'break-word',
-                          ...(getColor(
-                            severityType === 'current'
-                              ? x.currentSeverity ??
-                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                              : x.highestSeverity ??
-                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                          ) === 'bg-gray-150'
-                            ? backgroundStyle
-                            : {})
-                        }}
-                      >
-                        {x.checkName}
-                      </div>
-                    </Tooltip>
-                  ) : null
-                )}
-              </div>
-            )}
-          </td>
-        ))}
+        {renderExtendedChecks()}
       </tr>
       <tr
         className="bg-white border-b border-gray-100"
@@ -246,6 +250,6 @@ export default function TableQualityStatusCategory({
       >
         <td colSpan={Object.keys(firstLevelChecks).length + 1}></td>
       </tr>
-    </React.Fragment>
+    </>
   );
 }

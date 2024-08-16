@@ -29,6 +29,30 @@ export const getColor = (
       return '';
   }
 };
+export const getSecondColor = (
+  status:
+    | CheckCurrentDataQualityStatusModelCurrentSeverityEnum
+    | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+    | null
+    | undefined
+) => {
+  // console.log(status)
+  switch (status) {
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
+      return 'bg-gray-150';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
+      return 'bg-[#FEEDEC]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
+      return 'bg-[#FFEFD6]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
+      return 'bg-[#FDFDED]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
+      return 'bg-[#DDF2EF]';
+    default:
+      return '';
+  }
+};
+
 export const getColumnStatus = (
   severityType: 'current' | 'highest',
   categoryDimension: 'category' | 'dimension',

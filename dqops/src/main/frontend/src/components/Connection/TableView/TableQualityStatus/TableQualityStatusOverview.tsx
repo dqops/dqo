@@ -1,11 +1,6 @@
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useActionDispatch } from '../../../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { CheckTypes, ROUTES } from '../../../../shared/routes';
-import { useDecodedParams } from '../../../../utils';
 import TableQualityStatusCategory from './TableQualityStatusCategory';
 import TableQualityStatusColumnCategory from './TableQualityStatusColumnCategory';
 import {
@@ -23,50 +18,50 @@ export default function TableQualityStatusOverview({
   const [extendedChecks, setExtendedChecks] = useState<
     Array<{ checkType: string; categoryDimension: string }>
   >([]);
-  const dispatch = useActionDispatch();
-  const history = useHistory();
-  const {
-    checkTypes,
-    connection,
-    schema,
-    table
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-  } = useDecodedParams();
+  // const dispatch = useActionDispatch();
+  // const history = useHistory();
+  // const {
+  //   checkTypes,
+  //   connection,
+  //   schema,
+  //   table
+  // }: {
+  //   checkTypes: CheckTypes;
+  //   connection: string;
+  //   schema: string;
+  //   table: string;
+  // } = useDecodedParams();
 
-  const openFirstLevelTableTab = (
-    checkTypes: CheckTypes,
-    connection: string,
-    schema: string,
-    table: string,
-    timeScale?: 'daily' | 'monthly'
-  ) => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
-      connection,
-      schema,
-      table,
-      timeScale ?? 'advanced'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      checkTypes,
-      connection,
-      schema,
-      table
-    );
-    dispatch(
-      addFirstLevelTab(checkTypes, {
-        url,
-        value,
-        state: {},
-        label: table
-      })
-    );
-    history.push(url);
-  };
+  // const openFirstLevelTableTab = (
+  //   checkTypes: CheckTypes,
+  //   connection: string,
+  //   schema: string,
+  //   table: string,
+  //   timeScale?: 'daily' | 'monthly'
+  // ) => {
+  //   const url = ROUTES.TABLE_LEVEL_PAGE(
+  //     checkTypes,
+  //     connection,
+  //     schema,
+  //     table,
+  //     timeScale ?? 'advanced'
+  //   );
+  //   const value = ROUTES.TABLE_LEVEL_VALUE(
+  //     checkTypes,
+  //     connection,
+  //     schema,
+  //     table
+  //   );
+  //   dispatch(
+  //     addFirstLevelTab(checkTypes, {
+  //       url,
+  //       value,
+  //       state: {},
+  //       label: table
+  //     })
+  //   );
+  //   history.push(url);
+  // };
 
   const renderTooltipContent = (lastExecutedAt: any, severity: any) => {
     return (
@@ -134,19 +129,19 @@ export default function TableQualityStatusOverview({
           <th
             key={`header_${key}`}
             className={clsx(
-              'p-4 border-b min-w-40 w-40 border-b-gray-300 font-bold cursor-pointer underline'
+              ' border-b border-gray-300 font-bold text-xs text-center'
             )}
-            onClick={() =>
-              openFirstLevelTableTab(
-                checkTypes,
-                connection,
-                schema,
-                table,
-                timeScale
-              )
-            }
+            // onClick={() =>
+            //   openFirstLevelTableTab(
+            //     checkTypes,
+            //     connection,
+            //     schema,
+            //     table,
+            //     timeScale
+            //   )
+            // }
           >
-            {key}
+            <div className=" ml-4">{key}</div>
           </th>
         ))}
       </thead>
