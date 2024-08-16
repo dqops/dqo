@@ -313,7 +313,7 @@ export default function RuleMiningFilters({
           <Button
             label="Apply"
             onClick={applyChecks}
-            color={isUpdated ? 'primary' : 'secondary'}
+            color={isUpdatedFilters ? 'secondary' : 'primary'}
           />
         </div>
       </div>

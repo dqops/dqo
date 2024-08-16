@@ -220,7 +220,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * Sets the flag to enable collecting error samples for checks that would fail.
      * @param collectErrorSamples When true, error samples are collected.
      */
-    public void setCollectErrorSamples(boolean collectErrorSamples) {
+    public void setCollectErrorSamples(Boolean collectErrorSamples) {
         this.collectErrorSamples = collectErrorSamples;
     }
 

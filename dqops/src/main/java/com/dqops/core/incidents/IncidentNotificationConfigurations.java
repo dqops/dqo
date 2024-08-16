@@ -21,6 +21,8 @@ import com.dqops.data.incidents.models.IncidentModel;
 import com.dqops.metadata.incidents.FilteredNotificationSpec;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -65,9 +67,14 @@ public class IncidentNotificationConfigurations {
      * @return The first matching notification.
      */
     public FilteredNotificationSpec findFirstMatchingNotification(IncidentNotificationMessage message) {
+        Collection<FilteredNotificationSpec> connectionNotifications = this.connectionNotifications != null && this.connectionNotifications.getFilteredNotifications() != null ?
+                this.connectionNotifications.getFilteredNotifications().values() : new ArrayList<>();
+        Collection<FilteredNotificationSpec> globalNotifications = this.globalNotifications != null && this.globalNotifications.getFilteredNotifications() != null ?
+                this.globalNotifications.getFilteredNotifications().values() : new ArrayList<>();
+
         Optional<FilteredNotificationSpec> firstFilteredNotification = Stream.concat(
-                        this.connectionNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
-                        this.globalNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
+                        connectionNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
+                        globalNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
                 .filter(notification -> !notification.getDisabled() &&
                         notification.getFilter().isMatch(message))
                 .takeWhile(notification -> notification.getProcessAdditionalFilters())
@@ -83,9 +90,14 @@ public class IncidentNotificationConfigurations {
      * @return The first matching notification.
      */
     public FilteredNotificationSpec findFirstMatchingNotification(IncidentModel incidentDetails) {
+        Collection<FilteredNotificationSpec> connectionNotifications = this.connectionNotifications != null && this.connectionNotifications.getFilteredNotifications() != null ?
+                this.connectionNotifications.getFilteredNotifications().values() : new ArrayList<>();
+        Collection<FilteredNotificationSpec> globalNotifications = this.globalNotifications != null && this.globalNotifications.getFilteredNotifications() != null ?
+                this.globalNotifications.getFilteredNotifications().values() : new ArrayList<>();
+
         Optional<FilteredNotificationSpec> firstFilteredNotification = Stream.concat(
-                        this.connectionNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
-                        this.globalNotifications.getFilteredNotifications().values().stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
+                        connectionNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())),
+                        globalNotifications.stream().sorted(Comparator.comparingInt(n -> n.getPriority())))
                 .filter(notification -> !notification.getDisabled() &&
                         notification.getFilter().isMatch(incidentDetails))
                 .takeWhile(notification -> notification.getProcessAdditionalFilters())

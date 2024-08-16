@@ -173,6 +173,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpecTests extends BaseTest 
         Assertions.assertNotNull(this.sut.getError());
         Assertions.assertNotNull(this.sut.getParameters().getExpectedValues());
         Assertions.assertEquals(1, this.sut.getParameters().getExpectedValues().size());
+        Assertions.assertEquals(1L, this.sut.getParameters().getTop());
         Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
         Assertions.assertEquals(0, this.sut.getError().getMaxMissing());
     }
@@ -199,6 +200,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpecTests extends BaseTest 
         Assertions.assertEquals(2, this.sut.getParameters().getExpectedValues().size());
         Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("US"));
         Assertions.assertTrue(this.sut.getParameters().getExpectedValues().contains("UK"));
+        Assertions.assertEquals(2L, this.sut.getParameters().getTop());
         Assertions.assertEquals(0, this.sut.getError().getMaxMissing());
     }
 
@@ -245,6 +247,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpecTests extends BaseTest 
         Assertions.assertFalse(proposed);
         Assertions.assertNull(this.sut.getError());
     }
+
     @Test
     void proposeCheckConfiguration_whenTextInTopValuesCountPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
         this.profilingSut = new ColumnExpectedTextsInTopValuesCountCheckSpec();
@@ -277,5 +280,4 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpecTests extends BaseTest 
         Assertions.assertEquals(10, this.sut.getWarning().getMaxMissing());
         Assertions.assertEquals(20, this.sut.getError().getMaxMissing());
     }
-
 }

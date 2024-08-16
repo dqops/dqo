@@ -295,6 +295,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpec
             }
 
             this.parameters.setExpectedValues(topExpectedValues);
+            this.parameters.setTop((long)topExpectedValues.size());
 
             switch (miningParameters.getSeverityLevel()) {
                 case warning: {

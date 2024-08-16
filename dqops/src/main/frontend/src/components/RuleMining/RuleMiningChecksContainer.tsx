@@ -266,7 +266,7 @@ const RuleMiningChecksContainer = ({
                 className=" cursor-pointer"
               >
                 <td colSpan={100} className="w-full">
-                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-50">
+                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-60">
                     <SvgIcon
                       name={
                         !isExtendedArray.includes(key)
