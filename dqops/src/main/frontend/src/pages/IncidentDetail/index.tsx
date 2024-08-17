@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import {
   IncidentIssueHistogramModel,
   IncidentModel,
+  IncidentModelNotificationLocationEnum,
   IncidentModelStatusEnum
 } from '../../api';
 import Button from '../../components/Button';
@@ -257,7 +258,10 @@ export const IncidentDetail = () => {
   };
 
   const createConfirmNotification = async () => {
-    if (incidentDetail?.notificationLocation === 'connection_notification') {
+    if (
+      incidentDetail?.notificationLocation ===
+      IncidentModelNotificationLocationEnum.connection
+    ) {
       const url = ROUTES.CONNECTION_DETAIL(
         CheckTypes.SOURCES,
         connection,

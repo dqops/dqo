@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { FilteredNotificationModel, IncidentNotificationSpec } from '../../api';
 import Button from '../../components/Button';
 import CreateNotificationPattern from '../../components/Connection/ConnectionView/NotificationPattern/CreateNotificationPattern';
 import NotificationPatternTable from '../../components/Connection/ConnectionView/NotificationPattern/NotificationPatternTable';
 import SvgIcon from '../../components/SvgIcon';
+import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
   FilteredNotificationsConfigurationsClient,
   SettingsApi
@@ -19,6 +21,7 @@ type TNotificationPattern = FilteredNotificationModel & {
   highestSeverity?: number;
 };
 export default function DefaultWebhooksDetail() {
+  const { incidentFilters } = useSelector(getFirstLevelSensorState);
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
     useState<IncidentNotificationSpec>();
   const [addNotificationPattern, setAddNotificationPattern] = useState(false);
@@ -26,8 +29,31 @@ export default function DefaultWebhooksDetail() {
   const [filteredNotifications, setFilteredNotifications] = useState<
     Array<TNotificationPattern>
   >([]);
+  const [patternProp, setPatternProp] = useState<
+    FilteredNotificationModel | undefined
+  >();
   const [isUpdated, setIsUpdated] = useState(false);
-
+  useEffect(() => {
+    if (!incidentFilters) return;
+    if (incidentFilters.notificationName) {
+      setPatternNameEdit(incidentFilters.notificationName);
+    } else {
+      setPatternProp({
+        name: '',
+        filter: {
+          connection: incidentFilters.connection,
+          schema: incidentFilters.schema,
+          table: incidentFilters.table,
+          qualityDimension: incidentFilters.qualityDimension,
+          checkCategory: incidentFilters.checkCategory,
+          checkName: incidentFilters.check,
+          checkType: incidentFilters.checkType,
+          highestSeverity: incidentFilters.highestSeverity
+        }
+      });
+      setAddNotificationPattern(true);
+    }
+  }, [incidentFilters]);
   const getDefaultWebhooksConfiguration = async () => {
     await SettingsApi.getDefaultWebhooks().then((res) =>
       setDefaultWebhooksConfiguration(res.data)
@@ -106,6 +132,7 @@ export default function DefaultWebhooksDetail() {
             defaultConnectionAdressess={defaultWebhooksConfiguration}
             onChangeConnectionDefaultAdresses={onChangeWebhooks}
             onUpdateDefaultPattern={updateDefaultWebhooksConfiguration}
+            patternProp={patternProp}
           />
         </div>
       ) : (
