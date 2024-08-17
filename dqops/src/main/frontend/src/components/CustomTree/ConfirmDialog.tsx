@@ -8,6 +8,7 @@ interface ConfirmDialogProps {
   message: string;
   onConfirm: () => Promise<void>;
   isCancelExcluded?: boolean;
+  yesNo?: boolean;
 }
 
 const ConfirmDialog = ({
@@ -15,7 +16,8 @@ const ConfirmDialog = ({
   onClose,
   onConfirm,
   message,
-  isCancelExcluded
+  isCancelExcluded,
+  yesNo
 }: ConfirmDialogProps) => {
   const handleSubmit = async () => {
     await onConfirm();
@@ -36,14 +38,14 @@ const ConfirmDialog = ({
             variant="outlined"
             className="px-8"
             onClick={onClose}
-            label="Cancel"
+            label={yesNo ? 'No' : 'Cancel'}
           />
         )}
         <Button
           color="primary"
           className="px-8"
           onClick={handleSubmit}
-          label="Confirm"
+          label={yesNo ? 'Yes' : 'Confirm'}
         />
       </DialogFooter>
     </Dialog>

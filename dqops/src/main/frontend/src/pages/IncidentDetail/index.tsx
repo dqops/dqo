@@ -95,6 +95,8 @@ export const IncidentDetail = () => {
   const [open, setOpen] = useState(false);
   const [disableDialog, setDisableDialog] = useState(false);
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
+  const [createNotificationDialogOpen, setCreateNotificationDialogOpen] =
+    useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
@@ -253,7 +255,7 @@ export const IncidentDetail = () => {
     setRecalibrateDialog(false);
   };
 
-  const createNotification = () => {
+  const createConfirmNotification = async () => {
     const url = ROUTES.CONNECTION_DETAIL(
       CheckTypes.SOURCES,
       connection,
@@ -275,6 +277,14 @@ export const IncidentDetail = () => {
     history.push(url);
   };
 
+  const createNotification = () => {
+    if (incidentDetail?.notificationName) {
+      createConfirmNotification();
+    } else {
+      setCreateNotificationDialogOpen(true);
+    }
+  };
+  console.log(incidentDetail, filters);
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -681,6 +691,13 @@ export const IncidentDetail = () => {
         onClose={() => setRecalibrateDialog(false)}
         onConfirm={recalibrateIncident}
         message="Are you sure you want to recalibrate checks for this incident?"
+      />
+      <ConfirmDialog
+        open={createNotificationDialogOpen}
+        onClose={() => setCreateNotificationDialogOpen(false)}
+        onConfirm={createConfirmNotification}
+        message="No notification filters are defined for this incident, do you want to create a notification configuration for incidents similar to this incident?"
+        yesNo
       />
     </>
   );
