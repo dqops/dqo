@@ -180,7 +180,7 @@ export default function NotificationPatternTable({
               setPatternDelete('');
           }}
           onClose={() => setPatternDelete('')}
-          message={`Are you sure you want to delete the ${notificationPatternDelete} notification pattern ?`}
+          message={`Are you sure you want to delete the ${notificationPatternDelete} notification filter?`}
         />
       </tbody>
     </table>
