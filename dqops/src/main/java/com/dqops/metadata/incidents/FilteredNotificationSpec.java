@@ -217,7 +217,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
         if (hierarchyId == null) {
             return null;
         }
-        return hierarchyId.get(hierarchyId.size() - 2).toString();
+        return hierarchyId.get(hierarchyId.size() - 1).toString();
     }
 
     /**
@@ -233,9 +233,9 @@ public class FilteredNotificationSpec extends AbstractSpec {
 
         String connectionName = hierarchyId.getConnectionName();
         if (connectionName != null) {
-            return IncidentFilteredNotificationLocation.connection_notification;
+            return IncidentFilteredNotificationLocation.connection;
         }
 
-        return IncidentFilteredNotificationLocation.global_notification;
+        return IncidentFilteredNotificationLocation.global;
     }
 }

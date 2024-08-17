@@ -17,6 +17,7 @@ export default function AddressesNotificationsWrapper({
       <Input
         className="mb-4"
         label="A new incident was opened (detected)"
+        placeholder="user@domain.com,other.user@domain.com,https://hooks/slack/services/1234567890"
         value={target?.incident_opened_addresses}
         onChange={(e) =>
           onChangePatternTarget({ incident_opened_addresses: e.target.value })
@@ -25,6 +26,7 @@ export default function AddressesNotificationsWrapper({
       <Input
         className="mb-4"
         label="An incident was acknowledged"
+        placeholder="user@domain.com,other.user@domain.com,https://hooks/slack/services/1234567890"
         value={target?.incident_acknowledged_addresses}
         onChange={(e) =>
           onChangePatternTarget({
@@ -35,6 +37,7 @@ export default function AddressesNotificationsWrapper({
       <Input
         className="mb-4"
         label="An incident was resolved"
+        placeholder="user@domain.com,other.user@domain.com,https://hooks/slack/services/1234567890"
         value={target?.incident_resolved_addresses}
         onChange={(e) =>
           onChangePatternTarget({
@@ -45,6 +48,7 @@ export default function AddressesNotificationsWrapper({
       <Input
         className="mb-4"
         label="An incident was muted"
+        placeholder="user@domain.com,other.user@domain.com,https://hooks/slack/services/1234567890"
         value={target?.incident_muted_addresses}
         onChange={(e) =>
           onChangePatternTarget({ incident_muted_addresses: e.target.value })

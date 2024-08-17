@@ -26,7 +26,7 @@ export default function DefaultPatternTarget({
     <div>
       <div className="flex items-center text-black text-sm">
         <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-          <span>Pattern name</span>
+          <span>Notification name</span>
           {create === true ? (
             <Input
               value={pattern.name}
