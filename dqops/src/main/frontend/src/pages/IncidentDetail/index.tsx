@@ -18,6 +18,7 @@ import SvgIcon from '../../components/SvgIcon';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import useDebounce from '../../hooks/useDebounce';
+import { addFirstLevelTab as addFirstLevelConfigurationTab } from '../../redux/actions/definition.actions';
 import {
   getIncidentsIssues,
   setIncidentsFilter
@@ -277,6 +278,21 @@ export const IncidentDetail = () => {
       );
       history.push(url);
     } else {
+      dispatch(
+        addFirstLevelConfigurationTab({
+          url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
+          value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: 'Default notifications'
+        })
+      );
+      history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
+
       //handle global filtered notifications
     }
   };
