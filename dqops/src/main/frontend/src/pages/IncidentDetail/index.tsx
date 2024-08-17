@@ -253,6 +253,28 @@ export const IncidentDetail = () => {
     setRecalibrateDialog(false);
   };
 
+  const createNotification = () => {
+    const url = ROUTES.CONNECTION_DETAIL(
+      CheckTypes.SOURCES,
+      connection,
+      'incidents'
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+        state: {
+          incidentFilters: {
+            ...filters,
+            ...incidentDetail
+          }
+        },
+        label: 'Incident configuration'
+      })
+    );
+    history.push(url);
+  };
+
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -353,6 +375,24 @@ export const IncidentDetail = () => {
                     className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={goToConfigure}
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip
+                content={'Create notification for this incident.'}
+                className="w-52 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div className="text-white">
+                  <Button
+                    leftIcon={
+                      <SvgIcon
+                        name="letter"
+                        className="w-5.5 h-5.5 min-w-4 shrink-0"
+                      />
+                    }
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
+                    color="primary"
+                    onClick={createNotification}
                   />
                 </div>
               </Tooltip>
