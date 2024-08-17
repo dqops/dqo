@@ -37,12 +37,12 @@ const StringListField = ({
   }, [value, open]);
 
   const handleSave = () => {
-    onChange(labels);
     if (convertToDictionary) {
       saveDictionary();
-    } else {
-      setOpen(false);
     }
+    onChange(labels);
+    setOpen(false);
+
     setConvertToDictionary(false);
     setDictionaryExistError(false);
     setDictionary(null);
@@ -54,7 +54,13 @@ const StringListField = ({
 
   const saveDictionary = async () => {
     await DataDictionaryApiClient.createDictionary({
-      dictionary_name: '${dictionary://' + dictionary! + '}'
+      dictionary_name: dictionary!,
+      file_content: labels
+        .filter((label) => label !== '')
+        .map((label) => {
+          return '${dictionary://' + label + '}';
+        })
+        .join('\n')
     })
       .then(() => {
         setOpen(false);
