@@ -207,7 +207,6 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     setPaths(['']);
   };
 
-  console.log(connectionModel);
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-4 pb-2 px-8">
