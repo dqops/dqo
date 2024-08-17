@@ -31,6 +31,11 @@ export default function DefaultPatternTarget({
             <Input
               value={pattern.name}
               onChange={(e) => onChange({ name: e.target.value })}
+              className={
+                !pattern.name || pattern.name.length === 0
+                  ? 'border border-red-500'
+                  : ''
+              }
             />
           ) : (
             <span className="font-bold">{pattern.name}</span>

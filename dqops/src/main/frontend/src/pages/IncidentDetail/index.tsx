@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import {
   IncidentIssueHistogramModel,
   IncidentModel,
+  IncidentModelNotificationLocationEnum,
   IncidentModelStatusEnum
 } from '../../api';
 import Button from '../../components/Button';
@@ -18,6 +19,7 @@ import SvgIcon from '../../components/SvgIcon';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import useDebounce from '../../hooks/useDebounce';
+import { addFirstLevelTab as addFirstLevelConfigurationTab } from '../../redux/actions/definition.actions';
 import {
   getIncidentsIssues,
   setIncidentsFilter
@@ -95,6 +97,8 @@ export const IncidentDetail = () => {
   const [open, setOpen] = useState(false);
   const [disableDialog, setDisableDialog] = useState(false);
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
+  const [createNotificationDialogOpen, setCreateNotificationDialogOpen] =
+    useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
@@ -253,6 +257,56 @@ export const IncidentDetail = () => {
     setRecalibrateDialog(false);
   };
 
+  const createConfirmNotification = async () => {
+    if (
+      incidentDetail?.notificationLocation ===
+      IncidentModelNotificationLocationEnum.connection
+    ) {
+      const url = ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents'
+      );
+      dispatch(
+        addFirstLevelTab(CheckTypes.SOURCES, {
+          url,
+          value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: 'Incident configuration'
+        })
+      );
+      history.push(url);
+    } else {
+      dispatch(
+        addFirstLevelConfigurationTab({
+          url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
+          value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: 'Default notifications'
+        })
+      );
+      history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
+    }
+  };
+
+  const createNotification = () => {
+    if (incidentDetail?.notificationName) {
+      createConfirmNotification();
+    } else {
+      setCreateNotificationDialogOpen(true);
+    }
+  };
+
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -353,6 +407,24 @@ export const IncidentDetail = () => {
                     className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={goToConfigure}
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip
+                content={'Create notification for this incident.'}
+                className="w-52 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div className="text-white">
+                  <Button
+                    leftIcon={
+                      <SvgIcon
+                        name="letter"
+                        className="w-5.5 h-5.5 min-w-4 shrink-0 p-0.5"
+                      />
+                    }
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
+                    color="primary"
+                    onClick={createNotification}
                   />
                 </div>
               </Tooltip>
@@ -641,6 +713,13 @@ export const IncidentDetail = () => {
         onClose={() => setRecalibrateDialog(false)}
         onConfirm={recalibrateIncident}
         message="Are you sure you want to recalibrate checks for this incident?"
+      />
+      <ConfirmDialog
+        open={createNotificationDialogOpen}
+        onClose={() => setCreateNotificationDialogOpen(false)}
+        onConfirm={createConfirmNotification}
+        message="No notification filters are defined for this incident, do you want to create a notification configuration for incidents similar to this incident?"
+        yesNo
       />
     </>
   );
