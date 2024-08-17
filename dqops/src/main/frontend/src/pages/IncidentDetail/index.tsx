@@ -256,25 +256,29 @@ export const IncidentDetail = () => {
   };
 
   const createConfirmNotification = async () => {
-    const url = ROUTES.CONNECTION_DETAIL(
-      CheckTypes.SOURCES,
-      connection,
-      'incidents'
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
-        state: {
-          incidentFilters: {
-            ...filters,
-            ...incidentDetail
-          }
-        },
-        label: 'Incident configuration'
-      })
-    );
-    history.push(url);
+    if (incidentDetail?.notificationLocation === 'connection_notification') {
+      const url = ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents'
+      );
+      dispatch(
+        addFirstLevelTab(CheckTypes.SOURCES, {
+          url,
+          value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: 'Incident configuration'
+        })
+      );
+      history.push(url);
+    } else {
+      //handle global filtered notifications
+    }
   };
 
   const createNotification = () => {

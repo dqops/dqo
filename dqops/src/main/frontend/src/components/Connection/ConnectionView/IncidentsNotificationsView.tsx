@@ -85,7 +85,10 @@ export const IncidentsNotificationsView = () => {
   >();
 
   useEffect(() => {
-    if (incidentFilters) {
+    if (!incidentFilters) return;
+    if (incidentFilters.notificationName) {
+      setPatternNameEdit(incidentFilters.notificationName);
+    } else {
       setPatternProp({
         name: '',
         filter: {
