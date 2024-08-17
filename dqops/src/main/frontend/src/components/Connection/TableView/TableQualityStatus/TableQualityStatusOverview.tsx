@@ -141,7 +141,9 @@ export default function TableQualityStatusOverview({
             //   )
             // }
           >
-            <div className=" ml-4">{key}</div>
+            <div className=" ml-4">
+              {key?.replaceAll('_', ' ').replace(/./, (c) => c.toUpperCase())}
+            </div>
           </th>
         ))}
       </thead>

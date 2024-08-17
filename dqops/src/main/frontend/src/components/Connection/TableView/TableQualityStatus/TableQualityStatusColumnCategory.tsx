@@ -157,7 +157,7 @@ export default function TableQualityStatusColumnCategory({
               <div className="w-5 h-full"></div>
               <div
                 className={clsx(
-                  'h-8 w-32 flex justify-end',
+                  'h-8 w-32 flex justify-end  cursor-pointer',
                   getColor(columnStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
                   // isExtended && 'w-50'

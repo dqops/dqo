@@ -98,7 +98,7 @@ export default function TableQualityStatusCategory({
             {tableStatus.status && (
               <div
                 className={clsx(
-                  'w-32 h-8 flex  justify-end',
+                  'w-32 h-8 flex  justify-end  cursor-pointer',
                   getColor(tableStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
                 )}
