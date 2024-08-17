@@ -92,7 +92,7 @@ public class FilteredNotificationsController {
             @ApiParam("Connection name") @PathVariable String connectionName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, false);
             if (filteredNotifications == null) {
                 return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -133,7 +133,7 @@ public class FilteredNotificationsController {
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, false);
             if (filteredNotifications == null || !filteredNotifications.containsKey(filteredNotificationName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -183,7 +183,7 @@ public class FilteredNotificationsController {
 
             return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName);
+                FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, true);
                 if (filteredNotifications == null || !filteredNotifications.containsKey(filteredNotificationName)) {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
@@ -243,7 +243,7 @@ public class FilteredNotificationsController {
 
             return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName);
+                FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, true);
                 if (filteredNotifications == null) {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
@@ -291,7 +291,7 @@ public class FilteredNotificationsController {
 
             return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName);
+                FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, true);
                 if (filteredNotifications == null) {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
@@ -303,7 +303,6 @@ public class FilteredNotificationsController {
             });
         }));
     }
-
 
     /**
      * Returns a list of named filtered notification configurations on the connection.
@@ -326,7 +325,7 @@ public class FilteredNotificationsController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, false);
             if (filteredNotifications == null) {
                 return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -365,7 +364,7 @@ public class FilteredNotificationsController {
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, false);
             if (filteredNotifications == null || !filteredNotifications.containsKey(filteredNotificationName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -410,7 +409,7 @@ public class FilteredNotificationsController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, true);
             if (filteredNotifications == null || !filteredNotifications.containsKey(filteredNotificationName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -465,7 +464,7 @@ public class FilteredNotificationsController {
             }
 
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, true);
             if (filteredNotifications == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -508,7 +507,7 @@ public class FilteredNotificationsController {
             }
 
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext);
+            FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, true);
             if (filteredNotifications == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -525,10 +524,12 @@ public class FilteredNotificationsController {
      * Reads the filtered notification specification of a certain connection.
      * @param userHomeContext User-home context.
      * @param connectionName  Connection name.
+     * @param updateConnectionSpec True when this method should be invasive and should modify a connection spec object when the object is missing, because it is used in update operations.
      * @return FilteredNotificationSpecMap of the requested connection. Null if not found.
      */
     protected FilteredNotificationSpecMap readIncidentNotificationMap(UserHomeContext userHomeContext,
-                                                                      String connectionName) {
+                                                                      String connectionName,
+                                                                      boolean updateConnectionSpec) {
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -542,7 +543,9 @@ public class FilteredNotificationsController {
         if (incidentGrouping == null) {
             return null;
         } else {
-            incidentGrouping = incidentGrouping.deepClone();
+            if (!updateConnectionSpec) {
+                incidentGrouping = incidentGrouping.deepClone();
+            }
         }
 
         IncidentNotificationSpec incidentNotification = incidentGrouping.getIncidentNotification();
@@ -562,12 +565,19 @@ public class FilteredNotificationsController {
     /**
      * Reads the filtered notification specification of a certain connection.
      * @param userHomeContext User-home context.
+     * @param createDefaultConfigurationIfMissing Creates a default configuration when it is missing (requires a read-write dqops user home).
      * @return FilteredNotificationSpecMap of the default notifications.
      */
-    protected FilteredNotificationSpecMap readIncidentNotificationMapFromDefaults(UserHomeContext userHomeContext) {
+    protected FilteredNotificationSpecMap readIncidentNotificationMapFromDefaults(UserHomeContext userHomeContext, boolean createDefaultConfigurationIfMissing) {
         UserHome userHome = userHomeContext.getUserHome();
-        IncidentNotificationSpec spec = userHome.getDefaultIncidentNotifications().getSpec();
-        FilteredNotificationSpecMap filteredNotificationMap = spec.getFilteredNotifications();
+        IncidentNotificationSpec incidentNotificationSpec = userHome.getDefaultIncidentNotifications().getSpec();
+        if (incidentNotificationSpec == null) {
+            incidentNotificationSpec = new IncidentNotificationSpec();
+            if (createDefaultConfigurationIfMissing) {
+                userHome.getDefaultIncidentNotifications().setSpec(incidentNotificationSpec);
+            }
+        }
+        FilteredNotificationSpecMap filteredNotificationMap = incidentNotificationSpec.getFilteredNotifications();
         return filteredNotificationMap;
     }
 

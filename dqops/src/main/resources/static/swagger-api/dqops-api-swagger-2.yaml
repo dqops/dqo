@@ -36728,8 +36728,8 @@ definitions:
           \ field will tell whether the filtered notification is defined on a connection\
           \ level, or a global level."
         enum:
-        - "connection_notification"
-        - "global_notification"
+        - "connection"
+        - "global"
   IncidentNotificationSpec:
     type: "object"
     properties:

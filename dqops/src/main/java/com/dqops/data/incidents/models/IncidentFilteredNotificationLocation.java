@@ -23,10 +23,10 @@ public enum IncidentFilteredNotificationLocation {
     /**
      * The notification filter is configured on a connection.
      */
-    connection_notification,
+    connection,
 
     /**
      * The notification s configured on a global level.
      */
-    global_notification
+    global
 }

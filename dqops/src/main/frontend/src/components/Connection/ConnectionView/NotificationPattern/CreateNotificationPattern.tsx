@@ -32,7 +32,10 @@ export default function CreateNotificationPattern({
 }) {
   const isDefaultPattern = patternNameEdit === 'default';
 
-  const [pattern, setPattern] = useState<FilteredNotificationModel>({});
+  const [pattern, setPattern] = useState<FilteredNotificationModel>({
+    priority: 1000
+  });
+  const [isNewDefaultPattern, setIsNewDefaultPattern] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

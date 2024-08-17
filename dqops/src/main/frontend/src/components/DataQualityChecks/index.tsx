@@ -554,12 +554,14 @@ const DataQualityChecks = ({
           <div className="text-sm text-red-500">
             <div className="mr-3 text-black">
               The results are date partitioned (grouped) by a column:
+              {checksUI.partition_by_column ? (
+                  checksUI.partition_by_column
+              ) : ''
+            }
             </div>
-            {checksUI.partition_by_column ? (
-              <div className="text-black">{checksUI.partition_by_column}</div>
-            ) : (
-              'Warning: Partition checks will not be run, please configure the date or datetime column'
-            )}
+            {!checksUI.partition_by_column ? (
+              <div>Warning: Partition checks will not be run, please configure the date or datetime column</div>
+            ) : ''}
           </div>
           <Button
             label="Configure the date partitioning column"

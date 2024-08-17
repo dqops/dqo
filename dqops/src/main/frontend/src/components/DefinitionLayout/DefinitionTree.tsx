@@ -80,8 +80,7 @@ export const DefinitionTree = () => {
   const highlightedNode = urlencodeEncoder(
     activeTab?.split('/').at(activeTab?.split('/').length - 1)
   );
-  console.log('highlightedNode', highlightedNode);
-  console.log('activeTab', activeTab);
+
   const renderSensorFolderTree = (
     folder?: SensorFolderModel,
     path?: string[],

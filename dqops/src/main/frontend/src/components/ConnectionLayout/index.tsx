@@ -94,7 +94,6 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
   const getChecksConfigurated = (activeUrl: string) => {
     const tab = activeUrl.split('/')[activeUrl.split('/').length - 1];
-    console.log(tab);
     switch (checkTypes) {
       case CheckTypes.PROFILING: {
         if (tab !== 'advanced') return;

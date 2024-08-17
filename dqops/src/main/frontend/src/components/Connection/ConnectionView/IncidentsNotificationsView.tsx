@@ -306,7 +306,7 @@ export const IncidentsNotificationsView = () => {
               connection={connection}
             />
             <Button
-              label="Add notification pattern"
+              label="Add notification filter"
               onClick={createNotificationPattern}
               color="primary"
               className="!w-50 !my-5"

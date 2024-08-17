@@ -83,7 +83,6 @@ export default function TableQualityStatus({
       checkTypes === CheckTypes.PARTITIONED,
       timePartitioned
     ).then((res) => {
-      console.log(res.data);
       if (
         (!res.data.checks || Object.keys(res.data.checks).length === 0) &&
         (!res.data.columns || Object.keys(res.data.columns).length === 0)

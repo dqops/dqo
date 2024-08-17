@@ -67,7 +67,7 @@ export default function NotificationPattern({
             onChange={setFilteredNotificationsConfigurations}
           />
           <Button
-            label="Add notification pattern"
+            label="Add notification filter"
             onClick={createNotificationPattern}
             color="primary"
           />
