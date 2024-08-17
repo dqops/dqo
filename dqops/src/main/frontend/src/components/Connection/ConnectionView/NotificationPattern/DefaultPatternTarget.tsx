@@ -26,7 +26,7 @@ export default function DefaultPatternTarget({
     <div>
       <div className="flex items-center text-black text-sm">
         <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-          <span>Notification name</span>
+          <span className="w-40">Notification name</span>
           {create === true ? (
             <Input
               value={pattern.name}
@@ -53,8 +53,8 @@ export default function DefaultPatternTarget({
       </div>
       <div className="flex items-center pb-6 text-black text-sm">
         <div className="ml-2 flex items-center gap-x-4 py-2 w-1/2">
-          <span>Description</span>
-          <div className="min-w-60">
+          <span className="w-40">Description</span>
+          <div className="w-full px-5">
             <TextArea
               value={pattern?.description}
               onChange={(e) => onChange({ description: e.target.value })}
