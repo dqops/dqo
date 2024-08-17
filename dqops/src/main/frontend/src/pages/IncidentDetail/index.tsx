@@ -296,8 +296,6 @@ export const IncidentDetail = () => {
         })
       );
       history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
-
-      //handle global filtered notifications
     }
   };
 
@@ -308,7 +306,7 @@ export const IncidentDetail = () => {
       setCreateNotificationDialogOpen(true);
     }
   };
-  console.log(incidentDetail, filters);
+
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -421,7 +419,7 @@ export const IncidentDetail = () => {
                     leftIcon={
                       <SvgIcon
                         name="letter"
-                        className="w-5.5 h-5.5 min-w-4 shrink-0"
+                        className="w-5.5 h-5.5 min-w-4 shrink-0 p-0.5"
                       />
                     }
                     className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
