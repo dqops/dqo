@@ -65,9 +65,12 @@ export const IncidentsNotificationsView = () => {
     checkTypes
   }: { connection: string; checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
-  const { incidentGrouping, isUpdatedIncidentGroup, isUpdating } = useSelector(
-    getFirstLevelState(checkTypes)
-  );
+  const {
+    incidentGrouping,
+    isUpdatedIncidentGroup,
+    isUpdating,
+    incidentFilters
+  } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [patternNameEdit, setPatternNameEdit] = useState('');
   const [loading, setLoading] = useState(false);
@@ -77,6 +80,28 @@ export const IncidentsNotificationsView = () => {
     setFilteredNotificationsConfigurations
   ] = useState<Array<TNotificationPattern>>([]);
   const [addNotificationPattern, setAddNotificationPattern] = useState(false);
+  const [patternProp, setPatternProp] = useState<
+    FilteredNotificationModel | undefined
+  >();
+
+  useEffect(() => {
+    if (incidentFilters) {
+      setPatternProp({
+        name: '',
+        filter: {
+          connection: incidentFilters.connection,
+          schema: incidentFilters.schema,
+          table: incidentFilters.table,
+          qualityDimension: incidentFilters.qualityDimension,
+          checkCategory: incidentFilters.checkCategory,
+          checkName: incidentFilters.check,
+          checkType: incidentFilters.checkType,
+          highestSeverity: incidentFilters.highestSeverity
+        }
+      });
+      setAddNotificationPattern(true);
+    }
+  }, [incidentFilters]);
 
   const getConnectionFilteredNotificationsConfigurations = async () => {
     setLoading(true);
@@ -111,6 +136,7 @@ export const IncidentsNotificationsView = () => {
   };
   const onBack = () => {
     setPatternNameEdit('');
+    setPatternProp(undefined);
     setAddNotificationPattern(false);
     getConnectionFilteredNotificationsConfigurations();
   };
@@ -204,6 +230,7 @@ export const IncidentsNotificationsView = () => {
                 onChangeConnectionDefaultAdresses
               }
               onUpdateDefaultPattern={onUpdate}
+              patternProp={patternProp}
             />
           </div>
         ) : (

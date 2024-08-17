@@ -17,7 +17,8 @@ export default function CreateNotificationPattern({
   patternNameEdit,
   defaultConnectionAdressess,
   onChangeConnectionDefaultAdresses,
-  onUpdateDefaultPattern
+  onUpdateDefaultPattern,
+  patternProp
 }: {
   connection?: string;
   onBack: () => void;
@@ -27,30 +28,19 @@ export default function CreateNotificationPattern({
     obj: Partial<IncidentNotificationSpec>
   ) => void;
   onUpdateDefaultPattern: () => void;
+  patternProp?: FilteredNotificationModel;
 }) {
   const isDefaultPattern = patternNameEdit === 'default';
 
   const [pattern, setPattern] = useState<FilteredNotificationModel>({});
-  const [isNewDefaultPattern, setIsNewDefaultPattern] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (patternProp) {
+      setPattern(patternProp);
+      return;
+    }
     if (!patternNameEdit) return;
-
-    // if (isDefaultPattern) {
-    //   FilteredNotificationsConfigurationsClient.getDefaultFilteredNotificationConfiguration(
-    //     connection,
-    //     {
-    //       validateStatus: (status: number) =>
-    //         validate404Status(status, () => setIsNewDefaultPattern(true))
-    //     }
-    //   )
-    //     .then((res) => {
-    //       if (!res.data) return;
-    //       setPattern(res.data);
-    //     })
-    //     .catch(() => setPattern({}));
-    // } else {
     if (isDefaultPattern) return;
     setLoading(true);
     if (connection) {
@@ -67,7 +57,7 @@ export default function CreateNotificationPattern({
         .then((res) => setPattern(res.data))
         .finally(() => setLoading(false));
     }
-  }, [patternNameEdit]);
+  }, [patternNameEdit, patternProp]);
 
   const onChangePattern = (val: Partial<FilteredNotificationModel>) => {
     setPattern({
@@ -108,7 +98,7 @@ export default function CreateNotificationPattern({
       } else {
         FilteredNotificationsConfigurationsClient.updateConnectionFilteredNotificationConfiguration(
           connection,
-          patternNameEdit,
+          patternNameEdit!,
           pattern
         ).then(() => onBack());
       }
