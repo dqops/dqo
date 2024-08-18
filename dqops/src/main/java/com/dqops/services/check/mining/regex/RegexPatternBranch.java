@@ -25,4 +25,11 @@ import java.util.Map;
 public class RegexPatternBranch {
     private Map<RegexPatternTokenType, RegexPatternToken> nextTokens = new HashMap<>();
 
+    /**
+     * Returns a dictionary of next tokens by the next token type.
+     * @return Map of next tokens.
+     */
+    public Map<RegexPatternTokenType, RegexPatternToken> getNextTokens() {
+        return nextTokens;
+    }
 }

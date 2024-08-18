@@ -16,16 +16,20 @@
 
 package com.dqops.services.check.mining.regex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A type of a token identified in a regular expression.
  */
 public enum RegexPatternTokenType {
-    UPPER_CASE_LETTERS("[A-Z]"),
-    LOWER_CASE_LETTERS("[a-z]"),
-    ANY_CASE_LETTERS("[A-Za-z]"),
-    DIGITS("[0-9]"),
-    LETTERS_OR_DIGITS("[A-Za-z0-9]"),
-    SPACE(" "),
+    UPPER_CASE_LETTERS("[A-Z]", true),
+    LOWER_CASE_LETTERS("[a-z]", true),
+    MIXED_CASE_LETTERS("[A-Za-z]", true),
+    DIGITS("[0-9]", true),
+    LETTERS_OR_DIGITS("[A-Za-z0-9]", true),
+    SPACE(" ", true),
+
     LEFT_BRACE("{"),
     RIGHT_BRACE("}"),
     LEFT_PARENTHESIS("("),
@@ -59,13 +63,23 @@ public enum RegexPatternTokenType {
     DOUBLE_QUOTE("\""),
     QUESTION_MARK("?"),
     SECTION("§"),
-    EOL("\n"),
+    EOL("\n", true),
     TAB("\t");
 
     private String pattern;
+    private boolean supportsRepeats;
 
     RegexPatternTokenType(String pattern) {
+        this(pattern, false);
+    }
+
+    RegexPatternTokenType(String pattern, boolean supportsRepeats) {
+        if (!supportsRepeats && pattern.length() != 1) {
+            throw new RuntimeException("Invalid token format");
+        }
+
         this.pattern = pattern;
+        this.supportsRepeats = supportsRepeats;
     }
 
     /**
@@ -74,6 +88,14 @@ public enum RegexPatternTokenType {
      */
     public String getPattern() {
         return pattern;
+    }
+
+    /**
+     * Returns true if this token supports repeats. Letters, space and digits support repeating tokens, all other special characters are treated as single instances.
+     * @return Token supports repeats.
+     */
+    public boolean isSupportsRepeats() {
+        return supportsRepeats;
     }
 
     /**
@@ -122,7 +144,7 @@ public enum RegexPatternTokenType {
             }
 
             if (i == tokenText.length() - 1) {
-                return ANY_CASE_LETTERS;
+                return MIXED_CASE_LETTERS;
             }
         }
 
@@ -250,5 +272,22 @@ public enum RegexPatternTokenType {
             default:
                 return null;
         }
+    }
+
+    /**
+     * Returns a list of enum values that are character tokens.
+     * @return Character tokens.
+     */
+    public static List<RegexPatternTokenType> getSpecialCharacters() {
+        ArrayList<RegexPatternTokenType> characterTokens = new ArrayList<>();
+        RegexPatternTokenType[] allEnumValues = values();
+
+        for (RegexPatternTokenType tokenType : allEnumValues) {
+            if (!tokenType.isSupportsRepeats()) {
+                characterTokens.add(tokenType);
+            }
+        }
+
+        return characterTokens;
     }
 }
