@@ -48,4 +48,12 @@ public class RegexTokenOccurrence {
     public int getCount() {
         return count;
     }
+
+    /**
+     * Increases the count by a given increment, copied from another occurrence.
+     * @param increment Increment to increase by.
+     */
+    public void increaseCount(int increment) {
+        this.count += increment;
+    }
 }

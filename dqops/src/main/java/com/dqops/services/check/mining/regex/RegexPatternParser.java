@@ -17,6 +17,7 @@
 package com.dqops.services.check.mining.regex;
 
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import org.apache.parquet.Strings;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -34,10 +35,14 @@ public class RegexPatternParser {
     /**
      * Parses a text into a sequence of tokens.
      * @param text Text to parse.
-     * @param treatDigitsAsWords Digits are treated as words, allowing to mix letters and digits.
+     * @param mixDigitsAndLetters Digits are treated as words, allowing to mix letters and digits.
      * @return First token, with a list of next tokens.
      */
-    public static RegexPatternToken parseText(String text, boolean treatDigitsAsWords) {
+    public static RegexPatternToken parseText(String text, boolean mixDigitsAndLetters) {
+        if (Strings.isNullOrEmpty(text)) {
+            return null;
+        }
+
         Reader textReader = new StringReader(text);
         StreamTokenizer tokenizer = new StreamTokenizer(textReader);
         tokenizer.resetSyntax();
@@ -45,7 +50,7 @@ public class RegexPatternParser {
         tokenizer.wordChars('A', 'Z');
         tokenizer.wordChars(128 + 32, 255);
         tokenizer.eolIsSignificant(true);
-        if (treatDigitsAsWords) {
+        if (mixDigitsAndLetters) {
             tokenizer.wordChars('0', '9');
         } else {
             tokenizer.ordinaryChars('0', '9');
@@ -97,6 +102,10 @@ public class RegexPatternParser {
         }
         catch (IOException ex) {
             throw new DqoRuntimeException("Cannot parse a text into a sequence of tokens: " + text + ", error: " + ex.getMessage(), ex);
+        }
+
+        if (lastToken != null) {
+            lastToken.setTerminalToken(true);
         }
 
         return firstToken;

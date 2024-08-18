@@ -23,19 +23,19 @@ import java.util.List;
  * A type of a token identified in a regular expression.
  */
 public enum RegexPatternTokenType {
-    UPPER_CASE_LETTERS("[A-Z]", true),
-    LOWER_CASE_LETTERS("[a-z]", true),
-    MIXED_CASE_LETTERS("[A-Za-z]", true),
-    DIGITS("[0-9]", true),
-    LETTERS_OR_DIGITS("[A-Za-z0-9]", true),
-    SPACE(" ", true),
+    UPPER_CASE_LETTERS("[A-Z]", true, false),
+    LOWER_CASE_LETTERS("[a-z]", true, false),
+    MIXED_CASE_LETTERS("[A-Za-z]", true, false),
+    DIGITS("[0-9]", true, false),
+    LETTERS_OR_DIGITS("[A-Za-z0-9]", true, false),
+    SPACE(" ", true, false),
 
-    LEFT_BRACE("{"),
-    RIGHT_BRACE("}"),
-    LEFT_PARENTHESIS("("),
-    RIGHT_PARENTHESIS(")"),
-    LEFT_BRACKET("["),
-    RIGHT_BRACKET("]"),
+    LEFT_BRACE("{", false, true),
+    RIGHT_BRACE("}", false, true),
+    LEFT_PARENTHESIS("(", false, true),
+    RIGHT_PARENTHESIS(")", false, true),
+    LEFT_BRACKET("[", false, true),
+    RIGHT_BRACKET("]", false, true),
     EXCLAMATION_MARK("!"),
     AT("@"),
     HYPHEN("-"),
@@ -44,42 +44,44 @@ public enum RegexPatternTokenType {
     COLON(":"),
     SEMICOLON(";"),
     COMMA(","),
-    DOT("."),
+    DOT(".", false, true),
     LESS("<"),
     GREATER(">"),
     SLASH("/"),
-    BACKSLASH("\\"),
+    BACKSLASH("\\", false, true),
     TILDE("~"),
     BACK_QUOTE("`"),
     PERCENT("%"),
     HASH("#"),
-    DOLLAR("$"),
-    CARET("^"),
-    ASTERISK("*"),
-    PLUS("+"),
+    DOLLAR("$", false, true),
+    CARET("^", false, true),
+    ASTERISK("*", false, true),
+    PLUS("+", false, true),
     AMPERSAND("&"),
-    PIPE("|"),
+    PIPE("|", false, true),
     QUOTE("'"),
     DOUBLE_QUOTE("\""),
-    QUESTION_MARK("?"),
+    QUESTION_MARK("?", false, true),
     SECTION("§"),
-    EOL("\n", true),
-    TAB("\t");
+    EOL("\n", true, true),
+    TAB("\t", false, true);
 
     private String pattern;
     private boolean supportsRepeats;
+    private boolean requireEscape;
 
     RegexPatternTokenType(String pattern) {
-        this(pattern, false);
+        this(pattern, false, false);
     }
 
-    RegexPatternTokenType(String pattern, boolean supportsRepeats) {
+    RegexPatternTokenType(String pattern, boolean supportsRepeats, boolean requireEscape) {
         if (!supportsRepeats && pattern.length() != 1) {
             throw new RuntimeException("Invalid token format");
         }
 
         this.pattern = pattern;
         this.supportsRepeats = supportsRepeats;
+        this.requireEscape = requireEscape;
     }
 
     /**
@@ -96,6 +98,14 @@ public enum RegexPatternTokenType {
      */
     public boolean isSupportsRepeats() {
         return supportsRepeats;
+    }
+
+    /**
+     * Returns true if this token is a special regular expression token and requires escaping. For example: ().*?\[]
+     * @return This token requires escaping.
+     */
+    public boolean isRequireEscape() {
+        return requireEscape;
     }
 
     /**
