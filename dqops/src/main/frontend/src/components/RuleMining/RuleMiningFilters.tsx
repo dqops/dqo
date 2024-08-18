@@ -281,6 +281,15 @@ export default function RuleMiningFilters({
         />
         <Checkbox
           className="p-2 !w-62"
+          tooltipText="Analyze sample text values and try to find a regular expression that detects valid values similar to the sample values."
+          label="Detect regular expressions"
+          checked={configuration.detect_regular_expressions}
+          onChange={(e) =>
+            onChangeConfiguration({ detect_regular_expressions: e })
+          }
+        />
+        <Checkbox
+          className="p-2 !w-62"
           tooltipText="Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values."
           label="Whitespace checks"
           checked={configuration.propose_whitespace_checks}

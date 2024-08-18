@@ -197,6 +197,12 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeStandardPatternChecks = true;
 
     /**
+     * Analyze sample text values and try to find a regular expression that detects valid values similar to the sample values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Analyze sample text values and try to find a regular expression that detects valid values similar to the sample values. The default value of this parameter is 'true'.")
+    private boolean detectRegularExpressions = true;
+
+    /**
      * Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of this parameter is 'true'.")

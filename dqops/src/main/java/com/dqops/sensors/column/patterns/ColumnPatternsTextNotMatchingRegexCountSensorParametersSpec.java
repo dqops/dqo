@@ -15,6 +15,8 @@
  */
 package com.dqops.sensors.column.patterns;
 
+import com.dqops.metadata.fields.ControlDisplayHint;
+import com.dqops.metadata.fields.DisplayHint;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,6 +45,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec extends
 
     @JsonPropertyDescription("This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null")
     @SampleValues(values = { "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$" })
+    @ControlDisplayHint(DisplayHint.textarea)
     @RequiredField
     private String regex;
 

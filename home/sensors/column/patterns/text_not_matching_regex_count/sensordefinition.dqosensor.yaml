@@ -9,4 +9,5 @@ spec:
       \ custom regex, user should write correct regex as a string. If regex is not\
       \ defined by user then default regex is null"
     data_type: string
+    display_hint: textarea
     required: true

@@ -225,7 +225,7 @@ public class ColumnTextNotMatchingRegexFoundCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeStandardPatternChecks()) {
+        if (!miningParameters.isDetectRegularExpressions()) {
             return false;
         }
 

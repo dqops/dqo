@@ -17,6 +17,7 @@ package com.dqops.checks.column.checkspecs.patterns;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
@@ -27,6 +28,8 @@ import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextsNotMatchingRegexPercentSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
+import com.dqops.services.check.mining.regex.CommonRegexPatternAnalyzer;
+import com.dqops.services.check.mining.regex.RegexPatternAnalyzerParameters;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,8 +39,12 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * This check validates text values using a pattern defined as a regular expression.
@@ -223,9 +230,59 @@ public class ColumnTextsNotMatchingRegexPercentCheckSpec
                                              DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
-        if (!miningParameters.isProposeStandardPatternChecks()) {
+        if (!miningParameters.isDetectRegularExpressions()) {
             return false;
         }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        if (sourceProfilingCheck.getActualValue() == null && Strings.isNullOrEmpty(this.parameters.getRegex())) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
+            Double percentOfStringValues = columnDataAssetProfilingResults.matchPercentageOfSamples(value -> {
+                return value instanceof String && !Objects.equals("", value);
+            });
+
+            if (percentOfStringValues == null || percentOfStringValues < 100.0) {
+                return false;
+            }
+
+            List<String> listOfTextSamples = columnDataAssetProfilingResults.getSampleValues().stream()
+                    .map(profilingSampleValue -> profilingSampleValue.getValue().toString())
+                    .collect(Collectors.toList());
+
+            RegexPatternAnalyzerParameters analyzerParameters = new RegexPatternAnalyzerParameters(); // default parameters
+            String commonRegex = CommonRegexPatternAnalyzer.findCommonRegex(listOfTextSamples, analyzerParameters);
+
+            if (commonRegex == null) {
+                return false;
+            }
+
+            String beginEndRegex = "^(" + commonRegex + ")$";
+            this.parameters.setRegex(beginEndRegex);
+
+            sourceProfilingCheck.setActualValue(0.0); // just fake number like there were no invalid values, to enable a check, even if it fails, we cannot calculate a correct value from the samples
+            sourceProfilingCheck.setExecutedAt(Instant.now());
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && sourceProfilingCheck.getActualValue() > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
+            return false; // do not configure this check, when the value was captured and there are too many future values
+        }
+
 
         return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
                 tableSpec, parentCheckRootContainer, myCheckModel, miningParameters, columnTypeCategory,

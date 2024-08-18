@@ -16834,6 +16834,11 @@ definitions:
           \ or emails. DQOps will configure these data quality checks when analyzed\
           \ columns contain enough values matching a standard pattern. The default\
           \ value of this parameter is 'true'."
+      detect_regular_expressions:
+        type: "boolean"
+        description: "Analyze sample text values and try to find a regular expression\
+          \ that detects valid values similar to the sample values. The default value\
+          \ of this parameter is 'true'."
       propose_whitespace_checks:
         type: "boolean"
         description: "Propose the default configuration for the whitespace detection\

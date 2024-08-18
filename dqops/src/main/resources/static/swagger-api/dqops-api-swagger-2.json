@@ -19825,6 +19825,10 @@
           "type" : "boolean",
           "description" : "Propose the default configuration for the patterns check that validate the format of popular text patterns, such as UUIDs, phone numbers, or emails. DQOps will configure these data quality checks when analyzed columns contain enough values matching a standard pattern. The default value of this parameter is 'true'."
         },
+        "detect_regular_expressions" : {
+          "type" : "boolean",
+          "description" : "Analyze sample text values and try to find a regular expression that detects valid values similar to the sample values. The default value of this parameter is 'true'."
+        },
         "propose_whitespace_checks" : {
           "type" : "boolean",
           "description" : "Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of this parameter is 'true'."
