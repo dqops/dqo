@@ -1,1 +1,27 @@
-<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 12L18 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+<svg
+   width="200px"
+   height="200px"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="#ffffff"
+   stroke-width="0.00024"
+   version="1.1"
+   id="svg1252"
+   xmlns="http://www.w3.org/2000/svg">
+  <g
+     id="SVGRepo_iconCarrier">
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       d="M 17.9247,3.7298014 V 17.412044 l 1.371402,-1.341426 1.0606,1.037516 -3.182002,3.112456 -3.181902,-3.112456 1.0606,-1.037516 1.371302,1.341426 V 3.7298014 c 0,0 1.535086,0.062028 1.5,0 z"
+       fill="#ffffff"
+       id="path1247"
+       style="stroke-width:0.000237363" />
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       d="M 3.75,4.5 4.5,3.75 H 12 l 0.75,0.75 v 15 L 12,20.25 H 4.5 L 3.75,19.5 Z m 1.5,0.75 v 13.5 h 6 v -1.5 h -3 v -1.5 h 3 v -1.5 h -3 v -1.5 h 3 v -1.5 H 7.5 v -1.5 h 3.75 v -1.5 h -3 v -1.5 h 3 v -1.5 z"
+       fill="#ffffff"
+       id="path1249" />
+  </g>
+</svg>

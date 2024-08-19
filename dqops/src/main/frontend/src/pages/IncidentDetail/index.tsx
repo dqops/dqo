@@ -384,7 +384,7 @@ export const IncidentDetail = () => {
               </Tooltip>
               <Tooltip
                 content={
-                  'Recalibrate data quality checks for this incident to decrease the number of data quality issues by around 30%.'
+                  'Reconfigure (decrease) the rule threshold for the data quality check that caused the incident by 30% to reduce the number of data quality issues.'
                 }
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
