@@ -419,7 +419,19 @@ const definitionReducer = (state = initialState, action: any) => {
         refreshRulesTreeIndicator: action.refreshRulesTreeIndicator
       };
     }
-
+    case DEFINITION_ACTION.UPDATE_TAB_LABEL: {
+      return {
+        ...state,
+        tabs: state.tabs.map((item) =>
+          item.url === action.activeTab
+            ? {
+                ...item,
+                label: action.label
+              }
+            : item
+        )
+      };
+    }
     default:
       return state;
   }

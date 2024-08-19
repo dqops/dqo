@@ -6,7 +6,7 @@ import CreateNotificationPattern from '../../components/Connection/ConnectionVie
 import NotificationPatternTable from '../../components/Connection/ConnectionView/NotificationPattern/NotificationPatternTable';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelTab } from '../../redux/actions/definition.actions';
+import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
@@ -24,9 +24,7 @@ type TNotificationPattern = FilteredNotificationModel & {
   highestSeverity?: number;
 };
 export default function DefaultWebhooksDetail() {
-  const { tabs, activeTab } = useSelector(
-    (state: IRootState) => state.definition
-  );
+  const { activeTab } = useSelector((state: IRootState) => state.definition);
   const { incidentFilters } = useSelector(getFirstLevelSensorState);
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
     useState<IncidentNotificationSpec>();
@@ -40,7 +38,6 @@ export default function DefaultWebhooksDetail() {
   >();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
-  const activeTabSelected = tabs.find((tab) => tab.value === activeTab);
   useEffect(() => {
     if (!incidentFilters) return;
     if (incidentFilters.notificationName) {
@@ -109,10 +106,12 @@ export default function DefaultWebhooksDetail() {
 
   const createNotificationPattern = () => {
     setAddNotificationPattern(true);
+    dispatch(updateTabLabel('New default notification', activeTab ?? ''));
   };
 
   const onBack = () => {
-    console.log();
+    dispatch(updateTabLabel('Default notifications', activeTab ?? ''));
+
     setPatternNameEdit('');
     setAddNotificationPattern(false);
     getFilteredNotifications();
@@ -120,10 +119,7 @@ export default function DefaultWebhooksDetail() {
 
   const onCHangePatternNameToEdit = (patternName: string) => {
     setPatternNameEdit(patternName);
-    console.log(activeTabSelected);
-    dispatch(
-      setActiveFirstLevelTab({ ...activeTabSelected, label: patternName })
-    );
+    dispatch(updateTabLabel(patternName, activeTab ?? ''));
   };
 
   return (
