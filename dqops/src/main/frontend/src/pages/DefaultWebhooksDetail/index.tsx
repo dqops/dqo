@@ -86,8 +86,7 @@ export default function DefaultWebhooksDetail() {
             qualityDimension: x.filter?.qualityDimension || '',
             checkCategory: x.filter?.checkCategory || '',
             checkName: x.filter?.checkName || '',
-            checkType: x.filter?.checkType || '',
-            highestSeverity: x.filter?.highestSeverity
+            checkType: x.filter?.checkType || ''
           };
         });
         setFilteredNotifications(patterns);
