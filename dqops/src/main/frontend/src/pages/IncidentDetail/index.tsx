@@ -411,7 +411,7 @@ export const IncidentDetail = () => {
                 </div>
               </Tooltip>
               <Tooltip
-                content={'Create notification for this incident.'}
+                content={'Configure notifications for this and similar incidents.'}
                 className="w-52 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div className="text-white">
