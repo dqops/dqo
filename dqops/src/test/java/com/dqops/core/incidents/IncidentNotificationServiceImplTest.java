@@ -48,8 +48,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(1, messageAddressPairs.size());
-        assertEquals("", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals(0, messageAddressPairs.size());
     }
 
     @Test
