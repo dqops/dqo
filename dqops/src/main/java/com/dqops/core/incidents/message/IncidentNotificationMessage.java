@@ -32,7 +32,7 @@ import java.time.Instant;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
-public class IncidentNotificationMessage {
+public class IncidentNotificationMessage implements Cloneable {
     /**
      * Incident id (primary key).
      */
@@ -145,6 +145,12 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
+     * Description with the details of the filtered notification such as purpose explanation, SLA note, etc.
+     */
+    @JsonPropertyDescription("Description with the details of the filtered notification such as purpose explanation, SLA note, etc.")
+    private String description;
+
+    /**
      * Notification text that contains the most important fields from the class.
      * The "text" field of webhook body request is directly used by Slack notifications.
      */
@@ -204,4 +210,19 @@ public class IncidentNotificationMessage {
                 ", text='" + text + '\'' +
                 '}';
     }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public IncidentNotificationMessage clone() {
+        try {
+            IncidentNotificationMessage cloned = (IncidentNotificationMessage) super.clone();
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Object cannot be cloned.");
+        }
+    }
+
 }

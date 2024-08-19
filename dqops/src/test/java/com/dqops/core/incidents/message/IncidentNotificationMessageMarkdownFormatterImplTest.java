@@ -187,4 +187,35 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
         );
     }
 
+    @Test
+    void prepareText_incidentMessageWithDescriptionSet_generatesValidMessage() {
+        ((DefaultTimeZoneProviderStub)defaultTimeZoneProvider).setTimeZone(ZoneId.of("-08:00"));
+
+        Instant instant = LocalDateTime
+                .of(2023, 9, 1, 12, 30, 20)
+                .toInstant(ZoneOffset.UTC);
+
+        IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
+        notificationMessage.setDescription("A very important information about the configuration of the notification.");
+
+        String message = sut.prepareText(notificationMessage);
+
+        assertNotNull(message);
+        assertEquals("""
+                               > New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.
+                               > \s
+                               > First seen: 2023-09-01 04:30:20 (GMT-8)\s
+                               > Quality dimension: Reasonableness\s
+                               > Check category: volume\s
+                               > Highest severity: fatal\s
+                               > Total data quality issues: 10\s
+                               > Table priority: 2\s
+                               > Description: A very important information about the configuration of the notification.\s
+                               > \s
+                               > <http://localhost:8888/incidents/connection_name/2023/9/1 | View in DQOps>\s
+                        """.replaceAll("\\s+", ""),
+                message.replaceAll("\\s+", "")
+        );
+    }
+
 }

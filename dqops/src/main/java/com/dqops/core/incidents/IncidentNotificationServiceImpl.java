@@ -26,7 +26,9 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.incidents.*;
+import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.incidents.FilteredNotificationSpec;
+import com.dqops.metadata.incidents.NotificationCommonModel;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
@@ -35,8 +37,9 @@ import com.dqops.utils.serialization.JsonSerializer;
 import io.netty.buffer.Unpooled;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,27 +185,41 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
             processAdditionalFiltersNumber++;
         }
 
-        List<IncidentNotificationTargetSpec> allNotificationsToSend = filteredNotificationsToSend.stream()
-                .map(filteredNotificationSpec -> IncidentNotificationTargetSpec.from(filteredNotificationSpec))
+        List<NotificationCommonModel> allNotificationsToSend = filteredNotificationsToSend.stream()
+                .map(filteredNotificationSpec -> NotificationCommonModel.from(filteredNotificationSpec))
                 .collect(Collectors.toList());
 
-        // all filtered notifications got ProcessAdditionalFilters flag
+        // all filtered notifications got ProcessAdditionalFilters flag, so adding here the default notification addresses
         if (filteredNotificationsToSend.isEmpty() || filteredNotificationsList.size() == processAdditionalFiltersNumber) {
-            allNotificationsToSend.add(IncidentNotificationTargetSpec.from(incidentNotificationConfigurations.getConnectionNotifications()));
+            allNotificationsToSend.add(NotificationCommonModel.from(incidentNotificationConfigurations.getConnectionNotifications()));
         }
 
-        List<String> compoundAddressesList = allNotificationsToSend.stream().map(notificationTarget -> {
-            String notificationAddress = notificationTarget.getNotificationAddressForStatus(message.getStatus());
-            return notificationAddress != null ? notificationAddress : "";
-        }).collect(Collectors.toList());
+        List<AddressDescriptionPair> addressDescriptionPairs = allNotificationsToSend.stream()
+                .map(notificationToSend -> {
+                    String notificationAddresses = notificationToSend.getNotificationAddressForStatus(message.getStatus());
+                    if (notificationAddresses == null) {
+                        return new ArrayList<AddressDescriptionPair>();
+                    }
+                    List<AddressDescriptionPair> addresses = notificationAddresses.contains(",")
+                            ? Arrays.stream(notificationAddresses.split(","))
+                                    .map(address -> new AddressDescriptionPair(address.trim(), notificationToSend.getDescription()))
+                                    .collect(Collectors.toList())
+                            : List.of(new AddressDescriptionPair(notificationAddresses, notificationToSend.getDescription()));
+                    return addresses;
+                })
+                .flatMap(List::stream)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
-        String addressesString = StringUtils.join(compoundAddressesList, ',');
+        List<MessageAddressPair> messageAddressPairs = addressDescriptionPairs.stream()
+                .map(addressDescriptionPair -> {
+                    IncidentNotificationMessage clonedMessage = message.clone();
+                    clonedMessage.setDescription(addressDescriptionPair.getDescription());
+                    return new MessageAddressPair(clonedMessage, addressDescriptionPair.getAddress());
+                })
+                .collect(Collectors.toList());
 
-        List<String> addresses = addressesString.contains(",")
-                ? Arrays.stream(addressesString.split(",")).map(String::trim).collect(Collectors.toList())
-                : List.of(addressesString);
-
-        return addresses.stream().map(address -> new MessageAddressPair(message, address)).collect(Collectors.toList());
+        return messageAddressPairs;
     }
 
     /**
@@ -303,6 +320,13 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         }
 
         return serverConfiguration;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class AddressDescriptionPair {
+        private String address;
+        private String description;
     }
 
 }

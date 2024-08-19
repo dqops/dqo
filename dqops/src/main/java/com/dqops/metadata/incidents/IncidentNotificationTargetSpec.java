@@ -18,7 +18,6 @@ package com.dqops.metadata.incidents;
 
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -32,7 +31,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -130,30 +128,6 @@ public class IncidentNotificationTargetSpec extends AbstractSpec implements Clon
     }
 
     /**
-     * Returns a notification address for an incident status.
-     * @param incidentStatus Incident status.
-     * @return Notification address for incident status.
-     */
-    public String getNotificationAddressForStatus(IncidentStatus incidentStatus) {
-        switch (incidentStatus) {
-            case open:
-                return this.incidentOpenedAddresses;
-
-            case acknowledged:
-                return this.incidentAcknowledgedAddresses;
-
-            case resolved:
-                return this.incidentResolvedAddresses;
-
-            case muted:
-                return this.incidentMutedAddresses;
-
-            default:
-                throw new NoSuchElementException("Unsupported incident status: " + incidentStatus);
-        }
-    }
-
-    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -223,35 +197,6 @@ public class IncidentNotificationTargetSpec extends AbstractSpec implements Clon
         }
 
         return clonedIncidentNotification;
-    }
-
-    /**
-     * Creates a IncidentNotificationTargetSpec from the corresponding incident status addresses from IncidentNotificationSpec object.
-     * @param incidentNotificationSpec The incident notification spec.
-     * @return IncidentNotificationTargetSpec object.
-     */
-    public static IncidentNotificationTargetSpec from(IncidentNotificationSpec incidentNotificationSpec){
-        return new IncidentNotificationTargetSpec(){{
-            setIncidentOpenedAddresses(incidentNotificationSpec.getIncidentOpenedAddresses());
-            setIncidentAcknowledgedAddresses(incidentNotificationSpec.getIncidentAcknowledgedAddresses());
-            setIncidentResolvedAddresses(incidentNotificationSpec.getIncidentResolvedAddresses());
-            setIncidentMutedAddresses(incidentNotificationSpec.getIncidentMutedAddresses());
-        }};
-    }
-
-    /**
-     * Creates a IncidentNotificationTargetSpec from the corresponding incident status addresses from IncidentNotificationSpec object.
-     * @param filteredNotificationSpec The filtered notification spec.
-     * @return IncidentNotificationTargetSpec object.
-     */
-    public static IncidentNotificationTargetSpec from(FilteredNotificationSpec filteredNotificationSpec){
-        IncidentNotificationTargetSpec incidentNotificationTargetSpec = filteredNotificationSpec.getTarget();
-        return new IncidentNotificationTargetSpec(){{
-            setIncidentOpenedAddresses(incidentNotificationTargetSpec.getIncidentOpenedAddresses());
-            setIncidentAcknowledgedAddresses(incidentNotificationTargetSpec.getIncidentAcknowledgedAddresses());
-            setIncidentResolvedAddresses(incidentNotificationTargetSpec.getIncidentResolvedAddresses());
-            setIncidentMutedAddresses(incidentNotificationTargetSpec.getIncidentMutedAddresses());
-        }};
     }
 
     public static class IncidentNotificationSpecSampleFactory implements SampleValueFactory<IncidentNotificationTargetSpec> {

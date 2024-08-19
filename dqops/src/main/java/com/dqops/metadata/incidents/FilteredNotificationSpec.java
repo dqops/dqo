@@ -48,7 +48,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled = false;
 
-    @JsonPropertyDescription("Description.")
+    @JsonPropertyDescription("Description with the details of the filtered notification such as purpose explanation, SLA note, etc.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
 

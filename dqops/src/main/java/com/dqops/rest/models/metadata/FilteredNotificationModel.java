@@ -37,7 +37,7 @@ public class FilteredNotificationModel {
     @JsonPropertyDescription("Flag to turn off the notification filter.")
     private Boolean disabled;
 
-    @JsonPropertyDescription("Description.")
+    @JsonPropertyDescription("Description with the details of the filtered notification such as purpose explanation, SLA note, etc.")
     private String description;
 
     @JsonPropertyDescription("The doNotCreateIncidents flag that excludes from the creation of incidents that match the filters.")
@@ -62,6 +62,7 @@ public class FilteredNotificationModel {
             setDisabled(filteredNotificationSpec.isDisabled());
             setDescription(filteredNotificationSpec.getDescription());
             setDoNotCreateIncidents(filteredNotificationSpec.isDoNotCreateIncidents());
+            setDescription(filteredNotificationSpec.getDescription());
         }};
     }
 
