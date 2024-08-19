@@ -39,13 +39,15 @@ const StringListField = ({
   const handleSave = () => {
     if (convertToDictionary) {
       saveDictionary();
-    }
-    onChange(labels);
-    setOpen(false);
+      onChange(['${dictionary://' + dictionary + '}']);
 
-    setConvertToDictionary(false);
-    setDictionaryExistError(false);
-    setDictionary(null);
+      setConvertToDictionary(false);
+      setDictionaryExistError(false);
+      setDictionary(null);
+    } else {
+      onChange(labels);
+    }
+    setOpen(false);
   };
 
   const handleChange = useCallback((values: string[]) => {
@@ -55,12 +57,7 @@ const StringListField = ({
   const saveDictionary = async () => {
     await DataDictionaryApiClient.createDictionary({
       dictionary_name: dictionary!,
-      file_content: labels
-        .filter((label) => label !== '')
-        .map((label) => {
-          return '${dictionary://' + label + '}';
-        })
-        .join('\n')
+      file_content: labels.filter((label) => label !== '').join('\n')
     })
       .then(() => {
         setOpen(false);
@@ -108,17 +105,14 @@ const StringListField = ({
           />
         </div>
       </div>
-      <Dialog
-        open={open}
-        handler={() => setOpen(false)}
-        className=" max-h-[96vh] text-sm flex flex-col overflow-y-auto "
-      >
+      <Dialog open={open} handler={() => setOpen(false)} className="">
         <div className="p-4">
           <LabelsView
             labels={labels}
             onChange={handleChange}
             hasAdd
             title="Text values"
+            className=" max-h-[50vh] text-sm flex flex-col overflow-y-auto "
           />
           <div className="flex space-x-4 p-4 justify-between">
             <div>
