@@ -26,6 +26,7 @@ export interface IInputProps {
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   labelClassName?: string;
   containerClassName?: string;
+  boldLabel?: string;
 }
 
 const Input = ({
@@ -46,7 +47,8 @@ const Input = ({
   defaultValue,
   onKeyDown,
   labelClassName,
-  containerClassName
+  containerClassName,
+  boldLabel
 }: IInputProps) => (
   <div className={containerClassName}>
     <div className="flex space-x-1">
@@ -59,6 +61,7 @@ const Input = ({
             labelClassName
           )}
         >
+          {boldLabel && <span className="font-bold">{boldLabel}</span>}
           <span>{label}</span>
           {!!tooltipText && (
             <Tooltip
