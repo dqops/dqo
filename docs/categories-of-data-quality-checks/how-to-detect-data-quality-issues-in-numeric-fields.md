@@ -20,15 +20,10 @@ DQOps has a separate category of data quality checks that detect anomalies in nu
 Please read the guide for [detecting numeric anomalies](how-to-detect-anomaly-data-quality-issues.md) to learn more.
 
 ### Numerical statistics
-The fastest way to find out-of-range values is by reviewing basic statistics collected by DQOps. 
-The column list shows minimum and maximum values.
+The quickest method for identifying out-of-range values is by [examining the basic statistics](../working-with-dqo/collecting-basic-data-statistics.md) collected by DQOps.
+We can review the minimum and maximum values on the column's statistics screen. We can also review the values of aggregate metrics, such as median, sum or mean value. 
 
-![Column list with minimum and maximum values for columns](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-list-with-min-max-statistics-min.png){ loading=lazy; width="1200px" }
-
-We can also review the values of aggregate metrics, such as sum or mean value. 
-DQOps shows these measures on the column's statistics screen.
-
-![Profiling statistics of a single column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-statistics-numeric-ranges-min.png){ loading=lazy; width="1200px" }
+![Profiling statistics of a single column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-statistics-numeric-ranges-min2.png){ loading=lazy; width="1200px" }
 
 
 ## Detecting out-of-range numbers
@@ -103,7 +98,7 @@ such as 0 for negative values.
 The following example shows the configuration of 
 the [*number_above_max_value*](../checks/column/numeric/number-above-max-value.md) check.
 
-![Detect numeric values above a maximum accepted value using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-out-of-range-numeric-values-above-maximum-value-check-min.png){ loading=lazy; width="1200px" }
+![Detect numeric values above a maximum accepted value using a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-out-of-range-numeric-values-above-maximum-value-check-min2.png){ loading=lazy; width="1200px" }
 
 ### Detect invalid numbers in YAML
 The [*number_above_max_value*](../checks/column/numeric/number-above-max-value.md) check is straightforward to configure in YAML.
@@ -128,6 +123,18 @@ spec:
                 max_count: 0
 ```
 
+### Invalid numbers error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+Let's modify the max_value parameter to 9. Running the checks resulted in warning. 
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section.
+
+![Detect numeric values above a maximum accepted value using a data quality check - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-out-of-range-numeric-values-above-maximum-value-check-error-samples.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
+
+
 ## Aggregate value out-of-range
 Instead of detecting out-of-range values in the whole dataset, 
 we can calculate an aggregated measure and compare it to a valid range.
@@ -140,12 +147,12 @@ Please go to the [table of all numeric checks](#list-of-numeric-checks-at-a-colu
 at the bottom of this article to see the list of supported measures.
 
 ### Activating an aggregate check in UI 
-DQOps shows these measures when the *advanced checks* are enabled with a checkbox at the top of the 
+DQOps shows these measures when the *Show advanced checks* are enabled with a checkbox at the top of the 
 [data quality check editor screen](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 The following example shows the [*mean_in_range*](../checks/column/numeric/mean-in-range.md) data quality check configured in the editor.
 
-![Mean numeric value data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-value-in-range-data-quality-check-min.png){ loading=lazy; width="1200px" }
+![Mean numeric value data quality check in editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-value-in-range-data-quality-check-min2.png){ loading=lazy; width="1200px" }
 
 
 ### Activating an aggregate check inYAML
