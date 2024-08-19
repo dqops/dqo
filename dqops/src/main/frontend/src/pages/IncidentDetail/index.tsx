@@ -260,8 +260,23 @@ export const IncidentDetail = () => {
   const createConfirmNotification = async () => {
     if (
       incidentDetail?.notificationLocation ===
-      IncidentModelNotificationLocationEnum.connection
+      IncidentModelNotificationLocationEnum.global
     ) {
+      dispatch(
+        addFirstLevelConfigurationTab({
+          url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
+          value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: incidentDetail.notificationName ?? 'New default notifications'
+        })
+      );
+      history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
+    } else {
       const url = ROUTES.CONNECTION_DETAIL(
         CheckTypes.SOURCES,
         connection,
@@ -277,25 +292,10 @@ export const IncidentDetail = () => {
               ...incidentDetail
             }
           },
-          label: 'Incident configuration'
+          label: incidentDetail?.connection
         })
       );
       history.push(url);
-    } else {
-      dispatch(
-        addFirstLevelConfigurationTab({
-          url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
-          value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
-          state: {
-            incidentFilters: {
-              ...filters,
-              ...incidentDetail
-            }
-          },
-          label: 'Default notifications'
-        })
-      );
-      history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
     }
   };
 

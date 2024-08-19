@@ -11,6 +11,7 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionIncidentGrouping,
+  setActiveFirstLevelTab,
   setUpdateIncidentGroup,
   updateConnectionIncidentGrouping
 } from '../../../redux/actions/source.actions';
@@ -121,8 +122,7 @@ export const IncidentsNotificationsView = () => {
             qualityDimension: x.filter?.qualityDimension || '',
             checkCategory: x.filter?.checkCategory || '',
             checkName: x.filter?.checkName || '',
-            checkType: x.filter?.checkType || '',
-            highestSeverity: x.filter?.highestSeverity
+            checkType: x.filter?.checkType || ''
           };
         });
         setFilteredNotificationsConfigurations(patterns);
@@ -138,6 +138,10 @@ export const IncidentsNotificationsView = () => {
     setAddNotificationPattern(true);
   };
   const onBack = () => {
+    console.log(firstLevelActiveTab);
+    if (connection) {
+      dispatch(setActiveFirstLevelTab(checkTypes, firstLevelActiveTab));
+    }
     setPatternNameEdit('');
     setPatternProp(undefined);
     setAddNotificationPattern(false);
