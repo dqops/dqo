@@ -292,7 +292,7 @@ export const IncidentDetail = () => {
               ...incidentDetail
             }
           },
-          label: incidentDetail?.notificationName ?? 'New notification'
+          label: incidentDetail?.connection
         })
       );
       history.push(url);
