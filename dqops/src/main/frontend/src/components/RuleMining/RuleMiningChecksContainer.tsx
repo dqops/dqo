@@ -190,7 +190,7 @@ const RuleMiningChecksContainer = ({
 
   return (
     <div
-      className={clsx(className, ' overflow-y-auto')}
+      className={clsx(className, ' overflow-y-auto relative ')}
       style={{
         maxWidth: `calc(100vw - ${sidebarWidth + 30}px`,
         minWidth: '100%'
@@ -208,7 +208,7 @@ const RuleMiningChecksContainer = ({
                 className=" cursor-pointer"
               >
                 <td colSpan={100} className="w-full">
-                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-50">
+                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-300">
                     <SvgIcon
                       name={
                         !isExtendedArray.includes('Table level checks')
@@ -252,7 +252,7 @@ const RuleMiningChecksContainer = ({
         {Object.entries(checksUI?.column_checks ?? {}).length > 0 && (
           <tr className="w-full">
             <td colSpan={100} className="w-full ">
-              <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-50">
+              <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-300">
                 Column level checks
               </div>
             </td>
@@ -266,7 +266,7 @@ const RuleMiningChecksContainer = ({
                 className=" cursor-pointer"
               >
                 <td colSpan={100} className="w-full">
-                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-60">
+                  <div className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4 bg-gray-300">
                     <SvgIcon
                       name={
                         !isExtendedArray.includes(key)
