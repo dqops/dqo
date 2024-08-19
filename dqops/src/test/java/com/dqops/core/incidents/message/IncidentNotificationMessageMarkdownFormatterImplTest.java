@@ -188,7 +188,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
     }
 
     @Test
-    void prepareText_incidentMessageWithDescriptionSet_generatesValidMessage() {
+    void prepareText_incidentMessageWithMessageSet_generatesValidMessage() {
         ((DefaultTimeZoneProviderStub)defaultTimeZoneProvider).setTimeZone(ZoneId.of("-08:00"));
 
         Instant instant = LocalDateTime
@@ -196,7 +196,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
                 .toInstant(ZoneOffset.UTC);
 
         IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
-        notificationMessage.setDescription("A very important information about the configuration of the notification.");
+        notificationMessage.setMessage("A very important information about the configuration of the notification.");
 
         String message = sut.prepareText(notificationMessage);
 
@@ -210,7 +210,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
                                > Highest severity: fatal\s
                                > Total data quality issues: 10\s
                                > Table priority: 2\s
-                               > Description: A very important information about the configuration of the notification.\s
+                               > Message: A very important information about the configuration of the notification.\s
                                > \s
                                > <http://localhost:8888/incidents/connection_name/2023/9/1 | View in DQOps>\s
                         """.replaceAll("\\s+", ""),

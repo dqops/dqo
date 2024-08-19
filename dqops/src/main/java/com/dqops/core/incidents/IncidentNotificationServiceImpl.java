@@ -21,7 +21,7 @@ import com.dqops.core.incidents.email.EmailSenderProvider;
 import com.dqops.core.incidents.message.IncidentNotificationHtmlMessageFormatter;
 import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.core.incidents.message.IncidentNotificationMessageMarkdownFormatter;
-import com.dqops.core.incidents.message.MessageAddressPair;
+import com.dqops.core.incidents.message.IncidentNotificationMessageAddressPair;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;
@@ -129,22 +129,22 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .map(message -> filterNotifications(message, incidentNotificationConfigurations))
                 .flatMap(Flux::fromIterable)
-                .filter(messageAddressPair -> !Strings.isNullOrEmpty(
-                        incidentNotificationConfigurations.getConnectionNotifications().getNotificationAddressForStatus(messageAddressPair.getIncidentNotificationMessage().getStatus())))
-                .filter(messageAddressPair -> !Strings.isNullOrEmpty(messageAddressPair.getNotificationAddress()))
-                .flatMap(messageAddressPair -> {
+                .filter(incidentNotificationMessageAddressPair -> !Strings.isNullOrEmpty(
+                        incidentNotificationConfigurations.getConnectionNotifications().getNotificationAddressForStatus(incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getStatus())))
+                .filter(incidentNotificationMessageAddressPair -> !Strings.isNullOrEmpty(incidentNotificationMessageAddressPair.getNotificationAddress()))
+                .flatMap(incidentNotificationMessageAddressPair -> {
 
-                    if(messageAddressPair.getNotificationAddress().contains("@")){
-                        String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
-                        messageAddressPair.getIncidentNotificationMessage().setText(incidentText);
+                    if(incidentNotificationMessageAddressPair.getNotificationAddress().contains("@")){
+                        String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(incidentNotificationMessageAddressPair.getIncidentNotificationMessage());
+                        incidentNotificationMessageAddressPair.getIncidentNotificationMessage().setText(incidentText);
 
-                        return sendEmailNotification(messageAddressPair);
+                        return sendEmailNotification(incidentNotificationMessageAddressPair);
                     }
 
-                    String incidentText = incidentNotificationMessageMarkdownFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
-                    messageAddressPair.getIncidentNotificationMessage().setText(incidentText);
+                    String incidentText = incidentNotificationMessageMarkdownFormatter.prepareText(incidentNotificationMessageAddressPair.getIncidentNotificationMessage());
+                    incidentNotificationMessageAddressPair.getIncidentNotificationMessage().setText(incidentText);
 
-                    return sendWebhookNotification(messageAddressPair);
+                    return sendWebhookNotification(incidentNotificationMessageAddressPair);
                 })
                 .onErrorContinue((Throwable ex, Object msg) -> {
                     log.error("Failed to send notification to address(es): " +
@@ -158,11 +158,11 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
     /**
      * Builds the list of message and address pairs for notifications based on the filters available in incident notification filters configuration.
-     * @param message The incident notification message with its details.
+     * @param incidentNotificationMessage The incident notification message with its details.
      * @param incidentNotificationConfigurations The notification spec with the default notification setup and map of filtered notifications used for filtering.
      * @return The notification message and address pair.
      */
-    public List<MessageAddressPair> filterNotifications(IncidentNotificationMessage message, IncidentNotificationConfigurations incidentNotificationConfigurations) {
+    public List<IncidentNotificationMessageAddressPair> filterNotifications(IncidentNotificationMessage incidentNotificationMessage, IncidentNotificationConfigurations incidentNotificationConfigurations) {
         List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications =
                 Stream.concat(
                     incidentNotificationConfigurations.getConnectionNotifications().getFilteredNotifications().entrySet().stream().sorted(Comparator.comparingInt(n -> n.getValue().getPriority())),
@@ -170,7 +170,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                 .filter(stringFilteredNotificationSpecEntry -> {
                     FilteredNotificationSpec notification = stringFilteredNotificationSpecEntry.getValue();
                     return !notification.isDisabled() &&
-                            notification.getFilter().isMatch(message);
+                            notification.getFilter().isMatch(incidentNotificationMessage);
                 })
                 .collect(Collectors.toList());
 
@@ -194,42 +194,42 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
             allNotificationsToSend.add(NotificationCommonModel.from(incidentNotificationConfigurations.getConnectionNotifications()));
         }
 
-        List<AddressDescriptionPair> addressDescriptionPairs = allNotificationsToSend.stream()
+        List<AddressMessagePair> addressMessagePairs = allNotificationsToSend.stream()
                 .map(notificationToSend -> {
-                    String notificationAddresses = notificationToSend.getNotificationAddressForStatus(message.getStatus());
+                    String notificationAddresses = notificationToSend.getNotificationAddressForStatus(incidentNotificationMessage.getStatus());
                     if (notificationAddresses == null) {
-                        return new ArrayList<AddressDescriptionPair>();
+                        return new ArrayList<AddressMessagePair>();
                     }
-                    List<AddressDescriptionPair> addresses = notificationAddresses.contains(",")
+                    List<AddressMessagePair> addresses = notificationAddresses.contains(",")
                             ? Arrays.stream(notificationAddresses.split(","))
-                                    .map(address -> new AddressDescriptionPair(address.trim(), notificationToSend.getDescription()))
+                                    .map(address -> new AddressMessagePair(address.trim(), notificationToSend.getMessage()))
                                     .collect(Collectors.toList())
-                            : List.of(new AddressDescriptionPair(notificationAddresses, notificationToSend.getDescription()));
+                            : List.of(new AddressMessagePair(notificationAddresses, notificationToSend.getMessage()));
                     return addresses;
                 })
                 .flatMap(List::stream)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        List<MessageAddressPair> messageAddressPairs = addressDescriptionPairs.stream()
-                .map(addressDescriptionPair -> {
-                    IncidentNotificationMessage clonedMessage = message.clone();
-                    clonedMessage.setDescription(addressDescriptionPair.getDescription());
-                    return new MessageAddressPair(clonedMessage, addressDescriptionPair.getAddress());
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = addressMessagePairs.stream()
+                .map(addressMessagePair -> {
+                    IncidentNotificationMessage clonedMessage = incidentNotificationMessage.clone();
+                    clonedMessage.setMessage(addressMessagePair.getMessage());
+                    return new IncidentNotificationMessageAddressPair(clonedMessage, addressMessagePair.getAddress());
                 })
                 .collect(Collectors.toList());
 
-        return messageAddressPairs;
+        return incidentNotificationMessageAddressPairs;
     }
 
     /**
      * Sets a single notification with one incident.
-     * @param messageAddressPair Incident notification payload and webhook url pair.
+     * @param incidentNotificationMessageAddressPair Incident notification payload and webhook url pair.
      * @return Mono that returns the target webhook url.
      */
-    protected Mono<MessageAddressPair> sendWebhookNotification(MessageAddressPair messageAddressPair) {
+    protected Mono<IncidentNotificationMessageAddressPair> sendWebhookNotification(IncidentNotificationMessageAddressPair incidentNotificationMessageAddressPair) {
         HttpClient httpClient = this.sharedHttpClientProvider.getHttp11SharedClient();
-        String serializedJsonMessage = this.jsonSerializer.serialize(messageAddressPair.getIncidentNotificationMessage());
+        String serializedJsonMessage = this.jsonSerializer.serialize(incidentNotificationMessageAddressPair.getIncidentNotificationMessage());
         byte[] messageBytes = serializedJsonMessage.getBytes(StandardCharsets.UTF_8);
 
         Mono<Void> responseSent = httpClient
@@ -238,38 +238,38 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     httpHeaders.add(HttpHeaders.CONTENT_LENGTH, messageBytes.length);
                 })
                 .post()
-                .uri(messageAddressPair.getNotificationAddress())
+                .uri(incidentNotificationMessageAddressPair.getNotificationAddress())
                 .send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)))
                 .response()
                 .then();
 
-        return responseSent.retry(3).thenReturn(messageAddressPair);
+        return responseSent.retry(3).thenReturn(incidentNotificationMessageAddressPair);
     }
 
     /**
      * Sets a single notification with one incident.
-     * @param messageAddressPair Incident notification payload and email address pair.
+     * @param incidentNotificationMessageAddressPair Incident notification payload and email address pair.
      * @return Mono that returns the target email address.
      */
-    protected Mono<MessageAddressPair> sendEmailNotification(MessageAddressPair messageAddressPair) {
+    protected Mono<IncidentNotificationMessageAddressPair> sendEmailNotification(IncidentNotificationMessageAddressPair incidentNotificationMessageAddressPair) {
         SmtpServerConfigurationSpec smtpServerConfigurationSpec = loadSmtpServerConfiguration();
         JavaMailSender javaMailSender = emailSenderProvider.configureJavaMailSender(smtpServerConfigurationSpec);
 
         Mono<Void> responseSent = Mono.fromCallable(() -> {
                     try {
                         MimeMessage simpleMailMessage = javaMailSender.createMimeMessage();
-                        String messageTemplate = (messageAddressPair.getIncidentNotificationMessage().getStatus().equals(IncidentStatus.open))
+                        String messageTemplate = (incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getStatus().equals(IncidentStatus.open))
                                 ? "New incident detected in %s table."
                                 : "The incident in %s table has been detected.";
                         String subjectMessage = String.format(messageTemplate,
-                                messageAddressPair.getIncidentNotificationMessage().getConnection()
-                                        + "." + messageAddressPair.getIncidentNotificationMessage().getTable());
+                                incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getConnection()
+                                        + "." + incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getTable());
                         simpleMailMessage.setSubject(subjectMessage);
                         MimeMessageHelper helper;
                         helper = new MimeMessageHelper(simpleMailMessage, true);
                         helper.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM_EMAIL, EmailSender.EMAIL_SENDER_FROM_NAME)));
-                        helper.setTo(messageAddressPair.getNotificationAddress());
-                        helper.setText(messageAddressPair.getIncidentNotificationMessage().getText(), true);
+                        helper.setTo(incidentNotificationMessageAddressPair.getNotificationAddress());
+                        helper.setText(incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getText(), true);
                         javaMailSender.send(simpleMailMessage);
                         return simpleMailMessage;
                     } catch (Exception e) {
@@ -278,7 +278,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     }
                 }
         ).then();
-        return responseSent.retry(3).thenReturn(messageAddressPair);
+        return responseSent.retry(3).thenReturn(incidentNotificationMessageAddressPair);
     }
 
     /**
@@ -324,9 +324,9 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
     @Data
     @AllArgsConstructor
-    private class AddressDescriptionPair {
+    private class AddressMessagePair {
         private String address;
-        private String description;
+        private String message;
     }
 
 }

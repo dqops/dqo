@@ -145,10 +145,10 @@ public class IncidentNotificationMessage implements Cloneable {
     private IncidentStatus status;
 
     /**
-     * Description with the details of the filtered notification such as purpose explanation, SLA note, etc.
+     * Message with the details of the filtered notification such as purpose explanation, SLA note, etc.
      */
-    @JsonPropertyDescription("Description with the details of the filtered notification such as purpose explanation, SLA note, etc.")
-    private String description;
+    @JsonPropertyDescription("Message with the details of the filtered notification such as purpose explanation, SLA note, etc.")
+    private String message;
 
     /**
      * Notification text that contains the most important fields from the class.

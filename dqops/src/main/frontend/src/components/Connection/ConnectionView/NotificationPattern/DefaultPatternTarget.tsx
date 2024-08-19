@@ -58,11 +58,11 @@ export default function DefaultPatternTarget({
       </div>
       <div className="flex items-center pb-6 text-black text-sm">
         <div className="ml-2 flex items-center gap-x-4 py-2 w-1/2">
-          <span className="w-40">Description</span>
+          <span className="w-40">Notification message</span>
           <div className="w-full px-5">
             <TextArea
-              value={pattern?.description}
-              onChange={(e) => onChange({ description: e.target.value })}
+              value={pattern?.message}
+              onChange={(e) => onChange({ message: e.target.value })}
             />
           </div>
         </div>

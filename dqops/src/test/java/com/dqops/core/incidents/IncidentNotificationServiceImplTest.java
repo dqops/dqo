@@ -2,7 +2,7 @@ package com.dqops.core.incidents;
 
 import com.dqops.BaseTest;
 import com.dqops.core.incidents.message.IncidentNotificationMessage;
-import com.dqops.core.incidents.message.MessageAddressPair;
+import com.dqops.core.incidents.message.IncidentNotificationMessageAddressPair;
 import com.dqops.core.incidents.message.SampleIncidentMessages;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.metadata.incidents.*;
@@ -35,10 +35,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
         notificationSpec.setIncidentOpenedAddresses("default@email.com");
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(1, messageAddressPairs.size());
-        assertEquals("default@email.com", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals(1, incidentNotificationMessageAddressPairs.size());
+        assertEquals("default@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
     }
 
     @Test
@@ -47,9 +47,9 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
         IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(0, messageAddressPairs.size());
+        assertEquals(0, incidentNotificationMessageAddressPairs.size());
     }
 
     @Test
@@ -85,11 +85,11 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(2, messageAddressPairs.size());
-        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
-        assertEquals("default@email.com", messageAddressPairs.get(1).getNotificationAddress());
+        assertEquals(2, incidentNotificationMessageAddressPairs.size());
+        assertEquals("1_filtered@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("default@email.com", incidentNotificationMessageAddressPairs.get(1).getNotificationAddress());
     }
 
     @Test
@@ -139,13 +139,13 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(4, messageAddressPairs.size());
-        assertEquals("3_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
-        assertEquals("1_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
-        assertEquals("2_filtered@email.com", messageAddressPairs.get(2).getNotificationAddress());
-        assertEquals("default@email.com", messageAddressPairs.get(3).getNotificationAddress());
+        assertEquals(4, incidentNotificationMessageAddressPairs.size());
+        assertEquals("3_filtered@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("1_filtered@email.com", incidentNotificationMessageAddressPairs.get(1).getNotificationAddress());
+        assertEquals("2_filtered@email.com", incidentNotificationMessageAddressPairs.get(2).getNotificationAddress());
+        assertEquals("default@email.com", incidentNotificationMessageAddressPairs.get(3).getNotificationAddress());
     }
 
     @Test
@@ -193,11 +193,11 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(2, messageAddressPairs.size());
-        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
-        assertEquals("2_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
+        assertEquals(2, incidentNotificationMessageAddressPairs.size());
+        assertEquals("1_filtered@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("2_filtered@email.com", incidentNotificationMessageAddressPairs.get(1).getNotificationAddress());
     }
 
     @Test
@@ -234,10 +234,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(1, messageAddressPairs.size());
-        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals(1, incidentNotificationMessageAddressPairs.size());
+        assertEquals("1_filtered@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
     }
 
     @Test
@@ -262,11 +262,11 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(2, messageAddressPairs.size());
-        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
-        assertEquals("2_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
+        assertEquals(2, incidentNotificationMessageAddressPairs.size());
+        assertEquals("1_filtered@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("2_filtered@email.com", incidentNotificationMessageAddressPairs.get(1).getNotificationAddress());
     }
 
     @Test
@@ -285,7 +285,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
             setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
-            setDescription("description 1");
+            setMessage("description 1");
         }};
 
         FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec(){{
@@ -296,7 +296,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
             setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
-            setDescription("description 2");
+            setMessage("description 2");
         }};
 
         FilteredNotificationSpecMap filteredNotificationSpecMap = new FilteredNotificationSpecMap();
@@ -305,17 +305,17 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
-        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
 
-        assertEquals(2, messageAddressPairs.size());
+        assertEquals(2, incidentNotificationMessageAddressPairs.size());
         assertNotEquals(
-                messageAddressPairs.get(0).getIncidentNotificationMessage(),
-                messageAddressPairs.get(1).getIncidentNotificationMessage()
+                incidentNotificationMessageAddressPairs.get(0).getIncidentNotificationMessage(),
+                incidentNotificationMessageAddressPairs.get(1).getIncidentNotificationMessage()
         );
-        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
-        assertEquals("description 1", messageAddressPairs.get(0).getIncidentNotificationMessage().getDescription());
-        assertEquals("2_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
-        assertEquals("description 2", messageAddressPairs.get(1).getIncidentNotificationMessage().getDescription());
+        assertEquals("1_filtered@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("description 1", incidentNotificationMessageAddressPairs.get(0).getIncidentNotificationMessage().getMessage());
+        assertEquals("2_filtered@email.com", incidentNotificationMessageAddressPairs.get(1).getNotificationAddress());
+        assertEquals("description 2", incidentNotificationMessageAddressPairs.get(1).getIncidentNotificationMessage().getMessage());
     }
 
 }

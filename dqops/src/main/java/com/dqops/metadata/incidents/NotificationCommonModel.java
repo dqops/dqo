@@ -15,8 +15,8 @@ public class NotificationCommonModel {
     @JsonPropertyDescription("Notification target addresses for each of the status.")
     private IncidentNotificationTargetSpec targetSpec;
 
-    @JsonPropertyDescription("Description with the details of the filtered notification such as purpose explanation, SLA note, etc.")
-    private String description;
+    @JsonPropertyDescription("Message with the details of the filtered notification such as purpose explanation, SLA note, etc.")
+    private String message;
 
     /**
      * Returns a notification address for an incident status.
@@ -51,7 +51,7 @@ public class NotificationCommonModel {
         IncidentNotificationTargetSpec incidentNotificationTargetSpec = filteredNotificationSpec.getTarget();
         NotificationCommonModel notificationCommonModel = new NotificationCommonModel(){{
             setTargetSpec(incidentNotificationTargetSpec);
-            setDescription(filteredNotificationSpec.getDescription());
+            setMessage(filteredNotificationSpec.getMessage());
         }};
         return notificationCommonModel;
     }

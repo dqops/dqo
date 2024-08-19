@@ -91,8 +91,8 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
             stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckName(), IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
         }
 
-        if (notificationMessage.getDescription() != null) {
-            stringBuilder.append(extractStringWithFormatting(notificationMessage.getDescription(), "Description"));
+        if (notificationMessage.getMessage() != null) {
+            stringBuilder.append(extractStringWithFormatting(notificationMessage.getMessage(), "Message"));
         }
 
         stringBuilder.append(getFormatParagraph(""));

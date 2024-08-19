@@ -371,7 +371,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
     }
 
     @Test
-    void prepareText_incidentMessageWithDescriptionSet_generatesValidMessage() {
+    void prepareText_incidentMessageWithMessageSet_generatesValidMessage() {
         ((DefaultTimeZoneProviderStub)defaultTimeZoneProvider).setTimeZone(ZoneId.of("-08:00"));
 
         Instant instant = LocalDateTime
@@ -379,7 +379,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                 .toInstant(ZoneOffset.UTC);
 
         IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
-        notificationMessage.setDescription("A very important information about the configuration of the notification.");
+        notificationMessage.setMessage("A very important information about the configuration of the notification.");
 
         String message = sut.prepareText(notificationMessage);
 
@@ -441,7 +441,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                                         <p><b>Highest severity:</b> fatal</p>
                                         <p><b>Total data quality issues:</b> 10</p>
                                         <p><b>Table priority:</b> 2</p>
-                                        <p><b>Description:</b> A very important information about the configuration of the notification.</p>
+                                        <p><b>Message:</b> A very important information about the configuration of the notification.</p>
                                         <p></p>
                                         <p><a href="http://localhost:8888/incidents/connection_name/2023/9/1">View in DQOps</a></p>
                                     </div>

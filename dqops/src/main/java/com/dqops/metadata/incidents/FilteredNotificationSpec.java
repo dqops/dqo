@@ -48,9 +48,9 @@ public class FilteredNotificationSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled = false;
 
-    @JsonPropertyDescription("Description with the details of the filtered notification such as purpose explanation, SLA note, etc.")
+    @JsonPropertyDescription("Message with the details of the filtered notification such as purpose explanation, SLA note, etc.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String description;
+    private String message;
 
     @JsonPropertyDescription("Flag to remove incident that match the filters.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -144,20 +144,20 @@ public class FilteredNotificationSpec extends AbstractSpec {
     }
 
     /**
-     * Returns a description.
-     * @return Description.
+     * Returns a message.
+     * @return Message.
      */
-    public String getDescription() {
-        return description;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets a description.
-     * @param description Description.
+     * Sets a message.
+     * @param message Message.
      */
-    public void setDescription(String description) {
-        setDirtyIf(!Objects.equals(this.description, description));
-        this.description = description;
+    public void setMessage(String message) {
+        setDirtyIf(!Objects.equals(this.message, message));
+        this.message = message;
     }
 
     /**
