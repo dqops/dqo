@@ -8,7 +8,7 @@ import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import SvgIcon from '../../../SvgIcon';
 
 const headerElements = [
-  { label: 'Notification patterns', key: 'name' },
+  { label: 'Notification filters', key: 'name' },
   { label: 'Priority', key: 'priority' },
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
