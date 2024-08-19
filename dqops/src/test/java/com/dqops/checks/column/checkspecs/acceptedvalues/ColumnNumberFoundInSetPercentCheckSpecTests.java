@@ -42,6 +42,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.ZoneId;
+import java.util.List;
 
 @SpringBootTest
 public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
@@ -304,6 +305,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(99.0);
+        this.sut.getParameters().setExpectedValues(List.of(1L));
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
         this.checkMiningParametersModel.setFailChecksAtPercentErrorRows(2.0);
 
@@ -326,6 +328,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(100.0 - this.checkMiningParametersModel.getMaxPercentErrorRowsForPercentChecks() - 1);
+        this.sut.getParameters().setExpectedValues(List.of(1L));
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
@@ -346,6 +349,7 @@ public class ColumnNumberFoundInSetPercentCheckSpecTests extends BaseTest {
                 this.connectionSpec, this.tableSpec);
 
         this.profilingCheckResult.setActualValue(100.0 - this.checkMiningParametersModel.getFailChecksAtPercentErrorRows() - 1);
+        this.sut.getParameters().setExpectedValues(List.of(1L));
         this.dataAssetProfilingResults.setNotNullsCount(10000L);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,

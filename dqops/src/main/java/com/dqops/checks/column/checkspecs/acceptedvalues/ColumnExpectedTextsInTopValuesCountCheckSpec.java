@@ -67,7 +67,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpec
      * The multiplier of the count of two adjacent samples (when sorted descending by count of occurrence) to consider as a significant drop of the values
      * to be used as the cliff (the index of the last sample value that is added to the expected values).
      */
-    public static final double CLIFF_SAMPLE_COUNT_DROP_MULTIPLIER = 4.0;
+    public static final double CLIFF_SAMPLE_COUNT_DROP_MULTIPLIER = 0.7;
 
     @JsonPropertyDescription("Data quality check parameters that specify a list of expected most popular text values that should be found in the column. The second parameter is 'top', which is the limit of the most popular column values to find in the tested column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -245,7 +245,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpec
         }
 
         ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
-        if (sourceProfilingCheck.getActualValue() == null && (this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty())) {
+        if (sourceProfilingCheck.getActualValue() == null || this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty()) {
             if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
                 return false;
             }
@@ -273,7 +273,7 @@ public class ColumnExpectedTextsInTopValuesCountCheckSpec
             for (int i = 0; i < checkMiningConfigurationProperties.getMaxExpectedTextsInTopValues() + 1 && i < columnDataAssetProfilingResults.getSampleValues().size(); i++) {
                 ProfilingSampleValue sampleValue = columnDataAssetProfilingResults.getSampleValues().get(i);
 
-                if (previousCountOfValues > sampleValue.getCount() * CLIFF_SAMPLE_COUNT_DROP_MULTIPLIER) {
+                if (previousCountOfValues * CLIFF_SAMPLE_COUNT_DROP_MULTIPLIER > sampleValue.getCount()) {
                     cliffIndex = i - 1;
                 }
                 previousCountOfValues = sampleValue.getCount();

@@ -36395,9 +36395,10 @@ definitions:
       disabled:
         type: "boolean"
         description: "Flag to turn off the notification filter."
-      description:
+      message:
         type: "string"
-        description: "Description."
+        description: "Message with the details of the filtered notification such as\
+          \ purpose explanation, SLA note, etc."
       do_not_create_incidents:
         type: "boolean"
         description: "The doNotCreateIncidents flag that excludes from the creation\
@@ -36427,9 +36428,10 @@ definitions:
       disabled:
         type: "boolean"
         description: "Flag to turn off the notification filter."
-      description:
+      message:
         type: "string"
-        description: "Description."
+        description: "Message with the details of the filtered notification such as\
+          \ purpose explanation, SLA note, etc."
       do_not_create_incidents:
         type: "boolean"
         description: "Flag to remove incident that match the filters."

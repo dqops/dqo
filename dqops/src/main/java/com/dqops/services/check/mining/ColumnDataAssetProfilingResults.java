@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -65,6 +66,8 @@ public class ColumnDataAssetProfilingResults extends DataAssetProfilingResults {
                 this.sampleValues.add(new ProfilingSampleValue(sampleValue, sampleCount, instantValue));
             }
         }
+
+        this.sampleValues.sort(Comparator.comparing((ProfilingSampleValue sampleValues) -> sampleValues.getCount()).reversed());
     }
 
     /**

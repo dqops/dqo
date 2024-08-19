@@ -37799,9 +37799,9 @@
           "type" : "boolean",
           "description" : "Flag to turn off the notification filter."
         },
-        "description" : {
+        "message" : {
           "type" : "string",
-          "description" : "Description."
+          "description" : "Message with the details of the filtered notification such as purpose explanation, SLA note, etc."
         },
         "do_not_create_incidents" : {
           "type" : "boolean",
@@ -37834,9 +37834,9 @@
           "type" : "boolean",
           "description" : "Flag to turn off the notification filter."
         },
-        "description" : {
+        "message" : {
           "type" : "string",
-          "description" : "Description."
+          "description" : "Message with the details of the filtered notification such as purpose explanation, SLA note, etc."
         },
         "do_not_create_incidents" : {
           "type" : "boolean",

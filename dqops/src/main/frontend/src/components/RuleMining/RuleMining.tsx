@@ -83,7 +83,7 @@ export default function RuleMining({
     propose_date_checks: true,
     propose_bool_percent_checks: true,
     propose_values_in_set_checks: true,
-    propose_top_values_checks: true,
+    propose_top_values_checks: false,  // intentional false
     propose_text_conversion_checks: true,
     propose_standard_pattern_checks: true,
     detect_regular_expressions: true,

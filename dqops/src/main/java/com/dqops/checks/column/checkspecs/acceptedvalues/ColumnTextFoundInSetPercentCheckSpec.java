@@ -247,7 +247,7 @@ public class ColumnTextFoundInSetPercentCheckSpec
         }
 
         ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
-        if (sourceProfilingCheck.getActualValue() == null && (this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty())) {
+        if ((sourceProfilingCheck.getActualValue() == null || this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty())) {
             if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
                 return false;
             }

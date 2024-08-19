@@ -249,7 +249,7 @@ public class ColumnNumberFoundInSetPercentCheckSpec
         }
 
         ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
-        if (sourceProfilingCheck.getActualValue() == null && (this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty())) {
+        if (sourceProfilingCheck.getActualValue() == null || this.parameters.getExpectedValues() == null || this.parameters.getExpectedValues().isEmpty()) {
             if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.numeric_integer &&
                     columnTypeCategory != DataTypeCategory.numeric_decimal &&
                     columnTypeCategory != DataTypeCategory.numeric_float &&
