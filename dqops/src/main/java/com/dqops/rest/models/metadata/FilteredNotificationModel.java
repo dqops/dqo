@@ -37,8 +37,8 @@ public class FilteredNotificationModel {
     @JsonPropertyDescription("Flag to turn off the notification filter.")
     private Boolean disabled;
 
-    @JsonPropertyDescription("Description.")
-    private String description;
+    @JsonPropertyDescription("Message with the details of the filtered notification such as purpose explanation, SLA note, etc.")
+    private String message;
 
     @JsonPropertyDescription("The doNotCreateIncidents flag that excludes from the creation of incidents that match the filters.")
     private Boolean doNotCreateIncidents;
@@ -60,7 +60,7 @@ public class FilteredNotificationModel {
             setPriority(filteredNotificationSpec.getPriority());
             setProcessAdditionalFilters(filteredNotificationSpec.isProcessAdditionalFilters());
             setDisabled(filteredNotificationSpec.isDisabled());
-            setDescription(filteredNotificationSpec.getDescription());
+            setMessage(filteredNotificationSpec.getMessage());
             setDoNotCreateIncidents(filteredNotificationSpec.isDoNotCreateIncidents());
         }};
     }
@@ -73,7 +73,7 @@ public class FilteredNotificationModel {
     public FilteredNotificationSpec toSpec() {
         FilteredNotificationSpec spec = new FilteredNotificationSpec() {{
             setFilter(filter);
-            setDescription(description);
+            setMessage(message);
             setTarget(target);
         }};
 

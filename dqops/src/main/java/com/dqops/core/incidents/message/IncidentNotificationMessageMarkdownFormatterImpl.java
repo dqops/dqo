@@ -81,6 +81,10 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
         stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckType(), IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckName(), IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
 
+        if (notificationMessage.getMessage() != null) {
+            stringBuilder.append(extractStringWithFormatting(notificationMessage.getMessage(), "Message"));
+        }
+
         stringBuilder.append(getBlockQuotedLine(""));
 
         stringBuilder.append(getBlockQuotedLine(formatToLink(

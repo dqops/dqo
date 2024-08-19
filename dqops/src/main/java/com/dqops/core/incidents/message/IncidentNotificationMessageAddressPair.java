@@ -16,9 +16,9 @@
 package com.dqops.core.incidents.message;
 
 /**
- * A pair of a message and a notification address that is sent as a notification.
+ * A pair of an IncidentNotificationMessage and a notification address that is sent as a notification.
  */
-public class MessageAddressPair {
+public class IncidentNotificationMessageAddressPair {
     private final IncidentNotificationMessage incidentNotificationMessage;
     private final String notificationAddress;
 
@@ -27,7 +27,7 @@ public class MessageAddressPair {
      * @param incidentNotificationMessage Notification message.
      * @param notificationAddress Notification address.
      */
-    public MessageAddressPair(IncidentNotificationMessage incidentNotificationMessage, String notificationAddress) {
+    public IncidentNotificationMessageAddressPair(IncidentNotificationMessage incidentNotificationMessage, String notificationAddress) {
         this.incidentNotificationMessage = incidentNotificationMessage;
         this.notificationAddress = notificationAddress;
     }
