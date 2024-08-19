@@ -351,7 +351,7 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
      * @return True if the message matches the filter parameters.
      */
     public boolean isMatch(IncidentNotificationMessage message) {
-        boolean match = Strings.isNullOrEmpty(this.getConnection()) || this.getConnectionNameSearchPattern().match(message.getConnection()) &&
+        boolean match = (Strings.isNullOrEmpty(this.getConnection()) || this.getConnectionNameSearchPattern().match(message.getConnection())) &&
                 (Strings.isNullOrEmpty(this.getSchema()) || this.getSchemaNameSearchPattern().match(message.getSchema())) &&
                 (Strings.isNullOrEmpty(this.getTable()) || this.getTableNameSearchPattern().match(message.getTable())) &&
                 (this.getTablePriority() == null || this.getTablePriority().equals(message.getTablePriority())) &&
@@ -371,7 +371,7 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
      * @return True if the message matches the filter parameters.
      */
     public boolean isMatch(IncidentModel incidentModel) {
-        boolean match = Strings.isNullOrEmpty(this.getConnection()) || this.getConnectionNameSearchPattern().match(incidentModel.getConnection()) &&
+        boolean match = (Strings.isNullOrEmpty(this.getConnection()) || this.getConnectionNameSearchPattern().match(incidentModel.getConnection())) &&
                 (Strings.isNullOrEmpty(this.getSchema()) || this.getSchemaNameSearchPattern().match(incidentModel.getSchema())) &&
                 (Strings.isNullOrEmpty(this.getTable()) || this.getTableNameSearchPattern().match(incidentModel.getTable())) &&
                 (this.getTablePriority() == null || this.getTablePriority().equals(incidentModel.getTablePriority())) &&
