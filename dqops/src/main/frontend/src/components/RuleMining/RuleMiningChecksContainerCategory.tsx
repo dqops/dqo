@@ -100,6 +100,7 @@ const RuleMiningChecksContainerCategory = ({
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
+              <div className=" !w-5 !h-full bg-white"></div>
               <div
                 className="font-semibold text-gray-700 flex items-center justify-center gap-x-3 cursor-pointer"
                 onClick={() => setIsExtended(!isExtended)}
