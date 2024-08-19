@@ -16,6 +16,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 class IncidentNotificationServiceImplTest extends BaseTest {
@@ -266,6 +267,55 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         assertEquals(2, messageAddressPairs.size());
         assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
         assertEquals("2_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
+    }
+
+    @Test
+    void filterNotifications_twoIncidentsWithDescriptions_messageObjectsAreDistinguishableAmongAddressPairs() {
+        Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
+        IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
+        IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
+        notificationSpec.setIncidentOpenedAddresses("default@email.com");
+
+        FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec(){{
+            setPriority(1);
+            setProcessAdditionalFilters(true);
+            setTarget(new IncidentNotificationTargetSpec(){{
+                setIncidentOpenedAddresses("1_filtered@email.com");
+            }});
+            setFilter(new NotificationFilterSpec(){{
+                setConnection("connection_name");
+            }});
+            setDescription("description 1");
+        }};
+
+        FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec(){{
+            setPriority(2);
+            setTarget(new IncidentNotificationTargetSpec(){{
+                setIncidentOpenedAddresses("2_filtered@email.com");
+            }});
+            setFilter(new NotificationFilterSpec(){{
+                setConnection("connection_name");
+            }});
+            setDescription("description 2");
+        }};
+
+        FilteredNotificationSpecMap filteredNotificationSpecMap = new FilteredNotificationSpecMap();
+        filteredNotificationSpecMap.put("one_filtered_notification", filteredNotificationSpec);
+        filteredNotificationSpecMap.put("second_filtered_notification", secondFilteredNotificationSpec);
+
+        notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
+
+        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, new IncidentNotificationConfigurations(notificationSpec, new IncidentNotificationSpec()));
+
+        assertEquals(2, messageAddressPairs.size());
+        assertNotEquals(
+                messageAddressPairs.get(0).getIncidentNotificationMessage(),
+                messageAddressPairs.get(1).getIncidentNotificationMessage()
+        );
+        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("description 1", messageAddressPairs.get(0).getIncidentNotificationMessage().getDescription());
+        assertEquals("2_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
+        assertEquals("description 2", messageAddressPairs.get(1).getIncidentNotificationMessage().getDescription());
     }
 
 }
