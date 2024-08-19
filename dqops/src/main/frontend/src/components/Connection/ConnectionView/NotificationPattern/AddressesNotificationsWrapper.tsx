@@ -11,8 +11,8 @@ export default function AddressesNotificationsWrapper({
 }) {
   return (
     <>
-      <div className="mx-10">
-        <img src="https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-workflow.png" />
+      <div className="mx-10 ">
+        <img className="w-[1200px]" src="/images/incidents-workflow.png" />
       </div>
       <SectionWrapper
         title="Addresses for notifications of an incident state change"
