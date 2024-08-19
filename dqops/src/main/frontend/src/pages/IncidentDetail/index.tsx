@@ -272,7 +272,7 @@ export const IncidentDetail = () => {
               ...incidentDetail
             }
           },
-          label: 'Default notifications'
+          label: incidentDetail.notificationName ?? 'New default notifications'
         })
       );
       history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
@@ -292,7 +292,7 @@ export const IncidentDetail = () => {
               ...incidentDetail
             }
           },
-          label: 'Incident configuration'
+          label: incidentDetail?.notificationName ?? 'New notification'
         })
       );
       history.push(url);

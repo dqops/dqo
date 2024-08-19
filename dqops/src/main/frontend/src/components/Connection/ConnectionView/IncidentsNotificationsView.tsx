@@ -11,6 +11,7 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionIncidentGrouping,
+  setActiveFirstLevelTab,
   setUpdateIncidentGroup,
   updateConnectionIncidentGrouping
 } from '../../../redux/actions/source.actions';
@@ -137,6 +138,10 @@ export const IncidentsNotificationsView = () => {
     setAddNotificationPattern(true);
   };
   const onBack = () => {
+    console.log(firstLevelActiveTab);
+    if (connection) {
+      dispatch(setActiveFirstLevelTab(checkTypes, firstLevelActiveTab));
+    }
     setPatternNameEdit('');
     setPatternProp(undefined);
     setAddNotificationPattern(false);

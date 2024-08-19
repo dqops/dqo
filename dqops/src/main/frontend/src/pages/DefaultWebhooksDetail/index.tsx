@@ -5,6 +5,9 @@ import Button from '../../components/Button';
 import CreateNotificationPattern from '../../components/Connection/ConnectionView/NotificationPattern/CreateNotificationPattern';
 import NotificationPatternTable from '../../components/Connection/ConnectionView/NotificationPattern/NotificationPatternTable';
 import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveFirstLevelTab } from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
   FilteredNotificationsConfigurationsClient,
@@ -21,6 +24,9 @@ type TNotificationPattern = FilteredNotificationModel & {
   highestSeverity?: number;
 };
 export default function DefaultWebhooksDetail() {
+  const { tabs, activeTab } = useSelector(
+    (state: IRootState) => state.definition
+  );
   const { incidentFilters } = useSelector(getFirstLevelSensorState);
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
     useState<IncidentNotificationSpec>();
@@ -33,6 +39,8 @@ export default function DefaultWebhooksDetail() {
     FilteredNotificationModel | undefined
   >();
   const [isUpdated, setIsUpdated] = useState(false);
+  const dispatch = useActionDispatch();
+  const activeTabSelected = tabs.find((tab) => tab.value === activeTab);
   useEffect(() => {
     if (!incidentFilters) return;
     if (incidentFilters.notificationName) {
@@ -104,9 +112,18 @@ export default function DefaultWebhooksDetail() {
   };
 
   const onBack = () => {
+    console.log();
     setPatternNameEdit('');
     setAddNotificationPattern(false);
     getFilteredNotifications();
+  };
+
+  const onCHangePatternNameToEdit = (patternName: string) => {
+    setPatternNameEdit(patternName);
+    console.log(activeTabSelected);
+    dispatch(
+      setActiveFirstLevelTab({ ...activeTabSelected, label: patternName })
+    );
   };
 
   return (
@@ -147,7 +164,7 @@ export default function DefaultWebhooksDetail() {
             <NotificationPatternTable
               filteredNotificationsConfigurations={filteredNotifications}
               onChange={setFilteredNotifications}
-              setPatternNameEdit={setPatternNameEdit}
+              setPatternNameEdit={onCHangePatternNameToEdit}
             />
             <Button
               label="Add notification filter"
