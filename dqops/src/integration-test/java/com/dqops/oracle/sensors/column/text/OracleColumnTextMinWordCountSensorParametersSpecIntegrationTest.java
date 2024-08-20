@@ -78,6 +78,20 @@ public class OracleColumnTextMinWordCountSensorParametersSpecIntegrationTest ext
     }
 
     @Test
+    void runSensor_whenEmptyStrings_thenDoNotCountThem() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "just_spaces", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        // trimming the data containing only spaces leads to null in oracle
+        Assertions.assertEquals(null, ValueConverter.toInteger(resultTable.column(0).get(0)));
+    }
+
+    @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "empty_percent", this.checkSpec);
