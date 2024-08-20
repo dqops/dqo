@@ -126,7 +126,7 @@ const ErrorSamplesTab = ({
         <IconButton
           size="sm"
           className={
-            'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+            'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
           }
         >
           <a
