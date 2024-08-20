@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -340,13 +340,20 @@ const CheckResultsTab = ({
               setMode('table');
             }}
           >
-            <SvgIcon
-              name="table"
-              className={clsx(
-                'w-4 h-4 cursor-pointer ',
-                mode === 'table' ? 'font-bold text-white' : 'text-teal-500'
-              )}
-            />
+            <Tooltip
+              content="View results in a table"
+              className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+            >
+              <div>
+                <SvgIcon
+                  name="table"
+                  className={clsx(
+                    'w-4 h-4 cursor-pointer ',
+                    mode === 'table' ? 'font-bold text-white' : 'text-teal-500'
+                  )}
+                />
+              </div>
+            </Tooltip>
           </IconButton>
           <IconButton
             size="sm"
@@ -359,13 +366,20 @@ const CheckResultsTab = ({
               setMode('chart');
             }}
           >
-            <SvgIcon
-              name="chart-line"
-              className={clsx(
-                'w-4 h-4 cursor-pointer',
-                mode === 'chart' ? 'font-bold text-white' : 'text-teal-500'
-              )}
-            />
+            <Tooltip
+              content="View results in a graph"
+              className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+            >
+              <div>
+                <SvgIcon
+                  name="chart-line"
+                  className={clsx(
+                    'w-4 h-4 cursor-pointer',
+                    mode === 'chart' ? 'font-bold text-white' : 'text-teal-500'
+                  )}
+                />
+              </div>
+            </Tooltip>
           </IconButton>
         </div>
       </div>
