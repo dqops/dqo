@@ -208,6 +208,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*IncidentDailyIssuesCount*](./incidents.md#incidentdailyissuescount)|A model that stores a daily number of incidents.|
 |[*IncidentIssueHistogramModel*](./incidents.md#incidentissuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*IncidentStatus*](./incidents.md#incidentstatus)|Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.|
+|[*IncidentFilteredNotificationLocation*](./incidents.md#incidentfilterednotificationlocation)|Enumeration that says where a filtered notification for an incident is defined. Is it defined on a connection level, or on the global level.|
 |[*IncidentModel*](./incidents.md#incidentmodel)|Data quality incident model shown on an incident details screen.|
 |[*IncidentSortOrder*](./incidents.md#incidentsortorder)|Incident sort order columns.|
 |[*IncidentsPerConnectionModel*](./incidents.md#incidentsperconnectionmodel)|Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.|

@@ -79,6 +79,8 @@ class CheckMiningParametersModel:
             that validate the format of popular text patterns, such as UUIDs, phone numbers, or emails. DQOps will configure
             these data quality checks when analyzed columns contain enough values matching a standard pattern. The default
             value of this parameter is 'true'.
+        detect_regular_expressions (Union[Unset, bool]): Analyze sample text values and try to find a regular expression
+            that detects valid values similar to the sample values. The default value of this parameter is 'true'.
         propose_whitespace_checks (Union[Unset, bool]): Propose the default configuration for the whitespace detection
             checks. Whitespace checks detect common data quality issues with storing text representations of null values,
             such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of
@@ -122,6 +124,7 @@ class CheckMiningParametersModel:
     propose_bool_percent_checks: Union[Unset, bool] = UNSET
     propose_date_checks: Union[Unset, bool] = UNSET
     propose_standard_pattern_checks: Union[Unset, bool] = UNSET
+    detect_regular_expressions: Union[Unset, bool] = UNSET
     propose_whitespace_checks: Union[Unset, bool] = UNSET
     apply_pii_checks: Union[Unset, bool] = UNSET
     propose_custom_checks: Union[Unset, bool] = UNSET
@@ -162,6 +165,7 @@ class CheckMiningParametersModel:
         propose_bool_percent_checks = self.propose_bool_percent_checks
         propose_date_checks = self.propose_date_checks
         propose_standard_pattern_checks = self.propose_standard_pattern_checks
+        detect_regular_expressions = self.detect_regular_expressions
         propose_whitespace_checks = self.propose_whitespace_checks
         apply_pii_checks = self.apply_pii_checks
         propose_custom_checks = self.propose_custom_checks
@@ -235,6 +239,8 @@ class CheckMiningParametersModel:
             field_dict["propose_standard_pattern_checks"] = (
                 propose_standard_pattern_checks
             )
+        if detect_regular_expressions is not UNSET:
+            field_dict["detect_regular_expressions"] = detect_regular_expressions
         if propose_whitespace_checks is not UNSET:
             field_dict["propose_whitespace_checks"] = propose_whitespace_checks
         if apply_pii_checks is not UNSET:
@@ -318,6 +324,8 @@ class CheckMiningParametersModel:
             "propose_standard_pattern_checks", UNSET
         )
 
+        detect_regular_expressions = d.pop("detect_regular_expressions", UNSET)
+
         propose_whitespace_checks = d.pop("propose_whitespace_checks", UNSET)
 
         apply_pii_checks = d.pop("apply_pii_checks", UNSET)
@@ -360,6 +368,7 @@ class CheckMiningParametersModel:
             propose_bool_percent_checks=propose_bool_percent_checks,
             propose_date_checks=propose_date_checks,
             propose_standard_pattern_checks=propose_standard_pattern_checks,
+            detect_regular_expressions=detect_regular_expressions,
             propose_whitespace_checks=propose_whitespace_checks,
             apply_pii_checks=apply_pii_checks,
             propose_custom_checks=propose_custom_checks,

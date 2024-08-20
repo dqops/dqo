@@ -20,7 +20,7 @@ Named filtered notification model that represents a single entry of the Filtered
 |<span class="no-wrap-code">`priority`</span>|The priority of the notification. Notifications are sent to the first notification targets that matches the filters when processAdditionalFilters is not set.|*integer*|
 |<span class="no-wrap-code">`process_additional_filters`</span>|Flag to break sending next notifications. Setting to true allows to send next notification from the list in priority order that matches the filter.|*boolean*|
 |<span class="no-wrap-code">`disabled`</span>|Flag to turn off the notification filter.|*boolean*|
-|<span class="no-wrap-code">`description`</span>|Description.|*string*|
+|<span class="no-wrap-code">`message`</span>|Message with the details of the filtered notification such as purpose explanation, SLA note, etc.|*string*|
 |<span class="no-wrap-code">`do_not_create_incidents`</span>|The doNotCreateIncidents flag that excludes from the creation of incidents that match the filters.|*boolean*|
 
 
