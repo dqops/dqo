@@ -325,9 +325,9 @@ const CheckDetails = ({
 
     return (
       `/api/connections/${connection}/schemas/${schema}/tables/${table}` +
-      (column !== undefined && `/columns/${column}`) +
+      (column !== undefined ? `/columns/${column}` : '') +
       `/${checkTypes}` +
-      (timeScale !== undefined && `/${timeScale}`) +
+      (timeScale !== undefined ? `/${timeScale}` : '') +
       `/errorsamples/download` +
       queryString
     );
