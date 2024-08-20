@@ -5,13 +5,8 @@ import {
   QualityCategoryModel,
   TimeWindowFilterParameters
 } from '../../api';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { JobApiClient } from '../../services/apiClient';
-import { CheckTypes } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
 import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import SvgIcon from '../SvgIcon';
 import RuleMiningChecksContainerListItem from './RuleMiningChecksContainerListItem';
@@ -20,11 +15,7 @@ type CheckIndexTuple = [check: CheckModel, index: number];
 
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
-  handleChangeDataGroupingConfiguration: (
-    check: CheckModel,
-    index: number,
-    columnName?: string
-  ) => void;
+  handleChangeColumnDataGroupingConfiguration: (check: CheckModel) => void;
   onUpdate: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
   mode?: string;
@@ -40,7 +31,7 @@ interface CheckCategoriesViewProps {
 const RuleMiningChecksContainerCategory = ({
   mode,
   category,
-  handleChangeDataGroupingConfiguration,
+  handleChangeColumnDataGroupingConfiguration,
   onUpdate,
   timeWindowFilter,
   changeCopyUI,
@@ -53,9 +44,6 @@ const RuleMiningChecksContainerCategory = ({
   onChangeRuleParametersConfigured
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
-  const dispatch = useActionDispatch();
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isExtended, setIsExtended] = useState(false);
 
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -68,26 +56,6 @@ const RuleMiningChecksContainerCategory = ({
     ) {
       setIsExtended(true);
     }
-  };
-
-  const onRunChecks = async () => {
-    await onUpdate();
-    const res = await JobApiClient.runChecks(undefined, false, undefined, {
-      check_search_filters: category?.run_checks_job_template,
-      ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? {
-            time_window_filter: timeWindowFilter,
-            collect_error_samples: true
-          }
-        : { collect_error_samples: true })
-    });
-    dispatch(
-      setCurrentJobId(
-        checkTypes,
-        firstLevelActiveTab,
-        res.data?.jobId?.jobId ?? 0
-      )
-    );
   };
 
   useEffect(() => {
@@ -147,7 +115,7 @@ const RuleMiningChecksContainerCategory = ({
               check={tuple[0]}
               key={tuple[1]}
               onChange={(item) =>
-                handleChangeDataGroupingConfiguration(item, tuple[1])
+                handleChangeColumnDataGroupingConfiguration(item)
               }
               onUpdate={onUpdate}
               timeWindowFilter={timeWindowFilter}

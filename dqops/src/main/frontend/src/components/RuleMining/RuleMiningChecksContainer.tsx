@@ -56,9 +56,6 @@ const RuleMiningChecksContainer = ({
   );
   const [mode, setMode] = useState<string>();
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
-  const [showAdvanced, setShowAdvanced] = useState<boolean>(
-    isFiltered === true
-  );
   const [isExtendedArray, setIsExtendedArray] = useState<string[]>([
     'Table level checks'
   ]);
@@ -79,21 +76,20 @@ const RuleMiningChecksContainer = ({
 
   const handleChangeTableDataGrouping = (
     check: CheckModel,
-    idx: number,
-    jdx: number
+    categoryName: string
   ) => {
     if (!checksUI) return;
     const newChecksUI = {
       ...checksUI,
       table_checks: {
         ...checksUI.table_checks,
-        categories: checksUI.table_checks?.categories?.map((category, index) =>
-          index !== idx
+        categories: checksUI.table_checks?.categories?.map((category) =>
+          category.category !== categoryName
             ? category
             : {
                 ...category,
-                checks: category?.checks?.map((item, jindex) =>
-                  jindex !== jdx ? item : check
+                checks: category?.checks?.map((item) =>
+                  check.check_name !== item.check_name ? item : check
                 )
               }
         )
@@ -103,11 +99,11 @@ const RuleMiningChecksContainer = ({
   };
   const handleChangeColumnDataGrouping = (
     check: CheckModel,
-    idx: number,
-    jdx: number,
-    columnName: string
+    columnName: string,
+    categoryName: string
   ) => {
     if (!checksUI) return;
+
     const newChecksUI = {
       ...checksUI,
       column_checks: {
@@ -115,13 +111,13 @@ const RuleMiningChecksContainer = ({
         [columnName]: {
           ...checksUI?.column_checks?.[columnName],
           categories: checksUI.column_checks?.[columnName]?.categories?.map(
-            (category, index) =>
-              index !== idx
+            (category) =>
+              category.category !== categoryName
                 ? category
                 : {
                     ...category,
-                    checks: category?.checks?.map((item, jindex) =>
-                      jindex !== jdx ? item : check
+                    checks: category?.checks?.map((item) =>
+                      item.check_name !== check.check_name ? item : check
                     )
                   }
           )
@@ -131,6 +127,7 @@ const RuleMiningChecksContainer = ({
 
     onChange(newChecksUI);
   };
+
   const changeCopyUI = (
     category: string,
     checkName: string,
@@ -229,8 +226,8 @@ const RuleMiningChecksContainer = ({
               <RuleMiningChecksContainerCategory
                 category={category}
                 timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
-                handleChangeDataGroupingConfiguration={(check, jIndex) =>
-                  handleChangeTableDataGrouping(check, index, jIndex)
+                handleChangeColumnDataGroupingConfiguration={(check) =>
+                  handleChangeTableDataGrouping(check, category.category ?? '')
                 }
                 onUpdate={onUpdate}
                 mode={mode}
@@ -239,7 +236,7 @@ const RuleMiningChecksContainer = ({
                   (item) => item.category === category.category
                 )}
                 isDefaultEditing={isDefaultEditing}
-                showAdvanced={showAdvanced}
+                showAdvanced={true}
                 isFiltered={isFiltered}
                 ruleParamenterConfigured={ruleParametersConfigured}
                 onChangeRuleParametersConfigured={
@@ -285,8 +282,12 @@ const RuleMiningChecksContainer = ({
                     key={x.category && x?.category + jindex}
                     category={x}
                     timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
-                    handleChangeDataGroupingConfiguration={(check, jIndex) =>
-                      handleChangeColumnDataGrouping(check, index, jIndex, key)
+                    handleChangeColumnDataGroupingConfiguration={(check) =>
+                      handleChangeColumnDataGrouping(
+                        check,
+                        key,
+                        x.category ?? ''
+                      )
                     }
                     onUpdate={onUpdate}
                     mode={mode}
@@ -295,7 +296,7 @@ const RuleMiningChecksContainer = ({
                       (item) => item.category === category
                     )}
                     isDefaultEditing={isDefaultEditing}
-                    showAdvanced={showAdvanced}
+                    showAdvanced={true}
                     isFiltered={isFiltered}
                     ruleParamenterConfigured={ruleParametersConfigured}
                     onChangeRuleParametersConfigured={
