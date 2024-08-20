@@ -627,22 +627,22 @@ public class ErrorSamplesController {
                         .append(tableName).append("_");
 
                 if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup).append("_");
+                    fileNameBuilder.append(dataGroup.get()).append("_");
                 }
                 if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart).append("_");
+                    fileNameBuilder.append(monthStart.get()).append("_");
                 }
                 if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd).append("_");
+                    fileNameBuilder.append(monthEnd.get()).append("_");
                 }
                 if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName).append("_");
+                    fileNameBuilder.append(checkName.get()).append("_");
                 }
                 if(category.isPresent()){
-                    fileNameBuilder.append(category).append("_");
+                    fileNameBuilder.append(category.get()).append("_");
                 }
                 if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison).append("_");
+                    fileNameBuilder.append(tableComparison.get()).append("_");
                 }
                 fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
                 String fileName = fileNameBuilder.toString();
@@ -766,22 +766,22 @@ public class ErrorSamplesController {
                         .append(timeScale).append("_");
 
                 if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup).append("_");
+                    fileNameBuilder.append(dataGroup.get()).append("_");
                 }
                 if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart).append("_");
+                    fileNameBuilder.append(monthStart.get()).append("_");
                 }
                 if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd).append("_");
+                    fileNameBuilder.append(monthEnd.get()).append("_");
                 }
                 if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName).append("_");
+                    fileNameBuilder.append(checkName.get()).append("_");
                 }
                 if(category.isPresent()){
-                    fileNameBuilder.append(category).append("_");
+                    fileNameBuilder.append(category.get()).append("_");
                 }
                 if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison).append("_");
+                    fileNameBuilder.append(tableComparison.get()).append("_");
                 }
                 fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
                 String fileName = fileNameBuilder.toString();
@@ -905,22 +905,22 @@ public class ErrorSamplesController {
                         .append(timeScale).append("_");
 
                 if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup).append("_");
+                    fileNameBuilder.append(dataGroup.get()).append("_");
                 }
                 if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart).append("_");
+                    fileNameBuilder.append(monthStart.get()).append("_");
                 }
                 if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd).append("_");
+                    fileNameBuilder.append(monthEnd.get()).append("_");
                 }
                 if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName).append("_");
+                    fileNameBuilder.append(checkName.get()).append("_");
                 }
                 if(category.isPresent()){
-                    fileNameBuilder.append(category).append("_");
+                    fileNameBuilder.append(category.get()).append("_");
                 }
                 if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison).append("_");
+                    fileNameBuilder.append(tableComparison.get()).append("_");
                 }
                 fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
                 String fileName = fileNameBuilder.toString();
@@ -1049,22 +1049,22 @@ public class ErrorSamplesController {
                         .append(columnName).append("_");
 
                 if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup).append("_");
+                    fileNameBuilder.append(dataGroup.get()).append("_");
                 }
                 if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart).append("_");
+                    fileNameBuilder.append(monthStart.get()).append("_");
                 }
                 if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd).append("_");
+                    fileNameBuilder.append(monthEnd.get()).append("_");
                 }
                 if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName).append("_");
+                    fileNameBuilder.append(checkName.get()).append("_");
                 }
                 if(category.isPresent()){
-                    fileNameBuilder.append(category).append("_");
+                    fileNameBuilder.append(category.get()).append("_");
                 }
                 if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison).append("_");
+                    fileNameBuilder.append(tableComparison.get()).append("_");
                 }
                 fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
                 String fileName = fileNameBuilder.toString();
@@ -1196,22 +1196,22 @@ public class ErrorSamplesController {
                         .append(timeScale).append("_");
 
                 if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup).append("_");
+                    fileNameBuilder.append(dataGroup.get()).append("_");
                 }
                 if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart).append("_");
+                    fileNameBuilder.append(monthStart.get()).append("_");
                 }
                 if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd).append("_");
+                    fileNameBuilder.append(monthEnd.get()).append("_");
                 }
                 if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName).append("_");
+                    fileNameBuilder.append(checkName.get()).append("_");
                 }
                 if(category.isPresent()){
-                    fileNameBuilder.append(category).append("_");
+                    fileNameBuilder.append(category.get()).append("_");
                 }
                 if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison).append("_");
+                    fileNameBuilder.append(tableComparison.get()).append("_");
                 }
                 fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
                 String fileName = fileNameBuilder.toString();
@@ -1344,22 +1344,22 @@ public class ErrorSamplesController {
                         .append(timeScale).append("_");
 
                 if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup).append("_");
+                    fileNameBuilder.append(dataGroup.get()).append("_");
                 }
                 if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart).append("_");
+                    fileNameBuilder.append(monthStart.get()).append("_");
                 }
                 if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd).append("_");
+                    fileNameBuilder.append(monthEnd.get()).append("_");
                 }
                 if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName).append("_");
+                    fileNameBuilder.append(checkName.get()).append("_");
                 }
                 if(category.isPresent()){
-                    fileNameBuilder.append(category).append("_");
+                    fileNameBuilder.append(category.get()).append("_");
                 }
                 if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison).append("_");
+                    fileNameBuilder.append(tableComparison.get()).append("_");
                 }
                 fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
                 String fileName = fileNameBuilder.toString();
