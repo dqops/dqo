@@ -10,6 +10,7 @@ import {
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
+  addFirstLevelTab,
   getConnectionIncidentGrouping,
   setActiveFirstLevelTab,
   setUpdateIncidentGroup,
@@ -103,6 +104,14 @@ export const IncidentsNotificationsView = () => {
         },
         priority: 1000
       });
+      dispatch(
+        addFirstLevelTab(checkTypes, {
+          value: firstLevelActiveTab,
+          state: {
+            incidentFilters: undefined
+          }
+        })
+      );
       setAddNotificationPattern(true);
     }
   }, [incidentFilters]);
