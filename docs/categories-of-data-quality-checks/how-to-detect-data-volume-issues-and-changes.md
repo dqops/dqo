@@ -279,11 +279,14 @@ spec:
 
 
 ## Detecting volume relative change
-DQOps supports detecting significant data volume changes since the last known row count
-or a reference value at a relative point in the past.
+DQOps supports detecting significant changes in data volume compared to the last known row count or a reference 
+value from a previous point in time.
 
 - The [*row_count_change*](../checks/table/volume/row-count-change.md) check compares the current row count
   to the last known row count. The daily monitoring checks will use a value from the previous day or older.
+
+The data quality checks listed below are classified as non-standard checks. To display non-standard checks, 
+select the **Show advanced checks** checkbox at the top left of the Check editor table.
 
 - The [*row_count_change_1_day*](../checks/table/volume/row-count-change-1-day.md) check compares 
   the current row count to a value from yesterday. 
@@ -298,7 +301,7 @@ or a reference value at a relative point in the past.
 
 - The [*row_count_change_30_days*](../checks/table/volume/row-count-change-30-days.md) compares the current row count
   to a count captured thirty days ago. This behavior will detect the volume change since the previous month, 
-  avoiding the influence of monthly seasonability.
+  avoiding the influence of monthly seasonality.
 
 All these checks take one data quality rule parameter.
 The **max_percent** parameter sets the maximum accepted relative change in percent. 
