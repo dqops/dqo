@@ -68,8 +68,7 @@ export default function DefaultPatternTarget({
             />
           </div>
         </div>
-        <div className="flex items-center gap-x-2 py-2 mr-8 min-w-10">
-          <span>Disabled</span>
+        <div className="flex items-center gap-x-6 py-2 mr-8 min-w-10">
           <Checkbox
             checked={pattern?.disabled}
             onChange={(value) =>
@@ -78,11 +77,9 @@ export default function DefaultPatternTarget({
               })
             }
           />
+          <span>Disabled</span>
         </div>
-        <div className=" ml-2 flex items-center gap-x-2 py-2 mr-8 ">
-          <span className="!min-w-56">
-            Process additional notification filters
-          </span>
+        <div className=" ml-2 flex items-center gap-x-6 py-2 mr-8 ">
           <Checkbox
             checked={pattern?.process_additional_filters}
             onChange={(value) =>
@@ -91,9 +88,11 @@ export default function DefaultPatternTarget({
               })
             }
           />
+          <span className="!min-w-56">
+            Process additional notification filters
+          </span>
         </div>
-        <div className="] ml-2 flex items-center gap-x-2 py-2">
-          <span className="!min-w-38">Do not create incidents</span>
+        <div className="ml-2 flex items-center gap-x-6 py-2">
           <Checkbox
             checked={pattern?.do_not_create_incidents}
             onChange={(value) =>
@@ -102,6 +101,7 @@ export default function DefaultPatternTarget({
               })
             }
           />
+          <span className="!min-w-38">Do not create incidents</span>
         </div>
       </div>
       <SectionWrapper title="Target filters" className="cursor-default">
