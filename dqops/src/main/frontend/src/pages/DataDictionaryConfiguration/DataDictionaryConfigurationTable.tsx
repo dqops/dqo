@@ -4,12 +4,15 @@ import { DataDictionaryListModel } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SvgIcon from '../../components/SvgIcon';
-import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { DataDictionaryApiClient } from '../../services/apiClient';
-import { ROUTES } from '../../shared/routes';
 
-export default function DataDictionaryConfigurationTable() {
+export default function DataDictionaryConfigurationTable({
+  setDictionaryToEdit
+}: {
+  setDictionaryToEdit: (value: string) => void;
+}) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [loading, setLoading] = useState(false);
@@ -18,6 +21,8 @@ export default function DataDictionaryConfigurationTable() {
   );
   const [selectedDictionaryToDelete, setSelectedDictionaryToDelete] =
     useState('');
+  const { activeTab } = useSelector((state: IRootState) => state.definition);
+
   const dispatch = useDispatch();
 
   const getAllDictionaries = async () => {
@@ -29,16 +34,8 @@ export default function DataDictionaryConfigurationTable() {
   };
 
   const updateDataDictionary = async (dictionary_name: string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.DATA_DICTIONARY_DETAIL(dictionary_name),
-        value: ROUTES.DATA_DICTIONARY_VALUE(dictionary_name),
-        label: 'Edit dictionary',
-        state: {
-          dictionary_name
-        }
-      })
-    );
+    dispatch(updateTabLabel(dictionary_name, activeTab ?? ''));
+    setDictionaryToEdit(dictionary_name);
   };
 
   const deleteDictionary = async (dictionary: string) => {
