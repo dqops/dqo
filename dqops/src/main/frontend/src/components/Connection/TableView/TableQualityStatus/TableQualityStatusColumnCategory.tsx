@@ -144,7 +144,7 @@ export default function TableQualityStatusColumnCategory({
         <td
           key={`cell_column_${customKey}_${firstLevelChecksKey}`}
           className="h-full"
-          onClick={() => toggleExtendedChecks(customKey, firstLevelChecksKey)}
+          onClick={() => columnStatus.status && toggleExtendedChecks(customKey, firstLevelChecksKey)}
           style={{ padding: 0, margin: 0 }}
         >
           {columnStatus.status && (

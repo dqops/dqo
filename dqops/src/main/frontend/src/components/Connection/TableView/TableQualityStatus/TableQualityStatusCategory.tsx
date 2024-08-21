@@ -92,7 +92,7 @@ export default function TableQualityStatusCategory({
         >
           <div
             className="h-full flex w-29 items-center justify-end "
-            onClick={() => toggleExtendedChecks(key, 'table')}
+            onClick={() => tableStatus.status && toggleExtendedChecks(key, 'table')}
           >
             <div className="w-5 h-full"></div>
             {tableStatus.status && (
