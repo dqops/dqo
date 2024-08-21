@@ -391,6 +391,8 @@ public class TableListModel {
                 setDeleteErrors(true);
                 setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
+                setDeleteErrorSamples(true);
+                setDeleteIncidents(true);
             }});
         }};
     }

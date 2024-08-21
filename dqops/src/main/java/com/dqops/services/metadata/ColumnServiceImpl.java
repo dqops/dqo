@@ -149,6 +149,8 @@ public class ColumnServiceImpl implements ColumnService {
                     setDeleteCheckResults(true);
                     setDeleteSensorReadouts(true);
                     setDeleteErrors(true);
+                    setDeleteErrorSamples(true);
+                    setDeleteIncidents(true);
                 }};
                 deleteStoredDataParameters.add(param);
             }
