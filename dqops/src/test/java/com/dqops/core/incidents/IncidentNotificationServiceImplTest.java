@@ -421,46 +421,47 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         assertEquals(null, incidentNotificationMessageAddressPairs.get(4).getIncidentNotificationMessage().getMessage());
     }
 
-    @Test
-    void filterNotifications_globalAndConnectionNotificationsButDefaultIsSetGlobalOnly_theLastAddressIsGlobal() {
-        Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
-        IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
-
-        IncidentNotificationSpec notificationSpec = createIncidentNotificationSpecForMixedCase();
-        notificationSpec.setIncidentOpenedAddresses(null);
-        IncidentNotificationSpec globalNotificationSpec = createGlobalIncidentNotificationSpecForMixedCase();
-
-        IncidentNotificationConfigurations incidentNotificationConfigurations = new IncidentNotificationConfigurations(
-                notificationSpec,
-                globalNotificationSpec
-        );
-
-        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, incidentNotificationConfigurations);
-
-        assertEquals(5, incidentNotificationMessageAddressPairs.size());
-
-        assertEquals("default_global@email.com", incidentNotificationMessageAddressPairs.get(4).getNotificationAddress());
-        assertEquals(null, incidentNotificationMessageAddressPairs.get(4).getIncidentNotificationMessage().getMessage());
-    }
-
-    @Test
-    void filterNotifications_onlyGlobalDefaultItSet_setOnlyGlobalAddress() {
-        Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
-        IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
-
-        IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
-        IncidentNotificationSpec globalNotificationSpec = new IncidentNotificationSpec();
-        globalNotificationSpec.setIncidentOpenedAddresses("default_global@email.com");
-
-        IncidentNotificationConfigurations incidentNotificationConfigurations = new IncidentNotificationConfigurations(
-                notificationSpec,
-                globalNotificationSpec
-        );
-
-        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, incidentNotificationConfigurations);
-
-        assertEquals(1, incidentNotificationMessageAddressPairs.size());
-        assertEquals("default_global@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
-    }
+//    test not to be applied, the combination between global and connection notification is done on the loading stage: loadConfiguration from IncidentNotificationsConfigurationLoaderImpl
+//    @Test
+//    void filterNotifications_globalAndConnectionNotificationsButDefaultIsSetGlobalOnly_theLastAddressIsGlobal() {
+//        Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
+//        IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
+//
+//        IncidentNotificationSpec notificationSpec = createIncidentNotificationSpecForMixedCase();
+//        notificationSpec.setIncidentOpenedAddresses(null);
+//        IncidentNotificationSpec globalNotificationSpec = createGlobalIncidentNotificationSpecForMixedCase();
+//
+//        IncidentNotificationConfigurations incidentNotificationConfigurations = new IncidentNotificationConfigurations(
+//                notificationSpec,
+//                globalNotificationSpec
+//        );
+//
+//        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, incidentNotificationConfigurations);
+//
+//        assertEquals(5, incidentNotificationMessageAddressPairs.size());
+//
+//        assertEquals("default_global@email.com", incidentNotificationMessageAddressPairs.get(4).getNotificationAddress());
+//        assertEquals(null, incidentNotificationMessageAddressPairs.get(4).getIncidentNotificationMessage().getMessage());
+//    }
+//
+//    @Test
+//    void filterNotifications_onlyGlobalDefaultItSet_setOnlyGlobalAddress() {
+//        Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
+//        IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
+//
+//        IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
+//        IncidentNotificationSpec globalNotificationSpec = new IncidentNotificationSpec();
+//        globalNotificationSpec.setIncidentOpenedAddresses("default_global@email.com");
+//
+//        IncidentNotificationConfigurations incidentNotificationConfigurations = new IncidentNotificationConfigurations(
+//                notificationSpec,
+//                globalNotificationSpec
+//        );
+//
+//        List<IncidentNotificationMessageAddressPair> incidentNotificationMessageAddressPairs = sut.filterNotifications(message, incidentNotificationConfigurations);
+//
+//        assertEquals(1, incidentNotificationMessageAddressPairs.size());
+//        assertEquals("default_global@email.com", incidentNotificationMessageAddressPairs.get(0).getNotificationAddress());
+//    }
 
 }
