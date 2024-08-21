@@ -1,9 +1,9 @@
+import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FilteredNotificationModel } from '../../../../api';
 import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
 import { getSeverity, sortPatterns } from '../../../../utils';
-import Button from '../../../Button';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import SvgIcon from '../../../SvgIcon';
 
@@ -17,7 +17,8 @@ const headerElements = [
   { label: 'Check category', key: 'checkCategory' },
   { label: 'Check name', key: 'checkName' },
   { label: 'Check type', key: 'checkType' },
-  { label: 'Highest severity', key: 'highestSeverity' }
+  { label: 'Highest severity', key: 'highestSeverity' },
+  { label: 'Action', key: 'action' }
 ];
 
 type TNotificationPattern = FilteredNotificationModel & {
@@ -89,33 +90,45 @@ export default function NotificationPatternTable({
   };
 
   return (
-    <table>
+    <table className="text-sm">
       <thead>
         <tr>
           {headerElements.map((elem, index) => (
             <th className="" key={elem.label}>
               <div className="flex gap-x-1 items-center cursor-default">
-                <div>{elem.label}</div>
-                <div>
-                  {!(indexSortingElement === index && dir === 'asc') ? (
-                    <SvgIcon
-                      name="chevron-up"
-                      className="w-2 h-2 text-black"
-                      onClick={() => sortPreparedPattern(elem, index, 'desc')}
-                    />
-                  ) : (
-                    <div className="w-2 h-2" />
-                  )}
-                  {!(indexSortingElement === index && dir === 'desc') ? (
-                    <SvgIcon
-                      name="chevron-down"
-                      className="w-2 h-2 text-black"
-                      onClick={() => sortPreparedPattern(elem, index, 'asc')}
-                    />
-                  ) : (
-                    <div className="w-2 h-2" />
-                  )}
+                <div
+                  className={
+                    elem.key === 'action'
+                      ? filteredNotificationsConfigurations.length === 0
+                        ? ''
+                        : 'ml-4'
+                      : ''
+                  }
+                >
+                  {elem.label}
                 </div>
+                {elem.key !== 'action' && (
+                  <div>
+                    {!(indexSortingElement === index && dir === 'asc') ? (
+                      <SvgIcon
+                        name="chevron-up"
+                        className="w-2 h-2 text-black"
+                        onClick={() => sortPreparedPattern(elem, index, 'desc')}
+                      />
+                    ) : (
+                      <div className="w-2 h-2" />
+                    )}
+                    {!(indexSortingElement === index && dir === 'desc') ? (
+                      <SvgIcon
+                        name="chevron-down"
+                        className="w-2 h-2 text-black"
+                        onClick={() => sortPreparedPattern(elem, index, 'asc')}
+                      />
+                    ) : (
+                      <div className="w-2 h-2" />
+                    )}
+                  </div>
+                )}
               </div>
             </th>
           ))}
@@ -150,27 +163,34 @@ export default function NotificationPatternTable({
               {getSeverity(String(notificationPattern?.highestSeverity ?? ''))}
             </td>
             <td>
-              <Button
-                variant="text"
-                label="edit"
-                color="primary"
-                onClick={() =>
-                  setPatternNameEdit(notificationPattern.name ?? '')
-                }
-              />
-            </td>
-            {notificationPattern.name !== 'default' && (
-              <td>
-                <Button
-                  variant="text"
-                  label="delete"
-                  color="primary"
+              <div className="flex items-center gap-x-4 my-0.5">
+                <IconButton
                   onClick={() =>
-                    setPatternDelete(notificationPattern.name ?? '')
+                    setPatternNameEdit(notificationPattern.name ?? '')
                   }
-                />
-              </td>
-            )}
+                  size="sm"
+                  color="teal"
+                  className={clsx(
+                    '!shadow-none hover:!shadow-none hover:bg-[#028770]',
+                    filteredNotificationsConfigurations.length === 0 && 'ml-1.5'
+                  )}
+                >
+                  <SvgIcon name="edit" className="w-4" />
+                </IconButton>
+                {notificationPattern.name !== 'default' && (
+                  <IconButton
+                    onClick={() =>
+                      setPatternDelete(notificationPattern.name ?? '')
+                    }
+                    size="sm"
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                )}
+              </div>
+            </td>
           </tr>
         ))}
         <ConfirmDialog
