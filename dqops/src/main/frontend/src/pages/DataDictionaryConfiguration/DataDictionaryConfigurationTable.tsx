@@ -1,7 +1,7 @@
+import { IconButton } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataDictionaryListModel } from '../../api';
-import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SvgIcon from '../../components/SvgIcon';
 import { updateTabLabel } from '../../redux/actions/definition.actions';
@@ -73,36 +73,47 @@ export default function DataDictionaryConfigurationTable({
           <td className="px-6 py-2 text-left block w-100 italic">
             {'${dictionary://' + dictionary.dictionary_name + '}'}
           </td>
-          <td className="px-6 py-2 text-left block max-w-100">
-            <Button
-              label="Edit"
-              variant="text"
-              color="primary"
+          <td className="px-2 py-2 text-left block max-w-100">
+            <IconButton
+              size="sm"
               onClick={() =>
                 updateDataDictionary(dictionary.dictionary_name ?? '')
               }
+              color="teal"
+              className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
               disabled={userProfile.can_manage_definitions !== true}
-            />
+            >
+              <SvgIcon name="edit" className="w-4" />
+            </IconButton>
           </td>
-          <td className="px-6 py-2 text-left block max-w-100">
-            <Button
-              label="Delete"
-              variant="text"
-              color="primary"
+          <td className="px-2 py-2 text-left block max-w-100">
+            <IconButton
+              size="sm"
               onClick={() =>
                 setSelectedDictionaryToDelete(dictionary.dictionary_name ?? '')
               }
               disabled={userProfile.can_manage_definitions !== true}
-            />
+              color="teal"
+              className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+            >
+              <SvgIcon name="delete" className="w-4" />
+            </IconButton>
           </td>
-          <td className="px-6 py-2 text-left block max-w-100">
+          <td className="px-2 py-2 text-left block max-w-100">
             <a
               href={`/api/dictionaries/${dictionary.dictionary_name}/download`}
               rel="noreferrer"
               target="_blank"
               className="text-teal-500"
             >
-              Download
+              <IconButton
+                size="sm"
+                disabled={userProfile.can_manage_definitions !== true}
+                color="teal"
+                className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+              >
+                <SvgIcon name="download" className="w-4" />
+              </IconButton>
             </a>
           </td>
         </tr>
