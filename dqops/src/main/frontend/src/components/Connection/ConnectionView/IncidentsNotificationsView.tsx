@@ -99,9 +99,9 @@ export const IncidentsNotificationsView = () => {
           qualityDimension: incidentFilters.qualityDimension,
           checkCategory: incidentFilters.checkCategory,
           checkName: incidentFilters.check,
-          checkType: incidentFilters.checkType,
-          highestSeverity: incidentFilters.highestSeverity
-        }
+          checkType: incidentFilters.checkType
+        },
+        priority: 1000
       });
       setAddNotificationPattern(true);
     }
