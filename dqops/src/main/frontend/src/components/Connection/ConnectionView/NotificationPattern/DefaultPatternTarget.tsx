@@ -3,6 +3,7 @@ import {
   FilteredNotificationModel,
   NotificationFilterSpec
 } from '../../../../api';
+import { useDecodedParams } from '../../../../utils';
 import Checkbox from '../../../Checkbox';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import Input from '../../../Input';
@@ -22,6 +23,7 @@ export default function DefaultPatternTarget({
   onChange,
   onChangePatternFilter
 }: TDefaultCheckTargetConfigurationProps) {
+  const { connection }: { connection: string } = useDecodedParams();
   return (
     <div>
       <div className="flex items-center text-black text-sm">
@@ -107,13 +109,17 @@ export default function DefaultPatternTarget({
           <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2 ">
             <span className="w-25 ">Connection</span>
             <div className="w-full">
-              <Input
-                value={pattern?.filter?.connection}
-                className="w-full"
-                onChange={(e) =>
-                  onChangePatternFilter({ connection: e.target.value })
-                }
-              />
+              {connection ? (
+                <Input value={connection} disabled />
+              ) : (
+                <Input
+                  value={pattern?.filter?.connection}
+                  className="w-full"
+                  onChange={(e) =>
+                    onChangePatternFilter({ connection: e.target.value })
+                  }
+                />
+              )}
             </div>
           </div>
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
@@ -135,14 +141,14 @@ export default function DefaultPatternTarget({
         </div>
         <div className="flex justify-between  text-black  ">
           <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25"> Table</span>
+            <span className="w-25"> Schema</span>
             <div className="w-full">
               <Input
-                value={pattern?.filter?.table}
+                value={pattern?.filter?.schema}
+                className="w-full"
                 onChange={(e) =>
-                  onChangePatternFilter({ table: e.target.value })
+                  onChangePatternFilter({ schema: e.target.value })
                 }
-                className="w-11/12"
               />
             </div>
           </div>
@@ -161,18 +167,17 @@ export default function DefaultPatternTarget({
         </div>
         <div className="flex justify-between  text-black  ">
           <div className="w-1/2 ml-2 flex items-center gap-x-4 py-2">
-            <span className="w-25"> Schema</span>
+            <span className="w-25"> Table</span>
             <div className="w-full">
               <Input
-                value={pattern?.filter?.schema}
-                className="w-full"
+                value={pattern?.filter?.table}
                 onChange={(e) =>
-                  onChangePatternFilter({ schema: e.target.value })
+                  onChangePatternFilter({ table: e.target.value })
                 }
+                className="w-11/12"
               />
             </div>
           </div>
-
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25"> Check category </span>
             <div className="w-full">
@@ -230,6 +235,20 @@ export default function DefaultPatternTarget({
                   onChange={(value) =>
                     onChangePatternFilter({
                       highestSeverity: value
+                    })
+                  }
+                  className="w-49"
+                />
+              </div>
+            </div>
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25"> Data group name</span>
+              <div className="w-full">
+                <Input
+                  value={pattern?.filter?.dataGroupName}
+                  onChange={(value) =>
+                    onChangePatternFilter({
+                      dataGroupName: value.target.value
                     })
                   }
                   className="w-49"
