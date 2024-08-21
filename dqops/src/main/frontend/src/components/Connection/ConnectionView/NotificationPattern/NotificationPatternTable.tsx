@@ -44,7 +44,7 @@ export default function NotificationPatternTable({
   setPatternNameEdit: (patternName: string) => void;
   connection?: string;
 }) {
-  const [dir, setDir] = useState<'asc' | 'desc'>('desc');
+  const [dir, setDir] = useState<'asc' | 'desc'>('asc');
   const [notificationPatternDelete, setPatternDelete] = useState('');
   const [indexSortingElement, setIndexSortingElement] = useState(1);
   const [headerItems, setHeaderItems] = useState(HEADER_ELEMENTS);
@@ -130,13 +130,21 @@ export default function NotificationPatternTable({
         <tr>
           {headerItems.map((elem, index) => (
             <th key={elem.label}>
-              <div className="flex gap-x-1 items-center cursor-default">
+              <div
+                className={clsx(
+                  'flex gap-x-1 items-center cursor-default',
+                  elem.key === 'priority' &&
+                    'text-right flex items-center justify-end !max-w-10'
+                )}
+              >
                 <div
-                  className={clsx({
-                    'ml-4':
-                      elem.key === 'action' &&
-                      filteredNotificationsConfigurations.length > 0
-                  })}
+                  className={clsx(
+                    elem.key === 'action' &&
+                      filteredNotificationsConfigurations.length > 0 &&
+                      'ml-4',
+                    elem.key === 'priority' &&
+                      'text-right flex items-center justify-end !max-w-10'
+                  )}
                 >
                   {elem.label}
                 </div>
@@ -175,7 +183,8 @@ export default function NotificationPatternTable({
                 key={elem.key}
                 className={clsx(
                   elem.key === 'name' && 'underline cursor-pointer',
-                  notificationPattern.disabled && 'text-gray-200'
+                  notificationPattern.disabled && 'text-gray-200',
+                  'max-w-40 truncate'
                 )}
                 onClick={() =>
                   elem.key === 'name' &&
@@ -183,7 +192,11 @@ export default function NotificationPatternTable({
                 }
               >
                 {elem.key === 'name' && notificationPattern.name}
-                {elem.key === 'priority' && notificationPattern.priority}
+                {elem.key === 'priority' && (
+                  <div className="text-right !max-w-10">
+                    {notificationPattern.priority}{' '}
+                  </div>
+                )}
                 {elem.key === 'connection' && notificationPattern.connection}
                 {elem.key === 'schema' && notificationPattern.schema}
                 {elem.key === 'table' && notificationPattern.table}
