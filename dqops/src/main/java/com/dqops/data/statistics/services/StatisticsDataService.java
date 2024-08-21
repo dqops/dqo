@@ -53,4 +53,14 @@ public interface StatisticsDataService {
                                                                      String columName,
                                                                      String dataGroup,
                                                                      UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Checks if there are any recent partition files with the results of basic statistics for the given table.
+     * This operation is used to propose the user to collect statistics.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return True when there are any results, false when there are no results.
+     */
+    boolean hasAnyRecentStatisticsResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
 }

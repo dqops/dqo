@@ -22,12 +22,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.0</version>
+		<version>3.1.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.6.2</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.7.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -322,7 +322,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.26</version>
+			<version>1.18.32</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -454,7 +454,7 @@
 		<dependency>
 			<groupId>com.azure</groupId>
 			<artifactId>azure-identity</artifactId>
-			<version>1.12.2</version>
+			<version>1.8.2</version>	<!-- newer version prevents from logining to azure with service principal due to the java.lang.NoSuchMethodError: 'boolean com.azure.core.credential.TokenRequestContext.isCaeEnabled()' -->
 		</dependency>
 		<dependency>
 			<groupId>com.nimbusds</groupId> <!-- Direct import added on July 6th, 2024 when the artifact was removed from MavenCentral in the version that was referenced by some other libraries. It should be upgraded when this package returns to maven central. -->
@@ -751,7 +751,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.26</version>
+							<version>1.18.32</version>
 						</path>
 						<path>
 							<groupId>com.github.therapi</groupId>

@@ -38,10 +38,10 @@ const AddSchemaDialog = ({
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-6 pb-2 px-8">
         <div className="flex flex-col">
-          <h1 className="text-center mb-4 text-gray-700 text-2xl">Add Schema</h1>
+          <h1 className="text-center mb-4 text-gray-700 text-2xl">Add schema</h1>
           <div>
             <Input
-              label="Schema Name"
+              label="Schema name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />

@@ -81,7 +81,7 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
                 executionContext,
                 this.parameters.getCheckSearchFilters(),
                 this.parameters.getTimeWindowFilter(),
-                this.parameters.isCollectErrorSamples(),
+                this.parameters.getCollectErrorSamples(),
                 this.parameters.getProgressListener(),
                 this.parameters.isDummyExecution(),
                 true,

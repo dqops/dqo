@@ -16,14 +16,26 @@
 package com.dqops.checks.column.checkspecs.datetime;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
+import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.MaxPercentRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.datetime.ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
+import com.dqops.statistics.column.range.ColumnRangeMaxValueStatisticsCollectorSpec;
+import com.dqops.utils.conversion.DateTypesConverter;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,6 +44,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -46,6 +61,13 @@ public class ColumnDateValuesInFuturePercentCheckSpec
         {
         }
     };
+
+    /**
+     * The limit of days in the future that are proposed from statistics.
+     */
+    public final static double MAX_DAYS_IN_THE_FUTURE = 30.0;
+
+    public static final String SENSOR_NAME = ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec.SENSOR_NAME;
 
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -187,5 +209,103 @@ public class ColumnDateValuesInFuturePercentCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Validity;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule mining registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (!miningParameters.isProposeDateChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        boolean isDateType = columnTypeCategory == DataTypeCategory.datetime_date ||
+                columnTypeCategory == DataTypeCategory.datetime_datetime ||
+                columnTypeCategory == DataTypeCategory.datetime_timestamp ||
+                ((columnTypeCategory == DataTypeCategory.text || columnTypeCategory == null) && !columnDataAssetProfilingResults.getSampleValues().isEmpty() &&
+                        columnDataAssetProfilingResults.getSampleValues().stream().allMatch(sample -> sample.getInstantValue() != null));
+
+        if (sourceProfilingCheck.getActualValue() == null) {
+            if (miningParameters.getFailChecksAtPercentErrorRows() == 0.0) {
+                // no errors expected, so we will find the newest date from the stats and configure the lead time
+
+                List<StatisticsMetricModel> maxStatistics = columnDataAssetProfilingResults.getBasicStatisticsForSensor(
+                        ColumnRangeMaxValueStatisticsCollectorSpec.SENSOR_NAME, true);
+                if (!maxStatistics.isEmpty()) {
+                    Instant maxInstantValue = DateTypesConverter.toInstant(maxStatistics.get(0).getResult(), tableProfilingResults.getTimeZoneId());
+                    if (maxInstantValue == null) {
+                        return false;
+                    }
+
+                    Duration timeAfterExecuted = Duration.between(maxStatistics.get(0).getExecutedAt(), maxInstantValue);
+                    if (!timeAfterExecuted.isNegative()) {
+                        // there are dates in the future
+                        double maxDaysInTheFuture = DoubleRounding.roundToKeepEffectiveDigits((timeAfterExecuted.getSeconds() / 60.0 / 60.0 / 24.0) * 1.3);
+                        if (maxDaysInTheFuture > MAX_DAYS_IN_THE_FUTURE) {
+                            maxDaysInTheFuture = MAX_DAYS_IN_THE_FUTURE; // sanity check, dates far in the future are errors and must be reported as errors
+                        }
+                        this.parameters.setMaxFutureDays(maxDaysInTheFuture);
+                    }
+
+                    sourceProfilingCheck.setActualValue(0.0); // just fake number like there were no dates, to enable a check, even if it fails
+                    sourceProfilingCheck.setExecutedAt(Instant.now());
+                } else {
+                    return false;
+                }
+            } else {
+                if (isDateType) {
+                    sourceProfilingCheck.setActualValue(0.0); // just fake number like there were no dates, to enable a check, even if it fails
+                    sourceProfilingCheck.setExecutedAt(Instant.now());
+                } else {
+                    return false; // not a date column, skipping
+                }
+            }
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && sourceProfilingCheck.getActualValue() > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
+            return false; // do not configure this check, when the value was captured and there are too many future values
+        }
+
+        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters, columnTypeCategory,
+                checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }

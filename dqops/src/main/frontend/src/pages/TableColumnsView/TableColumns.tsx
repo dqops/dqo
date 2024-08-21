@@ -56,7 +56,6 @@ const TableColumns = ({
   };
 
   const removeColumn = async () => {
-    console.log(selectedColumn);
     if (selectedColumn?.column_name) {
       await ColumnApiClient.deleteColumn(
         connectionName,
@@ -168,7 +167,6 @@ const TableColumns = ({
     const columnToDelete = statistics?.column_statistics?.find(
       (x) => x.column_hash === hashValue
     );
-    console.log('columnToDelete', columnToDelete);
     if (columnToDelete) {
       Promise.resolve()
         .then(() => onRemoveColumn(columnToDelete))

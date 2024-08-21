@@ -24,7 +24,7 @@ const NotificationMenu = () => {
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler style={{ position: 'relative' }}>
         <IconButton
-          className="!mr-3 !bg-transparent"
+          className="!mr-3 !bg-transparent !shadow-none hover:!shadow-none"
           ripple={false}
           variant="text"
         >

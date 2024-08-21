@@ -70,7 +70,7 @@ const ColumnActionGroup = ({
               ? 'outlined'
               : 'contained'
           }
-          label="Delete Column"
+          label="Delete column"
           onClick={() => setIsOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
         />

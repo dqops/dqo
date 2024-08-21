@@ -1,8 +1,7 @@
-import React, { ReactNode } from 'react';
-
 import clsx from 'clsx';
-
+import React, { ReactNode } from 'react';
 import Loader from '../Loader';
+import './Button.css';
 
 interface IButtonProps {
   label?: string;
@@ -18,6 +17,7 @@ interface IButtonProps {
   textSize?: 'sm' | 'base' | 'lg' | 'xl';
   dataTestId?: string;
   ref?: any;
+  flashRedBorder?: boolean;
 }
 
 const colorsMap = {
@@ -61,7 +61,8 @@ const Button = ({
   variant = 'contained',
   textSize,
   dataTestId,
-  ref
+  ref,
+  flashRedBorder = false
 }: IButtonProps) => {
   const classes = color ? colorsMap[color][variant] : '';
 
@@ -77,7 +78,10 @@ const Button = ({
         'rounded-lg focus:outline-none flex items-center justify-center',
         (!className || className.indexOf('py-') === -1) && 'py-2',
         (!className || className.indexOf('px-') === -1) && 'px-6',
-        { 'cursor-not-allowed': disabled }
+        { 'cursor-not-allowed': disabled },
+        { 'flash-red-border': flashRedBorder },
+        classes === colorsMap.primary.contained && 'hover:bg-[#028770]',
+        classes === colorsMap.primary.outlined && 'hover:bg-[#DDF2EF]'
       )}
       disabled={disabled}
       data-testid={dataTestId}

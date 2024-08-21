@@ -182,7 +182,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param targetTable Target table.
      * @param checkSearchFilters Check search filters.
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
-     * @param collectErrorSamples Collect error samples for failed checks.
+     * @param collectErrorSamples Collect error samples for failed checks, requested by the user. Can disable or enable sample collection independent of other parameters.
      * @param progressListener Progress listener.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token.
@@ -195,7 +195,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                       TableWrapper targetTable,
                                                       CheckSearchFilters checkSearchFilters,
                                                       TimeWindowFilterParameters userTimeWindowFilters,
-                                                      boolean collectErrorSamples,
+                                                      Boolean collectErrorSamples,
                                                       CheckExecutionProgressListener progressListener,
                                                       boolean dummySensorExecution,
                                                       JobCancellationToken jobCancellationToken) {
@@ -208,7 +208,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         // TODO: before applying default checks, we could look into the filters, if the run check filters are selective (one column, or one check), we could use
         // a different variant of applying default checks, or pass the CheckSearchFilters object to the defaultObservabilityConfigurationService
 
-        List<AbstractCheckSpec<?, ?, ?, ?>> checksNotPassed = new ArrayList<>();
+        List<AbstractCheckSpec<?, ?, ?, ?>> checksForErrorSampling = new ArrayList<>();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(tableSpec, checkSearchFilters);
         if (checks.size() == 0) {
             return checkExecutionSummary; // no checks for this table
@@ -240,7 +240,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 .collect(Collectors.toList());
         executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, jobCancellationToken,
                 checkExecutionSummary, singleTableChecks, tableSpec, sensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
-                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksNotPassed);
+                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples);
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
@@ -272,11 +272,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch, userDomainIdentity);
         }
 
-        if (collectErrorSamples && !checksNotPassed.isEmpty()) {
+        if (!checksForErrorSampling.isEmpty()) {
             LocalDateTime errorSamplingSessionStartAt = LocalDateTime.now(this.defaultTimeZoneProvider.getDefaultTimeZoneId());
             CheckSearchFilters errorSamplingChecksFilters = checkSearchFilters.clone();
             errorSamplingChecksFilters.setCheckHierarchyIds(
-                    checksNotPassed.stream()
+                    checksForErrorSampling.stream()
                             .map(checkSpec -> checkSpec.getHierarchyId())
                             .collect(Collectors.toSet())
             );
@@ -315,7 +315,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             Table allRuleEvaluationResultsTable,
             Table allErrorsTable,
             TableChecksExecutionStatistics executionStatistics,
-            List<AbstractCheckSpec<?, ?, ?, ?>> checksNotPassedCollector) {
+            List<AbstractCheckSpec<?, ?, ?, ?>> checksNotPassedForErrorCollection,
+            Boolean collectErrorSamples) {
         if (checks.isEmpty()) {
             return;
         }
@@ -383,8 +384,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
 
                     int countOfNotPassedResults = ruleEvaluationResult.countIssueSeverityResults(1);
-                    if (countOfNotPassedResults > 0) {
-                        checksNotPassedCollector.add(sensorRunParameters.getCheck());
+
+                    if (Objects.equals(collectErrorSamples, true) || (collectErrorSamples == null &&
+                            (sensorRunParameters.getCheck().isAlwaysCollectErrorSamples() ||
+                                (sensorRunParameters.getCheckType() == CheckType.profiling) && !tableSpec.isDoNotCollectErrorSamplesInProfiling()) ||
+                                (sensorRunParameters.getCheckType() == CheckType.monitoring && tableSpec.isAlwaysCollectErrorSamplesInMonitoring()))) {
+                        if (countOfNotPassedResults > 0) {
+                            checksNotPassedForErrorCollection.add(sensorRunParameters.getCheck());
+                        }
                     }
                 }
                 catch (Throwable ex) {

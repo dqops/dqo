@@ -14,7 +14,7 @@ class ColumnSamplingColumnSamplesSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        limit (Union[Unset, int]): The limit of results that are returned. The default value is 10 sample values with
+        limit (Union[Unset, int]): The limit of results that are returned. The default value is 100 sample values with
             the highest count (the most popular).
     """
 

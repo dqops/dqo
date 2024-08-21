@@ -16,15 +16,23 @@
 package com.dqops.checks.column.checkspecs.bool;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.BetweenPercentRuleParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.sensors.column.bool.ColumnBoolFalsePercentSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,6 +41,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -188,5 +197,87 @@ public class ColumnFalsePercentCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Reasonableness;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule mining registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (!miningParameters.isProposeBoolPercentChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (sourceProfilingCheck.getActualValue() == null) {
+            // try to calculate the value from statistics
+            Long trueCount = null;
+            Long falseCount = null;
+
+            ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+            for (ProfilingSampleValue profilingSampleValue : columnDataAssetProfilingResults.getSampleValues()) {
+                if (!(profilingSampleValue.getValue() instanceof Boolean)) {
+                    return false;
+                }
+
+                if (Objects.equals(profilingSampleValue.getValue(), true)) {
+                    trueCount = profilingSampleValue.getCount();
+                }
+
+                if (Objects.equals(profilingSampleValue.getValue(), false)) {
+                    falseCount = profilingSampleValue.getCount();
+                }
+            }
+
+            if (trueCount == null || falseCount == null) {
+                return false;
+            }
+
+            double falsePercent = falseCount * 100.0 / (trueCount + falseCount);
+            sourceProfilingCheck.setActualValue(falsePercent);
+            sourceProfilingCheck.setExecutedAt(Instant.now()); // just to avoid null values
+        }
+
+        if (sourceProfilingCheck.getActualValue() > 50.0) {
+            return false; // we will configure the "true percent" check instead, we always configure the check for a less popular value
+        }
+
+        CheckMiningParametersModel clonedMiningParameters = miningParameters.clone();
+        clonedMiningParameters.setFailChecksAtPercentErrorRows(0.0); // to avoid creating failing tests when there are very few false values
+
+        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                tableSpec, parentCheckRootContainer, myCheckModel, clonedMiningParameters, columnTypeCategory,
+                checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }

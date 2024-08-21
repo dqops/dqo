@@ -18,7 +18,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckListModel*](./common.md#checklistmodel)|Simplistic model that returns a single data quality check, its name and &quot;configured&quot; flag.|
 |[*CheckContainerListModel*](./common.md#checkcontainerlistmodel)|Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.|
 |[*RuleThresholdsModel*](./common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
-|[*RuleSeverityLevel*](./common.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
+|[*DefaultRuleSeverityLevel*](./common.md#defaultruleseveritylevel)|Default rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
 |[*MonitoringScheduleSpec*](./common.md#monitoringschedulespec)|Monitoring job schedule specification.|
 |[*CheckRunScheduleGroup*](./common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
 |[*EffectiveScheduleLevelModel*](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule can be configured.|
@@ -35,6 +35,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckContainerTypeModel*](./common.md#checkcontainertypemodel)|Model identifying the check type and timescale of checks belonging to a container.|
 |[*CheckTemplate*](./common.md#checktemplate)|Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.|
 |[*PhysicalTableName*](./common.md#physicaltablename)|Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).|
+|[*RuleSeverityLevel*](./common.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
 |[*CheckResultStatus*](./common.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.|
 |[*CheckCurrentDataQualityStatusModel*](./common.md#checkcurrentdataqualitystatusmodel)|The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.|
 |[*DimensionCurrentDataQualityStatusModel*](./common.md#dimensioncurrentdataqualitystatusmodel)|A model that describes the current data quality status for a single data quality dimension.|
@@ -191,6 +192,13 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ErrorsListModel*](./errors.md#errorslistmodel)|Error detailed statuses. Returned in the context of a single data group, with a supplied list of other data groups.|
 
 
+## filtered_notifications_configurations
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*FilteredNotificationModel*](./filtered_notifications_configurations.md#filterednotificationmodel)|Named filtered notification model that represents a single entry of the FilteredNotificationSpecMap.|
+
+
 ## incidents
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -200,6 +208,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*IncidentDailyIssuesCount*](./incidents.md#incidentdailyissuescount)|A model that stores a daily number of incidents.|
 |[*IncidentIssueHistogramModel*](./incidents.md#incidentissuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*IncidentStatus*](./incidents.md#incidentstatus)|Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.|
+|[*IncidentFilteredNotificationLocation*](./incidents.md#incidentfilterednotificationlocation)|Enumeration that says where a filtered notification for an incident is defined. Is it defined on a connection level, or on the global level.|
 |[*IncidentModel*](./incidents.md#incidentmodel)|Data quality incident model shown on an incident details screen.|
 |[*IncidentSortOrder*](./incidents.md#incidentsortorder)|Incident sort order columns.|
 |[*IncidentsPerConnectionModel*](./incidents.md#incidentsperconnectionmodel)|Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.|
@@ -271,6 +280,15 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
 |[*ExternalLogEntry*](./log_shipping.md#externallogentry)|External log entry that would be logged on the server.|
+
+
+## rule_mining
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*TargetRuleSeverityLevel*](./rule_mining.md#targetruleseveritylevel)|Default rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
+|[*CheckMiningParametersModel*](./rule_mining.md#checkminingparametersmodel)|Data quality check rule mining parameters. Configure what type of checks should be configured.|
+|[*CheckMiningProposalModel*](./rule_mining.md#checkminingproposalmodel)|Model that has a proposed configuration of checks on a table and its columns generated by a data quality check mining service.|
 
 
 ## rules
@@ -358,6 +376,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*TablePartitioningModel*](./tables.md#tablepartitioningmodel)|Rest model that returns the configuration of table partitioning information.|
 |[*TableComparisonProfilingChecksSpecMap*](./tables.md#tablecomparisonprofilingchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table.|
 |[*TableProfilingCheckCategoriesSpec*](./tables.md#tableprofilingcheckcategoriesspec)|Container of table level checks that are activated on a table level.|
+|[*TableProfilingSetupStatusModel*](./tables.md#tableprofilingsetupstatusmodel)|Table status model that identifies which type of information is already collected, such as data quality checks are configured, or statistics collected. DQOps user interface uses this information to activate red borders to highlight tabs in the user interface that must be clicked to continue profiling the table.|
 |[*TableStatisticsModel*](./tables.md#tablestatisticsmodel)|Model that returns a summary of the table level statistics (the basic profiling results).|
 
 

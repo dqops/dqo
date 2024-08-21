@@ -16,6 +16,8 @@
 package com.dqops.checks;
 
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -25,10 +27,16 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
-import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
+import com.dqops.utils.reflection.ClassInfo;
+import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -98,6 +106,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             "Use the name of one of data grouping configurations defined on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String dataGrouping;
+
+    @JsonPropertyDescription("Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean alwaysCollectErrorSamples;
 
     /**
      * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
@@ -239,7 +251,25 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @param dataGrouping Data stream name.
      */
     public void setDataGrouping(String dataGrouping) {
+        this.setDirtyIf(!Objects.equals(this.dataGrouping, dataGrouping));
         this.dataGrouping = dataGrouping;
+    }
+
+    /**
+     * Returns a value of a flag which says that this check should always collect error samples when it fails.
+     * @return Always collect error samples.
+     */
+    public boolean isAlwaysCollectErrorSamples() {
+        return alwaysCollectErrorSamples;
+    }
+
+    /**
+     * Sets a flag that this check should always collect error samples when it fails.
+     * @param alwaysCollectErrorSamples True when error samples should be always collected.
+     */
+    public void setAlwaysCollectErrorSamples(boolean alwaysCollectErrorSamples) {
+        this.setDirtyIf(this.alwaysCollectErrorSamples != alwaysCollectErrorSamples);
+        this.alwaysCollectErrorSamples = alwaysCollectErrorSamples;
     }
 
     /**
@@ -416,8 +446,8 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
      */
     @JsonIgnore
-    public RuleSeverityLevel getDefaultSeverity() {
-        return RuleSeverityLevel.error;
+    public DefaultRuleSeverityLevel getDefaultSeverity() {
+        return DefaultRuleSeverityLevel.error;
     }
 
     /**
@@ -507,6 +537,164 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
         if (this.getWarning() != null) {
             if (!severityColumn.isEqualTo(1.0).isEmpty()) {
                 this.getWarning().decreaseRuleSensitivity(checkResultsSingleCheck);
+            }
+        }
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     * @param sourceProfilingCheck Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec Parent table specification for reference.
+     * @param parentCheckRootContainer Parent check container, to identify the type of checks.
+     * @param myCheckModel Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters Additional rule mining parameters given by the user.
+     * @param columnTypeCategory Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry Rule mining registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    public boolean proposeCheckConfiguration(
+            ProfilingCheckResult sourceProfilingCheck,
+            DataAssetProfilingResults dataAssetProfilingResults,
+            TableProfilingResults tableProfilingResults,
+            TableSpec tableSpec,
+            AbstractRootChecksContainerSpec parentCheckRootContainer,
+            CheckModel myCheckModel,
+            CheckMiningParametersModel miningParameters,
+            DataTypeCategory columnTypeCategory,
+            DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+            JsonSerializer jsonSerializer,
+            RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (sourceProfilingCheck == null) {
+            return false; // no previous results from a profiling check or statistics
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && (sourceProfilingCheck.getProfilingCheckModel() == null ||
+                !sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured())) {
+            // profiling check that has no rules configured is not a good source to copy from, unless it is a percentage or count check, which we can automatically configure
+
+            String ruleName = myCheckModel.getRule().findFirstNotNullRule().getRuleName();
+            RuleMiningRule ruleMiningRule = ruleMiningRuleRegistry.getRule(ruleName);
+            if (ruleMiningRule != null) {
+                AbstractRuleParametersSpec proposedRuleParameters = ruleMiningRule.proposeCheckConfiguration(
+                        sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults, tableSpec, parentCheckRootContainer,
+                        myCheckModel, miningParameters, columnTypeCategory, checkMiningConfigurationProperties);
+                if (proposedRuleParameters != null) {
+                    setRule(miningParameters.getSeverityLevel(), proposedRuleParameters, jsonSerializer);
+                    return true;
+                }
+            }
+        }
+
+        if (sourceProfilingCheck.getProfilingCheckModel() == null) {
+            return false; // no source profiling check to copy from
+        }
+
+        if (parentCheckRootContainer.getCheckType() == CheckType.profiling) {
+            return false; // a profiling check cannot copy from itself
+        }
+
+        if (sourceProfilingCheck.getProfilingCheckModel().getCheckSpec().isDefaultCheck()) {
+            return false; // do not copy the configuration of default checks, the user should configure a check pattern for a different check type
+        }
+
+        if (!miningParameters.isCopyFailedProfilingChecks() &&
+                sourceProfilingCheck.getSeverityLevel() != null &&
+                sourceProfilingCheck.getSeverityLevel().getSeverity() >= 1) {
+            return false; // do not copy configuration of failed profiling checks, they were tested for data quality assessment only
+        }
+
+        if (!miningParameters.isCopyProfilingChecks()) {
+            return false;
+        }
+
+        ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
+        AbstractCheckSpec<?, ?, ?, ?> profilingCheckSpec = sourceProfilingCheck.getProfilingCheckModel().getCheckSpec();
+        AbstractSensorParametersSpec sensorParametersFromProfilingCheck = profilingCheckSpec.getParameters();
+        if (sensorParametersFromProfilingCheck != null) {
+            FieldInfo parametersFieldInfo = reflectionClassInfo.getFieldByYamlName("parameters");
+            String serializedSensorParameters = jsonSerializer.serialize(sensorParametersFromProfilingCheck);
+            Object convertedSensorParameters = jsonSerializer.deserialize(serializedSensorParameters, parametersFieldInfo.getClazz());
+            //noinspection unchecked
+            this.setParameters((S) convertedSensorParameters);
+        }
+
+        AbstractRuleParametersSpec profilingWarningRule = profilingCheckSpec.getWarning();
+        if (profilingWarningRule != null) {
+            setRule(TargetRuleSeverityLevel.warning, profilingWarningRule, jsonSerializer);
+        }
+
+        AbstractRuleParametersSpec profilingErrorRule = profilingCheckSpec.getError();
+        if (profilingErrorRule != null) {
+            setRule(TargetRuleSeverityLevel.error, profilingErrorRule, jsonSerializer);
+        }
+
+        AbstractRuleParametersSpec profilingFatalRule = profilingCheckSpec.getFatal();
+        if (profilingFatalRule != null) {
+            setRule(TargetRuleSeverityLevel.fatal, profilingFatalRule, jsonSerializer);
+        }
+
+        return true;
+    }
+
+    /**
+     * Sets a rule by performing serialization to JSON and deserialization back to the expected rule class type.
+     * @param severityLevel Target rule severity level.
+     * @param sourceRuleParameters Source rule parameters object to convert and store in the rule.
+     * @param jsonSerializer Json serializer instance that will be used for this operation.
+     */
+    public void setRule(TargetRuleSeverityLevel severityLevel, AbstractRuleParametersSpec sourceRuleParameters, JsonSerializer jsonSerializer) {
+        ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
+
+        switch (severityLevel) {
+            case warning: {
+                if (sourceRuleParameters == null) {
+                    this.setWarning((RWarning) null);
+                    return;
+                }
+                FieldInfo warningFieldInfo = reflectionClassInfo.getFieldByYamlName("warning");
+                String serializedWarningParameters = jsonSerializer.serialize(sourceRuleParameters);
+                Object convertedWarningParameters = jsonSerializer.deserialize(serializedWarningParameters, warningFieldInfo.getClazz());
+                //noinspection unchecked
+                RWarning convertedWarningParametersCasted = (RWarning) convertedWarningParameters;
+                convertedWarningParametersCasted.setAdditionalProperties(null);
+                this.setWarning(convertedWarningParametersCasted);
+                break;
+            }
+
+            case error: {
+                if (sourceRuleParameters == null) {
+                    this.setError((RError) null);
+                    return;
+                }
+
+                FieldInfo errorFieldInfo = reflectionClassInfo.getFieldByYamlName("error");
+                String serializedErrorParameters = jsonSerializer.serialize(sourceRuleParameters);
+                Object convertedErrorParameters = jsonSerializer.deserialize(serializedErrorParameters, errorFieldInfo.getClazz());
+                //noinspection unchecked
+                RError convertedErrorParametersCasted = (RError) convertedErrorParameters;
+                convertedErrorParametersCasted.setAdditionalProperties(null);
+                this.setError(convertedErrorParametersCasted);
+                break;
+            }
+
+            case fatal: {
+                if (sourceRuleParameters == null) {
+                    this.setFatal((RFatal) null);
+                    return;
+                }
+
+                FieldInfo fatalFieldInfo = reflectionClassInfo.getFieldByYamlName("fatal");
+                String serializedFatalParameters = jsonSerializer.serialize(sourceRuleParameters);
+                Object convertedFatalParameters = jsonSerializer.deserialize(serializedFatalParameters, fatalFieldInfo.getClazz());
+                //noinspection unchecked
+                RFatal convertedFatalParametersCasted = (RFatal) convertedFatalParameters;
+                convertedFatalParametersCasted.setAdditionalProperties(null);
+                this.setFatal(convertedFatalParametersCasted);
+                break;
             }
         }
     }

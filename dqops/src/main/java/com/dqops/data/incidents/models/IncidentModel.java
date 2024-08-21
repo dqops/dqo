@@ -174,6 +174,18 @@ public class IncidentModel {
     private IncidentStatus status;
 
     /**
+     * Matching filtered notification for this incident.
+     */
+    @JsonPropertyDescription("Matching filtered notification for this incident.")
+    private String notificationName;
+
+    /**
+     * If this incident has a matching filtered notification, this field will tell whether the filtered notification is defined on a connection level, or a global level.
+     */
+    @JsonPropertyDescription("If this incident has a matching filtered notification, this field will tell whether the filtered notification is defined on a connection level, or a global level.")
+    private IncidentFilteredNotificationLocation notificationLocation;
+
+    /**
      * Creates a new incident notification message from a single row of the "incidents" table. The column names are defined in {@link IncidentsColumnNames} class.
      * @param incidentRow Incident row - a row from the Incident's Tablesaw row.
      * @param connectionName Connection name.

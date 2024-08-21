@@ -213,7 +213,6 @@ request_body = RunChecksParameters(
 		full_table_name='sample_schema.sample_table',
 		enabled=True
 	),
-	collect_error_samples=False,
 	dummy_execution=False
 )
 
@@ -395,6 +394,8 @@ ImportTablesQueueJobResult(
 		source_table_specs=[
 			TableSpec(
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				timestamp_columns=TimestampColumnsSpec(
 					event_timestamp_column='col1',
 					ingestion_timestamp_column='col2',
@@ -414,7 +415,8 @@ ImportTablesQueueJobResult(
 							error=MinCountRule1ParametersSpec(min_count=1),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					)
 				),
@@ -683,11 +685,13 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[Environment](./operations/environment.md)|DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.|
 |[ErrorSamples](./operations/error_samples.md)|Operations that return the error samples collected when data quality checks were executed on data sources from the check editor, and rules failed with an error.|
 |[Errors](./operations/errors.md)|Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.|
+|[FilteredNotificationsConfigurations](./operations/filtered_notifications_configurations.md)|Operations for managing the configuration of filtered notifications on a connection level in DQOps.|
 |[Healthcheck](./operations/healthcheck.md)|Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.|
 |[Incidents](./operations/incidents.md)|Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.|
 |[Jobs](./operations/jobs.md)|Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.|
 |[Labels](./operations/labels.md)|Operations that returns all labels that are assigned to data assets. Labels serve the purpose of a lazy business glossary.|
 |[LogShipping](./operations/log_shipping.md)|Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.|
+|[RuleMining](./operations/rule_mining.md)|Performs rule mining and proposes the configuration of data quality checks and their rule thresholds for tables.|
 |[Rules](./operations/rules.md)|Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.|
 |[Schemas](./operations/schemas.md)|Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.|
 |[Search](./operations/search.md)|Search operations for finding data assets, such as tables.|

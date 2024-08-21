@@ -40,6 +40,7 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
             put("min_value", o -> o.minValue);
             put("median_value", o -> o.medianValue);
             put("max_value", o -> o.maxValue);
+            put("mean_value", o -> o.meanValue);
             put("sum_value", o -> o.sumValue);
         }
     };
@@ -58,6 +59,11 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnRangeMaxValueStatisticsCollectorSpec maxValue = new ColumnRangeMaxValueStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that finds the mean value in the column.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnRangeMeanValueStatisticsCollectorSpec meanValue = new ColumnRangeMeanValueStatisticsCollectorSpec();
 
     @JsonPropertyDescription("Configuration of the profiler that finds the sum value in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -116,6 +122,24 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
         this.setDirtyIf(!Objects.equals(this.maxValue, maxValue));
         this.maxValue = maxValue;
         this.propagateHierarchyIdToField(maxValue, "max_value");
+    }
+
+    /**
+     * Returns the configuration of the profiler that finds the mean value in the column.
+     * @return Mean value profiler.
+     */
+    public ColumnRangeMeanValueStatisticsCollectorSpec getMeanValue() {
+        return meanValue;
+    }
+
+    /**
+     * Sets a reference to a profiler that finds the mean value in a column.
+     * @param meanValue Mean value profiler.
+     */
+    public void setMeanValue(ColumnRangeMeanValueStatisticsCollectorSpec meanValue) {
+        this.setDirtyIf(!Objects.equals(this.meanValue, meanValue));
+        this.meanValue = meanValue;
+        this.propagateHierarchyIdToField(meanValue, "mean_value");
     }
 
     /**

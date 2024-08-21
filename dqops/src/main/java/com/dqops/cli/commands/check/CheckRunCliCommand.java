@@ -120,7 +120,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private boolean dummyRun;
 
     @CommandLine.Option(names = {"-ces", "--collect-error-samples"}, description = "Collects error samples for failed data quality checks", defaultValue = "false")
-    private boolean collectErrorSamples;
+    private Boolean collectErrorSamples;
 
     @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
     private boolean failOnExecutionErrors = true;
@@ -337,7 +337,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * Returns true if error samples should be collected while running checks.
      * @return Collect error samples.
      */
-    public boolean isCollectErrorSamples() {
+    public Boolean getCollectErrorSamples() {
         return collectErrorSamples;
     }
 
@@ -345,7 +345,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * Sets the flag to collect error samples for failed checks.
      * @param collectErrorSamples True - collect error samples.
      */
-    public void setCollectErrorSamples(boolean collectErrorSamples) {
+    public void setCollectErrorSamples(Boolean collectErrorSamples) {
         this.collectErrorSamples = collectErrorSamples;
     }
 

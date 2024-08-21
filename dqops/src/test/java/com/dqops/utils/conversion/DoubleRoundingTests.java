@@ -43,26 +43,26 @@ public class DoubleRoundingTests extends BaseTest {
 
     @Test
     void roundToKeepMaxEffectiveDigits_when1234_thenReturnsValue() {
-        Assertions.assertEquals(1234.0, DoubleRounding.roundToKeepMaxEffectiveDigits(1234.0, 1));
-        Assertions.assertEquals(1234.0, DoubleRounding.roundToKeepMaxEffectiveDigits(1234.0, 3));
+        Assertions.assertEquals(1000.0, DoubleRounding.roundToKeepMaxEffectiveDigits(1234.0, 1));
+        Assertions.assertEquals(1234.0, DoubleRounding.roundToKeepMaxEffectiveDigits(1234.0, 4));
     }
 
     @Test
     void roundToKeepMaxEffectiveDigits_whenMinus1234_thenReturnsValue() {
-        Assertions.assertEquals(-1234.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-1234.0, 1));
-        Assertions.assertEquals(-1234.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-1234.0, 3));
+        Assertions.assertEquals(-1000.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-1234.0, 1));
+        Assertions.assertEquals(-1230.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-1234.0, 3));
     }
 
     @Test
     void roundToKeepMaxEffectiveDigits_when123456789012_thenReturnsValue() {
-        Assertions.assertEquals(123456789012.0, DoubleRounding.roundToKeepMaxEffectiveDigits(123456789012.0, 1));
-        Assertions.assertEquals(123456789012.0, DoubleRounding.roundToKeepMaxEffectiveDigits(123456789012.0, 3));
+        Assertions.assertEquals(100000000000.0, DoubleRounding.roundToKeepMaxEffectiveDigits(123456789012.0, 1));
+        Assertions.assertEquals(123000000000.0, DoubleRounding.roundToKeepMaxEffectiveDigits(123456789012.0, 3));
     }
 
     @Test
     void roundToKeepMaxEffectiveDigits_whenMinus123456789012_thenReturnsValue() {
-        Assertions.assertEquals(-123456789012.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-123456789012.0, 1));
-        Assertions.assertEquals(-123456789012.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-123456789012.0, 3));
+        Assertions.assertEquals(-100000000000.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-123456789012.0, 1));
+        Assertions.assertEquals(-123000000000.0, DoubleRounding.roundToKeepMaxEffectiveDigits(-123456789012.0, 3));
     }
 
     @Test

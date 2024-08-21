@@ -36,6 +36,8 @@ import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.data.checkresults.services.CheckResultsDataService;
+import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
 import com.dqops.execution.ExecutionContextFactory;
@@ -117,10 +119,12 @@ public class TablesControllerUTTests extends BaseTest {
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
 
         StatisticsDataServiceImpl statisticsDataService = new StatisticsDataServiceImpl(null, null); // TODO: configure dependencies if we want to unit test statistics
+        CheckResultsDataServiceImpl checkResultsDataService = new CheckResultsDataServiceImpl(null, null, null, null); // TODO: configure
         DefaultObservabilityConfigurationServiceImpl defaultObservabilityConfigurationService = new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance());
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService,
-                uiToSpecCheckMappingService, statisticsDataService, defaultObservabilityConfigurationService,
+                uiToSpecCheckMappingService, statisticsDataService, checkResultsDataService,
+                defaultObservabilityConfigurationService,
                 new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl()),
                 new TableStatusCacheStub(),
                 new RestApiLockServiceImpl(), null);

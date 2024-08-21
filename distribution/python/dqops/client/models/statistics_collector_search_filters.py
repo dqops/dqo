@@ -45,6 +45,7 @@ class StatisticsCollectorSearchFilters:
         collector_category (Union[Unset, str]): The target statistics collector category, for example: *nulls*,
             *volume*, *sampling*.
         target (Union[Unset, StatisticsCollectorTarget]):
+        samples_limit (Union[Unset, int]): The default limit of column samples that are collected.
         collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
@@ -59,6 +60,7 @@ class StatisticsCollectorSearchFilters:
     sensor_name: Union[Unset, str] = UNSET
     collector_category: Union[Unset, str] = UNSET
     target: Union[Unset, StatisticsCollectorTarget] = UNSET
+    samples_limit: Union[Unset, int] = UNSET
     collectors_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -86,6 +88,7 @@ class StatisticsCollectorSearchFilters:
         if not isinstance(self.target, Unset):
             target = self.target.value
 
+        samples_limit = self.samples_limit
         collectors_hierarchy_ids_models: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.collectors_hierarchy_ids_models, Unset):
             collectors_hierarchy_ids_models = []
@@ -125,6 +128,8 @@ class StatisticsCollectorSearchFilters:
             field_dict["collectorCategory"] = collector_category
         if target is not UNSET:
             field_dict["target"] = target
+        if samples_limit is not UNSET:
+            field_dict["samplesLimit"] = samples_limit
         if collectors_hierarchy_ids_models is not UNSET:
             field_dict["collectorsHierarchyIdsModels"] = collectors_hierarchy_ids_models
 
@@ -162,6 +167,8 @@ class StatisticsCollectorSearchFilters:
         else:
             target = StatisticsCollectorTarget(_target)
 
+        samples_limit = d.pop("samplesLimit", UNSET)
+
         collectors_hierarchy_ids_models = []
         _collectors_hierarchy_ids_models = d.pop("collectorsHierarchyIdsModels", UNSET)
         for collectors_hierarchy_ids_models_item_data in (
@@ -185,6 +192,7 @@ class StatisticsCollectorSearchFilters:
             sensor_name=sensor_name,
             collector_category=collector_category,
             target=target,
+            samples_limit=samples_limit,
             collectors_hierarchy_ids_models=collectors_hierarchy_ids_models,
         )
 

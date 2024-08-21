@@ -85,7 +85,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * Set the value to true to collect error samples for failed data quality checks.
      */
     @JsonPropertyDescription("Set the value to true to collect error samples for failed data quality checks.")
-    private boolean collectErrorSamples;
+    private Boolean collectErrorSamples;
 
     /**
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
@@ -212,7 +212,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * Returns true if error samples should be collected for failed data quality checks.
      * @return Collect error samples.
      */
-    public boolean isCollectErrorSamples() {
+    public Boolean getCollectErrorSamples() {
         return collectErrorSamples;
     }
 
@@ -220,7 +220,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * Sets the flag to enable collecting error samples for checks that would fail.
      * @param collectErrorSamples When true, error samples are collected.
      */
-    public void setCollectErrorSamples(boolean collectErrorSamples) {
+    public void setCollectErrorSamples(Boolean collectErrorSamples) {
         this.collectErrorSamples = collectErrorSamples;
     }
 

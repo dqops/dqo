@@ -87,7 +87,7 @@ export const SelectDataGroupingForTable = ({
           onChange={handleChange}
         />
         <Button
-          label="Create New"
+          label="Create new"
           color="primary"
           variant="outlined"
           className="h-9"

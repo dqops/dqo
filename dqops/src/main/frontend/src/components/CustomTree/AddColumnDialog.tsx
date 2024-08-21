@@ -39,16 +39,21 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
       setLoading(true);
       if (node) {
         const args = node.id.toString().split('.');
-        await ColumnApiClient.createColumn(urlencodeEncoder(args[0]), urlencodeEncoder(args[1]), urlencodeEncoder(args[2]), name, {
-          sql_expression: sqlExpression
-        });
+        await ColumnApiClient.createColumn(
+          urlencodeEncoder(args[0]),
+          urlencodeEncoder(args[1]),
+          urlencodeEncoder(args[2]),
+          name,
+          {
+            sql_expression: sqlExpression
+          }
+        ).finally(() => onCloseCleanPrevState());
         refreshNode(node);
       } else {
         await ColumnApiClient.createColumn(connection, schema, table, name, {
           sql_expression: sqlExpression
-        });
+        }).finally(() => onCloseCleanPrevState());
       }
-      onCloseCleanPrevState();
     } finally {
       setLoading(false);
     }
@@ -59,11 +64,11 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
       <DialogBody className="pt-6 pb-2 px-8">
         <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
-            Add Column
+            Add column
           </h1>
           <div className="mb-6">
             <Input
-              label="Column Name"
+              label="Column name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -73,7 +78,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
               label="SQL expression for a calculated column"
               value={sqlExpression}
               onChange={(e) => setSqlExpression(e.target.value)}
-              className='min-h-25'
+              className="min-h-25"
             />
           </div>
         </div>

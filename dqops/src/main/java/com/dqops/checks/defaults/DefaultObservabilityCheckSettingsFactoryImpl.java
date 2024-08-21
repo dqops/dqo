@@ -62,7 +62,6 @@ import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecks
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.*;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
@@ -199,7 +198,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNullsProfiling.setProfileNotNullsCount(new ColumnNotNullsCountCheckSpec() {{
             setWarning(new MinCountRule1ParametersSpec());
         }});
-        columnNullsProfiling.setProfileEmptyColumnFound(new EmptyColumnFoundCheckSpec() {{
+        columnNullsProfiling.setProfileEmptyColumnFound(new ColumnEmptyColumnFoundCheckSpec() {{
             setWarning(new MinCountRuleConstant1ParametersSpec());
         }});
         columnNullsProfiling.setProfileNullsPercent(new ColumnNullsPercentCheckSpec());

@@ -41,6 +41,8 @@ public class ColumnTextStatisticsCollectorsSpec extends AbstractStatisticsCollec
             put("text_mean_length", o -> o.textMeanLength);
             put("text_min_length", o -> o.textMinLength);
             put("text_datatype_detect", o -> o.textDatatypeDetect);
+            put("text_min_word_count", o -> o.textMinWordCount);
+            put("text_max_word_count", o -> o.textMaxWordCount);
         }
     };
 
@@ -63,6 +65,16 @@ public class ColumnTextStatisticsCollectorsSpec extends AbstractStatisticsCollec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnTextTextDatatypeDetectStatisticsCollectorSpec textDatatypeDetect = new ColumnTextTextDatatypeDetectStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that finds the estimated minimum word count.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnTextMinWordCountStatisticsCollectorSpec textMinWordCount = new ColumnTextMinWordCountStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that finds the estimated maximum word count.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnTextMaxWordCountStatisticsCollectorSpec textMaxWordCount = new ColumnTextMaxWordCountStatisticsCollectorSpec();
 
     /**
      * Returns the profiler configuration that finds the length of the longest text.
@@ -134,6 +146,42 @@ public class ColumnTextStatisticsCollectorsSpec extends AbstractStatisticsCollec
         this.setDirtyIf(!Objects.equals(this.textDatatypeDetect, textDatatypeDetect));
         this.textDatatypeDetect = textDatatypeDetect;
         this.propagateHierarchyIdToField(textDatatypeDetect, "text_datatype_detect");
+    }
+
+    /**
+     * Returns the profiler that estimates the minimum word count.
+     * @return The profiler of the estimated minimum word count.
+     */
+    public ColumnTextMinWordCountStatisticsCollectorSpec getTextMinWordCount() {
+        return textMinWordCount;
+    }
+
+    /**
+     * Configures a profiler that estimates a minimum word count.
+     * @param textMinWordCount A profiler that estimates a minimum word count.
+     */
+    public void setTextMinWordCount(ColumnTextMinWordCountStatisticsCollectorSpec textMinWordCount) {
+        this.setDirtyIf(!Objects.equals(this.textMinWordCount, textMinWordCount));
+        this.textMinWordCount = textMinWordCount;
+        this.propagateHierarchyIdToField(textMinWordCount, "text_min_word_count");
+    }
+
+    /**
+     * Returns the profiler that estimates the maximum word count.
+     * @return The profiler of the estimated maximum word count.
+     */
+    public ColumnTextMaxWordCountStatisticsCollectorSpec getTextMaxWordCount() {
+        return textMaxWordCount;
+    }
+
+    /**
+     * Configures a profiler that estimates a maximum word count.
+     * @param textMaxWordCount A profiler that estimates a maximum word count.
+     */
+    public void setTextMaxWordCount(ColumnTextMaxWordCountStatisticsCollectorSpec textMaxWordCount) {
+        this.setDirtyIf(!Objects.equals(this.textMaxWordCount, textMaxWordCount));
+        this.textMaxWordCount = textMaxWordCount;
+        this.propagateHierarchyIdToField(textMaxWordCount, "text_max_word_count");
     }
 
     /**

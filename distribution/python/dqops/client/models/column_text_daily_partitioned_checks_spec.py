@@ -25,10 +25,16 @@ if TYPE_CHECKING:
         ColumnTextLengthInRangePercentCheckSpec,
     )
     from ..models.column_text_max_length_check_spec import ColumnTextMaxLengthCheckSpec
+    from ..models.column_text_max_word_count_check_spec import (
+        ColumnTextMaxWordCountCheckSpec,
+    )
     from ..models.column_text_mean_length_check_spec import (
         ColumnTextMeanLengthCheckSpec,
     )
     from ..models.column_text_min_length_check_spec import ColumnTextMinLengthCheckSpec
+    from ..models.column_text_min_word_count_check_spec import (
+        ColumnTextMinWordCountCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnTextDailyPartitionedChecksSpec")
@@ -51,6 +57,8 @@ class ColumnTextDailyPartitionedChecksSpec:
         daily_partition_text_length_above_max_length_percent (Union[Unset,
             ColumnTextLengthAboveMaxLengthPercentCheckSpec]):
         daily_partition_text_length_in_range_percent (Union[Unset, ColumnTextLengthInRangePercentCheckSpec]):
+        daily_partition_min_word_count (Union[Unset, ColumnTextMinWordCountCheckSpec]):
+        daily_partition_max_word_count (Union[Unset, ColumnTextMaxWordCountCheckSpec]):
     """
 
     custom_checks: Union[Unset, "ColumnTextDailyPartitionedChecksSpecCustomChecks"] = (
@@ -80,6 +88,12 @@ class ColumnTextDailyPartitionedChecksSpec:
     daily_partition_text_length_in_range_percent: Union[
         Unset, "ColumnTextLengthInRangePercentCheckSpec"
     ] = UNSET
+    daily_partition_min_word_count: Union[Unset, "ColumnTextMinWordCountCheckSpec"] = (
+        UNSET
+    )
+    daily_partition_max_word_count: Union[Unset, "ColumnTextMaxWordCountCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -149,6 +163,18 @@ class ColumnTextDailyPartitionedChecksSpec:
                 self.daily_partition_text_length_in_range_percent.to_dict()
             )
 
+        daily_partition_min_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_min_word_count, Unset):
+            daily_partition_min_word_count = (
+                self.daily_partition_min_word_count.to_dict()
+            )
+
+        daily_partition_max_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_max_word_count, Unset):
+            daily_partition_max_word_count = (
+                self.daily_partition_max_word_count.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -186,6 +212,14 @@ class ColumnTextDailyPartitionedChecksSpec:
             field_dict["daily_partition_text_length_in_range_percent"] = (
                 daily_partition_text_length_in_range_percent
             )
+        if daily_partition_min_word_count is not UNSET:
+            field_dict["daily_partition_min_word_count"] = (
+                daily_partition_min_word_count
+            )
+        if daily_partition_max_word_count is not UNSET:
+            field_dict["daily_partition_max_word_count"] = (
+                daily_partition_max_word_count
+            )
 
         return field_dict
 
@@ -212,11 +246,17 @@ class ColumnTextDailyPartitionedChecksSpec:
         from ..models.column_text_max_length_check_spec import (
             ColumnTextMaxLengthCheckSpec,
         )
+        from ..models.column_text_max_word_count_check_spec import (
+            ColumnTextMaxWordCountCheckSpec,
+        )
         from ..models.column_text_mean_length_check_spec import (
             ColumnTextMeanLengthCheckSpec,
         )
         from ..models.column_text_min_length_check_spec import (
             ColumnTextMinLengthCheckSpec,
+        )
+        from ..models.column_text_min_word_count_check_spec import (
+            ColumnTextMinWordCountCheckSpec,
         )
 
         d = src_dict.copy()
@@ -337,6 +377,24 @@ class ColumnTextDailyPartitionedChecksSpec:
                 )
             )
 
+        _daily_partition_min_word_count = d.pop("daily_partition_min_word_count", UNSET)
+        daily_partition_min_word_count: Union[Unset, ColumnTextMinWordCountCheckSpec]
+        if isinstance(_daily_partition_min_word_count, Unset):
+            daily_partition_min_word_count = UNSET
+        else:
+            daily_partition_min_word_count = ColumnTextMinWordCountCheckSpec.from_dict(
+                _daily_partition_min_word_count
+            )
+
+        _daily_partition_max_word_count = d.pop("daily_partition_max_word_count", UNSET)
+        daily_partition_max_word_count: Union[Unset, ColumnTextMaxWordCountCheckSpec]
+        if isinstance(_daily_partition_max_word_count, Unset):
+            daily_partition_max_word_count = UNSET
+        else:
+            daily_partition_max_word_count = ColumnTextMaxWordCountCheckSpec.from_dict(
+                _daily_partition_max_word_count
+            )
+
         column_text_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             daily_partition_text_min_length=daily_partition_text_min_length,
@@ -347,6 +405,8 @@ class ColumnTextDailyPartitionedChecksSpec:
             daily_partition_text_length_above_max_length=daily_partition_text_length_above_max_length,
             daily_partition_text_length_above_max_length_percent=daily_partition_text_length_above_max_length_percent,
             daily_partition_text_length_in_range_percent=daily_partition_text_length_in_range_percent,
+            daily_partition_min_word_count=daily_partition_min_word_count,
+            daily_partition_max_word_count=daily_partition_max_word_count,
         )
 
         column_text_daily_partitioned_checks_spec.additional_properties = d

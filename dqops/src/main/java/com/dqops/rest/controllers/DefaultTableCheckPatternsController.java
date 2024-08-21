@@ -19,6 +19,7 @@ import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -575,6 +576,7 @@ public class DefaultTableCheckPatternsController {
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
                     null, null, null, executionContext, null,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            checkContainerModel.changeDefaultSeverityLevel(DefaultRuleSeverityLevel.none);
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
         }));

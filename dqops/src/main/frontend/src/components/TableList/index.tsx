@@ -105,7 +105,7 @@ export default function index({
     loading || tables.length == 0
       ? undefined
       : {
-          label: 'Data Quality KPI',
+          label: 'Data quality KPI',
           value: 'data-quality-kpi',
           toRotate: true,
           className: 'tracking-wider'

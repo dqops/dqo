@@ -42,25 +42,30 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPatternsDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_text_not_matching_regex_found", o -> o.dailyPartitionTextNotMatchingRegexFound);
-            put("daily_partition_texts_matching_regex_percent", o -> o.dailyPartitionTextsMatchingRegexPercent);
+            put("daily_partition_texts_not_matching_regex_percent", o -> o.dailyPartitionTextsNotMatchingRegexPercent);
             put("daily_partition_invalid_email_format_found", o -> o.dailyPartitionInvalidEmailFormatFound);
             put("daily_partition_invalid_email_format_percent", o -> o.dailyPartitionInvalidEmailFormatPercent);
             put("daily_partition_text_not_matching_date_pattern_found", o -> o.dailyPartitionTextNotMatchingDatePatternFound);
-            put("daily_partition_text_matching_date_pattern_percent", o -> o.dailyPartitionTextMatchingDatePatternPercent);
-            put("daily_partition_text_matching_name_pattern_percent", o -> o.dailyPartitionTextMatchingNamePatternPercent);
+            put("daily_partition_text_not_matching_date_pattern_percent", o -> o.dailyPartitionTextNotMatchingDatePatternPercent);
+            put("daily_partition_text_not_matching_name_pattern_percent", o -> o.dailyPartitionTextNotMatchingNamePatternPercent);
 
             put("daily_partition_invalid_uuid_format_found", o -> o.dailyPartitionInvalidUuidFormatFound);
-            put("daily_partition_valid_uuid_format_percent", o -> o.dailyPartitionValidUuidFormatPercent);
+            put("daily_partition_invalid_uuid_format_percent", o -> o.dailyPartitionInvalidUuidFormatPercent);
             put("daily_partition_invalid_ip4_address_format_found", o -> o.dailyPartitionInvalidIp4AddressFormatFound);
             put("daily_partition_invalid_ip6_address_format_found", o -> o.dailyPartitionInvalidIp6AddressFormatFound);
+
+            put("daily_partition_invalid_usa_phone_format_found", o -> o.dailyPartitionInvalidUsaPhoneFormatFound);
+            put("daily_partition_invalid_usa_zipcode_format_found", o -> o.dailyPartitionInvalidUsaZipcodeFormatFound);
+            put("daily_partition_invalid_usa_phone_format_percent", o -> o.dailyPartitionInvalidUsaPhoneFormatPercent);
+            put("daily_partition_invalid_usa_zipcode_format_percent", o -> o.dailyPartitionInvalidUsaZipcodeFormatPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingRegexFoundCheckSpec dailyPartitionTextNotMatchingRegexFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.")
-    private ColumnTextsMatchingRegexPercentCheckSpec dailyPartitionTextsMatchingRegexPercent;
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regular expression pattern does not exceed the maximum accepted percentage.")
+    private ColumnTextsNotMatchingRegexPercentCheckSpec dailyPartitionTextsNotMatchingRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec dailyPartitionInvalidEmailFormatFound;
@@ -71,23 +76,35 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec dailyPartitionTextNotMatchingDatePatternFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.")
-    private ColumnTextMatchingDatePatternPercentCheckSpec dailyPartitionTextMatchingDatePatternPercent;
+    @JsonPropertyDescription("Verifies that the percentage of texts matching the date format regular expression in a column does not exceed the maximum accepted percentage.")
+    private ColumnTextNotMatchingDatePatternPercentCheckSpec dailyPartitionTextNotMatchingDatePatternPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.")
-    private ColumnTextMatchingNamePatternPercentCheckSpec dailyPartitionTextMatchingNamePatternPercent;
+    @JsonPropertyDescription("Verifies that the percentage of texts matching the name regular expression does not exceed the maximum accepted percentage.")
+    private ColumnTextNotMatchingNamePatternPercentCheckSpec dailyPartitionTextNotMatchingNamePatternPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidUuidFormatFoundCheckSpec dailyPartitionInvalidUuidFormatFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.")
-    private ColumnValidUuidFormatPercentCheckSpec dailyPartitionValidUuidFormatPercent;
+    @JsonPropertyDescription("Verifies that the percentage of invalid UUID in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUuidFormatPercentCheckSpec dailyPartitionInvalidUuidFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp4AddressFormatFoundCheckSpec dailyPartitionInvalidIp4AddressFormatFound;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp6AddressFormatFoundCheckSpec dailyPartitionInvalidIp6AddressFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaPhoneFoundCheckSpec dailyPartitionInvalidUsaPhoneFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaZipcodeFoundCheckSpec dailyPartitionInvalidUsaZipcodeFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid USA phones number in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUsaPhonePercentCheckSpec dailyPartitionInvalidUsaPhoneFormatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid USA phones number in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUsaZipcodePercentCheckSpec dailyPartitionInvalidUsaZipcodeFormatPercent;
 
     /**
      * Returns a maximum not match regex count check.
@@ -108,21 +125,21 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
     }
 
     /**
-     * Returns a minimum match regex percent check.
-     * @return Minimum match regex percent check.
+     * Returns a maximum not match regex percent check.
+     * @return Maximum not match regex percent check.
      */
-    public ColumnTextsMatchingRegexPercentCheckSpec getDailyPartitionTextsMatchingRegexPercent() {
-        return dailyPartitionTextsMatchingRegexPercent;
+    public ColumnTextsNotMatchingRegexPercentCheckSpec getDailyPartitionTextsNotMatchingRegexPercent() {
+        return dailyPartitionTextsNotMatchingRegexPercent;
     }
 
     /**
-     * Sets a new definition of a minimum match regex percent check.
-     * @param dailyPartitionTextsMatchingRegexPercent Minimum match regex percent check.
+     * Sets a new definition of a maximum not match regex percent check.
+     * @param dailyPartitionTextsNotMatchingRegexPercent Maximum not match regex percent check.
      */
-    public void setDailyPartitionTextsMatchingRegexPercent(ColumnTextsMatchingRegexPercentCheckSpec dailyPartitionTextsMatchingRegexPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextsMatchingRegexPercent, dailyPartitionTextsMatchingRegexPercent));
-        this.dailyPartitionTextsMatchingRegexPercent = dailyPartitionTextsMatchingRegexPercent;
-        propagateHierarchyIdToField(dailyPartitionTextsMatchingRegexPercent, "daily_partition_texts_matching_regex_percent");
+    public void setDailyPartitionTextsNotMatchingRegexPercent(ColumnTextsNotMatchingRegexPercentCheckSpec dailyPartitionTextsNotMatchingRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextsNotMatchingRegexPercent, dailyPartitionTextsNotMatchingRegexPercent));
+        this.dailyPartitionTextsNotMatchingRegexPercent = dailyPartitionTextsNotMatchingRegexPercent;
+        propagateHierarchyIdToField(dailyPartitionTextsNotMatchingRegexPercent, "daily_partition_texts_not_matching_regex_percent");
     }
 
     /**
@@ -180,39 +197,39 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
     }
 
     /**
-     * Returns a maximum match date regex percent check.
-     * @return Maximum match date regex percent check.
+     * Returns a maximum not match date regex percent check.
+     * @return Maximum not match date regex percent check.
      */
-    public ColumnTextMatchingDatePatternPercentCheckSpec getDailyPartitionTextMatchingDatePatternPercent() {
-        return dailyPartitionTextMatchingDatePatternPercent;
+    public ColumnTextNotMatchingDatePatternPercentCheckSpec getDailyPartitionTextNotMatchingDatePatternPercent() {
+        return dailyPartitionTextNotMatchingDatePatternPercent;
     }
 
     /**
-     * Sets a new definition of a maximum match date regex percent check.
-     * @param dailyPartitionTextMatchingDatePatternPercent Maximum match date regex percent check.
+     * Sets a new definition of a maximum not match date regex percent check.
+     * @param dailyPartitionTextNotMatchingDatePatternPercent Maximum not match date regex percent check.
      */
-    public void setDailyPartitionTextMatchingDatePatternPercent(ColumnTextMatchingDatePatternPercentCheckSpec dailyPartitionTextMatchingDatePatternPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMatchingDatePatternPercent, dailyPartitionTextMatchingDatePatternPercent));
-        this.dailyPartitionTextMatchingDatePatternPercent = dailyPartitionTextMatchingDatePatternPercent;
-        propagateHierarchyIdToField(dailyPartitionTextMatchingDatePatternPercent, "daily_partition_text_matching_date_pattern_percent");
+    public void setDailyPartitionTextNotMatchingDatePatternPercent(ColumnTextNotMatchingDatePatternPercentCheckSpec dailyPartitionTextNotMatchingDatePatternPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextNotMatchingDatePatternPercent, dailyPartitionTextNotMatchingDatePatternPercent));
+        this.dailyPartitionTextNotMatchingDatePatternPercent = dailyPartitionTextNotMatchingDatePatternPercent;
+        propagateHierarchyIdToField(dailyPartitionTextNotMatchingDatePatternPercent, "daily_partition_text_not_matching_date_pattern_percent");
     }
 
     /**
-     * Returns a maximum match name regex percent check.
-     * @return Maximum match name regex percent check.
+     * Returns a maximum not match name regex percent check.
+     * @return Maximum not match name regex percent check.
      */
-    public ColumnTextMatchingNamePatternPercentCheckSpec getDailyPartitionTextMatchingNamePatternPercent() {
-        return dailyPartitionTextMatchingNamePatternPercent;
+    public ColumnTextNotMatchingNamePatternPercentCheckSpec getDailyPartitionTextNotMatchingNamePatternPercent() {
+        return dailyPartitionTextNotMatchingNamePatternPercent;
     }
 
     /**
-     * Sets a new definition of a maximum match name regex percent check.
-     * @param dailyPartitionTextMatchingNamePatternPercent Maximum match name regex percent check.
+     * Sets a new definition of a maximum not match name regex percent check.
+     * @param dailyPartitionTextNotMatchingNamePatternPercent Maximum not match name regex percent check.
      */
-    public void setDailyPartitionTextMatchingNamePatternPercent(ColumnTextMatchingNamePatternPercentCheckSpec dailyPartitionTextMatchingNamePatternPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMatchingNamePatternPercent, dailyPartitionTextMatchingNamePatternPercent));
-        this.dailyPartitionTextMatchingNamePatternPercent = dailyPartitionTextMatchingNamePatternPercent;
-        propagateHierarchyIdToField(dailyPartitionTextMatchingNamePatternPercent, "daily_partition_text_matching_name_pattern_percent");
+    public void setDailyPartitionTextNotMatchingNamePatternPercent(ColumnTextNotMatchingNamePatternPercentCheckSpec dailyPartitionTextNotMatchingNamePatternPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextNotMatchingNamePatternPercent, dailyPartitionTextNotMatchingNamePatternPercent));
+        this.dailyPartitionTextNotMatchingNamePatternPercent = dailyPartitionTextNotMatchingNamePatternPercent;
+        propagateHierarchyIdToField(dailyPartitionTextNotMatchingNamePatternPercent, "daily_partition_text_not_matching_name_pattern_percent");
     }
 
     /**
@@ -234,21 +251,21 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
     }
 
     /**
-     * Returns a valid UUID percent check.
-     * @return Valid UUID percent check.
+     * Returns an invalid UUID percent check.
+     * @return Invalid UUID percent check.
      */
-    public ColumnValidUuidFormatPercentCheckSpec getDailyPartitionValidUuidFormatPercent() {
-        return dailyPartitionValidUuidFormatPercent;
+    public ColumnInvalidUuidFormatPercentCheckSpec getDailyPartitionInvalidUuidFormatPercent() {
+        return dailyPartitionInvalidUuidFormatPercent;
     }
 
     /**
-     * Sets a new definition of a valid UUID percent check.
-     * @param dailyPartitionValidUuidFormatPercent Valid UUID percent check.
+     * Sets a new definition of an invalid UUID percent check.
+     * @param dailyPartitionInvalidUuidFormatPercent Invalid UUID percent check.
      */
-    public void setDailyPartitionValidUuidFormatPercent(ColumnValidUuidFormatPercentCheckSpec dailyPartitionValidUuidFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidUuidFormatPercent, dailyPartitionValidUuidFormatPercent));
-        this.dailyPartitionValidUuidFormatPercent = dailyPartitionValidUuidFormatPercent;
-        propagateHierarchyIdToField(dailyPartitionValidUuidFormatPercent, "daily_partition_valid_uuid_format_percent");
+    public void setDailyPartitionInvalidUuidFormatPercent(ColumnInvalidUuidFormatPercentCheckSpec dailyPartitionInvalidUuidFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidUuidFormatPercent, dailyPartitionInvalidUuidFormatPercent));
+        this.dailyPartitionInvalidUuidFormatPercent = dailyPartitionInvalidUuidFormatPercent;
+        propagateHierarchyIdToField(dailyPartitionInvalidUuidFormatPercent, "daily_partition_invalid_uuid_format_percent");
     }
 
     /**
@@ -287,6 +304,77 @@ public class ColumnPatternsDailyPartitionedChecksSpec extends AbstractCheckCateg
         propagateHierarchyIdToField(dailyPartitionInvalidIp6AddressFormatFound, "daily_partition_invalid_ip6_address_format_found");
     }
 
+    /**
+     * Returns a maximum invalid USA phone numbers count check.
+     * @return Maximum invalid USA phone numbers count check.
+     */
+    public ColumnInvalidUsaPhoneFoundCheckSpec getDailyPartitionInvalidUsaPhoneFormatFound() {
+        return dailyPartitionInvalidUsaPhoneFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phone numbers count check.
+     * @param dailyPartitionInvalidUsaPhoneFormatFound Invalid USA phone numbers count check.
+     */
+    public void setDailyPartitionInvalidUsaPhoneFormatFound(ColumnInvalidUsaPhoneFoundCheckSpec dailyPartitionInvalidUsaPhoneFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidUsaPhoneFormatFound, dailyPartitionInvalidUsaPhoneFormatFound));
+        this.dailyPartitionInvalidUsaPhoneFormatFound = dailyPartitionInvalidUsaPhoneFormatFound;
+        propagateHierarchyIdToField(dailyPartitionInvalidUsaPhoneFormatFound, "daily_partition_invalid_usa_phone_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid USA zip codes count check.
+     * @return Maximum invalid USA zip codes count check.
+     */
+    public ColumnInvalidUsaZipcodeFoundCheckSpec getDailyPartitionInvalidUsaZipcodeFormatFound() {
+        return dailyPartitionInvalidUsaZipcodeFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip codes count check.
+     * @param dailyPartitionInvalidUsaZipcodeFormatFound Invalid USA zip codes count check.
+     */
+    public void setDailyPartitionInvalidUsaZipcodeFormatFound(ColumnInvalidUsaZipcodeFoundCheckSpec dailyPartitionInvalidUsaZipcodeFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidUsaZipcodeFormatFound, dailyPartitionInvalidUsaZipcodeFormatFound));
+        this.dailyPartitionInvalidUsaZipcodeFormatFound = dailyPartitionInvalidUsaZipcodeFormatFound;
+        propagateHierarchyIdToField(dailyPartitionInvalidUsaZipcodeFormatFound, "daily_partition_invalid_usa_zipcode_format_found");
+    }
+
+    /**
+     * Returns an invalid USA phones number percent check.
+     * @return Invalid USA phones number percent check.
+     */
+    public ColumnInvalidUsaPhonePercentCheckSpec getDailyPartitionInvalidUsaPhoneFormatPercent() {
+        return dailyPartitionInvalidUsaPhoneFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phones number percent check.
+     * @param dailyPartitionInvalidUsaPhoneFormatPercent Invalid USA phones number percent check.
+     */
+    public void setDailyPartitionInvalidUsaPhoneFormatPercent(ColumnInvalidUsaPhonePercentCheckSpec dailyPartitionInvalidUsaPhoneFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidUsaPhoneFormatPercent, dailyPartitionInvalidUsaPhoneFormatPercent));
+        this.dailyPartitionInvalidUsaPhoneFormatPercent = dailyPartitionInvalidUsaPhoneFormatPercent;
+        propagateHierarchyIdToField(dailyPartitionInvalidUsaPhoneFormatPercent, "daily_partition_invalid_usa_phone_format_percent");
+    }
+
+    /**
+     * Returns an invalid USA zip code percent check.
+     * @return Invalid USA zip code percent check.
+     */
+    public ColumnInvalidUsaZipcodePercentCheckSpec getDailyPartitionInvalidUsaZipcodeFormatPercent() {
+        return dailyPartitionInvalidUsaZipcodeFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip code percent check.
+     * @param dailyPartitionInvalidUsaZipcodeFormatPercent Invalid USA zip code percent check.
+     */
+    public void setDailyPartitionInvalidUsaZipcodeFormatPercent(ColumnInvalidUsaZipcodePercentCheckSpec dailyPartitionInvalidUsaZipcodeFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidUsaPhoneFormatPercent, dailyPartitionInvalidUsaZipcodeFormatPercent));
+        this.dailyPartitionInvalidUsaZipcodeFormatPercent = dailyPartitionInvalidUsaZipcodeFormatPercent;
+        propagateHierarchyIdToField(dailyPartitionInvalidUsaZipcodeFormatPercent, "daily_partition_invalid_usa_zipcode_format_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

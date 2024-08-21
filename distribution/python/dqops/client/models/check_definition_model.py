@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.rule_severity_level import RuleSeverityLevel
+from ..models.default_rule_severity_level import DefaultRuleSeverityLevel
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckDefinitionModel")
@@ -23,7 +23,7 @@ class CheckDefinitionModel:
         standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
             checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
             shown when the user decides to expand the list of checks.
-        default_severity (Union[Unset, RuleSeverityLevel]):
+        default_severity (Union[Unset, DefaultRuleSeverityLevel]):
         custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
         built_in (Union[Unset, bool]): This check is provided with DQOps as a built-in check.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
@@ -38,7 +38,7 @@ class CheckDefinitionModel:
     help_text: Union[Unset, str] = UNSET
     friendly_name: Union[Unset, str] = UNSET
     standard: Union[Unset, bool] = UNSET
-    default_severity: Union[Unset, RuleSeverityLevel] = UNSET
+    default_severity: Union[Unset, DefaultRuleSeverityLevel] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
@@ -105,11 +105,11 @@ class CheckDefinitionModel:
         standard = d.pop("standard", UNSET)
 
         _default_severity = d.pop("default_severity", UNSET)
-        default_severity: Union[Unset, RuleSeverityLevel]
+        default_severity: Union[Unset, DefaultRuleSeverityLevel]
         if isinstance(_default_severity, Unset):
             default_severity = UNSET
         else:
-            default_severity = RuleSeverityLevel(_default_severity)
+            default_severity = DefaultRuleSeverityLevel(_default_severity)
 
         custom = d.pop("custom", UNSET)
 

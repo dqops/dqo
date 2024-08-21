@@ -15,16 +15,26 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
+import com.dqops.utils.conversion.LongRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
@@ -34,7 +44,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BetweenIntsRuleParametersSpec extends AbstractRuleParametersSpec {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BetweenIntsRuleParametersSpec extends AbstractRuleParametersSpec implements RuleMiningRule {
     private static final ChildHierarchyNodeFieldMapImpl<BetweenIntsRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
@@ -47,6 +59,19 @@ public class BetweenIntsRuleParametersSpec extends AbstractRuleParametersSpec {
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
     @SampleValues(values = "20")
     private Long to;
+
+    public BetweenIntsRuleParametersSpec() {
+    }
+
+    /**
+     * Constructor with parameters.
+     * @param from Minimum value.
+     * @param to Maximum value.
+     */
+    public BetweenIntsRuleParametersSpec(Long from, Long to) {
+        this.from = from;
+        this.to = to;
+    }
 
     /**
      * Returns a minimum value for a data quality check readout, for example a minimum row count.
@@ -110,13 +135,68 @@ public class BetweenIntsRuleParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
-        if (this.from == null || this.to == null) {
-            return;
+        Double spread = null;
+        if (this.from != null && this.to != null) {
+            spread = this.to.doubleValue() - this.from.doubleValue();
         }
 
-        double difference = this.to - this.from;
+        if (!checkResultsSingleCheck.getActualValueColumn().isEmpty()) {
+            if (this.from != null) {
+                double minValue = checkResultsSingleCheck.getActualValueColumn().min();
+                if (minValue < this.from) {
+                    if (spread != null) {
+                        this.from = LongRounding.roundToKeepEffectiveDigits((long) (this.from - spread * 0.15) + 1L);
+                    } else {
+                        this.from = LongRounding.roundToKeepEffectiveDigits((long) minValue);
+                    }
+                }
+            }
 
-        this.from = (long)(this.from - difference * 0.15);
-        this.to = (long)(this.to + difference * 0.15);
+            if (this.to != null) {
+                double maxValue = checkResultsSingleCheck.getActualValueColumn().max();
+                if (maxValue > this.to) {
+                    if (spread != null) {
+                        this.to = LongRounding.roundToKeepEffectiveDigits((long) (this.to + spread * 0.15) + 1L);
+                    } else {
+                        this.to = LongRounding.roundToKeepEffectiveDigits((long) maxValue);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @return A configured rule parameters class that should be converted to the target type (by serialization to JSON and back) when parameters were proposed, or null when on parameters were proposed.
+     */
+    @Override
+    public AbstractRuleParametersSpec proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                                                DataAssetProfilingResults dataAssetProfilingResults,
+                                                                TableProfilingResults tableProfilingResults,
+                                                                TableSpec tableSpec,
+                                                                AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                                                CheckModel myCheckModel,
+                                                                CheckMiningParametersModel miningParameters,
+                                                                DataTypeCategory columnTypeCategory,
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
+        if (sourceProfilingCheck.getActualValue() == 0.0) {
+            return null; // not enough information or the value would be wrong
+        }
+
+        long delta = (long)(Math.abs(sourceProfilingCheck.getActualValue()) * checkMiningConfigurationProperties.getMinMaxValueRateDelta());
+        long expectedMin = LongRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue().longValue() - delta);
+        long expectedMax = LongRounding.roundToKeepEffectiveDigits(sourceProfilingCheck.getActualValue().longValue() + delta);
+
+        return new BetweenIntsRuleParametersSpec(expectedMin, expectedMax);
     }
 }

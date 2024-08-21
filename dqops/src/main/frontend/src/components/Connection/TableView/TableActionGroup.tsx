@@ -1,7 +1,9 @@
+import { Tooltip } from '@material-tailwind/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTree } from '../../../contexts/treeContext';
 import { IRootState } from '../../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { TableApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
@@ -22,7 +24,7 @@ interface ITableActionGroupProps {
   createDataStreamFunc?: () => void;
   collectStatistics?: () => Promise<void>;
   selectedColumns?: boolean;
-  collectStatisticsSpinner?: boolean
+  collectStatisticsSpinner?: boolean;
 }
 
 const TableActionGroup = ({
@@ -54,24 +56,24 @@ const TableActionGroup = ({
 
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { userProfile } = useSelector(
+  const { userProfile, job_allert } = useSelector(
     (state: IRootState) => state.job || {}
   );
 
-  
   const fullPath = `${connection}.${schema}.${table}`;
-  
+
   const removeTable = async () => {
     await TableApiClient.deleteTable(
       connection ?? '',
       schema ?? '',
       table ?? ''
     );
-    
+
     deleteData(fullPath);
   };
-
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
@@ -88,7 +90,7 @@ const TableActionGroup = ({
               ? 'outlined'
               : 'contained'
           }
-          label="Add Column"
+          label="Add column"
           onClick={() => setIsAddColumnDialogOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
         />
@@ -106,14 +108,14 @@ const TableActionGroup = ({
               ? 'outlined'
               : 'contained'
           }
-          label="Delete Table"
+          label="Delete table"
           onClick={() => setIsOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
         />
       )}
       {createDataStream && (
         <Button
-          label="Create Data Grouping"
+          label="Create data grouping"
           color={
             !(userProfile.can_manage_data_sources !== true)
               ? 'primary'
@@ -128,7 +130,7 @@ const TableActionGroup = ({
           {' '}
           (You can choose max 9 columns)
           <Button
-            label="Create Data Grouping"
+            label="Create data grouping"
             color="secondary"
             className="text-black "
             disabled={userProfile.can_manage_data_sources !== true}
@@ -136,29 +138,46 @@ const TableActionGroup = ({
         </div>
       )}
       {collectStatistics && (
-        <Button
-          className="flex items-center gap-x-2 justify-center "
-          label={
-            collectStatisticsSpinner
-              ? 'Collecting...'
-              : selectedColumns 
-              ? 'Collect statistics on selected'
-              : 'Collect statistics'
+        <Tooltip
+          content={job_allert.tooltipMessage}
+          className={
+            job_allert.tooltipMessage
+              ? 'max-w-60 py-2 px-2 bg-gray-800'
+              : 'hidden'
           }
-          color={collectStatisticsSpinner ? 'secondary' : 'primary'}
-          leftIcon={
-            collectStatisticsSpinner ? (
-              <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
-            ) : (
-              ''
-            )
-          }
-          onClick={collectStatistics}
-          disabled={
-            userProfile.can_collect_statistics !== true ||
-            collectStatisticsSpinner
-          }
-        />
+        >
+          <div>
+            <Button
+              className="flex items-center gap-x-2 justify-center "
+              label={
+                collectStatisticsSpinner
+                  ? 'Collecting...'
+                  : selectedColumns
+                  ? 'Collect statistics on selected'
+                  : 'Collect statistics'
+              }
+              color={collectStatisticsSpinner ? 'secondary' : 'primary'}
+              leftIcon={
+                collectStatisticsSpinner ? (
+                  <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
+                ) : (
+                  ''
+                )
+              }
+              onClick={collectStatistics}
+              disabled={
+                userProfile.can_collect_statistics !== true ||
+                collectStatisticsSpinner
+              }
+              flashRedBorder={
+                firstLevelActiveTab === job_allert.activeTab &&
+                job_allert.action === 'collect_statistics'
+                  ? true
+                  : false
+              }
+            />
+          </div>
+        </Tooltip>
       )}
       {addSaveButton && (
         <Button

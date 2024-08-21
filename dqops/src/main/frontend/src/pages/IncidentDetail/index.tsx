@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import {
   IncidentIssueHistogramModel,
   IncidentModel,
+  IncidentModelNotificationLocationEnum,
   IncidentModelStatusEnum
 } from '../../api';
 import Button from '../../components/Button';
@@ -18,6 +19,7 @@ import SvgIcon from '../../components/SvgIcon';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import useDebounce from '../../hooks/useDebounce';
+import { addFirstLevelTab as addFirstLevelConfigurationTab } from '../../redux/actions/definition.actions';
 import {
   getIncidentsIssues,
   setIncidentsFilter
@@ -95,6 +97,8 @@ export const IncidentDetail = () => {
   const [open, setOpen] = useState(false);
   const [disableDialog, setDisableDialog] = useState(false);
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
+  const [createNotificationDialogOpen, setCreateNotificationDialogOpen] =
+    useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
@@ -253,6 +257,56 @@ export const IncidentDetail = () => {
     setRecalibrateDialog(false);
   };
 
+  const createConfirmNotification = async () => {
+    if (
+      incidentDetail?.notificationLocation ===
+      IncidentModelNotificationLocationEnum.global
+    ) {
+      dispatch(
+        addFirstLevelConfigurationTab({
+          url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
+          value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: incidentDetail.notificationName ?? 'New default notifications'
+        })
+      );
+      history.push(ROUTES.WEBHOOKS_DEFAULT_DETAIL());
+    } else {
+      const url = ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents'
+      );
+      dispatch(
+        addFirstLevelTab(CheckTypes.SOURCES, {
+          url,
+          value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+          state: {
+            incidentFilters: {
+              ...filters,
+              ...incidentDetail
+            }
+          },
+          label: connection ?? incidentDetail?.connection
+        })
+      );
+      history.push(url);
+    }
+  };
+
+  const createNotification = () => {
+    if (incidentDetail?.notificationName) {
+      createConfirmNotification();
+    } else {
+      setCreateNotificationDialogOpen(true);
+    }
+  };
+
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -314,26 +368,30 @@ export const IncidentDetail = () => {
               .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <div className="flex items-center gap-x-2">
               <Tooltip
-                content={'Disable data quality checks related to this check to avoid raising a similar incident again.'}
+                content={
+                  'Disable data quality checks related to this check to avoid raising a similar incident again.'
+                }
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="stop" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={() => setDisableDialog(true)}
                   />
                 </div>
               </Tooltip>
               <Tooltip
-                content={'Recalibrate data quality checks for this incident to decrease the number of data quality issues by around 30%.'}
+                content={
+                  'Reconfigure (decrease) the rule threshold for the data quality check that caused the incident by 30% to reduce the number of data quality issues.'
+                }
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="minus" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={() => setRecalibrateDialog(true)}
                   />
@@ -346,9 +404,29 @@ export const IncidentDetail = () => {
                 <div>
                   <Button
                     leftIcon={<SvgIcon name="cog" className="w-5.5 h-5.5" />}
-                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
                     color="primary"
                     onClick={goToConfigure}
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip
+                content={
+                  'Configure notifications for this and similar incidents.'
+                }
+                className="w-52 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div className="text-white">
+                  <Button
+                    leftIcon={
+                      <SvgIcon
+                        name="letter"
+                        className="w-5.5 h-5.5 min-w-4 shrink-0 p-0.5"
+                      />
+                    }
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 hover:bg-[#028770]"
+                    color="primary"
+                    onClick={createNotification}
                   />
                 </div>
               </Tooltip>
@@ -477,7 +555,7 @@ export const IncidentDetail = () => {
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">
                 Total issues:
-                <span className='inline-flex'>
+                <span className="inline-flex">
                   <Tooltip
                     className="max-w-80 py-2 px-2 bg-gray-800"
                     content={
@@ -523,7 +601,7 @@ export const IncidentDetail = () => {
                         color="teal"
                         size="sm"
                         onClick={() => setOpen(true)}
-                        className="!shadow-none"
+                        className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       >
                         <SvgIcon name="edit" className="w-4" />
                       </IconButton>
@@ -533,7 +611,7 @@ export const IncidentDetail = () => {
                       color="teal"
                       size="sm"
                       onClick={() => setOpen(true)}
-                      className="!shadow-none"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                     >
                       <SvgIcon name="add" className="w-4" />
                     </IconButton>
@@ -637,6 +715,13 @@ export const IncidentDetail = () => {
         onClose={() => setRecalibrateDialog(false)}
         onConfirm={recalibrateIncident}
         message="Are you sure you want to recalibrate checks for this incident?"
+      />
+      <ConfirmDialog
+        open={createNotificationDialogOpen}
+        onClose={() => setCreateNotificationDialogOpen(false)}
+        onConfirm={createConfirmNotification}
+        message="No notification filters are defined for this incident, do you want to create a notification configuration for incidents similar to this incident?"
+        yesNo
       />
     </>
   );

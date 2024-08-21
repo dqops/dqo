@@ -37,6 +37,11 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpec extends Abstrac
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/uniqueness/distinct_percent";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -53,6 +58,6 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpec extends Abstrac
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/uniqueness/distinct_percent";
+        return SENSOR_NAME;
     }
 }

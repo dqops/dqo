@@ -39,7 +39,7 @@ const [message, setMessage] = useState<string>()
           </h1>
           <div className="mb-6">
             <Input
-              label="New Password"
+              label="New password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type='password'
@@ -47,7 +47,7 @@ const [message, setMessage] = useState<string>()
           </div>
           <div className="mb-6">
             <Input
-              label="Confirm Password"
+              label="Confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               type='password'

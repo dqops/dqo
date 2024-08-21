@@ -109,6 +109,19 @@ Enumeration of the statuses used in the &quot;status&quot; field of the &quot;in
 
 ___
 
+## IncidentFilteredNotificationLocation
+Enumeration that says where a filtered notification for an incident is defined. Is it defined on a connection level, or on the global level.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|connection<br/>global<br/>|
+
+___
+
 ## IncidentModel
 Data quality incident model shown on an incident details screen.
 
@@ -136,6 +149,8 @@ Data quality incident model shown on an incident details screen.
 |<span class="no-wrap-code">`failed_checks_count`</span>|The total number of failed data quality checks that were seen when the incident was raised for the first time.|*integer*|
 |<span class="no-wrap-code">`issue_url`</span>|The link (url) to a ticket in an external system that is tracking this incident.|*string*|
 |<span class="no-wrap-code">[`status`](./incidents.md#incidentstatus)</span>|Incident status.|*[IncidentStatus](./incidents.md#incidentstatus)*|
+|<span class="no-wrap-code">`notification_name`</span>|Matching filtered notification for this incident.|*string*|
+|<span class="no-wrap-code">[`notification_location`](#incidentfilterednotificationlocation)</span>|If this incident has a matching filtered notification, this field will tell whether the filtered notification is defined on a connection level, or a global level.|*[IncidentFilteredNotificationLocation](#incidentfilterednotificationlocation)*|
 
 
 ___

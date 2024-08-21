@@ -39,6 +39,11 @@ public class TableVolumeRowCountSensorParametersSpec extends AbstractSensorParam
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "table/volume/row_count";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -55,7 +60,7 @@ public class TableVolumeRowCountSensorParametersSpec extends AbstractSensorParam
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/volume/row_count";
+        return SENSOR_NAME;
     }
 
     /**

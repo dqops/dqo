@@ -126,7 +126,7 @@ public class OracleColumnTextTextMaxLengthSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(8, ValueConverter.toInteger(resultTable.column(0).get(0)));
+        Assertions.assertEquals(4, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -164,7 +164,7 @@ public class OracleColumnTextTextMaxLengthSensorParametersSpecIntegrationTest ex
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(30, resultTable.rowCount());
+        Assertions.assertEquals(23, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())

@@ -75,6 +75,11 @@ from .check_definition_folder_model_folders import CheckDefinitionFolderModelFol
 from .check_definition_list_model import CheckDefinitionListModel
 from .check_definition_model import CheckDefinitionModel
 from .check_list_model import CheckListModel
+from .check_mining_parameters_model import CheckMiningParametersModel
+from .check_mining_proposal_model import CheckMiningProposalModel
+from .check_mining_proposal_model_column_checks import (
+    CheckMiningProposalModelColumnChecks,
+)
 from .check_model import CheckModel
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
@@ -472,6 +477,7 @@ from .column_distinct_percent_change_check_spec import (
 from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
 from .column_duplicate_percent_check_spec import ColumnDuplicatePercentCheckSpec
+from .column_empty_column_found_check_spec import ColumnEmptyColumnFoundCheckSpec
 from .column_expected_numbers_in_use_count_check_spec import (
     ColumnExpectedNumbersInUseCountCheckSpec,
 )
@@ -543,8 +549,23 @@ from .column_invalid_latitude_count_check_spec import (
 from .column_invalid_longitude_count_check_spec import (
     ColumnInvalidLongitudeCountCheckSpec,
 )
+from .column_invalid_usa_phone_found_check_spec import (
+    ColumnInvalidUsaPhoneFoundCheckSpec,
+)
+from .column_invalid_usa_phone_percent_check_spec import (
+    ColumnInvalidUsaPhonePercentCheckSpec,
+)
+from .column_invalid_usa_zipcode_found_check_spec import (
+    ColumnInvalidUsaZipcodeFoundCheckSpec,
+)
+from .column_invalid_usa_zipcode_percent_check_spec import (
+    ColumnInvalidUsaZipcodePercentCheckSpec,
+)
 from .column_invalid_uuid_format_found_check_spec import (
     ColumnInvalidUuidFormatFoundCheckSpec,
+)
+from .column_invalid_uuid_format_percent_check_spec import (
+    ColumnInvalidUuidFormatPercentCheckSpec,
 )
 from .column_list_model import ColumnListModel
 from .column_max_anomaly_differencing_check_spec import (
@@ -830,8 +851,23 @@ from .column_patterns_invalid_ip_4_address_format_count_sensor_parameters_spec i
 from .column_patterns_invalid_ip_6_address_format_count_sensor_parameters_spec import (
     ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec,
 )
+from .column_patterns_invalid_usa_phone_format_found_sensor_parameters_spec import (
+    ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec,
+)
+from .column_patterns_invalid_usa_phone_format_percent_sensor_parameters_spec import (
+    ColumnPatternsInvalidUsaPhoneFormatPercentSensorParametersSpec,
+)
+from .column_patterns_invalid_usa_zipcode_format_found_sensor_parameters_spec import (
+    ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec,
+)
+from .column_patterns_invalid_usa_zipcode_format_percent_sensor_parameters_spec import (
+    ColumnPatternsInvalidUsaZipcodeFormatPercentSensorParametersSpec,
+)
 from .column_patterns_invalid_uuid_format_count_sensor_parameters_spec import (
     ColumnPatternsInvalidUuidFormatCountSensorParametersSpec,
+)
+from .column_patterns_invalid_uuid_format_percent_sensor_parameters_spec import (
+    ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec,
 )
 from .column_patterns_monthly_monitoring_checks_spec import (
     ColumnPatternsMonthlyMonitoringChecksSpec,
@@ -849,23 +885,20 @@ from .column_patterns_profiling_checks_spec import ColumnPatternsProfilingChecks
 from .column_patterns_profiling_checks_spec_custom_checks import (
     ColumnPatternsProfilingChecksSpecCustomChecks,
 )
-from .column_patterns_text_matching_date_pattern_percent_sensor_parameters_spec import (
-    ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec,
-)
-from .column_patterns_text_matching_name_pattern_percent_sensor_parameters_spec import (
-    ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec,
-)
 from .column_patterns_text_not_matching_date_pattern_count_sensor_parameters_spec import (
     ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec,
+)
+from .column_patterns_text_not_matching_date_pattern_percent_sensor_parameters_spec import (
+    ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec,
+)
+from .column_patterns_text_not_matching_name_pattern_percent_sensor_parameters_spec import (
+    ColumnPatternsTextNotMatchingNamePatternPercentSensorParametersSpec,
 )
 from .column_patterns_text_not_matching_regex_count_sensor_parameters_spec import (
     ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec,
 )
-from .column_patterns_texts_matching_regex_percent_sensor_parameters_spec import (
-    ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec,
-)
-from .column_patterns_valid_uuid_format_percent_sensor_parameters_spec import (
-    ColumnPatternsValidUuidFormatPercentSensorParametersSpec,
+from .column_patterns_texts_not_matching_regex_percent_sensor_parameters_spec import (
+    ColumnPatternsTextsNotMatchingRegexPercentSensorParametersSpec,
 )
 from .column_percentile_10_in_range_check_spec import ColumnPercentile10InRangeCheckSpec
 from .column_percentile_25_in_range_check_spec import ColumnPercentile25InRangeCheckSpec
@@ -946,6 +979,9 @@ from .column_range_max_value_sensor_parameters_spec import (
 )
 from .column_range_max_value_statistics_collector_spec import (
     ColumnRangeMaxValueStatisticsCollectorSpec,
+)
+from .column_range_mean_value_statistics_collector_spec import (
+    ColumnRangeMeanValueStatisticsCollectorSpec,
 )
 from .column_range_median_value_statistics_collector_spec import (
     ColumnRangeMedianValueStatisticsCollectorSpec,
@@ -1071,15 +1107,23 @@ from .column_text_match_date_format_percent_check_spec import (
 from .column_text_match_date_format_percent_sensor_parameters_spec import (
     ColumnTextMatchDateFormatPercentSensorParametersSpec,
 )
-from .column_text_matching_date_pattern_percent_check_spec import (
-    ColumnTextMatchingDatePatternPercentCheckSpec,
-)
-from .column_text_matching_name_pattern_percent_check_spec import (
-    ColumnTextMatchingNamePatternPercentCheckSpec,
-)
 from .column_text_max_length_check_spec import ColumnTextMaxLengthCheckSpec
+from .column_text_max_word_count_check_spec import ColumnTextMaxWordCountCheckSpec
+from .column_text_max_word_count_sensor_parameters_spec import (
+    ColumnTextMaxWordCountSensorParametersSpec,
+)
+from .column_text_max_word_count_statistics_collector_spec import (
+    ColumnTextMaxWordCountStatisticsCollectorSpec,
+)
 from .column_text_mean_length_check_spec import ColumnTextMeanLengthCheckSpec
 from .column_text_min_length_check_spec import ColumnTextMinLengthCheckSpec
+from .column_text_min_word_count_check_spec import ColumnTextMinWordCountCheckSpec
+from .column_text_min_word_count_sensor_parameters_spec import (
+    ColumnTextMinWordCountSensorParametersSpec,
+)
+from .column_text_min_word_count_statistics_collector_spec import (
+    ColumnTextMinWordCountStatisticsCollectorSpec,
+)
 from .column_text_monthly_monitoring_checks_spec import (
     ColumnTextMonthlyMonitoringChecksSpec,
 )
@@ -1094,6 +1138,12 @@ from .column_text_monthly_partitioned_checks_spec_custom_checks import (
 )
 from .column_text_not_matching_date_pattern_found_check_spec import (
     ColumnTextNotMatchingDatePatternFoundCheckSpec,
+)
+from .column_text_not_matching_date_pattern_percent_check_spec import (
+    ColumnTextNotMatchingDatePatternPercentCheckSpec,
+)
+from .column_text_not_matching_name_pattern_percent_check_spec import (
+    ColumnTextNotMatchingNamePatternPercentCheckSpec,
 )
 from .column_text_not_matching_regex_found_check_spec import (
     ColumnTextNotMatchingRegexFoundCheckSpec,
@@ -1175,8 +1225,8 @@ from .column_text_valid_country_code_percent_check_spec import (
 from .column_text_valid_currency_code_percent_check_spec import (
     ColumnTextValidCurrencyCodePercentCheckSpec,
 )
-from .column_texts_matching_regex_percent_check_spec import (
-    ColumnTextsMatchingRegexPercentCheckSpec,
+from .column_texts_not_matching_regex_percent_check_spec import (
+    ColumnTextsNotMatchingRegexPercentCheckSpec,
 )
 from .column_true_percent_check_spec import ColumnTruePercentCheckSpec
 from .column_type_snapshot_spec import ColumnTypeSnapshotSpec
@@ -1240,9 +1290,6 @@ from .column_valid_latitude_percent_check_spec import (
 )
 from .column_valid_longitude_percent_check_spec import (
     ColumnValidLongitudePercentCheckSpec,
-)
-from .column_valid_uuid_format_percent_check_spec import (
-    ColumnValidUuidFormatPercentCheckSpec,
 )
 from .column_whitespace_blank_null_placeholder_text_count_sensor_parameters_spec import (
     ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec,
@@ -1359,6 +1406,7 @@ from .default_column_checks_pattern_list_model import (
     DefaultColumnChecksPatternListModel,
 )
 from .default_column_checks_pattern_model import DefaultColumnChecksPatternModel
+from .default_rule_severity_level import DefaultRuleSeverityLevel
 from .default_schedules_spec import DefaultSchedulesSpec
 from .default_table_checks_pattern_list_model import DefaultTableChecksPatternListModel
 from .default_table_checks_pattern_model import DefaultTableChecksPatternModel
@@ -1405,7 +1453,6 @@ from .duckdb_storage_type import DuckdbStorageType
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
-from .empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 from .equals_1_rule_parameters_spec import Equals1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_entry_model import ErrorEntryModel
@@ -1420,6 +1467,8 @@ from .external_log_entry import ExternalLogEntry
 from .field_model import FieldModel
 from .file_format_spec import FileFormatSpec
 from .file_synchronization_direction import FileSynchronizationDirection
+from .filtered_notification_model import FilteredNotificationModel
+from .filtered_notification_spec import FilteredNotificationSpec
 from .folder_synchronization_status import FolderSynchronizationStatus
 from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
@@ -1432,6 +1481,9 @@ from .import_tables_queue_job_result import ImportTablesQueueJobResult
 from .import_tables_result import ImportTablesResult
 from .incident_counts_model import IncidentCountsModel
 from .incident_daily_issues_count import IncidentDailyIssuesCount
+from .incident_filtered_notification_location import (
+    IncidentFilteredNotificationLocation,
+)
 from .incident_grouping_level import IncidentGroupingLevel
 from .incident_issue_histogram_model import IncidentIssueHistogramModel
 from .incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
@@ -1439,6 +1491,10 @@ from .incident_issue_histogram_model_columns import IncidentIssueHistogramModelC
 from .incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
 from .incident_model import IncidentModel
 from .incident_notification_spec import IncidentNotificationSpec
+from .incident_notification_spec_filtered_notifications import (
+    IncidentNotificationSpecFilteredNotifications,
+)
+from .incident_notification_target_spec import IncidentNotificationTargetSpec
 from .incident_severity_level_counts_model import IncidentSeverityLevelCountsModel
 from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
@@ -1493,6 +1549,7 @@ from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .new_line_character_type import NewLineCharacterType
+from .notification_filter_spec import NotificationFilterSpec
 from .optional import Optional
 from .optional_incident_notification_spec import OptionalIncidentNotificationSpec
 from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
@@ -1784,6 +1841,7 @@ from .table_profiling_check_categories_spec_comparisons import (
 from .table_profiling_check_categories_spec_custom import (
     TableProfilingCheckCategoriesSpecCustom,
 )
+from .table_profiling_setup_status_model import TableProfilingSetupStatusModel
 from .table_row_count_anomaly_differencing_check_spec import (
     TableRowCountAnomalyDifferencingCheckSpec,
 )
@@ -1936,6 +1994,7 @@ from .table_volume_row_count_statistics_collector_spec import (
 )
 from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
 from .target_column_pattern_spec import TargetColumnPatternSpec
+from .target_rule_severity_level import TargetRuleSeverityLevel
 from .target_table_pattern_spec import TargetTablePatternSpec
 from .temporal_unit import TemporalUnit
 from .text_built_in_date_formats import TextBuiltInDateFormats
@@ -1992,6 +2051,9 @@ __all__ = (
     "CheckDefinitionListModel",
     "CheckDefinitionModel",
     "CheckListModel",
+    "CheckMiningParametersModel",
+    "CheckMiningProposalModel",
+    "CheckMiningProposalModelColumnChecks",
     "CheckModel",
     "CheckResultEntryModel",
     "CheckResultsListModel",
@@ -2149,6 +2211,7 @@ __all__ = (
     "ColumnDistinctPercentCheckSpec",
     "ColumnDuplicateCountCheckSpec",
     "ColumnDuplicatePercentCheckSpec",
+    "ColumnEmptyColumnFoundCheckSpec",
     "ColumnExpectedNumbersInUseCountCheckSpec",
     "ColumnExpectedTextsInTopValuesCountCheckSpec",
     "ColumnExpectedTextValuesInUseCountCheckSpec",
@@ -2174,7 +2237,12 @@ __all__ = (
     "ColumnInvalidIp6AddressFormatFoundCheckSpec",
     "ColumnInvalidLatitudeCountCheckSpec",
     "ColumnInvalidLongitudeCountCheckSpec",
+    "ColumnInvalidUsaPhoneFoundCheckSpec",
+    "ColumnInvalidUsaPhonePercentCheckSpec",
+    "ColumnInvalidUsaZipcodeFoundCheckSpec",
+    "ColumnInvalidUsaZipcodePercentCheckSpec",
     "ColumnInvalidUuidFormatFoundCheckSpec",
+    "ColumnInvalidUuidFormatPercentCheckSpec",
     "ColumnListModel",
     "ColumnMaxAnomalyDifferencingCheckSpec",
     "ColumnMaxAnomalyStationaryCheckSpec",
@@ -2289,19 +2357,23 @@ __all__ = (
     "ColumnPatternsInvalidEmailFormatPercentSensorParametersSpec",
     "ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec",
     "ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec",
+    "ColumnPatternsInvalidUsaPhoneFormatPercentSensorParametersSpec",
+    "ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec",
+    "ColumnPatternsInvalidUsaZipcodeFormatPercentSensorParametersSpec",
     "ColumnPatternsInvalidUuidFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidUuidFormatPercentSensorParametersSpec",
     "ColumnPatternsMonthlyMonitoringChecksSpec",
     "ColumnPatternsMonthlyMonitoringChecksSpecCustomChecks",
     "ColumnPatternsMonthlyPartitionedChecksSpec",
     "ColumnPatternsMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnPatternsProfilingChecksSpec",
     "ColumnPatternsProfilingChecksSpecCustomChecks",
-    "ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec",
-    "ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec",
     "ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec",
+    "ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec",
+    "ColumnPatternsTextNotMatchingNamePatternPercentSensorParametersSpec",
     "ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec",
-    "ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec",
-    "ColumnPatternsValidUuidFormatPercentSensorParametersSpec",
+    "ColumnPatternsTextsNotMatchingRegexPercentSensorParametersSpec",
     "ColumnPercentile10InRangeCheckSpec",
     "ColumnPercentile25InRangeCheckSpec",
     "ColumnPercentile75InRangeCheckSpec",
@@ -2334,6 +2406,7 @@ __all__ = (
     "ColumnProfilingCheckCategoriesSpecCustom",
     "ColumnRangeMaxValueSensorParametersSpec",
     "ColumnRangeMaxValueStatisticsCollectorSpec",
+    "ColumnRangeMeanValueStatisticsCollectorSpec",
     "ColumnRangeMedianValueStatisticsCollectorSpec",
     "ColumnRangeMinValueSensorParametersSpec",
     "ColumnRangeMinValueStatisticsCollectorSpec",
@@ -2384,16 +2457,22 @@ __all__ = (
     "ColumnTextLengthInRangePercentCheckSpec",
     "ColumnTextMatchDateFormatPercentCheckSpec",
     "ColumnTextMatchDateFormatPercentSensorParametersSpec",
-    "ColumnTextMatchingDatePatternPercentCheckSpec",
-    "ColumnTextMatchingNamePatternPercentCheckSpec",
     "ColumnTextMaxLengthCheckSpec",
+    "ColumnTextMaxWordCountCheckSpec",
+    "ColumnTextMaxWordCountSensorParametersSpec",
+    "ColumnTextMaxWordCountStatisticsCollectorSpec",
     "ColumnTextMeanLengthCheckSpec",
     "ColumnTextMinLengthCheckSpec",
+    "ColumnTextMinWordCountCheckSpec",
+    "ColumnTextMinWordCountSensorParametersSpec",
+    "ColumnTextMinWordCountStatisticsCollectorSpec",
     "ColumnTextMonthlyMonitoringChecksSpec",
     "ColumnTextMonthlyMonitoringChecksSpecCustomChecks",
     "ColumnTextMonthlyPartitionedChecksSpec",
     "ColumnTextMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnTextNotMatchingDatePatternFoundCheckSpec",
+    "ColumnTextNotMatchingDatePatternPercentCheckSpec",
+    "ColumnTextNotMatchingNamePatternPercentCheckSpec",
     "ColumnTextNotMatchingRegexFoundCheckSpec",
     "ColumnTextParsableToBooleanPercentCheckSpec",
     "ColumnTextParsableToDatePercentCheckSpec",
@@ -2401,7 +2480,7 @@ __all__ = (
     "ColumnTextParsableToIntegerPercentCheckSpec",
     "ColumnTextProfilingChecksSpec",
     "ColumnTextProfilingChecksSpecCustomChecks",
-    "ColumnTextsMatchingRegexPercentCheckSpec",
+    "ColumnTextsNotMatchingRegexPercentCheckSpec",
     "ColumnTextStatisticsCollectorsSpec",
     "ColumnTextTextDatatypeDetectStatisticsCollectorSpec",
     "ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpec",
@@ -2446,7 +2525,6 @@ __all__ = (
     "ColumnUniquenessStatisticsCollectorsSpec",
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
-    "ColumnValidUuidFormatPercentCheckSpec",
     "ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec",
     "ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec",
     "ColumnWhitespaceDailyMonitoringChecksSpec",
@@ -2508,6 +2586,7 @@ __all__ = (
     "DatetimeBuiltInDateFormats",
     "DefaultColumnChecksPatternListModel",
     "DefaultColumnChecksPatternModel",
+    "DefaultRuleSeverityLevel",
     "DefaultSchedulesSpec",
     "DefaultTableChecksPatternListModel",
     "DefaultTableChecksPatternModel",
@@ -2544,7 +2623,6 @@ __all__ = (
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
-    "EmptyColumnFoundCheckSpec",
     "Equals1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorEntryModel",
@@ -2559,6 +2637,8 @@ __all__ = (
     "FieldModel",
     "FileFormatSpec",
     "FileSynchronizationDirection",
+    "FilteredNotificationModel",
+    "FilteredNotificationSpec",
     "FolderSynchronizationStatus",
     "HierarchyIdModel",
     "HierarchyIdModelPathItem",
@@ -2571,6 +2651,7 @@ __all__ = (
     "ImportTablesResult",
     "IncidentCountsModel",
     "IncidentDailyIssuesCount",
+    "IncidentFilteredNotificationLocation",
     "IncidentGroupingLevel",
     "IncidentIssueHistogramModel",
     "IncidentIssueHistogramModelChecks",
@@ -2578,6 +2659,8 @@ __all__ = (
     "IncidentIssueHistogramModelDays",
     "IncidentModel",
     "IncidentNotificationSpec",
+    "IncidentNotificationSpecFilteredNotifications",
+    "IncidentNotificationTargetSpec",
     "IncidentSeverityLevelCountsModel",
     "IncidentSortOrder",
     "IncidentsPerConnectionModel",
@@ -2620,6 +2703,7 @@ __all__ = (
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
     "NewLineCharacterType",
+    "NotificationFilterSpec",
     "Optional",
     "OptionalIncidentNotificationSpec",
     "OptionalMonitoringScheduleSpec",
@@ -2783,6 +2867,7 @@ __all__ = (
     "TableProfilingCheckCategoriesSpec",
     "TableProfilingCheckCategoriesSpecComparisons",
     "TableProfilingCheckCategoriesSpecCustom",
+    "TableProfilingSetupStatusModel",
     "TableRowCountAnomalyDifferencingCheckSpec",
     "TableRowCountAnomalyStationaryPartitionCheckSpec",
     "TableRowCountChange1DayCheckSpec",
@@ -2845,6 +2930,7 @@ __all__ = (
     "TableVolumeRowCountStatisticsCollectorSpec",
     "TableVolumeStatisticsCollectorsSpec",
     "TargetColumnPatternSpec",
+    "TargetRuleSeverityLevel",
     "TargetTablePatternSpec",
     "TemporalUnit",
     "TextBuiltInDateFormats",

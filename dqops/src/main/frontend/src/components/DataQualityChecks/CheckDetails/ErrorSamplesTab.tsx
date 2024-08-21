@@ -1,9 +1,11 @@
+import { IconButton } from '@material-tailwind/react';
 import moment from 'moment/moment';
 import React, { useMemo } from 'react';
 import { ErrorSamplesListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
 import { getLocalDateInUserTimeZone } from '../../../utils';
-import Select from '../../Select';
+import SelectTailwind from '../../Select/SelectTailwind';
+import SvgIcon from '../../SvgIcon';
 import { Table } from '../../Table';
 
 interface ErrorSamplesTabProps {
@@ -12,14 +14,15 @@ interface ErrorSamplesTabProps {
   month?: string;
   onChangeMonth: (month: string) => void;
   onChangeDataGroup: (name: string) => void;
+  downloadLink: string;
 }
 const getRowIds = () => {
   const idColumns = [];
   for (let i = 1; i <= 5; i++) {
     idColumns.push({
-      label: `ID ${i}`,
+      label: `ID Column ${i}`,
       value: `rowId${i}`,
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50 text-right'
     });
   }
   return idColumns;
@@ -30,15 +33,22 @@ const ErrorSamplesTab = ({
   dataGroup,
   onChangeDataGroup,
   month,
-  onChangeMonth
+  onChangeMonth,
+  downloadLink
 }: ErrorSamplesTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
     {
-      label: 'Sample index',
+      header: () => (
+        <span>
+          Sample
+          <br />
+          index
+        </span>
+      ),
       value: 'sampleIndex',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-30'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-20 text-right'
     },
     {
       label: 'Collected at',
@@ -47,25 +57,26 @@ const ErrorSamplesTab = ({
     },
 
     {
-      label: 'Result',
-      value: 'result',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
-    },
-    {
-      label: 'Result data type',
+      header: () => (
+        <span>
+          Result
+          <br />
+          data type
+        </span>
+      ),
       value: 'resultDataType',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     },
-    ...getRowIds(),
     {
-      label: 'Data grouping',
-      value: 'dataGroup',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
+      label: 'Result',
+      value: 'result',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50 text-right'
     },
+    ...getRowIds(),
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
     }
   ];
 
@@ -92,7 +103,7 @@ const ErrorSamplesTab = ({
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
-          <Select
+          <SelectTailwind
             value={dataGroup || errorSamples[0]?.dataGroup}
             options={
               (errorSamples[0]?.dataGroupsNames || []).map((item) => ({
@@ -100,23 +111,42 @@ const ErrorSamplesTab = ({
                 value: item
               })) || []
             }
+            disabled={true}
             onChange={onChangeDataGroup}
           />
         </div>
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Month</div>
-          <Select
+          <SelectTailwind
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
           />
         </div>
+        <IconButton
+          size="sm"
+          className={
+            'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
+          }
+        >
+          <a
+            href={downloadLink}
+            rel="noreferrer"
+            target="_blank"
+            className="text-teal-500"
+          >
+            <SvgIcon
+              name="download"
+              className={'w-4 h-4 cursor-pointer font-bold text-teal-500'}
+            />
+          </a>
+        </IconButton>
       </div>
       {errorSamples.length === 0 && (
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
       {errorSamples.map((result, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-2">
           <Table
             className="mt-4 w-full"
             columns={columns}

@@ -41,7 +41,7 @@ const CheckSettings = ({
     <div className="my-4">
       <div className="bg-white py-4 border border-gray-200 relative">
         <IconButton
-          className="absolute right-4 top-1 bg-gray-50 hover:bg-gray-100 text-gray-700"
+          className="absolute right-4 top-1 bg-gray-50 hover:bg-gray-100 text-gray-700 !shadow-none hover:!shadow-none"
           onClick={onClose}
         >
           <SvgIcon name="close" />

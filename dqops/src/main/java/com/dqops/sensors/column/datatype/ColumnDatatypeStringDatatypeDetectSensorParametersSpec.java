@@ -37,6 +37,11 @@ public class ColumnDatatypeStringDatatypeDetectSensorParametersSpec extends Abst
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/datatype/string_datatype_detect";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -53,7 +58,7 @@ public class ColumnDatatypeStringDatatypeDetectSensorParametersSpec extends Abst
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datatype/string_datatype_detect";
+        return SENSOR_NAME;
     }
 }
 

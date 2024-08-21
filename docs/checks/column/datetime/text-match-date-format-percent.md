@@ -114,7 +114,7 @@ spec:
         datetime:
           profile_text_match_date_format_percent:
             parameters:
-              date_format: DD/MM/YYYY
+              date_format: YYYY-MM-DD
             warning:
               min_percent: 100.0
             error:
@@ -167,7 +167,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -210,7 +210,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -251,7 +251,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -292,7 +292,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -339,7 +339,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -364,7 +364,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -386,7 +386,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -436,7 +436,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -483,7 +483,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -526,7 +526,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -569,7 +569,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -612,7 +612,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -662,7 +662,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -703,7 +703,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             datetime:
               profile_text_match_date_format_percent:
                 parameters:
-                  date_format: DD/MM/YYYY
+                  date_format: YYYY-MM-DD
                 warning:
                   min_percent: 100.0
                 error:
@@ -757,7 +757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -802,7 +802,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -845,7 +845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -888,7 +888,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -937,7 +937,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -970,7 +970,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -991,7 +991,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1043,7 +1043,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1097,7 +1097,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1142,7 +1142,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1187,7 +1187,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1232,7 +1232,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -1288,7 +1288,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1416,7 +1416,7 @@ spec:
           datetime:
             daily_text_match_date_format_percent:
               parameters:
-                date_format: DD/MM/YYYY
+                date_format: YYYY-MM-DD
               warning:
                 min_percent: 100.0
               error:
@@ -1469,7 +1469,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1512,7 +1512,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1553,7 +1553,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1594,7 +1594,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -1641,7 +1641,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -1666,7 +1666,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1688,7 +1688,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1738,7 +1738,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1785,7 +1785,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1828,7 +1828,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1871,7 +1871,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1914,7 +1914,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -1964,7 +1964,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2006,7 +2006,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               datetime:
                 daily_text_match_date_format_percent:
                   parameters:
-                    date_format: DD/MM/YYYY
+                    date_format: YYYY-MM-DD
                   warning:
                     min_percent: 100.0
                   error:
@@ -2060,7 +2060,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2105,7 +2105,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2148,7 +2148,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2191,7 +2191,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -2240,7 +2240,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -2273,7 +2273,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2294,7 +2294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2346,7 +2346,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2400,7 +2400,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2445,7 +2445,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2490,7 +2490,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2535,7 +2535,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -2591,7 +2591,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2719,7 +2719,7 @@ spec:
           datetime:
             monthly_text_match_date_format_percent:
               parameters:
-                date_format: DD/MM/YYYY
+                date_format: YYYY-MM-DD
               warning:
                 min_percent: 100.0
               error:
@@ -2772,7 +2772,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2815,7 +2815,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2856,7 +2856,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2897,7 +2897,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -2944,7 +2944,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -2969,7 +2969,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2991,7 +2991,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3041,7 +3041,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3088,7 +3088,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3131,7 +3131,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3174,7 +3174,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3217,7 +3217,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -3267,7 +3267,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3309,7 +3309,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               datetime:
                 monthly_text_match_date_format_percent:
                   parameters:
-                    date_format: DD/MM/YYYY
+                    date_format: YYYY-MM-DD
                   warning:
                     min_percent: 100.0
                   error:
@@ -3363,7 +3363,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3408,7 +3408,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3451,7 +3451,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3494,7 +3494,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -3543,7 +3543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -3576,7 +3576,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3597,7 +3597,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3649,7 +3649,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3703,7 +3703,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3748,7 +3748,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3793,7 +3793,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3838,7 +3838,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -3894,7 +3894,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4027,7 +4027,7 @@ spec:
           datetime:
             daily_partition_text_match_date_format_percent:
               parameters:
-                date_format: DD/MM/YYYY
+                date_format: YYYY-MM-DD
               warning:
                 min_percent: 100.0
               error:
@@ -4085,7 +4085,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4132,7 +4132,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4177,7 +4177,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4222,7 +4222,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -4273,7 +4273,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -4304,7 +4304,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4326,7 +4326,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4380,7 +4380,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4433,7 +4433,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4480,7 +4480,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4527,7 +4527,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4574,7 +4574,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -4630,7 +4630,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4683,7 +4683,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               datetime:
                 daily_partition_text_match_date_format_percent:
                   parameters:
-                    date_format: DD/MM/YYYY
+                    date_format: YYYY-MM-DD
                   warning:
                     min_percent: 100.0
                   error:
@@ -4742,7 +4742,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4789,7 +4789,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4834,7 +4834,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4879,7 +4879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -4930,7 +4930,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -4967,7 +4967,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4988,7 +4988,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5042,7 +5042,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5100,7 +5100,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5147,7 +5147,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5194,7 +5194,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5241,7 +5241,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -5297,7 +5297,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5434,7 +5434,7 @@ spec:
           datetime:
             monthly_partition_text_match_date_format_percent:
               parameters:
-                date_format: DD/MM/YYYY
+                date_format: YYYY-MM-DD
               warning:
                 min_percent: 100.0
               error:
@@ -5492,7 +5492,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5539,7 +5539,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5584,7 +5584,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5629,7 +5629,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -5680,7 +5680,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -5711,7 +5711,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5733,7 +5733,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5787,7 +5787,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5840,7 +5840,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5887,7 +5887,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5934,7 +5934,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5981,7 +5981,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -6037,7 +6037,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -6090,7 +6090,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               datetime:
                 monthly_partition_text_match_date_format_percent:
                   parameters:
-                    date_format: DD/MM/YYYY
+                    date_format: YYYY-MM-DD
                   warning:
                     min_percent: 100.0
                   error:
@@ -6149,7 +6149,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$") IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6196,7 +6196,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6241,7 +6241,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
+                            WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6286,7 +6286,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
+                               REGEXP_LIKE(analyzed_table.`target_column`, '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -6337,7 +6337,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
-                               REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                               REGEXP_LIKE(analyzed_table."target_column", '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                              THEN 1
                           ELSE 0
                         END
@@ -6374,7 +6374,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6395,7 +6395,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$' IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6449,7 +6449,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -6507,7 +6507,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 analyzed_table."target_column" ~ '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 analyzed_table."target_column" ~ '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -6554,7 +6554,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$')
+                                 REGEXP_LIKE(analyzed_table."target_column", '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END
@@ -6601,7 +6601,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
-                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$") IS NOT FALSE
+                                 REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$") IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6648,7 +6648,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
-                                 analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                                 analyzed_table.[target_column] LIKE '[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]' ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -6704,7 +6704,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                                 REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$')
                                 THEN 1
                             ELSE 0
                         END

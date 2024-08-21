@@ -161,7 +161,7 @@ public class SecretValueProviderImpl implements SecretValueProvider {
                         DictionaryList dictionaries = lookupContext.getUserHome().getDictionaries();
                         DictionaryWrapper dictionaryWrapper = dictionaries.getByObjectName(dictionaryName, true);
                         if (dictionaryWrapper != null && dictionaryWrapper.getObject() != null) {
-                            List<String> dictionaryEntries = dictionaryWrapper.getDictionaryEntries();
+                            Set<String> dictionaryEntries = dictionaryWrapper.getDictionaryEntries();
                             expanded.addAll(dictionaryEntries);
                         } else {
                             expanded.add(element);

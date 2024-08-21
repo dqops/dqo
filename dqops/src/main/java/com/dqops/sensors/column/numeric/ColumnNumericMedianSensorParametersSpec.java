@@ -40,6 +40,11 @@ public class ColumnNumericMedianSensorParametersSpec extends AbstractSensorParam
         }
     };
 
+    /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/numeric/percentile";
+
 
     @JsonPropertyDescription("Median (50th percentile), must equal 0.5")
     @RequiredField
@@ -79,6 +84,6 @@ public class ColumnNumericMedianSensorParametersSpec extends AbstractSensorParam
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/numeric/percentile";
+        return SENSOR_NAME;
     }
 }

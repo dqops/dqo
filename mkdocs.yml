@@ -20,6 +20,7 @@ nav:
           - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
           - Data monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
+      - User interface overview: "dqo-concepts/dqops-user-interface-overview.md"
       - Configuring data sources: "dqo-concepts/configuring-data-sources.md"
       - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
       - Configuring data quality checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
@@ -35,8 +36,8 @@ nav:
       - Data quality KPIs: "dqo-concepts/definition-of-data-quality-kpis.md"
       - Incremental data quality monitoring: "dqo-concepts/incremental-data-quality-monitoring.md"
       - Incident management: "dqo-concepts/grouping-data-quality-issues-to-incidents.md"
-      - User interface overview: "dqo-concepts/dqops-user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface.md"
+      - Data quality error sampling: "dqo-concepts/data-quality-error-sampling.md"
       - Storing data quality results: "dqo-concepts/data-storage-of-data-quality-results.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Quality check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
@@ -206,10 +207,12 @@ nav:
       - environment: 'client/models/environment.md'
       - error_samples: 'client/models/error_samples.md'
       - errors: 'client/models/errors.md'
+      - filtered_notifications_configurations: 'client/models/filtered_notifications_configurations.md'
       - incidents: 'client/models/incidents.md'
       - jobs: 'client/models/jobs.md'
       - labels: 'client/models/labels.md'
       - log_shipping: 'client/models/log_shipping.md'
+      - rule_mining: 'client/models/rule_mining.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
       - sensor_readouts: 'client/models/sensor_readouts.md'
@@ -236,11 +239,13 @@ nav:
       - environment: 'client/operations/environment.md'
       - error_samples: 'client/operations/error_samples.md'
       - errors: 'client/operations/errors.md'
+      - filtered_notifications_configurations: 'client/operations/filtered_notifications_configurations.md'
       - healthcheck: 'client/operations/healthcheck.md'
       - incidents: 'client/operations/incidents.md'
       - jobs: 'client/operations/jobs.md'
       - labels: 'client/operations/labels.md'
       - log_shipping: 'client/operations/log_shipping.md'
+      - rule_mining: 'client/operations/rule_mining.md'
       - rules: 'client/operations/rules.md'
       - schemas: 'client/operations/schemas.md'
       - search: 'client/operations/search.md'
@@ -415,16 +420,20 @@ nav:
       - patterns:
         - 'checks/column/patterns/index.md'
         - text not matching regex found: 'checks/column/patterns/text-not-matching-regex-found.md'
-        - texts matching regex percent: 'checks/column/patterns/texts-matching-regex-percent.md'
+        - texts not matching regex percent: 'checks/column/patterns/texts-not-matching-regex-percent.md'
         - invalid email format found: 'checks/column/patterns/invalid-email-format-found.md'
         - invalid email format percent: 'checks/column/patterns/invalid-email-format-percent.md'
         - text not matching date pattern found: 'checks/column/patterns/text-not-matching-date-pattern-found.md'
-        - text matching date pattern percent: 'checks/column/patterns/text-matching-date-pattern-percent.md'
-        - text matching name pattern percent: 'checks/column/patterns/text-matching-name-pattern-percent.md'
+        - text not matching date pattern percent: 'checks/column/patterns/text-not-matching-date-pattern-percent.md'
+        - text not matching name pattern percent: 'checks/column/patterns/text-not-matching-name-pattern-percent.md'
         - invalid uuid format found: 'checks/column/patterns/invalid-uuid-format-found.md'
-        - valid uuid format percent: 'checks/column/patterns/valid-uuid-format-percent.md'
+        - invalid uuid format percent: 'checks/column/patterns/invalid-uuid-format-percent.md'
         - invalid ip4 address format found: 'checks/column/patterns/invalid-ip4-address-format-found.md'
         - invalid ip6 address format found: 'checks/column/patterns/invalid-ip6-address-format-found.md'
+        - invalid usa phone format found: 'checks/column/patterns/invalid-usa-phone-format-found.md'
+        - invalid usa zipcode format found: 'checks/column/patterns/invalid-usa-zipcode-format-found.md'
+        - invalid usa phone format percent: 'checks/column/patterns/invalid-usa-phone-format-percent.md'
+        - invalid usa zipcode format percent: 'checks/column/patterns/invalid-usa-zipcode-format-percent.md'
       - pii:
         - 'checks/column/pii/index.md'
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
@@ -446,6 +455,8 @@ nav:
         - text length above max length: 'checks/column/text/text-length-above-max-length.md'
         - text length above max length percent: 'checks/column/text/text-length-above-max-length-percent.md'
         - text length in range percent: 'checks/column/text/text-length-in-range-percent.md'
+        - min word count: 'checks/column/text/min-word-count.md'
+        - max word count: 'checks/column/text/max-word-count.md'
       - uniqueness:
         - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'

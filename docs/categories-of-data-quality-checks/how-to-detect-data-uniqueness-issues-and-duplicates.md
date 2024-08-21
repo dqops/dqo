@@ -103,12 +103,12 @@ The table-level profiling statistics screen shows only the number of distinct va
 Columns with fewer unique values are highlighted with a darker green background color.
 These are the columns that potentially contain duplicate values.
 
-![Table profiling summary screen showing duplicate counts for each column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-statistics-on-column-list-dqops-profiling-screen-min.png){ loading=lazy; width="1200px" }
+![Table profiling summary screen showing duplicate counts for each column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-statistics-on-column-list-dqops-profiling-screen-min2.png){ loading=lazy; width="1200px" }
 
 ### Column statistics
 The data profiling screen for a column shows all data uniqueness metrics captured by the DQOps data profiler.
 
-![Column level uniqueness statistics in DQOps showing duplicate and distinct count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-and-duplicate-count-statistics-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Column level uniqueness statistics in DQOps showing duplicate and distinct count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-and-duplicate-count-statistics-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 
 ## Distinct count
@@ -129,7 +129,7 @@ The [*distinct_count*](../checks/column/uniqueness/distinct-count.md) check
 verifies that the count of distinct values is within an accepted range.
 The range is defined by setting the **min_count** and **max_count** parameters.
 
-![Distinct count in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-in-range-check-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Distinct count in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-in-range-check-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ### Validating distinct count in YAML
 The configuration of the [*distinct_count*](../checks/column/uniqueness/distinct-count.md) check is simple.
@@ -161,7 +161,7 @@ A value below 100% indicates that the column contains duplicate values.
 ### Validating distinct percent in UI
 The [*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)  check has one parameter, the *max_percent* value.
 
-![Distinct percent data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-percent-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Distinct percent data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-percent-data-quality-check-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ### Validating distinct percent in YAML
 The configuration of the [*distinct_percent*](../checks/column/uniqueness/distinct-percent.md) check in a YAML file is shown below.
@@ -193,7 +193,17 @@ The difference calculated by the expression `COUNT(column_name) - COUNT(DISTINCT
 The [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md) check
 takes one parameter **max_count**, which is the maximum accepted number of duplicate values.
 
-![Duplicate count data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Duplicate count data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min2.png){ loading=lazy; width="1200px" }
+
+### Duplicates error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for uniqueness checks.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section.
+
+![Duplicate count data quality check in DQOps - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min-error-samples2.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
 
 ### Finding duplicates in YAML
 The configuration of the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md) check in a YAML file is shown below.
@@ -230,7 +240,7 @@ The check will show the first values after 30 days.
 However, the check will not reveal any results if the distinct count has been unchanged for the last three months.
 That is because the time series anomaly detection rule needs to detect the scale of day-to-day changes.
 
-![Distinct count anomaly detection by DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-anomaly-detection-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Distinct count anomaly detection by DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/distinct-count-anomaly-detection-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ### Distinct count anomaly detection in YAML
 The configuration of the [*daily_distinct_count_anomaly*](../checks/column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly)
@@ -312,9 +322,9 @@ spec:
 ```
 
 ## Configuring other uniqueness checks
-The DQOps data quality check editor shows the remaining uniqueness checks after clicking the *Show advanced checks* checkbox.
+The DQOps data quality check editor shows the remaining uniqueness checks after clicking the **Show advanced checks** checkbox.
 
-![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min.png){ loading=lazy; width="800px" }
+![List of all uniqueness data quality checks in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-uniqueness-checks-in-dqops-min2.png){ loading=lazy; width="800px" }
 
 _(click to expand)_
 
@@ -328,7 +338,7 @@ _(click to expand)_
 | Data quality check name | Friendly name | Data quality dimension | Description | Standard check |
 |-------------------------|---------------|------------------------|-------------|----------------|
 |[*distinct_count*](../checks/column/uniqueness/distinct-count.md)|Verify that the count of distinct values is in the expected range|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.|:material-check-bold:|
-|[*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)|The minimum ratio of distinct values to the count of non null values (detect duplicate values)|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value. The default value of 100% distinct values ensures the column has no duplicate values.|:material-check-bold:|
+|[*distinct_percent*](../checks/column/uniqueness/distinct-percent.md)|The minimum ratio of distinct values to the count of non null values (detect duplicate values)|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum and maximum values. The default value of 100% distinct values ensures the column has no duplicate values.|:material-check-bold:|
 |[*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)|Maximum count of duplicate values|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value. The default configuration detects duplicate values by enforcing that the *min_count* of duplicates is zero.|:material-check-bold:|
 |[*duplicate_percent*](../checks/column/uniqueness/duplicate-percent.md)|Maximum percentage of duplicate values|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold. The default threshold is 0% duplicate values.| |
 |[*distinct_count_anomaly*](../checks/column/uniqueness/distinct-count-anomaly.md)|Abnormal change in the number of distinct values. Measured as a percentile of anomalous measures.|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window. The check is configured by setting a desired percentage of anomalies to identify as data quality issues.|:material-check-bold:|

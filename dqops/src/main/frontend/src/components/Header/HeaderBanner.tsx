@@ -1,21 +1,13 @@
-import {
-  IconButton,
-  Popover,
-  PopoverContent,
-  PopoverHandler
-} from '@material-tailwind/react';
+import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { toggleMenu } from '../../redux/actions/job.actions';
 import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
-import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { CheckTypes } from '../../shared/routes';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
-import SvgIcon from '../SvgIcon';
 
 type HeaderBannerProps = {
   onClose: () => void;
@@ -23,20 +15,13 @@ type HeaderBannerProps = {
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const dispatch = useActionDispatch();
-  const [openPopover, setOpenPopover] = useState(true);
-  const {
-    connection
-  }: { checkTypes: CheckTypes; connection: string; schema: string } =
-    useDecodedParams();
-  const history = useHistory();
-  const [scheduleConfigured, setScheduleConfigured] = useState(false);
-  const [isCollected, setIsCollected] = useState(false);
-  const [isProfilingChecked, setIsProfilingChecked] = useState(false);
-  const { advisorObject, userProfile } = useSelector(
+  const [isCollected, setIsCollected] = useState(true);
+  const [isProfilingChecked, setIsProfilingChecked] = useState(true);
+  const { advisorObject, isAdvisorOpen } = useSelector(
     (state: IRootState) => state.job
   );
 
-  const collectStatistics = () => {
+  const collectStatistics = async () => {
     setIsCollected(true);
 
     JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
@@ -44,159 +29,78 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
     });
   };
 
-  const runProfilingChecks = () => {
+  const runProfilingChecks = async () => {
     JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: {
         connection: advisorObject.connectionName,
         checkType: CheckTypes.PROFILING
       }
     });
-    setIsProfilingChecked(true);
   };
 
-  const configureScheduling = () => {
-    setScheduleConfigured(true);
-    const url = ROUTES.CONNECTION_DETAIL(
-      CheckTypes.SOURCES,
-      advisorObject.connectionName ?? connection,
-      'schedule'
-    );
-    const value = ROUTES.CONNECTION_LEVEL_VALUE(
-      CheckTypes.SOURCES,
-      advisorObject.connectionName ?? connection
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value,
-        state: {},
-        label: advisorObject.connectionName ?? connection
-      })
-    );
-    history.push(url);
+  const handleSubmit = async () => {
+    if (isCollected) {
+      await collectStatistics();
+    }
+    if (isProfilingChecked) {
+      await runProfilingChecks();
+    }
+    if (isCollected || isProfilingChecked) {
+      dispatch(toggleMenu(true));
+    }
+    onClose();
   };
 
   return (
-    <div className="absolute z-10 top-0 left-0 right-0">
-      <Popover open={openPopover} handler={setOpenPopover}>
-        <PopoverHandler>
-          <div
-            className="h-12 bg-orange-500 flex justify-between items-center px-4 bg-opacity-90 cursor-pointer"
-            onClick={() => setOpenPopover(!openPopover)}
-          >
-            <div className="flex items-center gap-2">
-              <SvgIcon name="info" className="text-white" />
-              <h4 className="text-white font-bold">
-                New tables have been imported and the automatic monitoring has
-                been scheduled. Click here for more actions.
-              </h4>
-            </div>
-
-            <IconButton
-              color="red"
-              size="sm"
-              className="!shadow-none"
-              onClick={onClose}
-            >
-              <SvgIcon name="close" />
-            </IconButton>
-          </div>
-        </PopoverHandler>
-
-        <PopoverContent className="max-w-250 z-50 !top-12 !left-0 rounded-none text-gray-700">
-          <div className="flex mb-4  items-center justify-between">
-            <div className="grow">Collect basic statistics</div>
-
-            <div className="w-50 justify-between flex gap-2 items-center">
-              <Button
-                variant={'contained'}
-                color={isCollected ? 'secondary' : 'primary'}
-                label={
-                  isCollected ? 'The job has started' : 'Collect statistics'
-                }
-                className="text-sm px-2 w-45"
-                onClick={isCollected ? undefined : collectStatistics}
-                disabled={userProfile.can_collect_statistics !== true}
+    <Dialog open={isAdvisorOpen} handler={onClose}>
+      <DialogBody className="pt-10 pb-2 px-8">
+        <div className="text-2xl text-gray-700 text-center whitespace-normal mb-5">
+          New tables were imported into DQOps. You should collect statistics to
+          enable data quality rule mining based on data samples.
+        </div>
+        <div>
+          <div className="text-black flex flex-col gap-y-2 mb-4">
+            <div className="px-4 flex items-center">
+              <Checkbox
+                checked={isCollected}
+                onChange={() => {
+                  setIsCollected(!isCollected);
+                }}
+                label="Collect basic statistics"
               />
-
-              <div className="px-4 flex items-center">
-                <Checkbox
-                  checked={isCollected}
-                  onChange={() => {
-                    setIsCollected(!isCollected);
-                  }}
-                />
-              </div>
             </div>
-          </div>
-          <div className="flex mb-4 items-center justify-between">
-            <div className="grow">Run profiling checks</div>
-
-            <div className="w-50 justify-between flex gap-2 items-center">
-              <Button
-                variant="contained"
-                color={isProfilingChecked ? 'secondary' : 'primary'}
-                label={
-                  isProfilingChecked
-                    ? 'The job has started'
-                    : 'Run profiling checks'
-                }
-                className="text-sm px-2 w-45"
-                onClick={isProfilingChecked ? undefined : runProfilingChecks}
-                disabled={userProfile.can_run_checks !== true}
+            <div className="px-4 flex items-center">
+              <Checkbox
+                checked={isProfilingChecked}
+                onChange={() => {
+                  setIsProfilingChecked(!isProfilingChecked);
+                }}
+                label="Profile data with default profiling checks"
               />
-
-              <div className="px-4 flex items-center">
-                <Checkbox
-                  checked={isProfilingChecked}
-                  onChange={() => {
-                    setIsProfilingChecked(!isProfilingChecked);
-                  }}
-                />
-              </div>
             </div>
           </div>
-          <div className="flex mb-4 w-150 items-center justify-between">
-            <div className="grow">
-              Review scheduling for profiling and
-              <br></br> daily monitoring checks
-            </div>
-
-            <div className="w-50 justify-between flex gap-2 items-center">
-              <Button
-                variant={scheduleConfigured ? 'contained' : 'outlined'}
-                color={scheduleConfigured ? 'secondary' : 'primary'}
-                label="Review scheduling"
-                className="text-sm px-2 w-45"
-                onClick={scheduleConfigured ? undefined : configureScheduling}
-              />
-
-              <div className="px-4 flex items-center">
-                <Checkbox
-                  checked={scheduleConfigured}
-                  onChange={() => {
-                    setScheduleConfigured(!scheduleConfigured);
-                  }}
-                />
-              </div>
-            </div>
+          <div className="text-md text-orange-500 text-center whitespace-normal">
+            Warning: If you imported a lot of tables, do not profile all tables
+            at once. Click the {'"'}Cancel{'"'} button and collect statistics on
+            each table individually
           </div>
-
-          <div className="flex justify-end">
-            <Button
-              variant={
-                scheduleConfigured && isCollected && isProfilingChecked
-                  ? 'contained'
-                  : 'outlined'
-              }
-              color="primary"
-              label="Close advisor"
-              className="px-2 my-4"
-              onClick={onClose}
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
-    </div>
+        </div>
+      </DialogBody>
+      <DialogFooter className="justify-center space-x-6 pb-8">
+        <Button
+          color="primary"
+          variant="outlined"
+          className="px-8"
+          onClick={onClose}
+          label="Cancel"
+        />
+        <Button
+          color="primary"
+          className="px-8"
+          onClick={handleSubmit}
+          label="Start profiling"
+        />
+      </DialogFooter>
+    </Dialog>
   );
 };

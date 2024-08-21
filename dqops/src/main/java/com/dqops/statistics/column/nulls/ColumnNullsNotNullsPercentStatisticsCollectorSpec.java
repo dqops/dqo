@@ -42,6 +42,11 @@ public class ColumnNullsNotNullsPercentStatisticsCollectorSpec extends AbstractS
         }
     };
 
+    /**
+     * Sensor name used by this statistics collector.
+     */
+    public static final String SENSOR_NAME = ColumnNullsNotNullsPercentSensorParametersSpec.SENSOR_NAME;
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

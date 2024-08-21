@@ -158,20 +158,21 @@ You can verify that the check has been disabled by navigating to the check edito
 ![Disabling check verification on Check editor](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-verification.png){ loading=lazy; width="1200px" }
 
 
-### **Recalibrate check for the incident**
+### **Reconfigure check for the incident**
 
 DQOps offers a one-click option to automatically reduce the number of data quality issues identified by a check.
 This can be helpful in situations where the check might be overly sensitive.
 
-Clicking the Recalibrate button will decrease the check's thresholds by 30%. For more significant adjustments, you can click
-the Recalibrate button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
+Clicking the **Reconfigure** button will decrease the rule threshold for the data quality check that caused the incident by 30%. For more significant adjustments, you can click
+the **Recalibrate** button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
 
-![Recalibrate-check-button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button.png){ loading=lazy; width="1200px" }
+![Reconfigure check button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button.png){ loading=lazy; width="1200px" }
 
-The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after recalibration. Notice that the `min_count` rule has been reduced from 1000, to 700.
+The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after reconfiguration. 
+Notice that the `min_count` rule has been reduced from 1000, to 700.
 
 
-=== "Check configuration before recalibration"
+=== "Check configuration before reconfiguration"
 
     ``` { .yaml .annotate linenums="1" hl_lines="17" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -193,7 +194,7 @@ The following example YAML files illustrate the `daily_partition_row_count` chec
                 min_count: 1000
     ```
 
-=== "Check configuration after recalibration"
+=== "Check configuration after reconfiguration"
 
     ``` { .yaml .annotate linenums="1" hl_lines="17" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json

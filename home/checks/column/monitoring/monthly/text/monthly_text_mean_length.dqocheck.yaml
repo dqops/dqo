@@ -8,4 +8,5 @@ spec:
     an accepted range. Stores the most recent captured value for each month when the
     data quality check was evaluated.
   friendly_name: Verify that the mean length of the text is in the range
+  standard: true
   default_severity: error

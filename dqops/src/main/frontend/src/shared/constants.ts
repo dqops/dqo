@@ -165,6 +165,10 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Table comparisons',
       value: 'table-comparisons'
+    },
+    {
+      label: 'Rule mining',
+      value: 'rule-mining'
     }
   ],
   [CheckTypes.PARTITIONED]: [
@@ -179,6 +183,10 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Table comparisons',
       value: 'table-comparisons'
+    },
+    {
+      label: 'Rule mining',
+      value: 'rule-mining'
     }
   ],
   [CheckTypes.MONITORING]: [
@@ -193,6 +201,10 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Table comparisons',
       value: 'table-comparisons'
+    },
+    {
+      label: 'Rule mining',
+      value: 'rule-mining'
     }
   ]
 };

@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -10,7 +10,7 @@ import { getCheckResults } from '../../../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
 import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
-import Select from '../../Select';
+import SelectTailwind from '../../Select/SelectTailwind';
 import SvgIcon from '../../SvgIcon';
 import { Table } from '../../Table';
 import { ChartView } from './ChartView';
@@ -108,10 +108,15 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Issue Severity Level',
+      header: () => (
+        <span>
+          Issue
+          <br />
+          Severity Level
+        </span>
+      ),
       value: 'severity',
-      className:
-        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left',
       render: (value: number) => {
         let name = '';
         switch (value) {
@@ -232,12 +237,12 @@ const CheckResultsTab = ({
     {
       label: 'Data Group',
       value: 'dataGroup',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     },
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
     }
   ];
 
@@ -304,7 +309,7 @@ const CheckResultsTab = ({
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
-          <Select
+          <SelectTailwind
             value={dataGroup || results[0]?.dataGroup}
             options={
               (results[0]?.dataGroups || []).map((item) => ({
@@ -317,7 +322,7 @@ const CheckResultsTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Month</div>
-          <Select
+          <SelectTailwind
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
@@ -328,39 +333,53 @@ const CheckResultsTab = ({
             size="sm"
             className={
               mode === 'chart'
-                ? 'bg-white border border-teal-500'
-                : 'bg-teal-500'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
             onClick={() => {
               setMode('table');
             }}
           >
-            <SvgIcon
-              name="table"
-              className={clsx(
-                'w-4 h-4 cursor-pointer ',
-                mode === 'table' ? 'font-bold text-white' : 'text-teal-500'
-              )}
-            />
+            <Tooltip
+              content="View results in a table"
+              className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+            >
+              <div>
+                <SvgIcon
+                  name="table"
+                  className={clsx(
+                    'w-4 h-4 cursor-pointer ',
+                    mode === 'table' ? 'font-bold text-white' : 'text-teal-500'
+                  )}
+                />
+              </div>
+            </Tooltip>
           </IconButton>
           <IconButton
             size="sm"
             className={
               mode === 'table'
-                ? 'bg-white border border-teal-500 '
-                : 'bg-teal-500'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
+                : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
             onClick={() => {
               setMode('chart');
             }}
           >
-            <SvgIcon
-              name="chart-line"
-              className={clsx(
-                'w-4 h-4 cursor-pointer',
-                mode === 'chart' ? 'font-bold text-white' : 'text-teal-500'
-              )}
-            />
+            <Tooltip
+              content="View results in a graph"
+              className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+            >
+              <div>
+                <SvgIcon
+                  name="chart-line"
+                  className={clsx(
+                    'w-4 h-4 cursor-pointer',
+                    mode === 'chart' ? 'font-bold text-white' : 'text-teal-500'
+                  )}
+                />
+              </div>
+            </Tooltip>
           </IconButton>
         </div>
       </div>

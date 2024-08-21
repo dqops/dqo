@@ -33,6 +33,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`stage`</span>|Stage name.|*string*| | | |
 |<span class="no-wrap-code ">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*| | | |
 |<span class="no-wrap-code ">`filter`</span>|SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.|*string*| | | |
+|<span class="no-wrap-code ">`do_not_collect_error_samples_in_profiling`</span>|Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks.|*boolean*| | | |
+|<span class="no-wrap-code ">`always_collect_error_samples_in_monitoring`</span>|Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor.|*boolean*| | | |
 |<span class="no-wrap-code ">[`timestamp_columns`](./TableYaml.md#timestampcolumnsspec)</span>|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|*[TimestampColumnsSpec](./TableYaml.md#timestampcolumnsspec)*| | | |
 |<span class="no-wrap-code ">[`incremental_time_window`](./TableYaml.md#partitionincrementaltimewindowspec)</span>|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|*[PartitionIncrementalTimeWindowSpec](./TableYaml.md#partitionincrementaltimewindowspec)*| | | |
 |<span class="no-wrap-code ">`default_grouping_name`</span>|The name of the default data grouping configuration that is applied on data quality checks. When a default data grouping is selected, all data quality checks run SQL queries with a GROUP BY clause, calculating separate data quality checks for each group of data. The data groupings are defined in the &#x27;groupings&#x27; dictionary (indexed by the data grouping name).|*string*| | | |
@@ -496,6 +498,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`text_mean_length`](./TableYaml.md#columntexttextmeanlengthstatisticscollectorspec)</span>|Configuration of the profiler that finds the mean text length.|*[ColumnTextTextMeanLengthStatisticsCollectorSpec](./TableYaml.md#columntexttextmeanlengthstatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`text_min_length`](./TableYaml.md#columntexttextminlengthstatisticscollectorspec)</span>|Configuration of the profiler that finds the min text length.|*[ColumnTextTextMinLengthStatisticsCollectorSpec](./TableYaml.md#columntexttextminlengthstatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`text_datatype_detect`](./TableYaml.md#columntexttextdatatypedetectstatisticscollectorspec)</span>|Configuration of the profiler that detects datatype.|*[ColumnTextTextDatatypeDetectStatisticsCollectorSpec](./TableYaml.md#columntexttextdatatypedetectstatisticscollectorspec)*| | | |
+|<span class="no-wrap-code ">[`text_min_word_count`](./TableYaml.md#columntextminwordcountstatisticscollectorspec)</span>|Configuration of the profiler that finds the estimated minimum word count.|*[ColumnTextMinWordCountStatisticsCollectorSpec](./TableYaml.md#columntextminwordcountstatisticscollectorspec)*| | | |
+|<span class="no-wrap-code ">[`text_max_word_count`](./TableYaml.md#columntextmaxwordcountstatisticscollectorspec)</span>|Configuration of the profiler that finds the estimated maximum word count.|*[ColumnTextMaxWordCountStatisticsCollectorSpec](./TableYaml.md#columntextmaxwordcountstatisticscollectorspec)*| | | |
 
 
 
@@ -555,6 +559,36 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../sensors/column/datatype-column-sensors.md#string-datatype-detect)</span>|Profiler parameters|*[ColumnDatatypeStringDatatypeDetectSensorParametersSpec](../sensors/column/datatype-column-sensors.md#string-datatype-detect)*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
+
+
+
+___
+
+## ColumnTextMinWordCountStatisticsCollectorSpec
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`parameters`](../sensors/column/text-column-sensors.md#min-word-count)</span>|Profiler parameters|*[ColumnTextMinWordCountSensorParametersSpec](../sensors/column/text-column-sensors.md#min-word-count)*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
+
+
+
+___
+
+## ColumnTextMaxWordCountStatisticsCollectorSpec
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`parameters`](../sensors/column/text-column-sensors.md#max-word-count)</span>|Profiler parameters|*[ColumnTextMaxWordCountSensorParametersSpec](../sensors/column/text-column-sensors.md#max-word-count)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
 
 
@@ -649,6 +683,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`min_value`](./TableYaml.md#columnrangeminvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the minimum value in the column.|*[ColumnRangeMinValueStatisticsCollectorSpec](./TableYaml.md#columnrangeminvaluestatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`median_value`](./TableYaml.md#columnrangemedianvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the median value in the column.|*[ColumnRangeMedianValueStatisticsCollectorSpec](./TableYaml.md#columnrangemedianvaluestatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`max_value`](./TableYaml.md#columnrangemaxvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the maximum value in the column.|*[ColumnRangeMaxValueStatisticsCollectorSpec](./TableYaml.md#columnrangemaxvaluestatisticscollectorspec)*| | | |
+|<span class="no-wrap-code ">[`mean_value`](./TableYaml.md#columnrangemeanvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the mean value in the column.|*[ColumnRangeMeanValueStatisticsCollectorSpec](./TableYaml.md#columnrangemeanvaluestatisticscollectorspec)*| | | |
 |<span class="no-wrap-code ">[`sum_value`](./TableYaml.md#columnrangesumvaluestatisticscollectorspec)</span>|Configuration of the profiler that finds the sum value in the column.|*[ColumnRangeSumValueStatisticsCollectorSpec](./TableYaml.md#columnrangesumvaluestatisticscollectorspec)*| | | |
 
 
@@ -725,6 +760,21 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`filter`</span>|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|*string*| | | |
+
+
+
+___
+
+## ColumnRangeMeanValueStatisticsCollectorSpec
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`parameters`](../sensors/column/numeric-column-sensors.md#mean)</span>|Profiler parameters|*[ColumnNumericMeanSensorParametersSpec](../sensors/column/numeric-column-sensors.md#mean)*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
 
 
 

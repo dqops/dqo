@@ -22,10 +22,16 @@ if TYPE_CHECKING:
         ColumnTextLengthInRangePercentCheckSpec,
     )
     from ..models.column_text_max_length_check_spec import ColumnTextMaxLengthCheckSpec
+    from ..models.column_text_max_word_count_check_spec import (
+        ColumnTextMaxWordCountCheckSpec,
+    )
     from ..models.column_text_mean_length_check_spec import (
         ColumnTextMeanLengthCheckSpec,
     )
     from ..models.column_text_min_length_check_spec import ColumnTextMinLengthCheckSpec
+    from ..models.column_text_min_word_count_check_spec import (
+        ColumnTextMinWordCountCheckSpec,
+    )
     from ..models.column_text_monthly_partitioned_checks_spec_custom_checks import (
         ColumnTextMonthlyPartitionedChecksSpecCustomChecks,
     )
@@ -51,6 +57,8 @@ class ColumnTextMonthlyPartitionedChecksSpec:
         monthly_partition_text_length_above_max_length_percent (Union[Unset,
             ColumnTextLengthAboveMaxLengthPercentCheckSpec]):
         monthly_partition_text_length_in_range_percent (Union[Unset, ColumnTextLengthInRangePercentCheckSpec]):
+        monthly_partition_min_word_count (Union[Unset, ColumnTextMinWordCountCheckSpec]):
+        monthly_partition_max_word_count (Union[Unset, ColumnTextMaxWordCountCheckSpec]):
     """
 
     custom_checks: Union[
@@ -79,6 +87,12 @@ class ColumnTextMonthlyPartitionedChecksSpec:
     ] = UNSET
     monthly_partition_text_length_in_range_percent: Union[
         Unset, "ColumnTextLengthInRangePercentCheckSpec"
+    ] = UNSET
+    monthly_partition_min_word_count: Union[
+        Unset, "ColumnTextMinWordCountCheckSpec"
+    ] = UNSET
+    monthly_partition_max_word_count: Union[
+        Unset, "ColumnTextMaxWordCountCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -149,6 +163,18 @@ class ColumnTextMonthlyPartitionedChecksSpec:
                 self.monthly_partition_text_length_in_range_percent.to_dict()
             )
 
+        monthly_partition_min_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_min_word_count, Unset):
+            monthly_partition_min_word_count = (
+                self.monthly_partition_min_word_count.to_dict()
+            )
+
+        monthly_partition_max_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_max_word_count, Unset):
+            monthly_partition_max_word_count = (
+                self.monthly_partition_max_word_count.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -186,6 +212,14 @@ class ColumnTextMonthlyPartitionedChecksSpec:
             field_dict["monthly_partition_text_length_in_range_percent"] = (
                 monthly_partition_text_length_in_range_percent
             )
+        if monthly_partition_min_word_count is not UNSET:
+            field_dict["monthly_partition_min_word_count"] = (
+                monthly_partition_min_word_count
+            )
+        if monthly_partition_max_word_count is not UNSET:
+            field_dict["monthly_partition_max_word_count"] = (
+                monthly_partition_max_word_count
+            )
 
         return field_dict
 
@@ -209,11 +243,17 @@ class ColumnTextMonthlyPartitionedChecksSpec:
         from ..models.column_text_max_length_check_spec import (
             ColumnTextMaxLengthCheckSpec,
         )
+        from ..models.column_text_max_word_count_check_spec import (
+            ColumnTextMaxWordCountCheckSpec,
+        )
         from ..models.column_text_mean_length_check_spec import (
             ColumnTextMeanLengthCheckSpec,
         )
         from ..models.column_text_min_length_check_spec import (
             ColumnTextMinLengthCheckSpec,
+        )
+        from ..models.column_text_min_word_count_check_spec import (
+            ColumnTextMinWordCountCheckSpec,
         )
         from ..models.column_text_monthly_partitioned_checks_spec_custom_checks import (
             ColumnTextMonthlyPartitionedChecksSpecCustomChecks,
@@ -341,6 +381,32 @@ class ColumnTextMonthlyPartitionedChecksSpec:
                 )
             )
 
+        _monthly_partition_min_word_count = d.pop(
+            "monthly_partition_min_word_count", UNSET
+        )
+        monthly_partition_min_word_count: Union[Unset, ColumnTextMinWordCountCheckSpec]
+        if isinstance(_monthly_partition_min_word_count, Unset):
+            monthly_partition_min_word_count = UNSET
+        else:
+            monthly_partition_min_word_count = (
+                ColumnTextMinWordCountCheckSpec.from_dict(
+                    _monthly_partition_min_word_count
+                )
+            )
+
+        _monthly_partition_max_word_count = d.pop(
+            "monthly_partition_max_word_count", UNSET
+        )
+        monthly_partition_max_word_count: Union[Unset, ColumnTextMaxWordCountCheckSpec]
+        if isinstance(_monthly_partition_max_word_count, Unset):
+            monthly_partition_max_word_count = UNSET
+        else:
+            monthly_partition_max_word_count = (
+                ColumnTextMaxWordCountCheckSpec.from_dict(
+                    _monthly_partition_max_word_count
+                )
+            )
+
         column_text_monthly_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_partition_text_min_length=monthly_partition_text_min_length,
@@ -351,6 +417,8 @@ class ColumnTextMonthlyPartitionedChecksSpec:
             monthly_partition_text_length_above_max_length=monthly_partition_text_length_above_max_length,
             monthly_partition_text_length_above_max_length_percent=monthly_partition_text_length_above_max_length_percent,
             monthly_partition_text_length_in_range_percent=monthly_partition_text_length_in_range_percent,
+            monthly_partition_min_word_count=monthly_partition_min_word_count,
+            monthly_partition_max_word_count=monthly_partition_max_word_count,
         )
 
         column_text_monthly_partitioned_checks_spec.additional_properties = d

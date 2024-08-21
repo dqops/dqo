@@ -29,6 +29,7 @@ import {
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 
 import { AxiosResponse } from 'axios';
+import { setJobAllert } from '../../../redux/actions/job.actions';
 import {
   addFirstLevelTab,
   setActiveFirstLevelUrl
@@ -42,6 +43,7 @@ import {
 } from '../../../services/apiClient';
 import { TABLE_LEVEL_TABS } from '../../../shared/constants';
 import { useDecodedParams } from '../../../utils';
+import RuleMining from '../../RuleMining/RuleMining';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TablePreview from './TablePreview';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
@@ -85,7 +87,22 @@ const ProfilingView = () => {
         connectionName,
         schemaName,
         tableName
-      ).then((res) => setStatistics(res.data));
+      ).then((res) => {
+        if (
+          !res.data.column_statistics ||
+          res.data.column_statistics.length === 0
+        ) {
+          dispatch(
+            setJobAllert({
+              activeTab: firstLevelActiveTab,
+              action: 'collect_statistics',
+              tooltipMessage:
+                'The table has no results of basic statistics, please collect the statistics'
+            })
+          );
+        }
+        setStatistics(res.data);
+      });
     } catch (err) {
       console.error(err);
     }
@@ -99,6 +116,16 @@ const ProfilingView = () => {
           schemaName,
           tableName
         );
+      if (!res.data.statistics || res.data.statistics.length === 0) {
+        dispatch(
+          setJobAllert({
+            activeTab: firstLevelActiveTab,
+            action: 'collect_statistics',
+            tooltipMessage:
+              'The table has no results of basic statistics, please collect the statistics'
+          })
+        );
+      }
       setRowCount(res.data);
     } catch (err) {
       console.error(err);
@@ -231,6 +258,7 @@ const ProfilingView = () => {
   };
 
   const collectStatistics = async () => {
+    dispatch(setJobAllert({}));
     await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
       ...statistics?.collect_column_statistics_job_template,
       columnNames: checkedColumns
@@ -311,6 +339,7 @@ const ProfilingView = () => {
           onUpdateChecks={onUpdate}
         />
       )}
+      {activeTab === 'rule-mining' && <RuleMining />}
     </div>
   );
 };

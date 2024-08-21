@@ -1,15 +1,19 @@
-import React, { useState } from "react";
-import Input from "../Input";
-import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../SvgIcon";
+import { IconButton } from '@material-tailwind/react';
+import React, { useState } from 'react';
+import Input from '../Input';
+import SvgIcon from '../SvgIcon';
 
 type RuleParametersProps = {
   parameters?: Record<string, string>;
   onChange: (parameters: Record<string, string>) => void;
-  canUserEdit ?: boolean
-}
+  canUserEdit?: boolean;
+};
 
-const RuleParameters = ({ parameters, onChange, canUserEdit }: RuleParametersProps) => {
+const RuleParameters = ({
+  parameters,
+  onChange,
+  canUserEdit
+}: RuleParametersProps) => {
   const [name, setName] = useState('');
   const [value, setValue] = useState('');
 
@@ -17,7 +21,7 @@ const RuleParameters = ({ parameters, onChange, canUserEdit }: RuleParametersPro
     if (!name) return;
 
     onChange({
-      ...parameters || {},
+      ...(parameters || {}),
       [name]: value
     });
     setName('');
@@ -37,48 +41,44 @@ const RuleParameters = ({ parameters, onChange, canUserEdit }: RuleParametersPro
     <div>
       <table className="w-full text-sm">
         <thead>
-        <tr>
-          <th className="pr-4 py-2 text-left">
-            Parameter name
-          </th>
-          <th className="px-4 py-2 text-left">
-            Value
-          </th>
-          <th className="px-4 py-2 text-left">
-            Action
-          </th>
-        </tr>
+          <tr>
+            <th className="pr-4 py-2 text-left">Parameter name</th>
+            <th className="px-4 py-2 text-left">Value</th>
+            <th className="px-4 py-2 text-left">Action</th>
+          </tr>
         </thead>
         <tbody>
-          {parameters ? Object.keys(parameters).map((key, index) => (
-            <tr key={index}>
-              <td className="pr-4 py-2">
-                <Input
-                  value={key}
-                  onChange={(e) => {}}
-                  disabled={canUserEdit !== true}
-                />
-              </td>
-              <td className="px-4 py-2">
-                <Input
-                  value={parameters[key]}
-                  onChange={(e) => {}}
-                  disabled={canUserEdit !== true}
-                />
-              </td>
-              <td className="px-4 py-2  align-top w-20">
-                <IconButton
-                  color="teal"
-                  size="sm"
-                  onClick={() => onDelete(key)}
-                  className="!shadow-none"
-                  disabled={canUserEdit !== true}
-                >
-                  <SvgIcon name="delete" className="w-4" />
-                </IconButton>
-              </td>
-            </tr>
-          )) : null}
+          {parameters
+            ? Object.keys(parameters).map((key, index) => (
+                <tr key={index}>
+                  <td className="pr-4 py-2">
+                    <Input
+                      value={key}
+                      onChange={(e) => {}}
+                      disabled={canUserEdit !== true}
+                    />
+                  </td>
+                  <td className="px-4 py-2">
+                    <Input
+                      value={parameters[key]}
+                      onChange={(e) => {}}
+                      disabled={canUserEdit !== true}
+                    />
+                  </td>
+                  <td className="px-4 py-2  align-top w-20">
+                    <IconButton
+                      color="teal"
+                      size="sm"
+                      onClick={() => onDelete(key)}
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                      disabled={canUserEdit !== true}
+                    >
+                      <SvgIcon name="delete" className="w-4" />
+                    </IconButton>
+                  </td>
+                </tr>
+              ))
+            : null}
           <tr>
             <td className="pr-4 py-2">
               <Input
@@ -99,7 +99,7 @@ const RuleParameters = ({ parameters, onChange, canUserEdit }: RuleParametersPro
                 color="teal"
                 size="sm"
                 onClick={onAdd}
-                className="!shadow-none"
+                className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                 disabled={canUserEdit !== true}
               >
                 <SvgIcon name="add" className="w-4" />

@@ -37,8 +37,12 @@ import TableMonthlyPartitionedChecksView from '../../pages/TableMonthlyPartition
 import TablePartitionedChecksUIFilterView from '../../pages/TablePartitionedChecksUIFilterView';
 import TableProfilingChecksUIFilterView from '../../pages/TableProfilingChecksUIFilterView';
 import TableProfilingChecksView from '../../pages/TableProfilingChecksView';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { useDecodedParams } from '../../utils';
+import { setJobAllert } from '../../redux/actions/job.actions';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import { getIsAnyChecksEnabled, useDecodedParams } from '../../utils';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 
 interface ConnectionLayoutProps {
@@ -51,6 +55,13 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
+  const {
+    dailyMonitoring,
+    monthlyMonitoring,
+    dailyPartitionedChecks,
+    monthlyPartitionedChecks,
+    checksUI
+  } = useSelector(getFirstLevelState(checkTypes));
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -81,10 +92,67 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
     }));
   }, [pageTabs]);
 
+  const getChecksConfigurated = (activeUrl: string) => {
+    const tab = activeUrl.split('/')[activeUrl.split('/').length - 1];
+    switch (checkTypes) {
+      case CheckTypes.PROFILING: {
+        if (tab !== 'advanced') return;
+        if (checksUI && getIsAnyChecksEnabled(checksUI) === false) {
+          dispatch(
+            setJobAllert({
+              activeTab,
+              action: 'rule-mining',
+              tooltipMessage:
+                'No custom data quality rules configurated. Use the data quality rule miner to get a proposal of data quality checks.'
+            })
+          );
+        }
+        break;
+      }
+      case CheckTypes.MONITORING: {
+        if (tab !== 'check-editor') return;
+        if (
+          (dailyMonitoring &&
+            getIsAnyChecksEnabled(dailyMonitoring) === false) ||
+          (monthlyMonitoring &&
+            getIsAnyChecksEnabled(monthlyMonitoring) === false)
+        ) {
+          dispatch(
+            setJobAllert({
+              activeTab,
+              action: 'rule-mining',
+              tooltipMessage:
+                'No custom data quality rules configurated. Use the data quality rule miner to get a proposal of data quality checks.'
+            })
+          );
+        }
+        break;
+      }
+      case CheckTypes.PARTITIONED: {
+        if (tab !== 'check-editor') return;
+        if (
+          (dailyPartitionedChecks &&
+            getIsAnyChecksEnabled(dailyPartitionedChecks) === false) ||
+          (monthlyPartitionedChecks &&
+            getIsAnyChecksEnabled(monthlyPartitionedChecks) === false)
+        ) {
+          dispatch(
+            setJobAllert({
+              activeTab,
+              action: 'rule-mining',
+              tooltipMessage:
+                'No custom data quality rules configurated. Use the data quality rule miner to get a proposal of data quality checks.'
+            })
+          );
+        }
+        break;
+      }
+    }
+  };
   useEffect(() => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
-
+      getChecksConfigurated(activeUrl ?? activeTab);
       if (activeUrl && activeUrl !== location.pathname) {
         history.push(activeUrl);
       }

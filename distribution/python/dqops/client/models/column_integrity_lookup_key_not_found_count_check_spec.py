@@ -47,6 +47,9 @@ class ColumnIntegrityLookupKeyNotFoundCountCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
+        always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
+            fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
+            error samples will impose additional load on the data source.
         parameters (Union[Unset, ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec]):
         warning (Union[Unset, MaxCountRule0WarningParametersSpec]):
         error (Union[Unset, MaxCountRule0WarningParametersSpec]):
@@ -61,6 +64,7 @@ class ColumnIntegrityLookupKeyNotFoundCountCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
+    always_collect_error_samples: Union[Unset, bool] = UNSET
     parameters: Union[
         Unset, "ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec"
     ] = UNSET
@@ -88,6 +92,7 @@ class ColumnIntegrityLookupKeyNotFoundCountCheckSpec:
         quality_dimension = self.quality_dimension
         display_name = self.display_name
         data_grouping = self.data_grouping
+        always_collect_error_samples = self.always_collect_error_samples
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -123,6 +128,8 @@ class ColumnIntegrityLookupKeyNotFoundCountCheckSpec:
             field_dict["display_name"] = display_name
         if data_grouping is not UNSET:
             field_dict["data_grouping"] = data_grouping
+        if always_collect_error_samples is not UNSET:
+            field_dict["always_collect_error_samples"] = always_collect_error_samples
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
         if warning is not UNSET:
@@ -175,6 +182,8 @@ class ColumnIntegrityLookupKeyNotFoundCountCheckSpec:
 
         data_grouping = d.pop("data_grouping", UNSET)
 
+        always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
+
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[
             Unset, ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
@@ -218,6 +227,7 @@ class ColumnIntegrityLookupKeyNotFoundCountCheckSpec:
             quality_dimension=quality_dimension,
             display_name=display_name,
             data_grouping=data_grouping,
+            always_collect_error_samples=always_collect_error_samples,
             parameters=parameters,
             warning=warning,
             error=error,

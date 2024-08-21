@@ -17,9 +17,10 @@ package com.dqops.checks.column.checkspecs.nulls;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercent1DayRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercent1DayRule50ParametersSpec;
@@ -192,7 +193,7 @@ public class ColumnNullPercentChange1DayCheckSpec
      */
     @Override
     @JsonIgnore
-    public RuleSeverityLevel getDefaultSeverity() {
-        return RuleSeverityLevel.warning;
+    public DefaultRuleSeverityLevel getDefaultSeverity() {
+        return DefaultRuleSeverityLevel.warning;
     }
 }

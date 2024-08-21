@@ -1,3 +1,4 @@
+import { IconButton } from '@material-tailwind/react';
 import React from 'react';
 import {
   ParameterDefinitionSpec,
@@ -5,11 +6,10 @@ import {
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
 import Checkbox from '../Checkbox';
-import StringListField from '../StringListField';
-import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
 import { EditInput } from '../EditInput';
 import EditSelect from '../EditSelect';
+import StringListField from '../StringListField';
+import SvgIcon from '../SvgIcon';
 import TextArea from '../TextArea';
 
 type RuleFieldRowProps = {
@@ -129,7 +129,7 @@ const RuleFieldRow = ({
             color="teal"
             size="sm"
             onClick={onDelete}
-            className="!shadow-none"
+            className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
           >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>

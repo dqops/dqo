@@ -24,7 +24,8 @@ class RunChecksParameters:
         time_window_filter (Union[Unset, TimeWindowFilterParameters]): Time window configuration for partitioned checks
             (the number of recent days or months to analyze in an incremental mode) or an absolute time range to analyze.
         collect_error_samples (Union[Unset, bool]): Set the value to true to collect error samples for failed data
-            quality checks.
+            quality checks. Set the value to false to disable error sampling collection despite any other settings on the
+            table or check level.
         dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
             dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
             be rendered.

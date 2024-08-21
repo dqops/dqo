@@ -24,6 +24,7 @@ import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import DataQualityChecks from '../../DataQualityChecks';
+import RuleMining from '../../RuleMining/RuleMining';
 import Tabs from '../../Tabs';
 import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
@@ -41,6 +42,10 @@ const initTabs = [
   {
     label: 'Table comparisons',
     value: 'table-comparisons'
+  },
+  {
+    label: 'Rule mining',
+    value: 'rule-mining'
   }
 ];
 
@@ -82,25 +87,36 @@ const TablePartitionedChecksView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    dispatch(
-      getTableDailyPartitionedChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-    dispatch(
-      getTableMonthlyPartitionedChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
+    if (secondTab === 'daily') {
+      dispatch(
+        getTableDailyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+    if (secondTab == 'monthly') {
+      dispatch(
+        getTableMonthlyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    tableName,
+    secondTab
+  ]);
 
   const onUpdate = async () => {
     if (secondTab === 'daily') {
@@ -292,6 +308,22 @@ const TablePartitionedChecksView = () => {
           timePartitioned={secondTab}
           setTimePartitioned={setTimePartitioned}
         />
+      )}
+      {activeTab === 'rule-mining' && (
+        <>
+          {secondTab === 'daily' && (
+            <RuleMining
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+          {secondTab === 'monthly' && (
+            <RuleMining
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+        </>
       )}
     </div>
   );

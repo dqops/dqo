@@ -26,7 +26,11 @@ import {
 } from '../../api';
 import { TJobDictionary, TJobList } from '../../shared/constants';
 import { JOB_ACTION } from '../types';
-
+export interface IJobAllert {
+  activeTab?: string;
+  action?: string;
+  tooltipMessage?: string;
+}
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
   loading: boolean;
@@ -52,6 +56,7 @@ export interface IJobsState {
   isErrorModalOpen: boolean;
   notificationCount: number;
   newNotification: boolean;
+  job_allert: IJobAllert;
 }
 
 const initialState: IJobsState = {
@@ -74,7 +79,8 @@ const initialState: IJobsState = {
   jobList: {},
   isErrorModalOpen: false,
   notificationCount: 0,
-  newNotification: false
+  newNotification: false,
+  job_allert: {}
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -347,6 +353,12 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         newNotification: action.newNotification
+      };
+    }
+    case JOB_ACTION.SET_JOB_ALLERT: {
+      return {
+        ...state,
+        job_allert: action.job_allert
       };
     }
     default:

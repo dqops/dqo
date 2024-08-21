@@ -153,6 +153,7 @@ dqo:
   statistics:
     truncated-strings-length: 50
     viewed-statistics-age-months: 3
+    samples-limit: 100
   error-sampling:
     truncated-strings-length: 50
     samples-limit: 50
@@ -185,7 +186,7 @@ dqo:
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:
-      profiling: "0 12 1 * *"  # 12PM on the first day of the month
+      profiling: "0 1 1 * *"  # 1AM on the first day of the month
       monitoring-daily: "0 12 * * *"  # 12PM every day (noon)
       monitoring-monthly: "0 12 * * *"  # 12PM every day (noon)
       partitioned-daily: "0 12 * * *"  # 12PM every day (noon)

@@ -8,6 +8,7 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   setAdvisorJobId,
   setAdvisorObject,
+  setJobAllert,
   toggleAdvisor
 } from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
@@ -25,9 +26,9 @@ import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
 import SvgIcon from '../SvgIcon';
 import UserProfile from '../UserProfile';
+import './Header.css';
 import { HeaderBanner } from './HeaderBanner';
 import { SynchronizeButton } from './SynchronizeButton';
-
 const Header = () => {
   const history = useHistory();
   const location = useLocation();
@@ -62,10 +63,10 @@ const Header = () => {
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const { isAdvisorOpen, job_dictionary_state, advisorJobId } = useSelector(
-    (state: IRootState) => state.job
-  );
+  const { isAdvisorOpen, job_dictionary_state, advisorJobId, job_allert } =
+    useSelector((state: IRootState) => state.job);
   const onClick = (newCheckTypes: CheckTypes) => () => {
+    dispatch(setJobAllert({}));
     let url = '';
     let value = '';
 
@@ -231,11 +232,12 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-2">
                 <SvgIcon name="data_sources" className="w-4.5 h-4.5" />
               </div>
-              {!isWindowSmall && <div>Data Sources</div>}
+              {!isWindowSmall && <div>Data sources</div>}
             </div>
           </Tooltip>
           <Tooltip
             content={
+              job_allert.tooltipMessage ??
               'Measure basic data statistics and experiment with various types of data quality checks'
             }
             className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
@@ -245,7 +247,8 @@ const Header = () => {
                 'px-2 cursor-pointer flex items-center',
                 location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
                   ? 'font-bold'
-                  : ''
+                  : '',
+                job_allert.action === 'profiling' ? 'flash-red-border' : ''
               )}
               onClick={onClick(CheckTypes.PROFILING)}
             >
@@ -270,7 +273,7 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-2">
                 <SvgIcon name="monitoring_checks" className="!w-4.5 !h-4.5" />
               </div>
-              {!isWindowSmall && <div>Monitoring Checks</div>}
+              {!isWindowSmall && <div>Monitoring checks</div>}
             </div>
           </Tooltip>
           <Tooltip
@@ -302,7 +305,7 @@ const Header = () => {
                 <div
                   className={clsx(isTextWrapped && !isWindowSmall && 'ml-2')}
                 >
-                  Partition Checks
+                  Partition checks
                 </div>
               )}
             </div>
@@ -322,7 +325,7 @@ const Header = () => {
               <div className="!w-4.5 !h-4.5 mr-1.5">
                 <SvgIcon name="dashboards" className="!w-4.5 !h-4.5" />
               </div>
-              {!isWindowSmall && <div>Data Quality Dashboards</div>}
+              {!isWindowSmall && <div>Data quality dashboards</div>}
             </div>
           </Tooltip>
           <Tooltip

@@ -2,7 +2,10 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { setJobAllert } from '../../../../redux/actions/job.actions';
 import { IRootState } from '../../../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import { CheckResultApi } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
@@ -65,6 +68,8 @@ export default function TableQualityStatus({
   const [since, setSince] = useState<Date | undefined>(
     new Date(moment().subtract(30, 'days').format('YYYY-MM-DD'))
   );
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const dispatch = useActionDispatch();
 
   const getTableDataQualityStatus = (month?: number, since?: Date) => {
     CheckResultApi.getTableDataQualityStatus(
@@ -77,7 +82,22 @@ export default function TableQualityStatus({
       checkTypes === CheckTypes.MONITORING,
       checkTypes === CheckTypes.PARTITIONED,
       timePartitioned
-    ).then((res) => setTableDataQualityStatus(res.data));
+    ).then((res) => {
+      if (
+        (!res.data.checks || Object.keys(res.data.checks).length === 0) &&
+        (!res.data.columns || Object.keys(res.data.columns).length === 0)
+      ) {
+        dispatch(
+          setJobAllert({
+            activeTab: firstLevelActiveTab,
+            action: timePartitioned ? 'check-editor' : 'advanced',
+            tooltipMessage:
+              'The table has no data recent data quality results. Please configure and run additional data quality checks to see the table quality status.'
+          })
+        );
+      }
+      setTableDataQualityStatus(res.data);
+    });
   };
 
   useEffect(() => {
@@ -156,87 +176,89 @@ export default function TableQualityStatus({
             />
           </div>
         )}
-      <div className="flex justify-between items-center p-4 ">
-        <div className="flex pb-6 gap-x-5 items-center">
+      <div className="flex justify-between ">
+        <div className="flex gap-x-5 pl-4 mt-3 relative">
           <div className="text-sm pl-1">Group checks by: </div>
           <RadioButton
             checked={categoryDimension === 'category'}
             label="category"
             fontClassName="text-sm"
+            className="!items-start"
             onClick={() => setCategoryDimension('category')}
           />
           <RadioButton
             checked={categoryDimension === 'dimension'}
             label="quality dimension"
             fontClassName="text-sm"
+            className="!items-start"
             onClick={() => setCategoryDimension('dimension')}
           />
         </div>
-        <div>
-          <div className="flex pb-6 gap-x-5">
-            <RadioButton
-              checked={month === 1}
-              label="Current month"
-              onClick={() => {
-                setSince(undefined), setMonth(1);
-              }}
-              fontClassName="text-sm"
-            />
-            <RadioButton
-              checked={month === 3}
-              label="Last 3 months"
-              onClick={() => {
-                setSince(undefined), setMonth(3);
-              }}
-              fontClassName="text-sm"
-            />
-            <RadioButton
-              checked={month === undefined}
-              label="Since"
-              onClick={() => {
-                setMonth(undefined);
-              }}
-              fontClassName="text-sm"
-            />
-            <DatePicker
-              showIcon
-              placeholderText="Select date start"
-              onChange={setSince}
-              selected={since}
-              dateFormat="yyyy-MM-dd"
-            />
-          </div>
-          <div className="flex items-center gap-x-3 pb-6">
-            <RadioButton
-              label="Current severity status"
-              checked={severityType === 'current'}
-              onClick={() => setSeverityType('current')}
-              fontClassName="text-sm"
-            />
-            <RadioButton
-              label="Highest severity status"
-              checked={severityType === 'highest'}
-              onClick={() => setSeverityType('highest')}
-              fontClassName="text-sm"
-            />
-          </div>
+        <div className="flex pb-6 gap-x-5 pr-4 pt-2">
+          <RadioButton
+            checked={month === 1}
+            label="Current month"
+            onClick={() => {
+              setSince(undefined), setMonth(1);
+            }}
+            fontClassName="text-sm"
+          />
+          <RadioButton
+            checked={month === 3}
+            label="Last 3 months"
+            onClick={() => {
+              setSince(undefined), setMonth(3);
+            }}
+            fontClassName="text-sm"
+          />
+          <RadioButton
+            checked={month === undefined}
+            label="Since"
+            onClick={() => {
+              setMonth(undefined);
+            }}
+            fontClassName="text-sm"
+          />
+          <DatePicker
+            showIcon
+            placeholderText="Select date start"
+            onChange={setSince}
+            selected={since}
+            dateFormat="yyyy-MM-dd"
+          />
         </div>
       </div>
-      <div className="flex gap-x-5 ml-4">
+      <div className="flex flex-col 2xl:flex-row 2xl:items-center items-end gap-y-2 gap-x-3 justify-end pr-4">
+        <RadioButton
+          label="Current severity status"
+          checked={severityType === 'current'}
+          onClick={() => setSeverityType('current')}
+          fontClassName="text-sm"
+        />
+        <RadioButton
+          label="Highest severity status"
+          checked={severityType === 'highest'}
+          onClick={() => setSeverityType('highest')}
+          fontClassName="text-sm"
+        />
+      </div>
+      <div className="flex gap-x-5 ml-4 mt-[-30px]">
         <CurrentTableStatus tableDataQualityStatus={tableDataQualityStatus} />
         <TotalChecksExecuted tableDataQualityStatus={tableDataQualityStatus} />
       </div>
-      {Object.keys(firstLevelChecks).length > 0 ? (
-        <TableQualityStatusOverview
-          firstLevelChecks={firstLevelChecks}
-          categoryDimension={categoryDimension}
-          severityType={severityType}
-          tableDataQualityStatus={tableDataQualityStatus}
-          timeScale={timePartitioned}
-        />
-      ) : (
-        <div className="mt-5">No data quality check results</div>
-      )}
+      <div>
+        {Object.keys(firstLevelChecks).length > 0 ? (
+          <TableQualityStatusOverview
+            firstLevelChecks={firstLevelChecks}
+            categoryDimension={categoryDimension}
+            severityType={severityType}
+            tableDataQualityStatus={tableDataQualityStatus}
+            timeScale={timePartitioned}
+          />
+        ) : (
+          <div className="mt-5">No data quality check results</div>
+        )}
+      </div>
     </div>
   );
 }

@@ -117,6 +117,14 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
 
+    @JsonPropertyDescription("Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean doNotCollectErrorSamplesInProfiling;
+
+    @JsonPropertyDescription("Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean alwaysCollectErrorSamplesInMonitoring;
+
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -291,6 +299,40 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
     public void setFilter(String filter) {
 		setDirtyIf(!Objects.equals(this.filter, filter));
         this.filter = filter;
+    }
+
+    /**
+     * Returns the flag if collecting error samples in profiling checks is disabled by default.
+     * @return True when profiling checks will not collect error samples, unless it is requested in the run checks job.
+     */
+    public boolean isDoNotCollectErrorSamplesInProfiling() {
+        return doNotCollectErrorSamplesInProfiling;
+    }
+
+    /**
+     * Sets a flag to disable collecting error samples by profiling checks.
+     * @param doNotCollectErrorSamplesInProfiling Disable collecting error samples by profiling checks.
+     */
+    public void setDoNotCollectErrorSamplesInProfiling(boolean doNotCollectErrorSamplesInProfiling) {
+        this.setDirtyIf(this.doNotCollectErrorSamplesInProfiling != doNotCollectErrorSamplesInProfiling);
+        this.doNotCollectErrorSamplesInProfiling = doNotCollectErrorSamplesInProfiling;
+    }
+
+    /**
+     * Returns a flag if failed monitoring checks will collect error samples.
+     * @return True when failed monitoring checks collect error samples.
+     */
+    public boolean isAlwaysCollectErrorSamplesInMonitoring() {
+        return alwaysCollectErrorSamplesInMonitoring;
+    }
+
+    /**
+     * Sets a flag to collect error samples by failed monitoring checks.
+     * @param alwaysCollectErrorSamplesInMonitoring Always collect error samples for monitoring checks.
+     */
+    public void setAlwaysCollectErrorSamplesInMonitoring(boolean alwaysCollectErrorSamplesInMonitoring) {
+        this.setDirtyIf(this.alwaysCollectErrorSamplesInMonitoring != alwaysCollectErrorSamplesInMonitoring);
+        this.alwaysCollectErrorSamplesInMonitoring = alwaysCollectErrorSamplesInMonitoring;
     }
 
     /**

@@ -25,6 +25,7 @@ class StatisticsMetricModel:
         result_data_type (Union[Unset, StatisticsResultDataType]):
         result (Union[Unset, StatisticsMetricModelResult]): Statistics result for the metric
         collected_at (Union[Unset, datetime.datetime]): The local timestamp when the metric was collected
+        executed_at (Union[Unset, int]): The UTC timestamp when the metric was collected (executed)
         sample_count (Union[Unset, int]): The number of the value samples for this result value. Filled only by the
             column value sampling profilers.
         sample_index (Union[Unset, int]): The index of the result that was returned. Filled only by the column value
@@ -37,6 +38,7 @@ class StatisticsMetricModel:
     result_data_type: Union[Unset, StatisticsResultDataType] = UNSET
     result: Union[Unset, "StatisticsMetricModelResult"] = UNSET
     collected_at: Union[Unset, datetime.datetime] = UNSET
+    executed_at: Union[Unset, int] = UNSET
     sample_count: Union[Unset, int] = UNSET
     sample_index: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -57,6 +59,7 @@ class StatisticsMetricModel:
         if not isinstance(self.collected_at, Unset):
             collected_at = self.collected_at.isoformat()
 
+        executed_at = self.executed_at
         sample_count = self.sample_count
         sample_index = self.sample_index
 
@@ -75,6 +78,8 @@ class StatisticsMetricModel:
             field_dict["result"] = result
         if collected_at is not UNSET:
             field_dict["collectedAt"] = collected_at
+        if executed_at is not UNSET:
+            field_dict["executedAt"] = executed_at
         if sample_count is not UNSET:
             field_dict["sampleCount"] = sample_count
         if sample_index is not UNSET:
@@ -114,6 +119,8 @@ class StatisticsMetricModel:
         else:
             collected_at = isoparse(_collected_at)
 
+        executed_at = d.pop("executedAt", UNSET)
+
         sample_count = d.pop("sampleCount", UNSET)
 
         sample_index = d.pop("sampleIndex", UNSET)
@@ -125,6 +132,7 @@ class StatisticsMetricModel:
             result_data_type=result_data_type,
             result=result,
             collected_at=collected_at,
+            executed_at=executed_at,
             sample_count=sample_count,
             sample_index=sample_index,
         )

@@ -24,6 +24,7 @@ import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import DataQualityChecks from '../../DataQualityChecks';
+import RuleMining from '../../RuleMining/RuleMining';
 import Tabs from '../../Tabs';
 import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
@@ -41,6 +42,10 @@ const initTabs = [
   {
     label: 'Table comparisons',
     value: 'table-comparisons'
+  },
+  {
+    label: 'Rule mining',
+    value: 'rule-mining'
   }
 ];
 
@@ -81,25 +86,36 @@ const MonitoringView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    dispatch(
-      getTableDailyMonitoringChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-    dispatch(
-      getTableMonthlyMonitoringChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connectionName,
-        schemaName,
-        tableName
-      )
-    );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
+    if (secondTab === 'daily') {
+      dispatch(
+        getTableDailyMonitoringChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+    if (secondTab === 'monthly') {
+      dispatch(
+        getTableMonthlyMonitoringChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      );
+    }
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    tableName,
+    secondTab
+  ]);
 
   const onUpdate = async () => {
     if (secondTab === 'daily') {
@@ -265,6 +281,22 @@ const MonitoringView = () => {
               checkResultsOverview={monthlyCheckResultsOverview}
               getCheckOverview={getMonthlyCheckOverview}
               loading={loading}
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+        </>
+      )}
+      {activeTab === 'rule-mining' && (
+        <>
+          {secondTab === 'daily' && (
+            <RuleMining
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+          {secondTab === 'monthly' && (
+            <RuleMining
               timePartitioned={secondTab}
               setTimePartitioned={setTimePartitioned}
             />

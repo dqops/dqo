@@ -49,7 +49,7 @@ export default function SharedCredentailTable({
           <td className="px-6 py-2 text-left block w-100">{credential.type}</td>
           <td className="px-6 py-2 text-left block max-w-100">
             <Button
-              label="edit"
+              label="Edit"
               variant="text"
               color="primary"
               onClick={() =>
@@ -59,7 +59,7 @@ export default function SharedCredentailTable({
           </td>
           <td className="px-6 py-2 text-left block max-w-100">
             <Button
-              label="delete"
+              label="Delete"
               variant="text"
               color="primary"
               onClick={() =>
@@ -78,7 +78,7 @@ export default function SharedCredentailTable({
               target="_blank"
               className="text-teal-500"
             >
-              download
+              Download
             </a>
           </td>
         </tr>

@@ -249,6 +249,9 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
 
         TextColumn qualityDimensionColumn = TextColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultsRowCount);
         String effectiveDataQualityDimension = sensorRunParameters.getCheck().getEffectiveDataQualityDimension();
+        if (Strings.isNullOrEmpty(effectiveDataQualityDimension)) {
+            effectiveDataQualityDimension = "None";
+        }
         qualityDimensionColumn.setMissingTo(effectiveDataQualityDimension);
         sortedNormalizedTable.addColumns(qualityDimensionColumn);
 

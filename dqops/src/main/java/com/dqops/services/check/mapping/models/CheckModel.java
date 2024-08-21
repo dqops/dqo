@@ -16,24 +16,31 @@
 package com.dqops.services.check.mapping.models;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.CheckType;
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.comments.CommentsListSpec;
+import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.reflection.FieldInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -140,7 +147,7 @@ public class CheckModel implements Cloneable {
      * The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.
      */
     @JsonPropertyDescription("The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.")
-    private RuleSeverityLevel defaultSeverity;
+    private DefaultRuleSeverityLevel defaultSeverity;
 
     /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
@@ -227,6 +234,13 @@ public class CheckModel implements Cloneable {
     private String dataGroupingConfiguration;
 
     /**
+     * Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.
+     */
+    @JsonPropertyDescription("Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean alwaysCollectErrorSamples;
+
+    /**
      * Type of the check's target (column, table).
      */
     @JsonPropertyDescription("Type of the check's target (column, table).")
@@ -243,6 +257,12 @@ public class CheckModel implements Cloneable {
      */
     @JsonPropertyDescription("List of similar checks in other check types or in other time scales.")
     private List<SimilarCheckModel> similarChecks;
+
+    /**
+     * The check hash code that identifies the check instance.
+     */
+    @JsonPropertyDescription("The check hash code that identifies the check instance.")
+    private Long checkHash;
 
     /**
      * Boolean flag that decides if the current user can edit the check.
@@ -263,13 +283,22 @@ public class CheckModel implements Cloneable {
     private boolean canDeleteData;
 
     /**
-     * Returns the check hash code that identifies the check instance.
-     * @return Check hash or null.
+     * Check field info object, used only internally by the check mining engine.
      */
-    @JsonPropertyDescription("The check hash code that identifies the check instance.")
-    public Long getCheckHash() {
-        return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
-    }
+    @JsonIgnore
+    private FieldInfo checkFieldInfo;
+
+    /**
+     * Custom check definition specification.
+     */
+    @JsonIgnore
+    private CheckDefinitionSpec customCheckDefinitionSpec;
+
+    /**
+     * Check scheduling group.
+     */
+    @JsonIgnore
+    private CheckRunScheduleGroup scheduleGroup;
 
     /**
      * Creates a selective deep/shallow clone of the object. Definition objects are not cloned, but all other editable objects are.
@@ -344,6 +373,24 @@ public class CheckModel implements Cloneable {
         this.configurationRequirementsErrors.add(configurationRequirementsError);
     }
 
+    /**
+     * Finds a similar check in the profiling checks type.
+     * @return Similar checks in the profiling checks type.
+     */
+    public SimilarCheckModel getSimilarProfilingCheck() {
+        if (this.similarChecks == null) {
+            return null;
+        }
+
+        for (SimilarCheckModel similarCheckModel : this.similarChecks) {
+            if (similarCheckModel.getCheckType() == CheckType.profiling) {
+                return similarCheckModel;
+            }
+        }
+
+        return null;
+    }
+
     public static class CheckModelSampleFactory implements SampleValueFactory<CheckModel> {
         @Override
         public CheckModel createSample() {
@@ -352,7 +399,7 @@ public class CheckModel implements Cloneable {
                 setHelpText(SampleStringsRegistry.getHelpText());
                 setSensorName(SampleStringsRegistry.getFullSensorName());
                 setQualityDimension(SampleStringsRegistry.getQualityDimension());
-                setDefaultSeverity(RuleSeverityLevel.error);
+                setDefaultSeverity(DefaultRuleSeverityLevel.error);
             }};
             checkModel.applySampleValues();
             return checkModel;

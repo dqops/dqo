@@ -11,10 +11,10 @@ Boolean columns are easy to analyze for data quality issues. They can have only 
 DQOps has data quality checks for measuring the percentage of *true* and *false* values.
 The measure (the percentage) is verified with a range data quality check.
 
-The profile of a sample *bool* column is shown below. The tested column has ~201M false values and ~5M true values.
-The percentage of true values is 2.43%.
+The profile of a sample *bool* column is shown below. The tested column has ~285M false values and ~5.2M true values.
+The percentage of true values is 1.8%.
 
-![Bool column profiling statistics in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/bool-column-profile-min.png){ loading=lazy; width="1200px" }
+![Bool column profiling statistics in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/bool-column-profile-min2.png){ loading=lazy; width="1200px" }
 
 ## Bool data quality checks
 DQOps has two similar data quality checks for analyzing bool values.
@@ -32,7 +32,14 @@ Both bool checks accept two optional rule parameters, which set the valid percen
 ### Enable bool checks in UI
 [DQOps check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor) shows the bool checks in the `Bool` category.
 
-![Configure data quality check to measure the percentage of true values in a bool column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/boolean-true-percent-check-editor-warning-min.png){ loading=lazy; width="1200px" }
+![Configure data quality check to measure the percentage of true values in a bool column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/boolean-true-percent-check-editor-warning-min2.png){ loading=lazy; width="1200px" }
+
+### Bool checks error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error Sample** tab in the results section.
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
 
 ### Enable bool checks in YAML
 Bool checks are configured in the `bool` category node.

@@ -1,10 +1,9 @@
 import { IconButton } from '@material-tailwind/react';
-import React, { useEffect, useState } from 'react';
-import SvgIcon from '../../SvgIcon';
+import React from 'react';
 import { SharedCredentialListModel } from '../../../api';
-import Input from '../../Input';
-import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
 import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
 
 interface IKeyValueProperties {
   properties: { [key: string]: string }[];
@@ -69,7 +68,7 @@ export default function KeyValuePropertyAddItem({
       </td>
       <td className="px-8 min-w-20 py-2 text-center">
         <IconButton
-          className="bg-teal-500"
+          className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           size="sm"
           onClick={onAdd}
           disabled={isKeyRed || isValueRed || areBothEmpty}

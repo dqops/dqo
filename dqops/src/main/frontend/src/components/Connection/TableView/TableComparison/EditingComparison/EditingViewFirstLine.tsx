@@ -105,7 +105,7 @@ export default function EditingViewFirstLine({
             )}
           />
           <Button
-            label="Compare Tables"
+            label="Compare tables"
             color="primary"
             variant="contained"
             onClick={compareTables}

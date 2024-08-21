@@ -42,25 +42,30 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPatternsProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_text_not_matching_regex_found", o -> o.profileTextNotMatchingRegexFound);
-            put("profile_texts_matching_regex_percent", o -> o.profileTextsMatchingRegexPercent);
+            put("profile_texts_not_matching_regex_percent", o -> o.profileTextsNotMatchingRegexPercent);
             put("profile_invalid_email_format_found", o -> o.profileInvalidEmailFormatFound);
             put("profile_invalid_email_format_percent", o -> o.profileInvalidEmailFormatPercent);
             put("profile_text_not_matching_date_pattern_found", o -> o.profileTextNotMatchingDatePatternFound);
-            put("profile_text_matching_date_pattern_percent", o -> o.profileTextMatchingDatePatternPercent);
-            put("profile_text_matching_name_pattern_percent", o -> o.profileTextMatchingNamePatternPercent);
+            put("profile_text_not_matching_date_pattern_percent", o -> o.profileTextNotMatchingDatePatternPercent);
+            put("profile_text_not_matching_name_pattern_percent", o -> o.profileTextNotMatchingNamePatternPercent);
 
             put("profile_invalid_uuid_format_found", o -> o.profileInvalidUuidFormatFound);
-            put("profile_valid_uuid_format_percent", o -> o.profileValidUuidFormatPercent);
+            put("profile_invalid_uuid_format_percent", o -> o.profileInvalidUuidFormatPercent);
             put("profile_invalid_ip4_address_format_found", o -> o.profileInvalidIp4AddressFormatFound);
             put("profile_invalid_ip6_address_format_found", o -> o.profileInvalidIp6AddressFormatFound);
+
+            put("profile_invalid_usa_phone_format_found", o -> o.profileInvalidUsaPhoneFormatFound);
+            put("profile_invalid_usa_zipcode_format_found", o -> o.profileInvalidUsaZipcodeFormatFound);
+            put("profile_invalid_usa_phone_format_percent", o -> o.profileInvalidUsaPhoneFormatPercent);
+            put("profile_invalid_usa_zipcode_format_percent", o -> o.profileInvalidUsaZipcodeFormatPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingRegexFoundCheckSpec profileTextNotMatchingRegexFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.")
-    private ColumnTextsMatchingRegexPercentCheckSpec profileTextsMatchingRegexPercent;
+    @JsonPropertyDescription("Verifies that the percentage of strings not matching the custom regular expression pattern does not exceed the maximum accepted percentage.")
+    private ColumnTextsNotMatchingRegexPercentCheckSpec profileTextsNotMatchingRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidEmailFormatFoundCheckSpec profileInvalidEmailFormatFound;
@@ -71,23 +76,35 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.")
     private ColumnTextNotMatchingDatePatternFoundCheckSpec profileTextNotMatchingDatePatternFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.")
-    private ColumnTextMatchingDatePatternPercentCheckSpec profileTextMatchingDatePatternPercent;
+    @JsonPropertyDescription("Verifies that the percentage of texts not matching the date format regular expression in a column does not exceed the maximum accepted percentage.")
+    private ColumnTextNotMatchingDatePatternPercentCheckSpec profileTextNotMatchingDatePatternPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.")
-    private ColumnTextMatchingNamePatternPercentCheckSpec profileTextMatchingNamePatternPercent;
+    @JsonPropertyDescription("Verifies that the percentage of texts not matching the name regular expression does not exceed the maximum accepted percentage.")
+    private ColumnTextNotMatchingNamePatternPercentCheckSpec profileTextNotMatchingNamePatternPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidUuidFormatFoundCheckSpec profileInvalidUuidFormatFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.")
-    private ColumnValidUuidFormatPercentCheckSpec profileValidUuidFormatPercent;
+    @JsonPropertyDescription("Verifies that the percentage of invalid UUID in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUuidFormatPercentCheckSpec profileInvalidUuidFormatPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp4AddressFormatFoundCheckSpec profileInvalidIp4AddressFormatFound;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.")
     private ColumnInvalidIp6AddressFormatFoundCheckSpec profileInvalidIp6AddressFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid USA phone numbers in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaPhoneFoundCheckSpec profileInvalidUsaPhoneFormatFound;
+
+    @JsonPropertyDescription("Verifies that the number of invalid zip codes in a text column does not exceed the maximum accepted count.")
+    private ColumnInvalidUsaZipcodeFoundCheckSpec profileInvalidUsaZipcodeFormatFound;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid USA phones number in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUsaPhonePercentCheckSpec profileInvalidUsaPhoneFormatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of invalid USA phones number in a text column does not exceed the maximum accepted percentage.")
+    private ColumnInvalidUsaZipcodePercentCheckSpec profileInvalidUsaZipcodeFormatPercent;
 
     /**
      * Returns a maximum not match regex count check.
@@ -108,21 +125,21 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a minimum match regex percent check.
-     * @return Minimum match regex percent check.
+     * Returns a maximum not match regex percent check.
+     * @return Maximum not match regex percent check.
      */
-    public ColumnTextsMatchingRegexPercentCheckSpec getProfileTextsMatchingRegexPercent() {
-        return profileTextsMatchingRegexPercent;
+    public ColumnTextsNotMatchingRegexPercentCheckSpec getProfileTextsNotMatchingRegexPercent() {
+        return profileTextsNotMatchingRegexPercent;
     }
 
     /**
-     * Sets a new definition of a minimum match regex percent check.
-     * @param profileTextsMatchingRegexPercent Minimum match regex percent check.
+     * Sets a new definition of a maximum not match regex percent check.
+     * @param profileTextsNotMatchingRegexPercent Maximum not match regex percent check.
      */
-    public void setProfileTextsMatchingRegexPercent(ColumnTextsMatchingRegexPercentCheckSpec profileTextsMatchingRegexPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextsMatchingRegexPercent, profileTextsMatchingRegexPercent));
-        this.profileTextsMatchingRegexPercent = profileTextsMatchingRegexPercent;
-        propagateHierarchyIdToField(profileTextsMatchingRegexPercent, "profile_texts_matching_regex_percent");
+    public void setProfileTextsNotMatchingRegexPercent(ColumnTextsNotMatchingRegexPercentCheckSpec profileTextsNotMatchingRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextsNotMatchingRegexPercent, profileTextsNotMatchingRegexPercent));
+        this.profileTextsNotMatchingRegexPercent = profileTextsNotMatchingRegexPercent;
+        propagateHierarchyIdToField(profileTextsNotMatchingRegexPercent, "profile_texts_not_matching_regex_percent");
     }
 
     /**
@@ -180,39 +197,39 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a maximum match date regex percent check.
-     * @return Maximum match date regex percent check.
+     * Returns a maximum not match date regex percent check.
+     * @return Maximum not match date regex percent check.
      */
-    public ColumnTextMatchingDatePatternPercentCheckSpec getProfileTextMatchingDatePatternPercent() {
-        return profileTextMatchingDatePatternPercent;
+    public ColumnTextNotMatchingDatePatternPercentCheckSpec getProfileTextNotMatchingDatePatternPercent() {
+        return profileTextNotMatchingDatePatternPercent;
     }
 
     /**
-     * Sets a new definition of a maximum match date regex percent check.
-     * @param profileTextMatchingDatePatternPercent Maximum match date regex percent check.
+     * Sets a new definition of a maximum not match date regex percent check.
+     * @param profileTextNotMatchingDatePatternPercent Maximum not match date regex percent check.
      */
-    public void setProfileTextMatchingDatePatternPercent(ColumnTextMatchingDatePatternPercentCheckSpec profileTextMatchingDatePatternPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextMatchingDatePatternPercent, profileTextMatchingDatePatternPercent));
-        this.profileTextMatchingDatePatternPercent = profileTextMatchingDatePatternPercent;
-        propagateHierarchyIdToField(profileTextMatchingDatePatternPercent, "profile_text_matching_date_pattern_percent");
+    public void setProfileTextNotMatchingDatePatternPercent(ColumnTextNotMatchingDatePatternPercentCheckSpec profileTextNotMatchingDatePatternPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextNotMatchingDatePatternPercent, profileTextNotMatchingDatePatternPercent));
+        this.profileTextNotMatchingDatePatternPercent = profileTextNotMatchingDatePatternPercent;
+        propagateHierarchyIdToField(profileTextNotMatchingDatePatternPercent, "profile_text_not_matching_date_pattern_percent");
     }
 
     /**
-     * Returns a maximum match name regex percent check.
-     * @return Maximum match name regex percent check.
+     * Returns a maximum not match name regex percent check.
+     * @return Maximum not match name regex percent check.
      */
-    public ColumnTextMatchingNamePatternPercentCheckSpec getProfileTextMatchingNamePatternPercent() {
-        return profileTextMatchingNamePatternPercent;
+    public ColumnTextNotMatchingNamePatternPercentCheckSpec getProfileTextNotMatchingNamePatternPercent() {
+        return profileTextNotMatchingNamePatternPercent;
     }
 
     /**
-     * Sets a new definition of a maximum match name regex percent check.
-     * @param profileTextMatchingNamePatternPercent Maximum match name regex percent check.
+     * Sets a new definition of a maximum not match name regex percent check.
+     * @param profileTextNotMatchingNamePatternPercent Maximum not match name regex percent check.
      */
-    public void setProfileTextMatchingNamePatternPercent(ColumnTextMatchingNamePatternPercentCheckSpec profileTextMatchingNamePatternPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextMatchingNamePatternPercent, profileTextMatchingNamePatternPercent));
-        this.profileTextMatchingNamePatternPercent = profileTextMatchingNamePatternPercent;
-        propagateHierarchyIdToField(profileTextMatchingNamePatternPercent, "profile_text_matching_name_pattern_percent");
+    public void setProfileTextNotMatchingNamePatternPercent(ColumnTextNotMatchingNamePatternPercentCheckSpec profileTextNotMatchingNamePatternPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextNotMatchingNamePatternPercent, profileTextNotMatchingNamePatternPercent));
+        this.profileTextNotMatchingNamePatternPercent = profileTextNotMatchingNamePatternPercent;
+        propagateHierarchyIdToField(profileTextNotMatchingNamePatternPercent, "profile_text_not_matching_name_pattern_percent");
     }
 
     /**
@@ -234,21 +251,21 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a valid UUID percent check.
-     * @return Valid UUID percent check.
+     * Returns an invalid UUID percent check.
+     * @return Invalid UUID percent check.
      */
-    public ColumnValidUuidFormatPercentCheckSpec getProfileValidUuidFormatPercent() {
-        return profileValidUuidFormatPercent;
+    public ColumnInvalidUuidFormatPercentCheckSpec getProfileInvalidUuidFormatPercent() {
+        return profileInvalidUuidFormatPercent;
     }
 
     /**
-     * Sets a new definition of a valid UUID percent check.
-     * @param profileValidUuidFormatPercent Valid UUID percent check.
+     * Sets a new definition of an invalid UUID percent check.
+     * @param profileInvalidUuidFormatPercent Invalid UUID percent check.
      */
-    public void setProfileValidUuidFormatPercent(ColumnValidUuidFormatPercentCheckSpec profileValidUuidFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileValidUuidFormatPercent, profileValidUuidFormatPercent));
-        this.profileValidUuidFormatPercent = profileValidUuidFormatPercent;
-        propagateHierarchyIdToField(profileValidUuidFormatPercent, "profile_valid_uuid_format_percent");
+    public void setProfileInvalidUuidFormatPercent(ColumnInvalidUuidFormatPercentCheckSpec profileInvalidUuidFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUuidFormatPercent, profileInvalidUuidFormatPercent));
+        this.profileInvalidUuidFormatPercent = profileInvalidUuidFormatPercent;
+        propagateHierarchyIdToField(profileInvalidUuidFormatPercent, "profile_invalid_uuid_format_percent");
     }
 
     /**
@@ -287,6 +304,77 @@ public class ColumnPatternsProfilingChecksSpec extends AbstractCheckCategorySpec
         propagateHierarchyIdToField(profileInvalidIp6AddressFormatFound, "profile_invalid_ip6_address_format_found");
     }
 
+    /**
+     * Returns a maximum invalid USA phone numbers count check.
+     * @return Maximum invalid USA phone numbers count check.
+     */
+    public ColumnInvalidUsaPhoneFoundCheckSpec getProfileInvalidUsaPhoneFormatFound() {
+        return profileInvalidUsaPhoneFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phone numbers count check.
+     * @param profileInvalidUsaPhoneFormatFound Invalid USA phone numbers count check.
+     */
+    public void setProfileInvalidUsaPhoneFormatFound(ColumnInvalidUsaPhoneFoundCheckSpec profileInvalidUsaPhoneFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUsaPhoneFormatFound, profileInvalidUsaPhoneFormatFound));
+        this.profileInvalidUsaPhoneFormatFound = profileInvalidUsaPhoneFormatFound;
+        propagateHierarchyIdToField(profileInvalidUsaPhoneFormatFound, "profile_invalid_usa_phone_format_found");
+    }
+
+    /**
+     * Returns a maximum invalid USA zip codes count check.
+     * @return Maximum invalid USA zip codes count check.
+     */
+    public ColumnInvalidUsaZipcodeFoundCheckSpec getProfileInvalidUsaZipcodeFormatFound() {
+        return profileInvalidUsaZipcodeFormatFound;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip codes count check.
+     * @param profileInvalidUsaZipcodeFormatFound Invalid USA zip codes count check.
+     */
+    public void setProfileInvalidUsaZipcodeFormatFound(ColumnInvalidUsaZipcodeFoundCheckSpec profileInvalidUsaZipcodeFormatFound) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUsaZipcodeFormatFound, profileInvalidUsaZipcodeFormatFound));
+        this.profileInvalidUsaZipcodeFormatFound = profileInvalidUsaZipcodeFormatFound;
+        propagateHierarchyIdToField(profileInvalidUsaZipcodeFormatFound, "profile_invalid_usa_zipcode_format_found");
+    }
+
+    /**
+     * Returns an invalid USA phones number percent check.
+     * @return Invalid USA phones number percent check.
+     */
+    public ColumnInvalidUsaPhonePercentCheckSpec getProfileInvalidUsaPhoneFormatPercent() {
+        return profileInvalidUsaPhoneFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA phones number percent check.
+     * @param profileInvalidUsaPhoneFormatPercent Invalid USA phones number percent check.
+     */
+    public void setProfileInvalidUsaPhoneFormatPercent(ColumnInvalidUsaPhonePercentCheckSpec profileInvalidUsaPhoneFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUsaPhoneFormatPercent, profileInvalidUsaPhoneFormatPercent));
+        this.profileInvalidUsaPhoneFormatPercent = profileInvalidUsaPhoneFormatPercent;
+        propagateHierarchyIdToField(profileInvalidUsaPhoneFormatPercent, "profile_invalid_usa_phone_format_percent");
+    }
+
+    /**
+     * Returns an invalid USA zip code percent check.
+     * @return Invalid USA zip code percent check.
+     */
+    public ColumnInvalidUsaZipcodePercentCheckSpec getProfileInvalidUsaZipcodeFormatPercent() {
+        return profileInvalidUsaZipcodeFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of an invalid USA zip code percent check.
+     * @param profileInvalidUsaZipcodeFormatPercent Invalid USA zip code percent check.
+     */
+    public void setProfileInvalidUsaZipcodeFormatPercent(ColumnInvalidUsaZipcodePercentCheckSpec profileInvalidUsaZipcodeFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileInvalidUsaPhoneFormatPercent, profileInvalidUsaZipcodeFormatPercent));
+        this.profileInvalidUsaZipcodeFormatPercent = profileInvalidUsaZipcodeFormatPercent;
+        propagateHierarchyIdToField(profileInvalidUsaZipcodeFormatPercent, "profile_invalid_usa_zipcode_format_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

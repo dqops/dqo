@@ -25,7 +25,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Returns a single metric captured by the data statistics collectors (basic profilers).
@@ -34,6 +36,15 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class StatisticsMetricModel {
+    public StatisticsMetricModel() {
+    }
+
+    public StatisticsMetricModel(Object result, Instant executedAt, Long sampleCount) {
+        this.result = result;
+        this.executedAt = executedAt;
+        this.sampleCount = sampleCount;
+    }
+
     /**
      * Statistic category.
      */
@@ -71,6 +82,12 @@ public class StatisticsMetricModel {
     private LocalDateTime collectedAt;
 
     /**
+     * The UTC date and time when the metric was collected (executed).
+     */
+    @JsonPropertyDescription("The UTC timestamp when the metric was collected (executed)")
+    private Instant executedAt;
+
+    /**
      * The number of the value samples for this result value. Filled only by the column value sampling profilers.
      */
     @JsonPropertyDescription("The number of the value samples for this result value. Filled only by the column value sampling profilers.")
@@ -92,6 +109,7 @@ public class StatisticsMetricModel {
                 setResultDataType(StatisticsResultDataType.INTEGER);
                 setResult((int)SampleLongsRegistry.getSequenceNumber() % 10_000);
                 setCollectedAt(LocalDateTime.of(2007, 10, 11, 18, 0, 0));
+                setExecutedAt(LocalDateTime.of(2007, 10, 11, 18, 0, 0).atOffset(ZoneOffset.UTC).toInstant());
             }};
         }
     }

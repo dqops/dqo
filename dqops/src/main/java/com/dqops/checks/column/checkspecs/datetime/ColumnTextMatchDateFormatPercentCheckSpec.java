@@ -16,14 +16,27 @@
 package com.dqops.checks.column.checkspecs.datetime;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
+import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
+import com.dqops.statistics.column.range.ColumnRangeMaxValueStatisticsCollectorSpec;
+import com.dqops.statistics.column.range.ColumnRangeMinValueStatisticsCollectorSpec;
+import com.dqops.utils.conversion.DateTypesConverter;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,6 +45,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -188,5 +207,95 @@ public class ColumnTextMatchDateFormatPercentCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Validity;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule mining registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (!miningParameters.isProposeDateChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType != CheckType.profiling && sourceProfilingCheck.getProfilingCheckModel() != null &&
+                sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // copy the results from an already configured profiling checks
+            return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                    tableSpec, parentCheckRootContainer, myCheckModel, miningParameters,
+                    columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
+        }
+
+        if (!(dataAssetProfilingResults instanceof ColumnDataAssetProfilingResults)) {
+            return false;
+        }
+
+        ColumnDataAssetProfilingResults columnDataAssetProfilingResults = (ColumnDataAssetProfilingResults) dataAssetProfilingResults;
+        if (sourceProfilingCheck.getActualValue() == null) {
+            if (columnTypeCategory != null && columnTypeCategory != DataTypeCategory.text) {
+                return false;
+            }
+
+            Double percentDaySlashMonthSlashYear = columnDataAssetProfilingResults.measurePercentOfSamplesMatchingDateFormat(
+                    new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH));
+            if (percentDaySlashMonthSlashYear != null && (100.0 - percentDaySlashMonthSlashYear) <= miningParameters.getFailChecksAtPercentErrorRows()){
+                this.parameters.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+            } else {
+                Double percentDayDashMonthDashYear = columnDataAssetProfilingResults.measurePercentOfSamplesMatchingDateFormat(
+                        new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH));
+                if (percentDayDashMonthDashYear != null && (100.0 - percentDayDashMonthDashYear) <= miningParameters.getFailChecksAtPercentErrorRows()){
+                    this.parameters.setDateFormat(DatetimeBuiltInDateFormats.DayDashMonthDashYear);
+                } else {
+                    Double percentDayDotMonthDotYear = columnDataAssetProfilingResults.measurePercentOfSamplesMatchingDateFormat(
+                            new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH));
+                    if (percentDayDotMonthDotYear != null && (100.0 - percentDayDotMonthDotYear) <= miningParameters.getFailChecksAtPercentErrorRows()){
+                        this.parameters.setDateFormat(DatetimeBuiltInDateFormats.DayDotMonthDotYear);
+                    } else {
+                        Double percentISO8601 = columnDataAssetProfilingResults.measurePercentOfSamplesMatchingDateFormat(
+                                new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH));
+                        if (percentISO8601 != null && (100.0 - percentISO8601) <= miningParameters.getFailChecksAtPercentErrorRows()){
+                            this.parameters.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            sourceProfilingCheck.setActualValue(100.0); // just fake number like there were no dates, to enable a check, even if it fails, we cannot calculate a correct value from the samples
+            sourceProfilingCheck.setExecutedAt(Instant.now());
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && (100.0 - sourceProfilingCheck.getActualValue()) > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
+            return false; // do not configure this check, when the value was captured and there are too many future values
+        }
+
+        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                tableSpec, parentCheckRootContainer, myCheckModel, miningParameters, columnTypeCategory,
+                checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }

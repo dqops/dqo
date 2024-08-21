@@ -71,11 +71,11 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNotNullsCountCheckSpec dailyNotNullsCount;
 
-    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage.")
     private ColumnNotNullsPercentCheckSpec dailyNotNullsPercent;
 
     @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private EmptyColumnFoundCheckSpec dailyEmptyColumnFound;
+    private ColumnEmptyColumnFoundCheckSpec dailyEmptyColumnFound;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout.")
     private ColumnNullPercentChangeCheckSpec dailyNullsPercentChange;
@@ -186,7 +186,7 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Returns an empty column found check specification.
      * @return Empty column found check specification.
      */
-    public EmptyColumnFoundCheckSpec getDailyEmptyColumnFound() {
+    public ColumnEmptyColumnFoundCheckSpec getDailyEmptyColumnFound() {
         return dailyEmptyColumnFound;
     }
 
@@ -194,7 +194,7 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Sets an empty column found check specification
      * @param dailyEmptyColumnFound Empty column found check specification.
      */
-    public void setDailyEmptyColumnFound(EmptyColumnFoundCheckSpec dailyEmptyColumnFound) {
+    public void setDailyEmptyColumnFound(ColumnEmptyColumnFoundCheckSpec dailyEmptyColumnFound) {
         this.setDirtyIf(!Objects.equals(this.dailyEmptyColumnFound, dailyEmptyColumnFound));
         this.dailyEmptyColumnFound = dailyEmptyColumnFound;
         propagateHierarchyIdToField(dailyEmptyColumnFound, "daily_empty_column_found");

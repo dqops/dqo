@@ -60,11 +60,11 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsPercentCheckSpec monthlyPartitionNotNullsPercent;
 
     @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores a separate data quality check result for each monthly partition.")
-    private EmptyColumnFoundCheckSpec monthlyPartitionEmptyColumnFound;
+    private ColumnEmptyColumnFoundCheckSpec monthlyPartitionEmptyColumnFound;
 
     /**
      * Returns a nulls count check.
@@ -142,7 +142,7 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns an empty column found check specification.
      * @return Empty column found check specification.
      */
-    public EmptyColumnFoundCheckSpec getMonthlyPartitionEmptyColumnFound() {
+    public ColumnEmptyColumnFoundCheckSpec getMonthlyPartitionEmptyColumnFound() {
         return monthlyPartitionEmptyColumnFound;
     }
 
@@ -150,7 +150,7 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
      * Sets an empty column found check specification
      * @param monthlyPartitionEmptyColumnFound Empty column found check specification.
      */
-    public void setMonthlyPartitionEmptyColumnFound(EmptyColumnFoundCheckSpec monthlyPartitionEmptyColumnFound) {
+    public void setMonthlyPartitionEmptyColumnFound(ColumnEmptyColumnFoundCheckSpec monthlyPartitionEmptyColumnFound) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionEmptyColumnFound, monthlyPartitionEmptyColumnFound));
         this.monthlyPartitionEmptyColumnFound = monthlyPartitionEmptyColumnFound;
         propagateHierarchyIdToField(monthlyPartitionEmptyColumnFound, "monthly_partition_empty_column_found");

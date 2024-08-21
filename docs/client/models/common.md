@@ -154,8 +154,8 @@ Model that returns the form definition and the form data to edit a single rule w
 
 ___
 
-## RuleSeverityLevel
-Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
+## DefaultRuleSeverityLevel
+Default rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
 
 
 **The structure of this object is described below**
@@ -163,7 +163,7 @@ Rule severity levels. Matches the severity level name (warning - 1, alert - 2, f
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|valid<br/>warning<br/>error<br/>fatal<br/>|
+|string|none<br/>warning<br/>error<br/>fatal<br/>|
 
 ___
 
@@ -348,7 +348,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">`supports_grouping`</span>|The data quality check supports a custom data grouping configuration.|*boolean*|
 |<span class="no-wrap-code">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*|
 |<span class="no-wrap-code">`default_check`</span>|This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.|*boolean*|
-|<span class="no-wrap-code">[`default_severity`](#ruleseveritylevel)</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*[RuleSeverityLevel](#ruleseveritylevel)*|
+|<span class="no-wrap-code">[`default_severity`](#defaultruleseveritylevel)</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*[DefaultRuleSeverityLevel](#defaultruleseveritylevel)*|
 |<span class="no-wrap-code">[`data_grouping_override`](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)</span>|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)*|
 |<span class="no-wrap-code">[`schedule_override`](./common.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
 |<span class="no-wrap-code">[`effective_schedule`](#effectiveschedulemodel)</span>|Model of configured schedule enabled on the check level.|*[EffectiveScheduleModel](#effectiveschedulemodel)*|
@@ -362,9 +362,11 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">[`run_checks_job_template`](#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to start the job.|*[CheckSearchFilters](#checksearchfilters)*|
 |<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
 |<span class="no-wrap-code">`data_grouping_configuration`</span>|The name of a data grouping configuration defined at a table that should be used for this check.|*string*|
+|<span class="no-wrap-code">`always_collect_error_samples`</span>|Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.|*boolean*|
 |<span class="no-wrap-code">[`check_target`](#checktargetmodel)</span>|Type of the check's target (column, table).|*[CheckTargetModel](#checktargetmodel)*|
 |<span class="no-wrap-code">`configuration_requirements_errors`</span>|List of configuration errors that must be fixed before the data quality check can be executed.|*List[string]*|
 |<span class="no-wrap-code">`similar_checks`</span>|List of similar checks in other check types or in other time scales.|*List[[SimilarCheckModel](#similarcheckmodel)]*|
+|<span class="no-wrap-code">`check_hash`</span>|The check hash code that identifies the check instance.|*long*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can edit the check.|*boolean*|
 |<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
 |<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
@@ -466,6 +468,19 @@ Physical table name that is a combination of a schema name and a physical table 
 
 ___
 
+## RuleSeverityLevel
+Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|valid<br/>warning<br/>error<br/>fatal<br/>|
+
+___
+
 ## CheckResultStatus
 Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.
 
@@ -539,7 +554,7 @@ The column validity status. It is a summary of the results of the most recently 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`current_severity`](./common.md#ruleseveritylevel)</span>|The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
+|<span class="no-wrap-code">[`current_severity`](#ruleseveritylevel)</span>|The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](#ruleseveritylevel)*|
 |<span class="no-wrap-code">[`highest_historical_severity`](./common.md#ruleseveritylevel)</span>|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">`executed_checks`</span>|The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|*integer*|
 |<span class="no-wrap-code">`valid_results`</span>|The number of most recent valid data quality checks that passed without raising any issues.|*integer*|
@@ -690,6 +705,8 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the table. Data quality checks will not be executed.|*boolean*|
 |<span class="no-wrap-code">`stage`</span>|Stage name.|*string*|
 |<span class="no-wrap-code">`filter`</span>|SQL WHERE clause added to the sensor queries.|*string*|
+|<span class="no-wrap-code">`do_not_collect_error_samples_in_profiling`</span>|Disable automatic collection of error samples in the profiling section. The profiling checks by default always collect error samples for failed data quality checks.|*boolean*|
+|<span class="no-wrap-code">`always_collect_error_samples_in_monitoring`</span>|Always collect error samples for failed monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks are run from the check editor.|*boolean*|
 |<span class="no-wrap-code">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*|
 |<span class="no-wrap-code">[`owner`](../../reference/yaml/TableYaml.md#tableownerspec)</span>|Table owner information like the data steward name or the business application name.|*[TableOwnerSpec](../../reference/yaml/TableYaml.md#tableownerspec)*|
 |<span class="no-wrap-code">[`profiling_checks_result_truncation`](#profilingtimeperiodtruncation)</span>|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|*[ProfilingTimePeriodTruncation](#profilingtimeperiodtruncation)*|

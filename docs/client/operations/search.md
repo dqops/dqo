@@ -586,11 +586,13 @@ http://localhost:8888/api/search/tables
         ```
         [ {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -632,11 +634,13 @@ http://localhost:8888/api/search/tables
 		  "can_delete_data" : true
 		}, {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -678,11 +682,13 @@ http://localhost:8888/api/search/tables
 		  "can_delete_data" : true
 		}, {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -754,12 +760,14 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -805,12 +813,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -856,12 +866,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -938,12 +950,14 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -989,12 +1003,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1040,12 +1056,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1125,12 +1143,14 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1176,12 +1196,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1227,12 +1249,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1312,12 +1336,14 @@ http://localhost:8888/api/search/tables
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1363,12 +1389,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1414,12 +1442,14 @@ http://localhost:8888/api/search/tables
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,

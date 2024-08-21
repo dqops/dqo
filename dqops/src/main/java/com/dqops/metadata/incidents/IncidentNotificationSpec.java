@@ -25,6 +25,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -49,6 +51,7 @@ import java.util.Objects;
 public class IncidentNotificationSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentNotificationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("filtered_notifications", o -> o.filteredNotifications);
         }
     };
 
@@ -63,6 +66,11 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedAddresses;
+
+    @JsonPropertyDescription("Filtered notifications map with filter configuration and notification addresses treated with higher priority than those from the current class.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private FilteredNotificationSpecMap filteredNotifications = new FilteredNotificationSpecMap();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -155,6 +163,24 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         this.incidentMutedAddresses = incidentMutedAddresses;
     }
 
+    /**
+     * Returns a hashtable of filtered notification specs, indexed by the name.
+     * @return Dictionary of filtered notification spec.
+     */
+    public FilteredNotificationSpecMap getFilteredNotifications() {
+        return filteredNotifications;
+    }
+
+    /**
+     * Sets a new collection of filtered notification spec.
+     * @param filteredNotifications New dictionary of filtered notification spec.
+     */
+    public void setFilteredNotifications(FilteredNotificationSpecMap filteredNotifications) {
+        setDirtyIf(!Objects.equals(this.filteredNotifications, filteredNotifications));
+        this.filteredNotifications = filteredNotifications;
+        propagateHierarchyIdToField(filteredNotifications, "filtered_notifications");
+    }
+
     @Override
     /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
@@ -237,6 +263,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     @Override
     public IncidentNotificationSpec deepClone() {
         IncidentNotificationSpec cloned = (IncidentNotificationSpec) super.deepClone();
+        cloned.filteredNotifications = cloned.filteredNotifications.deepClone();
         return cloned;
     }
 

@@ -115,6 +115,15 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         SensorReadoutsNormalizedResult normalizedSensorReadout = this.sensorReadoutsNormalizationService.normalizeResults(
                 sensorExecutionResult, sensorRunParameters);
         normalizedSensorReadout.getIdColumn().setName(ErrorsColumnNames.READOUT_ID_COLUMN_NAME); // renaming the ID column
+
+        // fixing required fields that could be missing because an error was raised to early
+        normalizedSensorReadout.getProviderColumn().setMissingTo("null");
+        normalizedSensorReadout.getSensorNameColumn().setMissingTo("null");
+        normalizedSensorReadout.getQualityDimensionColumn().setMissingTo("null");
+        normalizedSensorReadout.getDurationMsColumn().setMissingTo(0);
+        normalizedSensorReadout.getTimeSeriesIdColumn().setMissingTo("null");
+        normalizedSensorReadout.getExecutedAtColumn().setMissingTo(Instant.now());
+
         Table table = normalizedSensorReadout.getTable();
 
         // remove a severity column if present

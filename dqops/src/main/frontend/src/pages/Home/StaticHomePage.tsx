@@ -21,7 +21,7 @@ export default function StaticHomePage() {
               <ul className="pl-8 list-disc list-outside">
                 <li className="mb-2">
                   <div className="inline-flex items-end gap-2">
-                    <span>Go to the Data Sources section and click</span>
+                    <span>Go to the Data sources section and click</span>
                     <img
                       src="/images/home/addConnection.png"
                       className="w-30"
@@ -137,7 +137,7 @@ export default function StaticHomePage() {
                   to view more details.
                 </li>
                 <li className="mb-2">
-                  Go to the Data Quality Dashboards section to review KPIs
+                  Go to the Data quality dashboards section to review KPIs
                   (percentage of passed data quality checks).
                 </li>
               </ul>

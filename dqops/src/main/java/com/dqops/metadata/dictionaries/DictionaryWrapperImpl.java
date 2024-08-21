@@ -25,9 +25,7 @@ import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -132,8 +130,8 @@ public class DictionaryWrapperImpl extends AbstractPojoElementWrapper<String, Fi
      * @return A list of dictionary entries.
      */
     @Override
-    public List<String> getDictionaryEntries() {
-        ArrayList<String> entries = new ArrayList<>();
+    public Set<String> getDictionaryEntries() {
+        Set<String> entries = new LinkedHashSet<>();
         FileContent fileContent = this.getObject();
         if (fileContent == null || fileContent.getTextContent() == null) {
             return entries;

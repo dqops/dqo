@@ -1,0 +1,16 @@
+.flash-red-border {
+  border: 2px solid red;
+  animation: flash-border 1s ease-in-out infinite;
+}
+
+@keyframes flash-border {
+  0% {
+    border-color: red;
+  }
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: red;
+  }
+}

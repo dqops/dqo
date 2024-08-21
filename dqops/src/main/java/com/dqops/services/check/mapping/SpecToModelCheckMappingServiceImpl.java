@@ -617,6 +617,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setCanEdit(canManageChecks);
         checkModel.setCanRunChecks(canManageChecks);
         checkModel.setCanDeleteData(canManageChecks);
+        checkModel.setCheckFieldInfo(checkFieldInfo);
+        checkModel.setCustomCheckDefinitionSpec(customCheckDefinitionSpec);
+        checkModel.setScheduleGroup(scheduleGroup);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
@@ -677,10 +680,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             }
         }
 
-        String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() : customCheckDefinitionSpec.getCheckName();
+        String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() :
+                (customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getCheckName() : checkSpec.getCheckName());
         checkModel.setCheckName(checkName);
+        checkModel.setCheckHash(checkSpec != null && checkSpec.getHierarchyId() != null ? checkSpec.getHierarchyId().hashCode64() : null);
         checkModel.setHelpText(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getHelpText() :
-                (checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText()));
+                (checkFieldInfo != null ? checkFieldInfo.getHelpText() : null));
         checkModel.setDisplayName(checkSpec.getDisplayName());
         checkModel.setFriendlyName(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getFriendlyName() : checkSpec.getFriendlyName());
         checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());
@@ -721,6 +726,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setQualityDimension(checkSpec.getEffectiveDataQualityDimension());
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataGroupingConfiguration(checkSpec.getDataGrouping());
+        checkModel.setAlwaysCollectErrorSamples(checkSpec.isAlwaysCollectErrorSamples());
         checkModel.setCheckSpec(checkSpec);
         checkModel.setCheckTarget(CheckTargetModel.fromCheckTarget(checkTarget));
 

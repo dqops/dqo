@@ -207,7 +207,6 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     setPaths(['']);
   };
 
-  console.log(connectionModel);
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-4 pb-2 px-8">
@@ -215,7 +214,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           <h1 className="text-center mb-4 text-gray-700 text-2xl">Add table</h1>
           <div>
             <Input
-              label="Table Name"
+              label="Table name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={name.length ? '' : 'border border-red-500'}

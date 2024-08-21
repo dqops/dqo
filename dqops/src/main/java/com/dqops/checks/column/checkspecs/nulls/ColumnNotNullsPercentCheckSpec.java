@@ -16,14 +16,19 @@
 package com.dqops.checks.column.checkspecs.nulls;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.sensors.column.nulls.ColumnNullsNotNullsPercentSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -35,15 +40,15 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
- * Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
- * The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
+ * Verifies that a column contains some null values by measuring the maximum percentage of rows that have non-null values.
+ * Raises a data quality issue when the percentage of non-null values is above *max_percentage*, which means that a column that is expected to have null values is
+ * The default value of the *max_percentage* parameter is 0.0, but DQOps supports setting a higher value to verify that the percentage of null values is not above a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNotNullsPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNotNullsPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNullsNotNullsPercentSensorParametersSpec, MaxPercentRule0WarningParametersSpec, MaxPercentRule0ErrorParametersSpec, MaxPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNotNullsPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -57,17 +62,17 @@ public class ColumnNotNullsPercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100WarningParametersSpec warning;
+    private MaxPercentRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with null values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ErrorParametersSpec error;
+    private MaxPercentRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private MaxPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -94,7 +99,7 @@ public class ColumnNotNullsPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100WarningParametersSpec getWarning() {
+    public MaxPercentRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +107,7 @@ public class ColumnNotNullsPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100WarningParametersSpec warning) {
+    public void setWarning(MaxPercentRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +119,7 @@ public class ColumnNotNullsPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule100ErrorParametersSpec getError() {
+    public MaxPercentRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -122,7 +127,7 @@ public class ColumnNotNullsPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule100ErrorParametersSpec error) {
+    public void setError(MaxPercentRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -134,7 +139,7 @@ public class ColumnNotNullsPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public MaxPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -142,7 +147,7 @@ public class ColumnNotNullsPercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -166,7 +171,7 @@ public class ColumnNotNullsPercentCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Minimum percentage of rows containing non-null values";
+        return "Maximum percentage of rows containing non-null values";
     }
 
     /**
@@ -189,5 +194,45 @@ public class ColumnNotNullsPercentCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Completeness;
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @param jsonSerializer                     JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @param ruleMiningRuleRegistry             Rule registry.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    @Override
+    public boolean proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                             DataAssetProfilingResults dataAssetProfilingResults,
+                                             TableProfilingResults tableProfilingResults,
+                                             TableSpec tableSpec,
+                                             AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                             CheckModel myCheckModel,
+                                             CheckMiningParametersModel miningParameters,
+                                             DataTypeCategory columnTypeCategory,
+                                             DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties,
+                                             JsonSerializer jsonSerializer,
+                                             RuleMiningRuleRegistry ruleMiningRuleRegistry) {
+        if (!miningParameters.isProposeNotNullsChecks()) {
+            return false;
+        }
+
+        CheckMiningParametersModel miningParametersWithoutAutoFailing = miningParameters.clone();
+        miningParametersWithoutAutoFailing.setFailChecksAtPercentErrorRows(0.0); // disable failing when a column is sparse and has only a few values, because this check is meant to detect it
+
+        return super.proposeCheckConfiguration(sourceProfilingCheck, dataAssetProfilingResults, tableProfilingResults,
+                tableSpec, parentCheckRootContainer, myCheckModel, miningParametersWithoutAutoFailing,
+                columnTypeCategory, checkMiningConfigurationProperties, jsonSerializer, ruleMiningRuleRegistry);
     }
 }

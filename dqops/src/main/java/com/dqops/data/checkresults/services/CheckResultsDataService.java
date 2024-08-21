@@ -23,6 +23,8 @@ import com.dqops.data.checkresults.models.*;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.services.check.mining.TableProfilingResults;
 
 import java.time.Instant;
 
@@ -46,6 +48,15 @@ public interface CheckResultsDataService {
     CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                                 CheckResultsOverviewParameters loadParameters,
                                                                 UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Loads the most recent table profiling results for a table and its columns. Reads one most recent result of the profiling checks.
+     * @param tableSpec Table specification for which we are loading the results.
+     * @param userDomainIdentity User domain identity to identify the data domain.
+     * @return Aggregated results for the most recent check result.
+     */
+    TableProfilingResults loadProfilingChecksResultsForTable(TableSpec tableSpec,
+                                                             UserDomainIdentity userDomainIdentity);
 
     /**
      * Read the results of the most recent table comparison.
@@ -132,4 +143,14 @@ public interface CheckResultsDataService {
     TableCurrentDataQualityStatusModel analyzeTableMostRecentQualityStatus(
             TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters,
             UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Checks if there are any recent partition files with the results of check results for the given table.
+     * This operation is used to propose the user to run checks.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return True when there are any results, false when there are no results.
+     */
+    boolean hasAnyRecentCheckResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
 }

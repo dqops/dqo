@@ -234,6 +234,28 @@ Container of table level checks that are activated on a table level.
 
 ___
 
+## TableProfilingSetupStatusModel
+Table status model that identifies which type of information is already collected, such as data quality checks are configured, or statistics collected.
+ DQOps user interface uses this information to activate red borders to highlight tabs in the user interface that must be clicked to continue profiling the table.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">`table_hash`</span>|Table hash that identifies the table using a unique hash code.|*long*|
+|<span class="no-wrap-code">[`target`](./common.md#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name).|*[PhysicalTableName](./common.md#physicaltablename)*|
+|<span class="no-wrap-code">`basic_statistics_collected`</span>|The basic statistics were collected for this table. If this field returns false, the statistics were not collected and the user should collect basic statistics again.|*boolean*|
+|<span class="no-wrap-code">`profiling_checks_configured`</span>|Returns true if the table has any profiling checks configured on the table, or any of its column. Returns false when the user should first generate a configuration of the profiling checks using the rule miner.|*boolean*|
+|<span class="no-wrap-code">`monitoring_checks_configured`</span>|Returns true if the table has any monitoring checks configured on the table, or any of its column. Returns false when the user should first generate a configuration of the monitoring checks using the rule miner.|*boolean*|
+|<span class="no-wrap-code">`partition_checks_configured`</span>|Returns true if the table has any partition checks configured on the table, or any of its column. The value is true also when the table is not configured to support partitioned checks, so asking the user to configure partition checks is useless. Returns false when the user should first generate a configuration of the partition checks using the rule miner.|*boolean*|
+|<span class="no-wrap-code">`check_results_present`</span>|Returns true if the table has any recent data quality check results. Returns false when the user should run any checks to get any results.|*boolean*|
+
+
+___
+
 ## TableStatisticsModel
 Model that returns a summary of the table level statistics (the basic profiling results).
 

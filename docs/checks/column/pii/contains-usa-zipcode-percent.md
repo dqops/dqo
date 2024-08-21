@@ -316,7 +316,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -344,7 +344,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -594,10 +594,10 @@ spec:
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -622,10 +622,10 @@ spec:
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -932,7 +932,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -959,7 +959,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -1232,10 +1232,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -1259,10 +1259,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -1652,7 +1652,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -1680,7 +1680,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -1930,10 +1930,10 @@ spec:
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -1958,10 +1958,10 @@ spec:
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -2269,7 +2269,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -2296,7 +2296,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -2569,10 +2569,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -2596,10 +2596,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -2989,7 +2989,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -3017,7 +3017,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -3267,10 +3267,10 @@ spec:
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -3295,10 +3295,10 @@ spec:
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -3606,7 +3606,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -3633,7 +3633,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -3906,10 +3906,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -3933,10 +3933,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -4352,7 +4352,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -4380,7 +4380,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -4658,10 +4658,10 @@ spec:
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -4686,10 +4686,10 @@ spec:
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -5027,7 +5027,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5054,7 +5054,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5343,10 +5343,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -5370,10 +5370,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -5793,7 +5793,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5821,7 +5821,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -6099,10 +6099,10 @@ spec:
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -6127,10 +6127,10 @@ spec:
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -6468,7 +6468,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -6495,7 +6495,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column",
-                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
+                                 '(^|[ \t.,:;"''`|\n\r])[0-9]{5}(-[0-9]{4})?([ \t.,:;"''`|\n\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -6784,10 +6784,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END
@@ -6811,10 +6811,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                                  analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
                                  analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
-                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]'
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '%[ \t.,:;"''`|\n\r][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][ \t.,:;"''`|\n\r]%' OR
+                                 analyzed_table.[target_column] LIKE '[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'
                                 THEN 1
                             ELSE 0
                         END

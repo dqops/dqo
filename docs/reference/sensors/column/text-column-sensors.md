@@ -7,6 +7,458 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 ---
 
 
+## max word count
+Column level sensor that ensures that the count of words in a column does not exceed the maximum accepted length.
+
+**Sensor summary**
+
+The max word count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | text | <span class="no-wrap-code">`column/text/max_word_count`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_column_cast_to_string('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LEN( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        MAX(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+
+
+## min word count
+Column level sensor that ensures that the count of words in a column does not exceed the minimum accepted length.
+
+**Sensor summary**
+
+The min word count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | text | <span class="no-wrap-code">`column/text/min_word_count`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_column_cast_to_string('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM(
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LEN( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        MIN(
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+
+
 ## text length above max length count
 Column level sensor that calculates the count of text values that are longer than a given length in a column.
 

@@ -38,6 +38,11 @@ public class ColumnRangeMaxValueSensorParametersSpec extends AbstractSensorParam
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/range/max_value";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -54,6 +59,6 @@ public class ColumnRangeMaxValueSensorParametersSpec extends AbstractSensorParam
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/range/max_value";
+        return SENSOR_NAME;
     }
 }

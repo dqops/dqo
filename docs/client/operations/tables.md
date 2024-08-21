@@ -83,6 +83,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -102,7 +104,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -150,6 +153,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -169,7 +174,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -220,6 +226,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -239,7 +247,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -290,6 +299,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -309,7 +320,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -782,11 +794,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         ```
         {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -859,12 +873,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         ```
         TableListModel(
 			connection_name='sample_connection',
-			table_hash=2314522140819107818,
+			table_hash=7188561880498907939,
 			target=PhysicalTableName(
 				schema_name='sample_schema',
 				table_name='sample_table'
 			),
 			disabled=False,
+			do_not_collect_error_samples_in_profiling=False,
+			always_collect_error_samples_in_monitoring=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -941,12 +957,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         ```
         TableListModel(
 			connection_name='sample_connection',
-			table_hash=2314522140819107818,
+			table_hash=7188561880498907939,
 			target=PhysicalTableName(
 				schema_name='sample_schema',
 				table_name='sample_table'
 			),
 			disabled=False,
+			do_not_collect_error_samples_in_profiling=False,
+			always_collect_error_samples_in_monitoring=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -1026,12 +1044,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         ```
         TableListModel(
 			connection_name='sample_connection',
-			table_hash=2314522140819107818,
+			table_hash=7188561880498907939,
 			target=PhysicalTableName(
 				schema_name='sample_schema',
 				table_name='sample_table'
 			),
 			disabled=False,
+			do_not_collect_error_samples_in_profiling=False,
+			always_collect_error_samples_in_monitoring=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -1111,12 +1131,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         ```
         TableListModel(
 			connection_name='sample_connection',
-			table_hash=2314522140819107818,
+			table_hash=7188561880498907939,
 			target=PhysicalTableName(
 				schema_name='sample_schema',
 				table_name='sample_table'
 			),
 			disabled=False,
+			do_not_collect_error_samples_in_profiling=False,
+			always_collect_error_samples_in_monitoring=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -2447,7 +2469,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2490,7 +2513,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2536,7 +2560,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2582,7 +2607,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2691,7 +2717,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -2734,7 +2761,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -2780,7 +2808,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -2826,7 +2855,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -4012,11 +4042,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4079,11 +4110,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4149,11 +4181,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4219,11 +4252,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4374,11 +4408,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4443,11 +4478,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4515,11 +4551,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4587,11 +4624,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4707,7 +4745,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -4750,7 +4789,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -4796,7 +4836,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -4842,7 +4883,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -5659,11 +5701,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -5726,11 +5769,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -5796,11 +5840,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -5866,11 +5911,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6021,11 +6067,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6090,11 +6137,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6162,11 +6210,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6234,11 +6283,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6354,7 +6404,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -6397,7 +6448,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -6443,7 +6495,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -6489,7 +6542,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -7147,7 +7201,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		)
@@ -7189,7 +7244,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		)
@@ -7234,7 +7290,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		)
@@ -7279,7 +7336,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		)
@@ -7810,11 +7868,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -7875,11 +7934,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -7943,11 +8003,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8011,11 +8072,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8163,11 +8225,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8230,11 +8293,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8300,11 +8364,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8370,11 +8435,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8650,6 +8716,253 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				]
 			)
 		]
+        ```
+    
+    
+    
+
+
+
+___
+## get_table_profiling_status
+Return the status of profiling the table, which provides hints to the user about which profiling steps were not yet performed
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_status.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profilingstatus
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`table_profiling_setup_status_model`](../models/tables.md#tableprofilingsetupstatusmodel)</span>||*[TableProfilingSetupStatusModel](../models/tables.md#tableprofilingsetupstatusmodel)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profilingstatus^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "connection_name" : "sample_connection",
+		  "target" : {
+		    "schema_name" : "sample_schema",
+		    "table_name" : "sample_table"
+		  },
+		  "basic_statistics_collected" : false,
+		  "profiling_checks_configured" : false,
+		  "monitoring_checks_configured" : false,
+		  "partition_checks_configured" : false,
+		  "check_results_present" : false
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_status.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_status.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_status.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_status
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_status.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableProfilingSetupStatusModel(
+			connection_name='sample_connection',
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			basic_statistics_collected=False,
+			profiling_checks_configured=False,
+			monitoring_checks_configured=False,
+			partition_checks_configured=False,
+			check_results_present=False
+		)
         ```
     
     
@@ -9123,11 +9436,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         ```
         [ {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -9169,11 +9484,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  "can_delete_data" : true
 		}, {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -9215,11 +9532,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  "can_delete_data" : true
 		}, {
 		  "connection_name" : "sample_connection",
-		  "table_hash" : 2314522140819107818,
+		  "table_hash" : 7188561880498907939,
 		  "target" : {
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -9293,12 +9612,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9344,12 +9665,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9395,12 +9718,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9479,12 +9804,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9530,12 +9857,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9581,12 +9910,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9668,12 +9999,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9719,12 +10052,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9770,12 +10105,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9857,12 +10194,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         [
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9908,12 +10247,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -9959,12 +10300,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			TableListModel(
 				connection_name='sample_connection',
-				table_hash=2314522140819107818,
+				table_hash=7188561880498907939,
 				target=PhysicalTableName(
 					schema_name='sample_schema',
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -10094,6 +10437,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -10113,7 +10458,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -10161,6 +10507,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -10180,7 +10528,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -10231,6 +10580,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -10250,7 +10601,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -10301,6 +10653,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableSpec(
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		timestamp_columns=TimestampColumnsSpec(
 			event_timestamp_column='col1',
 			ingestion_timestamp_column='col2',
@@ -10320,7 +10674,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					error=MinCountRule1ParametersSpec(min_count=1),
 					disabled=False,
 					exclude_from_kpi=False,
-					include_in_sla=False
+					include_in_sla=False,
+					always_collect_error_samples=False
 				)
 			)
 		),
@@ -10388,7 +10743,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"table_hash\":2314522140819107818,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":false,\"deleteIncidents\":false},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"table_hash\":7188561880498907939,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"do_not_collect_error_samples_in_profiling\":false,\"always_collect_error_samples_in_monitoring\":false,\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":false,\"deleteIncidents\":false},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -10412,12 +10767,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableListModel(
 		connection_name='sample_connection',
-		table_hash=2314522140819107818,
+		table_hash=7188561880498907939,
 		target=PhysicalTableName(
 			schema_name='sample_schema',
 			table_name='sample_table'
 		),
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -10492,12 +10849,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableListModel(
 		connection_name='sample_connection',
-		table_hash=2314522140819107818,
+		table_hash=7188561880498907939,
 		target=PhysicalTableName(
 			schema_name='sample_schema',
 			table_name='sample_table'
 		),
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -10575,12 +10934,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableListModel(
 		connection_name='sample_connection',
-		table_hash=2314522140819107818,
+		table_hash=7188561880498907939,
 		target=PhysicalTableName(
 			schema_name='sample_schema',
 			table_name='sample_table'
 		),
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -10658,12 +11019,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = TableListModel(
 		connection_name='sample_connection',
-		table_hash=2314522140819107818,
+		table_hash=7188561880498907939,
 		target=PhysicalTableName(
 			schema_name='sample_schema',
 			table_name='sample_table'
 		),
 		disabled=False,
+		do_not_collect_error_samples_in_profiling=False,
+		always_collect_error_samples_in_monitoring=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -11029,7 +11392,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11072,7 +11436,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11118,7 +11483,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11164,7 +11530,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11815,9 +12182,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -11841,11 +12208,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -11881,9 +12249,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -11907,11 +12275,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -11947,9 +12316,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -11976,11 +12345,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12016,9 +12386,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -12045,11 +12415,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12153,7 +12524,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12196,7 +12568,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12242,7 +12615,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12288,7 +12662,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12384,7 +12759,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -12427,7 +12803,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -12473,7 +12850,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -12519,7 +12897,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -12601,9 +12980,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -12627,11 +13006,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12667,9 +13047,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -12693,11 +13073,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12733,9 +13114,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -12762,11 +13143,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12802,9 +13184,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                CheckTimeScale, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -12831,11 +13213,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12939,7 +13322,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -12982,7 +13366,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13028,7 +13413,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13074,7 +13460,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13416,7 +13803,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		)
 	)
@@ -13457,7 +13845,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		)
 	)
@@ -13501,7 +13890,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		)
 	)
@@ -13545,7 +13935,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				error=MinCountRule1ParametersSpec(min_count=1),
 				disabled=False,
 				exclude_from_kpi=False,
-				include_in_sla=False
+				include_in_sla=False,
+				always_collect_error_samples=False
 			)
 		)
 	)
@@ -13624,9 +14015,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.api.tables import update_table_profiling_checks_model
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -13650,11 +14041,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13688,9 +14080,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.api.tables import update_table_profiling_checks_model
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -13714,11 +14106,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13752,9 +14145,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.api.tables import update_table_profiling_checks_model
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -13781,11 +14174,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13819,9 +14213,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.api.tables import update_table_profiling_checks_model
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -13848,11 +14242,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False

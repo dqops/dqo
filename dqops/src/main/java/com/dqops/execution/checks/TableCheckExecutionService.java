@@ -36,7 +36,7 @@ public interface TableCheckExecutionService {
      * @param targetTable Target table.
      * @param checkSearchFilters Check search filters.
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
-     * @param collectErrorSamples Collect error samples for failed checks.
+     * @param collectErrorSamples Collect error samples for failed checks. Can disable or enable sample collection independent of other parameters.
      * @param progressListener Progress listener.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token.
@@ -48,7 +48,7 @@ public interface TableCheckExecutionService {
                                                TableWrapper targetTable,
                                                CheckSearchFilters checkSearchFilters,
                                                TimeWindowFilterParameters userTimeWindowFilters,
-                                               boolean collectErrorSamples,
+                                               Boolean collectErrorSamples,
                                                CheckExecutionProgressListener progressListener,
                                                boolean dummySensorExecution,
                                                JobCancellationToken jobCancellationToken);

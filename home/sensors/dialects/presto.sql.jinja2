@@ -422,11 +422,21 @@
     {%- endif -%}
 {% endmacro -%}
 
-{% macro render_error_sampler(wrap_condition = '', render_null_check = true, override_samples_limit = none) %}
+{% macro render_error_sampler(
+    wrap_condition = '',
+    render_null_check = true,
+    override_samples_limit = none,
+    value_order_by = 'ASC',
+    sample_index = true,
+    order_by_value_first = true,
+    order_by_expression = ''
+)%}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 SELECT
-    sample_table.sample_value AS actual_value,
+    sample_table.sample_value AS actual_value
+    {%- if sample_index -%},
     sample_table.sample_index AS sample_index
+    {%- endif %}
     {%- for attribute in data_groupings -%}
         {{ ',' }}
     sample_table.grouping_{{ attribute }} AS grouping_{{ attribute }}
@@ -447,7 +457,8 @@ FROM
                 {{ ',' }}
         {{ render_column(id_column, 'analyzed_table') }} AS row_id_{{ loop.index }}
         {%- endfor -%}
-    {%- endif -%},
+    {%- endif -%}
+    {%- if sample_index -%}{{ ',' }}
         ROW_NUMBER() OVER (
             PARTITION BY
                 {%- for attribute in data_groupings -%}
@@ -463,13 +474,18 @@ FROM
                     {%- endwith %}
                 {%- endfor %}
             ORDER BY
+                {% if order_by_expression is not none and (order_by_expression | length() > 0) %}{{ order_by_expression | replace('{column}', 'analyzed_table.' ~ quote_identifier(column_name)) ~ ' ' ~ value_order_by ~ ', ' }}{% endif -%}
+                {% if order_by_value_first %} {{ render_target_column('analyzed_table') ~ ' ' ~ value_order_by }} {% endif -%}
+                {{ ', ' if order_by_value_first and (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -}}
                 {% if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
                     {%- for id_column in error_sampling.id_columns -%}
-                        {{- render_column(id_column, 'analyzed_table') }} ASC,{{ ' ' }}
+                        {{ ', ' if not loop.first }}
+                        {{- render_column(id_column, 'analyzed_table') }} ASC
                     {%- endfor %}
                 {%- endif -%}
-                {{ render_target_column('analyzed_table') }} ASC
+                {% if not order_by_value_first %} {{ ', ' ~ render_target_column('analyzed_table') ~ ' ' ~ value_order_by }} {% endif %}
         ) AS sample_index
+    {%- endif %}
     FROM
         {{ render_target_table() }} AS analyzed_table
     {% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
@@ -479,7 +495,9 @@ FROM
         {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 ) AS sample_table
+{% if sample_index -%}
 WHERE sample_table.sample_index <= {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
+{%- endif %}
 LIMIT {{ error_sampling.total_samples_limit }}
     {%- else -%}
 SELECT
@@ -497,6 +515,8 @@ LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS forei
 ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
 {% endif %}
     {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
+ORDER BY {% if order_by_expression is not none and (order_by_expression | length() > 0) %} {{ order_by_expression | replace('{column}', 'analyzed_table.' ~ quote_identifier(column_name)) ~ ' ' ~ value_order_by ~ ', ' }} {% endif -%}
+    {{ render_target_column('analyzed_table') ~ ' ' ~ value_order_by }}
 LIMIT {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
     {%- endif -%}
 {%- endmacro %}

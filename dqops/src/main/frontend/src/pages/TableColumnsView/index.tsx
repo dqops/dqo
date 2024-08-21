@@ -1,6 +1,7 @@
+import { Tooltip } from '@material-tailwind/react';
 import { AxiosResponse } from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
   DataGroupingConfigurationSpec,
@@ -10,8 +11,11 @@ import {
 } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setJobAllert } from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,
@@ -23,18 +27,25 @@ import TableColumns from './TableColumns';
 
 const TableColumnsView = () => {
   const {
+    checkTypes,
     connection: connectionName,
     schema: schemaName,
     table: tableName
-  }: { connection: string; schema: string; table: string } = useDecodedParams();
-  const { job_dictionary_state, userProfile } = useSelector(
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useDecodedParams();
+  const { job_dictionary_state, userProfile, job_allert } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const dispatch = useDispatch();
+  const dispatch = useActionDispatch();
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [checkedColumns, setCheckedColumns] = useState<string[]>([]);
   const [jobId, setJobId] = useState<number>();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
@@ -46,6 +57,20 @@ const TableColumnsView = () => {
           schemaName,
           tableName
         );
+      if (
+        !res.data.column_statistics?.find(
+          (column) => column.statistics && column.statistics.length > 0
+        )
+      ) {
+        dispatch(
+          setJobAllert({
+            activeTab: firstLevelActiveTab,
+            action: 'collect_statistics',
+            tooltipMessage:
+              'The table has no results of basic statistics, please collect the statistics'
+          })
+        );
+      }
       setStatistics(res.data);
     } catch (err) {
       console.error(err);
@@ -53,6 +78,7 @@ const TableColumnsView = () => {
   };
 
   const collectStatistics = async () => {
+    dispatch(setJobAllert({}));
     try {
       await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
         connection: connectionName,
@@ -132,7 +158,8 @@ const TableColumnsView = () => {
 
   useEffect(() => {
     fetchColumns();
-  }, [connectionName, schemaName, tableName]);
+  }, [checkTypes, connectionName, schemaName, tableName]);
+
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -143,7 +170,7 @@ const TableColumnsView = () => {
         <div className="flex items-center gap-x-2 justify-center">
           {checkedColumns.length !== 0 && checkedColumns.length <= 9 && (
             <Button
-              label="Create Data Grouping"
+              label="Create data grouping"
               color="primary"
               onClick={postDataStream}
               disabled={userProfile.can_manage_data_sources !== true}
@@ -153,28 +180,49 @@ const TableColumnsView = () => {
             <div className="flex items-center gap-x-2 justify-center text-red-500">
               (You can choose max 9 columns)
               <Button
-                label="Create Data Grouping"
+                label="Create data grouping"
                 color="secondary"
                 className="text-black "
               />
             </div>
           )}
-          <Button
-            className="flex items-center gap-x-2 justify-center"
-            label={
-              filteredJobs
-                ? 'Collecting...'
-                : checkedColumns.length !== 0
-                ? 'Collect statistics on selected'
-                : 'Collect statistics'
+          <Tooltip
+            content={job_allert.tooltipMessage}
+            className={
+              job_allert.tooltipMessage
+                ? 'max-w-60 py-2 px-2 bg-gray-800'
+                : 'hidden'
             }
-            color={filteredJobs ? 'secondary' : 'primary'}
-            leftIcon={
-              filteredJobs ? <SvgIcon name="sync" className="w-4 h-4" /> : ''
-            }
-            onClick={collectStatistics}
-            disabled={userProfile.can_collect_statistics !== true}
-          />
+          >
+            <div>
+              <Button
+                className="flex items-center gap-x-2 justify-center"
+                label={
+                  filteredJobs
+                    ? 'Collecting...'
+                    : checkedColumns.length !== 0
+                    ? 'Collect statistics on selected'
+                    : 'Collect statistics'
+                }
+                color={filteredJobs ? 'secondary' : 'primary'}
+                leftIcon={
+                  filteredJobs ? (
+                    <SvgIcon name="sync" className="w-4 h-4" />
+                  ) : (
+                    ''
+                  )
+                }
+                onClick={collectStatistics}
+                disabled={userProfile.can_collect_statistics !== true}
+                flashRedBorder={
+                  firstLevelActiveTab === job_allert.activeTab &&
+                  job_allert.action === 'collect_statistics'
+                    ? true
+                    : false
+                }
+              />
+            </div>
+          </Tooltip>
         </div>
       </div>
       <div>

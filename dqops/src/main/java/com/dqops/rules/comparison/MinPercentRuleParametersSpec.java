@@ -15,11 +15,17 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.*;
 import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,6 +33,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
@@ -36,11 +45,19 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec implements MinPercentRule, RuleMiningRule {
     private static final ChildHierarchyNodeFieldMapImpl<MinPercentRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
+
+    /**
+     * The rule name from the DQOps home folder that is used by this rule.
+     */
+    public static final String RULE_NAME = "comparison/min_percent";
+
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
     @SampleValues(values = "2.5")
@@ -95,7 +112,7 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/min_percent";
+        return RULE_NAME;
     }
 
     /**
@@ -113,5 +130,57 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
         double to100Pct = 100.0 - this.minPercent;
 
         this.minPercent = DoubleRounding.roundToKeepEffectiveDigits(this.minPercent + 0.3 * to100Pct);
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     *
+     * @param sourceProfilingCheck               Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults          Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults              All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec                          Parent table specification for reference.
+     * @param parentCheckRootContainer           Parent check container, to identify the type of checks.
+     * @param myCheckModel                       Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters                   Additional rule mining parameters given by the user.
+     * @param columnTypeCategory                 Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
+     * @return A configured rule parameters class that should be converted to the target type (by serialization to JSON and back) when parameters were proposed, or null when on parameters were proposed.
+     */
+    @Override
+    public AbstractRuleParametersSpec proposeCheckConfiguration(ProfilingCheckResult sourceProfilingCheck,
+                                                                DataAssetProfilingResults dataAssetProfilingResults,
+                                                                TableProfilingResults tableProfilingResults,
+                                                                TableSpec tableSpec,
+                                                                AbstractRootChecksContainerSpec parentCheckRootContainer,
+                                                                CheckModel myCheckModel,
+                                                                CheckMiningParametersModel miningParameters,
+                                                                DataTypeCategory columnTypeCategory,
+                                                                DqoRuleMiningConfigurationProperties checkMiningConfigurationProperties) {
+        if (sourceProfilingCheck.getActualValue() < 0.0 || sourceProfilingCheck.getActualValue() > 100.0) {
+            return null; // invalid value, the sensor must be corrupted
+        }
+
+        double differenceTo100Pct = 100.0 - sourceProfilingCheck.getActualValue();
+        double expectedMinPercent = 100.0;
+
+        if (differenceTo100Pct > miningParameters.getFailChecksAtPercentErrorRows()) {
+            if (differenceTo100Pct > miningParameters.getMaxPercentErrorRowsForPercentChecks()) {
+                return null;
+            }
+
+            expectedMinPercent = sourceProfilingCheck.getActualValue() -
+                    (differenceTo100Pct * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+
+            if (expectedMinPercent < checkMiningConfigurationProperties.getPercentCheckDeltaRate()) {
+                expectedMinPercent = sourceProfilingCheck.getActualValue() -
+                        (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+            }
+
+            if (differenceTo100Pct < miningParameters.getFailChecksAtPercentErrorRows()) {
+                expectedMinPercent = 100.0;
+            }
+        }
+
+        return new MinPercentRuleParametersSpec(DoubleRounding.roundToKeepEffectiveDigits(expectedMinPercent));
     }
 }

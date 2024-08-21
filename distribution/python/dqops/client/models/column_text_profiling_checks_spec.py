@@ -22,10 +22,16 @@ if TYPE_CHECKING:
         ColumnTextLengthInRangePercentCheckSpec,
     )
     from ..models.column_text_max_length_check_spec import ColumnTextMaxLengthCheckSpec
+    from ..models.column_text_max_word_count_check_spec import (
+        ColumnTextMaxWordCountCheckSpec,
+    )
     from ..models.column_text_mean_length_check_spec import (
         ColumnTextMeanLengthCheckSpec,
     )
     from ..models.column_text_min_length_check_spec import ColumnTextMinLengthCheckSpec
+    from ..models.column_text_min_word_count_check_spec import (
+        ColumnTextMinWordCountCheckSpec,
+    )
     from ..models.column_text_profiling_checks_spec_custom_checks import (
         ColumnTextProfilingChecksSpecCustomChecks,
     )
@@ -49,6 +55,8 @@ class ColumnTextProfilingChecksSpec:
         profile_text_length_above_max_length (Union[Unset, ColumnTextLengthAboveMaxLengthCheckSpec]):
         profile_text_length_above_max_length_percent (Union[Unset, ColumnTextLengthAboveMaxLengthPercentCheckSpec]):
         profile_text_length_in_range_percent (Union[Unset, ColumnTextLengthInRangePercentCheckSpec]):
+        profile_min_word_count (Union[Unset, ColumnTextMinWordCountCheckSpec]):
+        profile_max_word_count (Union[Unset, ColumnTextMaxWordCountCheckSpec]):
     """
 
     custom_checks: Union[Unset, "ColumnTextProfilingChecksSpecCustomChecks"] = UNSET
@@ -70,6 +78,8 @@ class ColumnTextProfilingChecksSpec:
     profile_text_length_in_range_percent: Union[
         Unset, "ColumnTextLengthInRangePercentCheckSpec"
     ] = UNSET
+    profile_min_word_count: Union[Unset, "ColumnTextMinWordCountCheckSpec"] = UNSET
+    profile_max_word_count: Union[Unset, "ColumnTextMaxWordCountCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -123,6 +133,14 @@ class ColumnTextProfilingChecksSpec:
                 self.profile_text_length_in_range_percent.to_dict()
             )
 
+        profile_min_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_min_word_count, Unset):
+            profile_min_word_count = self.profile_min_word_count.to_dict()
+
+        profile_max_word_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_max_word_count, Unset):
+            profile_max_word_count = self.profile_max_word_count.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -154,6 +172,10 @@ class ColumnTextProfilingChecksSpec:
             field_dict["profile_text_length_in_range_percent"] = (
                 profile_text_length_in_range_percent
             )
+        if profile_min_word_count is not UNSET:
+            field_dict["profile_min_word_count"] = profile_min_word_count
+        if profile_max_word_count is not UNSET:
+            field_dict["profile_max_word_count"] = profile_max_word_count
 
         return field_dict
 
@@ -177,11 +199,17 @@ class ColumnTextProfilingChecksSpec:
         from ..models.column_text_max_length_check_spec import (
             ColumnTextMaxLengthCheckSpec,
         )
+        from ..models.column_text_max_word_count_check_spec import (
+            ColumnTextMaxWordCountCheckSpec,
+        )
         from ..models.column_text_mean_length_check_spec import (
             ColumnTextMeanLengthCheckSpec,
         )
         from ..models.column_text_min_length_check_spec import (
             ColumnTextMinLengthCheckSpec,
+        )
+        from ..models.column_text_min_word_count_check_spec import (
+            ColumnTextMinWordCountCheckSpec,
         )
         from ..models.column_text_profiling_checks_spec_custom_checks import (
             ColumnTextProfilingChecksSpecCustomChecks,
@@ -299,6 +327,24 @@ class ColumnTextProfilingChecksSpec:
                 )
             )
 
+        _profile_min_word_count = d.pop("profile_min_word_count", UNSET)
+        profile_min_word_count: Union[Unset, ColumnTextMinWordCountCheckSpec]
+        if isinstance(_profile_min_word_count, Unset):
+            profile_min_word_count = UNSET
+        else:
+            profile_min_word_count = ColumnTextMinWordCountCheckSpec.from_dict(
+                _profile_min_word_count
+            )
+
+        _profile_max_word_count = d.pop("profile_max_word_count", UNSET)
+        profile_max_word_count: Union[Unset, ColumnTextMaxWordCountCheckSpec]
+        if isinstance(_profile_max_word_count, Unset):
+            profile_max_word_count = UNSET
+        else:
+            profile_max_word_count = ColumnTextMaxWordCountCheckSpec.from_dict(
+                _profile_max_word_count
+            )
+
         column_text_profiling_checks_spec = cls(
             custom_checks=custom_checks,
             profile_text_min_length=profile_text_min_length,
@@ -309,6 +355,8 @@ class ColumnTextProfilingChecksSpec:
             profile_text_length_above_max_length=profile_text_length_above_max_length,
             profile_text_length_above_max_length_percent=profile_text_length_above_max_length_percent,
             profile_text_length_in_range_percent=profile_text_length_in_range_percent,
+            profile_min_word_count=profile_min_word_count,
+            profile_max_word_count=profile_max_word_count,
         )
 
         column_text_profiling_checks_spec.additional_properties = d

@@ -5,8 +5,8 @@ spec:
   fields:
   - field_name: limit
     display_name: limit
-    help_text: The limit of results that are returned. The default value is 10 sample
+    help_text: The limit of results that are returned. The default value is 100 sample
       values with the highest count (the most popular).
     data_type: integer
     required: true
-    default_value: 10
+    default_value: 100

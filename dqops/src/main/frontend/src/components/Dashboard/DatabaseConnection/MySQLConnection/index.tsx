@@ -163,7 +163,7 @@ const MySQLConnection = ({
           />
           <FieldTypeInput
             data={sharedCredentials}
-            label="Host Descriptions"
+            label="Host descriptions"
             className="mb-4"
             value={mysql?.single_store_db_parameters_spec?.host_descriptions?.join(
               ','

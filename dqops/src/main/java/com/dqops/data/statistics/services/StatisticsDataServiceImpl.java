@@ -25,6 +25,7 @@ import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshot;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshotFactory;
+import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.google.common.base.Objects;
@@ -35,6 +36,7 @@ import tech.tablesaw.api.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 /**
  * Service that provides access to read requested data statistics results.
@@ -120,11 +122,13 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                     tableStatisticsResults.getColumns().put(columnName, columnModel);
                 }
 
-                if (columnModel.getMetrics().stream()
-                        .noneMatch(m -> Objects.equal(m.getCategory(), category) &&
-                                Objects.equal(m.getCollector(), collectorName) &&
-                                !Objects.equal(m.getCollectedAt(), collectedAt) && // a newer result was already added, so we are skipping
-                                Objects.equal(m.getSampleIndex(), sampleIndex))) {
+                Optional<StatisticsMetricModel> firstMetric = columnModel.getMetrics()
+                        .stream()
+                        .filter(m -> Objects.equal(m.getCategory(), category) &&
+                                Objects.equal(m.getCollector(), collectorName))
+                        .findFirst();
+
+                if (firstMetric.isEmpty() || Objects.equal(firstMetric.get().getCollectedAt(), collectedAt)) {
                     columnModel.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }
@@ -212,6 +216,35 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
     }
 
     /**
+     * Checks if there are any recent partition files with the results of basic statistics for the given table.
+     * This operation is used to propose the user to collect statistics.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return True when there are any results, false when there are no results.
+     */
+    @Override
+    public boolean hasAnyRecentStatisticsResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
+        StatisticsSnapshot statisticsResultsSnapshot = this.statisticsResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
+        LocalDate todayDate = LocalDate.now();
+        int monthsToLoad = this.statisticsConfigurationProperties.getViewedStatisticsAgeMonths() - 1;
+        if (monthsToLoad < 0 || monthsToLoad > 36) {
+            monthsToLoad = 3;
+        }
+        LocalDate startDate = todayDate.minus(monthsToLoad, ChronoUnit.MONTHS);
+        statisticsResultsSnapshot.ensureNRecentMonthsAreLoaded(startDate, todayDate, 1);
+
+        for (LoadedMonthlyPartition loadedMonthlyPartition : statisticsResultsSnapshot.getLoadedMonthlyPartitions().values()) {
+            if (loadedMonthlyPartition != null && loadedMonthlyPartition.getData() != null && loadedMonthlyPartition.getData().rowCount() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Creates a single metric model.
      * @param row Row with one metric result.
      * @return Metric model.
@@ -225,6 +258,8 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         StatisticsResultDataType statisticsResultDataType = StatisticsResultDataType.fromName(resultTypeString);
         result.setResultDataType(statisticsResultDataType);
         result.setCollectedAt(row.getDateTime(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME));
+        result.setExecutedAt(row.getInstant(StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME));
+
         if (!row.isMissing(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME)) {
             result.setSampleCount(row.getLong(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME));
         }

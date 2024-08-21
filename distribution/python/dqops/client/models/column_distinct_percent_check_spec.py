@@ -6,19 +6,13 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.between_percent_rule_parameters_spec import (
+        BetweenPercentRuleParametersSpec,
+    )
     from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
         ColumnUniquenessDistinctPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
-    )
-    from ..models.min_percent_rule_100_error_parameters_spec import (
-        MinPercentRule100ErrorParametersSpec,
-    )
-    from ..models.min_percent_rule_100_warning_parameters_spec import (
-        MinPercentRule100WarningParametersSpec,
-    )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
@@ -50,10 +44,13 @@ class ColumnDistinctPercentCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
+        always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
+            fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
+            error samples will impose additional load on the data source.
         parameters (Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
-        error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        warning (Union[Unset, BetweenPercentRuleParametersSpec]):
+        error (Union[Unset, BetweenPercentRuleParametersSpec]):
+        fatal (Union[Unset, BetweenPercentRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -64,12 +61,13 @@ class ColumnDistinctPercentCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
+    always_collect_error_samples: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "ColumnUniquenessDistinctPercentSensorParametersSpec"] = (
         UNSET
     )
-    warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    error: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -91,6 +89,7 @@ class ColumnDistinctPercentCheckSpec:
         quality_dimension = self.quality_dimension
         display_name = self.display_name
         data_grouping = self.data_grouping
+        always_collect_error_samples = self.always_collect_error_samples
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -126,6 +125,8 @@ class ColumnDistinctPercentCheckSpec:
             field_dict["display_name"] = display_name
         if data_grouping is not UNSET:
             field_dict["data_grouping"] = data_grouping
+        if always_collect_error_samples is not UNSET:
+            field_dict["always_collect_error_samples"] = always_collect_error_samples
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
         if warning is not UNSET:
@@ -139,19 +140,13 @@ class ColumnDistinctPercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.between_percent_rule_parameters_spec import (
+            BetweenPercentRuleParametersSpec,
+        )
         from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
             ColumnUniquenessDistinctPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
-        )
-        from ..models.min_percent_rule_100_error_parameters_spec import (
-            MinPercentRule100ErrorParametersSpec,
-        )
-        from ..models.min_percent_rule_100_warning_parameters_spec import (
-            MinPercentRule100WarningParametersSpec,
-        )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
@@ -181,6 +176,8 @@ class ColumnDistinctPercentCheckSpec:
 
         data_grouping = d.pop("data_grouping", UNSET)
 
+        always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
+
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]
         if isinstance(_parameters, Unset):
@@ -191,25 +188,25 @@ class ColumnDistinctPercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100WarningParametersSpec]
+        warning: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100WarningParametersSpec.from_dict(_warning)
+            warning = BetweenPercentRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule100ErrorParametersSpec]
+        error: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule100ErrorParametersSpec.from_dict(_error)
+            error = BetweenPercentRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = BetweenPercentRuleParametersSpec.from_dict(_fatal)
 
         column_distinct_percent_check_spec = cls(
             schedule_override=schedule_override,
@@ -220,6 +217,7 @@ class ColumnDistinctPercentCheckSpec:
             quality_dimension=quality_dimension,
             display_name=display_name,
             data_grouping=data_grouping,
+            always_collect_error_samples=always_collect_error_samples,
             parameters=parameters,
             warning=warning,
             error=error,

@@ -21,8 +21,7 @@ The columns of this table are described below.
 | Column&nbsp;name | Description | Hive&nbsp;data&nbsp;type |
 |------------------|-------------|--------------------------|
  | <span class="no-wrap-code">`id`</span> | The check result id (primary key), it is a uuid of the check hash, collected at, sample index and the data grouping id. This value identifies a single row. | *STRING* |
- | <span class="no-wrap-code">`collected_at`</span> | Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time.
- The parquet files are time partitioned by this column. | *TIMESTAMP* |
+ | <span class="no-wrap-code">`collected_at`</span> | Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time. The parquet files are time partitioned by this column. | *TIMESTAMP* |
  | <span class="no-wrap-code">`scope`</span> | String column that says if the result is for a whole table (the &quot;table&quot; value) or for each data group separately (the &quot;data_group&quot; value). | *STRING* |
  | <span class="no-wrap-code">`grouping_level_1`</span> | Data group value at a single level. | *STRING* |
  | <span class="no-wrap-code">`grouping_level_2`</span> | Data group value at a single level. | *STRING* |

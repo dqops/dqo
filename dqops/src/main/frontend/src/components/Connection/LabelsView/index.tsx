@@ -13,6 +13,7 @@ interface ILabelsViewProps {
   hasAdd?: boolean;
   title?: string;
   titleClassName?: string;
+  className?: string;
 }
 
 const LabelsView = ({
@@ -20,7 +21,8 @@ const LabelsView = ({
   onChange,
   hasAdd,
   title,
-  titleClassName
+  titleClassName,
+  className
 }: ILabelsViewProps) => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
@@ -55,7 +57,9 @@ const LabelsView = ({
   };
 
   return (
-    <div className="p-4 text-sm w-full max-w-200 !text-black">
+    <div
+      className={clsx('p-4 text-sm w-full max-w-200 !text-black', className)}
+    >
       <div className={clsx('flex items-center font-bold', titleClassName)}>
         <div className="text-left min-w-40 w-11/12 pr-4">
           {title ?? 'Label'}
@@ -87,7 +91,7 @@ const LabelsView = ({
           <div className="flex justify-center">
             <IconButton
               size="sm"
-              className="bg-teal-500"
+              className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
               onClick={onAdd}
               disabled={userProfile.can_edit_labels === false}
             >

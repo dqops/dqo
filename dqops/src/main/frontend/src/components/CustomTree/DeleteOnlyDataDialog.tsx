@@ -45,7 +45,8 @@ const DeleteOnlyDataDialog = ({
     deleteErrors: true,
     deleteStatistics: false,
     deleteCheckResults: true,
-    deleteSensorReadouts: true
+    deleteSensorReadouts: true,
+    deleteErrorSamples: true
   });
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
@@ -113,17 +114,18 @@ const DeleteOnlyDataDialog = ({
             />
           </div>
           <div>
-            <div className="flex items-start text-gray-700">
+            <div className="flex items-center text-gray-700">
               <Radio
                 id="part"
                 name="delete_mode"
                 value="part"
                 checked={mode === 'part'}
                 onChange={() => setMode('part')}
+                className="outline-none"
                 color="teal"
               />
               <div>For the time range:</div>
-              <div className="flex space-x-6 items-center">
+              <div className="flex space-x-4 items-center ml-2">
                 <DatePicker
                   showIcon
                   placeholderText="Select date start"
@@ -143,7 +145,7 @@ const DeleteOnlyDataDialog = ({
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700 ml-7">
+            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700">
               <Checkbox
                 checked={params.deleteStatistics}
                 onChange={(deleteStatistics) =>
@@ -172,6 +174,14 @@ const DeleteOnlyDataDialog = ({
                 checked={params.deleteErrors}
                 onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
                 label="Execution errors"
+                checkClassName="bg-teal-500"
+              />
+              <Checkbox
+                checked={params.deleteErrorSamples}
+                onChange={(deleteErrorSamples) =>
+                  onChangeParams({ deleteErrorSamples })
+                }
+                label="Error sampling"
                 checkClassName="bg-teal-500"
               />
             </div>

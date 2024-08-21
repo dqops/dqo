@@ -42,6 +42,11 @@ public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisti
         }
     };
 
+    /**
+     * Sensor name used by this statistics collector.
+     */
+    public static final String SENSOR_NAME = ColumnNumericSumSensorParametersSpec.SENSOR_NAME;
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
