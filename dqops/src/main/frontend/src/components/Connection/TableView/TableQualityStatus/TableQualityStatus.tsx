@@ -242,11 +242,11 @@ export default function TableQualityStatus({
           fontClassName="text-sm"
         />
       </div>
-      <div className="flex gap-x-5 ml-4 absolute top-39">
+      <div className="flex gap-x-5 ml-4 mt-[-30px]">
         <CurrentTableStatus tableDataQualityStatus={tableDataQualityStatus} />
         <TotalChecksExecuted tableDataQualityStatus={tableDataQualityStatus} />
       </div>
-      <div className="mt-35">
+      <div>
         {Object.keys(firstLevelChecks).length > 0 ? (
           <TableQualityStatusOverview
             firstLevelChecks={firstLevelChecks}
