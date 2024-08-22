@@ -6,7 +6,10 @@ import CreateNotificationPattern from '../../components/Connection/ConnectionVie
 import NotificationPatternTable from '../../components/Connection/ConnectionView/NotificationPattern/NotificationPatternTable';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { updateTabLabel } from '../../redux/actions/definition.actions';
+import {
+  addFirstLevelTab,
+  updateTabLabel
+} from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
@@ -57,6 +60,14 @@ export default function DefaultWebhooksDetail() {
           highestSeverity: incidentFilters.highestSeverity
         }
       });
+      dispatch(
+        addFirstLevelTab({
+          value: activeTab ?? '',
+          state: {
+            incidentFilters: undefined
+          }
+        })
+      );
       setAddNotificationPattern(true);
     }
   }, [incidentFilters]);
@@ -157,6 +168,12 @@ export default function DefaultWebhooksDetail() {
               <div className="text-lg font-semibold truncate">
                 Default incident notification configuration
               </div>
+              <Button
+                label="Add notification filter"
+                onClick={createNotificationPattern}
+                color="primary"
+                className="!w-44 !my-5"
+              />
             </div>
           </div>
           <div className="flex flex-col px-4 py-2">
@@ -164,12 +181,6 @@ export default function DefaultWebhooksDetail() {
               filteredNotificationsConfigurations={filteredNotifications}
               onChange={setFilteredNotifications}
               setPatternNameEdit={onCHangePatternNameToEdit}
-            />
-            <Button
-              label="Add notification filter"
-              onClick={createNotificationPattern}
-              color="primary"
-              className="!w-50 !my-5"
             />
           </div>
         </div>
