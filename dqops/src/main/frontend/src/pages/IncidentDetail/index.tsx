@@ -280,7 +280,7 @@ export const IncidentDetail = () => {
       const url = ROUTES.CONNECTION_DETAIL(
         CheckTypes.SOURCES,
         connection,
-        'incidents'
+        'filtered-notifications'
       );
       dispatch(
         addFirstLevelTab(CheckTypes.SOURCES, {
