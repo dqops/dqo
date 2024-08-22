@@ -80,7 +80,7 @@ const Header = () => {
         newCheckTypes,
         connection,
         schema,
-        'tables'
+        'data-quality-summary'
       );
       value = ROUTES.SCHEMA_LEVEL_VALUE(newCheckTypes, connection, schema);
     } else if (match.path === ROUTES.PATTERNS.TABLE) {
