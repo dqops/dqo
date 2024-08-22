@@ -113,7 +113,7 @@ export default function DefaultWebhooksDetail() {
   };
 
   const onBack = () => {
-    dispatch(updateTabLabel('Default notifications', activeTab ?? ''));
+    dispatch(updateTabLabel('Global incident notifications', activeTab ?? ''));
 
     setPatternNameEdit('');
     setAddNotificationPattern(false);
@@ -155,7 +155,7 @@ export default function DefaultWebhooksDetail() {
           <div className="flex justify-between px-4 border-b border-gray-300 h-14 items-center flex-shrink-0">
             <div className="flex items-center justify-between w-full">
               <div className="text-lg font-semibold truncate">
-                Default incident notification configuration
+                Global incident notification configuration
               </div>
             </div>
           </div>
