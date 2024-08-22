@@ -226,7 +226,7 @@ Notifications will be sent to the target addresses when they are set in the **Ad
 
 Depending on the status of the incident the appropriate field has to be set accordingly.
 
-To access the global notifications configuration, click on the **Configuration** in the menu and select the **Global notifications configuration** in the tree panel.
+To access the global notifications configuration, click on the **Configuration** in the menu and select the **Global incident notifications** in the tree panel.
 
 When no notifications are configured, the only default notification configuration will be present.
 
@@ -287,11 +287,11 @@ In the case of responsibility for the specific tables among different team membe
 Another configuration filter can be set for a Data Engineering Team to receive notifications about Timeliness (data delay) or Validity (data ingestion issues) issues
 then the filter set for a Data Asset Manager to receive notification messages about market completeness for missing a particular market data.
 
-When using multiple filtered notification configuration, DQOps will send the notification that matches the first notification in the ascending order of the priority value
+When using multiple filtered notification configuration, DQOps will send the notification that matches the first notification in the **ascending order of the priority value**
 unless the **Process additional notification filters** checkbox is set.
 
-Setting to process additional filters makes the first matching filter of configured filters not break searching for the next filters.
-Then the process of searching and matching will continue to the next match. When it does not have set that flag, this filter will break the searching process.
+Setting to **process additional filters makes** the first matching filter **not breaks the searching process** for the next configured filters, which will continue to the next match. 
+When it does **not** have **set** that flag, this filter **will break** the searching process.
 The notifications are sent with the use of all matched notification filters in this process.
 
 To break the process of searching for the next matching filter without sending the notification message, set the **Do not create incidents** option.
@@ -311,11 +311,11 @@ The connection notifications have precedence over global notifications.
 This means setting the connection notifications will be verified first. When none of the filters from the connection notifications match the incident, then the global notification filters are verified.
 
 In final, when no filter matched the filters, neither connection nor global, or none of them broke searching for the next and no more filters were available,
-the verification process fails to use the default notification configuration in final.
+the verification process fails to use the **default notification** configuration in final.
 
-The default notification can be set on the connection notification and the global notification configuration as well but the connection one has precedence over the global.
+The default notification can be set on the connection notification and the global notification configuration as well but the **connection one has precedence over the global**.
 
-When the incident does not match any filter and no address is set in the default notification, no notification will be sent.
+When the incident **does not match** any filter and no address is set in the default notification, **no notification will be sent**.
 
 The connection notification configuration can be reached in each of the created connections by clicking the **Data sources** in the menu.
 Then select a connection and click on the Notifications tab.
@@ -353,7 +353,7 @@ The incident notification email contains:
 
 Email notifications require to configure an SMTP Server for sending email messages.
 
-The configuration of the SMTP Server can be done by use of the environment variables or by setting the local settings from userhome directory. 
+The configuration of the SMTP Server can be done by use of the **environment variables** or by setting the **local settings from userhome** directory. 
 
 The environment variables to be set are:
 
@@ -384,8 +384,8 @@ spec:
 DQOps supports automation of the incident workflows by using notifications.
 Please read the description of integrating incidents with other systems using [webhooks](../integrations/webhooks/index.md).
 
-Incident notifications configured for [Slack](../integrations/slack/configuring-slack-notifications.md) will
-use formatted messages that are shown on the Slack channels as shown below.
+Incident notifications configured for [Slack](../integrations/slack/configuring-slack-notifications.md) 
+uses formatted messages that are shown on the Slack channels as shown below.
 
 ![slack-message-open](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-open.png)
 
