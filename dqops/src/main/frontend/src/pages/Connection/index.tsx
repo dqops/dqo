@@ -62,8 +62,8 @@ const initSourceTabs = [
     value: 'incident-grouping'
   },
   {
-    label: 'Filtered notifications',
-    value: 'filtered-notifications'
+    label: 'Notifications',
+    value: 'notifications'
   }
 ];
 const initCheckTabs = [
@@ -224,7 +224,7 @@ const ConnectionPage = () => {
           <ConnectionDefaultGroupingConfiguration />
         )}
         {activeTab === 'incident-grouping' && <IncidentsNotificationsView />}
-        {activeTab === 'filtered-notifications' && (
+        {activeTab === 'notifications' && (
           <FilteredNotificationsView />
         )}
         {activeTab === 'tables' && <TableListView />}
