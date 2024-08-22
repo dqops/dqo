@@ -228,15 +228,13 @@ Depending on the status of the incident the appropriate field has to be set acco
 
 To access the global notifications configuration, click on the **Configuration** in the menu and select the **Global notifications configuration** in the tree panel.
 
-// todo: screen how to reach the UI page,
-
 When no notifications are configured, the only default notification configuration will be present.
 
-// todo: screen of the default notification setup page
+![Global incident notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications.png){ loading=lazy; width="1200px" }
 
 Open the default notification configuration by clicking the **default** name or by clicking **the edit action button** on the right.
 
-// todo: screen with the addresses form
+![Global incident notifications default](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notification-default.png){ loading=lazy; width="1200px" }
 
 Each notification field of the form can be filled with an **email address** or a **webhook URL**.
 You can also use multiple email addresses separated by the comma character (,). Mixing email addresses with webhook addresses is also allowed if you use commas between them.
@@ -249,12 +247,12 @@ The notifications can be limited to only receive messages that meet selected fil
 
 In the incident notification configuration click the **Add notification filter button**
 
-// todo: screen with marked button
+![Add filter to lobal incident notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications-add-filter.png){ loading=lazy; width="1200px" }
 
 Set the name for the notification filter and fill in the field that will be filtered.
 Down below, fill any field in the **Addresses for notifications of an incident state change** section.
 
-// todo: screen
+![Filtered notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/filtered-notification.png){ loading=lazy; width="1200px" }
 
 The filter configuration allows to specify the following:
 
@@ -322,7 +320,7 @@ When the incident does not match any filter and no address is set in the default
 The connection notification configuration can be reached in each of the created connections by clicking the **Data sources** in the menu.
 Then select a connection and click on the Notifications tab.
 
-// todo: screen
+![Connection notifications configuration](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/connection-notification-configuration.png){ loading=lazy; width="1200px" }
 
 
 ### Email notifications
@@ -348,7 +346,7 @@ The incident notification email contains:
 | **Check name**          | Shown when present. The check name that was affected by a data quality incident.                                                                                               |
 | **Message**             | Shown when present. The additional message of the notification message configured by user from the filtered notifications. Default notification does not contain such a field. |
 
-// todo: screen with the email notification
+![Email notification](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/email-notification.png){ loading=lazy; width="1200px" }
 
 
 ### SMTP Server configuration
