@@ -168,6 +168,12 @@ export default function DefaultWebhooksDetail() {
               <div className="text-lg font-semibold truncate">
                 Default incident notification configuration
               </div>
+              <Button
+                label="Add notification filter"
+                onClick={createNotificationPattern}
+                color="primary"
+                className="!w-44 !my-5"
+              />
             </div>
           </div>
           <div className="flex flex-col px-4 py-2">
@@ -175,12 +181,6 @@ export default function DefaultWebhooksDetail() {
               filteredNotificationsConfigurations={filteredNotifications}
               onChange={setFilteredNotifications}
               setPatternNameEdit={onCHangePatternNameToEdit}
-            />
-            <Button
-              label="Add notification filter"
-              onClick={createNotificationPattern}
-              color="primary"
-              className="!w-50 !my-5"
             />
           </div>
         </div>

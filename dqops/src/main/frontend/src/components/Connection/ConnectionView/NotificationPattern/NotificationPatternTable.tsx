@@ -126,7 +126,7 @@ export default function NotificationPatternTable({
 
   return (
     <table className="text-sm">
-      <thead>
+      <thead className="!mb-1">
         <tr>
           {headerItems.map((elem, index) => (
             <th key={elem.label}>
@@ -175,7 +175,9 @@ export default function NotificationPatternTable({
           ))}
         </tr>
       </thead>
-      <tbody className="border-t border-gray-100">
+      <div className="w-full h-1.5"></div>
+      <tbody className="border-t border-gray-100 mt-1">
+        <div className="w-full h-1"></div>
         {sortedNotifications.map((notificationPattern, index) => (
           <tr key={index} className="text-sm">
             {getFilteredItemsBasedOnWidth().map((elem) => (
