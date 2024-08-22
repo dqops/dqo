@@ -7,18 +7,21 @@ import {
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import RadioButton from '../../components/RadioButton';
+import SvgIcon from '../../components/SvgIcon';
 import TextArea from '../../components/TextArea';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
-import { getFirstLevelSensorState } from '../../redux/selectors';
 import { SharedCredentialsApi } from '../../services/apiClient';
-import { urlencodeDecoder } from '../../utils';
 
-export default function SingleSharedCredential() {
+export default function SingleSharedCredential({
+  credential_name = '',
+  onBack
+}: {
+  credential_name?: string;
+  onBack: () => void;
+}) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const { activeTab } = useSelector((state: IRootState) => state.definition);
-  const { credential_name } = useSelector(getFirstLevelSensorState);
   const [credentialName, setCredentialName] = useState('');
   const [editingCredential, setEditingCredential] =
     useState<SharedCredentialModel>();
@@ -42,7 +45,7 @@ export default function SingleSharedCredential() {
         binary_value: textAreaValue
       }).catch((err) => console.error(err));
     }
-    dispatch(closeFirstLevelTab('/definitions/shared-credential/new'));
+    onBack();
   };
 
   const editSharedCredential = async () => {
@@ -59,12 +62,7 @@ export default function SingleSharedCredential() {
         binary_value: textAreaValue
       }).catch((err) => console.error(err));
     }
-
-    dispatch(
-      closeFirstLevelTab(
-        '/definitions/shared-credential/' + urlencodeDecoder(credential_name)
-      )
-    );
+    onBack();
   };
 
   const getSharedCredential = async () => {
@@ -77,7 +75,7 @@ export default function SingleSharedCredential() {
     if (credential_name) {
       getSharedCredential();
     }
-  }, []);
+  }, [credential_name]);
 
   useEffect(() => {
     if (editingCredential) {
@@ -115,10 +113,20 @@ export default function SingleSharedCredential() {
               <Input
                 value={credentialName}
                 onChange={(e) => setCredentialName(e.target.value)}
-                disabled={credential_name}
+                disabled={!credential_name.length}
               />
             </div>
             <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
+              <Button
+                label="Back"
+                color="primary"
+                variant="text"
+                className="px-0 mr-2"
+                leftIcon={
+                  <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+                }
+                onClick={onBack}
+              />
               {credential_name ? (
                 <a
                   href={`/api/credentials/${credential_name}/download`}

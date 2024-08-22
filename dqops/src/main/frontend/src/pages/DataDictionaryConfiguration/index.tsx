@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from '../../components/Button';
 import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import DataDictionaryConfigurationHeader from './DataDictionaryConfigurationHeader';
@@ -32,15 +31,11 @@ export default function DataDictionary() {
         />
       ) : (
         <table className="w-full ">
-          <DataDictionaryConfigurationHeader />
+          <DataDictionaryConfigurationHeader
+            addDictionary={() => setCreateDictionary(true)}
+          />
           <DataDictionaryConfigurationTable
             setDictionaryToEdit={setDictionaryToEdit}
-          />
-          <Button
-            onClick={() => setCreateDictionary(true)}
-            className="w-40 my-5 ml-6"
-            label="Create Dictionary"
-            color="primary"
           />
         </table>
       )}

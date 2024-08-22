@@ -14,7 +14,6 @@ import IncidentConnection from '../../pages/IncidentConnection';
 import RuleDetail from '../../pages/RuleDetail';
 import SensorDetail from '../../pages/SensorDetail';
 import SharedCredentialsDetail from '../../pages/SharedCredentialsDetail';
-import SingleSharedCredential from '../../pages/SharedCredentialsDetail/SingleSharedCredential';
 import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
 import {
@@ -92,8 +91,8 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <DefaultWebhooksDetail />;
       case ROUTES.PATTERNS.SHARED_CREDENTIALS_LIST_DETAIL:
         return <SharedCredentialsDetail />;
-      case ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL:
-        return <SingleSharedCredential />;
+      // case ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL:
+      //   return <SingleSharedCredential />;
       case ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL:
         return <DataDictionary />;
       // case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
