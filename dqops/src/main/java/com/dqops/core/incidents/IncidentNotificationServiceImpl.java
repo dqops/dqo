@@ -257,19 +257,21 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         Mono<Void> responseSent = Mono.fromCallable(() -> {
                     try {
-                        MimeMessage simpleMailMessage = javaMailSender.createMimeMessage();
-                        String messageTemplate = (incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getStatus().equals(IncidentStatus.open))
-                                ? "New incident detected in %s table."
-                                : "The incident in %s table has been detected.";
+                        IncidentNotificationMessage incidentNotificationMessage = incidentNotificationMessageAddressPair.getIncidentNotificationMessage();
+                        String messageTemplate = (incidentNotificationMessage.getStatus().equals(IncidentStatus.open))
+                                ? "New incident detected in %s table in the %s data source."
+                                : "The incident in %s table in the %s data source has been detected.";
                         String subjectMessage = String.format(messageTemplate,
-                                incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getConnection()
-                                        + "." + incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getTable());
+                                incidentNotificationMessage.getSchema() + "." + incidentNotificationMessage.getTable(),
+                                incidentNotificationMessage.getConnection()
+                                );
+                        MimeMessage simpleMailMessage = javaMailSender.createMimeMessage();
                         simpleMailMessage.setSubject(subjectMessage);
                         MimeMessageHelper helper;
                         helper = new MimeMessageHelper(simpleMailMessage, true);
                         helper.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM_EMAIL, EmailSender.EMAIL_SENDER_FROM_NAME)));
                         helper.setTo(incidentNotificationMessageAddressPair.getNotificationAddress());
-                        helper.setText(incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getText(), true);
+                        helper.setText(incidentNotificationMessage.getText(), true);
                         javaMailSender.send(simpleMailMessage);
                         return simpleMailMessage;
                     } catch (Exception e) {
@@ -290,33 +292,33 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SmtpServerConfigurationSpec serverConfiguration;
-        if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null
-                || userHome.getSettings().getSpec().getSmtpServerConfiguration() == null) {
-            serverConfiguration = new SmtpServerConfigurationSpec();
-
-            String host = smtpServerConfigurationProperties.getHost();
-            if(host != null && !host.isEmpty()){
-                smtpServerConfigurationProperties.setHost(host);
-            }
-            String port = smtpServerConfigurationProperties.getPort();
-            if(port != null && !port.isEmpty()){
-                smtpServerConfigurationProperties.setPort(port);
-            }
-            Boolean useSsl = smtpServerConfigurationProperties.getUseSsl();
-            if(useSsl != null){
-                smtpServerConfigurationProperties.setUseSsl(useSsl);
-            }
-            String username = smtpServerConfigurationProperties.getUsername();
-            if(username != null && !username.isEmpty()){
-                smtpServerConfigurationProperties.setUsername(username);
-            }
-            String password = smtpServerConfigurationProperties.getPassword();
-            if(password != null && !password.isEmpty()){
-                smtpServerConfigurationProperties.setPassword(password);
-            }
-        }
-        else {
+        if (userHome.getSettings() != null && userHome.getSettings().getSpec() != null
+                && userHome.getSettings().getSpec().getSmtpServerConfiguration() != null) {
             serverConfiguration = userHome.getSettings().getSpec().getSmtpServerConfiguration();
+            return serverConfiguration;
+        }
+
+        serverConfiguration = new SmtpServerConfigurationSpec();
+
+        String host = smtpServerConfigurationProperties.getHost();
+        if(host != null && !host.isEmpty()){
+            smtpServerConfigurationProperties.setHost(host);
+        }
+        String port = smtpServerConfigurationProperties.getPort();
+        if(port != null && !port.isEmpty()){
+            smtpServerConfigurationProperties.setPort(port);
+        }
+        Boolean useSsl = smtpServerConfigurationProperties.getUseSsl();
+        if(useSsl != null){
+            smtpServerConfigurationProperties.setUseSsl(useSsl);
+        }
+        String username = smtpServerConfigurationProperties.getUsername();
+        if(username != null && !username.isEmpty()){
+            smtpServerConfigurationProperties.setUsername(username);
+        }
+        String password = smtpServerConfigurationProperties.getPassword();
+        if(password != null && !password.isEmpty()){
+            smtpServerConfigurationProperties.setPassword(password);
         }
 
         return serverConfiguration;

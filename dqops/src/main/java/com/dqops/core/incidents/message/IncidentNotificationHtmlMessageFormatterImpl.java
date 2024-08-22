@@ -56,6 +56,7 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
         ))));
         stringBuilder.append(getFormatParagraph(""));
 
+        stringBuilder.append(extractStringWithFormatting(notificationMessage.getConnection(), "Data source"));
         stringBuilder.append(extractInstantWithFormatting(notificationMessage.getFirstSeen(), IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME));
         if(!notificationMessage.getStatus().equals(IncidentStatus.open)){
             stringBuilder.append(extractInstantWithFormatting(notificationMessage.getLastSeen(), IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
