@@ -219,21 +219,29 @@ Notice that the `min_count` rule has been reduced from 1000, to 700.
 
 ## Incident notifications
 
-Incident notifications allow to receive the notification message about new incidents or a change of the incident status as soon as they appear.
+Incident notifications allow to receive notification messages about new incidents or a change of the incident status as soon as they appear.
 
-A configuration of notifications always contain the default notification setup, which is empty at the beginning.
-Notifications will be sent to the target address when it is set in the **Addresses for notifications of an incident state change** section.
+A notifications configuration always contains the default notification setup, which is empty at the beginning.
+Notifications will be sent to the target addresses when they are set in the **Addresses for notifications of an incident state change** section.
 
 Depending on the status of the incident the appropriate field has to be set accordingly.
 
+To access the global notifications configuration, click on the **Configuration** in the menu and select the **Global notifications configuration** in the tree panel.
+
 // todo: screen how to reach the UI page,
+
+When no notifications are configured, the only default notification configuration will be present.
 
 // todo: screen of the default notification setup page
 
-Each of the notification fields of the form can be filled with an **email address** or a **webhook URL**.
-You can also use multiple email addresses separated by the comma character (,). Mixing email addresses with webhook addresses are also allowed as far as you use comma between them.
+Open the default notification configuration by clicking the **default** name or by clicking **the edit action button** on the right.
 
-The address field for the specific status can also be leaved as empty so no notifications will be received for that incident status. 
+// todo: screen with the addresses form
+
+Each notification field of the form can be filled with an **email address** or a **webhook URL**.
+You can also use multiple email addresses separated by the comma character (,). Mixing email addresses with webhook addresses is also allowed if you use commas between them.
+
+The address field for the specific status can also be left as empty so no notifications will be received for that incident status.
 
 ### Notification filters
 
@@ -241,12 +249,14 @@ The notifications can be limited to only receive messages that meet selected fil
 
 In the incident notification configuration click the **Add notification filter button**
 
-Set the name for the notification filter and fill the field that will be filtered.
-Down below, fill any field in **Addresses for notifications of an incident state change** section. 
+// todo: screen with marked button
+
+Set the name for the notification filter and fill in the field that will be filtered.
+Down below, fill any field in the **Addresses for notifications of an incident state change** section.
 
 // todo: screen
 
-Filters allow to point the details of the following:
+The filter configuration allows to specify the following:
 
 | Field name                                  | Description                                                                                                                                                                                                                               |
 |---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -254,8 +264,8 @@ Filters allow to point the details of the following:
 | **Priority**                                | The priority of the notification. The notifications with smaller number are matched first.                                                                                                                                                |
 | **Notification message**                    | Extra message to be attached to the notification message. It can be the description about the notification, SLA note etc.                                                                                                                 |
 | **Disabled**                                | Whether the filtered notification should be take into account.                                                                                                                                                                            |
-| **Process additional notification filters** | Whether the next filters in priority order (smaller number more important) should be taken into account. When not set the notificaiton will be sent only to the addresses that match the first notification filter in the priority order. |
-| **Do not create incidents**                 | Whether the notification message should be sent when the notification matches the filters. Setting this flag to true can break searching for the next matching notificaiton without sending the notification message.                     |
+| **Process additional notification filters** | Whether the next filters in priority order (smaller number more important) should be taken into account. When not set the notification will be sent only to the addresses that match the first notification filter in the priority order. |
+| **Do not create incidents**                 | Whether the notification message should be sent when the notification matches the filters. Setting this flag to true can break searching for the next matching notification without sending the notification message.                     |
 | **Connection**                              | The target schema name filter. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.                                                                                                                           |
 | **Schema**                                  | The target schema name filter. Supports search patterns in the format: &#x27;schema_name_\*&#x27;, &#x27;\*_schema&#x27;, &#x27;prefix\*suffix&#x27;.                                                                                     |
 | **Table**                                   | The target schema name filter. Supports search patterns in the format: &#x27;table_name_\*&#x27;, &#x27;\*table&#x27;, &#x27;prefix\*suffix&#x27;.                                                                                        |
@@ -265,10 +275,10 @@ Filters allow to point the details of the following:
 | **Table priority**                          | The target table priority filter.                                                                                                                                                                                                         |
 | **Quality dimension**                       | The target quality dimension filter.                                                                                                                                                                                                      |
 | **Check category**                          | The target check category filter, for example: *nulls*, *volume*, *anomaly*.                                                                                                                                                              |*string*|                                                                                                                                                                                                           |
-| **Check type**                              | The target type of check filter. One from: profiling, monitoring or partitioning                                                                                                                                                          |
+| **Check type**                              | The target type of check filter. One of: profiling, monitoring, or partitioning.                                                                                                                                                          |
 
 Setting the filter field e.g. **table** means that the incident's table name has to match the filter to receive the notification message. 
-When other filters are left empty, they are not taken into account and set filters are verified only.
+When other filters are left empty, they are not taken into account and only non empty filters are verified.
 
 Filters such as: connection, schema, table, data group name and check name support search patterns in format prefix\*, \*suffix, prefix\*suffix.
 
@@ -279,20 +289,19 @@ In case of responsibility for the specific tables among different team members, 
 Other configuration filter can be set for a Data Engineering Team to receive notifications about Timeliness (data delay) or Validity (data ingestion issues) issues
 than the filter set for a Data Asset Manager to receive notification messages about market completeness for missing a particular market data.
 
-When using multiple filtered notification configuration, DQOps will send the notification that matches the first notification 
+When using multiple filtered notification configuration, DQOps will send the notification that matches the first notification in the ascending order of the priority value
 unless the **Process additional notification filters** checkbox is set.
 
-Setting to process additional filters makes that the first matching filter of configured filters will not break searching for the next filters in the priority descending order.
-Then the process of searching and matching will continue to the next match. 
-
-When it finds the next filter with no setting of that flag, this filter will break the next searching, sending the notification message.
+Setting to process additional filters makes the first matching filter of configured filters will not break searching for the next filters.
+Then the process of searching and matching will continue to the next match. When it does not have setting of that flag, this filter will break the searching process.
+The notifications are send with use of all matched notification filters in this process.
 
 To break the process of searching for the next matching filter without sending the notification message, set the **Do not create incidents** option.
 
-// todo: screen how to configure filtered notification
+All preceding notifications that matches the filters are sent until the breaking filter will be matched.
 
 
-### Global notifications, connection notifications, default notifications
+### Difference between notifications configuration: global, connection, default
 
 The notifications configuration provides you two levels of settings:
 
@@ -303,13 +312,17 @@ The connection notifications have precedence over global notifications.
 
 This means setting the connection notifications will be verified first. When none of filters from the connection notifications match the incident, then the global notification filters are verified.
 
-In final, when verification did not break the verification the default notification setting is used. 
+In final, when no filter matched the filters, both connection nor global, or non of them broke searching for the next and no more filters are available,
+the verification process falls to use the default notification configuration in final. 
 
-The default setting contain only fields with addresses because the verification process fall to the default in final.
+The default notification can be set on the connection notification and the global notification configuration as well but the connection one have the precedence over the global.
 
-The default notification can be set on the connection notification as well as on the global notification but the connection one have the precedence over global.
+When the incident does not match any filter and no address is set in the default notification, no notification will be sent.
 
-When no address is set there, no notification will be sent.
+The connection notification configuration can be reached in each of the created connections by clicking the **Data sources** in the menu.
+Then select a connection and click on the Notifications tab.
+
+// todo: screen
 
 
 ### Email notifications
