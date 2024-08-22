@@ -302,23 +302,23 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         String host = smtpServerConfigurationProperties.getHost();
         if(host != null && !host.isEmpty()){
-            smtpServerConfigurationProperties.setHost(host);
+            serverConfiguration.setHost(host);
         }
         String port = smtpServerConfigurationProperties.getPort();
         if(port != null && !port.isEmpty()){
-            smtpServerConfigurationProperties.setPort(port);
+            serverConfiguration.setPort(port);
         }
         Boolean useSsl = smtpServerConfigurationProperties.getUseSsl();
         if(useSsl != null){
-            smtpServerConfigurationProperties.setUseSsl(useSsl);
+            serverConfiguration.setUseSsl(useSsl);
         }
         String username = smtpServerConfigurationProperties.getUsername();
         if(username != null && !username.isEmpty()){
-            smtpServerConfigurationProperties.setUsername(username);
+            serverConfiguration.setUsername(username);
         }
         String password = smtpServerConfigurationProperties.getPassword();
         if(password != null && !password.isEmpty()){
-            smtpServerConfigurationProperties.setPassword(password);
+            serverConfiguration.setPassword(password);
         }
 
         return serverConfiguration;

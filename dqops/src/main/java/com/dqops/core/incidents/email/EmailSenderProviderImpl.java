@@ -29,7 +29,7 @@ public class EmailSenderProviderImpl implements EmailSenderProvider {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
 
-        if(smtpServerConfiguration.getUseSSL()){
+        if(smtpServerConfiguration.getUseSsl()){
             props.put("mail.smtp.ssl.enable", "true");
         } else {
             props.put("mail.smtp.starttls.enable", "true");
