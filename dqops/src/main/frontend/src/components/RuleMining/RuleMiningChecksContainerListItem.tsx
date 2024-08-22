@@ -251,9 +251,8 @@ const RuleMiningChecksContainerListItem = ({
           'h-18'
         )}
       >
-        <td className="pl-4 pr-8 min-w-133 max-w-133 h-full ">
-          <div className="flex space-x-1 items-center">
-            <div className=" !w-7 !h-full"></div>
+        <td className="pr-8 min-w-133 max-w-133 h-full ">
+          <div className="flex space-x-1 items-center !ml-12">
             {isAlreadyDeleted !== true &&
               (mode ? (
                 <div className="w-5 h-5 block items-center">

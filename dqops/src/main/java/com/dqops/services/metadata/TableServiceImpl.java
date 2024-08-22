@@ -240,6 +240,8 @@ public class TableServiceImpl implements TableService {
                     setDeleteCheckResults(true);
                     setDeleteSensorReadouts(true);
                     setDeleteErrors(true);
+                    setDeleteErrorSamples(true);
+                    setDeleteIncidents(true);
                 }};
                 deleteStoredDataParameters.add(param);
             }

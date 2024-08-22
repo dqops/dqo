@@ -10,6 +10,7 @@ import {
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
+  addFirstLevelTab,
   getConnectionIncidentGrouping,
   setActiveFirstLevelTab,
   setUpdateIncidentGroup,
@@ -22,7 +23,7 @@ import {
 } from '../../../redux/selectors';
 import { FilteredNotificationsConfigurationsClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
-import { useDecodedParams } from '../../../utils';
+import { sortPatterns, useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Loader from '../../Loader';
@@ -99,10 +100,18 @@ export const IncidentsNotificationsView = () => {
           qualityDimension: incidentFilters.qualityDimension,
           checkCategory: incidentFilters.checkCategory,
           checkName: incidentFilters.check,
-          checkType: incidentFilters.checkType,
-          highestSeverity: incidentFilters.highestSeverity
-        }
+          checkType: incidentFilters.checkType
+        },
+        priority: 1000
       });
+      dispatch(
+        addFirstLevelTab(checkTypes, {
+          value: firstLevelActiveTab,
+          state: {
+            incidentFilters: undefined
+          }
+        })
+      );
       setAddNotificationPattern(true);
     }
   }, [incidentFilters]);
@@ -125,7 +134,8 @@ export const IncidentsNotificationsView = () => {
             checkType: x.filter?.checkType || ''
           };
         });
-        setFilteredNotificationsConfigurations(patterns);
+        const sortedPatterns = sortPatterns(patterns, 'priority', 'asc');
+        setFilteredNotificationsConfigurations(sortedPatterns);
       })
       .finally(() => setLoading(false));
   };
@@ -287,12 +297,12 @@ export const IncidentsNotificationsView = () => {
                 </span>
               </div>
             </div>
-            <div className="flex items-center mb-4 gap-2 text-sm">
+            <div className="flex items-center mb-8 gap-2 text-sm">
               <p>Mute data quality issues for</p>
               <div className="flex gap-2 items-center">
                 <NumberInput
                   value={incidentGrouping?.mute_for_days}
-                  onChange={() => {}}
+                  onChange={(value) => onChange({ mute_for_days: value })}
                 />
                 <span>
                   {' '}

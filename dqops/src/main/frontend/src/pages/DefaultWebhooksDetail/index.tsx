@@ -13,6 +13,7 @@ import {
   FilteredNotificationsConfigurationsClient,
   SettingsApi
 } from '../../services/apiClient';
+import { sortPatterns } from '../../utils';
 type TNotificationPattern = FilteredNotificationModel & {
   connection?: string;
   schema?: string;
@@ -94,7 +95,9 @@ export default function DefaultWebhooksDetail() {
             checkType: x.filter?.checkType || ''
           };
         });
-        setFilteredNotifications(patterns);
+        const sortedPatterns = sortPatterns(patterns, 'priority', 'asc');
+
+        setFilteredNotifications(sortedPatterns);
       }
     );
   };

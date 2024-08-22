@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
 import TextArea from '../../components/TextArea';
-import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
-import { getFirstLevelSensorState } from '../../redux/selectors';
 import { DataDictionaryApiClient } from '../../services/apiClient';
-import { urlencodeDecoder } from '../../utils';
 
-export default function DataDictionaryItemOverview() {
+export default function DataDictionaryItemOverview({
+  dictionary_name = '',
+  onBack
+}: {
+  dictionary_name?: string;
+  onBack: () => void;
+}) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-  const { dictionary_name } = useSelector(getFirstLevelSensorState);
   const [dictionaryName, setDictionaryName] = useState('');
   const [textAreaValue, setTextAreaValue] = useState<string>('');
 
@@ -23,7 +26,7 @@ export default function DataDictionaryItemOverview() {
       dictionary_name: dictionaryName,
       file_content: textAreaValue
     }).catch((err) => console.error(err));
-    dispatch(closeFirstLevelTab('/definitions/data-dictionary/new'));
+    onBack();
   };
 
   const editDictionary = async () => {
@@ -31,16 +34,11 @@ export default function DataDictionaryItemOverview() {
       dictionary_name: dictionaryName,
       file_content: textAreaValue
     }).catch((err) => console.error(err));
-
-    dispatch(
-      closeFirstLevelTab(
-        '/definitions/data-dictionary/' + urlencodeDecoder(dictionary_name)
-      )
-    );
+    onBack();
   };
 
   useEffect(() => {
-    if (dictionary_name) {
+    if (dictionary_name && dictionary_name.length !== 0) {
       const getDictionary = () => {
         DataDictionaryApiClient.getDictionary(dictionary_name).then((res) => {
           setDictionaryName(res?.data?.dictionary_name ?? ''),
@@ -60,11 +58,20 @@ export default function DataDictionaryItemOverview() {
             value={dictionaryName}
             onChange={(e) => setDictionaryName(e.target.value)}
             disabled={
-              dictionary_name || userProfile.can_manage_definitions !== true
+              dictionary_name.length !== 0 ||
+              userProfile.can_manage_definitions !== true
             }
           />
         </div>
         <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
+          <Button
+            label="Back"
+            color="primary"
+            variant="text"
+            className="px-0 mr-4"
+            leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+            onClick={onBack}
+          />
           {dictionary_name ? (
             <a
               href={`/api/credentials/${dictionary_name}/download`}

@@ -153,7 +153,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
             checkContainerModel.setDataCleanJobTemplate(
                     DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                            checkContainerModel.getRunChecksJobTemplate(), false));
+                            checkContainerModel.getRunChecksJobTemplate(), false, false));
         }
 
         if (tableSpec != null) {
@@ -441,7 +441,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
         categoryModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                        runChecksCategoryTemplate, false)
+                        runChecksCategoryTemplate, false, false)
         );
 
         if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
@@ -697,7 +697,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             runOneCheckTemplate.setCheckName(checkName);
             checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
 
-            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate, false);
+            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate, false, false);
             dataCleanJobTemplate.setDataGroupTag(checkSpec.getDataGrouping());
             checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
         }

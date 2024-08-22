@@ -108,6 +108,8 @@ public class ConnectionServiceImpl implements ConnectionService {
                 setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
                 setDeleteErrors(true);
+                setDeleteErrorSamples(true);
+                setDeleteIncidents(true);
             }};
             deleteStoredDataParameters.add(param);
         }

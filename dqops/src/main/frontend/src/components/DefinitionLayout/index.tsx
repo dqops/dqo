@@ -5,7 +5,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDefinition } from '../../contexts/definitionContext';
 import CheckDetail from '../../pages/CheckDetail';
 import DataDictionary from '../../pages/DataDictionaryConfiguration';
-import DataDictionaryItemOverview from '../../pages/DataDictionaryConfiguration/DataDictionaryItemOverview';
 import DefaultCheckPatternConfiguration from '../../pages/DefaultCheckPatternConfiguration';
 import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail';
@@ -97,8 +96,8 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <SingleSharedCredential />;
       case ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL:
         return <DataDictionary />;
-      case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
-        return <DataDictionaryItemOverview />;
+      // case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
+      //   return <DataDictionaryItemOverview />;
       case ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS:
         return <DefaultCheckPatterns />;
       case ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL:
