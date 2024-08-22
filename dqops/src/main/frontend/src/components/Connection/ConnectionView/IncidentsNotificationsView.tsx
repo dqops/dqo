@@ -148,7 +148,6 @@ export const IncidentsNotificationsView = () => {
     setAddNotificationPattern(true);
   };
   const onBack = () => {
-    console.log(firstLevelActiveTab);
     if (connection) {
       dispatch(setActiveFirstLevelTab(checkTypes, firstLevelActiveTab));
     }

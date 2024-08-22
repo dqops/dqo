@@ -6,7 +6,10 @@ import CreateNotificationPattern from '../../components/Connection/ConnectionVie
 import NotificationPatternTable from '../../components/Connection/ConnectionView/NotificationPattern/NotificationPatternTable';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { updateTabLabel } from '../../redux/actions/definition.actions';
+import {
+  addFirstLevelTab,
+  updateTabLabel
+} from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
@@ -57,6 +60,14 @@ export default function DefaultWebhooksDetail() {
           highestSeverity: incidentFilters.highestSeverity
         }
       });
+      dispatch(
+        addFirstLevelTab({
+          value: activeTab ?? '',
+          state: {
+            incidentFilters: undefined
+          }
+        })
+      );
       setAddNotificationPattern(true);
     }
   }, [incidentFilters]);
