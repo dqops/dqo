@@ -20,6 +20,11 @@ const Routes = () => {
         path={ROUTES.PATTERNS.GLOBAL_INCIDENTS}
         component={HomePage}
       />
+      <Route
+        exact
+        path={ROUTES.PATTERNS.DATA_QUALITY_SUMMARY}
+        component={HomePage}
+      />
 
       {/* Dashboard Layout pages */}
       <Route
