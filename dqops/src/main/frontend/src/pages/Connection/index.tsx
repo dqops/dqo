@@ -22,6 +22,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { getFirstLevelConnectionTab, useDecodedParams } from '../../utils';
 import ColumnListView from '../ColumnListView/ColumnListView';
 import TableListView from '../TableListView/TableListView';
+import { FilteredNotificationsView } from '../../components/Connection/ConnectionView/FilteredNotificationsView';
 
 const initSourceTabs = [
   {
@@ -57,8 +58,12 @@ const initSourceTabs = [
     value: 'data-groupings'
   },
   {
-    label: 'Incidents and notifications',
-    value: 'incidents'
+    label: 'Incident grouping',
+    value: 'incident-grouping'
+  },
+  {
+    label: 'Filtered notifications',
+    value: 'filtered-notifications'
   }
 ];
 const initCheckTabs = [
@@ -218,7 +223,10 @@ const ConnectionPage = () => {
         {activeTab === 'data-groupings' && (
           <ConnectionDefaultGroupingConfiguration />
         )}
-        {activeTab === 'incidents' && <IncidentsNotificationsView />}
+        {activeTab === 'incident-grouping' && <IncidentsNotificationsView />}
+        {activeTab === 'filtered-notifications' && (
+          <FilteredNotificationsView />
+        )}
         {activeTab === 'tables' && <TableListView />}
         {activeTab === 'columns' && <ColumnListView />}
       </div>
