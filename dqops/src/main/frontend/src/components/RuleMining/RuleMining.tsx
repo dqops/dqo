@@ -64,7 +64,7 @@ export default function RuleMining({
   const defaultParameters: CheckMiningParametersModel = {
     severity_level: 'error',
     fail_checks_at_percent_error_rows: 2.0,
-    copy_failed_profiling_checks: false,
+    copy_failed_profiling_checks: true,
     copy_disabled_profiling_checks: false,
     copy_profiling_checks: true,
     propose_default_checks: true,
