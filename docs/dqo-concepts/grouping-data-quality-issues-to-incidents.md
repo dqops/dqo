@@ -54,9 +54,9 @@ The following statuses are used in the data quality incident workflow.
 
 
 ## Grouping issues into incidents
-The **data quality incident** grouping level is configured on a connection level as shown on the *Incidents and Notifications* screen below.
+The **data quality incident** grouping level is configured on a connection level as shown on the *Incidents grouping* screen below.
 
-![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings2.png){ loading=lazy; width="1200px" }
+![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-grouping.png){ loading=lazy; width="1200px" }
 
 The following grouping levels are supported:
 
@@ -218,11 +218,177 @@ Notice that the `min_count` rule has been reduced from 1000, to 700.
 
 
 ## Incident notifications
+
+Incident notifications allow to receive notification messages about new incidents or a change of the incident status as soon as they appear.
+
+A notifications configuration always contains the default notification setup, which is empty at the beginning.
+Notifications will be sent to the target addresses when they are set in the **Addresses for notifications of an incident state change** section.
+
+Depending on the status of the incident the appropriate field has to be set accordingly.
+
+To access the global notifications configuration, click on the **Configuration** in the menu and select the **Global incident notifications** in the tree panel.
+
+When no notifications are configured, the only default notification configuration will be present.
+
+![Global incident notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications.png){ loading=lazy; width="1200px" }
+
+Open the default notification configuration by clicking the **default** name or by clicking **the edit action button** on the right.
+
+![Global incident notifications default](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notification-default.png){ loading=lazy; width="1200px" }
+
+Each notification field of the form can be filled with an **email address** or a **webhook URL**.
+You can also use multiple email addresses separated by the comma character (,). Mixing email addresses with webhook addresses is also allowed if you use commas between them.
+
+The address field for the specific status can also be left as empty so no notifications will be received for that incident status.
+
+### Notification filters
+
+The notifications can be limited to only receive messages that meet selected filters.
+
+In the incident notification configuration click the **Add notification filter button**
+
+![Add filter to lobal incident notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications-add-filter.png){ loading=lazy; width="1200px" }
+
+Set the name for the notification filter and fill in the field that will be filtered.
+Down below, fill any field in the **Addresses for notifications of an incident state change** section.
+
+![Filtered notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/filtered-notification.png){ loading=lazy; width="1200px" }
+
+The filter configuration allows to specify the following:
+
+| Field name                                  | Description                                                                                                                                                                                                                               |
+|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Notification name**                       | The unique name of the filtered notification.                                                                                                                                                                                             |
+| **Priority**                                | The priority of the notification. The notifications with smaller number are matched first.                                                                                                                                                |
+| **Notification message**                    | Extra message to be attached to the notification message. It can be the description of the notification, SLA note, etc.                                                                                                                   |
+| **Disabled**                                | Whether the filtered notification should be taken into account.                                                                                                                                                                           |
+| **Process additional notification filters** | Whether the next filters in priority order (smaller number more important) should be taken into account. When not set the notification will be sent only to the addresses that match the first notification filter in the priority order. |
+| **Do not create incidents**                 | Whether the notification message should be sent when the notification matches the filters. Setting this flag to true can break searching for the next matching notification without sending the notification message.                     |
+| **Connection**                              | The target schema name filter. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.                                                                                                                           |
+| **Schema**                                  | The target schema name filter. Supports search patterns in the format: &#x27;schema_name_\*&#x27;, &#x27;\*_schema&#x27;, &#x27;prefix\*suffix&#x27;.                                                                                     |
+| **Table**                                   | The target schema name filter. Supports search patterns in the format: &#x27;table_name_\*&#x27;, &#x27;\*table&#x27;, &#x27;prefix\*suffix&#x27;.                                                                                        |
+| **Data group name**                         | The target data group name filter. Supports search patterns in the format: 'group_name_\*', '\*group', 'prefix\*suffix'.                                                                                                                  |
+| **Check name**                              | The target check name filter. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: 'profiling_\*', '\*_count', 'profiling_\*_percent'.                  |
+| **Highest severity**                        | The target highest severity filter.                                                                                                                                                                                                       |
+| **Table priority**                          | The target table priority filter.                                                                                                                                                                                                         |
+| **Quality dimension**                       | The target quality dimension filter.                                                                                                                                                                                                      |
+| **Check category**                          | The target check category filter, for example: *nulls*, *volume*, *anomaly*.                                                                                                                                                              |*string*|                                                                                                                                                                                                           |
+| **Check type**                              | The target check type filter. One of: profiling, monitoring, or partitioning.                                                                                                                                                             |
+
+Setting the filter field e.g. **table** means that the incident's table name has to match the filter to receive the notification message.
+When other filters are left empty, they are not taken into account and only non-empty filters are verified.
+
+Filters such as connection, schema, table, data group name and check name support search patterns in format prefix\*, \*suffix, prefix\*suffix.
+
+### The use of multiple notification filters
+
+In the case of responsibility for the specific tables among different team members, more filtered notifications can be applied.
+
+Another configuration filter can be set for a Data Engineering Team to receive notifications about Timeliness (data delay) or Validity (data ingestion issues) issues
+then the filter set for a Data Asset Manager to receive notification messages about market completeness for missing a particular market data.
+
+When using multiple filtered notification configuration, DQOps will send the notification that matches the first notification in the **ascending order of the priority value**
+unless the **Process additional notification filters** checkbox is set.
+
+Setting to **process additional filters makes** the first matching filter **not breaks the searching process** for the next configured filters, which will continue to the next match. 
+When it does **not** have **set** that flag, this filter **will break** the searching process.
+The notifications are sent with the use of all matched notification filters in this process.
+
+To break the process of searching for the next matching filter without sending the notification message, set the **Do not create incidents** option.
+
+All preceding notifications that match the filters are sent until the breaking filter is matched.
+
+
+### Difference between notifications configuration: global, connection, default
+
+The notifications configuration provides two levels of settings:
+
+- global notifications configuration,
+- connection notifications configuration.
+
+The connection notifications have precedence over global notifications.
+
+This means setting the connection notifications will be verified first. When none of the filters from the connection notifications match the incident, then the global notification filters are verified.
+
+In final, when no filter matched the filters, neither connection nor global, or none of them broke searching for the next and no more filters were available,
+the verification process fails to use the **default notification** configuration in final.
+
+The default notification can be set on the connection notification and the global notification configuration as well but the **connection one has precedence over the global**.
+
+When the incident **does not match** any filter and no address is set in the default notification, **no notification will be sent**.
+
+The connection notification configuration can be reached in each of the created connections by clicking the **Data sources** in the menu.
+Then select a connection and click on the Notifications tab.
+
+![Connection notifications configuration](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/connection-notification-configuration.png){ loading=lazy; width="1200px" }
+
+
+### Email notifications
+
+The notification received through email contains the complete information about the incident.
+
+The incident notification email contains:
+
+
+| Field name              | Description                                                                                                                                                                    |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Full table name**     | Schema and table name affected by a data quality incident. The name is linked to the incident in the application.                                                              |
+| **Data source**         | Connection name affected by a data quality incident.                                                                                                                           |
+| **Last seen**           | The UTC timestamp when the data quality incident was last seen. Appears for all incident statuses except for open.                                                             |
+| **Quality dimension**   | The data quality dimension that was affected by a data quality incident.                                                                                                       |
+| **Check category**      | The data quality check category that was affected by a data quality incident.                                                                                                  |
+| **Highest severity**    | The highest severity of the failed check detected in this data quality incident. Possible values include warning, error and fatal.                                             |
+| **Failed checks count** | The total number of failed data quality checks that were seen when the incident was raised for the first time.                                                                 |
+| **Table priority**      | Shown when present. Table priority of the table that was affected by a data quality incident.                                                                                  |
+| **Issue url**           | Shown when present. The link (URL) to a ticket in an external system that is tracking this incident.                                                                           |
+| **Data group name**     | Shown when present. The data group name that was affected by a data quality incident.                                                                                          |
+| **Check type**          | Shown when present. The check type that was affected by a data quality incident.                                                                                               |
+| **Check name**          | Shown when present. The check name that was affected by a data quality incident.                                                                                               |
+| **Message**             | Shown when present. The additional message of the notification message configured by user from the filtered notifications. Default notification does not contain such a field. |
+
+
+The notification received via email looks as the below picture.
+
+![Email notification](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/email-notification.png){ loading=lazy; }
+
+
+### SMTP Server configuration
+
+Email notifications require to configure an SMTP Server for sending email messages.
+
+The configuration of the SMTP Server can be done by use of the **environment variables** or by setting the **local settings from userhome** directory. 
+
+The environment variables to be set are:
+
+
+| Environment variable         | Description                  |
+|------------------------------|------------------------------|
+| **DQO_SMTP_SERVER_HOST**     | The SMTP Server host address |
+| **DQO_SMTP_SERVER_PORT**     | The port for SMTP service    |
+| **DQO_SMTP_SERVER_USESSL**   | Use SSL flag (true / false)  |
+| **DQO_SMTP_SERVER_USERNAME** | User name                    |
+| **DQO_SMTP_SERVER_PASSWORD** | Password                     |
+
+
+The example of the SMTP Server configuration from the **.localsettings.dqopsettings.yaml** file
+
+```yaml
+spec:
+  smtp_server_configuration:
+    host: <host_address_here>
+    port: <port_number_here>
+    use_ssl: <true/false>
+    username: <user_name_here>
+    password: <password_here>
+```
+
+### Webhooks
+
 DQOps supports automation of the incident workflows by using notifications.
 Please read the description of integrating incidents with other systems using [webhooks](../integrations/webhooks/index.md).
 
-Incident notifications configured for [Slack](../integrations/slack/configuring-slack-notifications.md) will
-use formatted messages that are shown on the Slack channels as shown below.
+Incident notifications configured for [Slack](../integrations/slack/configuring-slack-notifications.md) 
+uses formatted messages that are shown on the Slack channels as shown below.
 
 ![slack-message-open](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-open.png)
 

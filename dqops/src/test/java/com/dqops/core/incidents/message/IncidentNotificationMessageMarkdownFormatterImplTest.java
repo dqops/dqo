@@ -83,6 +83,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
         assertEquals("""
                                > New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.
                                > \s
+                               > Data source: connection_name\s
                                > First seen: 2023-09-01 14:30:20 (GMT+2)\s
                                > Quality dimension: Reasonableness\s
                                > Check category: volume\s
@@ -112,6 +113,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
         assertEquals("""
                                > The incident in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table has been acknowledged.\s
                                > \s
+                               > Data source: connection_name\s
                                > First seen: 2023-09-01 14:30:20 (GMT+2)\s
                                > Last seen: 2023-09-01 14:30:20 (GMT+2)\s
                                > Quality dimension: Reasonableness\s
@@ -143,6 +145,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
         assertEquals("""
                                > The incident in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table has been acknowledged.\s
                                > \s
+                               > Data source: connection_name\s
                                > First seen: 2023-09-01 14:30:20 (GMT+2)\s
                                > Last seen: 2023-09-01 14:30:20 (GMT+2)\s
                                > Quality dimension: Reasonableness\s
@@ -174,6 +177,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
         assertEquals("""
                                > New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.
                                > \s
+                               > Data source: connection_name\s
                                > First seen: 2023-09-01 04:30:20 (GMT-8)\s
                                > Quality dimension: Reasonableness\s
                                > Check category: volume\s
@@ -204,6 +208,7 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
         assertEquals("""
                                > New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.
                                > \s
+                               > Data source: connection_name\s
                                > First seen: 2023-09-01 04:30:20 (GMT-8)\s
                                > Quality dimension: Reasonableness\s
                                > Check category: volume\s

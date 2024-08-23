@@ -65,6 +65,7 @@ The fields of a JSON payload include the following:
 | **failed_checks_count** | The total number of failed data quality checks that were seen when the incident was raised for the first time.                                                                                                                                                                                              | String   |
 | **issue_url**           | The link (URL) to a ticket in an external system that is tracking this incident.                                                                                                                                                                                                                            | String   |
 | **status**              | Possible values for incident status include open, acknowledged, resolved and muted.                                                                                                                                                                                                                         | String   |
+| **message**             | Additional message of the notification message configured by user from the filtered notifications. Default notificaitons does not contain such field.                                                                                                                                                       | String   |
 | **text**                | Notification text in Markdown format that contains the most important fields from the payload.                                                                                                                                                                                                              | String   |
 
 
@@ -85,6 +86,7 @@ The json object presents as below:
     "highest_severity": 3,
     "failed_checks_count": 10,
     "status": "acknowledged",
+    "message": "An informative message about the incident",
     "text": "> *The incident in <http://localhost:8888/sources/connection/first-connection/schema/maven_restaurant_ratings/table/consumers/detail|maven_restaurant_ratings.consumers> table has been acknowledged.* \n>  \n> *First seen*: 2023-09-04 12:13:19 (GTM+2) \n> *Last seen*: 2023-09-04 14:35:51 (GTM+2) \n> *Quality dimension*: Reasonableness \n> *Check category*: volume \n> *Highest severity*: fatal \n> *Total data quality issues*: 10 \n>  \n> <http://localhost:8888/incidents/first-connection/2023/9/588af5cf-8ab9-a296-0af4-126772dbb2c7| *View in DQOps*> \n"
 }
 ```
@@ -109,6 +111,7 @@ Payload's text field is built with the use of the following data:
 - **Data quality dimension**: Name of the dimension. [Read more](../../dqo-concepts/data-quality-dimensions.md)
 - **Highest severity level**: A severity level from the data quality rule. [Read more](../../dqo-concepts/definition-of-data-quality-checks/index.md)
 - **Total data quality issues**: A value from failedChecksCount JSON field.
+- **Message**: Additional message of the notification message configured by user from the filtered notifications. Default notifications does not contain such field.
 - **Links**: Quick access links.
  
 **Links**
@@ -157,3 +160,4 @@ Adding an Issue URL to an incident provides easy access to the issue in the tick
 - Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
 - Learn how the [data quality incident workflow](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md) is managed
   by DQOps by grouping similar data quality issues into data quality incidents.
+- Learn about data quality incident management, grouping and notifications [grouping-data-quality-issues-to-incidents.md](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md)

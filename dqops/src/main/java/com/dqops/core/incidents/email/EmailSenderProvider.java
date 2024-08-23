@@ -11,7 +11,7 @@ public interface EmailSenderProvider {
     /**
      * Sets JavaMailSender with the SmtpServerConfigurationSpec values.
      * @param smtpServerConfiguration SMTP server configuration.
-     * @return
+     * @return JavaMailSender with incident notifications' configuration.
      */
     JavaMailSender configureJavaMailSender(SmtpServerConfigurationSpec smtpServerConfiguration);
 
