@@ -36,6 +36,7 @@ import com.dqops.data.readouts.services.SensorReadoutsDeleteService;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
 import com.dqops.data.statistics.services.StatisticsDeleteService;
 import com.dqops.metadata.search.TableSearchFilters;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -232,11 +233,18 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
             DeleteStoredDataResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter(), userIdentity);
             result.concat(sensorReadoutsResult);
         }
-        if (this.deletionParameters.isDeleteErrorSamples()){
+        if (this.deletionParameters.isDeleteErrorSamples()) {
             DeleteStoredDataResult errorSamplesResult = this.errorSamplesDeleteService.deleteSelectedErrorSamplesFragment(this.getErrorsSamplesFragmentFilter(), userIdentity);
             result.concat(errorSamplesResult);
         }
-        if (this.deletionParameters.isDeleteIncidents()){
+        if (this.deletionParameters.isDeleteIncidents() &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCheckName()) &&   // delete incidents only when no specific filters are present, filtering values that are not stored in an incident's row, to avoid deleting too much data
+                (this.deletionParameters.getColumnNames() == null || this.deletionParameters.getColumnNames().isEmpty()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getSensorName()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCollectorCategory()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCollectorName()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCollectorTarget()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getTableComparisonName())) {
             DeleteStoredDataResult incidentsResult = this.incidentsDeleteService.deleteSelectedIncidentsFragment(this.getIncidentsFragmentFilter(), userIdentity);
             result.concat(incidentsResult);
         }

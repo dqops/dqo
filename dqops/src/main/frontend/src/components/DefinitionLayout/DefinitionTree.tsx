@@ -77,9 +77,12 @@ export const DefinitionTree = () => {
     toggleTree(tabs);
   }, [activeTab]);
 
-  const highlightedNode = urlencodeEncoder(
-    activeTab?.split('/').at(activeTab?.split('/').length - 1)
-  );
+  const highlightedNode =
+    activeTab && typeof activeTab === 'string'
+      ? urlencodeEncoder(
+          activeTab?.split('/')?.at(activeTab?.split('/')?.length - 1)
+        )
+      : false;
 
   const renderSensorFolderTree = (
     folder?: SensorFolderModel,

@@ -34,7 +34,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_column_cast_to_string('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_column_cast_to_string('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -49,7 +49,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -64,7 +64,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -79,7 +79,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -94,7 +94,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -114,7 +114,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -130,7 +130,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -152,7 +152,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -167,7 +167,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -182,7 +182,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -197,7 +197,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
-            LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LEN( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LEN( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -213,7 +213,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         MAX(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -260,7 +260,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_column_cast_to_string('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_column_cast_to_string('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_column_cast_to_string('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -275,7 +275,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -290,7 +290,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -305,7 +305,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -320,7 +320,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -340,7 +340,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -356,7 +356,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -378,7 +378,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -393,7 +393,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -408,7 +408,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -423,7 +423,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LEN( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LEN( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LEN( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -439,7 +439,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         MIN(
-            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + 1
+            LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) - LENGTH( REPLACE(TRIM({{lib.render_target_column('analyzed_table')}}), ' ', '') ) + CASE WHEN LENGTH( TRIM({{lib.render_target_column('analyzed_table')}}) ) > 0 THEN 1 ELSE 0 END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

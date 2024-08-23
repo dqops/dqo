@@ -6,15 +6,16 @@ import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setHomeFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
-import ColumnListView from '../ColumnListView/ColumnListView';
+import DataQualitySummary from '../DataQualitySummary';
 import GlobalIncidents from '../GlobalIncidents';
-import TableListView from '../TableListView/TableListView';
 import StaticHomePage from './StaticHomePage';
 
 const tabs = [
   { label: 'Home', value: '/home' },
-  { label: 'Tables', value: '/tables' },
-  { label: 'Columns', value: '/columns' },
+  {
+    label: 'Data quality summary',
+    value: '/data-quality-summary'
+  },
   {
     label: 'Incidents summary',
     value: '/global-incidents'
@@ -59,8 +60,7 @@ const HomePage = () => {
       </div>
       <div className="mt-24.5">
         {activeTab === '/home' && <StaticHomePage />}
-        {activeTab === '/tables' && <TableListView />}
-        {activeTab === '/columns' && <ColumnListView />}
+        {activeTab === '/data-quality-summary' && <DataQualitySummary />}
         {activeTab === '/global-incidents' && <GlobalIncidents />}
         {/* {activeTab === '/global-incidents?groupBy=category' && (
         <GlobalIncidents groupBy="category" />

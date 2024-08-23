@@ -1481,6 +1481,9 @@ from .import_tables_queue_job_result import ImportTablesQueueJobResult
 from .import_tables_result import ImportTablesResult
 from .incident_counts_model import IncidentCountsModel
 from .incident_daily_issues_count import IncidentDailyIssuesCount
+from .incident_filtered_notification_location import (
+    IncidentFilteredNotificationLocation,
+)
 from .incident_grouping_level import IncidentGroupingLevel
 from .incident_issue_histogram_model import IncidentIssueHistogramModel
 from .incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
@@ -2648,6 +2651,7 @@ __all__ = (
     "ImportTablesResult",
     "IncidentCountsModel",
     "IncidentDailyIssuesCount",
+    "IncidentFilteredNotificationLocation",
     "IncidentGroupingLevel",
     "IncidentIssueHistogramModel",
     "IncidentIssueHistogramModelChecks",

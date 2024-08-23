@@ -86,12 +86,12 @@ class CheckModel:
             before the data quality check can be executed.
         similar_checks (Union[Unset, List['SimilarCheckModel']]): List of similar checks in other check types or in
             other time scales.
+        check_hash (Union[Unset, int]): The check hash code that identifies the check instance.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
         can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
         can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
         similar_profiling_check (Union[Unset, SimilarCheckModel]): Model that identifies a similar check in another
             category or another type of check (monitoring, partition).
-        check_hash (Union[Unset, int]): The check hash code that identifies the check instance.
     """
 
     check_name: Union[Unset, str] = UNSET
@@ -124,11 +124,11 @@ class CheckModel:
     check_target: Union[Unset, CheckTargetModel] = UNSET
     configuration_requirements_errors: Union[Unset, List[str]] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
+    check_hash: Union[Unset, int] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
     similar_profiling_check: Union[Unset, "SimilarCheckModel"] = UNSET
-    check_hash: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -213,14 +213,13 @@ class CheckModel:
 
                 similar_checks.append(similar_checks_item)
 
+        check_hash = self.check_hash
         can_edit = self.can_edit
         can_run_checks = self.can_run_checks
         can_delete_data = self.can_delete_data
         similar_profiling_check: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.similar_profiling_check, Unset):
             similar_profiling_check = self.similar_profiling_check.to_dict()
-
-        check_hash = self.check_hash
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -287,6 +286,8 @@ class CheckModel:
             )
         if similar_checks is not UNSET:
             field_dict["similar_checks"] = similar_checks
+        if check_hash is not UNSET:
+            field_dict["check_hash"] = check_hash
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
         if can_run_checks is not UNSET:
@@ -295,8 +296,6 @@ class CheckModel:
             field_dict["can_delete_data"] = can_delete_data
         if similar_profiling_check is not UNSET:
             field_dict["similar_profiling_check"] = similar_profiling_check
-        if check_hash is not UNSET:
-            field_dict["check_hash"] = check_hash
 
         return field_dict
 
@@ -447,6 +446,8 @@ class CheckModel:
 
             similar_checks.append(similar_checks_item)
 
+        check_hash = d.pop("check_hash", UNSET)
+
         can_edit = d.pop("can_edit", UNSET)
 
         can_run_checks = d.pop("can_run_checks", UNSET)
@@ -461,8 +462,6 @@ class CheckModel:
             similar_profiling_check = SimilarCheckModel.from_dict(
                 _similar_profiling_check
             )
-
-        check_hash = d.pop("check_hash", UNSET)
 
         check_model = cls(
             check_name=check_name,
@@ -495,11 +494,11 @@ class CheckModel:
             check_target=check_target,
             configuration_requirements_errors=configuration_requirements_errors,
             similar_checks=similar_checks,
+            check_hash=check_hash,
             can_edit=can_edit,
             can_run_checks=can_run_checks,
             can_delete_data=can_delete_data,
             similar_profiling_check=similar_profiling_check,
-            check_hash=check_hash,
         )
 
         check_model.additional_properties = d

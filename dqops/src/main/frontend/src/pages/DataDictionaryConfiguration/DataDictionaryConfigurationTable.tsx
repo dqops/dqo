@@ -1,15 +1,18 @@
+import { IconButton } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataDictionaryListModel } from '../../api';
-import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SvgIcon from '../../components/SvgIcon';
-import { addFirstLevelTab } from '../../redux/actions/definition.actions';
+import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { DataDictionaryApiClient } from '../../services/apiClient';
-import { ROUTES } from '../../shared/routes';
 
-export default function DataDictionaryConfigurationTable() {
+export default function DataDictionaryConfigurationTable({
+  setDictionaryToEdit
+}: {
+  setDictionaryToEdit: (value: string) => void;
+}) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [loading, setLoading] = useState(false);
@@ -18,6 +21,8 @@ export default function DataDictionaryConfigurationTable() {
   );
   const [selectedDictionaryToDelete, setSelectedDictionaryToDelete] =
     useState('');
+  const { activeTab } = useSelector((state: IRootState) => state.definition);
+
   const dispatch = useDispatch();
 
   const getAllDictionaries = async () => {
@@ -29,16 +34,8 @@ export default function DataDictionaryConfigurationTable() {
   };
 
   const updateDataDictionary = async (dictionary_name: string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.DATA_DICTIONARY_DETAIL(dictionary_name),
-        value: ROUTES.DATA_DICTIONARY_VALUE(dictionary_name),
-        label: 'Edit dictionary',
-        state: {
-          dictionary_name
-        }
-      })
-    );
+    dispatch(updateTabLabel(dictionary_name, activeTab ?? ''));
+    setDictionaryToEdit(dictionary_name);
   };
 
   const deleteDictionary = async (dictionary: string) => {
@@ -76,36 +73,47 @@ export default function DataDictionaryConfigurationTable() {
           <td className="px-6 py-2 text-left block w-100 italic">
             {'${dictionary://' + dictionary.dictionary_name + '}'}
           </td>
-          <td className="px-6 py-2 text-left block max-w-100">
-            <Button
-              label="Edit"
-              variant="text"
-              color="primary"
+          <td className="px-2 py-2 text-left block max-w-100">
+            <IconButton
+              size="sm"
               onClick={() =>
                 updateDataDictionary(dictionary.dictionary_name ?? '')
               }
+              color="teal"
+              className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
               disabled={userProfile.can_manage_definitions !== true}
-            />
+            >
+              <SvgIcon name="edit" className="w-4" />
+            </IconButton>
           </td>
-          <td className="px-6 py-2 text-left block max-w-100">
-            <Button
-              label="Delete"
-              variant="text"
-              color="primary"
+          <td className="px-2 py-2 text-left block max-w-100">
+            <IconButton
+              size="sm"
               onClick={() =>
                 setSelectedDictionaryToDelete(dictionary.dictionary_name ?? '')
               }
               disabled={userProfile.can_manage_definitions !== true}
-            />
+              color="teal"
+              className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+            >
+              <SvgIcon name="delete" className="w-4" />
+            </IconButton>
           </td>
-          <td className="px-6 py-2 text-left block max-w-100">
+          <td className="px-2 py-2 text-left block max-w-100">
             <a
               href={`/api/dictionaries/${dictionary.dictionary_name}/download`}
               rel="noreferrer"
               target="_blank"
               className="text-teal-500"
             >
-              Download
+              <IconButton
+                size="sm"
+                disabled={userProfile.can_manage_definitions !== true}
+                color="teal"
+                className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+              >
+                <SvgIcon name="download" className="w-4" />
+              </IconButton>
             </a>
           </td>
         </tr>

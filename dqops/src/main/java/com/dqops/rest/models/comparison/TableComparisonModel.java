@@ -254,7 +254,7 @@ public class TableComparisonModel {
         }};
 
         tableComparisonModel.compareTableCleanDataJobTemplate =
-                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(tableComparisonModel.compareTableRunChecksJobTemplate, false);
+                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(tableComparisonModel.compareTableRunChecksJobTemplate, false, false);
 
         return tableComparisonModel;
     }

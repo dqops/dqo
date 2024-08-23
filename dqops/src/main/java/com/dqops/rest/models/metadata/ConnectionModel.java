@@ -288,6 +288,8 @@ public class ConnectionModel {
                 setDeleteErrors(true);
                 setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
+                setDeleteErrorSamples(true);
+                setDeleteIncidents(true);
             }});
         }};
     }

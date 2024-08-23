@@ -28,7 +28,8 @@ class FilteredNotificationModel:
         process_additional_filters (Union[Unset, bool]): Flag to break sending next notifications. Setting to true
             allows to send next notification from the list in priority order that matches the filter.
         disabled (Union[Unset, bool]): Flag to turn off the notification filter.
-        description (Union[Unset, str]): Description.
+        message (Union[Unset, str]): Message with the details of the filtered notification such as purpose explanation,
+            SLA note, etc.
         do_not_create_incidents (Union[Unset, bool]): The doNotCreateIncidents flag that excludes from the creation of
             incidents that match the filters.
     """
@@ -39,7 +40,7 @@ class FilteredNotificationModel:
     priority: Union[Unset, int] = UNSET
     process_additional_filters: Union[Unset, bool] = UNSET
     disabled: Union[Unset, bool] = UNSET
-    description: Union[Unset, str] = UNSET
+    message: Union[Unset, str] = UNSET
     do_not_create_incidents: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -56,7 +57,7 @@ class FilteredNotificationModel:
         priority = self.priority
         process_additional_filters = self.process_additional_filters
         disabled = self.disabled
-        description = self.description
+        message = self.message
         do_not_create_incidents = self.do_not_create_incidents
 
         field_dict: Dict[str, Any] = {}
@@ -74,8 +75,8 @@ class FilteredNotificationModel:
             field_dict["process_additional_filters"] = process_additional_filters
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
-        if description is not UNSET:
-            field_dict["description"] = description
+        if message is not UNSET:
+            field_dict["message"] = message
         if do_not_create_incidents is not UNSET:
             field_dict["do_not_create_incidents"] = do_not_create_incidents
 
@@ -111,7 +112,7 @@ class FilteredNotificationModel:
 
         disabled = d.pop("disabled", UNSET)
 
-        description = d.pop("description", UNSET)
+        message = d.pop("message", UNSET)
 
         do_not_create_incidents = d.pop("do_not_create_incidents", UNSET)
 
@@ -122,7 +123,7 @@ class FilteredNotificationModel:
             priority=priority,
             process_additional_filters=process_additional_filters,
             disabled=disabled,
-            description=description,
+            message=message,
             do_not_create_incidents=do_not_create_incidents,
         )
 

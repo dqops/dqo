@@ -13,6 +13,7 @@ import {
   FilteredNotificationsConfigurationsClient,
   SettingsApi
 } from '../../services/apiClient';
+import { sortPatterns } from '../../utils';
 type TNotificationPattern = FilteredNotificationModel & {
   connection?: string;
   schema?: string;
@@ -94,7 +95,9 @@ export default function DefaultWebhooksDetail() {
             checkType: x.filter?.checkType || ''
           };
         });
-        setFilteredNotifications(patterns);
+        const sortedPatterns = sortPatterns(patterns, 'priority', 'asc');
+
+        setFilteredNotifications(sortedPatterns);
       }
     );
   };
@@ -106,11 +109,15 @@ export default function DefaultWebhooksDetail() {
 
   const createNotificationPattern = () => {
     setAddNotificationPattern(true);
-    dispatch(updateTabLabel('New default notification', activeTab ?? ''));
+    dispatch(updateTabLabel('New filtered notification', activeTab ?? ''));
   };
 
   const onBack = () => {
-    dispatch(updateTabLabel('Default notifications', activeTab ?? ''));
+    dispatch(
+      updateTabLabel('Global incident notifications', activeTab ?? '', {
+        incidentFilters: undefined
+      })
+    );
 
     setPatternNameEdit('');
     setAddNotificationPattern(false);
@@ -152,8 +159,14 @@ export default function DefaultWebhooksDetail() {
           <div className="flex justify-between px-4 border-b border-gray-300 h-14 items-center flex-shrink-0">
             <div className="flex items-center justify-between w-full">
               <div className="text-lg font-semibold truncate">
-                Default incident notification configuration
+                Global incident notification configuration
               </div>
+              <Button
+                label="Add notification filter"
+                onClick={createNotificationPattern}
+                color="primary"
+                className="!w-44 !my-5"
+              />
             </div>
           </div>
           <div className="flex flex-col px-4 py-2">
@@ -161,12 +174,6 @@ export default function DefaultWebhooksDetail() {
               filteredNotificationsConfigurations={filteredNotifications}
               onChange={setFilteredNotifications}
               setPatternNameEdit={onCHangePatternNameToEdit}
-            />
-            <Button
-              label="Add notification filter"
-              onClick={createNotificationPattern}
-              color="primary"
-              className="!w-50 !my-5"
             />
           </div>
         </div>

@@ -456,8 +456,13 @@ export const toggleFirstLevelFolder = (
   data
 });
 
-export const updateTabLabel = (label: string, activeTab: string) => ({
+export const updateTabLabel = (
+  label: string,
+  activeTab: string,
+  state?: any
+) => ({
   type: DEFINITION_ACTION.UPDATE_TAB_LABEL,
   label,
-  activeTab
+  activeTab,
+  state
 });

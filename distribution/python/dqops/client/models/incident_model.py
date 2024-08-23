@@ -3,6 +3,9 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.incident_filtered_notification_location import (
+    IncidentFilteredNotificationLocation,
+)
 from ..models.incident_status import IncidentStatus
 from ..types import UNSET, Unset
 
@@ -44,6 +47,8 @@ class IncidentModel:
             incident was raised for the first time.
         issue_url (Union[Unset, str]): The link (url) to a ticket in an external system that is tracking this incident.
         status (Union[Unset, IncidentStatus]):
+        notification_name (Union[Unset, str]): Matching filtered notification for this incident.
+        notification_location (Union[Unset, IncidentFilteredNotificationLocation]):
     """
 
     incident_id: Union[Unset, str] = UNSET
@@ -67,6 +72,8 @@ class IncidentModel:
     failed_checks_count: Union[Unset, int] = UNSET
     issue_url: Union[Unset, str] = UNSET
     status: Union[Unset, IncidentStatus] = UNSET
+    notification_name: Union[Unset, str] = UNSET
+    notification_location: Union[Unset, IncidentFilteredNotificationLocation] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -93,6 +100,11 @@ class IncidentModel:
         status: Union[Unset, str] = UNSET
         if not isinstance(self.status, Unset):
             status = self.status.value
+
+        notification_name = self.notification_name
+        notification_location: Union[Unset, str] = UNSET
+        if not isinstance(self.notification_location, Unset):
+            notification_location = self.notification_location.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -139,6 +151,10 @@ class IncidentModel:
             field_dict["issueUrl"] = issue_url
         if status is not UNSET:
             field_dict["status"] = status
+        if notification_name is not UNSET:
+            field_dict["notificationName"] = notification_name
+        if notification_location is not UNSET:
+            field_dict["notificationLocation"] = notification_location
 
         return field_dict
 
@@ -192,6 +208,17 @@ class IncidentModel:
         else:
             status = IncidentStatus(_status)
 
+        notification_name = d.pop("notificationName", UNSET)
+
+        _notification_location = d.pop("notificationLocation", UNSET)
+        notification_location: Union[Unset, IncidentFilteredNotificationLocation]
+        if isinstance(_notification_location, Unset):
+            notification_location = UNSET
+        else:
+            notification_location = IncidentFilteredNotificationLocation(
+                _notification_location
+            )
+
         incident_model = cls(
             incident_id=incident_id,
             connection=connection,
@@ -214,6 +241,8 @@ class IncidentModel:
             failed_checks_count=failed_checks_count,
             issue_url=issue_url,
             status=status,
+            notification_name=notification_name,
+            notification_location=notification_location,
         )
 
         incident_model.additional_properties = d

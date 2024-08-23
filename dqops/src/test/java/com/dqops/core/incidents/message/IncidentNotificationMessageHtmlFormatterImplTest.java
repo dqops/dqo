@@ -97,6 +97,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                                     <div class="content">
                                         <p><b>New incident detected in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table.</b></p>
                                         <p></p>
+                                        <p><b>Data source:</b> connection_name</p>
                                         <p><b>First seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
                                         <p><b>Quality dimension:</b> Reasonableness</p>
                                         <p><b>Check category:</b> volume</p>
@@ -180,6 +181,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
                                         <p></p>
+                                        <p><b>Data source:</b> connection_name</p>
                                         <p><b>First seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
                                         <p><b>Last seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
                                         <p><b>Quality dimension:</b> Reasonableness</p>
@@ -264,6 +266,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
                                         <p></p>
+                                        <p><b>Data source:</b> connection_name</p>
                                         <p><b>First seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
                                         <p><b>Last seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
                                         <p><b>Quality dimension:</b> Reasonableness</p>
@@ -349,6 +352,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
                                         <p></p>
+                                        <p><b>Data source:</b> connection_name</p>
                                         <p><b>First seen:</b> 2023-09-01 04:30:20 (GMT-8)</p>
                                         <p><b>Last seen:</b> 2023-09-01 04:30:20 (GMT-8)</p>
                                         <p><b>Quality dimension:</b> Reasonableness</p>
@@ -434,6 +438,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
                                         <p></p>
+                                        <p><b>Data source:</b> connection_name</p>
                                         <p><b>First seen:</b> 2023-09-01 04:30:20 (GMT-8)</p>
                                         <p><b>Last seen:</b> 2023-09-01 04:30:20 (GMT-8)</p>
                                         <p><b>Quality dimension:</b> Reasonableness</p>

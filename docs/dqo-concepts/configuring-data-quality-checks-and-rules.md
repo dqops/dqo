@@ -817,6 +817,7 @@ To learn more about [configuring multiple data quality checks](../working-with-d
 
 ## What's next
 
+- Data quality checks do not need to be configured manually. Learn how the [data quality rule mining](data-quality-rule-mining.md) engine can automatically propose and configure data quality checks to detect the most common data quality issues.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
 - DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](types-of-data-quality-dashboards.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).

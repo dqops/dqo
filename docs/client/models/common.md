@@ -366,6 +366,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">[`check_target`](#checktargetmodel)</span>|Type of the check's target (column, table).|*[CheckTargetModel](#checktargetmodel)*|
 |<span class="no-wrap-code">`configuration_requirements_errors`</span>|List of configuration errors that must be fixed before the data quality check can be executed.|*List[string]*|
 |<span class="no-wrap-code">`similar_checks`</span>|List of similar checks in other check types or in other time scales.|*List[[SimilarCheckModel](#similarcheckmodel)]*|
+|<span class="no-wrap-code">`check_hash`</span>|The check hash code that identifies the check instance.|*long*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can edit the check.|*boolean*|
 |<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
 |<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|

@@ -426,7 +426,11 @@ const definitionReducer = (state = initialState, action: any) => {
           item.url === action.activeTab
             ? {
                 ...item,
-                label: action.label
+                label: action.label,
+                state: {
+                  ...item.state,
+                  ...action.state
+                }
               }
             : item
         )

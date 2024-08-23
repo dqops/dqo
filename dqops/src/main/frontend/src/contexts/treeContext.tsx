@@ -1248,7 +1248,7 @@ function TreeProvider(props: any) {
         checkType,
         connectionNode?.label ?? '',
         node.label,
-        'tables'
+        'data-quality-summary'
       );
       const value = ROUTES.SCHEMA_LEVEL_VALUE(
         checkType,
@@ -1276,7 +1276,7 @@ function TreeProvider(props: any) {
           checkType,
           connectionNode?.label ?? '',
           node.label,
-          'tables'
+          'data-quality-summary'
         )
       );
     } else if (node.level === TREE_LEVEL.TABLE) {

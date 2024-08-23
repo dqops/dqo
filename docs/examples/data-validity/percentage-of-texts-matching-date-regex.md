@@ -22,20 +22,20 @@ The `source_date` column contains non-standard date format. We want to verify th
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
-[text_matching_date_pattern_percent](../../checks/column/patterns/text-matching-date-pattern-percent.md) column check.
-Our goal is to verify if the percentage of values matches the indicated by the user date format on `source_date` column does not fall below the set thresholds.
+[text_not_matching_date_pattern_percent](../../checks/column/patterns/text-not-matching-date-pattern-percent.md) column check.
+Our goal is to verify if the percentage of invalid values that are not matching the user expected date format on the `source_date` column does not exceed the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
-- warning: 99.0%
-- error: 98.0%
-- fatal: 95.0%
+- warning: 1.0%
+- error: 2.0%
+- fatal: 5.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of data falls below 99.0%, a warning alert will be triggered.
+If the percentage of data exceed 1.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -211,15 +211,15 @@ spec:
       monitoring_checks:
         daily:
           patterns:
-            daily_text_matching_date_pattern_percent:
+            daily_text_not_matching_date_pattern_percent:
               parameters:
                 date_format: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 
 ```
 ## Run the checks in the example using the DQOps Shell
@@ -262,45 +262,41 @@ SELECT
         WHEN COUNT(analyzed_table.`source_date`) = 0 THEN NULL
         ELSE 100.0 * SUM(
             CASE
-                WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`source_date`) IS NOT NULL
+                WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`source_date`) IS NULL
                     THEN 1
                 ELSE 0
             END
-        ) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        ) / COUNT(analyzed_table.`source_date`)
+    END AS actual_value
 FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 0.0%, which is below the minimum
-threshold level set in the Fatal error (95.0%).
+You can also see the results returned by the sensor. The actual value in this example is 100.0%, which is above the minimum
+threshold level set in the Fatal error (5.0% of invalid records).
 
 ```
 **************************************************
-Finished executing a sensor for a check text_matching_date_pattern_percent on the table america_health_rankings.ahr using a sensor definition column/patterns/text_matching_date_pattern_percent, sensor result count: 1
+Finished executing a sensor for a check text_not_matching_date_pattern_percent on the table america_health_rankings.ahr using a sensor definition column/patterns/text_not_matching_date_pattern_percent, sensor result count: 1
 
 Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|0.0         |2023-04-26T11:01:24.538Z|2023-04-26T11:01:24.538Z|
-+------------+------------------------+------------------------+
++------------+
+|actual_value|
++------------+
+|100.0       |
++------------+
 **************************************************
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
-By using the [text_matching_date_pattern_percent](../../checks/column/patterns/text-matching-date-pattern-percent.md) column check, we can monitor that
+By using the [text_not_matching_date_pattern_percent](../../checks/column/patterns/text-not-matching-date-pattern-percent.md) column check, we can monitor that
 the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage. 
 If it does, you will get a warning, error or fatal results.
 
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
-- For details on the [text_matching_date_pattern_percent check used in this example, go to the check details section](../../checks/column/patterns/text-matching-date-pattern-percent.md).
+- For details on the [text_not_matching_date_pattern_percent check used in this example, go to the check details section](../../checks/column/patterns/text-not-matching-date-pattern-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid currency code strings in the monitored column does not fall below set thresholds.](./percentage-of-valid-currency-codes.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

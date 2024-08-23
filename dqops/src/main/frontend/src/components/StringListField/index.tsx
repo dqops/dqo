@@ -39,7 +39,11 @@ const StringListField = ({
   const handleSave = () => {
     if (convertToDictionary) {
       saveDictionary();
-      onChange(['${dictionary://' + dictionary + '}']);
+      onChange([
+        '${dictionary://' +
+          (dictionary?.includes('.csv') ? dictionary : dictionary + '.csv') +
+          '}'
+      ]);
 
       setConvertToDictionary(false);
       setDictionaryExistError(false);

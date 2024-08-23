@@ -28,6 +28,11 @@ DQOps has three types of data quality checks:
   incrementally any table that has a date column.
 
 
+### **[User interface overview](dqops-user-interface-overview.md)**
+The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
+Configuring data quality checks on multiple tables at the same time is supported in separate tabs.
+
+
 ### **[Configuring data sources](configuring-data-sources.md)**
 DQOps stores the data source configuration and the metadata of imported tables in YAML files.
 The files are stored in the current folder, called the [`DQOps user home`](dqops-user-home-folder.md). 
@@ -65,6 +70,11 @@ are shown by Visual Studio Code and many other editors when editing DQOps YAML f
 ### **[Running data quality checks](running-data-quality-checks.md)**
 Data quality checks configured for each table and column are executed by targeting the data source, table, column,
 check name, check type, check category or even labels assigned to tables or columns.
+
+
+### **[Data quality rule mining](data-quality-rule-mining.md)**
+DQOps supports data quality rule mining, a feature that uses statistics and sample data to automatically configure data quality checks,
+which will detect the most common data quality issues without manual configuration.
 
 
 ### **[Data observability](data-observability.md)**
@@ -165,11 +175,6 @@ A column that identifies a country must be present in the table and data groupin
 
 Data grouping allows detecting data quality issues for groups of rows loaded by different data streams,
 different data pipelines, or received from different vendors or departments.
-
-
-### **[User interface overview](dqops-user-interface-overview.md)**
-The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
-Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
 
 
 ### **[Command-line interface](command-line-interface.md)**
