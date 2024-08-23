@@ -65,12 +65,12 @@ const initSourceTabs = [
     value: 'data-groupings'
   },
   {
-    label: 'Incident grouping',
-    value: 'incident-grouping'
+    label: 'Incidents grouping',
+    value: 'incidents-grouping'
   },
   {
-    label: 'Filtered notifications',
-    value: 'filtered-notifications'
+    label: 'Notifications',
+    value: 'notifications'
   }
 ];
 const initCheckTabs = [
@@ -226,8 +226,8 @@ const ConnectionPage = () => {
         {activeTab === 'data-groupings' && (
           <ConnectionDefaultGroupingConfiguration />
         )}
-        {activeTab === 'incident-grouping' && <IncidentsNotificationsView />}
-        {activeTab === 'filtered-notifications' && (
+        {activeTab === 'incidents-grouping' && <IncidentsNotificationsView />}
+        {activeTab === 'notifications' && (
           <FilteredNotificationsView />
         )}
         {/* {activeTab === 'tables' && <TableListView />}

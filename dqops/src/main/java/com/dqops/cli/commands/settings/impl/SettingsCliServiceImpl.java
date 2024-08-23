@@ -350,7 +350,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 	 * Sets a new SMTP server configuration.
 	 * @param host SMTP server host.
 	 * @param port SMTP server port.
-	 * @param useSSL SMTP server useSSL.
+	 * @param useSsl SMTP server useSSL.
 	 * @param username SMTP server username.
 	 * @param password SMTP server password.
 	 * @return Cli operation status.
@@ -358,7 +358,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 	@Override
 	public CliOperationStatus setSmtpServerConfiguration(String host,
 														 String port,
-														 Boolean useSSL,
+														 Boolean useSsl,
 														 String username,
 														 String password){
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
@@ -377,7 +377,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		SmtpServerConfigurationSpec smtpServerConfigurationSpec = new SmtpServerConfigurationSpec() {{
 				setHost(host);
 				setPort(port);
-				setUseSSL(useSSL);
+				setUseSsl(useSsl);
 				setUsername(username);
 				setPassword(password);
 		}};
@@ -453,7 +453,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		StringBuilder textBuilder = new StringBuilder();
 		textBuilder.append(String.format("SMTP server host: %s\n", smtpServerConfiguration.getHost()));
 		textBuilder.append(String.format("SMTP server port: %s/%d\n", smtpServerConfiguration.getPort()));
-		textBuilder.append(String.format("SMTP server use SSL: %s\n", smtpServerConfiguration.getUseSSL()));
+		textBuilder.append(String.format("SMTP server use SSL: %s\n", smtpServerConfiguration.getUseSsl()));
 		textBuilder.append(String.format("SMTP server user name: %s\n", smtpServerConfiguration.getUsername()));
 		textBuilder.append(String.format("SMTP server password: %s\n", smtpServerConfiguration.getPassword()));
 
