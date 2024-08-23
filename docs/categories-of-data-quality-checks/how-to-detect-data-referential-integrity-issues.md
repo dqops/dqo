@@ -154,7 +154,7 @@ Our target of 100% rows containing valid country codes was missed by 0.0087%.
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Detecting missing keys using a lookup data quality check in DQOps - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min-error-sampling.png){ loading=lazy; width="1200px" }
 

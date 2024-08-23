@@ -109,7 +109,7 @@ is easy to activate. The parameter of the rule is the expected data type.
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Configure data type detection check in UI - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/assert-data-type-in-text-column-street-number-check-error-sampling.png){ loading=lazy; width="1200px" }
 

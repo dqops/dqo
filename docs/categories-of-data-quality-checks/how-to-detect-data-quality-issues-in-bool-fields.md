@@ -38,7 +38,7 @@ Both bool checks accept two optional rule parameters, which set the valid percen
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
 
 ### Enable bool checks in YAML

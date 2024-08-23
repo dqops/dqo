@@ -104,7 +104,7 @@ We can see that this public dataset contains a few phone numbers and emails.
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for PII check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section. 
+**Error sampling** tab in the results section. 
 
 ![Data quality checks editor with PII checks that found sensitive data - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-check-detecting-emails-and-phones-found-error-sampling.png){ loading=lazy; width="1200px" }
 

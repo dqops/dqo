@@ -199,7 +199,7 @@ takes one parameter **max_count**, which is the maximum accepted number of dupli
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for uniqueness checks.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Duplicate count data quality check in DQOps - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min-error-samples2.png){ loading=lazy; width="1200px" }
 

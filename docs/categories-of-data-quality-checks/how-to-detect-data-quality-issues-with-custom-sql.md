@@ -170,7 +170,7 @@ daily monitoring data quality check.
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Compare columns in a data quality check - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/compare-column-values-data-quality-check-in-editor-error-sampling.png){ loading=lazy; width="1200px" }
 

@@ -128,7 +128,7 @@ spec:
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 Let's modify the max_value parameter to 9. Running the checks resulted in warning. 
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Detect numeric values above a maximum accepted value using a data quality check - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-out-of-range-numeric-values-above-maximum-value-check-error-samples.png){ loading=lazy; width="1200px" }
 

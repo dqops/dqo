@@ -66,7 +66,7 @@ The default value of the *max_count* parameter is 0, which asserts that no null 
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Detect incomplete columns with some null values using a data quality check - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/incomplete-column-with-some-nulls-check-in-editor-error-sampling.png){ loading=lazy; width="1200px" }
 

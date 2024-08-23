@@ -41,7 +41,7 @@ The *max_percent* parameter controls the maximum accepted percentage of invalid 
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Date in the future invalid date - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-future-found-check-error-samples.png){ loading=lazy; width="1200px" }
 

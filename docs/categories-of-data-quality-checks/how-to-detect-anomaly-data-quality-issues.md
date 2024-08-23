@@ -81,7 +81,7 @@ The chart view shows all anomalies of the maximum value in the latitude column.
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section. For the Partition checks, samples are collected from entire table, not specific partition.
+**Error sampling** tab in the results section. For the Partition checks, samples are collected from entire table, not specific partition.
 
 ![Data anomalies in a mean value of latitude in partitions chart view - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-error-sampling.png){ loading=lazy; width="1200px" }
 
