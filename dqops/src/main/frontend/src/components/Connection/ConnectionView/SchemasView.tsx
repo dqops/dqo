@@ -97,7 +97,9 @@ const SchemasView = () => {
                   label={item.schema_name}
                   variant="text"
                   className="underline px-2 text-sm"
-                  onClick={() => goToTable(item.schema_name ?? '', 'tables')}
+                  onClick={() =>
+                    goToTable(item.schema_name ?? '', 'data-quality-summary')
+                  }
                 />
               </td>
               {isSourceScreen ? (
