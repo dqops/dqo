@@ -15,6 +15,7 @@ nav:
       - Review results on the dashboards: "getting-started/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
+      - Data quality rule mining: "dqo-concepts/data-quality-rule-mining.md"
       - What is a data quality check:
           - "dqo-concepts/definition-of-data-quality-checks/index.md"
           - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
@@ -25,7 +26,6 @@ nav:
       - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
       - Configuring data quality checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
       - Running data quality checks: "dqo-concepts/running-data-quality-checks.md"
-      - Data quality rule mining: "dqo-concepts/data-quality-rule-mining.md"
       - Data observability: "dqo-concepts/data-observability.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"
