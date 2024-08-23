@@ -138,7 +138,7 @@ When a single incident is clicked, DQOps shows the incident detail screen. The u
 to the clipboard and send to another DQOps user, who can review the issue. Also, the link is shown
 in the [Slack incident notifications](../integrations/slack/configuring-slack-notifications.md).
 
-![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen3.png){ loading=lazy; width="1200px" }
+![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen4.png){ loading=lazy; width="1200px" }
 
 The incident management screens are described in details on the 
 [working with incidents and notifications](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) page.
@@ -151,7 +151,7 @@ useful when you are actively working to resolve the underlying issue.
 To disable a check, click on the "Disable check" button in the top right corner of the Incident details screen.
 Once confirmed, the check will be temporarily stopped from executing.
 
-![Disabling check](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-button.png){ loading=lazy; width="1200px" }
+![Disabling check](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-button2.png){ loading=lazy; width="1200px" }
 
 You can verify that the check has been disabled by navigating to the check editor screen.
 
@@ -166,7 +166,7 @@ This can be helpful in situations where the check might be overly sensitive.
 Clicking the **Reconfigure** button will decrease the rule threshold for the data quality check that caused the incident by 30%. For more significant adjustments, you can click
 the **Recalibrate** button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
 
-![Reconfigure check button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button.png){ loading=lazy; width="1200px" }
+![Reconfigure check button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button2.png){ loading=lazy; width="1200px" }
 
 The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after reconfiguration. 
 Notice that the `min_count` rule has been reduced from 1000, to 700.
@@ -215,6 +215,25 @@ Notice that the `min_count` rule has been reduced from 1000, to 700.
               error:
                 min_count: 700
     ```
+
+
+### **Configure notification filter**
+
+To receive a notification for the incident, you can configure the notification by clicking the envelope icon.
+
+![Configure notification filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configure-notificaiton-filter.png){ loading=lazy; width="1200px" }
+
+If no incident has ever been configured you will see the popup message informing you to create a new notification filter.
+
+![Configure incident popup](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configure-incident-popup.png){ loading=lazy; }
+
+When approved, you are redirected to the page with the creation of the new incident notification filter.
+The configuration form is partially filled based on the incident's data.
+
+![New notification filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/new-notification-filter.png){ loading=lazy; width="1200px" }
+
+In case the incident matches any notification filter you have already configured.
+Clicking on the envelope opens the edit form for the first notification filter to which the incident matches.
 
 
 ## Incident notifications
@@ -280,7 +299,7 @@ When other filters are left empty, they are not taken into account and only non-
 
 Filters such as connection, schema, table, data group name and check name support search patterns in format prefix\*, \*suffix, prefix\*suffix.
 
-### The use of multiple notification filters
+### Multiple notification filters
 
 In the case of responsibility for the specific tables among different team members, more filtered notifications can be applied.
 
