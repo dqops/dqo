@@ -154,7 +154,7 @@ export default function TableQualityStatusColumnCategory({
               <div className="w-5 h-full"></div>
               <div
                 className={clsx(
-                  'h-8 w-32 flex justify-end  cursor-pointer',
+                  'h-8 w-32 flex justify-end  cursor-pointer relative',
                   getColor(columnStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
                   // isExtended && 'w-50'
@@ -165,33 +165,8 @@ export default function TableQualityStatusColumnCategory({
                     : {}
                 }
               >
-                {showTooltip && (
-                  <Tooltip
-                    content={renderTooltipContent(
-                      moment(columnCircleStatus.lastExecutedAt).format(
-                        'YYYY-MM-DD HH:mm:ss'
-                      ),
-                      columnCircleStatus.status,
-                      severityType
-                    )}
-                  >
-                    <div
-                      className={clsx(
-                        'h-4 w-4 ml-2 mt-2 mr-0.5',
-                        getColor(columnCircleStatus.status)
-                      )}
-                      style={{
-                        borderRadius: '6px',
-                        ...(getColor(columnCircleStatus.status) ===
-                        'bg-gray-150'
-                          ? backgroundStyle
-                          : {})
-                      }}
-                    ></div>
-                  </Tooltip>
-                )}
                 {showIcon && (
-                  <div className="flex items-center justify-center">
+                  <div className="absolute top-1 left-1">
                     <SvgIcon
                       name={
                         extendedChecks.some(
@@ -214,6 +189,31 @@ export default function TableQualityStatusColumnCategory({
                       )}
                     />
                   </div>
+                )}
+                {showTooltip && (
+                  <Tooltip
+                    content={renderTooltipContent(
+                      moment(columnCircleStatus.lastExecutedAt).format(
+                        'YYYY-MM-DD HH:mm:ss'
+                      ),
+                      columnCircleStatus.status,
+                      severityType
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'h-4 w-4 mr-2 mt-2 ml-0.5',
+                        getColor(columnCircleStatus.status)
+                      )}
+                      style={{
+                        borderRadius: '6px',
+                        ...(getColor(columnCircleStatus.status) ===
+                        'bg-gray-150'
+                          ? backgroundStyle
+                          : {})
+                      }}
+                    ></div>
+                  </Tooltip>
                 )}
               </div>
             </div>
