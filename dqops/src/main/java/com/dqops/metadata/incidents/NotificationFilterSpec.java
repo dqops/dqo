@@ -1,5 +1,6 @@
 package com.dqops.metadata.incidents;
 
+import com.dqops.checks.CheckType;
 import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.data.incidents.models.IncidentModel;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -53,7 +54,7 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String checkType;
+    private CheckType checkType;
 
     @JsonPropertyDescription("The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. " +
                              "This field supports search patterns such as: 'profiling_\\*', '\\*_count', 'profiling_\\*_percent'.")
@@ -198,7 +199,7 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
      * Returns a check type
      * @return Check type
      */
-    public String getCheckType() {
+    public CheckType getCheckType() {
         return checkType;
     }
 
@@ -206,7 +207,7 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
      * Sets a check type
      * @param checkType Check type
      */
-    public void setCheckType(String checkType) {
+    public void setCheckType(CheckType checkType) {
         this.setDirtyIf(!Objects.equals(this.checkType, checkType));
         this.checkType = checkType;
     }
@@ -358,12 +359,11 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
                 (Strings.isNullOrEmpty(this.getDataGroupName()) || this.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
                 (Strings.isNullOrEmpty(this.getQualityDimension()) || this.getQualityDimension().equals(message.getQualityDimension())) &&
                 (Strings.isNullOrEmpty(this.getCheckCategory()) || this.getCheckCategory().equals(message.getCheckCategory())) &&
-                (Strings.isNullOrEmpty(this.getCheckType()) || this.getCheckType().equals(message.getCheckType())) &&
+                (this.getCheckType() == null || this.getCheckType().equals(message.getCheckType())) &&
                 (Strings.isNullOrEmpty(this.getCheckName()) || this.getCheckNameSearchPattern().match(message.getCheckName())) &&
                 (this.getHighestSeverity() == null || this.getHighestSeverity().equals(message.getHighestSeverity()));
         return match;
     }
-
 
     /**
      * Filters a message by the filter parameters and decide if the incident notification message matches the filters.
@@ -378,7 +378,7 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
                 (Strings.isNullOrEmpty(this.getDataGroupName()) || this.getDataGroupNameSearchPattern().match(incidentModel.getDataGroup())) &&
                 (Strings.isNullOrEmpty(this.getQualityDimension()) || this.getQualityDimension().equals(incidentModel.getQualityDimension())) &&
                 (Strings.isNullOrEmpty(this.getCheckCategory()) || this.getCheckCategory().equals(incidentModel.getCheckCategory())) &&
-                (Strings.isNullOrEmpty(this.getCheckType()) || this.getCheckType().equals(incidentModel.getCheckType())) &&
+                (this.getCheckType() == null || this.getCheckType().equals(incidentModel.getCheckType())) &&
                 (Strings.isNullOrEmpty(this.getCheckName()) || this.getCheckNameSearchPattern().match(incidentModel.getCheckName())) &&
                 (this.getHighestSeverity() == null || this.getHighestSeverity().equals(incidentModel.getHighestSeverity()));
         return match;
