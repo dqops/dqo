@@ -18,13 +18,13 @@ export const getColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
       return 'bg-gray-150';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
-      return 'bg-red-300';
+      return 'bg-[#EF8079]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
-      return 'bg-orange-300';
+      return 'bg-[#EFB87E]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
-      return 'bg-yellow-300';
+      return 'bg-[#EFEC82]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
-      return 'bg-green-300';
+      return 'bg-[#5CBCAB]';
     default:
       return '';
   }
