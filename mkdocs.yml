@@ -25,6 +25,7 @@ nav:
       - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
       - Configuring data quality checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
       - Running data quality checks: "dqo-concepts/running-data-quality-checks.md"
+      - Data quality rule mining: "dqo-concepts/data-quality-rule-mining.md"
       - Data observability: "dqo-concepts/data-observability.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"

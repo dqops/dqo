@@ -6,6 +6,7 @@ import ConnectionCommentView from '../../components/Connection/ConnectionView/Co
 import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
 import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
 import ConnectionLabelsView from '../../components/Connection/ConnectionView/ConnectionLabelsView';
+import { FilteredNotificationsView } from '../../components/Connection/ConnectionView/FilteredNotificationsView';
 import { IncidentsNotificationsView } from '../../components/Connection/ConnectionView/IncidentsNotificationsView';
 import ScheduleDetail from '../../components/Connection/ConnectionView/ScheduleDetail';
 import SchemasView from '../../components/Connection/ConnectionView/SchemasView';
@@ -20,9 +21,7 @@ import {
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { getFirstLevelConnectionTab, useDecodedParams } from '../../utils';
-import ColumnListView from '../ColumnListView/ColumnListView';
-import TableListView from '../TableListView/TableListView';
-import { FilteredNotificationsView } from '../../components/Connection/ConnectionView/FilteredNotificationsView';
+import DataQualitySummary from '../DataQualitySummary';
 
 const initSourceTabs = [
   {
@@ -45,13 +44,21 @@ const initSourceTabs = [
     label: 'Schemas',
     value: 'schemas'
   },
+  // {
+  //   label: 'Tables',
+  //   value: 'tables'
+  // },
+  // {
+  //   label: 'Columns',
+  //   value: 'columns'
+  // },
   {
-    label: 'Tables',
-    value: 'tables'
+    label: 'Data quality summary',
+    value: 'data-quality-summary'
   },
   {
-    label: 'Columns',
-    value: 'columns'
+    label: 'Incident grouping',
+    value: 'incident-grouping'
   },
   {
     label: 'Default grouping template',
@@ -179,12 +186,8 @@ const ConnectionPage = () => {
         value: 'schemas'
       },
       {
-        label: 'Tables',
-        value: 'tables'
-      },
-      {
-        label: 'Columns',
-        value: 'columns'
+        label: 'Data quality summary',
+        value: 'data-quality-summary'
       }
     ];
     if (!newTabs.find((x) => x.value === activeTab)) {
@@ -227,8 +230,9 @@ const ConnectionPage = () => {
         {activeTab === 'notifications' && (
           <FilteredNotificationsView />
         )}
-        {activeTab === 'tables' && <TableListView />}
-        {activeTab === 'columns' && <ColumnListView />}
+        {/* {activeTab === 'tables' && <TableListView />}
+        {activeTab === 'columns' && <ColumnListView />} */}
+        {activeTab === 'data-quality-summary' && <DataQualitySummary />}
       </div>
     </>
   );

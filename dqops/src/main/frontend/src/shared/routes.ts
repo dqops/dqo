@@ -494,6 +494,7 @@ export const ROUTES = {
       '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/:column/partitioned/:timePartitioned/:category/:checkName',
     QUALITY_CHECKS: '/:checkTypes',
     HOME: '/home',
+    DATA_QUALITY_SUMMARY: '/data-quality-summary',
     TABLES: '/tables',
     COLUMNS: '/columns',
     GLOBAL_INCIDENTS: '/global-incidents',
