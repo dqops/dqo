@@ -11,7 +11,10 @@ import {
   TableColumnsStatisticsModel
 } from '../../api';
 import Checkbox from '../../components/Checkbox';
-import { getColor } from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
+import {
+  getColor,
+  getDimensionColor
+} from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
@@ -214,7 +217,7 @@ export default function TableColumnsBody({
                 const lastCheckExecutedAt =
                   column.dimentions?.[dimensionKey as any]
                     ?.last_check_executed_at;
-                const severityColor = getColor(currentSeverity as any);
+                const severityColor = getDimensionColor(currentSeverity as any);
                 const hasNoSeverity = severityColor.length === 0;
 
                 const dimensionsClassNames = clsx(

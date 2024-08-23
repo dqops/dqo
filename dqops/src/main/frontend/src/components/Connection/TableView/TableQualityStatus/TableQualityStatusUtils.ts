@@ -52,6 +52,29 @@ export const getSecondColor = (
       return '';
   }
 };
+export const getDimensionColor = (
+  status:
+    | CheckCurrentDataQualityStatusModelCurrentSeverityEnum
+    | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+    | null
+    | undefined
+) => {
+  // console.log(status)
+  switch (status) {
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
+      return 'bg-gray-150';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
+      return 'bg-[#E3170A]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
+      return 'bg-[#FF9900]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
+      return 'bg-[#EBE51E]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
+      return 'bg-[#029A80]';
+    default:
+      return '';
+  }
+};
 
 export const getColumnStatus = (
   severityType: 'current' | 'highest',
