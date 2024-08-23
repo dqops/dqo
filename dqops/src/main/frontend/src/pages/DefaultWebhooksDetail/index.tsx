@@ -120,7 +120,7 @@ export default function DefaultWebhooksDetail() {
 
   const createNotificationPattern = () => {
     setAddNotificationPattern(true);
-    dispatch(updateTabLabel('New default notification', activeTab ?? ''));
+    dispatch(updateTabLabel('New filtered notification', activeTab ?? ''));
   };
 
   const onBack = () => {

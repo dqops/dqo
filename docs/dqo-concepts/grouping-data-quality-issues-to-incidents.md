@@ -54,9 +54,9 @@ The following statuses are used in the data quality incident workflow.
 
 
 ## Grouping issues into incidents
-The **data quality incident** grouping level is configured on a connection level as shown on the *Incidents and Notifications* screen below.
+The **data quality incident** grouping level is configured on a connection level as shown on the *Incidents grouping* screen below.
 
-![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings2.png){ loading=lazy; width="1200px" }
+![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-grouping.png){ loading=lazy; width="1200px" }
 
 The following grouping levels are supported:
 
@@ -346,7 +346,10 @@ The incident notification email contains:
 | **Check name**          | Shown when present. The check name that was affected by a data quality incident.                                                                                               |
 | **Message**             | Shown when present. The additional message of the notification message configured by user from the filtered notifications. Default notification does not contain such a field. |
 
-![Email notification](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/email-notification.png){ loading=lazy; width="1200px" }
+
+The notification received via email looks as the below picture.
+
+![Email notification](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/email-notification.png){ loading=lazy; }
 
 
 ### SMTP Server configuration
