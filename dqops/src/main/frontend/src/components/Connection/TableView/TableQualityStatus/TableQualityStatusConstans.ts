@@ -20,6 +20,12 @@ export interface ITableParameters {
   severityType: 'current' | 'highest';
   tableDataQualityStatus: TableCurrentDataQualityStatusModel;
   timeScale: 'daily' | 'monthly' | undefined;
+  extendedChecks: Array<{ checkType: string; categoryDimension: string }>;
+  setExtendedChecks: React.Dispatch<
+    React.SetStateAction<
+      Array<{ checkType: string; categoryDimension: string }>
+    >
+  >;
 }
 
 export const severityMap = [

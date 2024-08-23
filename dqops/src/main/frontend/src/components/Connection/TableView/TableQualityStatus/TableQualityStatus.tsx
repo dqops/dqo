@@ -64,6 +64,9 @@ export default function TableQualityStatus({
   const [severityType, setSeverityType] = useState<'current' | 'highest'>(
     'current'
   );
+  const [extendedChecks, setExtendedChecks] = useState<
+    Array<{ checkType: string; categoryDimension: string }>
+  >([]);
   const [month, setMonth] = useState<number | undefined>();
   const [since, setSince] = useState<Date | undefined>(
     new Date(moment().subtract(30, 'days').format('YYYY-MM-DD'))
@@ -160,6 +163,22 @@ export default function TableQualityStatus({
     onChangeFirstLevelChecks();
   }, [categoryDimension, tableDataQualityStatus, severityType]);
 
+  const handleCategoryDimensionChange = (value: 'category' | 'dimension') => {
+    setCategoryDimension(value);
+    setExtendedChecks([]);
+  };
+
+  const handleSeverityTypeChange = (value: 'current' | 'highest') => {
+    setSeverityType(value);
+    setExtendedChecks([]);
+  };
+
+  const handleMonthChange = (value: number | undefined) => {
+    setMonth(value);
+    setSince(undefined);
+    setExtendedChecks([]);
+  };
+
   return (
     <div className="text-sm">
       {timePartitioned &&
@@ -184,47 +203,45 @@ export default function TableQualityStatus({
             label="category"
             fontClassName="text-sm"
             className="!items-start"
-            onClick={() => setCategoryDimension('category')}
+            onClick={() => handleCategoryDimensionChange('category')}
           />
           <RadioButton
             checked={categoryDimension === 'dimension'}
             label="quality dimension"
             fontClassName="text-sm"
             className="!items-start"
-            onClick={() => setCategoryDimension('dimension')}
+            onClick={() => handleCategoryDimensionChange('dimension')}
           />
         </div>
         <div className="flex pb-6 gap-x-5 pr-4 pt-2">
           <RadioButton
             checked={month === 1}
             label="Current month"
-            onClick={() => {
-              setSince(undefined), setMonth(1);
-            }}
+            onClick={() => handleMonthChange(1)}
             fontClassName="text-sm"
           />
           <RadioButton
             checked={month === 3}
             label="Last 3 months"
-            onClick={() => {
-              setSince(undefined), setMonth(3);
-            }}
+            onClick={() => handleMonthChange(3)}
             fontClassName="text-sm"
           />
           <RadioButton
             checked={month === undefined}
             label="Since"
-            onClick={() => {
-              setMonth(undefined);
-            }}
+            onClick={() => handleMonthChange(undefined)}
             fontClassName="text-sm"
           />
           <DatePicker
             showIcon
             placeholderText="Select date start"
-            onChange={setSince}
+            onChange={(date: any) => {
+              setSince(date);
+              setExtendedChecks([]);
+            }}
             selected={since}
             dateFormat="yyyy-MM-dd"
+            disabled={month !== undefined}
           />
         </div>
       </div>
@@ -232,13 +249,13 @@ export default function TableQualityStatus({
         <RadioButton
           label="Current severity status"
           checked={severityType === 'current'}
-          onClick={() => setSeverityType('current')}
+          onClick={() => handleSeverityTypeChange('current')}
           fontClassName="text-sm"
         />
         <RadioButton
           label="Highest severity status"
           checked={severityType === 'highest'}
-          onClick={() => setSeverityType('highest')}
+          onClick={() => handleSeverityTypeChange('highest')}
           fontClassName="text-sm"
         />
       </div>
@@ -254,6 +271,8 @@ export default function TableQualityStatus({
             severityType={severityType}
             tableDataQualityStatus={tableDataQualityStatus}
             timeScale={timePartitioned}
+            extendedChecks={extendedChecks}
+            setExtendedChecks={setExtendedChecks}
           />
         ) : (
           <div className="mt-5">No data quality check results</div>

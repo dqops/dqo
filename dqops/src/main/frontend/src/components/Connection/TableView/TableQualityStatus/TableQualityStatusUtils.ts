@@ -38,8 +38,6 @@ export const getSecondColor = (
 ) => {
   // console.log(status)
   switch (status) {
-    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
-      return 'bg-gray-150';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
       return 'bg-[#FEEDEC]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
@@ -49,7 +47,7 @@ export const getSecondColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
       return 'bg-[#DDF2EF]';
     default:
-      return '';
+      return 'bg-gray-150';
   }
 };
 
