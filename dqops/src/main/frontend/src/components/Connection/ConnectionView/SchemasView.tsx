@@ -115,7 +115,7 @@ const SchemasView = () => {
                 <div className="left-80 absolute">
                   <Button
                     className="text-sm"
-                    label="Manage checks"
+                    label="Edit multiple data quality checks"
                     color="primary"
                     variant="text"
                     onClick={() =>
