@@ -77,7 +77,6 @@ export const FilteredNotificationsView = () => {
           qualityDimension: incidentFilters.qualityDimension,
           checkCategory: incidentFilters.checkCategory,
           checkName: incidentFilters.check,
-          checkType: incidentFilters.checkType
         },
         priority: 1000
       });
