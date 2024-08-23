@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 import TableQualityStatusCategory from './TableQualityStatusCategory';
 import TableQualityStatusColumnCategory from './TableQualityStatusColumnCategory';
 import {
@@ -13,56 +13,10 @@ export default function TableQualityStatusOverview({
   categoryDimension,
   severityType,
   tableDataQualityStatus,
-  timeScale
+  timeScale,
+  extendedChecks,
+  setExtendedChecks
 }: ITableParameters) {
-  const [extendedChecks, setExtendedChecks] = useState<
-    Array<{ checkType: string; categoryDimension: string }>
-  >([]);
-  // const dispatch = useActionDispatch();
-  // const history = useHistory();
-  // const {
-  //   checkTypes,
-  //   connection,
-  //   schema,
-  //   table
-  // }: {
-  //   checkTypes: CheckTypes;
-  //   connection: string;
-  //   schema: string;
-  //   table: string;
-  // } = useDecodedParams();
-
-  // const openFirstLevelTableTab = (
-  //   checkTypes: CheckTypes,
-  //   connection: string,
-  //   schema: string,
-  //   table: string,
-  //   timeScale?: 'daily' | 'monthly'
-  // ) => {
-  //   const url = ROUTES.TABLE_LEVEL_PAGE(
-  //     checkTypes,
-  //     connection,
-  //     schema,
-  //     table,
-  //     timeScale ?? 'advanced'
-  //   );
-  //   const value = ROUTES.TABLE_LEVEL_VALUE(
-  //     checkTypes,
-  //     connection,
-  //     schema,
-  //     table
-  //   );
-  //   dispatch(
-  //     addFirstLevelTab(checkTypes, {
-  //       url,
-  //       value,
-  //       state: {},
-  //       label: table
-  //     })
-  //   );
-  //   history.push(url);
-  // };
-
   const renderTooltipContent = (lastExecutedAt: any, severity: any) => {
     return (
       <div>
@@ -131,15 +85,6 @@ export default function TableQualityStatusOverview({
             className={clsx(
               ' border-b border-gray-300 font-bold text-xs text-center'
             )}
-            // onClick={() =>
-            //   openFirstLevelTableTab(
-            //     checkTypes,
-            //     connection,
-            //     schema,
-            //     table,
-            //     timeScale
-            //   )
-            // }
           >
             <div className=" ml-4">
               {key?.replaceAll('_', ' ').replace(/./, (c) => c.toUpperCase())}

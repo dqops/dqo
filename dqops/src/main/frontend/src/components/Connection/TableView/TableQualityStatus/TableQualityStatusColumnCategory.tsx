@@ -134,17 +134,14 @@ export default function TableQualityStatusColumnCategory({
       const showTooltip = columnCircleStatus.lastExecutedAt !== null;
       const showIcon = columnStatus.status !== null;
 
-      const isExtended = extendedChecks.some(
-        (x) =>
-          x.checkType === customKey &&
-          x.categoryDimension === firstLevelChecksKey
-      );
-
       return (
         <td
           key={`cell_column_${customKey}_${firstLevelChecksKey}`}
           className="h-full"
-          onClick={() => columnStatus.status && toggleExtendedChecks(customKey, firstLevelChecksKey)}
+          onClick={() =>
+            columnStatus.status &&
+            toggleExtendedChecks(customKey, firstLevelChecksKey)
+          }
           style={{ padding: 0, margin: 0 }}
         >
           {columnStatus.status && (
@@ -262,7 +259,7 @@ export default function TableQualityStatusColumnCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-5 px-1 ml-[16.7px] truncate',
+                      'cursor-auto h-5 px-1 ml-[15.5px] truncate',
                       getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -271,7 +268,7 @@ export default function TableQualityStatusColumnCategory({
                     style={{
                       fontSize: '11px',
                       whiteSpace: 'normal',
-                      ...(getColor(severity) === 'bg-gray-150'
+                      ...(getSecondColor(severity) === 'bg-gray-150'
                         ? secondBackgroundStyle
                         : {})
                     }}
