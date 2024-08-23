@@ -18,13 +18,13 @@ export const getColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
       return 'bg-gray-150';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
-      return 'bg-red-300';
+      return 'bg-[#E3170A]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
-      return 'bg-orange-300';
+      return 'bg-[#FFEFD6]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
-      return 'bg-yellow-300';
+      return 'bg-[#EbE51E]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
-      return 'bg-green-300';
+      return 'bg-[#029A80]';
     default:
       return '';
   }
@@ -38,6 +38,8 @@ export const getSecondColor = (
 ) => {
   // console.log(status)
   switch (status) {
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
+      return 'bg-gray-150';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
       return 'bg-[#FEEDEC]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
@@ -47,7 +49,7 @@ export const getSecondColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
       return 'bg-[#DDF2EF]';
     default:
-      return 'bg-gray-150';
+      return '';
   }
 };
 
