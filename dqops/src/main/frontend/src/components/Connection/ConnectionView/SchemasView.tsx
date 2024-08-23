@@ -80,7 +80,7 @@ const SchemasView = () => {
     <div className="py-4 px-8 text-sm">
       {isSourceScreen && <ConnectionActionGroup />}
       <table className="w-full">
-        <thead>
+        <thead className="border-b border-gray-300">
           <tr>
             <th className="py-2 pl-2 text-left">Schema name</th>
             <th />

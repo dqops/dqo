@@ -80,21 +80,40 @@ const SourceSchemasView = () => {
         job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
   };
+  const onBack = () => {
+    history.push(
+      ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schemas')
+    );
+  };
 
   return (
     <div className="py-4 px-8 text-sm">
       <ConnectionActionGroup />
+      <div className="flex items-center justify-between  pb-2">
+        <div className="text-lg font-semibold">
+          List of schemas present in the data source, imported or not imported
+          to DQOps
+        </div>
+        <Button
+          label="Back"
+          color="primary"
+          variant="text"
+          className="px-0"
+          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+          onClick={onBack}
+        />
+      </div>
       {loading ? (
         <div className="flex justify-center h-100">
           <Loader isFull={false} className="w-8 h-8 fill-green-700" />
         </div>
       ) : (
         <table className="w-full">
-          <thead>
+          <thead className="border-b border-gray-300">
             <tr>
               <th className="py-2 pr-4 text-left">Source schema name</th>
               <th className="py-2 px-4 text-left">Import status</th>
-              <th />
+              <th className="py-2">Actions</th>{' '}
             </tr>
           </thead>
           <tbody>
@@ -114,13 +133,15 @@ const SourceSchemasView = () => {
                     height={22}
                   />
                 </td>
-                <td className="py-2 px-4 text-left">
+                <td className="py-2 px-4">
                   {!isExist(item) && (
-                    <Button
-                      label="Import tables"
-                      color="primary"
-                      onClick={() => onImportTables(item)}
-                    />
+                    <div className=" flex justify-center">
+                      <Button
+                        label="Import tables"
+                        color="primary"
+                        onClick={() => onImportTables(item)}
+                      />
+                    </div>
                   )}
                 </td>
               </tr>
