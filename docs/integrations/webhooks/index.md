@@ -16,23 +16,26 @@ A notification contains the most important information about an incident you may
 
 ## Configure notifications
 
-You can use Webhooks to receive notifications for new data quality incidents or changes in the incident status.
+You can receive a notification with use of **webhooks** to receive notifications for new data quality incidents or changes in the incident status.
 
-To configure Webhooks, follow these steps:
+To configure a webhook notification, follow these steps:
 
-1. Go to the **Data Sources** section.
-2. Select the relevant data source.
-3. Select the **Incidents And Notifications** tab.
-4. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
+1. Go to the **Configuration** section.
+2. Open the **Global incident notifications** in tree and select the **default**.  
 
-![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-webhooks.png)
+    ![Connection notifications configuration](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications.png){ loading=lazy; width="1200px" }
+
+3. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
+
+    ![Global incident notifications default](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notification-default.png){ loading=lazy; width="1200px" }
+
 
 ## Types of webhooks configuration
 
 Configuration of webhooks in DQOps platform can be done in two different ways.
 
-First, is the default webhooks configuration available under Configuration menu.
-Second, is to configure webhooks on a connection level under the Notifications and Incidents tab. 
+First, is to configure webhooks on a connection level under the Notifications and Incidents tab. 
+Second, is the default webhooks configuration available under Configuration menu.
 
 DQOps uses both of them when preparing notifications.
 When the connection does not set the webhook link on it's level,
@@ -154,6 +157,7 @@ Adding an Issue URL to an incident provides easy access to the issue in the tick
 
 ## Next steps
 
+- Read about [detailed notifications configuration](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md)
 - Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
 - Learn how the [data quality incident workflow](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md) is managed
   by DQOps by grouping similar data quality issues into data quality incidents.
