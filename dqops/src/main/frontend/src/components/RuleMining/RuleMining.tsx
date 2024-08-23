@@ -83,7 +83,7 @@ export default function RuleMining({
     propose_date_checks: true,
     propose_bool_percent_checks: true,
     propose_values_in_set_checks: true,
-    propose_top_values_checks: false,  // intentional false
+    propose_top_values_checks: false, // intentional false
     propose_text_conversion_checks: true,
     propose_standard_pattern_checks: true,
     detect_regular_expressions: true,
@@ -131,7 +131,7 @@ export default function RuleMining({
     }
   };
 
-  const proposeChecks = async () => {
+  const proposeChecks = async (flash?: boolean) => {
     const addPrefix = (key: string) => {
       if (key.includes('*') || key.length === 0) {
         return key;
@@ -173,11 +173,7 @@ export default function RuleMining({
     const getShouldUserCollectStatisitcs = (
       checksUI: CheckMiningProposalModel
     ) => {
-      if (
-        checksUI &&
-        checksUI.table_checks?.categories?.length === 0 &&
-        Object.keys(checksUI?.column_checks ?? {}).length === 0
-      ) {
+      if (checksUI.missing_current_statistics) {
         if (checkTypes === CheckTypes.PROFILING) {
           dispatch(
             setJobAllert({
@@ -194,6 +190,17 @@ export default function RuleMining({
               action: 'profiling',
               tooltipMessage:
                 'Missing basic data statistics and the rule minner is limited to copying configured profiling checks. Please go to the profiling section and collect statistics for the table'
+            })
+          );
+        }
+      } else {
+        if (flash) {
+          dispatch(
+            setJobAllert({
+              activeTab: firstLevelActiveTab,
+              action: 'table-quality-status',
+              tooltipMessage:
+                'When the "run checks" job finishes, the table quality status will show the status of all passed and failed data quality checks.'
             })
           );
         }
@@ -358,7 +365,7 @@ export default function RuleMining({
           runPartitionedChecks({
             check_search_filters: runChecksJobTemplate
           }).then(() => {
-            proposeChecks();
+            proposeChecks(true);
           });
           toggleOpen();
         }}
