@@ -91,7 +91,9 @@ The types of data quality checks configured by the rule mining engine are listed
   * The sample values are also used to configure the [expected_texts_in_top_values](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#testing-the-most-common-values) checks,
     ensuring that the most common values are always the same in the data set over time.
 
-  * Text values are analyzed for well-known patterns, such as UUID identifiers, emails, phone numbers, ISO country codes, or [currency codes](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#validating-country-codes).
+  * Text values are analyzed for well-known patterns, such as [UUID identifiers](../examples/data-validity/percentage-of-valid-uuid.md),
+    [emails](../examples/data-validity/detect-invalid-emails.md), phone numbers, [ISO country codes](../examples/data-validity/percentage-of-valid-currency-codes.md),
+    or [currency codes](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#validating-country-codes).
     When DQOps detects columns mainly containing these values, relevant pattern validation checks are automatically configured.
 
   * DQOps will detect column values containing possible [patterns that can be analyzed with regular expressions](../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md#validating-custom-regular-expressions). 
@@ -108,7 +110,8 @@ These checks will only capture the [sensor readouts](../reference/parquetfiles/s
 For example, the user can enable all profiling checks in the 
 [PII (Personal Identifiable Information) check category](../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)
 to detect columns containing a few sensitive values, such as emails or phone numbers inside comment columns. 
-When the rule mining engine notices that the contains_email_percent check finds 1% of records containing emails and the desired error rate is 2%, 
+When the rule mining engine notices that the [contains_email_percent](../checks/column/pii/contains-email-percent.md)
+check finds 1% of records containing emails and the desired error rate is 2%, 
 DQOps will configure the [contains_email_percent](../checks/column/pii/contains-email-percent.md) check with a 
 [max_percent](../reference/rules/Comparison.md#max-percent) threshold 0%, identifying all these records as values containing a possible data leak.
 
