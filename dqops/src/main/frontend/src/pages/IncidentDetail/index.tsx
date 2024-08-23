@@ -720,7 +720,7 @@ export const IncidentDetail = () => {
         open={createNotificationDialogOpen}
         onClose={() => setCreateNotificationDialogOpen(false)}
         onConfirm={createConfirmNotification}
-        message="No notification filters are defined for this incident, do you want to create a notification configuration for incidents similar to this incident?"
+        message="No notification filters have been defined for this incident. Would you like to create a notification configuration based on this incident?"
         yesNo
       />
     </>

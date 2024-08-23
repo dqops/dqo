@@ -37200,6 +37200,10 @@ definitions:
         type: "string"
         description: "The target type of checks to run. Supported values are *profiling*,\
           \ *monitoring* and *partitioned*."
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
       checkName:
         type: "string"
         description: "The target check name to run only this named check. Uses the\

@@ -57,10 +57,6 @@ const initSourceTabs = [
     value: 'data-quality-summary'
   },
   {
-    label: 'Incident grouping',
-    value: 'incident-grouping'
-  },
-  {
     label: 'Default grouping template',
     value: 'data-groupings'
   },
@@ -227,9 +223,7 @@ const ConnectionPage = () => {
           <ConnectionDefaultGroupingConfiguration />
         )}
         {activeTab === 'incidents-grouping' && <IncidentsNotificationsView />}
-        {activeTab === 'notifications' && (
-          <FilteredNotificationsView />
-        )}
+        {activeTab === 'notifications' && <FilteredNotificationsView />}
         {/* {activeTab === 'tables' && <TableListView />}
         {activeTab === 'columns' && <ColumnListView />} */}
         {activeTab === 'data-quality-summary' && <DataQualitySummary />}
