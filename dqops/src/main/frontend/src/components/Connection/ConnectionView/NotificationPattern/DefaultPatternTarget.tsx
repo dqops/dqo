@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   FilteredNotificationModel,
-  NotificationFilterSpec
+  NotificationFilterSpec,
+  NotificationFilterSpecCheckTypeEnum
 } from '../../../../api';
 import { useDecodedParams } from '../../../../utils';
 import Checkbox from '../../../Checkbox';
@@ -209,11 +210,18 @@ export default function DefaultPatternTarget({
             <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
               <span className="w-25"> Check type</span>
               <div className="w-full">
-                <Input
+                <Select
+                  options={[
+                    { label: '', value: undefined },
+                    ...Object.values(NotificationFilterSpecCheckTypeEnum).map((x) => ({
+                      label: x,
+                      value: x,
+                    })),
+                  ]}
                   value={pattern?.filter?.checkType}
-                  onChange={(e) =>
+                  onChange={(value) =>
                     onChangePatternFilter({
-                      checkType: e.target.value
+                      checkType: value as NotificationFilterSpecCheckTypeEnum 
                     })
                   }
                 />
@@ -237,7 +245,6 @@ export default function DefaultPatternTarget({
                       highestSeverity: value
                     })
                   }
-                  className="w-49"
                 />
               </div>
             </div>
