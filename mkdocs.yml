@@ -15,6 +15,7 @@ nav:
       - Review results on the dashboards: "getting-started/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
+      - Data quality process: "dqo-concepts/data-quality-process.md"
       - Data quality rule mining: "dqo-concepts/data-quality-rule-mining.md"
       - What is a data quality check:
           - "dqo-concepts/definition-of-data-quality-checks/index.md"
