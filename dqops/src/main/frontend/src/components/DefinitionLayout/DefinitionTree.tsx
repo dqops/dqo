@@ -74,8 +74,8 @@ export const DefinitionTree = () => {
   }, [refreshChecksTreeIndicator]);
 
   useEffect(() => {
-    toggleTree(tabs);
-  }, [activeTab]);
+    toggleTree(tabs, activeTab);
+  }, []);
 
   const highlightedNode =
     activeTab && typeof activeTab === 'string'

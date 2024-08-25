@@ -56,9 +56,7 @@ function DefinitionProvider(props: any) {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.SENSOR_DETAIL(sensor.sensor_name ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(
-          sensor.sensor_name ??''
-        ),
+        value: ROUTES.SENSOR_DETAIL_VALUE(sensor.sensor_name ?? ''),
         state: {
           full_sensor_name: sensor.full_sensor_name
         },
@@ -84,9 +82,7 @@ function DefinitionProvider(props: any) {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
-        value: ROUTES.CHECK_DETAIL_VALUE(
-          check.check_name ?? ''
-        ),
+        value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
         state: {
           full_check_name: check.full_check_name,
           custom: check.custom
@@ -212,48 +208,47 @@ function DefinitionProvider(props: any) {
     toggleFolderRecursively(elements, index + 1, type);
   };
 
-  const toggleTree = (tabs: INestTab[]) => {
+  const toggleTree = (tabs: INestTab[], activeTab: string) => {
     const configuration = [
       { category: 'Sensors', isOpen: false },
       { category: 'Rules', isOpen: false },
       { category: 'Data quality checks', isOpen: false },
       { category: 'Default checks configuration', isOpen: false }
     ];
-    if (tabs && tabs.length !== 0) {
-      for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url?.includes('patterns')) {
-          configuration[3].isOpen = true;
-        } else if (tabs[i]?.url?.includes('sensors')) {
-          configuration[0].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_sensor_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-          }
-          // to do: fix expanding tree checks/default checks
-        } else if (tabs[i]?.url?.includes('checks')) {
-          configuration[2].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_check_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          }
-        } else if (tabs[i]?.url?.includes('rules')) {
-          configuration[1].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_rule_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-          }
+
+    const currentTab = tabs.find((tab) => tab.value === activeTab);
+    if (currentTab) {
+      if (currentTab.url?.includes('patterns')) {
+        configuration[3].isOpen = true;
+      } else if (currentTab?.url?.includes('sensors')) {
+        configuration[0].isOpen = true;
+        const arrayOfElemsToToggle = (
+          currentTab.state.full_sensor_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
         }
-        dispatch(toggleFirstLevelFolder(configuration));
+        // to do: fix expanding tree checks/default checks
+      } else if (currentTab?.url?.includes('checks')) {
+        configuration[2].isOpen = true;
+        const arrayOfElemsToToggle = (
+          currentTab.state.full_check_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+        }
+      } else if (currentTab?.url?.includes('rules')) {
+        configuration[1].isOpen = true;
+        const arrayOfElemsToToggle = (
+          currentTab.state.full_rule_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
+        }
       }
-    } else {
-      dispatch(toggleFirstLevelFolder(configuration));
     }
+
+    dispatch(toggleFirstLevelFolder(configuration));
   };
 
   const nodes = [
@@ -340,4 +335,3 @@ function useDefinition() {
 }
 
 export { DefinitionProvider, useDefinition };
-
