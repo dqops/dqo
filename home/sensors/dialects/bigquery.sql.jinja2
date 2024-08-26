@@ -16,6 +16,10 @@
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
 
+{%- macro render_regex(regex) -%}
+     r{{ '\'' }}{{ regex }}{{ '\'' }}
+{%- endmacro -%}
+
 {% macro eol() -%}
 {{ '' }}
 {% endmacro %}
@@ -359,10 +363,6 @@
         {{ render_target_column(analyzed_table_to_render) }}
     {%- endif -%}
 {% endmacro -%}
-
-{%- macro render_regex(regex) -%}
-     r{{ make_text_constant(regex) }}
-{%- endmacro -%}
 
 {% macro render_date_format(date_format) %}
     {%- if date_format == 'YYYY-MM-DD'-%}
