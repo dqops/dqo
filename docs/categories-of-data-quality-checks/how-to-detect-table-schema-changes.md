@@ -65,7 +65,7 @@ The change detection checks should be configured as
 [daily monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)
 to detect day-to-day changes.
 
-![Enabled data quality checks for table schema drift detection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-enabled-without-changes-min.png){ loading=lazy; width="1200px" }
+![Enabled data quality checks for table schema drift detection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-enabled-without-changes-min2.png){ loading=lazy; width="1200px" }
 
 ### Example of a schema change
 In the meantime, a new column was added to the table using an SQL statement shown below.
@@ -77,7 +77,7 @@ ADD COLUMN int64_field_31 INTEGER;
 
 The following screenshot shows the data quality check editor on the next day.
 
-![Data quality checks that detected table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-detected-changes-min.png){ loading=lazy; width="1200px" }
+![Data quality checks that detected table schema changes](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-schema-drift-monitoring-detected-changes-min2.png){ loading=lazy; width="1200px" }
 
 DQOps detected new data quality issues for all types of schema changes because adding a new column is detected by all table-level checks.
 You can also review the [example of detecting table schema changes](../examples/schema/detect-table-schema-changes.md),
@@ -96,15 +96,15 @@ spec:
       schema:
         daily_column_count:
           error:
-            expected_value: 31
+            expected_value: 32
         daily_column_count_changed:
-          error: {}
+          warning: {}
         daily_column_list_changed:
-          error: {}
+          warning: {}
         daily_column_list_or_order_changed:
-          error: {}
+          warning: {}
         daily_column_types_changed:
-          error: {}
+          warning: {}
 ```
 
 
@@ -122,7 +122,7 @@ DQOps supports the following schema change detection checks configured on a colu
 The column-level schema change detection checks are configured using the [data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor)
 on a column level.
 
-![Configuring column schema change detection data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-schema-checks-enabled-in-editor-min.png){ loading=lazy; width="1200px" }
+![Configuring column schema change detection data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-schema-checks-enabled-in-editor-min2.png){ loading=lazy; width="1200px" }
 
 
 ### Configuring column-level checks in YAML
