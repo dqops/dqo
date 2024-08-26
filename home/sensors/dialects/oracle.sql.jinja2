@@ -16,6 +16,10 @@
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
 
+{%- macro render_regex(regex) -%}
+     {{ '\'' }}{{ regex }}{{ '\'' }}
+{%- endmacro -%}
+
 {% macro eol() -%}
 {{ '' }}
 {% endmacro %}
