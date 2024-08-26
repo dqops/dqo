@@ -208,20 +208,28 @@ function DefinitionProvider(props: any) {
     toggleFolderRecursively(elements, index + 1, type);
   };
 
-  const toggleTree = (tabs: INestTab[], activeTab: string) => {
-    const configuration = [
+  const toggleTree = (
+    tabs: INestTab[],
+    activeTab: string,
+    configuration?: Array<{ category: string; isOpen: boolean }>
+  ) => {
+    const defaultconfiguration = [
       { category: 'Sensors', isOpen: false },
       { category: 'Rules', isOpen: false },
       { category: 'Data quality checks', isOpen: false },
       { category: 'Default checks configuration', isOpen: false }
     ];
-
+    const currectConfiguration: Array<{ category: string; isOpen: boolean }> = [
+      ...(configuration ?? defaultconfiguration)
+    ];
     const currentTab = tabs.find((tab) => tab.value === activeTab);
+    // todo: just first level folders are closed when changing tab
+
     if (currentTab) {
       if (currentTab.url?.includes('patterns')) {
-        configuration[3].isOpen = true;
+        currectConfiguration[3].isOpen = true;
       } else if (currentTab?.url?.includes('sensors')) {
-        configuration[0].isOpen = true;
+        currectConfiguration[0].isOpen = true;
         const arrayOfElemsToToggle = (
           currentTab.state.full_sensor_name as string
         )?.split('/');
@@ -230,7 +238,7 @@ function DefinitionProvider(props: any) {
         }
         // to do: fix expanding tree checks/default checks
       } else if (currentTab?.url?.includes('checks')) {
-        configuration[2].isOpen = true;
+        currectConfiguration[2].isOpen = true;
         const arrayOfElemsToToggle = (
           currentTab.state.full_check_name as string
         )?.split('/');
@@ -238,7 +246,7 @@ function DefinitionProvider(props: any) {
           toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
         }
       } else if (currentTab?.url?.includes('rules')) {
-        configuration[1].isOpen = true;
+        currectConfiguration[1].isOpen = true;
         const arrayOfElemsToToggle = (
           currentTab.state.full_rule_name as string
         )?.split('/');
@@ -248,7 +256,7 @@ function DefinitionProvider(props: any) {
       }
     }
 
-    dispatch(toggleFirstLevelFolder(configuration));
+    dispatch(toggleFirstLevelFolder(currectConfiguration));
   };
 
   const nodes = [

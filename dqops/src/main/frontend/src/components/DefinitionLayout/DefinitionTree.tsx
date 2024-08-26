@@ -46,7 +46,7 @@ export const DefinitionTree = () => {
     refreshRulesTreeIndicator,
     refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
-
+  console.log(definitionFirstLevelFolder);
   const {
     openCheckDefaultFirstLevelTab,
     openCheckFirstLevelTab,
@@ -74,8 +74,8 @@ export const DefinitionTree = () => {
   }, [refreshChecksTreeIndicator]);
 
   useEffect(() => {
-    toggleTree(tabs, activeTab);
-  }, []);
+    toggleTree(tabs, activeTab, definitionFirstLevelFolder);
+  }, [activeTab]);
 
   const highlightedNode =
     activeTab && typeof activeTab === 'string'
