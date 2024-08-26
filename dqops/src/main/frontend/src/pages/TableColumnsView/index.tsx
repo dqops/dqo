@@ -91,14 +91,19 @@ const TableColumnsView = () => {
     }
   };
 
-  const filteredJobs = useMemo(() => {
+  const isCollectingStatistics = useMemo(() => {
     return (
       job &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.connection === connectionName &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.fullTableName ===
+        schemaName + '.' + tableName &&
       (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
         job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
-  }, [job]);
+  }, [job, checkTypes, connectionName, schemaName, tableName]);
 
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -198,16 +203,16 @@ const TableColumnsView = () => {
               <Button
                 className="flex items-center gap-x-2 justify-center"
                 label={
-                  filteredJobs
+                  isCollectingStatistics
                     ? 'Collecting...'
                     : checkedColumns.length !== 0
                     ? 'Collect statistics on selected'
                     : 'Collect statistics'
                 }
-                color={filteredJobs ? 'secondary' : 'primary'}
+                color={isCollectingStatistics ? 'secondary' : 'primary'}
                 leftIcon={
-                  filteredJobs ? (
-                    <SvgIcon name="sync" className="w-4 h-4" />
+                  isCollectingStatistics ? (
+                    <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
                   ) : (
                     ''
                   )
