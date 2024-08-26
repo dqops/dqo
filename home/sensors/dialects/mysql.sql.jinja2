@@ -17,6 +17,12 @@
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
 
+{% macro render_regex(column, regex_pattern, wrap_with_quotes = true) %}
+    {%- if engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ '\'' if wrap_with_quotes }}{{ regex_pattern }}{{ '\'' if wrap_with_quotes  }}
+    {%- else -%}REGEXP_LIKE({{ column }}, {{ '\'' if wrap_with_quotes }}{{ regex_pattern }}{{ '\'' if wrap_with_quotes }})
+    {%- endif -%}
+{% endmacro %}
+
 {% macro eol() -%}
 {{ '' }}
 {% endmacro %}
@@ -434,16 +440,6 @@
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
-
-{% macro render_regex(column, regex_pattern, should_make_text_constant = true) %}
-    {%- if engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ make_text_constant(regex_pattern) if should_make_text_constant else regex_pattern }}
-    {%- else -%}REGEXP_LIKE({{ column }}, {{ make_text_constant(regex_pattern) if should_make_text_constant else regex_pattern }})
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro make_text_constant(string) -%}
-    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-{%- endmacro %}
 
 {% macro render_date_format_regex(date_format) %}
     {%- if date_format == 'DD/MM/YYYY'-%}

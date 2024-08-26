@@ -265,14 +265,19 @@ const ProfilingView = () => {
     }).then((res) => setJobId(res.data.jobId?.jobId));
   };
 
-  const filteredCollectStatisticsJobs = useMemo(() => {
+  const isCollectingStatistics = useMemo(() => {
     return (
       job &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.connection === connectionName &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.fullTableName ===
+        schemaName + '.' + tableName &&
       (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
         job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
-  }, [job]);
+  }, [job, checkTypes, connectionName, schemaName, tableName]);
 
   useEffect(() => {
     if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
@@ -304,7 +309,7 @@ const ProfilingView = () => {
           maxToCreateDataStream={checkedColumns.length > 9 && true}
           collectStatistics={collectStatistics}
           selectedColumns={checkedColumns && checkedColumns?.length > 0}
-          collectStatisticsSpinner={filteredCollectStatisticsJobs}
+          collectStatisticsSpinner={isCollectingStatistics}
         />
       )}
       {activeTab === 'advanced' && (

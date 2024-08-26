@@ -23,21 +23,37 @@ To collect error samples, just run the check manually:
 3. Activate the check of interest, set the thresholds or leave the default options.
 4. Click on the check Run icon.
 
-
 To view the error samples, click on the **Results** icon, and select the tab **Error sampling**.
 For column-level checks that do not have error samples, the tab will be inactive.
 
-![View error samples](https://dqops.com/docs/images/concepts/data-quality-error-sampling/view-error-samples.png){ loading=lazy; width="1200px" }
+![View error samples](https://dqops.com/docs/images/concepts/data-quality-error-sampling/view-error-samples2.png){ loading=lazy; width="1200px" }
 
 The table with error samples has the following columns:
 
 - **Sample index:** The index of the collected sample.
 - **Collected at:** Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time.
-- **Result:** The sample value.
 - **Result data type:** The sample's result data type.
+- **Result:** The sample value.
 - **ID Column 1:** The value of the ID column from the original data row that corresponds to the error sample. This column helps trace the error back to its source record. You can set up to 9 ID Columns.
-- **Data grouping:** The data grouping name
 - **Id:** The error sample result id (primary key). This value identifies a single row.
+
+## Download error samples as a CSV file
+To aid in root cause analysis and data cleanup, DQOps enables you to download error samples as a CSV file. 
+These samples provide a representative selection of data points that failed to meet the specified data quality criteria.
+
+To download error samples:
+
+1. Navigate to the data quality check with available results.
+2. Click on the **Results** icon to open the results.
+3. Choose the **Error sampling** tag.
+4. Click the **Download as CSV** icon button.
+5. Your browser will start the download.
+
+The CSV file you download will include up to 100 sample records that did not meet the defined data quality thresholds for the specific check.
+
+![Download error samples as a CSV file](https://dqops.com/docs/images/concepts/data-quality-error-sampling/download-error-samples-as-csv-file.png){ loading=lazy; width="1200px" }
+
+By analyzing error samples, you can gain valuable insights into the nature of data quality issues, identify patterns, and take appropriate corrective actions to improve your data.
 
 ## Configuring an ID column
 To be able to collect error samples you need to define an ID column to uniquely identify error samples.
