@@ -410,7 +410,7 @@ export const DefinitionTree = () => {
       </div>
     );
   };
-
+  console.log(highlightedNode);
   const NodeComponent = ({
     onClick,
     icon,
@@ -424,7 +424,9 @@ export const DefinitionTree = () => {
       onClick={onClick}
       className={clsx(
         'cursor-pointer flex space-x-1 items-center mb-1 h-4.5 hover:bg-gray-300',
-        highlightedNode === text.toLowerCase().replace(' ', '-') &&
+        (highlightedNode === text.toLowerCase().replace(' ', '-') ||
+          (highlightedNode === 'default-notifications' &&
+            text === 'Global incident notifications')) &&
           'bg-gray-300'
       )}
     >
