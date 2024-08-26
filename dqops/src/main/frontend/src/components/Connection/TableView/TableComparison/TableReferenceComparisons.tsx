@@ -132,71 +132,27 @@ export const TableReferenceComparisons = ({
       setIsEditing(true);
       setIsCreting(false);
     } else {
-      let url = '';
-      if (checkTypes === CheckTypes.PROFILING) {
-        url = `${ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connection,
-          schema,
-          table,
-          'table-comparisons'
-        )}`;
-        dispatch(
-          addFirstLevelTab(checkTypes, {
-            url,
-            value: ROUTES.TABLE_LEVEL_VALUE(
-              checkTypes,
-              connection,
-              schema,
-              table
-            ),
-            state: {},
-            label: table
-          })
-        );
-      } else if (timePartitioned === 'daily') {
-        url = `${ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connection,
-          schema,
-          table,
-          'daily_comparisons'
-        )}`;
-        dispatch(
-          addFirstLevelTab(checkTypes, {
-            url,
-            value: ROUTES.TABLE_LEVEL_VALUE(
-              checkTypes,
-              connection,
-              schema,
-              table
-            ),
-            state: {},
-            label: table
-          })
-        );
-      } else if (timePartitioned === 'monthly') {
-        url = `${ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connection,
-          schema,
-          table,
-          'monthly_comparisons'
-        )}`;
-        dispatch(
-          addFirstLevelTab(checkTypes, {
-            url,
-            value: ROUTES.TABLE_LEVEL_VALUE(
-              checkTypes,
-              connection,
-              schema,
-              table
-            ),
-            state: {},
-            label: table
-          })
-        );
-      }
+      const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        table,
+        'table-comparisons'
+      )}`;
+      dispatch(
+        addFirstLevelTab(checkTypes, {
+          url,
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            checkTypes,
+            connection,
+            schema,
+            table
+          ),
+          state: {},
+          label: table
+        })
+      );
+
       if (isCreating === true) {
         getNewTableComparison();
       }

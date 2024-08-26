@@ -1,10 +1,10 @@
+import clsx from 'clsx';
 import React from 'react';
 import {
   CompareThresholdsModel,
   ComparisonCheckResultModel,
   TableComparisonModel
 } from '../../../api';
-import clsx from 'clsx';
 import Input from '../../Input';
 import { CheckName } from './ResultPanel';
 
@@ -163,7 +163,7 @@ const ResultBox = ({
             {item.warnings}
           </td>
           <td>
-            <a className="group relative text-blue-300 underline whitespace-normal cursor-pointer text-xs">
+            <a className="group relative text-teal-500 underline whitespace-normal cursor-pointer text-xs">
               Show mismatches
               <section
                 className="hidden group-hover:grid grid-cols-1 absolute px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline font-light"

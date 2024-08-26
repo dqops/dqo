@@ -84,10 +84,10 @@ export default function EditingViewFirstLine({
     <div>
       <div className="flex items-center justify-between my-4">
         <div className="flex items-center justify-center gap-x-5">
-          <div className="font-bold text-center">
+          <div className="text-center">
             Table comparison configuration name:{' '}
           </div>
-          <span className="font-bold">{editConfigurationParameters.name}</span>
+          <span>{editConfigurationParameters.name}</span>
         </div>
         <div className="flex justify-center items-center gap-x-2">
           <Button

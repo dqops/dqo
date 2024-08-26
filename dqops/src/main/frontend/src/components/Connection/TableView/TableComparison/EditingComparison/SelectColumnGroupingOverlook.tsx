@@ -1,6 +1,6 @@
 import React from 'react';
-import SvgIcon from '../../../../SvgIcon';
 import { TableComparisonGroupingColumnPairModel } from '../../../../../api';
+import SvgIcon from '../../../../SvgIcon';
 
 type TSelecColumnGroupingOverlook = {
   onChangeEditColumnGrouping: (open: boolean) => void;
@@ -21,29 +21,15 @@ export default function SelecColumnGroupingOverlook({
         Data grouping on compared table:{' '}
         {dataGroupingArray
           ?.map((item) => item?.compared_table_column_name ?? '')
-          .map((x, index) =>
-            index !==
-            (dataGroupingArray?.map(
-              (item) => item?.compared_table_column_name ?? ''
-            ).length ?? 9) -
-              1
-              ? x + ','
-              : x
-          )}
+          .filter(Boolean)
+          .join(', ')}
       </div>
       <div className="pl-8">
         Data grouping on reference table:{' '}
         {dataGroupingArray
           ?.map((item) => item?.reference_table_column_name ?? '')
-          .map((x, index) =>
-            index !==
-            (dataGroupingArray?.map(
-              (item) => item?.reference_table_column_name ?? ''
-            ).length ?? 9) -
-              1
-              ? x + ','
-              : x
-          )}
+          .filter(Boolean)
+          .join(', ')}
       </div>
     </div>
   );
