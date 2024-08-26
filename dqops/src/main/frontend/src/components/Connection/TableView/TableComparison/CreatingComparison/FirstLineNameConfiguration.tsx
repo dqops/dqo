@@ -224,7 +224,7 @@ export default function FirstLineNameConfiguration({
         </div>
         <Input
           className={clsx(
-            'flex-1 w-64',
+            'flex-1 !w-72',
             editConfigurationParameters.name &&
               editConfigurationParameters?.name?.length > 0
               ? ''
@@ -242,6 +242,14 @@ export default function FirstLineNameConfiguration({
       ) : null}
       <div className="flex justify-center items-center gap-x-2">
         <Button
+          label="Back"
+          color="primary"
+          variant="text"
+          className="px-0"
+          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+          onClick={onBack}
+        />
+        <Button
           onClick={onCreate}
           label="Save"
           color="primary"
@@ -250,14 +258,6 @@ export default function FirstLineNameConfiguration({
             !getIsButtonEnabled(editConfigurationParameters) ||
             userProfile.can_manage_data_sources !== true
           }
-        />
-        <Button
-          label="Back"
-          color="primary"
-          variant="text"
-          className="px-0"
-          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-          onClick={onBack}
         />
       </div>
     </div>

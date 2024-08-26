@@ -91,6 +91,14 @@ export default function EditingViewFirstLine({
         </div>
         <div className="flex justify-center items-center gap-x-2">
           <Button
+            label="Back"
+            color="primary"
+            variant="text"
+            className="px-0"
+            leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+            onClick={onBack}
+          />
+          <Button
             color="primary"
             variant="contained"
             disabled={disabled || userProfile.can_manage_data_sources !== true}
@@ -121,14 +129,6 @@ export default function EditingViewFirstLine({
               getIsButtonEnabled(editConfigurationParameters) === false ||
               userProfile.can_manage_data_sources !== true
             }
-          />
-          <Button
-            label="Back"
-            color="primary"
-            variant="text"
-            className="px-0"
-            leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-            onClick={onBack}
           />
         </div>
       </div>
