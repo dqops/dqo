@@ -13,11 +13,11 @@ The statistics around text values are less sophisticated than calculating metric
 but observing the length of strings can still reveal many data quality issues.
 
 ### Issues with too short texts
-Texts shorter than a reasonable minimum are a possible case of potential data corruption. 
-We can't expect a phone number to be only two digits. 
-Or an email that has just two letters must be wrong. It is not even enough to include the domain name.
+Texts that are shorter than a reasonable minimum may indicate potential data corruption. For example, a phone number 
+should not be only two digits, and an email address with just two letters is likely to be incorrect 
+as it does not include the domain name.
 
-Too short texts are a result of:
+Too short texts can be a result of:
 
 - Someone accidentally truncated the text manually.
 
@@ -34,11 +34,11 @@ Too short texts are a result of:
 To detect these types of possible data corruption, we can choose a reasonable minimum text length
 that should fit the smallest valid value, such as a phone number.
 
-Truncated texts that are too short lead to the completeness and uniqueness issues. 
-If more identifiers are also truncated, we will have duplicate data.
+Short, truncated texts can lead to issues with completeness and uniqueness. 
+If additional identifiers are also truncated, it can result in duplicate data.
 
 ### Issues with too long texts
-Texts that are longer than expected are caused by other problems.
+Texts that are longer than expected can be caused by other problems.
 
 - The data is corrupted.
 
@@ -86,30 +86,33 @@ They are very similar to each other, but they can still detect different types o
 - The [*text_length_in_range_percent*](../checks/column/text/text-length-in-range-percent.md) check measures the percentage of valid texts whose length
   is within a minimum and maximum accepted length.
 
+- The [*min_word_count*](../checks/column/text/min-word-count.md) check verifies that the minimum word count of the text column is in the range.
+
+- The [*max_word_count*](../checks/column/text/max-word-count.md) check verifies that the maximum word count of the text is in the range.
+
 ### Profiling the text length
 DQOps shows the text length statistics on the column's profile screen.
 The values are:
 
 - The **Text min length** shows the length of the shortest text in the column.
-
 - The **Text max length** shows the length of the longest text in the column.
-
 - The **Text mean length** shows the average text length.
+- The **Text min word count** shows the minimal number of words in the column.
+- The **Text max word count** shows the maximal number of words in the column.
 
-![Data profiling a text column length in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-profiling-text-column-length-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Data profiling a text column length in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-profiling-text-column-length-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ## Minimum text length
 The [*text_min_length*](../checks/column/text/text-min-length.md) has two optional rule parameters.
 
 - The **from** parameter configures a minimum text length bottom range.
-
 - The **to** parameter configures a minimum text length upper range.
 
 ### Verifying minimum text length in UI
 The following screenshot shows configuring the [*text_min_length*](../checks/column/text/text-min-length.md) check 
 in the [DQOps data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-![Configuring minimum text length in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/min-text-length-in-range-data-quality-check-in-dqops-min.png){ loading=lazy; width="1200px" }
+![Configuring minimum text length in range data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/min-text-length-in-range-data-quality-check-in-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ### Verifying minimum text length in YAML
 The configuration of the [*text_min_length*](../checks/column/text/text-min-length.md) check in YAML is simple.
@@ -141,10 +144,8 @@ Instead, it is effortless to customize the built-in checks by combining the sens
 
 - [*column/text/text_min_length*](../reference/sensors/column/text-column-sensors.md#text-min-length)
   sensor that finds the length of the shortest text,
-
 - [*column/text/text_max_length*](../reference/sensors/column/text-column-sensors.md#text-max-length)
   sensor that finds the length of the longest text,
-
 - [*column/text/text_mean_length*](../reference/sensors/column/text-column-sensors.md#text-mean-length)
   sensor that calculates the average length.
 
@@ -152,14 +153,13 @@ And one of the anomaly or change detection rules:
 
 - [*percentile/anomaly_stationary_percentile_moving_average*](../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)
   that finds anomalies in a 90 days time window,
-
 - [*change/change_percent_1_day*](../reference/rules/Change.md#change-percent-1-day)
   that detects an increase or a decrease in the captured value (such as a maximum text length).
 
 The following screenshot shows the configuration of a custom data quality check that detects changes
 to the minimum or maximum text length.
 
-![Creating custom data quality check that detects anomalies in the maximum text length](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/creating-custom-text-maximum-length-anomaly-detection-check-dqops-min.png){ loading=lazy; width="1200px" }
+![Creating custom data quality check that detects anomalies in the maximum text length](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/creating-custom-text-maximum-length-anomaly-detection-check-dqops-min2.png){ loading=lazy; width="1200px" }
 
 ## Use cases
 | **Name of the example**                                                                                        | **Description**                                                                                                                                                                                                                         |
