@@ -121,33 +121,10 @@ The data quality results of the profiling checks are used further in DQOps when 
 in the [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) or [partition](definition-of-data-quality-checks/partition-checks.md) sections.
 
 
-## Data quality check configuration steps
-Follow these steps to configure the data quality lifecycle process in DQOps.
-
-### Basic profiling
-
-### Advanced profiling
-
-### Data quality check selection
-
-### Data quality check evaluation
-
-### Data quality health review
-
-### Data quality issue review
-
-### Data quality rule tuning
-
-### Disabling false-positive checks
-
-
-## Data observability
-
-### Configuring monitoring checks
-
-### Configuring partition checks
-
-### Incident management
 
 
 ## What's next
+
+- Get familiar with the [DQOps user interface](dqops-user-interface-overview.md)
+- Learn how to [connect data sources](configuring-data-sources.md)
+- Learn how to [configure data quality checks](configuring-data-quality-checks-and-rules.md)
