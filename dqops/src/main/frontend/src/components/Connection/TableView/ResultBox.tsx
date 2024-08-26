@@ -142,25 +142,25 @@ const ResultBox = ({
         </div>
       </td>
       {secondBool && (
-        <>
-          <td className="flex justify-between w-2/3 ">
-            <th className="text-sm font-light">Results:</th>
+        <div className="mt-1">
+          <td className="flex justify-between w-[100%] ">
+            <th className="text-sm font-bold">Results</th>
           </td>
-          <td className="flex justify-between w-2/3 ">
-            <th className="text-xs font-light">Valid:</th>
+          <td className="flex justify-between w-[100%] ">
+            <th className="text-xs font-light">Correct results:</th>
             {item.valid_results}
           </td>
-          <td className="flex justify-between w-2/3 ">
+          <td className="flex justify-between w-[100%] ">
+            <th className="text-xs font-light">Warning:</th>
+            {item.warnings}
+          </td>
+          <td className="flex justify-between w-[100%] ">
             <th className="text-xs font-light">Errors:</th>
             {item.errors}
           </td>
-          <td className="flex justify-between w-2/3 ">
-            <th className="text-xs font-light">Fatal:</th>
+          <td className="flex justify-between w-[100%] ">
+            <th className="text-xs font-light">Fatal errors:</th>
             {item.fatals}
-          </td>
-          <td className="flex justify-between w-2/3 ">
-            <th className="text-xs font-light">Warning:</th>
-            {item.warnings}
           </td>
           <td>
             <a className="group relative text-teal-500 underline whitespace-normal cursor-pointer text-xs">
@@ -186,7 +186,7 @@ const ResultBox = ({
               </section>
             </a>
           </td>
-        </>
+        </div>
       )}
     </tr>
   );

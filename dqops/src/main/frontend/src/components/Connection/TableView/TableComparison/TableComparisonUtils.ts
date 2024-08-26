@@ -64,13 +64,13 @@ export const calculateColor = (
   }
 
   if (colorVar?.fatals && Number(colorVar.fatals) !== 0) {
-    return 'bg-red-200';
+    return 'bg-[#EF8079]';
   } else if (colorVar?.errors && Number(colorVar.errors) !== 0) {
-    return 'bg-orange-200';
+    return 'bg-[#EFB87E]';
   } else if (colorVar?.warnings && Number(colorVar.warnings) !== 0) {
-    return 'bg-yellow-200';
+    return 'bg-[#EFEC82]';
   } else if (colorVar?.valid_results && Number(colorVar.valid_results) !== 0) {
-    return 'bg-green-200';
+    return 'bg-[#5CBCAB]';
   } else {
     return '';
   }
