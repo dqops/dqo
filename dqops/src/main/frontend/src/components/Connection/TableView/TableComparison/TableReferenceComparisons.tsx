@@ -148,7 +148,9 @@ export const TableReferenceComparisons = ({
             schema,
             table
           ),
-          state: {},
+          state: {
+            checksUI
+          },
           label: table
         })
       );

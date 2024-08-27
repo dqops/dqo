@@ -97,7 +97,6 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdateChecksUI = (
-    checksUI: any,
     type: 'row' | 'column',
     disabled?: boolean,
     severity?: TSeverityValues
@@ -120,6 +119,7 @@ export const EditProfilingReferenceTable = ({
         String(item.check_name).includes('column')
       );
     }
+
     if (disabled !== undefined) {
       selectedCheck.configured = disabled;
       if (type === 'row') {
@@ -562,6 +562,7 @@ export const EditProfilingReferenceTable = ({
       </div>
     );
   }
+  console.log(checksUI);
 
   return (
     <div className="text-sm">
@@ -626,7 +627,6 @@ export const EditProfilingReferenceTable = ({
                 }
                 showRowCount={showRowCount}
                 onUpdateChecksUI={onUpdateChecksUI}
-                checksUI={checksUI}
                 setIsUpdated={setIsUpdated}
                 tableComparisonResults={tableComparisonResults}
                 showColumnCount={showColumnCount}
@@ -644,7 +644,6 @@ export const EditProfilingReferenceTable = ({
                           onChange={onChangeCompareRowCount}
                           reference={reference}
                           onUpdateChecksUI={onUpdateChecksUI}
-                          checksUI={checksUI}
                           type="row"
                         />
                       ) : (
@@ -666,7 +665,6 @@ export const EditProfilingReferenceTable = ({
                             onChange={onChangeCompareColumnCount}
                             reference={reference}
                             onUpdateChecksUI={onUpdateChecksUI}
-                            checksUI={checksUI}
                             type="column"
                           />
                         ) : (

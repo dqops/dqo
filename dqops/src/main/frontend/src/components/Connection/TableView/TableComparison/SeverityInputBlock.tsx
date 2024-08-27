@@ -1,18 +1,16 @@
 import React from 'react';
-import Input from '../../../Input';
 import { CompareThresholdsModel, TableComparisonModel } from '../../../../api';
+import Input from '../../../Input';
 import { TSeverityValues } from './TableComparisonConstans';
 
 type TSeverityInputBlock = {
   onChange: (obj: Partial<CompareThresholdsModel>) => void;
   reference: TableComparisonModel;
   onUpdateChecksUI: (
-    checksUI: any,
     type: 'row' | 'column',
     disabled?: boolean,
     severity?: TSeverityValues
   ) => void;
-  checksUI: any;
   type: 'row' | 'column';
 };
 
@@ -20,7 +18,6 @@ export default function SeverityInputBlock({
   onChange,
   reference,
   onUpdateChecksUI,
-  checksUI,
   type
 }: TSeverityInputBlock) {
   return (
@@ -40,7 +37,7 @@ export default function SeverityInputBlock({
                   ? undefined
                   : Number(e.target.value)
             });
-            onUpdateChecksUI(checksUI, type, undefined, {
+            onUpdateChecksUI(type, undefined, {
               warning:
                 String(e.target.value).length === 0
                   ? undefined
@@ -65,7 +62,7 @@ export default function SeverityInputBlock({
                   ? undefined
                   : Number(e.target.value)
             });
-            onUpdateChecksUI(checksUI, type, undefined, {
+            onUpdateChecksUI(type, undefined, {
               error:
                 String(e.target.value).length === 0
                   ? undefined
@@ -90,7 +87,7 @@ export default function SeverityInputBlock({
                   ? undefined
                   : Number(e.target.value)
             });
-            onUpdateChecksUI(checksUI, type, undefined, {
+            onUpdateChecksUI(type, undefined, {
               fatal:
                 String(e.target.value).length === 0
                   ? undefined
