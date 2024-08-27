@@ -83,6 +83,7 @@ export default function TableComparisonOverwiewBody({
             }
             empty={true}
             placeholder=""
+            className="pr-2"
           />
         </td>
         {itemsToRender.map((itemData, jIndex) => (

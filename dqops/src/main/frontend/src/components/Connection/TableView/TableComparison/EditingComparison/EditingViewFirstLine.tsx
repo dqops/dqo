@@ -84,12 +84,20 @@ export default function EditingViewFirstLine({
     <div>
       <div className="flex items-center justify-between my-4">
         <div className="flex items-center justify-center gap-x-5">
-          <div className="font-bold text-center">
+          <div className="text-center">
             Table comparison configuration name:{' '}
           </div>
-          <span className="font-bold">{editConfigurationParameters.name}</span>
+          <span>{editConfigurationParameters.name}</span>
         </div>
         <div className="flex justify-center items-center gap-x-2">
+          <Button
+            label="Back"
+            color="primary"
+            variant="text"
+            className="px-0 mr-2"
+            leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+            onClick={onBack}
+          />
           <Button
             color="primary"
             variant="contained"
@@ -121,14 +129,6 @@ export default function EditingViewFirstLine({
               getIsButtonEnabled(editConfigurationParameters) === false ||
               userProfile.can_manage_data_sources !== true
             }
-          />
-          <Button
-            label="Back"
-            color="primary"
-            variant="text"
-            className="px-0"
-            leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-            onClick={onBack}
           />
         </div>
       </div>
