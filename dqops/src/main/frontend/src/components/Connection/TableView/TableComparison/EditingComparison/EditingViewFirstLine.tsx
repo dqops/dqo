@@ -94,7 +94,7 @@ export default function EditingViewFirstLine({
             label="Back"
             color="primary"
             variant="text"
-            className="px-0"
+            className="px-0 mr-2"
             leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
             onClick={onBack}
           />

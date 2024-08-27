@@ -102,7 +102,7 @@ export const EditProfilingReferenceTable = ({
     disabled?: boolean,
     severity?: TSeverityValues
   ) => {
-    const checks = checksUI.categories.find(
+    const checks = checksUI?.categories?.find(
       (item: any) =>
         String(item.category) ===
         `comparisons/${
@@ -374,6 +374,27 @@ export const EditProfilingReferenceTable = ({
   };
 
   const compareTables = async () => {
+    const runChecks = async () => {
+      setIsUpdated(false);
+      try {
+        const res = await JobApiClient.runChecks(undefined, false, undefined, {
+          check_search_filters: categoryCheck
+            ? categoryCheck?.run_checks_job_template
+            : {
+                connection: connection,
+                fullTableName: schema + '.' + table,
+                tableComparisonName:
+                  reference?.table_comparison_configuration_name,
+                enabled: true,
+                checkCategory: 'comparisons',
+                checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
+              }
+        });
+        setJobId(res.data?.jobId?.jobId);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     onUpdate(
       connection,
       schema,
@@ -382,27 +403,9 @@ export const EditProfilingReferenceTable = ({
       timePartitioned,
       reference,
       handleChange,
-      checksUI
+      checksUI,
+      runChecks
     );
-    setIsUpdated(false);
-    try {
-      const res = await JobApiClient.runChecks(undefined, false, undefined, {
-        check_search_filters: categoryCheck
-          ? categoryCheck?.run_checks_job_template
-          : {
-              connection: connection,
-              fullTableName: schema + '.' + table,
-              tableComparisonName:
-                reference?.table_comparison_configuration_name,
-              enabled: true,
-              checkCategory: 'comparisons',
-              checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
-            }
-      });
-      setJobId(res.data?.jobId?.jobId);
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   const deleteData = async (params: { [key: string]: string | boolean }) => {

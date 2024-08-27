@@ -84,7 +84,8 @@ export const onUpdate = (
   timePartitioned: 'daily' | 'monthly' | undefined,
   reference: TableComparisonModel | undefined,
   handleChange: (value: CheckContainerModel) => Promise<void>,
-  tableChecksToUpdate: any
+  tableChecksToUpdate: any,
+  callback?: () => Promise<void>
 ) => {
   if (checkTypes === CheckTypes.PROFILING) {
     TableComparisonsApi.updateTableComparisonProfiling(
@@ -93,9 +94,13 @@ export const onUpdate = (
       table,
       reference?.table_comparison_configuration_name ?? '',
       reference
-    ).catch((err) => {
-      console.error(err);
-    });
+    )
+      .then(() => {
+        callback && callback();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   } else if (checkTypes === CheckTypes.MONITORING) {
     if (timePartitioned === 'daily') {
       TableComparisonsApi.updateTableComparisonMonitoringDaily(
@@ -104,9 +109,13 @@ export const onUpdate = (
         table,
         reference?.table_comparison_configuration_name ?? '',
         reference
-      ).catch((err) => {
-        console.error(err);
-      });
+      )
+        .then(() => {
+          callback && callback();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } else if (timePartitioned === 'monthly') {
       TableComparisonsApi.updateTableComparisonMonitoringMonthly(
         connection,
@@ -114,9 +123,13 @@ export const onUpdate = (
         table,
         reference?.table_comparison_configuration_name ?? '',
         reference
-      ).catch((err) => {
-        console.error(err);
-      });
+      )
+        .then(() => {
+          callback && callback();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   } else if (checkTypes === CheckTypes.PARTITIONED) {
     if (timePartitioned === 'daily') {
