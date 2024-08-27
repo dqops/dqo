@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonDailyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.customsql.TableCustomSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.uniqueness.TableUniquenessDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -54,6 +55,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("custom_sql", o -> o.customSql);
+            put("uniqueness", o -> o.uniqueness);
             put("comparisons", o -> o.comparisons);
 
             // accuracy checks are not supported on partitioned checks yet, but we support comparisons
@@ -74,6 +76,11 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableCustomSqlDailyPartitionedChecksSpec customSql;
+
+    @JsonPropertyDescription("Daily partitioned uniqueness checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableUniquenessDailyPartitionedChecksSpec uniqueness;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -132,6 +139,24 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.customSql, customSql));
         this.customSql = customSql;
         this.propagateHierarchyIdToField(customSql, "custom_sql");
+    }
+
+    /**
+     * Returns a container of table uniqueness checks.
+     * @return Table uniqueness checks.
+     */
+    public TableUniquenessDailyPartitionedChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets a reference to a container with the table uniqueness checks.
+     * @param uniqueness Container of table uniqueness checks.
+     */
+    public void setUniqueness(TableUniquenessDailyPartitionedChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**
