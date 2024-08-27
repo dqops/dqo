@@ -82,7 +82,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2 !w-62"
             label="Copy failed profiling checks"
-            tooltipText="Copy the configuration of profiling checks that failed durign the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continous monitoring."
+            tooltipText="Copy the configuration of profiling checks that failed durinh the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continuous monitoring."
             checked={configuration.copy_failed_profiling_checks}
             onChange={(e) =>
               onChangeConfiguration({ copy_failed_profiling_checks: e })
@@ -109,7 +109,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2 !w-62"
             label="Reconfigure default checks"
-            tooltipText="Reconfigure the rule thresholds of data quality checks that were activated using data observability rule patterns (data quality policies)"
+            tooltipText="Reconfigure the rule thresholds of data quality checks that were activated using data observability rule patterns (data quality policies)."
             checked={configuration.propose_default_checks}
             onChange={(e) =>
               onChangeConfiguration({ propose_default_checks: e })
@@ -118,7 +118,7 @@ export default function RuleMiningFilters({
         </div>
         <Checkbox
           className="p-2 !w-62"
-          tooltipText="Configure the minimum row count based on the statistics"
+          tooltipText="Configure the minimum row count based on the basic statistics captured from the table."
           label="Minimum row count"
           checked={configuration.propose_minimum_row_count}
           onChange={(e) =>
@@ -134,7 +134,7 @@ export default function RuleMiningFilters({
         />
         <Checkbox
           className="p-2 !w-62"
-          tooltipText="Configure a column exists check for each column to report when the column is no longer present"
+          tooltipText="Configure a column exists check for each column to report when the column is no longer present."
           label="Column exists"
           checked={configuration.propose_column_exists}
           onChange={(e) => onChangeConfiguration({ propose_column_exists: e })}
