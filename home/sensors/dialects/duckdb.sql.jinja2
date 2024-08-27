@@ -221,11 +221,29 @@
     {%- endif -%}
 {% endmacro %}
 
+{% macro render_data_grouping_projections_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
+        {%- for attribute in data_groupings -%}
+            {{ ',' -}}{{- eol() }}
+            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+        {%- endfor -%}
+        {{- eol() }}
+    {%- endif -%}
+{% endmacro %}
+
 {% macro render_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
         {{ indentation }}CAST(({{ render_time_dimension_expression(table_alias_prefix) }}) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_projection_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if time_series is not none -%}
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}time_period,{{ eol() -}}
+        {{ indentation }}time_period_utc
     {%- endif -%}
 {% endmacro %}
 
