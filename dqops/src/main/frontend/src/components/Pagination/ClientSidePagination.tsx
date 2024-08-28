@@ -15,7 +15,7 @@ export default function ClientSidePagination<T>({
 }: IClientSidePaginationProps<T>) {
   const [filters, setFilters] = React.useState({
     page: 1,
-    pageSize: 1
+    pageSize: 10
   });
 
   const paginatedItems = useMemo(() => {
