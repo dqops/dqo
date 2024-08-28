@@ -75,6 +75,7 @@ export default function DataDictionaryConfigurationTable({
           </td>
           <td className="px-2 py-2 text-left block max-w-100">
             <IconButton
+              ripple={false}
               size="sm"
               onClick={() =>
                 updateDataDictionary(dictionary.dictionary_name ?? '')
@@ -88,6 +89,7 @@ export default function DataDictionaryConfigurationTable({
           </td>
           <td className="px-2 py-2 text-left block max-w-100">
             <IconButton
+              ripple={false}
               size="sm"
               onClick={() =>
                 setSelectedDictionaryToDelete(dictionary.dictionary_name ?? '')
@@ -107,6 +109,7 @@ export default function DataDictionaryConfigurationTable({
               className="text-teal-500"
             >
               <IconButton
+                ripple={false}
                 size="sm"
                 disabled={userProfile.can_manage_definitions !== true}
                 color="teal"

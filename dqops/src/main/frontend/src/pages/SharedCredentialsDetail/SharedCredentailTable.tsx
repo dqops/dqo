@@ -45,6 +45,7 @@ export default function SharedCredentailTable({
           <td className="px-6 py-2 text-left block w-100">{credential.type}</td>
           <td className="px-2 py-2 text-left block max-w-100">
             <IconButton
+              ripple={false}
               size="sm"
               onClick={() =>
                 updateSharedCredential(credential.credential_name ?? '')
@@ -64,6 +65,7 @@ export default function SharedCredentailTable({
               className="text-teal-500"
             >
               <IconButton
+                ripple={false}
                 size="sm"
                 disabled={userProfile.can_manage_definitions !== true}
                 color="teal"
@@ -75,6 +77,7 @@ export default function SharedCredentailTable({
           </td>
           <td className="px-2 py-2 text-left block max-w-100">
             <IconButton
+              ripple={false}
               size="sm"
               onClick={() =>
                 setSelectedSharedCredentialToDelete(
