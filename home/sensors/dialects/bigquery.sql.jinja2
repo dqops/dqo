@@ -178,10 +178,9 @@
 {% macro render_data_grouping_projections_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
     {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
         {%- for attribute in data_groupings -%}
-            {{ ',' -}}{{- eol() }}
+            {{- ',' -}}{{- eol() -}}
             {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
         {%- endfor -%}
-        {{- eol() }}
     {%- endif -%}
 {% endmacro %}
 
@@ -195,7 +194,7 @@
 
 {% macro render_time_dimension_projection_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
     {%- if time_series is not none -%}
-        {{ ',' -}}{{- eol() -}}
+        {{- ',' -}}{{- eol() -}}
         {{ indentation }}time_period,{{ eol() -}}
         {{ indentation }}time_period_utc
     {%- endif -%}
