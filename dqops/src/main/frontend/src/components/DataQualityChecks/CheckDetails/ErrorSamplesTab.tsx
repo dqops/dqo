@@ -152,9 +152,9 @@ const ErrorSamplesTab = ({
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
       {errorSamples.map((result, index) => (
-        <div key={index} className="mb-2">
+        <div key={index}>
           <Table
-            className="mt-4 w-full"
+            className="mt-1 w-full"
             columns={columns}
             data={(result.errorSamplesEntries || []).map((item) => ({
               ...item,
@@ -163,7 +163,7 @@ const ErrorSamplesTab = ({
                 getLocalDateInUserTimeZone(new Date(String(item.collectedAt)))
               ).format('YYYY-MM-DD HH:mm:ss')
             }))}
-            emptyMessage="No Data"
+            emptyMessage="No data"
           />
         </div>
       ))}

@@ -46,7 +46,7 @@ export const DefinitionTree = () => {
     refreshRulesTreeIndicator,
     refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
-  console.log(definitionFirstLevelFolder);
+
   const {
     openCheckDefaultFirstLevelTab,
     openCheckFirstLevelTab,
@@ -410,7 +410,7 @@ export const DefinitionTree = () => {
       </div>
     );
   };
-  console.log(highlightedNode);
+
   const NodeComponent = ({
     onClick,
     icon,
