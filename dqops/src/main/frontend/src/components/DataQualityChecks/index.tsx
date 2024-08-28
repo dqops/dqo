@@ -27,7 +27,7 @@ import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getIsAnyCheckResults,
-  getIsAnyChecksEnabled,
+  getIsAnyChecksEnabledOrDefault,
   useDecodedParams
 } from '../../utils';
 import Button from '../Button';
@@ -604,7 +604,7 @@ const DataQualityChecks = ({
           isFiltered={isFiltered}
           ruleParamenterConfigured={!!ruleParametersConfigured}
           flashRunChecks={
-            getIsAnyChecksEnabled(checksUI) &&
+            getIsAnyChecksEnabledOrDefault(checksUI) &&
             !getIsAnyCheckResults(checkResultsOverview)
           }
         />

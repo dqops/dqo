@@ -436,8 +436,17 @@ const TableHeader = ({
                   className={clsx('text-primary cursor-pointer')}
                   onClick={onRunChecks}
                 />
-                <div className="hidden group-hover:block absolute bottom-[-10] right-2 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                  Run checks for the category
+                <div
+                  className={clsx(
+                    'hidden group-hover:block absolute right-2 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1',
+                    flashRunChecks
+                      ? 'w-40 right-[22px] bottom-[-10px]'
+                      : 'right-[22px] bottom-[-10px]'
+                  )}
+                >
+                  {flashRunChecks
+                    ? 'Data quality checks are configured, but DQOps does not have any recent results. Please run the data quality checks to get the values.'
+                    : 'Run checks for the category'}
                 </div>
               </div>
             )}

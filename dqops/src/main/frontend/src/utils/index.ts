@@ -888,6 +888,21 @@ export const getIsAnyChecksEnabled = (checksUI?: CheckContainerModel) => {
   return !!param;
 };
 
+export const getIsAnyChecksEnabledOrDefault = (
+  checksUI?: CheckContainerModel
+) => {
+  const checks: CheckModel[] = [];
+  checksUI?.categories?.forEach((category) => {
+    checks.push(...(category.checks || []));
+  });
+  const param = checks?.find((x) => {
+    if (x.configured === true || x.default_check === true) {
+      return true;
+    }
+  });
+  return !!param;
+};
+
 export const getIsAnyCheckResults = (
   checksOverview?: CheckResultsOverviewDataModel[]
 ) => {
