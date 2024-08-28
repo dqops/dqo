@@ -5,6 +5,7 @@ import { FilteredNotificationModel } from '../../../../api';
 import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
 import { getSeverity, sortPatterns } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
+import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
 
 const HEADER_ELEMENTS = [
@@ -48,6 +49,7 @@ export default function NotificationPatternTable({
   const [notificationPatternDelete, setPatternDelete] = useState('');
   const [indexSortingElement, setIndexSortingElement] = useState(1);
   const [headerItems, setHeaderItems] = useState(HEADER_ELEMENTS);
+  const [displayedPatterns, setDisplayedPatterns] = useState<any[]>([]); // State for displayed patterns
 
   const getFilteredItemsBasedOnWidth = () => {
     const width = window.innerWidth;
@@ -178,7 +180,7 @@ export default function NotificationPatternTable({
       <div className="w-full h-1.5"></div>
       <tbody className="border-t border-gray-100 mt-1">
         <div className="w-full h-1"></div>
-        {sortedNotifications.map((notificationPattern, index) => (
+        {displayedPatterns.map((notificationPattern, index) => (
           <tr key={index} className="text-sm">
             {getFilteredItemsBasedOnWidth().map((elem) => (
               <td
@@ -246,6 +248,11 @@ export default function NotificationPatternTable({
             ))}
           </tr>
         ))}
+        <ClientSidePagination
+          items={sortedNotifications}
+          onChangeItems={setDisplayedPatterns}
+          className="pl-0"
+        />
         <ConfirmDialog
           open={notificationPatternDelete.length > 0}
           onConfirm={async () => {
