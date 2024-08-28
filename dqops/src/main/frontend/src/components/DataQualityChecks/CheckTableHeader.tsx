@@ -44,6 +44,7 @@ interface TableHeaderProps {
   setShowAdvanced: (showAdvanced: boolean) => void;
   isFiltered?: boolean;
   ruleParamenterConfigured: boolean;
+  flashRunChecks?: boolean;
 }
 
 const TableHeader = ({
@@ -58,7 +59,8 @@ const TableHeader = ({
   showAdvanced,
   setShowAdvanced,
   isFiltered,
-  ruleParamenterConfigured
+  ruleParamenterConfigured,
+  flashRunChecks
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -82,7 +84,6 @@ const TableHeader = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { currentJobId } = useSelector(getFirstLevelState(checkTypes));
   const job = currentJobId ? job_dictionary_state[currentJobId] : undefined;
-
   const onRunChecks = async () => {
     await onUpdate();
     const res = await JobApiClient.runChecks(undefined, false, undefined, {
@@ -423,7 +424,12 @@ const TableHeader = ({
                 className="text-gray-700 h-5 cursor-pointer"
               />
             ) : (
-              <div className="group relative">
+              <div
+                className={clsx(
+                  'group relative rounded-99',
+                  flashRunChecks && 'flash-red-border'
+                )}
+              >
                 <SvgIcon
                   name="play"
                   width={20}

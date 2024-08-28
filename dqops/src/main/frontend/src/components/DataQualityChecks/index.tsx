@@ -25,7 +25,11 @@ import {
 } from '../../redux/selectors';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import {
+  getIsAnyCheckResults,
+  getIsAnyChecksEnabled,
+  useDecodedParams
+} from '../../utils';
 import Button from '../Button';
 import Loader from '../Loader';
 import Select from '../Select';
@@ -554,14 +558,16 @@ const DataQualityChecks = ({
           <div className="text-sm text-red-500">
             <div className="mr-3 text-black">
               The results are date partitioned (grouped) by a column:
-              {checksUI.partition_by_column ? (
-                  checksUI.partition_by_column
-              ) : ''
-            }
+              {checksUI.partition_by_column ? checksUI.partition_by_column : ''}
             </div>
             {!checksUI.partition_by_column ? (
-              <div>Warning: Partition checks will not be run, please configure the date or datetime column</div>
-            ) : ''}
+              <div>
+                Warning: Partition checks will not be run, please configure the
+                date or datetime column
+              </div>
+            ) : (
+              ''
+            )}
           </div>
           <Button
             label="Configure the date partitioning column"
@@ -597,6 +603,10 @@ const DataQualityChecks = ({
           setShowAdvanced={setShowAdvanced}
           isFiltered={isFiltered}
           ruleParamenterConfigured={!!ruleParametersConfigured}
+          flashRunChecks={
+            getIsAnyChecksEnabled(checksUI) &&
+            !getIsAnyCheckResults(checkResultsOverview)
+          }
         />
         <tbody>
           {(checksUI?.categories ?? []).map((category, index) => (
