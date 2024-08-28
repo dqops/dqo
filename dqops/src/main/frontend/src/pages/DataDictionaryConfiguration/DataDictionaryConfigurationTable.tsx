@@ -86,6 +86,7 @@ export default function DataDictionaryConfigurationTable({
                   onClick={() =>
                     updateDataDictionary(dictionary.dictionary_name ?? '')
                   }
+                  ripple={false}
                   color="teal"
                   className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   disabled={userProfile.can_manage_definitions !== true}
@@ -101,6 +102,7 @@ export default function DataDictionaryConfigurationTable({
                       dictionary.dictionary_name ?? ''
                     )
                   }
+                  ripple={false}
                   disabled={userProfile.can_manage_definitions !== true}
                   color="teal"
                   className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
@@ -120,6 +122,7 @@ export default function DataDictionaryConfigurationTable({
                     disabled={userProfile.can_manage_definitions !== true}
                     color="teal"
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                    ripple={false}
                   >
                     <SvgIcon name="download" className="w-4" />
                   </IconButton>

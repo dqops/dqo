@@ -416,6 +416,7 @@ export const IncidentConnection = () => {
                   </Tooltip>
                 </a>
                 <IconButton
+                  ripple={false}
                   color="teal"
                   size="sm"
                   onClick={() => addIssueUrl(row)}
@@ -426,6 +427,7 @@ export const IncidentConnection = () => {
               </div>
             ) : (
               <IconButton
+                ripple={false}
                 color="teal"
                 size="sm"
                 onClick={() => addIssueUrl(row)}

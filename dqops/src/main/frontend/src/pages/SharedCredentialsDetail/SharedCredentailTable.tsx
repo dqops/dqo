@@ -57,6 +57,7 @@ export default function SharedCredentialTable({
                   onClick={() =>
                     updateSharedCredential(credential.credential_name ?? '')
                   }
+                  ripple={false}
                   color="teal"
                   className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   disabled={userProfile.can_manage_definitions !== true}
@@ -75,6 +76,7 @@ export default function SharedCredentialTable({
                     size="sm"
                     disabled={userProfile.can_manage_definitions !== true}
                     color="teal"
+                    ripple={false}
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
                     <SvgIcon name="download" className="w-4" />

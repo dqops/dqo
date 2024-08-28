@@ -68,6 +68,7 @@ export const ProfilingReferenceTableList = ({
                 {' '}
                 <IconButton
                   size="sm"
+                  ripple={false}
                   className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                   onClick={() => {
                     selectReference(reference);

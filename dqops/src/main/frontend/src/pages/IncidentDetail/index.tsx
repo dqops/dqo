@@ -598,6 +598,7 @@ export const IncidentDetail = () => {
                         </Tooltip>
                       </a>
                       <IconButton
+                        ripple={false}
                         color="teal"
                         size="sm"
                         onClick={() => setOpen(true)}
@@ -608,6 +609,7 @@ export const IncidentDetail = () => {
                     </div>
                   ) : (
                     <IconButton
+                      ripple={false}
                       color="teal"
                       size="sm"
                       onClick={() => setOpen(true)}

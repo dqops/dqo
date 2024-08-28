@@ -387,6 +387,7 @@ export default function TableColumnsBody({
             <div className="flex" style={{ justifyContent: 'flex-end' }}>
               <div>
                 <IconButton
+                  ripple={false}
                   size="sm"
                   disabled={userProfile.can_collect_statistics !== true}
                   className={
@@ -406,6 +407,7 @@ export default function TableColumnsBody({
               </div>
               <div>
                 <IconButton
+                  ripple={false}
                   size="sm"
                   className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                   disabled={userProfile.can_manage_data_sources !== true}

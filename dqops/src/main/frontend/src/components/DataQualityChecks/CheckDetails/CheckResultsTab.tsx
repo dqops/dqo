@@ -330,6 +330,7 @@ const CheckResultsTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <IconButton
+            ripple={false}
             size="sm"
             className={
               mode === 'chart'
@@ -357,9 +358,10 @@ const CheckResultsTab = ({
           </IconButton>
           <IconButton
             size="sm"
+            ripple={false}
             className={
               mode === 'table'
-                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
                 : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
             onClick={() => {

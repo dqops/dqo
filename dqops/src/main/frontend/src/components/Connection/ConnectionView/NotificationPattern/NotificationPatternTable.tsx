@@ -218,6 +218,7 @@ export default function NotificationPatternTable({
                   {elem.key === 'action' && (
                     <div className="flex items-center gap-x-4 my-0.5">
                       <IconButton
+                        ripple={false}
                         onClick={() =>
                           setPatternNameEdit(notificationPattern.name ?? '')
                         }

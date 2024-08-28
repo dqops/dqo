@@ -36,6 +36,7 @@ export default function FilePath({
             <div className="flex justify-center">
               {' '}
               <IconButton
+                ripple={false}
                 color="teal"
                 size="sm"
                 onClick={() => onDeletePath(index)}
@@ -58,6 +59,7 @@ export default function FilePath({
         <div className="px-8 max-w-34 min-w-34 py-2">
           <div className="flex justify-center">
             <IconButton
+              ripple={false}
               size="sm"
               className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
               onClick={onAddPath}
