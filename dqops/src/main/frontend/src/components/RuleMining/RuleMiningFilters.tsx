@@ -317,7 +317,8 @@ export default function RuleMiningFilters({
           <Button
             label="Propose"
             onClick={proposeChecks}
-            color={isUpdatedFilters ? 'primary' : 'secondary'}
+            color="primary"
+            variant={isUpdatedFilters ? 'contained' : 'outlined'}
           />
           <Button
             label="Apply"
