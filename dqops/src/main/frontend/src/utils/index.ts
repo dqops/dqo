@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import {
   CheckContainerModel,
   CheckModel,
+  CheckResultsOverviewDataModel,
   CheckSearchFiltersCheckTypeEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
@@ -884,6 +885,31 @@ export const getIsAnyChecksEnabled = (checksUI?: CheckContainerModel) => {
       return true;
     }
   });
-  console.log(checks, param);
+  return !!param;
+};
+
+export const getIsAnyChecksEnabledOrDefault = (
+  checksUI?: CheckContainerModel
+) => {
+  const checks: CheckModel[] = [];
+  checksUI?.categories?.forEach((category) => {
+    checks.push(...(category.checks || []));
+  });
+  const param = checks?.find((x) => {
+    if (x.configured === true || x.default_check === true) {
+      return true;
+    }
+  });
+  return !!param;
+};
+
+export const getIsAnyCheckResults = (
+  checksOverview?: CheckResultsOverviewDataModel[]
+) => {
+  const param = checksOverview?.find((x) => {
+    if (x.results?.length) {
+      return true;
+    }
+  });
   return !!param;
 };
