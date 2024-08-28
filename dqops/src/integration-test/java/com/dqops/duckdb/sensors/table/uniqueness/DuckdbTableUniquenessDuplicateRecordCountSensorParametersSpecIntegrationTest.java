@@ -86,6 +86,19 @@ public class DuckdbTableUniquenessDuplicateRecordCountSensorParametersSpecIntegr
     }
 
     @Test
+    void runSensor_whenNoColumnsSet_usesAllColumns() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+    }
+
+    @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
         this.sut.setColumns(List.of("length_string", "strings_with_numbers"));
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
@@ -156,6 +169,20 @@ public class DuckdbTableUniquenessDuplicateRecordCountSensorParametersSpecIntegr
     }
 
     @Test
+    void runSensor_whenErrorSamplingUsesNoColumnsSet_usesAllColumns() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForErrorSampling(
+                sampleTableMetadata, this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(0, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+    }
+
+
+    @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsErrorSamples() {
         this.sut.setColumns(List.of("length_string", "strings_with_numbers"));
 
@@ -184,8 +211,8 @@ public class DuckdbTableUniquenessDuplicateRecordCountSensorParametersSpecIntegr
         sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
         sampleTableMetadata.getTableSpec().getColumns().getAt(1).setId(true);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
-                sampleTableMetadata, "date_iso", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForErrorSampling(
+                sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -225,8 +252,8 @@ public class DuckdbTableUniquenessDuplicateRecordCountSensorParametersSpecIntegr
         sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
         sampleTableMetadata.getTableSpec().getColumns().getAt(1).setId(true);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
-                sampleTableMetadata, "date_iso", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForErrorSampling(
+                sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

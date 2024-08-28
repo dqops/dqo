@@ -1,9 +1,15 @@
 {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
 
 {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none) -%}
-    {%- for item in values_list -%}
-        {{ (column_prefix) if column_prefix is not none}} {{ item }} {{ (column_suffix) if column_suffix is not none}} {{ ", " if not loop.last }}
-    {%- endfor -%}
+    {%- if values_list is none or (values_list | length()) == 0 -%}
+        {%- for item in table.columns -%}
+            {{ (column_prefix) if column_prefix is not none}} {{ item }} {{ (column_suffix) if column_suffix is not none}} {{ ", " if not loop.last }}
+        {%- endfor -%}
+    {%- else -%}
+        {%- for item in values_list -%}
+            {{ (column_prefix) if column_prefix is not none}} {{ item }} {{ (column_suffix) if column_suffix is not none}} {{ ", " if not loop.last }}
+        {%- endfor -%}
+    {%- endif -%}
 {% endmacro -%}
 
 SELECT
@@ -23,4 +29,3 @@ FROM (
 ) grouping_table
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
-
