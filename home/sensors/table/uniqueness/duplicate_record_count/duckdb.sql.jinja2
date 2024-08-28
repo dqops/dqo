@@ -2,7 +2,7 @@
 
 {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none) -%}
     {%- for item in values_list -%}
-        {{ (column_prefix ~ " ") if column_prefix is not none}} {{ item }} {{ (" " ~ column_suffix) if column_suffix is not none}} {{ ", " if not loop.last }}
+        {{ (column_prefix) if column_prefix is not none}} {{ item }} {{ (column_suffix) if column_suffix is not none}} {{ ", " if not loop.last }}
     {%- endfor -%}
 {% endmacro -%}
 
@@ -18,7 +18,7 @@ FROM (
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, 'CAST(', 'AS VARCHAR)') ~ ') IS NOT NULL') }}
+    {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST( ', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
     GROUP BY {{ extract_in_list(parameters.columns) }} {{ (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
 ) grouping_table
 {{- lib.render_group_by() -}}
