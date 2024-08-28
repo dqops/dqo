@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { DqoCloudUserModel, DqoCloudUserModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
@@ -14,6 +15,7 @@ import ChangeUserPasswordDialog from './ChangeUserPasswordDialog';
 export default function UserListDetail() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoCloudUserModel[]>([]);
+  const [displayedUsers, setDisplayedUsers] = useState<DqoCloudUserModel[]>([]); // State for displayed users
   const [reshreshUsersIndicator, setRefreshUsersIndicator] =
     useState<boolean>(false);
   const [selectedEmailToChangePassword, setSelectedEmailToChangePassword] =
@@ -62,7 +64,7 @@ export default function UserListDetail() {
     await UsersApi.changeCallerPassword(selectedEmailToChangePassword, password)
       .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
       .catch((err) => console.error(err));
-    setSelectedEmailToChangePassword(''); 
+    setSelectedEmailToChangePassword('');
   };
 
   const addDqoCloudUser = () => {
@@ -115,7 +117,7 @@ export default function UserListDetail() {
           ) : null}
         </thead>
         <tbody>
-          {dqoCloudUsers?.map((user, index) => (
+          {displayedUsers?.map((user, index) => (
             <tr key={index} className="flex items-center text-sm">
               <td className="px-6 py-2 text-left block w-100">{user.email}</td>
               <td className="px-6 py-2 text-left block w-50">
@@ -177,6 +179,10 @@ export default function UserListDetail() {
           ))}
         </tbody>
       </table>
+      <ClientSidePagination
+        items={dqoCloudUsers} // Pass the full list of users
+        onChangeItems={setDisplayedUsers} // Update the displayed users based on pagination
+      />
       <ConfirmDialog
         open={selectedEmailToDelete.length !== 0}
         onClose={() => setSelectedEmailToDelete('')}
