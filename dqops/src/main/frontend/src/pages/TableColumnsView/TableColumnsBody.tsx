@@ -11,10 +11,7 @@ import {
   TableColumnsStatisticsModel
 } from '../../api';
 import Checkbox from '../../components/Checkbox';
-import {
-  getColor,
-  getDimensionColor
-} from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
+import { getDimensionColor } from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
@@ -255,14 +252,14 @@ export default function TableColumnsBody({
                       <div
                         className={clsx(
                           'w-3 h-3 border border-gray-150',
-                          getColor(
+                          getDimensionColor(
                             column.dimentions?.[dimensionKey as any]
                               ?.current_severity as
                               | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
                               | undefined
                           ).length === 0
                             ? 'bg-gray-150'
-                            : getColor(
+                            : getDimensionColor(
                                 column.dimentions?.[dimensionKey as any]
                                   ?.current_severity as
                                   | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
