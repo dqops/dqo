@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -28,7 +29,6 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import SvgIcon from '../SvgIcon';
-import CategoryMenu from './CategoryMenu';
 
 interface TableHeaderProps {
   checksUI: CheckContainerModel;
@@ -278,7 +278,7 @@ const TableHeader = ({
   };
 
   return (
-    <thead>
+    <thead className="relative">
       {ruleParamenterConfigured && (
         <tr>
           <td
@@ -302,28 +302,6 @@ const TableHeader = ({
           <div className="flex items-center ">
             <div className="flex space-x-1 items-center w-45">
               <span className="mr-1">Data quality check</span>
-              {(!job ||
-                job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
-                job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
-                isDefaultEditing !== true && (
-                  <CategoryMenu
-                    onRunChecks={onRunChecks}
-                    onDeleteChecks={() => setDeleteDataDialogOpened(true)}
-                  />
-                )}
-              {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
-                <SvgIcon
-                  name="hourglass"
-                  className="text-gray-700 h-5 cursor-pointer"
-                />
-              )}
-              {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
-                job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
-                <SvgIcon
-                  name="hourglass"
-                  className="text-gray-700 h-5 cursor-pointer"
-                />
-              )}
             </div>
             <div className=" flex items-center justify-start font-normal">
               {isFiltered !== true ? (
@@ -339,26 +317,6 @@ const TableHeader = ({
         </th>
         <th className="text-start whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
           <div className="flex gap-2 items-center font-normal text-gray-950 justify-start">
-            {/* {!mode && (
-              <>
-                <Button
-                  color="primary"
-                  label="Set up monitoring checks"
-                  textSize="sm"
-                  className="font-medium px-1 py-1"
-                  variant="outlined"
-                  onClick={() => onChangeMode('monitoring')}
-                />
-                <Button
-                  color="primary"
-                  label="Set up partition checks"
-                  textSize="sm"
-                  className="font-medium px-1 py-1"
-                  variant="outlined"
-                  onClick={() => onChangeMode('partitioned')}
-                />
-              </>
-            )} */}
             {mode === 'monitoring' && (
               <>
                 <div className="text-sm">Copy selected checks to:</div>
@@ -443,6 +401,41 @@ const TableHeader = ({
               <div className="w-38 h-full bg-gray-400"></div>
             </td>
           </>
+        )}
+        {isDefaultEditing !== true && (
+          <div className="flex justify-end gap-x-3 absolute right-4 top-2">
+            <div className="group relative">
+              <SvgIcon
+                name="delete"
+                width={20}
+                className="cursor-pointer"
+                onClick={() => setDeleteDataDialogOpened(true)}
+              />
+              <div className="hidden group-hover:block absolute bottom-[-10] right-2 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                Delete data quality results for the category
+              </div>
+            </div>
+            {job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
+            job?.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+            job?.status === DqoJobHistoryEntryModelStatusEnum.waiting ? (
+              <SvgIcon
+                name="hourglass"
+                className="text-gray-700 h-5 cursor-pointer"
+              />
+            ) : (
+              <div className="group relative">
+                <SvgIcon
+                  name="play"
+                  width={20}
+                  className={clsx('text-primary cursor-pointer')}
+                  onClick={onRunChecks}
+                />
+                <div className="hidden group-hover:block absolute bottom-[-10] right-2 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
+                  Run checks for the category
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </tr>
       <DeleteOnlyDataDialog
