@@ -43,13 +43,13 @@ Incidents are the default function of DQOps and automatically groups issues.
 
 To modify the settings of the Incidents, follow these steps:
 
-![Incidents and notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings2.png){ loading=lazy; width="1200px" }
+![Incidents and notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-grouping.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Data Sources** section.
 
 2. Select the relevant data source from the tree view on the left.
 
-3. Select the **Incidents And Notifications** tab.
+3. Select the **Incident grouping** tab.
 
 4. Update the settings and click the **Save** button
 
