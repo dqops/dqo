@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.bigquery.sensors.table.uniqueness;
+package com.dqops.databricks.sensors.table.uniqueness;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordCountCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class DatabricksTableUniquenessDuplicateRecordCountSensorParametersSpecIntegrationTest extends BaseDatabricksIntegrationTest {
     private TableDuplicateRecordCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableDuplicateRecordCountCheckSpec checkSpec;
@@ -53,7 +53,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.databricks);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.sut = new TableDuplicateRecordCountSensorParametersSpec();
@@ -67,7 +67,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
 
         String csvFileName = SampleCsvFileNames.only_nulls;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                csvFileName, ProviderType.bigquery);
+                csvFileName, ProviderType.databricks);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
@@ -92,7 +92,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -120,7 +120,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -134,7 +134,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -148,7 +148,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class BigQueryTableUniquenessDuplicateRecordCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
