@@ -10,11 +10,11 @@
 {% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
 {% set files_format_type = connection.duckdb.files_format_type -%}
 
-{% macro quote_identifier(name) -%}
+{%- macro quote_identifier(name) -%}
     {%- if name == column_name and target_column_is_nested is not none and target_column_is_nested is true -%}
-        {{ name }}
+        {{- name -}}
     {%- else -%}
-        {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+        {{- dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end -}}
     {%- endif -%}
 {%- endmacro %}
 

@@ -107,8 +107,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                     SELECT COUNT(*) AS duplicated_count
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls
+                          AND (COALESCE(CAST(`int_nulls AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls, `string_nulls`
                 ) grouping_table""";
 
         Assertions.assertEquals(String.format(target_query,
@@ -144,8 +144,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         analyzed_table.`date` AS time_period,
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
-                    WHERE (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls, time_period, time_period_utc
+                    WHERE (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -182,8 +182,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls, time_period, time_period_utc
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -222,9 +222,9 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                           AND (analyzed_table.col2=5)
-                    GROUP BY int_nulls, string_nulls, time_period, time_period_utc
+                    GROUP BY `int_nulls`, `string_nulls`, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -264,10 +264,10 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                           AND (analyzed_table.col2=5)
                           AND (analyzed_table.col3='x')
-                    GROUP BY int_nulls, string_nulls, time_period, time_period_utc
+                    GROUP BY `int_nulls`, `string_nulls`, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -297,8 +297,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                     SELECT COUNT(*) AS duplicated_count
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`
                 ) grouping_table""";
 
         Assertions.assertEquals(String.format(target_query,
@@ -329,10 +329,10 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                           AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                           AND analyzed_table.`date` < CURRENT_DATE()
-                    GROUP BY int_nulls, string_nulls, time_period, time_period_utc
+                    GROUP BY `int_nulls`, `string_nulls`, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -368,8 +368,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         analyzed_table.`strings_with_numbers` AS grouping_level_1
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls, grouping_level_1
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1
                 ) grouping_table
                 GROUP BY grouping_level_1
                 ORDER BY grouping_level_1""";
@@ -403,8 +403,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         analyzed_table.`strings_with_numbers` AS grouping_level_1
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls, grouping_level_1
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1
                 ) grouping_table
                 GROUP BY grouping_level_1
                 ORDER BY grouping_level_1""";
@@ -442,10 +442,10 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE (%s)
-                              AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
+                              AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
-                        GROUP BY int_nulls, string_nulls, grouping_level_1, time_period, time_period_utc
+                        GROUP BY `int_nulls``, `string_nulls`, grouping_level_1, time_period, time_period_utc
                     ) grouping_table
                     GROUP BY grouping_level_1, time_period, time_period_utc
                     ORDER BY grouping_level_1, time_period, time_period_utc""";
@@ -483,10 +483,10 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH)) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                           AND analyzed_table.`date` >= DATE_ADD(DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH), INTERVAL -120 MONTH)
                           AND analyzed_table.`date` < DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH)
-                    GROUP BY int_nulls, string_nulls, grouping_level_1, time_period, time_period_utc
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY grouping_level_1, time_period, time_period_utc
                 ORDER BY grouping_level_1, time_period, time_period_utc""";
@@ -535,8 +535,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls, grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
                 ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
@@ -576,8 +576,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         analyzed_table.`length_string` AS grouping_level_3
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
-                    GROUP BY int_nulls, string_nulls, grouping_level_1, grouping_level_2, grouping_level_3
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, grouping_level_2, grouping_level_3
                 ) grouping_table
                 GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
                 ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
@@ -621,10 +621,10 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(int_nulls AS STRING), CAST(string_nulls AS STRING)) IS NOT NULL)
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                           AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                           AND analyzed_table.`date` < CURRENT_DATE()
-                    GROUP BY int_nulls, string_nulls, grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
                 ) grouping_table
                 GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
                 ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";

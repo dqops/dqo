@@ -9,8 +9,8 @@
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
 {% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
 
-{% macro quote_identifier(name) -%}
-    {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+{%- macro quote_identifier(name) -%}
+    {{- dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end -}}
 {%- endmacro %}
 
 {% macro make_text_constant(string) -%}
