@@ -1,4 +1,4 @@
-# Incidents overview
+# Incidents and notifications overview
 Read this guide to learn how the data quality incident workflow works in DQOps, and how to use all incident management screens to manage data quality incidents.
 
 ## Overview
