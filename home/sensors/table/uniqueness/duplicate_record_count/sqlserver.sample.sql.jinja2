@@ -45,7 +45,7 @@ WITH error_samples AS (
         {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST( ', column_suffix=' AS VARCHAR)') ~ ')  IS NOT NULL',
             table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
-SELECT
+SELECT TOP ({{ error_sampling.total_samples_limit }})
     sample_table.sample_value AS actual_value
     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) -%}
         {%- for attribute in lib.data_groupings -%}
@@ -61,4 +61,3 @@ SELECT
     {%- endif %}
 FROM error_samples AS sample_table
 WHERE sample_table.sample_index = 2
-LIMIT {{ error_sampling.total_samples_limit }}

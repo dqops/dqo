@@ -9,7 +9,7 @@
 
 WITH error_samples AS (
     SELECT
-        {{ ( "CONCAT(" ~ extract_in_list(parameters.columns, separate_by_comma = true) ~ ")" ) }} AS sample_value
+        {{ ( "CONCAT(" ~ extract_in_list(parameters.columns, column_prefix='CAST( ', column_suffix=' AS VARCHAR)', separate_by_comma = true) ~ ")" ) }} AS sample_value
         {{- lib.render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
         {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
             {%- for id_column in error_sampling.id_columns -%}
