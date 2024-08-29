@@ -226,7 +226,7 @@ To do this, click on the envelope icon located in the top right corner of the in
 
 ![Configure notification filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configure-notificaiton-filter.png){ loading=lazy; width="1200px" }
 
-The action after clicking on the envelope icon will depend on whether the incident matches any existing 
+The action after clicking on the envelope icon will depend on whether the incident matches any existing incident.
 [notification filters](grouping-data-quality-issues-to-incidents.md#notification-filters).
 
 **Adding a new notification filter**.

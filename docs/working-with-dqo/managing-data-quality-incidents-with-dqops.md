@@ -213,13 +213,13 @@ If the check encountered any errors during execution, they will be displayed in 
 
 ### **Disable check for the incident** 
 
-To manage incidents, you have the option to disable the check responsible for the incident. Disabling a check can be 
+To manage incidents, you have the option to disable the check responsible for the incident. Disabling a check can be
 useful when you are actively working to resolve the underlying issue.
 
-To disable a check, click on the "Disable check" button in the top right corner of the Incident details screen. 
+To disable a check, click on the "Disable check" button in the top right corner of the Incident details screen.
 Once confirmed, the check will be temporarily stopped from executing.
 
-![Disabling check](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-button.png){ loading=lazy; width="1200px" }
+![Disabling check](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-button2.png){ loading=lazy; width="1200px" }
 
 You can verify that the check has been disabled by navigating to the check editor screen.
 
@@ -228,16 +228,16 @@ You can verify that the check has been disabled by navigating to the check edito
 
 ### **Recalibrate check for the incident** 
 
-DQOps offers a one-click option to automatically reduce the number of data quality issues identified by a check. 
+DQOps offers a one-click option to automatically reduce the number of data quality issues identified by a check.
 This can be helpful in situations where the check might be overly sensitive.
 
-Clicking the Recalibrate button will decrease the check's thresholds by 30%. For more significant adjustments, you can click
-the Recalibrate button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
+Clicking the **Reconfigure** button will decrease the rule threshold for the data quality check that caused the incident by 30%. For more significant adjustments, you can click
+the **Recalibrate** button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
 
-![Recalibrate-check-button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button.png){ loading=lazy; width="1200px" }
+![Reconfigure check button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button2.png){ loading=lazy; width="1200px" }
 
-The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after recalibration. Notice that the `min_count` rule has been reduced from 1000, to 700.
-
+The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after reconfiguration.
+Notice that the `min_count` rule has been reduced from 1000, to 700.
 
 === "Check configuration before recalibration"
 
@@ -282,6 +282,34 @@ The following example YAML files illustrate the `daily_partition_row_count` chec
               error:
                 min_count: 700
     ```
+### **Configure notification for an incident**
+
+To receive notifications for specific data quality incidents, you can create or edit notification filters.
+To do this, click on the envelope icon located in the top right corner of the incident details screen.
+
+![Configure notification filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configure-notificaiton-filter.png){ loading=lazy; width="1200px" }
+
+The action after clicking on the envelope icon will depend on whether the incident matches any existing incident
+[notification filters](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#notification-filters).
+
+**Adding a new notification filter**.
+
+If no notification has ever been configured for the incident, you will see a popup message informing you to create a new notification configuration.
+
+![Configure incident popup](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configure-incident-popup.png){ loading=lazy; width="600px" }
+
+Once approved, you will be redirected to the page to create the new incident notification filter.
+The configuration form will be partially filled based on the incident's data. The details of the filter configuration can be
+found in the section [Notification filters](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#notification-filters) below.
+
+![New notification filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/new-notification-filter.png){ loading=lazy; width="1200px" }
+
+
+**Editing an existing notification filter**
+
+If the notification matches an existing filter, a screen with this filter will open, and you can edit the filter's settings.
+
+Learn more about [configuration of the notification filtering in the Concept section](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-notifications)
 
 ## What's next
 
