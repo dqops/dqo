@@ -44,31 +44,31 @@ import java.util.Objects;
 public class TableUniquenessDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_duplicate_record_count", o -> o.dailyDuplicateRecordCount);
+            put("daily_partitioned_duplicate_record_count", o -> o.dailyPartitionedDuplicateRecordCount);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDuplicateRecordCountCheckSpec dailyDuplicateRecordCount;
+    private TableDuplicateRecordCountCheckSpec dailyPartitionedDuplicateRecordCount;
 
     /**
      * Returns a duplicate record count check.
      * @return Duplicate record count check.
      */
-    public TableDuplicateRecordCountCheckSpec getDailyDuplicateRecordCount() {
-        return dailyDuplicateRecordCount;
+    public TableDuplicateRecordCountCheckSpec getDailyPartitionedDuplicateRecordCount() {
+        return dailyPartitionedDuplicateRecordCount;
     }
 
     /**
      * Sets a new definition of a duplicate record count check.
-     * @param dailyDuplicateRecordCount Duplicate record count check.
+     * @param dailyPartitionedDuplicateRecordCount Duplicate record count check.
      */
-    public void setDailyDuplicateRecordCount(TableDuplicateRecordCountCheckSpec dailyDuplicateRecordCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyDuplicateRecordCount, dailyDuplicateRecordCount));
-        this.dailyDuplicateRecordCount = dailyDuplicateRecordCount;
-		this.propagateHierarchyIdToField(dailyDuplicateRecordCount, "daily_duplicate_record_count");
+    public void setDailyPartitionedDuplicateRecordCount(TableDuplicateRecordCountCheckSpec dailyPartitionedDuplicateRecordCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyPartitionedDuplicateRecordCount, dailyPartitionedDuplicateRecordCount));
+        this.dailyPartitionedDuplicateRecordCount = dailyPartitionedDuplicateRecordCount;
+		this.propagateHierarchyIdToField(dailyPartitionedDuplicateRecordCount, "daily_partitioned_duplicate_record_count");
     }
 
     /**
@@ -137,7 +137,7 @@ public class TableUniquenessDailyPartitionedChecksSpec extends AbstractCheckCate
         @Override
         public TableUniquenessDailyPartitionedChecksSpec createSample() {
             return new TableUniquenessDailyPartitionedChecksSpec() {{
-                setDailyDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
+                setDailyPartitionedDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
             }};
         }
     }

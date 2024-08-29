@@ -44,31 +44,31 @@ import java.util.Objects;
 public class TableUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_duplicate_record_count", o -> o.monthlyDuplicateRecordCount);
+            put("monthly_partitioned_duplicate_record_count", o -> o.monthlyPartitionedDuplicateRecordCount);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDuplicateRecordCountCheckSpec monthlyDuplicateRecordCount;
+    private TableDuplicateRecordCountCheckSpec monthlyPartitionedDuplicateRecordCount;
 
     /**
      * Returns a duplicate record count check.
      * @return Duplicate record count check.
      */
-    public TableDuplicateRecordCountCheckSpec getMonthlyDuplicateRecordCount() {
-        return monthlyDuplicateRecordCount;
+    public TableDuplicateRecordCountCheckSpec getMonthlyPartitionedDuplicateRecordCount() {
+        return monthlyPartitionedDuplicateRecordCount;
     }
 
     /**
      * Sets a new definition of a duplicate record count check.
-     * @param monthlyDuplicateRecordCount Duplicate record count check.
+     * @param monthlyPartitionedDuplicateRecordCount Duplicate record count check.
      */
-    public void setMonthlyDuplicateRecordCount(TableDuplicateRecordCountCheckSpec monthlyDuplicateRecordCount) {
-		this.setDirtyIf(!Objects.equals(this.monthlyDuplicateRecordCount, monthlyDuplicateRecordCount));
-        this.monthlyDuplicateRecordCount = monthlyDuplicateRecordCount;
-		this.propagateHierarchyIdToField(monthlyDuplicateRecordCount, "monthly_duplicate_record_count");
+    public void setMonthlyPartitionedDuplicateRecordCount(TableDuplicateRecordCountCheckSpec monthlyPartitionedDuplicateRecordCount) {
+		this.setDirtyIf(!Objects.equals(this.monthlyPartitionedDuplicateRecordCount, monthlyPartitionedDuplicateRecordCount));
+        this.monthlyPartitionedDuplicateRecordCount = monthlyPartitionedDuplicateRecordCount;
+		this.propagateHierarchyIdToField(monthlyPartitionedDuplicateRecordCount, "monthly_partitioned_duplicate_record_count");
     }
 
     /**
@@ -137,7 +137,7 @@ public class TableUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         @Override
         public TableUniquenessMonthlyPartitionedChecksSpec createSample() {
             return new TableUniquenessMonthlyPartitionedChecksSpec() {{
-                setMonthlyDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
+                setMonthlyPartitionedDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
             }};
         }
     }

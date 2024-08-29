@@ -104,7 +104,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(6, uiModel.getCategories().size());
+        Assertions.assertEquals(7, uiModel.getCategories().size());
     }
 
     @Test
@@ -115,7 +115,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(7, uiModel.getCategories().size());
+        Assertions.assertEquals(8, uiModel.getCategories().size());
     }
 
     @Test
@@ -179,7 +179,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         CheckContainerListModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<List<String>, List<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
         HashSet<String> allCheckNames = new HashSet<>(names.getKey());
@@ -214,7 +214,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(6, uiModel.getCategories().size());
+        Assertions.assertEquals(7, uiModel.getCategories().size());
     }
 
     @Test
@@ -234,7 +234,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(6, uiModel.getCategories().size());
+        Assertions.assertEquals(7, uiModel.getCategories().size());
     }
 
     @Test
@@ -254,7 +254,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(6, uiModel.getCategories().size());
+        Assertions.assertEquals(7, uiModel.getCategories().size());
     }
 
     @Test

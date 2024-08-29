@@ -107,8 +107,8 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                     SELECT COUNT(*) AS duplicated_count
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
-                          AND (COALESCE(CAST(`int_nulls AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
-                    GROUP BY `int_nulls, `string_nulls`
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                    GROUP BY `int_nulls`, `string_nulls`
                 ) grouping_table""";
 
         Assertions.assertEquals(String.format(target_query,
@@ -445,7 +445,7 @@ public class TableUniquenessDuplicateRecordCountSensorParametersSpecBigQueryTest
                               AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
-                        GROUP BY `int_nulls``, `string_nulls`, grouping_level_1, time_period, time_period_utc
+                        GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, time_period, time_period_utc
                     ) grouping_table
                     GROUP BY grouping_level_1, time_period, time_period_utc
                     ORDER BY grouping_level_1, time_period, time_period_utc""";
