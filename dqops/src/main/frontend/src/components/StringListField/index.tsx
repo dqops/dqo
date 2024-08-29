@@ -117,6 +117,11 @@ const StringListField = ({
             hasAdd
             title="Text values"
             className=" max-h-[50vh] text-sm flex flex-col overflow-y-auto "
+            hasEdit={
+              labels.length === 1 &&
+              labels[0].startsWith('${dictionary://') &&
+              labels[0].endsWith('}')
+            }
           />
           <div className="flex space-x-4 p-4 justify-between">
             <div>
