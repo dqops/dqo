@@ -9,9 +9,9 @@ import Input from '../../components/Input';
 import RadioButton from '../../components/RadioButton';
 import SvgIcon from '../../components/SvgIcon';
 import TextArea from '../../components/TextArea';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import { SharedCredentialsApi } from '../../services/apiClient';
+import Loader from '../../components/Loader';
 
 export default function SingleSharedCredential({
   credential_name = '',
@@ -21,15 +21,13 @@ export default function SingleSharedCredential({
   onBack: () => void;
 }) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-  const { activeTab } = useSelector((state: IRootState) => state.definition);
   const [credentialName, setCredentialName] = useState('');
   const [editingCredential, setEditingCredential] =
     useState<SharedCredentialModel>();
   const [type, setType] = useState<SharedCredentialModelTypeEnum>('text');
   const [textAreaValue, setTextAreaValue] = useState<string>('');
   const [incorrectBinaryText, setIncorrectBinaryText] = useState(false);
-
-  const dispatch = useActionDispatch();
+  const [loading, setLoading] = useState(false);
 
   const addSharedCredential = async () => {
     if (type === 'text') {
@@ -66,9 +64,11 @@ export default function SingleSharedCredential({
   };
 
   const getSharedCredential = async () => {
+    setLoading(true);
     await SharedCredentialsApi.getSharedCredential(credential_name)
       .then((res) => setEditingCredential(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -102,6 +102,16 @@ export default function SingleSharedCredential({
       setIncorrectBinaryText(false);
     }
   };
+
+  if (loading) {
+    return (
+      <>
+        <div className="w-full h-screen flex items-center justify-center">
+          <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

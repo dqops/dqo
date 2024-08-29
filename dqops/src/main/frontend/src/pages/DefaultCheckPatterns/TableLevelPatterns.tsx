@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { DefaultTableCheckPatternsApiClient } from '../../services/apiClient';
 
-import DefaultCheckPatternsTable from './DefaultCheckPatternsTable';
 import { DefaultTableChecksPatternListModel } from '../../api';
+import Loader from '../../components/Loader';
 import { sortPatterns } from '../../utils';
+import DefaultCheckPatternsTable from './DefaultCheckPatternsTable';
 
 export default function TableLevelPatterns() {
   const [patterns, setPatterns] = useState<
     DefaultTableChecksPatternListModel[]
   >([]);
+  const [loading, setLoading] = useState(false);
   const getPatterns = async () => {
-    DefaultTableCheckPatternsApiClient.getAllDefaultTableChecksPatterns().then(
-      (res) => setPatterns(sortPatterns(res.data ?? [], 'priority', 'asc'))
-    );
+    setLoading(true);
+    DefaultTableCheckPatternsApiClient.getAllDefaultTableChecksPatterns()
+      .then((res) =>
+        setPatterns(sortPatterns(res.data ?? [], 'priority', 'asc'))
+      )
+      .finally(() => setLoading(false));
   };
   useEffect(() => {
     getPatterns();
@@ -23,6 +28,14 @@ export default function TableLevelPatterns() {
       patternName
     ).then(() => getPatterns());
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   return (
     <div className="py-2">

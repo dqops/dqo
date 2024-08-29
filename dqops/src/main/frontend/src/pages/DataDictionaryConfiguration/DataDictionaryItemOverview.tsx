@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import SvgIcon from '../../components/SvgIcon';
 import TextArea from '../../components/TextArea';
 import { IRootState } from '../../redux/reducers';
@@ -17,7 +18,7 @@ export default function DataDictionaryItemOverview({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const [dictionaryName, setDictionaryName] = useState('');
   const [textAreaValue, setTextAreaValue] = useState<string>('');
-
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const addDictionary = async () => {
@@ -40,14 +41,25 @@ export default function DataDictionaryItemOverview({
   useEffect(() => {
     if (dictionary_name && dictionary_name.length !== 0) {
       const getDictionary = () => {
-        DataDictionaryApiClient.getDictionary(dictionary_name).then((res) => {
-          setDictionaryName(res?.data?.dictionary_name ?? ''),
-            setTextAreaValue(res?.data?.file_content ?? '');
-        });
+        setLoading(true);
+        DataDictionaryApiClient.getDictionary(dictionary_name)
+          .then((res) => {
+            setDictionaryName(res?.data?.dictionary_name ?? ''),
+              setTextAreaValue(res?.data?.file_content ?? '');
+          })
+          .finally(() => setLoading(false));
       };
       getDictionary();
     }
   }, [dictionary_name]);
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   return (
     <>

@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { DqoCloudUserModel, DqoCloudUserModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import Loader from '../../components/Loader';
 import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
-import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
@@ -85,11 +85,9 @@ export default function UserListDetail() {
 
   if (loading) {
     return (
-      <>
-        <div className="w-full h-screen flex items-center justify-center">
-          <SvgIcon name="sync" className="w-6 h-6 animate-spin" />
-        </div>
-      </>
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
     );
   }
 
