@@ -133,7 +133,7 @@ public class TableUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCat
         return CheckTimeScale.monthly;
     }
 
-    public static class TableVolumeMonthlyMonitoringChecksSpecSampleFactory implements SampleValueFactory<TableUniquenessMonthlyMonitoringChecksSpec> {
+    public static class TableUniquenessMonthlyMonitoringChecksSpecSampleFactory implements SampleValueFactory<TableUniquenessMonthlyMonitoringChecksSpec> {
         @Override
         public TableUniquenessMonthlyMonitoringChecksSpec createSample() {
             return new TableUniquenessMonthlyMonitoringChecksSpec() {{

@@ -36,39 +36,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level monthly monitoring for uniqueness data quality checks
+ * Container of table level monthly partition for uniqueness data quality checks
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class TableUniquenessMonthlyPartitionChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessMonthlyPartitionChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partitioned_duplicate_record_count", o -> o.monthlyPartitionedDuplicateRecordCount);
+            put("monthly_partition_duplicate_record_count", o -> o.monthlyPartitionDuplicateRecordCount);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDuplicateRecordCountCheckSpec monthlyPartitionedDuplicateRecordCount;
+    private TableDuplicateRecordCountCheckSpec monthlyPartitionDuplicateRecordCount;
 
     /**
      * Returns a duplicate record count check.
      * @return Duplicate record count check.
      */
-    public TableDuplicateRecordCountCheckSpec getMonthlyPartitionedDuplicateRecordCount() {
-        return monthlyPartitionedDuplicateRecordCount;
+    public TableDuplicateRecordCountCheckSpec getMonthlyPartitionDuplicateRecordCount() {
+        return monthlyPartitionDuplicateRecordCount;
     }
 
     /**
      * Sets a new definition of a duplicate record count check.
-     * @param monthlyPartitionedDuplicateRecordCount Duplicate record count check.
+     * @param monthlyPartitionDuplicateRecordCount Duplicate record count check.
      */
-    public void setMonthlyPartitionedDuplicateRecordCount(TableDuplicateRecordCountCheckSpec monthlyPartitionedDuplicateRecordCount) {
-		this.setDirtyIf(!Objects.equals(this.monthlyPartitionedDuplicateRecordCount, monthlyPartitionedDuplicateRecordCount));
-        this.monthlyPartitionedDuplicateRecordCount = monthlyPartitionedDuplicateRecordCount;
-		this.propagateHierarchyIdToField(monthlyPartitionedDuplicateRecordCount, "monthly_partitioned_duplicate_record_count");
+    public void setMonthlyPartitionDuplicateRecordCount(TableDuplicateRecordCountCheckSpec monthlyPartitionDuplicateRecordCount) {
+		this.setDirtyIf(!Objects.equals(this.monthlyPartitionDuplicateRecordCount, monthlyPartitionDuplicateRecordCount));
+        this.monthlyPartitionDuplicateRecordCount = monthlyPartitionDuplicateRecordCount;
+		this.propagateHierarchyIdToField(monthlyPartitionDuplicateRecordCount, "monthly_partition_duplicate_record_count");
     }
 
     /**
@@ -85,8 +85,8 @@ public class TableUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckCa
      * Creates and returns a deep clone (copy) of this object.
      */
     @Override
-    public TableUniquenessMonthlyPartitionedChecksSpec deepClone() {
-        return (TableUniquenessMonthlyPartitionedChecksSpec)super.deepClone();
+    public TableUniquenessMonthlyPartitionChecksSpec deepClone() {
+        return (TableUniquenessMonthlyPartitionChecksSpec)super.deepClone();
     }
 
     /**
@@ -133,11 +133,11 @@ public class TableUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         return CheckTimeScale.monthly;
     }
 
-    public static class TableVolumeMonthlyMonitoringChecksSpecSampleFactory implements SampleValueFactory<TableUniquenessMonthlyPartitionedChecksSpec> {
+    public static class TableUniquenessMonthlyPartitionChecksSpecSampleFactory implements SampleValueFactory<TableUniquenessMonthlyPartitionChecksSpec> {
         @Override
-        public TableUniquenessMonthlyPartitionedChecksSpec createSample() {
-            return new TableUniquenessMonthlyPartitionedChecksSpec() {{
-                setMonthlyPartitionedDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
+        public TableUniquenessMonthlyPartitionChecksSpec createSample() {
+            return new TableUniquenessMonthlyPartitionChecksSpec() {{
+                setMonthlyPartitionDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
             }};
         }
     }

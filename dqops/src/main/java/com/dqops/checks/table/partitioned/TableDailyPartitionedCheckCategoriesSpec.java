@@ -22,7 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonDailyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.customsql.TableCustomSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
-import com.dqops.checks.table.partitioned.uniqueness.TableUniquenessDailyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.uniqueness.TableUniquenessDailyPartitionChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -80,7 +80,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonPropertyDescription("Daily partitioned uniqueness checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableUniquenessDailyPartitionedChecksSpec uniqueness;
+    private TableUniquenessDailyPartitionChecksSpec uniqueness;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -145,7 +145,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of table uniqueness checks.
      * @return Table uniqueness checks.
      */
-    public TableUniquenessDailyPartitionedChecksSpec getUniqueness() {
+    public TableUniquenessDailyPartitionChecksSpec getUniqueness() {
         return uniqueness;
     }
 
@@ -153,7 +153,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
      * Sets a reference to a container with the table uniqueness checks.
      * @param uniqueness Container of table uniqueness checks.
      */
-    public void setUniqueness(TableUniquenessDailyPartitionedChecksSpec uniqueness) {
+    public void setUniqueness(TableUniquenessDailyPartitionChecksSpec uniqueness) {
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");

@@ -22,7 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.customsql.TableCustomSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
-import com.dqops.checks.table.partitioned.uniqueness.TableUniquenessMonthlyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.uniqueness.TableUniquenessMonthlyPartitionChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -80,7 +80,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonPropertyDescription("Monthly partitioned uniqueness checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableUniquenessMonthlyPartitionedChecksSpec uniqueness;
+    private TableUniquenessMonthlyPartitionChecksSpec uniqueness;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -146,7 +146,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Returns a container of table uniqueness checks.
      * @return Table uniqueness checks.
      */
-    public TableUniquenessMonthlyPartitionedChecksSpec getUniqueness() {
+    public TableUniquenessMonthlyPartitionChecksSpec getUniqueness() {
         return uniqueness;
     }
 
@@ -154,7 +154,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Sets a reference to a container with the table uniqueness checks.
      * @param uniqueness Container of table uniqueness checks.
      */
-    public void setUniqueness(TableUniquenessMonthlyPartitionedChecksSpec uniqueness) {
+    public void setUniqueness(TableUniquenessMonthlyPartitionChecksSpec uniqueness) {
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");

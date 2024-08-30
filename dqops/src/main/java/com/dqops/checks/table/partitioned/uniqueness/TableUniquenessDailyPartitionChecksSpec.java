@@ -36,39 +36,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level daily monitoring for uniqueness data quality checks.
+ * Container of table level daily partition for uniqueness data quality checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableUniquenessDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class TableUniquenessDailyPartitionChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessDailyPartitionChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partitioned_duplicate_record_count", o -> o.dailyPartitionedDuplicateRecordCount);
+            put("daily_partition_duplicate_record_count", o -> o.dailyPartitionDuplicateRecordCount);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDuplicateRecordCountCheckSpec dailyPartitionedDuplicateRecordCount;
+    private TableDuplicateRecordCountCheckSpec dailyPartitionDuplicateRecordCount;
 
     /**
      * Returns a duplicate record count check.
      * @return Duplicate record count check.
      */
-    public TableDuplicateRecordCountCheckSpec getDailyPartitionedDuplicateRecordCount() {
-        return dailyPartitionedDuplicateRecordCount;
+    public TableDuplicateRecordCountCheckSpec getDailyPartitionDuplicateRecordCount() {
+        return dailyPartitionDuplicateRecordCount;
     }
 
     /**
      * Sets a new definition of a duplicate record count check.
-     * @param dailyPartitionedDuplicateRecordCount Duplicate record count check.
+     * @param dailyPartitionDuplicateRecordCount Duplicate record count check.
      */
-    public void setDailyPartitionedDuplicateRecordCount(TableDuplicateRecordCountCheckSpec dailyPartitionedDuplicateRecordCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyPartitionedDuplicateRecordCount, dailyPartitionedDuplicateRecordCount));
-        this.dailyPartitionedDuplicateRecordCount = dailyPartitionedDuplicateRecordCount;
-		this.propagateHierarchyIdToField(dailyPartitionedDuplicateRecordCount, "daily_partitioned_duplicate_record_count");
+    public void setDailyPartitionDuplicateRecordCount(TableDuplicateRecordCountCheckSpec dailyPartitionDuplicateRecordCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyPartitionDuplicateRecordCount, dailyPartitionDuplicateRecordCount));
+        this.dailyPartitionDuplicateRecordCount = dailyPartitionDuplicateRecordCount;
+		this.propagateHierarchyIdToField(dailyPartitionDuplicateRecordCount, "daily_partition_duplicate_record_count");
     }
 
     /**
@@ -85,8 +85,8 @@ public class TableUniquenessDailyPartitionedChecksSpec extends AbstractCheckCate
      * Creates and returns a deep clone (copy) of this object.
      */
     @Override
-    public TableUniquenessDailyPartitionedChecksSpec deepClone() {
-        return (TableUniquenessDailyPartitionedChecksSpec)super.deepClone();
+    public TableUniquenessDailyPartitionChecksSpec deepClone() {
+        return (TableUniquenessDailyPartitionChecksSpec)super.deepClone();
     }
 
     /**
@@ -133,11 +133,11 @@ public class TableUniquenessDailyPartitionedChecksSpec extends AbstractCheckCate
         return CheckTimeScale.daily;
     }
 
-    public static class TableVolumeDailyMonitoringChecksSpecSampleFactory implements SampleValueFactory<TableUniquenessDailyPartitionedChecksSpec> {
+    public static class TableUniquenessDailyPartitionChecksSpecSampleFactory implements SampleValueFactory<TableUniquenessDailyPartitionChecksSpec> {
         @Override
-        public TableUniquenessDailyPartitionedChecksSpec createSample() {
-            return new TableUniquenessDailyPartitionedChecksSpec() {{
-                setDailyPartitionedDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
+        public TableUniquenessDailyPartitionChecksSpec createSample() {
+            return new TableUniquenessDailyPartitionChecksSpec() {{
+                setDailyPartitionDuplicateRecordCount(new TableDuplicateRecordCountCheckSpec.TableDuplicateRecordCountCheckSpecSampleFactory().createSample());
             }};
         }
     }
