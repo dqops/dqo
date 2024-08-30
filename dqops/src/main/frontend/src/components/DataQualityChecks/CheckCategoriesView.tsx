@@ -246,6 +246,8 @@ const CheckCategoriesView = ({
           JobApiClient.deleteStoredData(undefined, false, undefined, {
             ...category.data_clean_job_template,
             ...params
+          }).then((res) => {
+            setJobId(res.data?.jobId?.jobId);
           });
         }}
       />

@@ -473,6 +473,14 @@ const TableHeader = ({
           JobApiClient.deleteStoredData(undefined, false, undefined, {
             ...checksUI.data_clean_job_template,
             ...params
+          }).then((res) => {
+            dispatch(
+              setCurrentJobId(
+                checkTypes,
+                firstLevelActiveTab,
+                res.data?.jobId?.jobId ?? 0
+              )
+            );
           });
         }}
       />
