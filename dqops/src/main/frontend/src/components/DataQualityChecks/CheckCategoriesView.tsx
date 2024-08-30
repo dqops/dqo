@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   CheckModel,
   CheckResultsOverviewDataModel,
+  DqoJobHistoryEntryModelStatusEnum,
   QualityCategoryModel,
   TimeWindowFilterParameters
 } from '../../api';
@@ -57,13 +58,16 @@ const CheckCategoriesView = ({
   ruleParamenterConfigured,
   onChangeRuleParametersConfigured
 }: CheckCategoriesViewProps) => {
+  const { job_dictionary_state, userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isExtended, setIsExtended] = useState(false);
-
-  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const shouldExtend = () => {
     if (
@@ -93,15 +97,22 @@ const CheckCategoriesView = ({
         res.data?.jobId?.jobId ?? 0
       )
     );
-
-    if (getCheckOverview) {
-      getCheckOverview();
-    }
+    setJobId(res.data?.jobId?.jobId);
   };
 
   useEffect(() => {
     shouldExtend();
   }, []);
+
+  useEffect(() => {
+    if (!getCheckOverview) return;
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      getCheckOverview();
+    }
+  }, [job?.status]);
 
   return (
     <Fragment>

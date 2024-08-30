@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
@@ -45,6 +45,7 @@ interface TableHeaderProps {
   isFiltered?: boolean;
   ruleParamenterConfigured: boolean;
   flashRunChecks?: boolean;
+  getCheckOverview?: () => void;
 }
 
 const TableHeader = ({
@@ -60,7 +61,8 @@ const TableHeader = ({
   setShowAdvanced,
   isFiltered,
   ruleParamenterConfigured,
-  flashRunChecks
+  flashRunChecks,
+  getCheckOverview
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -277,6 +279,16 @@ const TableHeader = ({
     );
     history.push(url);
   };
+
+  useEffect(() => {
+    if (!getCheckOverview) return;
+    if (
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.failed
+    ) {
+      getCheckOverview();
+    }
+  }, [job?.status]);
 
   return (
     <thead className="relative">
