@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Loader from '../../components/Loader';
@@ -19,7 +19,6 @@ export default function DataDictionaryItemOverview({
   const [dictionaryName, setDictionaryName] = useState('');
   const [textAreaValue, setTextAreaValue] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
 
   const addDictionary = async () => {
     if (dictionaryName.length === 0) return;
