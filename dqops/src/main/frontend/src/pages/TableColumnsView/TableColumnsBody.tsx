@@ -332,7 +332,7 @@ export default function TableColumnsBody({
           )}
           <td className="border-b border-gray-100 text-right px-4 py-2">
             <div className="flex justify-center items-center">
-              <div className="flex justify-center items-center">
+              <div className="flex items-center w-12">
                 <div>
                   {isNaN(Number(column.null_percent))
                     ? ''
