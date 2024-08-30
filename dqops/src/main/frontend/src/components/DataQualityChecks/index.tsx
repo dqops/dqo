@@ -607,6 +607,7 @@ const DataQualityChecks = ({
             getIsAnyChecksEnabledOrDefault(checksUI) &&
             !getIsAnyCheckResults(checkResultsOverview)
           }
+          getCheckOverview={getCheckOverview}
         />
         <tbody>
           {(checksUI?.categories ?? []).map((category, index) => (
