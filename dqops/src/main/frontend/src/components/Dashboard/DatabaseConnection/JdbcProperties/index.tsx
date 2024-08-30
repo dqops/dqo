@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SharedCredentialListModel } from '../../../../api';
 import JdbcPropertyItem from './JdbcPropertyItem';
 
@@ -31,7 +31,7 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 }
 
 const JdbcPropertiesView = ({
-  properties = {[''] : ''},
+  properties = { ['']: '' },
   onChange,
   sharedCredentials
 }: IJdbcPropertiesViewProps) => {
@@ -46,11 +46,11 @@ const JdbcPropertiesView = ({
     onChange(convertArrayToObject(array));
   };
 
-  // useEffect(() => {
-  //   if (properties) {
-  //     setArr(convertObjectToArray(properties ?? {}));
-  //   }
-  // }, [firstLevelActiveTab, storageType]);
+  useEffect(() => {
+    if (properties && arr.length === 1 && Object.keys(properties)[0] === '') {
+      setArr(convertObjectToArray(properties ?? {}));
+    }
+  }, []);
 
   return (
     <div className="py-4">

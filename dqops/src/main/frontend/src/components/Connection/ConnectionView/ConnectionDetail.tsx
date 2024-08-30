@@ -32,6 +32,7 @@ import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorMo
 import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksConnection';
 import DuckdbConnection from '../../Dashboard/DatabaseConnection/DuckDBConnection';
 import ErrorModal from '../../Dashboard/DatabaseConnection/ErrorModal';
+import JdbcPropertiesView from '../../Dashboard/DatabaseConnection/JdbcProperties';
 import MySQLConnection from '../../Dashboard/DatabaseConnection/MySQLConnection';
 import OracleConnection from '../../Dashboard/DatabaseConnection/OracleConnection';
 import PostgreSQLConnection from '../../Dashboard/DatabaseConnection/PostgreSQLConnection';
@@ -41,8 +42,10 @@ import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeCon
 import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
 import SqlServerConnection from '../../Dashboard/DatabaseConnection/SqlServerConnection';
 import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
+import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Input from '../../Input';
 import Loader from '../../Loader';
+import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
 
 const ConnectionDetail = () => {
@@ -66,6 +69,7 @@ const ConnectionDetail = () => {
 
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
+  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -150,7 +154,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials();
   }, []);
-
+  console.log(connectionBasic);
   return (
     <div
       className={clsx(
@@ -198,6 +202,37 @@ const ConnectionDetail = () => {
               </div>
             </td>
           </tr>
+          <div>
+            {advancedPropertiesOpen ? (
+              <SectionWrapper
+                title="Advanced properties"
+                className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
+                svgIcon
+                onClick={() =>
+                  setAdvancedPropertiesOpen(!advancedPropertiesOpen)
+                }
+              >
+                <JdbcPropertiesView
+                  properties={connectionBasic?.advanced_properties}
+                  onChange={(properties) =>
+                    onChange({ advanced_properties: properties })
+                  }
+                  sharedCredentials={sharedCredentials}
+                />
+              </SectionWrapper>
+            ) : (
+              <div className="flex items-center ml-4 my-2">
+                <SvgIcon
+                  name="chevron-right"
+                  className="w-5 h-5"
+                  onClick={() =>
+                    setAdvancedPropertiesOpen(!advancedPropertiesOpen)
+                  }
+                />
+                Advanced properties
+              </div>
+            )}
+          </div>
         </tbody>
       </table>
 
