@@ -320,6 +320,8 @@ export const SensorDetail = () => {
                 value={sensorName}
                 onChange={onChangeSensorName}
                 error={!sensorName}
+                className="!min-w-100"
+                autoFocus
               />
             </div>
           </div>

@@ -240,6 +240,8 @@ export const RuleDetail = () => {
                 value={ruleName}
                 onChange={onChangeRuleName}
                 error={!ruleName}
+                className="!min-w-100"
+                autoFocus
               />
             </div>
           </div>
