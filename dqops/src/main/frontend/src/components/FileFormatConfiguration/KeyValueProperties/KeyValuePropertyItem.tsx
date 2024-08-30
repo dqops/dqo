@@ -72,6 +72,7 @@ const KeyValuePropertyItem = ({
       <td className="px-8 min-w-20 py-2 text-center gap-x-4">
         {!(index === 0 && properties.length === 1) && (
           <IconButton
+            ripple={false}
             className="bg-teal-500 mx-1 !shadow-none hover:!shadow-none hover:bg-[#028770]"
             size="sm"
             onClick={onRemove}
@@ -81,6 +82,7 @@ const KeyValuePropertyItem = ({
         )}
         {index === properties.length - 1 && (
           <IconButton
+            ripple={false}
             className="bg-teal-500 mx-1 !shadow-none hover:!shadow-none hover:bg-[#028770]"
             size="sm"
             onClick={onAdd}

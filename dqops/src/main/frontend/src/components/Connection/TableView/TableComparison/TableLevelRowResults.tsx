@@ -14,12 +14,10 @@ interface TableRowProps {
   >;
   showRowCount: boolean;
   onUpdateChecksUI: (
-    checksUI: any,
     type: 'row' | 'column',
     disabled?: boolean,
     severity?: TSeverityValues
   ) => void;
-  checksUI: any;
   setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   tableComparisonResults: any;
   showColumnCount: boolean;
@@ -33,7 +31,6 @@ const TableRow: React.FC<TableRowProps> = ({
   settableLevelComparisonExtended,
   showRowCount,
   onUpdateChecksUI,
-  checksUI,
   setIsUpdated,
   tableComparisonResults,
   showColumnCount,
@@ -88,7 +85,7 @@ const TableRow: React.FC<TableRowProps> = ({
           <Checkbox
             checked={showRowCount}
             onChange={(checked) => {
-              onUpdateChecksUI(checksUI, 'row', checked);
+              onUpdateChecksUI('row', checked);
               setIsUpdated(true);
             }}
           />
@@ -121,7 +118,7 @@ const TableRow: React.FC<TableRowProps> = ({
             <Checkbox
               checked={showColumnCount}
               onChange={(checked) => {
-                onUpdateChecksUI(checksUI, 'column', checked);
+                onUpdateChecksUI('column', checked);
                 setIsUpdated(true);
               }}
             />

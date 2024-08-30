@@ -29,6 +29,16 @@ export default function DataQualitySummary() {
           on the Home screen.
         </div>
       )}
+      {checkTypes === CheckTypes.MONITORING && (
+        <div className="px-4 pt-4 pb-6 text-sm">
+          Data quality KPIs are calculated only from the Monitoring checks.
+        </div>
+      )}
+      {checkTypes === CheckTypes.PARTITIONED && (
+        <div className="px-4 pt-4 pb-6 text-sm">
+          Data quality KPIs are calculated only from the Partition checks.
+        </div>
+      )}
       {activeTab === 'tables' && <TableListView />}
       {activeTab === 'columns' && <ColumnListView />}
     </div>

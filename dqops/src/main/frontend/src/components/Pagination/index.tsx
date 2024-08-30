@@ -64,6 +64,7 @@ export const Pagination = ({
       </div>
       <div className="flex items-center gap-2">
         <IconButton
+          ripple={false}
           size="sm"
           className="w-10 h-10 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           color="teal"
@@ -73,6 +74,7 @@ export const Pagination = ({
           <SvgIcon name="chevron-left" className="w-4 text-white" />
         </IconButton>
         <IconButton
+          ripple={false}
           size="sm"
           className="w-10 h-10 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           color="teal"
@@ -81,6 +83,7 @@ export const Pagination = ({
           {page}
         </IconButton>
         <IconButton
+          ripple={false}
           size="sm"
           className="w-10 h-10 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           color="teal"

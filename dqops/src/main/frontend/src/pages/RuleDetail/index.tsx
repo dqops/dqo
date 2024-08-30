@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import { RuleActionGroup } from '../../components/Sensors/RuleActionGroup';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
@@ -36,8 +37,11 @@ export const RuleDetail = () => {
   const { full_rule_name, ruleDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const { refreshRulesTreeIndicator, activeTab: firstLevelActiveTab } =
-    useSelector((state: IRootState) => state.definition);
+  const {
+    refreshRulesTreeIndicator,
+    activeTab: firstLevelActiveTab,
+    loading
+  } = useSelector((state: IRootState) => state.definition);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [ruleName, setRuleName] = useState(
@@ -197,7 +201,13 @@ export const RuleDetail = () => {
       closeRuleFirstLevelTab()
     );
   };
-
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
   return (
     <>
       <div className="relative">

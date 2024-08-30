@@ -7,6 +7,7 @@ import {
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -29,7 +30,7 @@ export const SensorDetail = () => {
   const { full_check_name, path, type, custom, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const { tabs, activeTab, refreshChecksTreeIndicator } = useSelector(
+  const { tabs, activeTab, refreshChecksTreeIndicator, loading } = useSelector(
     (state: IRootState) => state.definition
   );
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -287,7 +288,13 @@ export const SensorDetail = () => {
       })
     );
   };
-
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
   return (
     <>
       <div className="relative">

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SharedCredentialListModel } from '../../api';
 import Button from '../../components/Button';
-import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { SharedCredentialsApi } from '../../services/apiClient';
 import SharedCredentailTable from './SharedCredentailTable';
 import SingleSharedCredential from './SingleSharedCredential';
+import Loader from '../../components/Loader';
 
 export default function SharedCredentialsDetail() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -27,7 +27,7 @@ export default function SharedCredentialsDetail() {
   const onBack = () => {
     setCredentialToEdit(undefined);
     setCreateCredential(false);
-    dispatch(updateTabLabel('Data dictionaries', activeTab ?? ''));
+    dispatch(updateTabLabel('Shared credentials', activeTab ?? ''));
   };
 
   const getSharedCredentialList = async () => {
@@ -59,7 +59,7 @@ export default function SharedCredentialsDetail() {
     return (
       <>
         <div className="w-full h-screen flex items-center justify-center">
-          <SvgIcon name="sync" className="w-6 h-6 animate-spin" />
+          <Loader isFull={false} className="w-8 h-8 fill-green-700" />
         </div>
       </>
     );

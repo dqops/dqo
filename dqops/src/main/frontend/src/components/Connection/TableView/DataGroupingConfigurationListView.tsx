@@ -186,6 +186,7 @@ const DataGroupingConfigurationListView = ({
                   }
                 >
                   <IconButton
+                    ripple={false}
                     size="sm"
                     className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                     onClick={() => onEdit(groupingConfiguration)}
@@ -202,6 +203,7 @@ const DataGroupingConfigurationListView = ({
                 </Tooltip>
                 <Tooltip content="Delete">
                   <IconButton
+                    ripple={false}
                     size="sm"
                     className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                     onClick={() => {

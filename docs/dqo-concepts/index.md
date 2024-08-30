@@ -7,6 +7,18 @@ Follow this guide to learn each concept of DQOps Data Quality Operations Center 
 ## List of DQOps concepts
 This article is a dictionary of DQOps terms. Click on the links to learn about every concept.
 
+### **[Data quality process](data-quality-process.md)**
+DQOps follows a two-stage data quality process. The first step is a [data quality assessment](data-quality-process.md#data-quality-assessment) using the [data profiler](definition-of-data-quality-checks/data-profiling-checks.md) . 
+This step identifies confirmed data quality issues. In the second stage,
+users configure [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and [partition checks](definition-of-data-quality-checks/partition-checks.md) that regularly verify data quality using Data Observability.
+
+
+### **[Data quality rule miner](data-quality-rule-mining.md)**
+The data quality rule miner is responsible for proposing the configuration of
+[data quality checks](definition-of-data-quality-checks/index.md) and their
+[rule thresholds](definition-of-data-quality-rules.md) to detect [the most common data quality checks](data-quality-rule-mining.md#information-used-for-proposing-checks).
+
+
 ### **[What is a data quality check](definition-of-data-quality-checks/index.md)**
 A data quality check detects data quality issues. The check in DQOps is defined as a pair
 of a [sensor](definition-of-data-quality-sensors.md) that captures metrics from the data source and a [rule](definition-of-data-quality-rules.md) that verifies the sensor's readout.

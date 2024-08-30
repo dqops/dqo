@@ -99,6 +99,7 @@ const CommentsView = ({
         <div className="px-0 pr-8 max-w-34 min-w-34 py-2">
           <div className="flex justify-center">
             <IconButton
+              ripple={false}
               size="sm"
               className="bg-teal-500 shadow-none hover:shadow-none hover:bg-[#028770]"
               onClick={onAdd}
