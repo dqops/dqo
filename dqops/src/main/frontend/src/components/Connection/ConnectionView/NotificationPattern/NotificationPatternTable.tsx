@@ -5,6 +5,7 @@ import { FilteredNotificationModel } from '../../../../api';
 import { FilteredNotificationsConfigurationsClient } from '../../../../services/apiClient';
 import { getSeverity, sortPatterns } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
+import Loader from '../../../Loader';
 import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
 
@@ -38,12 +39,14 @@ export default function NotificationPatternTable({
   filteredNotificationsConfigurations,
   onChange,
   setPatternNameEdit,
-  connection
+  connection,
+  loading
 }: {
   filteredNotificationsConfigurations: Array<TNotificationPattern>;
   onChange: (data: any) => void;
   setPatternNameEdit: (patternName: string) => void;
   connection?: string;
+  loading?: boolean;
 }) {
   const [dir, setDir] = useState<'asc' | 'desc'>('asc');
   const [notificationPatternDelete, setPatternDelete] = useState('');
@@ -125,7 +128,13 @@ export default function NotificationPatternTable({
     () => [...filteredNotificationsConfigurations, { name: 'default' }],
     [filteredNotificationsConfigurations]
   );
-
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
   return (
     <>
       <table className="text-sm">

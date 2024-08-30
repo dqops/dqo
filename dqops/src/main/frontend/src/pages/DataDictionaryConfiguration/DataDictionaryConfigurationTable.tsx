@@ -8,6 +8,7 @@ import SvgIcon from '../../components/SvgIcon';
 import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { DataDictionaryApiClient } from '../../services/apiClient';
+import Loader from '../../components/Loader';
 
 export default function DataDictionaryConfigurationTable({
   setDictionaryToEdit
@@ -58,7 +59,7 @@ export default function DataDictionaryConfigurationTable({
   if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
-        <SvgIcon name="sync" className="w-6 h-6 animate-spin" />
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
       </div>
     );
   }

@@ -38,6 +38,7 @@ export default function DefaultWebhooksDetail() {
     FilteredNotificationModel | undefined
   >();
   const [isUpdated, setIsUpdated] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useActionDispatch();
   useEffect(() => {
     if (!incidentFilters) return;
@@ -81,8 +82,9 @@ export default function DefaultWebhooksDetail() {
   };
 
   const getFilteredNotifications = () => {
-    FilteredNotificationsConfigurationsClient.getDefaultFilteredNotificationsConfigurations().then(
-      (response) => {
+    setLoading(true);
+    FilteredNotificationsConfigurationsClient.getDefaultFilteredNotificationsConfigurations()
+      .then((response) => {
         const patterns: TNotificationPattern[] = response.data.map((x) => {
           return {
             ...x,
@@ -98,8 +100,8 @@ export default function DefaultWebhooksDetail() {
         const sortedPatterns = sortPatterns(patterns, 'priority', 'asc');
 
         setFilteredNotifications(sortedPatterns);
-      }
-    );
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -174,6 +176,7 @@ export default function DefaultWebhooksDetail() {
               filteredNotificationsConfigurations={filteredNotifications}
               onChange={setFilteredNotifications}
               setPatternNameEdit={onCHangePatternNameToEdit}
+              loading={loading}
             />
           </div>
         </div>

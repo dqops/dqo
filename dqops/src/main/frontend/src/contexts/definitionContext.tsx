@@ -133,6 +133,7 @@ function DefinitionProvider(props: any) {
   };
 
   const openDefaultWebhooksFirstLevelTab = () => {
+    if (ROUTES.WEBHOOKS_DEFAULT_DETAIL() === location.pathname) return;
     dispatch(
       addFirstLevelTab({
         url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
@@ -153,6 +154,7 @@ function DefinitionProvider(props: any) {
   };
 
   const openDataDictionaryFirstLevelTab = () => {
+    if (ROUTES.DATA_DICTIONARY_LIST_DETAIL() === location.pathname) return;
     dispatch(
       addFirstLevelTab({
         url: ROUTES.DATA_DICTIONARY_LIST_DETAIL(),
