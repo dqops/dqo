@@ -149,7 +149,7 @@ using a background color of each  [data quality issue severity levels](../dqo-co
 ### Tables match
 When all metrics match, DQOps shows the cells using a green background.
 
-![Table reconciliation valid result tables match](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-tables-match-result-min.png){ loading=lazy; width="1200px" }
+![Table reconciliation correct result tables match](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-reconciliation-tables-match-result-min.png){ loading=lazy; width="1200px" }
 
 ### Discrepancies detected
 We are introducing a discrepancy on the rows whose city value is MANOR. 

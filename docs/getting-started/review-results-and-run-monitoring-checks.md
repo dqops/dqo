@@ -54,7 +54,7 @@ executed checks, and detailed results per table and columns grouped by check cat
 At the bottom of the screen, you will find a table that displays the check results per category, and per 
 table and columns.
 
-The colored boxes indicates the current or the highest severity status: green for a valid result, yellow for a warning,
+The colored boxes indicates the current or the highest severity status: green for a correct result, yellow for a warning,
 orange for an error, and red for a fatal error. By clicking on the arrow next to the colored box, you can view a list 
 of checks that contribute to the result.
 
@@ -77,7 +77,7 @@ review results, and get more information about it.
 
 For activated checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
 
-- green for a valid result
+- green for a correct result
 - yellow for a warning
 - orange for an error
 - red for a fatal error
@@ -189,7 +189,7 @@ You can view a list of tables with measured total data quality KPI and a breakdo
 categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display 
 a tooltip containing more details.
 
-The calculated KPIs in our example are at 100% because we ran one monitoring check that gave a valid result.
+The calculated KPIs in our example are at 100% because we ran one monitoring check that gave a correct result.
 
 For a deeper dive into [Tables and Columns summaries, see the DQOps concepts section](../dqo-concepts/dqops-user-interface-overview.md#home-screen)
 

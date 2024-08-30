@@ -82,7 +82,7 @@ On the left of the name of each check, there are several buttons and icons that 
 - View detailed results for Checks, Sensor readouts, and Execution errors
 - View detailed information about check,
 - Check the results of the run check shown as a color square
-      - Green for a valid result
+      - Green for a correct result
       - Yellow for a warning
       - Orange for an error
       - Red for a fatal error
@@ -100,7 +100,7 @@ or table and click on the **Run checks** option.
 
 A dialog box will appear where you can modify different options or simply click the **Run checks** button. 
 
-![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box.png){ loading=lazy; width="1000px" }
+![Run all checks dialog box](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/run-all-checks-dialog-box2.png){ loading=lazy; width="1000px" }
 
 
 

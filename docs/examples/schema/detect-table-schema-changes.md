@@ -101,7 +101,7 @@ The Check results category shows the severity level that result from the verific
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
 
-All the checks in the example gives valid results (notice the green square to the left of the checks name).
+All the checks in the example gives correct results (notice the green square to the left of the checks name).
 
 ### **Modify the table schema**
 
