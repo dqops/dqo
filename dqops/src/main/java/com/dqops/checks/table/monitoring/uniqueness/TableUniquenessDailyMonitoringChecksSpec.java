@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordCountCheckSpec;
+import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordPercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -45,6 +46,7 @@ public class TableUniquenessDailyMonitoringChecksSpec extends AbstractCheckCateg
     public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_duplicate_record_count", o -> o.dailyDuplicateRecordCount);
+            put("daily_duplicate_record_percent", o -> o.dailyDuplicateRecordPercent);
         }
     };
 
@@ -52,6 +54,11 @@ public class TableUniquenessDailyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDuplicateRecordCountCheckSpec dailyDuplicateRecordCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDuplicateRecordPercentCheckSpec dailyDuplicateRecordPercent;
 
     /**
      * Returns a duplicate record count check.
@@ -69,6 +76,24 @@ public class TableUniquenessDailyMonitoringChecksSpec extends AbstractCheckCateg
 		this.setDirtyIf(!Objects.equals(this.dailyDuplicateRecordCount, dailyDuplicateRecordCount));
         this.dailyDuplicateRecordCount = dailyDuplicateRecordCount;
 		this.propagateHierarchyIdToField(dailyDuplicateRecordCount, "daily_duplicate_record_count");
+    }
+
+    /**
+     * Returns a duplicate record percent check.
+     * @return Duplicate record percent check.
+     */
+    public TableDuplicateRecordPercentCheckSpec getDailyDuplicateRecordPercent() {
+        return dailyDuplicateRecordPercent;
+    }
+
+    /**
+     * Sets a new definition of a duplicate record percent check.
+     * @param dailyDuplicateRecordPercent Duplicate record percent check.
+     */
+    public void setDailyDuplicateRecordPercent(TableDuplicateRecordPercentCheckSpec dailyDuplicateRecordPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyDuplicateRecordPercent, dailyDuplicateRecordPercent));
+        this.dailyDuplicateRecordPercent = dailyDuplicateRecordPercent;
+        this.propagateHierarchyIdToField(dailyDuplicateRecordPercent, "daily_duplicate_record_percent");
     }
 
     /**

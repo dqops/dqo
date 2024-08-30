@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordCountCheckSpec;
+import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordPercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -45,6 +46,7 @@ public class TableUniquenessDailyPartitionChecksSpec extends AbstractCheckCatego
     public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessDailyPartitionChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_duplicate_record_count", o -> o.dailyPartitionDuplicateRecordCount);
+            put("daily_partition_duplicate_record_percent", o -> o.dailyPartitionDuplicateRecordPercent);
         }
     };
 
@@ -52,6 +54,11 @@ public class TableUniquenessDailyPartitionChecksSpec extends AbstractCheckCatego
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDuplicateRecordCountCheckSpec dailyPartitionDuplicateRecordCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDuplicateRecordPercentCheckSpec dailyPartitionDuplicateRecordPercent;
 
     /**
      * Returns a duplicate record count check.
@@ -69,6 +76,24 @@ public class TableUniquenessDailyPartitionChecksSpec extends AbstractCheckCatego
 		this.setDirtyIf(!Objects.equals(this.dailyPartitionDuplicateRecordCount, dailyPartitionDuplicateRecordCount));
         this.dailyPartitionDuplicateRecordCount = dailyPartitionDuplicateRecordCount;
 		this.propagateHierarchyIdToField(dailyPartitionDuplicateRecordCount, "daily_partition_duplicate_record_count");
+    }
+
+    /**
+     * Returns a duplicate record percent check.
+     * @return Duplicate record percent check.
+     */
+    public TableDuplicateRecordPercentCheckSpec getDailyPartitionDuplicateRecordPercent() {
+        return dailyPartitionDuplicateRecordPercent;
+    }
+
+    /**
+     * Sets a new definition of a duplicate record percent check.
+     * @param dailyPartitionDuplicateRecordPercent Duplicate record percent check.
+     */
+    public void setDailyPartitionDuplicateRecordPercent(TableDuplicateRecordPercentCheckSpec dailyPartitionDuplicateRecordPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDuplicateRecordPercent, dailyPartitionDuplicateRecordPercent));
+        this.dailyPartitionDuplicateRecordPercent = dailyPartitionDuplicateRecordPercent;
+        this.propagateHierarchyIdToField(dailyPartitionDuplicateRecordPercent, "daily_partition_duplicate_record_percent");
     }
 
     /**

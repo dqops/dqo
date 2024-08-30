@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordCountCheckSpec;
+import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordPercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,11 +44,15 @@ public class TableUniquenessProfilingChecksSpec extends AbstractCheckCategorySpe
     public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_duplicate_record_count", o -> o.profileDuplicateRecordCount);
+            put("profile_duplicate_record_percent", o -> o.profileDuplicateRecordPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.")
     private TableDuplicateRecordCountCheckSpec profileDuplicateRecordCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.")
+    private TableDuplicateRecordPercentCheckSpec profileDuplicateRecordPercent;
 
 
     /**
@@ -66,6 +71,24 @@ public class TableUniquenessProfilingChecksSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.profileDuplicateRecordCount, profileDuplicateRecordCount));
         this.profileDuplicateRecordCount = profileDuplicateRecordCount;
         propagateHierarchyIdToField(profileDuplicateRecordCount, "profile_duplicate_record_count");
+    }
+
+    /**
+     * Returns a duplicate record percent check.
+     * @return Duplicate record percent check.
+     */
+    public TableDuplicateRecordPercentCheckSpec getProfileDuplicateRecordPercent() {
+        return profileDuplicateRecordPercent;
+    }
+
+    /**
+     * Sets a new definition of a duplicate record percent check.
+     * @param profileDuplicateRecordPercent Duplicate record percent check.
+     */
+    public void setProfileDuplicateRecordPercent(TableDuplicateRecordPercentCheckSpec profileDuplicateRecordPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDuplicateRecordPercent, profileDuplicateRecordPercent));
+        this.profileDuplicateRecordPercent = profileDuplicateRecordPercent;
+        propagateHierarchyIdToField(profileDuplicateRecordPercent, "profile_duplicate_record_percent");
     }
 
     /**

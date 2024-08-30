@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordCountCheckSpec;
+import com.dqops.checks.table.checkspecs.uniqueness.TableDuplicateRecordPercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -45,6 +46,7 @@ public class TableUniquenessMonthlyPartitionChecksSpec extends AbstractCheckCate
     public static final ChildHierarchyNodeFieldMapImpl<TableUniquenessMonthlyPartitionChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_duplicate_record_count", o -> o.monthlyPartitionDuplicateRecordCount);
+            put("monthly_partition_duplicate_record_percent", o -> o.monthlyPartitionDuplicateRecordPercent);
         }
     };
 
@@ -52,6 +54,11 @@ public class TableUniquenessMonthlyPartitionChecksSpec extends AbstractCheckCate
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDuplicateRecordCountCheckSpec monthlyPartitionDuplicateRecordCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDuplicateRecordPercentCheckSpec monthlyPartitionDuplicateRecordPercent;
 
     /**
      * Returns a duplicate record count check.
@@ -69,6 +76,24 @@ public class TableUniquenessMonthlyPartitionChecksSpec extends AbstractCheckCate
 		this.setDirtyIf(!Objects.equals(this.monthlyPartitionDuplicateRecordCount, monthlyPartitionDuplicateRecordCount));
         this.monthlyPartitionDuplicateRecordCount = monthlyPartitionDuplicateRecordCount;
 		this.propagateHierarchyIdToField(monthlyPartitionDuplicateRecordCount, "monthly_partition_duplicate_record_count");
+    }
+
+    /**
+     * Returns a duplicate record percent check.
+     * @return Duplicate record percent check.
+     */
+    public TableDuplicateRecordPercentCheckSpec getMonthlyPartitionDuplicateRecordPercent() {
+        return monthlyPartitionDuplicateRecordPercent;
+    }
+
+    /**
+     * Sets a new definition of a duplicate record percent check.
+     * @param monthlyPartitionDuplicateRecordPercent Duplicate record percent check.
+     */
+    public void setMonthlyPartitionDuplicateRecordPercent(TableDuplicateRecordPercentCheckSpec monthlyPartitionDuplicateRecordPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDuplicateRecordPercent, monthlyPartitionDuplicateRecordPercent));
+        this.monthlyPartitionDuplicateRecordPercent = monthlyPartitionDuplicateRecordPercent;
+        this.propagateHierarchyIdToField(monthlyPartitionDuplicateRecordPercent, "monthly_partition_duplicate_record_percent");
     }
 
     /**
