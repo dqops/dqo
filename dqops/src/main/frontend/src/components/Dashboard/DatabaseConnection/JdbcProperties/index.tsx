@@ -10,6 +10,7 @@ interface IJdbcPropertiesViewProps {
   properties?: IProperties;
   onChange: (properties: IProperties) => void;
   sharedCredentials?: SharedCredentialListModel[];
+  title?: string;
 }
 function convertObjectToArray(obj: {
   [key: string]: string;
@@ -33,9 +34,12 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 const JdbcPropertiesView = ({
   properties = { ['']: '' },
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  title
 }: IJdbcPropertiesViewProps) => {
-  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
+  const [arr, setArr] = useState(
+    convertObjectToArray(properties ?? { ['']: '' })
+  );
 
   const onChangeArr = (
     array: {
@@ -48,7 +52,9 @@ const JdbcPropertiesView = ({
 
   useEffect(() => {
     if (properties && arr.length === 1 && Object.keys(properties)[0] === '') {
-      setArr(convertObjectToArray(properties ?? {}));
+      setArr(convertObjectToArray(properties ?? { ['']: '' }));
+    } else if (Object.keys(properties).length === 0) {
+      setArr([{ ['']: '' }]);
     }
   }, []);
 
@@ -58,7 +64,7 @@ const JdbcPropertiesView = ({
         <thead>
           <tr>
             <th className="text-left min-w-40 pr-4 py-2">
-              JDBC connection property
+              {title ?? 'JDBC connection property'}
             </th>
             <th className="text-left min-w-40 pr-4 py-2">Value</th>
             <th className="px-8 min-w-40 py-2">Action</th>

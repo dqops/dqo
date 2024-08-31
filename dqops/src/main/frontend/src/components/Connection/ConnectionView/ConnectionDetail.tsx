@@ -169,7 +169,7 @@ const ConnectionDetail = () => {
         isUpdating={isUpdating}
         isUpdated={isUpdatedConnectionBasic}
       />
-      <table className="mb-6">
+      <table>
         <tbody>
           <tr>
             <td className="px-4 py-2">
@@ -202,39 +202,36 @@ const ConnectionDetail = () => {
               </div>
             </td>
           </tr>
-          <div>
-            {advancedPropertiesOpen ? (
-              <SectionWrapper
-                title="Advanced properties"
-                className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
-                svgIcon
-                onClick={() =>
-                  setAdvancedPropertiesOpen(!advancedPropertiesOpen)
-                }
-              >
-                <JdbcPropertiesView
-                  properties={connectionBasic?.advanced_properties}
-                  onChange={(properties) =>
-                    onChange({ advanced_properties: properties })
-                  }
-                  sharedCredentials={sharedCredentials}
-                />
-              </SectionWrapper>
-            ) : (
-              <div className="flex items-center ml-4 my-2">
-                <SvgIcon
-                  name="chevron-right"
-                  className="w-5 h-5"
-                  onClick={() =>
-                    setAdvancedPropertiesOpen(!advancedPropertiesOpen)
-                  }
-                />
-                Advanced properties
-              </div>
-            )}
-          </div>
         </tbody>
       </table>
+      <div className="!w-full">
+        {advancedPropertiesOpen ? (
+          <SectionWrapper
+            title="Advanced properties"
+            className="ml-4 !pb-1 !pt-1 !mb-4 mt-4"
+            svgIcon
+            onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
+          >
+            <JdbcPropertiesView
+              properties={connectionBasic?.advanced_properties}
+              onChange={(properties) =>
+                onChange({ advanced_properties: properties })
+              }
+              sharedCredentials={sharedCredentials}
+              title="Advanced property name"
+            />
+          </SectionWrapper>
+        ) : (
+          <div className="flex items-center ml-4 mb-6">
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5"
+              onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
+            />
+            Advanced properties
+          </div>
+        )}
+      </div>
 
       <div className="px-4">
         {connectionBasic?.provider_type ===

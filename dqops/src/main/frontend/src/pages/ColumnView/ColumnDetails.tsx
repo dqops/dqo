@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { SharedCredentialListModel } from '../../api';
 import Checkbox from '../../components/Checkbox';
+import JdbcPropertiesView from '../../components/Dashboard/DatabaseConnection/JdbcProperties';
+import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import Input from '../../components/Input';
 import NumberInput from '../../components/NumberInput';
+import SvgIcon from '../../components/SvgIcon';
 import TextArea from '../../components/TextArea';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -14,6 +18,7 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
+import { SharedCredentialsApi } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
@@ -34,7 +39,10 @@ const TableDetails = ({
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-
+  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] = useState(false);
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
   const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
@@ -71,6 +79,12 @@ const TableDetails = ({
         columnName
       )
     );
+    const getSharedCredentials = async () => {
+      await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
+        setSharedCredentials(res.data)
+      );
+    };
+    getSharedCredentials();
   }, [checkTypes, connectionName, schemaName, columnName, tableName]);
 
   const onUpdate = async () => {
@@ -107,7 +121,7 @@ const TableDetails = ({
         isUpdating={isUpdating}
         isUpdated={isUpdatedColumnBasic}
       />
-      <table className="mb-6 w-160 text-sm">
+      <table className="w-160 text-sm">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection name</td>
@@ -211,6 +225,34 @@ const TableDetails = ({
           </tr>
         </tbody>
       </table>
+      <div>
+        {advancedPropertiesOpen ? (
+          <SectionWrapper
+            title="Advanced properties"
+            className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
+            svgIcon
+            onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
+          >
+            <JdbcPropertiesView
+              properties={columnBasic?.advanced_properties}
+              onChange={(properties) =>
+                handleChange({ advanced_properties: properties })
+              }
+              title="Advanced property name"
+              sharedCredentials={sharedCredentials}
+            />
+          </SectionWrapper>
+        ) : (
+          <div className="flex items-center ml-4 mb-2 text-sm">
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5"
+              onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
+            />
+            Advanced properties
+          </div>
+        )}
+      </div>
     </div>
   );
 };

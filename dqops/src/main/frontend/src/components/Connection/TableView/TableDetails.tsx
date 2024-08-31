@@ -6,6 +6,7 @@ import {
   ConnectionSpecProviderTypeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
   FileFormatSpec,
+  SharedCredentialListModel,
   TableListModelProfilingChecksResultTruncationEnum
 } from '../../../api';
 import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
@@ -20,15 +21,21 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { ConnectionApiClient } from '../../../services/apiClient';
+import {
+  ConnectionApiClient,
+  SharedCredentialsApi
+} from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import Checkbox from '../../Checkbox';
+import JdbcPropertiesView from '../../Dashboard/DatabaseConnection/JdbcProperties';
+import SectionWrapper from '../../Dashboard/SectionWrapper';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
 import Input from '../../Input';
 import NumberInput from '../../NumberInput';
 import Select from '../../Select';
+import SvgIcon from '../../SvgIcon';
 import ActionGroup from './TableActionGroup';
 
 const TableDetails = () => {
@@ -53,7 +60,10 @@ const TableDetails = () => {
     DuckdbParametersSpecFilesFormatTypeEnum.csv;
 
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
-
+  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] = useState(false);
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecFilesFormatTypeEnum>(format);
 
@@ -89,6 +99,12 @@ const TableDetails = () => {
         setConnectionModel(res.data)
       );
     };
+    const getSharedCredentials = async () => {
+      await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
+        setSharedCredentials(res.data)
+      );
+    };
+    getSharedCredentials();
     getConnectionBasic();
   }, [checkTypes, connection, schema, table]);
 
@@ -192,6 +208,34 @@ const TableDetails = () => {
       >
         {TableDetailBody({ tableBasic, handleChange })}
       </table>
+      <div>
+        {advancedPropertiesOpen ? (
+          <SectionWrapper
+            title="Advanced properties"
+            className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
+            svgIcon
+            onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
+          >
+            <JdbcPropertiesView
+              properties={tableBasic?.advanced_properties}
+              onChange={(properties) =>
+                handleChange({ advanced_properties: properties })
+              }
+              title="Advanced property name"
+              sharedCredentials={sharedCredentials}
+            />
+          </SectionWrapper>
+        ) : (
+          <div className="flex items-center ml-4 mb-2 text-sm">
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5"
+              onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
+            />
+            Advanced properties
+          </div>
+        )}
+      </div>
       {connectionModel.provider_type ===
         ConnectionSpecProviderTypeEnum.duckdb && (
         <FileFormatConfiguration
@@ -250,24 +294,34 @@ const TableDetailBody = ({
           </div>
         </td>
       </tr>
-            <tr>
-        <td className="px-4 py-2">Do not collect error samples for profiling checks</td>
+      <tr>
+        <td className="px-4 py-2">
+          Do not collect error samples for profiling checks
+        </td>
         <td className="px-4 py-2">
           <div className="flex">
             <Checkbox
-              onChange={(value) => handleChange({ do_not_collect_error_samples_in_profiling: value })}
+              onChange={(value) =>
+                handleChange({
+                  do_not_collect_error_samples_in_profiling: value
+                })
+              }
               checked={tableBasic?.do_not_collect_error_samples_in_profiling}
             />
           </div>
         </td>
       </tr>
       <tr>
-        <td className="px-4 py-2">Always collect error samples for scheduled monitoring checks</td>
+        <td className="px-4 py-2">
+          Always collect error samples for scheduled monitoring checks
+        </td>
         <td className="px-4 py-2">
           <div className="flex">
             <Checkbox
-              onChange={(value) => handleChange({ always_collect_error_samples: value })}
-              checked={tableBasic?.always_collect_error_samples}              
+              onChange={(value) =>
+                handleChange({ always_collect_error_samples: value })
+              }
+              checked={tableBasic?.always_collect_error_samples}
             />
           </div>
         </td>
