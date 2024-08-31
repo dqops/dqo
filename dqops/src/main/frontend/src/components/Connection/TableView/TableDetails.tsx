@@ -27,15 +27,13 @@ import {
 } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
+import AdvancedProperties from '../../AdvancedProperties/AdvancedProperties';
 import Checkbox from '../../Checkbox';
-import JdbcPropertiesView from '../../Dashboard/DatabaseConnection/JdbcProperties';
-import SectionWrapper from '../../Dashboard/SectionWrapper';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
 import Input from '../../Input';
 import NumberInput from '../../NumberInput';
 import Select from '../../Select';
-import SvgIcon from '../../SvgIcon';
 import ActionGroup from './TableActionGroup';
 
 const TableDetails = () => {
@@ -60,7 +58,6 @@ const TableDetails = () => {
     DuckdbParametersSpecFilesFormatTypeEnum.csv;
 
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
-  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] = useState(false);
   const [sharedCredentials, setSharedCredentials] = useState<
     SharedCredentialListModel[]
   >([]);
@@ -208,34 +205,11 @@ const TableDetails = () => {
       >
         {TableDetailBody({ tableBasic, handleChange })}
       </table>
-      <div>
-        {advancedPropertiesOpen ? (
-          <SectionWrapper
-            title="Advanced properties"
-            className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
-            svgIcon
-            onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
-          >
-            <JdbcPropertiesView
-              properties={tableBasic?.advanced_properties}
-              onChange={(properties) =>
-                handleChange({ advanced_properties: properties })
-              }
-              title="Advanced property name"
-              sharedCredentials={sharedCredentials}
-            />
-          </SectionWrapper>
-        ) : (
-          <div className="flex items-center ml-4 mb-2 text-sm">
-            <SvgIcon
-              name="chevron-right"
-              className="w-5 h-5"
-              onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
-            />
-            Advanced properties
-          </div>
-        )}
-      </div>
+      <AdvancedProperties
+        properties={tableBasic?.advanced_properties}
+        handleChange={handleChange}
+        sharedCredentials={sharedCredentials}
+      />
       {connectionModel.provider_type ===
         ConnectionSpecProviderTypeEnum.duckdb && (
         <FileFormatConfiguration

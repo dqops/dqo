@@ -26,13 +26,13 @@ import {
 } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
+import AdvancedProperties from '../../AdvancedProperties/AdvancedProperties';
 import Button from '../../Button';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
 import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksConnection';
 import DuckdbConnection from '../../Dashboard/DatabaseConnection/DuckDBConnection';
 import ErrorModal from '../../Dashboard/DatabaseConnection/ErrorModal';
-import JdbcPropertiesView from '../../Dashboard/DatabaseConnection/JdbcProperties';
 import MySQLConnection from '../../Dashboard/DatabaseConnection/MySQLConnection';
 import OracleConnection from '../../Dashboard/DatabaseConnection/OracleConnection';
 import PostgreSQLConnection from '../../Dashboard/DatabaseConnection/PostgreSQLConnection';
@@ -42,10 +42,8 @@ import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeCon
 import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
 import SqlServerConnection from '../../Dashboard/DatabaseConnection/SqlServerConnection';
 import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
-import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Input from '../../Input';
 import Loader from '../../Loader';
-import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
 
 const ConnectionDetail = () => {
@@ -69,7 +67,6 @@ const ConnectionDetail = () => {
 
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
-  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -169,7 +166,7 @@ const ConnectionDetail = () => {
         isUpdating={isUpdating}
         isUpdated={isUpdatedConnectionBasic}
       />
-      <table>
+      <table className="mb-1">
         <tbody>
           <tr>
             <td className="px-4 py-2">
@@ -204,36 +201,13 @@ const ConnectionDetail = () => {
           </tr>
         </tbody>
       </table>
-      <div className="!w-full">
-        {advancedPropertiesOpen ? (
-          <SectionWrapper
-            title="Advanced properties"
-            className="ml-4 !pb-1 !pt-1 !mb-4 mt-4"
-            svgIcon
-            onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
-          >
-            <JdbcPropertiesView
-              properties={connectionBasic?.advanced_properties}
-              onChange={(properties) =>
-                onChange({ advanced_properties: properties })
-              }
-              sharedCredentials={sharedCredentials}
-              title="Advanced property name"
-            />
-          </SectionWrapper>
-        ) : (
-          <div className="flex items-center ml-4 mb-6">
-            <SvgIcon
-              name="chevron-right"
-              className="w-5 h-5"
-              onClick={() => setAdvancedPropertiesOpen(!advancedPropertiesOpen)}
-            />
-            Advanced properties
-          </div>
-        )}
-      </div>
+      <AdvancedProperties
+        properties={connectionBasic?.advanced_properties}
+        handleChange={onChange}
+        sharedCredentials={sharedCredentials}
+      />
 
-      <div className="px-4">
+      <div className="px-4 !mt-6">
         {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection
