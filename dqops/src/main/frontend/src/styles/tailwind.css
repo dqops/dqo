@@ -33,6 +33,9 @@ body {
   background-color: #ffffff;
 }
 
+#webpack-dev-server-client-overlay {
+  display: none;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
