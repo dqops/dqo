@@ -63,6 +63,7 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
+import com.dqops.metadata.lineage.*;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
@@ -1230,4 +1231,63 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
+    /**
+     * Accept a source table data lineage specification.
+     *
+     * @param tableLineageSourceSpec Source table on the data lineage.
+     * @param parameter              Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableLineageSourceSpec tableLineageSourceSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a list of source table data lineage specifications.
+     *
+     * @param tableLineageSourceSpecs List of source table on the data lineages.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableLineageSourceSpecList tableLineageSourceSpecs, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a source columns data lineage specification.
+     *
+     * @param columnLineageSourceSpec Source columns on the data lineage.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnLineageSourceSpec columnLineageSourceSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a dictionary of source columns data lineage specification.
+     *
+     * @param columnLineageSourceSpecMap Dictionary of source columns on the data lineage.
+     * @param parameter                  Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnLineageSourceSpecMap columnLineageSourceSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a list of source column names in the data lineage.
+     *
+     * @param sourceColumnsSetSpec Source column names for a single target column.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SourceColumnsSetSpec sourceColumnsSetSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
 }

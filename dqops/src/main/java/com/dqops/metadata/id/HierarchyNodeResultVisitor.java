@@ -62,6 +62,7 @@ import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
+import com.dqops.metadata.lineage.*;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
@@ -930,4 +931,43 @@ public interface HierarchyNodeResultVisitor<P, R> {
      */
     R accept(IncidentNotificationTargetSpec incidentNotificationTargetSpec, P parameter);
 
+    /**
+     * Accept a source table data lineage specification.
+     * @param tableLineageSourceSpec Source table on the data lineage.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TableLineageSourceSpec tableLineageSourceSpec, P parameter);
+
+    /**
+     * Accept a list of source table data lineage specifications.
+     * @param tableLineageSourceSpecs List of source table on the data lineages.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TableLineageSourceSpecList tableLineageSourceSpecs, P parameter);
+
+    /**
+     * Accept a source columns data lineage specification.
+     * @param columnLineageSourceSpec Source columns on the data lineage.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnLineageSourceSpec columnLineageSourceSpec, P parameter);
+
+    /**
+     * Accept a dictionary of source columns data lineage specification.
+     * @param columnLineageSourceSpecMap Dictionary of source columns on the data lineage.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnLineageSourceSpecMap columnLineageSourceSpecMap, P parameter);
+
+    /**
+     * Accept a list of source column names in the data lineage.
+     * @param sourceColumnsSetSpec Source column names for a single target column.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(SourceColumnsSetSpec sourceColumnsSetSpec, P parameter);
 }

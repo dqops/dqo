@@ -25656,6 +25656,25 @@
         }
       }
     },
+    "ColumnLineageSourceSpec" : {
+      "type" : "object",
+      "properties" : {
+        "source_columns" : {
+          "type" : "array",
+          "description" : "A list of source columns from the source table name from which this column receives data.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "description" : "A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
     "ColumnListModel" : {
       "type" : "object",
       "properties" : {
@@ -41630,6 +41649,45 @@
         }
       }
     },
+    "TableLineageSourceSpec" : {
+      "type" : "object",
+      "properties" : {
+        "source_connection" : {
+          "type" : "string",
+          "description" : "The name of a source connection that is defined in DQOps and contains a source table from which the current table receives data."
+        },
+        "source_schema" : {
+          "type" : "string",
+          "description" : "The name of a source schema within the source connection that contains a source table from which the current table receives data."
+        },
+        "source_table" : {
+          "type" : "string",
+          "description" : "The name of a source table in the source schema from which the current table receives data."
+        },
+        "data_lineage_source_tool" : {
+          "type" : "string",
+          "description" : "The name of a source tool from which this data lineage information was copied. This field should be filled when the data lineage was imported from another data catalog or a data lineage tracking platform."
+        },
+        "properties" : {
+          "type" : "object",
+          "description" : "A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "columns" : {
+          "type" : "object",
+          "description" : "Configuration of source columns for each column in the current table. The keys in this dictionary are column names in the current table. The object stored in the dictionary contain a list of source columns.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/ColumnLineageSourceSpec"
+          }
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "NOT_TOUCHED", "LOAD_IN_PROGRESS", "ADDED", "UNCHANGED", "MODIFIED", "TO_BE_DELETED", "DELETED" ]
+        }
+      }
+    },
     "TableListModel" : {
       "type" : "object",
       "properties" : {
@@ -43019,6 +43077,13 @@
         "file_format" : {
           "description" : "File format with the specification used as a source data. It overrides the connection spec's file format when it is set",
           "$ref" : "#/definitions/FileFormatSpec"
+        },
+        "source_tables" : {
+          "type" : "array",
+          "description" : "A list of source tables. This information is used to define the data lineage report for the table.",
+          "items" : {
+            "$ref" : "#/definitions/TableLineageSourceSpec"
+          }
         }
       }
     },
