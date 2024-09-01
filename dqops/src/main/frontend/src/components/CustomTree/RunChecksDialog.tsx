@@ -22,6 +22,7 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import LabelsView from '../Connection/LabelsView';
 import SectionWrapper from '../Dashboard/SectionWrapper';
+import DatePicker from '../DatePicker';
 import Input from '../Input';
 import RadioButton from '../RadioButton';
 import Select from '../Select';
@@ -84,6 +85,7 @@ export default function RunChecksDialog({
   const onChangeTimeFilterWindow = (
     obj: Partial<TimeWindowFilterParameters>
   ) => {
+    console.log(obj);
     setTimeWindowFilter((prev) => ({
       ...prev,
       ...obj
@@ -338,55 +340,66 @@ export default function RunChecksDialog({
                       onChangeFilters({ timeWindowFilter: value })
                     }
                     label="Time window for partitioned checks"
-                    disabled={filters.checkType !== CheckTypes.PARTITIONED}
-                    menuClassName="!top-14 !max-h-29 !z-[99]"
+                    disabled={
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                      !timeWindowPartitioned
+                    }
+                    menuClassName="!top-14 !max-h-29 !z-50"
                   />
                 </div>
               </div>
-              <div className="flex justify-between items-center pb-4 text-black">
+              <div className="flex justify-between items-center pb-4 text-black text-sm">
                 <RadioButton
                   checked={!timeWindowPartitioned}
-                  // onChange={(value) =>
-                  //   onChangeFilters({
-                  //     timeWindowFilter: value ? 'Custom' : undefined
-                  //   })
-                  // }
                   onClick={() => setTimeWindowPartitioned(false)}
-                  className=" mt-6"
+                  className=""
                   disabled={filters.checkType !== CheckTypes.PARTITIONED}
                 />
-                <div className="w-[45%]">
-                  From
-                  <Input
+                <div className="w-30 text-left">For the time range</div>
+                <div className="">
+                  <DatePicker
+                    showIcon
+                    placeholderText="Select date start"
                     value={timeWindowFilter?.from_date}
-                    onChange={(e) =>
-                      onChangeTimeFilterWindow({ from_date: e.target.value })
+                    onChange={(e: any) =>
+                      onChangeTimeFilterWindow({
+                        from_date: moment(e).utc().format('YYYY-MM-DD')
+                      })
                     }
                     className={clsx(
-                      'mt-2',
+                      'border border-gray-300',
                       !isDateValid(timeWindowFilter?.from_date)
                         ? 'border border-red-500'
                         : ''
                     )}
                     placeholder="*"
-                    disabled={filters.checkType !== CheckTypes.PARTITIONED}
+                    disabled={
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                      timeWindowPartitioned
+                    }
                   />
                 </div>
+                <div>to</div>
                 <div className="w-[45%] ml-2">
-                  To
-                  <Input
+                  <DatePicker
+                    showIcon
+                    placeholderText="Select to start"
                     value={timeWindowFilter?.to_date}
-                    onChange={(e) =>
-                      onChangeTimeFilterWindow({ to_date: e.target.value })
+                    onChange={(e: any) =>
+                      onChangeTimeFilterWindow({
+                        to_date: moment(e).utc().format('YYYY-MM-DD')
+                      })
                     }
                     className={clsx(
-                      'mt-2',
+                      'border border-gray-300',
                       !isDateValid(timeWindowFilter?.to_date)
                         ? 'border border-red-500'
                         : ''
                     )}
-                    placeholder="*"
-                    disabled={filters.checkType !== CheckTypes.PARTITIONED}
+                    disabled={
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                      timeWindowPartitioned
+                    }
                   />
                 </div>
                 <div></div>

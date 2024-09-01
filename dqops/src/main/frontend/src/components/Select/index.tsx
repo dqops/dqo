@@ -68,7 +68,7 @@ const Select = ({
   }, [options, value]);
 
   const handleClick = (option: Option) => {
-    if (onChange) {
+    if (onChange && isOpen) {
       onChange(option.value);
     }
     closeMenu();
