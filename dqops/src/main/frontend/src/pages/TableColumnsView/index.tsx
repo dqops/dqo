@@ -43,6 +43,7 @@ const TableColumnsView = () => {
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [isCollected, setIsCollected] = useState<boolean>(false);
   const [checkedColumns, setCheckedColumns] = useState<string[]>([]);
   const [jobId, setJobId] = useState<number>();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -60,7 +61,8 @@ const TableColumnsView = () => {
       if (
         !res.data.column_statistics?.find(
           (column) => column.statistics && column.statistics.length > 0
-        )
+        ) &&
+        !isCollected
       ) {
         dispatch(
           setJobAllert({
@@ -85,7 +87,11 @@ const TableColumnsView = () => {
         fullTableName: schemaName + '.' + tableName,
         enabled: true,
         columnNames: checkedColumns
-      }).then((res) => setJobId(res.data.jobId?.jobId));
+      }).then((res) => {
+        setIsCollected(true);
+        dispatch(setJobAllert({}));
+        setJobId(res.data.jobId?.jobId);
+      });
     } catch (err) {
       console.error(err);
     }
