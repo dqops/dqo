@@ -303,26 +303,20 @@ export default function RunChecksDialog({
             </div>
             <div
               className={clsx(
-                'text-sm text-black',
-                checkType !== CheckTypes.PARTITIONED &&
-                  'text-gray-300 cursor-not-allowed'
+                'text-sm text-black ml-2',
+                checkType !== CheckTypes.PARTITIONED && ' cursor-not-allowed'
               )}
             >
-              {/* <div className="mb-2">Time window for partitioned checks</div> */}
-              <div className="flex justify-between items-center pb-4 ">
+              <div className="mb-3">Time window for partitioned checks</div>
+              <div className="flex items-center pb-4 ">
                 <div className="flex items-center">
                   <RadioButton
                     checked={timeWindowPartitioned}
-                    // onChange={(value) =>
-                    //   onChangeFilters({
-                    //     timeWindowFilter: value ? 'Custom' : undefined
-                    //   })
-                    // }
                     onClick={() => {
                       setTimeWindowPartitioned(true);
                     }}
                     className={clsx(
-                      'mr-7 mt-4',
+                      'mr-5',
                       filters.checkType !== CheckTypes.PARTITIONED &&
                         'text-gray-500'
                     )}
@@ -338,24 +332,24 @@ export default function RunChecksDialog({
                     onChange={(value) =>
                       onChangeFilters({ timeWindowFilter: value })
                     }
-                    label="Time window for partitioned checks"
+                    // label="Time window for partitioned checks"
                     disabled={
                       filters.checkType !== CheckTypes.PARTITIONED ||
                       !timeWindowPartitioned
                     }
-                    menuClassName="!top-14 !max-h-29 !z-50"
+                    menuClassName="!top-9 !max-h-29 !z-50"
                   />
                 </div>
               </div>
-              <div className="flex justify-between items-center pb-4 text-black text-sm">
+              <div className="flex items-center pb-4 text-black text-sm">
                 <RadioButton
                   checked={!timeWindowPartitioned}
                   onClick={() => setTimeWindowPartitioned(false)}
-                  className=""
+                  className="mr-6"
                   disabled={filters.checkType !== CheckTypes.PARTITIONED}
                 />
                 <div className="w-30 text-left">For the time range</div>
-                <div className="">
+                <div className="mx-3">
                   <DatePicker
                     showIcon
                     placeholderText="Select date start"
@@ -381,7 +375,7 @@ export default function RunChecksDialog({
                   />
                 </div>
                 <div>to</div>
-                <div className="w-[45%] ml-2">
+                <div className="w-[45%] ml-3">
                   <DatePicker
                     showIcon
                     placeholderText="Select to start"
