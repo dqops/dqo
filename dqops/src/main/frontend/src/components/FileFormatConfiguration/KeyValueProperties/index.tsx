@@ -112,6 +112,8 @@ const KeyValueProperties = ({
                 ? 'az://container_name'
                 : storageType === DuckdbParametersSpecStorageTypeEnum.local
                 ? '/path/to/folder'
+                : storageType === DuckdbParametersSpecStorageTypeEnum.gcs
+                ? 'gs://bucket_name'
                 : undefined
             }
             onChange={onChangeArr}
