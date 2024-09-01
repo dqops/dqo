@@ -7,6 +7,7 @@ interface RadioButtonProps {
   checked?: boolean;
   className?: string;
   fontClassName?: string;
+  disabled?: boolean;
 }
 
 const RadioButton = ({
@@ -14,12 +15,17 @@ const RadioButton = ({
   onClick,
   checked,
   className,
-  fontClassName
+  fontClassName,
+  disabled
 }: RadioButtonProps) => {
   return (
     <div
-      className={clsx('flex items-center space-x-2 cursor-pointer', className)}
-      onClick={onClick}
+      className={clsx(
+        'flex items-center space-x-2 cursor-pointer',
+        className,
+        disabled ? 'opacity-50 cursor-default' : ''
+      )}
+      onClick={!disabled ? onClick : () => {}}
     >
       <div className="!w-5 !h-5 !min-w-5 border border-primary rounded-full flex items-center justify-center">
         <div

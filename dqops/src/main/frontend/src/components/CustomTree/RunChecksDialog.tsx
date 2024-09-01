@@ -22,7 +22,9 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import LabelsView from '../Connection/LabelsView';
 import SectionWrapper from '../Dashboard/SectionWrapper';
+import DatePicker from '../DatePicker';
 import Input from '../Input';
+import RadioButton from '../RadioButton';
 import Select from '../Select';
 import SelectInput from '../SelectInput';
 import SvgIcon from '../SvgIcon';
@@ -63,7 +65,7 @@ export default function RunChecksDialog({
     from_date: moment().utc().subtract(7, 'days').format('YYYY-MM-DD'),
     to_date: moment().utc().format('YYYY-MM-DD')
   });
-
+  const [timeWindowPartitioned, setTimeWindowPartitioned] = useState(true);
   const [additionalParams, setAdditionalParams] = useState(false);
 
   const onChangeFilters = (
@@ -83,6 +85,7 @@ export default function RunChecksDialog({
   const onChangeTimeFilterWindow = (
     obj: Partial<TimeWindowFilterParameters>
   ) => {
+    console.log(obj);
     setTimeWindowFilter((prev) => ({
       ...prev,
       ...obj
@@ -109,7 +112,6 @@ export default function RunChecksDialog({
       ? isDateValid(timeWindowFilter?.to_date) &&
         isDateValid(timeWindowFilter?.from_date)
       : true;
-
   return (
     <Dialog
       open={open}
@@ -120,43 +122,6 @@ export default function RunChecksDialog({
         Run checks
       </DialogHeader>
       <DialogBody className={clsx('text-sm flex flex-col overflow-y-auto')}>
-        {checkType === CheckTypes.PARTITIONED && (
-          <div className="flex justify-between border-b pb-4 border-gray-300 text-black">
-            <div className="w-[45%] ml-2">
-              From
-              <Input
-                value={timeWindowFilter?.from_date}
-                onChange={(e) =>
-                  onChangeTimeFilterWindow({ from_date: e.target.value })
-                }
-                className={clsx(
-                  'mt-2',
-                  !isDateValid(timeWindowFilter?.from_date)
-                    ? 'border border-red-500'
-                    : ''
-                )}
-                placeholder="*"
-              />
-            </div>
-            <div className="w-[45%] ml-2">
-              To
-              <Input
-                value={timeWindowFilter?.to_date}
-                onChange={(e) =>
-                  onChangeTimeFilterWindow({ to_date: e.target.value })
-                }
-                className={clsx(
-                  'mt-2',
-                  !isDateValid(timeWindowFilter?.to_date)
-                    ? 'border border-red-500'
-                    : ''
-                )}
-                placeholder="*"
-              />
-            </div>
-            <div></div>
-          </div>
-        )}
         <div className="flex justify-between border-b py-4 border-gray-300 text-black">
           <div className="w-[45%] ml-2">
             Connection
@@ -181,7 +146,7 @@ export default function RunChecksDialog({
           <div></div>
         </div>
         <div className="flex justify-between py-4 text-black items-center">
-          <div className="w-1/4 ml-2">
+          <div className="w-1/3 ml-2">
             Column name
             <Input
               value={filters.column}
@@ -190,7 +155,7 @@ export default function RunChecksDialog({
               placeholder="*"
             />
           </div>
-          <div className="w-1/4 ml-2">
+          <div className="w-1/3 ml-2">
             Column datatype
             <Input
               value={filters.columnDataType}
@@ -201,29 +166,24 @@ export default function RunChecksDialog({
               placeholder="*"
             />
           </div>
-          <div className="flex items-center gap-x-2 w-1/4 pl-5 mt-5">
-            Column nullable
+          <div className="flex items-center gap-x-2 w-40 pl-5 mt-5">
             <Checkbox
               checked={!!filters.columnNullable}
               onChange={(value) => onChangeFilters({ columnNullable: value })}
+              className="mr-4"
             />
+            Column nullable
           </div>
-          {checkType === CheckTypes.PARTITIONED && (
-            <div className="w-1/4">
-              <Select
-                options={Object.keys(RUN_CHECK_TIME_WINDOW_FILTERS).map(
-                  (key) => ({ label: key, value: key })
-                )}
-                value={filters.timeWindowFilter}
-                onChange={(value) =>
-                  onChangeFilters({ timeWindowFilter: value })
-                }
-                label="Time window for partitioned checks"
-                disabled={checkType !== CheckTypes.PARTITIONED}
-                menuClassName="!top-14 !max-h-29 !z-[99]"
-              />
-            </div>
-          )}
+          <div className="flex items-center gap-x-2 w-40 ml-4 mt-5">
+            <Checkbox
+              checked={!!filters.collectErrorSample}
+              onChange={(value) =>
+                onChangeFilters({ collectErrorSample: value })
+              }
+              className="mr-4"
+            />
+            Collect error samples
+          </div>
         </div>
         {additionalParams === false ? (
           <div
@@ -292,15 +252,6 @@ export default function RunChecksDialog({
                   className="mt-2"
                 />
               </div>
-              <div className="flex items-center gap-x-2 w-1/4 ml-4 mt-5">
-                Collect error samples
-                <Checkbox
-                  checked={!!filters.collectErrorSample}
-                  onChange={(value) =>
-                    onChangeFilters({ collectErrorSample: value })
-                  }
-                />
-              </div>
             </div>
             <div className="flex justify-between pt-4 text-black">
               <div className="w-1/3 ml-2">
@@ -350,6 +301,115 @@ export default function RunChecksDialog({
                 titleClassName="font-normal"
               />
             </div>
+            <div
+              className={clsx(
+                'text-sm text-black ml-2',
+                checkType !== CheckTypes.PARTITIONED &&
+                  'text-gray-300 cursor-not-allowed'
+              )}
+            >
+              <div className="mb-3">Time window for partitioned checks</div>
+              <div className="flex items-center pb-4 ">
+                <div className="flex items-center">
+                  <RadioButton
+                    checked={timeWindowPartitioned}
+                    onClick={() => {
+                      setTimeWindowPartitioned(true);
+                    }}
+                    className={clsx(
+                      'mr-5',
+                      filters.checkType !== CheckTypes.PARTITIONED &&
+                        'text-gray-500'
+                    )}
+                    disabled={filters.checkType !== CheckTypes.PARTITIONED}
+                  />
+                  <Select
+                    options={[
+                      ...Object.keys(RUN_CHECK_TIME_WINDOW_FILTERS).map(
+                        (key) => ({ label: key, value: key })
+                      )
+                    ]}
+                    value={filters.timeWindowFilter}
+                    onChange={(value) =>
+                      onChangeFilters({ timeWindowFilter: value })
+                    }
+                    // label="Time window for partitioned checks"
+                    disabled={
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                      !timeWindowPartitioned
+                    }
+                    triggerClassName={clsx(
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                        !timeWindowPartitioned
+                        ? 'text-gray-500'
+                        : ''
+                    )}
+                    menuClassName="!top-9 !max-h-29 !z-50"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center pb-4  text-sm">
+                <RadioButton
+                  checked={!timeWindowPartitioned}
+                  onClick={() => setTimeWindowPartitioned(false)}
+                  className="mr-6"
+                  disabled={filters.checkType !== CheckTypes.PARTITIONED}
+                />
+                <div className="w-30 text-left">For the time range</div>
+                <div className="mx-3">
+                  <DatePicker
+                    showIcon
+                    placeholderText="Select date start"
+                    selected={moment
+                      .utc(timeWindowFilter?.from_date, 'YYYY-MM-DD')
+                      .toDate()}
+                    onChange={(e: any) =>
+                      onChangeTimeFilterWindow({
+                        from_date: moment(e).utc().format('YYYY-MM-DD')
+                      })
+                    }
+                    className={clsx(
+                      'border border-gray-300',
+                      !isDateValid(timeWindowFilter?.from_date)
+                        ? 'border border-red-500'
+                        : ''
+                    )}
+                    dateFormat="yyyy-MM-dd"
+                    disabled={
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                      timeWindowPartitioned
+                    }
+                  />
+                </div>
+                <div>to</div>
+                <div className="w-[45%] ml-3">
+                  <DatePicker
+                    showIcon
+                    placeholderText="Select to start"
+                    selected={moment
+                      .utc(timeWindowFilter?.to_date, 'YYYY-MM-DD')
+                      .toDate()}
+                    onChange={(e: any) =>
+                      onChangeTimeFilterWindow({
+                        to_date: moment(e).utc().format('YYYY-MM-DD')
+                      })
+                    }
+                    className={clsx(
+                      'border border-gray-300',
+                      !isDateValid(timeWindowFilter?.to_date)
+                        ? 'border border-red-500'
+                        : ''
+                    )}
+                    disabled={
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                      timeWindowPartitioned
+                    }
+                    dateFormat="yyyy-MM-dd"
+                  />
+                </div>
+                <div></div>
+              </div>
+            </div>
           </SectionWrapper>
         )}
       </DialogBody>
@@ -370,10 +430,14 @@ export default function RunChecksDialog({
             isSaveEnabled
               ? (onClick(
                   prepareFilters(filters),
-                  (filters.timeWindowFilter &&
                   checkType === CheckTypes.PARTITIONED
-                    ? RUN_CHECK_TIME_WINDOW_FILTERS[filters.timeWindowFilter]
-                    : timeWindowFilter) ?? undefined,
+                    ? timeWindowPartitioned
+                      ? RUN_CHECK_TIME_WINDOW_FILTERS[
+                          filters.timeWindowFilter ??
+                            'Default incremental time window'
+                        ] ?? undefined
+                      : timeWindowFilter
+                    : undefined,
                   filters.collectErrorSample
                 ),
                 setFilters(runChecksJobTemplate))
