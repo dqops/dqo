@@ -412,10 +412,14 @@ export default function RunChecksDialog({
             isSaveEnabled
               ? (onClick(
                   prepareFilters(filters),
-                  (filters.timeWindowFilter &&
                   checkType === CheckTypes.PARTITIONED
-                    ? RUN_CHECK_TIME_WINDOW_FILTERS[filters.timeWindowFilter]
-                    : timeWindowFilter) ?? undefined,
+                    ? timeWindowPartitioned
+                      ? RUN_CHECK_TIME_WINDOW_FILTERS[
+                          filters.timeWindowFilter ??
+                            'Default incremental time window'
+                        ] ?? undefined
+                      : timeWindowFilter
+                    : undefined,
                   filters.collectErrorSample
                 ),
                 setFilters(runChecksJobTemplate))
