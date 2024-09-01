@@ -334,10 +334,15 @@ const CheckDetails = ({
   };
 
   const refetch = (month: string, name?: string) => {
-    fetchCheckErrors(month, name);
-    fetchCheckResults(month, name);
-    fetchCheckReadouts(month, name);
-    fetchErrorSamples(month, name);
+    if (activeTab === 'check_results') {
+      fetchCheckResults(month, name);
+    } else if (activeTab === 'sensor_readouts') {
+      fetchCheckReadouts(month, name);
+    } else if (activeTab === 'execution_errors') {
+      fetchCheckErrors(month, name);
+    } else if (activeTab === 'error_sampling') {
+      fetchErrorSamples(month, name);
+    }
   };
 
   useEffect(() => {
@@ -350,15 +355,7 @@ const CheckDetails = ({
   }, [fetchCheckResults]);
 
   useEffect(() => {
-    if (activeTab === 'check_results') {
-      fetchCheckResults(filters.month, filters.dataGroup);
-    } else if (activeTab === 'sensor_readouts') {
-      fetchCheckReadouts(filters.month, filters.dataGroup);
-    } else if (activeTab === 'execution_errors') {
-      fetchCheckErrors(filters.month, filters.dataGroup);
-    } else if (activeTab === 'error_sampling') {
-      fetchErrorSamples(filters.month, filters.dataGroup);
-    }
+    refetch(filters.month, filters.dataGroup);
   }, [activeTab]);
 
   const tabs = [

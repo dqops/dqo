@@ -388,8 +388,7 @@ const CheckResultsTab = ({
       {results.length === 0 && (
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
-
-      {mode === 'table' && (
+      {mode === 'table' && results.length !== 0 && (
         <>
           {results[0] && (
             <Table
@@ -409,7 +408,7 @@ const CheckResultsTab = ({
           )}
         </>
       )}
-      {mode === 'chart' && (
+      {mode === 'chart' && results.length !== 0 && (
         <>
           <ChartView data={allResults} />
         </>
