@@ -74,6 +74,7 @@ const ProfilingView = () => {
   );
 
   const [checkedColumns, setCheckedColumns] = useState<string[]>([]);
+  const [isCollected, setIsCollected] = useState<boolean>(false);
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [jobId, setJobId] = useState<number>();
@@ -89,8 +90,9 @@ const ProfilingView = () => {
         tableName
       ).then((res) => {
         if (
-          !res.data.column_statistics ||
-          res.data.column_statistics.length === 0
+          (!res.data.column_statistics ||
+            res.data.column_statistics.length === 0) &&
+          !isCollected
         ) {
           dispatch(
             setJobAllert({
@@ -116,7 +118,10 @@ const ProfilingView = () => {
           schemaName,
           tableName
         );
-      if (!res.data.statistics || res.data.statistics.length === 0) {
+      if (
+        (!res.data.statistics || res.data.statistics.length === 0) &&
+        !isCollected
+      ) {
         dispatch(
           setJobAllert({
             activeTab: firstLevelActiveTab,
@@ -258,11 +263,14 @@ const ProfilingView = () => {
   };
 
   const collectStatistics = async () => {
-    dispatch(setJobAllert({}));
     await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
       ...statistics?.collect_column_statistics_job_template,
       columnNames: checkedColumns
-    }).then((res) => setJobId(res.data.jobId?.jobId));
+    }).then((res) => {
+      dispatch(setJobAllert({}));
+      setIsCollected(true);
+      setJobId(res.data.jobId?.jobId);
+    });
   };
 
   const isCollectingStatistics = useMemo(() => {
