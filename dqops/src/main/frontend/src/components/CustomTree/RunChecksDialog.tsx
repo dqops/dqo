@@ -112,7 +112,6 @@ export default function RunChecksDialog({
       ? isDateValid(timeWindowFilter?.to_date) &&
         isDateValid(timeWindowFilter?.from_date)
       : true;
-
   return (
     <Dialog
       open={open}
@@ -360,7 +359,9 @@ export default function RunChecksDialog({
                   <DatePicker
                     showIcon
                     placeholderText="Select date start"
-                    value={timeWindowFilter?.from_date}
+                    selected={moment
+                      .utc(timeWindowFilter?.from_date, 'YYYY-MM-DD')
+                      .toDate()}
                     onChange={(e: any) =>
                       onChangeTimeFilterWindow({
                         from_date: moment(e).utc().format('YYYY-MM-DD')
@@ -372,7 +373,7 @@ export default function RunChecksDialog({
                         ? 'border border-red-500'
                         : ''
                     )}
-                    placeholder="*"
+                    dateFormat="yyyy-MM-dd"
                     disabled={
                       filters.checkType !== CheckTypes.PARTITIONED ||
                       timeWindowPartitioned
@@ -384,7 +385,9 @@ export default function RunChecksDialog({
                   <DatePicker
                     showIcon
                     placeholderText="Select to start"
-                    value={timeWindowFilter?.to_date}
+                    selected={moment
+                      .utc(timeWindowFilter?.to_date, 'YYYY-MM-DD')
+                      .toDate()}
                     onChange={(e: any) =>
                       onChangeTimeFilterWindow({
                         to_date: moment(e).utc().format('YYYY-MM-DD')
@@ -400,6 +403,7 @@ export default function RunChecksDialog({
                       filters.checkType !== CheckTypes.PARTITIONED ||
                       timeWindowPartitioned
                     }
+                    dateFormat="yyyy-MM-dd"
                   />
                 </div>
                 <div></div>
