@@ -304,7 +304,8 @@ export default function RunChecksDialog({
             <div
               className={clsx(
                 'text-sm text-black ml-2',
-                checkType !== CheckTypes.PARTITIONED && ' cursor-not-allowed'
+                checkType !== CheckTypes.PARTITIONED &&
+                  'text-gray-300 cursor-not-allowed'
               )}
             >
               <div className="mb-3">Time window for partitioned checks</div>
@@ -337,11 +338,17 @@ export default function RunChecksDialog({
                       filters.checkType !== CheckTypes.PARTITIONED ||
                       !timeWindowPartitioned
                     }
+                    triggerClassName={clsx(
+                      filters.checkType !== CheckTypes.PARTITIONED ||
+                        !timeWindowPartitioned
+                        ? 'text-gray-500'
+                        : ''
+                    )}
                     menuClassName="!top-9 !max-h-29 !z-50"
                   />
                 </div>
               </div>
-              <div className="flex items-center pb-4 text-black text-sm">
+              <div className="flex items-center pb-4  text-sm">
                 <RadioButton
                   checked={!timeWindowPartitioned}
                   onClick={() => setTimeWindowPartitioned(false)}

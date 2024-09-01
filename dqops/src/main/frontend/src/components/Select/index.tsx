@@ -122,6 +122,7 @@ const Select = ({
           >
             <div
               className={clsx(
+                disabled && '!text-gray-500',
                 truncateText ? 'truncate max-w-full' : '', // Apply truncation classes
                 'flex items-center gap-2'
               )}
