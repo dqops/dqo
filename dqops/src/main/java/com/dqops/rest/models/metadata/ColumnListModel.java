@@ -343,6 +343,7 @@ public class ColumnListModel {
         targetColumnSpec.setDisabled(this.isDisabled());
         targetColumnSpec.setId(this.isId());
         targetColumnSpec.setTypeSnapshot(this.getTypeSnapshot());
+        targetColumnSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 
     public static class ColumnListModelSampleFactory implements SampleValueFactory<ColumnListModel> {

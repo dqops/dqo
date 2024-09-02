@@ -117,7 +117,7 @@ public class ColumnSpec extends AbstractSpec {
 
     @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> advancedProperties = new HashMap<>();;
+    private Map<String, String> advancedProperties = new HashMap<>();
 
     public ColumnSpec() {
     }
