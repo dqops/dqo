@@ -252,7 +252,7 @@ Incident notifications allow you to receive alerts via email or webhook whenever
 
 There are two levels of notification configuration in DQOps:
 
-1. **Global notifications:** This is the default configuration applied to all incidents unless overridden. You can access it through the Configuration section> Global incident notifications.
+1. **Global notifications:** This configuration applies to all incidents unless overridden. You can access it through the Configuration section > Global incident notifications.
 2. **Connection notifications:** These configurations take precedence over global notifications and are specific to individual data sources.
     You can access them by navigating to a specific data source under the Data sources section > [Connection name] > Notifications tab.
 
