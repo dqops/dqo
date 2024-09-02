@@ -1,15 +1,15 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
 
-{% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+{%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
     {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
     {%- for item in column_names -%}
         {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
     {%- endfor -%}
-{% endmacro %}
+{% endmacro -%}
 
 SELECT
     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-        ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+        ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
         AS actual_value
     {{- lib.render_data_grouping_projections_reference('grouping_table') }}
     {{- lib.render_time_dimension_projection_reference('grouping_table') }}
