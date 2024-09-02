@@ -87,7 +87,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/uniqueness/duplicate_record_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/uniqueness/duplicate_record_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -99,12 +99,12 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
                           AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
@@ -133,14 +133,14 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`date` AS time_period,
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -170,14 +170,14 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`date` AS time_period,
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -210,14 +210,14 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`date` AS time_period,
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -252,14 +252,14 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`date` AS time_period,
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -289,12 +289,12 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
                           AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
@@ -317,14 +317,14 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`date` AS time_period,
                         TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                     FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -358,13 +358,13 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     grouping_table.grouping_level_1
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`strings_with_numbers` AS grouping_level_1
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
@@ -393,13 +393,13 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     grouping_table.grouping_level_1
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`strings_with_numbers` AS grouping_level_1
                     FROM `%s`.`%s`.`%s` AS analyzed_table
                     WHERE (%s)
@@ -427,28 +427,28 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-                    SELECT
-                        CASE
-                            WHEN SUM(duplicated_count) IS NULL THEN 0
-                            ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                            END AS actual_value,
-                        grouping_table.grouping_level_1,
-                        time_period,
-                        time_period_utc
-                    FROM (
-                        SELECT COUNT(*) AS duplicated_count,
-                            analyzed_table.`strings_with_numbers` AS grouping_level_1,
-                            analyzed_table.`date` AS time_period,
-                            TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-                        FROM `%s`.`%s`.`%s` AS analyzed_table
-                        WHERE (%s)
-                              AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
-                              AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
-                              AND analyzed_table.`date` < CURRENT_DATE()
-                        GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, time_period, time_period_utc
-                    ) grouping_table
-                    GROUP BY grouping_level_1, time_period, time_period_utc
-                    ORDER BY grouping_level_1, time_period, time_period_utc""";
+                SELECT
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
+                    grouping_table.grouping_level_1,
+                    time_period,
+                    time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
+                        analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                        analyzed_table.`date` AS time_period,
+                        TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                    FROM `%s`.`%s`.`%s` AS analyzed_table
+                    WHERE (%s)
+                          AND (COALESCE(CAST(`int_nulls` AS STRING), CAST(`string_nulls` AS STRING)) IS NOT NULL)
+                          AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                          AND analyzed_table.`date` < CURRENT_DATE()
+                    GROUP BY `int_nulls`, `string_nulls`, grouping_level_1, time_period, time_period_utc
+                ) grouping_table
+                GROUP BY grouping_level_1, time_period, time_period_utc
+                ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
@@ -469,15 +469,15 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     grouping_table.grouping_level_1,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`strings_with_numbers` AS grouping_level_1,
                         DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH) AS time_period,
                         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH)) AS time_period_utc
@@ -517,17 +517,17 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     grouping_table.grouping_level_1,
                     grouping_table.grouping_level_2,
                     grouping_table.grouping_level_3,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`strings_with_numbers` AS grouping_level_1,
                         analyzed_table.`mix_of_values` AS grouping_level_2,
                         analyzed_table.`length_string` AS grouping_level_3,
@@ -562,15 +562,15 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     grouping_table.grouping_level_1,
                     grouping_table.grouping_level_2,
                     grouping_table.grouping_level_3
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`strings_with_numbers` AS grouping_level_1,
                         analyzed_table.`mix_of_values` AS grouping_level_2,
                         analyzed_table.`length_string` AS grouping_level_3
@@ -603,17 +603,17 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    CASE
-                        WHEN SUM(duplicated_count) IS NULL THEN 0
-                        ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
-                        END AS actual_value,
+                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        AS actual_value,
                     grouping_table.grouping_level_1,
                     grouping_table.grouping_level_2,
                     grouping_table.grouping_level_3,
                     time_period,
                     time_period_utc
                 FROM (
-                    SELECT COUNT(*) AS duplicated_count,
+                    SELECT COUNT(*) AS records_number,
+                        COUNT(*) OVER (PARTITION BY `int_nulls`, `string_nulls`) AS distinct_records,
                         analyzed_table.`strings_with_numbers` AS grouping_level_1,
                         analyzed_table.`mix_of_values` AS grouping_level_2,
                         analyzed_table.`length_string` AS grouping_level_3,
