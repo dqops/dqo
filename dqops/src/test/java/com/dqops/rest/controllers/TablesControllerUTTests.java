@@ -36,7 +36,6 @@ import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
-import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
@@ -207,7 +206,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         CheckContainerModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @Test
@@ -285,7 +284,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         CheckContainerModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -304,9 +303,9 @@ public class TablesControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(6, result.getCategories().size());
+            Assertions.assertEquals(7, result.getCategories().size());
         } else {
-            Assertions.assertEquals(6, result.getCategories().size());
+            Assertions.assertEquals(7, result.getCategories().size());
         }
     }
 
@@ -326,9 +325,9 @@ public class TablesControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(3, result.getCategories().size());
+            Assertions.assertEquals(4, result.getCategories().size());
         } else {
-            Assertions.assertEquals(3, result.getCategories().size());
+            Assertions.assertEquals(4, result.getCategories().size());
         }
     }
 
@@ -345,7 +344,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         CheckContainerListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -363,9 +362,9 @@ public class TablesControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -384,9 +383,9 @@ public class TablesControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(3, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(3, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
     
