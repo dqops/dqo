@@ -106,7 +106,7 @@ public class BigQueryTableUniquenessDuplicateRecordPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(10.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class BigQueryTableUniquenessDuplicateRecordPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(10.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -134,7 +134,7 @@ public class BigQueryTableUniquenessDuplicateRecordPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(10.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class BigQueryTableUniquenessDuplicateRecordPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(10.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

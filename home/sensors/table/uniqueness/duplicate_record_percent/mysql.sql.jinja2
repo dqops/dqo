@@ -9,8 +9,8 @@
 
 SELECT
     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-            AS actual_value
+        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+        AS actual_value
     {{- lib.render_data_grouping_projections_reference('grouping_table') }}
     {{- lib.render_time_dimension_projection_reference('grouping_table') }}
 FROM (
