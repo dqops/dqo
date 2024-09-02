@@ -103,7 +103,7 @@ const SchemasView = () => {
                 />
               </td>
               {isSourceScreen ? (
-                <td className="left-80 absolute py-1 px-4 text-left">
+                <td className="left-80 absolute px-4 text-left">
                   <Button
                     className="!py-2 !rounded-md text-sm"
                     textSize="sm"

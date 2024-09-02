@@ -126,6 +126,7 @@ const ErrorSamplesTab = ({
         <IconButton
           ripple={false}
           size="sm"
+          disabled={errorSamples.length === 0 ? true : false}
           className={
             'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
           }

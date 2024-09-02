@@ -170,7 +170,7 @@ const ConnectionDetail = () => {
         <tbody>
           <tr>
             <td className="px-4 py-2">
-              <div>Connection name:</div>
+              <div>Connection name</div>
             </td>
             <td className="px-4 py-2">
               <div>{connectionBasic?.connection_name}</div>
@@ -178,7 +178,7 @@ const ConnectionDetail = () => {
           </tr>
           <tr>
             <td className="px-4 py-2">
-              <div>Parallel jobs limit:</div>
+              <div>Parallel jobs limit</div>
             </td>
             <td className="px-4 py-2">
               <div>
