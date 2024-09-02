@@ -22,9 +22,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.errorsamples.models.ErrorSampleEntryModel;
 import com.dqops.data.errorsamples.models.ErrorSamplesListModel;
-import com.dqops.data.errorsamples.services.ErrorSamplesCsvCreator;
-import com.dqops.data.errorsamples.services.ErrorSamplesDataService;
-import com.dqops.data.errorsamples.services.ErrorSamplesFilterParameters;
+import com.dqops.data.errorsamples.services.*;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -43,6 +41,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -58,21 +57,25 @@ public class ErrorSamplesController {
     private UserHomeContextFactory userHomeContextFactory;
     private ErrorSamplesDataService errorSamplesDataService;
     private final ErrorSamplesCsvCreator errorSamplesCsvCreator;
+    private final ErrorSamplesFileNameCreator errorSamplesFileNameCreator;
 
     /**
      * Dependency injection constructor.
      *
-     * @param userHomeContextFactory  User home context factory.
-     * @param errorSamplesDataService Error samples data service.
-     * @param errorSamplesCsvCreator  CSV creator for the error samples.
+     * @param userHomeContextFactory      User home context factory.
+     * @param errorSamplesDataService     Error samples data service.
+     * @param errorSamplesCsvCreator      CSV creator for the error samples.
+     * @param errorSamplesFileNameCreator CSV file name creator.
      */
     @Autowired
     public ErrorSamplesController(UserHomeContextFactory userHomeContextFactory,
                                   ErrorSamplesDataService errorSamplesDataService,
-                                  ErrorSamplesCsvCreator errorSamplesCsvCreator) {
+                                  ErrorSamplesCsvCreator errorSamplesCsvCreator,
+                                  ErrorSamplesFileNameCreator errorSamplesFileNameCreator) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.errorSamplesDataService = errorSamplesDataService;
         this.errorSamplesCsvCreator = errorSamplesCsvCreator;
+        this.errorSamplesFileNameCreator = errorSamplesFileNameCreator;
     }
 
     /**
@@ -620,32 +623,14 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                StringBuilder fileNameBuilder = new StringBuilder();
-                fileNameBuilder.append("Error_samples_").append(CheckType.profiling).append("_")
-                        .append(connectionName).append("_")
-                        .append(schemaName).append("_")
-                        .append(tableName).append("_");
-
-                if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup.get()).append("_");
-                }
-                if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart.get()).append("_");
-                }
-                if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd.get()).append("_");
-                }
-                if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName.get()).append("_");
-                }
-                if(category.isPresent()){
-                    fileNameBuilder.append(category.get()).append("_");
-                }
-                if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison.get()).append("_");
-                }
-                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
-                String fileName = fileNameBuilder.toString();
+                ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                        .connectionName(connectionName)
+                        .schemaName(schemaName)
+                        .tableName(tableName)
+                        .checkName(checkName.orElse(null))
+                        .checkCategory(category.orElse(null))
+                        .build();
+                String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -662,15 +647,14 @@ public class ErrorSamplesController {
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
-            StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_")
-                    .append(connectionName).append("_")
-                    .append(schemaName).append("_")
-                    .append(tableName).append("_")
-                    .append(firstErrorSamplesListModel.getCheckCategory()).append("_")
-                    .append(firstErrorSamplesListModel.getCheckName()).append("_")
-                    .append(DateTime.now().toDateTimeISO()).append(".csv");
-            String fileName = fileNameBuilder.toString();
+            ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                    .connectionName(connectionName)
+                    .schemaName(schemaName)
+                    .tableName(tableName)
+                    .checkCategory(firstErrorSamplesListModel.getCheckCategory())
+                    .checkName(firstErrorSamplesListModel.getCheckName())
+                    .build();
+            String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -758,33 +742,14 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                StringBuilder fileNameBuilder = new StringBuilder();
-                fileNameBuilder.append("Error_samples_").append(CheckType.monitoring).append("_")
-                        .append(connectionName).append("_")
-                        .append(schemaName).append("_")
-                        .append(tableName).append("_")
-                        .append(timeScale).append("_");
-
-                if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup.get()).append("_");
-                }
-                if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart.get()).append("_");
-                }
-                if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd.get()).append("_");
-                }
-                if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName.get()).append("_");
-                }
-                if(category.isPresent()){
-                    fileNameBuilder.append(category.get()).append("_");
-                }
-                if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison.get()).append("_");
-                }
-                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
-                String fileName = fileNameBuilder.toString();
+                ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                        .connectionName(connectionName)
+                        .schemaName(schemaName)
+                        .tableName(tableName)
+                        .checkName(checkName.orElse(null))
+                        .checkCategory(category.orElse(null))
+                        .build();
+                String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -801,15 +766,14 @@ public class ErrorSamplesController {
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
-            StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_")
-                    .append(connectionName).append("_")
-                    .append(schemaName).append("_")
-                    .append(tableName).append("_")
-                    .append(firstErrorSamplesListModel.getCheckCategory()).append("_")
-                    .append(firstErrorSamplesListModel.getCheckName()).append("_")
-                    .append(DateTime.now().toDateTimeISO()).append(".csv");
-            String fileName = fileNameBuilder.toString();
+            ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                    .connectionName(connectionName)
+                    .schemaName(schemaName)
+                    .tableName(tableName)
+                    .checkCategory(firstErrorSamplesListModel.getCheckCategory())
+                    .checkName(firstErrorSamplesListModel.getCheckName())
+                    .build();
+            String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -897,33 +861,14 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                StringBuilder fileNameBuilder = new StringBuilder();
-                fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
-                        .append(connectionName).append("_")
-                        .append(schemaName).append("_")
-                        .append(tableName).append("_")
-                        .append(timeScale).append("_");
-
-                if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup.get()).append("_");
-                }
-                if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart.get()).append("_");
-                }
-                if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd.get()).append("_");
-                }
-                if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName.get()).append("_");
-                }
-                if(category.isPresent()){
-                    fileNameBuilder.append(category.get()).append("_");
-                }
-                if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison.get()).append("_");
-                }
-                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
-                String fileName = fileNameBuilder.toString();
+                ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                        .connectionName(connectionName)
+                        .schemaName(schemaName)
+                        .tableName(tableName)
+                        .checkName(checkName.orElse(null))
+                        .checkCategory(category.orElse(null))
+                        .build();
+                String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -1041,33 +986,15 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                StringBuilder fileNameBuilder = new StringBuilder();
-                fileNameBuilder.append("Error_samples_").append(CheckType.profiling).append("_")
-                        .append(connectionName).append("_")
-                        .append(schemaName).append("_")
-                        .append(tableName).append("_")
-                        .append(columnName).append("_");
-
-                if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup.get()).append("_");
-                }
-                if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart.get()).append("_");
-                }
-                if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd.get()).append("_");
-                }
-                if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName.get()).append("_");
-                }
-                if(category.isPresent()){
-                    fileNameBuilder.append(category.get()).append("_");
-                }
-                if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison.get()).append("_");
-                }
-                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
-                String fileName = fileNameBuilder.toString();
+                ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                        .connectionName(connectionName)
+                        .schemaName(schemaName)
+                        .tableName(tableName)
+                        .columnName(columnName)
+                        .checkName(checkName.orElse(null))
+                        .checkCategory(category.orElse(null))
+                        .build();
+                String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -1084,16 +1011,15 @@ public class ErrorSamplesController {
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
-            StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_")
-                    .append(connectionName).append("_")
-                    .append(schemaName).append("_")
-                    .append(tableName).append("_")
-                    .append(columnName).append("_")
-                    .append(firstErrorSamplesListModel.getCheckCategory()).append("_")
-                    .append(firstErrorSamplesListModel.getCheckName()).append("_")
-                    .append(DateTime.now().toDateTimeISO()).append(".csv");
-            String fileName = fileNameBuilder.toString();
+            ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                    .connectionName(connectionName)
+                    .schemaName(schemaName)
+                    .tableName(tableName)
+                    .columnName(columnName)
+                    .checkCategory(firstErrorSamplesListModel.getCheckCategory())
+                    .checkName(firstErrorSamplesListModel.getCheckName())
+                    .build();
+            String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -1187,34 +1113,15 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                StringBuilder fileNameBuilder = new StringBuilder();
-                fileNameBuilder.append("Error_samples_").append(CheckType.monitoring).append("_")
-                        .append(connectionName).append("_")
-                        .append(schemaName).append("_")
-                        .append(tableName).append("_")
-                        .append(columnName).append("_")
-                        .append(timeScale).append("_");
-
-                if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup.get()).append("_");
-                }
-                if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart.get()).append("_");
-                }
-                if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd.get()).append("_");
-                }
-                if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName.get()).append("_");
-                }
-                if(category.isPresent()){
-                    fileNameBuilder.append(category.get()).append("_");
-                }
-                if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison.get()).append("_");
-                }
-                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
-                String fileName = fileNameBuilder.toString();
+                ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                        .connectionName(connectionName)
+                        .schemaName(schemaName)
+                        .tableName(tableName)
+                        .columnName(columnName)
+                        .checkName(checkName.orElse(null))
+                        .checkCategory(category.orElse(null))
+                        .build();
+                String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -1231,16 +1138,15 @@ public class ErrorSamplesController {
             ErrorSamplesListModel firstErrorSamplesListModel = errorSamplesListModels[0];
             List<ErrorSampleEntryModel> errorSamples = firstErrorSamplesListModel.getErrorSamplesEntries();
 
-            StringBuilder fileNameBuilder = new StringBuilder();
-            fileNameBuilder.append("Error_samples_")
-                    .append(connectionName).append("_")
-                    .append(schemaName).append("_")
-                    .append(tableName).append("_")
-                    .append(columnName).append("_")
-                    .append(firstErrorSamplesListModel.getCheckCategory()).append("_")
-                    .append(firstErrorSamplesListModel.getCheckName()).append("_")
-                    .append(DateTime.now().toDateTimeISO()).append(".csv");
-            String fileName = fileNameBuilder.toString();
+            ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                    .connectionName(connectionName)
+                    .schemaName(schemaName)
+                    .tableName(tableName)
+                    .columnName(columnName)
+                    .checkCategory(firstErrorSamplesListModel.getCheckCategory())
+                    .checkName(firstErrorSamplesListModel.getCheckName())
+                    .build();
+            String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
@@ -1335,34 +1241,15 @@ public class ErrorSamplesController {
                     checks, loadParams, principal.getDataDomainIdentity());
 
             if(errorSamplesListModels.length == 0){
-                StringBuilder fileNameBuilder = new StringBuilder();
-                fileNameBuilder.append("Error_samples_").append(CheckType.partitioned).append("_")
-                        .append(connectionName).append("_")
-                        .append(schemaName).append("_")
-                        .append(tableName).append("_")
-                        .append(columnName).append("_")
-                        .append(timeScale).append("_");
-
-                if(dataGroup.isPresent()){
-                    fileNameBuilder.append(dataGroup.get()).append("_");
-                }
-                if(monthStart.isPresent()){
-                    fileNameBuilder.append(monthStart.get()).append("_");
-                }
-                if(monthEnd.isPresent()){
-                    fileNameBuilder.append(monthEnd.get()).append("_");
-                }
-                if(checkName.isPresent()){
-                    fileNameBuilder.append(checkName.get()).append("_");
-                }
-                if(category.isPresent()){
-                    fileNameBuilder.append(category.get()).append("_");
-                }
-                if(tableComparison.isPresent()){
-                    fileNameBuilder.append(tableComparison.get()).append("_");
-                }
-                fileNameBuilder.append(DateTime.now().toDateTimeISO()).append(".csv");
-                String fileName = fileNameBuilder.toString();
+                ErrorSamplesFileNameDetails fileNameDetails = ErrorSamplesFileNameDetails.builder()
+                        .connectionName(connectionName)
+                        .schemaName(schemaName)
+                        .tableName(tableName)
+                        .columnName(columnName)
+                        .checkName(checkName.orElse(null))
+                        .checkCategory(category.orElse(null))
+                        .build();
+                String fileName = this.errorSamplesFileNameCreator.createFileName(fileNameDetails, LocalDateTime.now());
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
