@@ -129,7 +129,7 @@ The Sensor readouts category displays the values obtained by the sensors from th
 The Execution errors category displays any error that occurred during the check's execution.
  
 The actual value in this example is 100%, which is above the minimum threshold level set in the warning (99.0%).
-The check gives a valid result (notice the green square to the left of the check name).
+The check gives a correct result (notice the green square to the left of the check name).
 
 
 ### **Synchronize the results with the cloud account**
@@ -227,7 +227,7 @@ check run
 ```
 
 Access the results which should be similar as the one below.
-The percentage of matching values in the `state_fips_code` column is above the 99% and the check shows valid result.
+The percentage of matching values in the `state_fips_code` column is above the 99% and the check shows correct result.
 
 ```
 Check evaluation summary per table:

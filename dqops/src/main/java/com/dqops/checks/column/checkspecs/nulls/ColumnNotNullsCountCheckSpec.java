@@ -17,6 +17,7 @@ package com.dqops.checks.column.checkspecs.nulls;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
@@ -224,6 +225,11 @@ public class ColumnNotNullsCountCheckSpec
                                              JsonSerializer jsonSerializer,
                                              RuleMiningRuleRegistry ruleMiningRuleRegistry) {
         if (!miningParameters.isProposeNotNullsChecks()) {
+            return false;
+        }
+
+        CheckType checkType = parentCheckRootContainer.getCheckType();
+        if (checkType == CheckType.partitioned) {
             return false;
         }
 

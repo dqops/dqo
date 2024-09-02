@@ -12,15 +12,10 @@ We have a table availability issue when even a simple query cannot be run on a t
 There are many reasons for table availability issues.
 
 - The database server is down.
-
 - Networking issues.
-
 - Firewall issues.
-
 - Invalid permissions to the table.
-
 - The table is physically corrupted on the disk.
-
 - Credentials expired or were changed.
 
 
@@ -65,17 +60,13 @@ spec:
         daily_table_availability:
           warning:
             max_failures: 0
-          error:
-            max_failures: 5
-          fatal:
-            max_failures: 10
   columns: {}
 ```
 
 ### User interface
 The table availability monitoring can be also enabled in the [check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min.png){ loading=lazy; width="1200px" }
+![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min2.png){ loading=lazy; width="1200px" }
 
 ## Monitoring table availability on dashboards
 DQOps provides dedicated data quality dashboards for monitoring table availability issues.

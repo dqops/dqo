@@ -188,7 +188,7 @@ Run the activated check using the **Run check** button.
 
 The results of the run check are shown as a color square
 
-- Green for a valid result
+- Green for a correct result
 - Yellow for a warning
 - Orange for an error
 - Red for a fatal error

@@ -278,3 +278,4 @@ and route notifications to correct data teams based on filters, such as the conn
 - Learn how to import [metadata from a data source](configuring-data-sources.md) into DQOps
 - Learn how to import [configure data quality checks](configuring-data-quality-checks-and-rules.md) into DQOps
 - Understand the [concept of DQOps user interface](dqops-user-interface-overview.md)
+- Learn how to use the DQOps [data quality rule miner](data-quality-rule-mining.md) to automate the data quality process

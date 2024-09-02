@@ -22,9 +22,10 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.monitoring.accuracy.TableAccuracyMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.comparison.TableComparisonMonthlyMonitoringChecksSpecMap;
-import com.dqops.checks.table.monitoring.schema.TableSchemaMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.customsql.TableCustomSqlMonthlyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.schema.TableSchemaMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessMonthlyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.uniqueness.TableUniquenessMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -60,6 +61,7 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
             put("custom_sql", o -> o.customSql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
+            put("uniqueness", o -> o.uniqueness);
             put("comparisons", o -> o.comparisons);
         }
     };
@@ -93,6 +95,11 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSchemaMonthlyMonitoringChecksSpec schema;
+
+    @JsonPropertyDescription("Monthly monitoring uniqueness checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableUniquenessMonthlyMonitoringChecksSpec uniqueness;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -205,6 +212,24 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns a container of table uniqueness checks.
+     * @return Table uniqueness checks.
+     */
+    public TableUniquenessMonthlyMonitoringChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets a reference to a container with the table uniqueness checks.
+     * @param uniqueness Container of table uniqueness checks.
+     */
+    public void setUniqueness(TableUniquenessMonthlyMonitoringChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**

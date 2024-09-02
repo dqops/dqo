@@ -41,22 +41,22 @@ const SensorReadoutsTab = ({
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Time Scale',
+      label: 'Time scale',
       value: 'timeGradient',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Time Period',
+      label: 'Time period',
       value: 'timePeriod',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Executed At',
+      label: 'Executed at',
       value: 'executedAt',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Actual Value',
+      label: 'Actual value',
       value: 'actualValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => (
@@ -64,12 +64,12 @@ const SensorReadoutsTab = ({
       )
     },
     {
-      label: 'Duration Ms',
+      label: 'Duration ms',
       value: 'durationMs',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
     },
     {
-      label: 'Data Grouping',
+      label: 'Data grouping',
       value: 'dataGroup',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
@@ -97,7 +97,7 @@ const SensorReadoutsTab = ({
 
   return (
     <div
-      className="py-3 overflow-auto"
+      className="pt-3 overflow-auto"
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
     >
       <div className="flex space-x-8 items-center">
@@ -129,14 +129,15 @@ const SensorReadoutsTab = ({
       {sensorReadouts.map((result, index) => (
         <div key={index}>
           <Table
-            className="mt-4 w-full"
+            className="mt-1 w-full"
             columns={columns}
             data={
               result.sensorReadoutEntries?.map((item) => ({
                 ...item,
                 executedAt: moment(
                   getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
-                ).format('YYYY-MM-DD HH:mm:ss')
+                ).format('YYYY-MM-DD HH:mm:ss'),
+                timePeriod: item.timePeriod?.replace(/T/g, ' ')
               })) || []
             }
           />

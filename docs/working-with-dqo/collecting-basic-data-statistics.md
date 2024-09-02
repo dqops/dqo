@@ -69,7 +69,7 @@ In the **Table Statistics** box:
 
 In the summary table:
 
-- **Dimensions**: The circles represent the results from data quality checks for at least three dimensions: Completeness, Validity, and Consistency. The color of the circle represents the results: white for no checks were run, green for valid results, orange for error results, red for fatal error results, and grey for check execution errors. Hovering over a circle will display more details.
+- **Dimensions**: The circles represent the results from data quality checks for at least three dimensions: Completeness, Validity, and Consistency. The color of the circle represents the results: white for no checks were run, green for correct results, orange for error results, red for fatal error results, and grey for check execution errors. Hovering over a circle will display more details.
 - **Column name**: The name of the column in the selected table. Clicking on the column name will lead you to the detailed statistics.
 - **Detected data type**: The data type detected for STRING columns, which can be INTEGER, FLOAT, DATETIME, TIMESTAMP, BOOLEAN, STRING, or Mixed data types.
 - **Imported data type**: The physical data type retrieved from the database metadata, specific to the data source.

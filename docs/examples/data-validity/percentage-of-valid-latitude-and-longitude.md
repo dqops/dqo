@@ -106,7 +106,7 @@ The Execution errors category displays any error that occurred during the check'
 
 The actual value in this example is 99.24% for both longitude and latitude checks, which is above the minimum
 threshold level set in the warning (99.0%).
-The check gives a valid result (notice the green square to the left of the check name).
+The check gives a correct result (notice the green square to the left of the check name).
 
 
 ### **Synchronize the results with the cloud account**

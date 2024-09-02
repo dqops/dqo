@@ -83,9 +83,7 @@ const ColumnActionGroup = ({
             label={
               collectStatisticsSpinner ? 'Collecting...' : 'Collect statistics'
             }
-            className={clsx(
-              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
-            )}
+            className={clsx('!h-10 whitespace-nowrap gap-x-2 ')}
             leftIcon={
               collectStatisticsSpinner ? (
                 <SvgIcon name="sync" className="w-4 h-4 animate-spin" />

@@ -97,12 +97,11 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdateChecksUI = (
-    checksUI: any,
     type: 'row' | 'column',
     disabled?: boolean,
     severity?: TSeverityValues
   ) => {
-    const checks = checksUI.categories.find(
+    const checks = checksUI?.categories?.find(
       (item: any) =>
         String(item.category) ===
         `comparisons/${
@@ -120,6 +119,7 @@ export const EditProfilingReferenceTable = ({
         String(item.check_name).includes('column')
       );
     }
+
     if (disabled !== undefined) {
       selectedCheck.configured = disabled;
       if (type === 'row') {
@@ -374,6 +374,27 @@ export const EditProfilingReferenceTable = ({
   };
 
   const compareTables = async () => {
+    const runChecks = async () => {
+      setIsUpdated(false);
+      try {
+        const res = await JobApiClient.runChecks(undefined, false, undefined, {
+          check_search_filters: categoryCheck
+            ? categoryCheck?.run_checks_job_template
+            : {
+                connection: connection,
+                fullTableName: schema + '.' + table,
+                tableComparisonName:
+                  reference?.table_comparison_configuration_name,
+                enabled: true,
+                checkCategory: 'comparisons',
+                checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
+              }
+        });
+        setJobId(res.data?.jobId?.jobId);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     onUpdate(
       connection,
       schema,
@@ -382,27 +403,9 @@ export const EditProfilingReferenceTable = ({
       timePartitioned,
       reference,
       handleChange,
-      checksUI
+      checksUI,
+      runChecks
     );
-    setIsUpdated(false);
-    try {
-      const res = await JobApiClient.runChecks(undefined, false, undefined, {
-        check_search_filters: categoryCheck
-          ? categoryCheck?.run_checks_job_template
-          : {
-              connection: connection,
-              fullTableName: schema + '.' + table,
-              tableComparisonName:
-                reference?.table_comparison_configuration_name,
-              enabled: true,
-              checkCategory: 'comparisons',
-              checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
-            }
-      });
-      setJobId(res.data?.jobId?.jobId);
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   const deleteData = async (params: { [key: string]: string | boolean }) => {
@@ -559,6 +562,7 @@ export const EditProfilingReferenceTable = ({
       </div>
     );
   }
+  console.log(checksUI);
 
   return (
     <div className="text-sm">
@@ -623,7 +627,6 @@ export const EditProfilingReferenceTable = ({
                 }
                 showRowCount={showRowCount}
                 onUpdateChecksUI={onUpdateChecksUI}
-                checksUI={checksUI}
                 setIsUpdated={setIsUpdated}
                 tableComparisonResults={tableComparisonResults}
                 showColumnCount={showColumnCount}
@@ -641,7 +644,6 @@ export const EditProfilingReferenceTable = ({
                           onChange={onChangeCompareRowCount}
                           reference={reference}
                           onUpdateChecksUI={onUpdateChecksUI}
-                          checksUI={checksUI}
                           type="row"
                         />
                       ) : (
@@ -663,7 +665,6 @@ export const EditProfilingReferenceTable = ({
                             onChange={onChangeCompareColumnCount}
                             reference={reference}
                             onUpdateChecksUI={onUpdateChecksUI}
-                            checksUI={checksUI}
                             type="column"
                           />
                         ) : (

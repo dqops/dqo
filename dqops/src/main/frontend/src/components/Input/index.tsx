@@ -27,6 +27,7 @@ export interface IInputProps {
   labelClassName?: string;
   containerClassName?: string;
   boldLabel?: string;
+  autoFocus?: boolean; // Add autoFocus prop
 }
 
 const Input = ({
@@ -48,7 +49,8 @@ const Input = ({
   onKeyDown,
   labelClassName,
   containerClassName,
-  boldLabel
+  boldLabel,
+  autoFocus // Destructure autoFocus prop
 }: IInputProps) => (
   <div className={containerClassName}>
     <div className="flex space-x-1">
@@ -98,6 +100,7 @@ const Input = ({
         data-testid={dataTestId}
         defaultValue={defaultValue}
         onKeyDown={onKeyDown}
+        autoFocus={autoFocus} // Apply autoFocus prop
       />
       {value !== undefined && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">

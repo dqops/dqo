@@ -56,9 +56,7 @@ function DefinitionProvider(props: any) {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.SENSOR_DETAIL(sensor.sensor_name ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(
-          sensor.sensor_name ??''
-        ),
+        value: ROUTES.SENSOR_DETAIL_VALUE(sensor.sensor_name ?? ''),
         state: {
           full_sensor_name: sensor.full_sensor_name
         },
@@ -84,9 +82,7 @@ function DefinitionProvider(props: any) {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.CHECK_DETAIL(check.check_name ?? ''),
-        value: ROUTES.CHECK_DETAIL_VALUE(
-          check.check_name ?? ''
-        ),
+        value: ROUTES.CHECK_DETAIL_VALUE(check.check_name ?? ''),
         state: {
           full_check_name: check.full_check_name,
           custom: check.custom
@@ -137,6 +133,7 @@ function DefinitionProvider(props: any) {
   };
 
   const openDefaultWebhooksFirstLevelTab = () => {
+    if (ROUTES.WEBHOOKS_DEFAULT_DETAIL() === location.pathname) return;
     dispatch(
       addFirstLevelTab({
         url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
@@ -157,6 +154,7 @@ function DefinitionProvider(props: any) {
   };
 
   const openDataDictionaryFirstLevelTab = () => {
+    if (ROUTES.DATA_DICTIONARY_LIST_DETAIL() === location.pathname) return;
     dispatch(
       addFirstLevelTab({
         url: ROUTES.DATA_DICTIONARY_LIST_DETAIL(),
@@ -212,48 +210,55 @@ function DefinitionProvider(props: any) {
     toggleFolderRecursively(elements, index + 1, type);
   };
 
-  const toggleTree = (tabs: INestTab[]) => {
-    const configuration = [
+  const toggleTree = (
+    tabs: INestTab[],
+    activeTab: string,
+    configuration?: Array<{ category: string; isOpen: boolean }>
+  ) => {
+    const defaultconfiguration = [
       { category: 'Sensors', isOpen: false },
       { category: 'Rules', isOpen: false },
       { category: 'Data quality checks', isOpen: false },
       { category: 'Default checks configuration', isOpen: false }
     ];
-    if (tabs && tabs.length !== 0) {
-      for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url?.includes('patterns')) {
-          configuration[3].isOpen = true;
-        } else if (tabs[i]?.url?.includes('sensors')) {
-          configuration[0].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_sensor_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-          }
-          // to do: fix expanding tree checks/default checks
-        } else if (tabs[i]?.url?.includes('checks')) {
-          configuration[2].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_check_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          }
-        } else if (tabs[i]?.url?.includes('rules')) {
-          configuration[1].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_rule_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-          }
+    const currectConfiguration: Array<{ category: string; isOpen: boolean }> = [
+      ...(configuration ?? defaultconfiguration)
+    ];
+    const currentTab = tabs.find((tab) => tab.value === activeTab);
+    // todo: just first level folders are closed when changing tab
+
+    if (currentTab) {
+      if (currentTab.url?.includes('patterns')) {
+        currectConfiguration[3].isOpen = true;
+      } else if (currentTab?.url?.includes('sensors')) {
+        currectConfiguration[0].isOpen = true;
+        const arrayOfElemsToToggle = (
+          currentTab.state.full_sensor_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
         }
-        dispatch(toggleFirstLevelFolder(configuration));
+        // to do: fix expanding tree checks/default checks
+      } else if (currentTab?.url?.includes('checks')) {
+        currectConfiguration[2].isOpen = true;
+        const arrayOfElemsToToggle = (
+          currentTab.state.full_check_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+        }
+      } else if (currentTab?.url?.includes('rules')) {
+        currectConfiguration[1].isOpen = true;
+        const arrayOfElemsToToggle = (
+          currentTab.state.full_rule_name as string
+        )?.split('/');
+        if (arrayOfElemsToToggle) {
+          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
+        }
       }
-    } else {
-      dispatch(toggleFirstLevelFolder(configuration));
     }
+
+    dispatch(toggleFirstLevelFolder(currectConfiguration));
   };
 
   const nodes = [
@@ -340,4 +345,3 @@ function useDefinition() {
 }
 
 export { DefinitionProvider, useDefinition };
-

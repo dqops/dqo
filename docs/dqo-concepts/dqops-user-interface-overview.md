@@ -316,7 +316,7 @@ If you select the "Multiple levels" option, you will switch to the Advanced chec
 
 In the advanced mode, you can configure different thresholds for warning, error, and fatal error severity levels.
 
-To access the Advanced mode, select the "Multiple levels" option from the Issue severity level dropdown menu in 
+To access the Advanced mode, select the **Multiple levels** option from the Issue severity level dropdown menu in 
 the simplified data check editor, as shown above. Once you have made this selection, you will receive a prompt 
 informing you that the editor will switch to an advanced mode.
 
@@ -362,7 +362,7 @@ The buttons and icons located on the left side of each check name allow you to p
 
 - **Check Information:** View tooltip with detailed information about the specific check. 
 - **Check results colored square:** Indicates the result of the last check run:
-    - Green for a valid result
+    - Green for a correct result
     - Yellow for a warning
     - Orange for an error
     - Red for a fatal error
@@ -388,7 +388,7 @@ dimension, depending on the selected option. The first row displays the results 
 on the table, while the following rows show the column names and the results from the executed column-level checks. 
 The color indicate the current or the highest severity status:
 
-- Green for a valid result
+- Green for a correct result
 - Yellow for a warning
 - Orange for an error
 - Red for a fatal error
@@ -423,7 +423,7 @@ If the job is queued or running you can cancel or stop it by clicking the X butt
 ### **Run checks summary**
 
 You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
-severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
+severity status of the results (green for a correct result, yellow for a warning, orange for an error and red for a fatal error).
 
 ![DQOps job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 

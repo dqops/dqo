@@ -71,7 +71,7 @@ The following example shows how to validate identifier values in a raw table sto
 The identifier column is *product_id*, which should contain only integer values. 
 The data profiling screen reveals that the column contains a non-numeric value "3Product".
 
-![Text column with integers and one invalid text that cannot be converted to a number](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/integer-with-invalid-values-column-profile-min.png){ loading=lazy; width="1200px" }
+![Text column with integers and one invalid text that cannot be converted to a number](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/integer-with-invalid-values-column-profile-min2.png){ loading=lazy; width="1200px" }
 
 ### Testing valid integers in UI
 The [*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md) check
@@ -80,7 +80,17 @@ It measures the percentage of valid values.
 The data quality check is configured by setting the **min_percent** parameter, 
 which is the minimum percentage of convertible values.
 
-![Data conversion data quality check to parse text values as integer values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-min.png){ loading=lazy; width="1200px" }
+![Data conversion data quality check to parse text values as integer values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-min2.png){ loading=lazy; width="1200px" }
+
+### Valid integers error sampling in UI
+
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error sampling** tab in the results section.
+
+![Data conversion data quality check to parse text values as integer values - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-error-sampling.png){ loading=lazy; width="1200px" }
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
 
 ### Testing valid integers in YAML
 The [*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md) data quality check is easy to configure.

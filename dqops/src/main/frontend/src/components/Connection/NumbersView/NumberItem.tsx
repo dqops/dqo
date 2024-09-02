@@ -39,6 +39,7 @@ const NumberItem = ({
       <td className="px-8 min-w-20 py-2">
         {isLast ? (
           <IconButton
+            ripple={false}
             size="sm"
             className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
           >
@@ -46,6 +47,7 @@ const NumberItem = ({
           </IconButton>
         ) : (
           <IconButton
+            ripple={false}
             className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
             size="sm"
             onClick={() => onRemove(idx)}

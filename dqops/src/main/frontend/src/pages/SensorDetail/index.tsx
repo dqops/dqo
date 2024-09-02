@@ -6,6 +6,7 @@ import {
 } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import { SensorActionGroup } from '../../components/Sensors/SensorActionGroup';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
@@ -84,8 +85,11 @@ export const SensorDetail = () => {
   const { full_sensor_name, sensorDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const { refreshSensorsTreeIndicator, activeTab: firstLevelActiveTab } =
-    useSelector((state: IRootState) => state.definition);
+  const {
+    refreshSensorsTreeIndicator,
+    activeTab: firstLevelActiveTab,
+    loading
+  } = useSelector((state: IRootState) => state.definition);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -277,6 +281,14 @@ export const SensorDetail = () => {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="relative">
@@ -308,6 +320,8 @@ export const SensorDetail = () => {
                 value={sensorName}
                 onChange={onChangeSensorName}
                 error={!sensorName}
+                className="!min-w-100"
+                autoFocus
               />
             </div>
           </div>

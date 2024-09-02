@@ -97,7 +97,7 @@ The types of data quality checks configured by the rule mining engine are listed
     When DQOps detects columns mainly containing these values, relevant pattern validation checks are automatically configured.
 
   * DQOps will detect column values containing possible [patterns that can be analyzed with regular expressions](../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md#validating-custom-regular-expressions). 
-    Suppose the sample column values contain texts of at least three components, such as numbers, texts, and special characters, such as "A/2024/11-C".
+    Suppose the sample column values contain texts of at least three components, such as numbers, texts, and special characters, such as `A/2024/11-C`.
     In that case, DQOps will propose a regular expression pattern that will detect values that do not match the pattern.
 
 
@@ -124,30 +124,219 @@ in the [monitoring](definition-of-data-quality-checks/data-observability-monitor
 ## Data quality check configuration steps
 Follow these steps to configure the data quality lifecycle process in DQOps.
 
-### Basic profiling
+### Basic data profiling
+The first step of generating data quality rule configuration in DQOps, as part of a [data quality assessment process](data-quality-process.md#data-quality-assessment),
+is [collecting basic data statistics](../working-with-dqo/collecting-basic-data-statistics.md).
+
+DQOps starts a statistics collection job for every table imported into DQOps using the user interface.
+If the basic statistics are outdated or statistics collection has been stopped,
+the user can click the "Collect statistics" button and wait until the screen shows the scale of null and distinct values for each column.
+
+![Basic data profiling statistics screen in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/profile-statistics-rule-mining-step-1-min.png){ loading=lazy; width="1200px" }
 
 ### Advanced profiling
+After the basic statistics and column value samples are collected, the rule mining screen can propose a configuration of data quality checks.
+The most critical configuration parameter of the DQOps data quality rule miner is the desired error rate. It is a percentage of errors that can contain invalid values.
+
+DQOps will try to configure [data quality checks](definition-of-data-quality-checks/index.md)
+in a way the data quality checks will detect data quality issues in 2% of records containing the most outstanding values.
+
+![Data quality rule mining screen with percentage of invalid records in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/propose-rules-rule-mining-step-2-min.png){ loading=lazy; width="1200px" }
+
+DQOps proposes the list of data quality checks instantly after entering the rule mining screen.
+If any parameter configuration is changed, pressing the "Propose" button will generate a new proposal.
+
+The following screen shows how DQOps proposed the configuration of data quality checks.
+DQOps supports changing the data quality check parameters and data quality rule thresholds before saving (applying) the proposed configuration, as shown below.
+
+![Review proposed data quality rule parameters and thresholds in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/review-proposed-thresholds-rule-mining-step-3-min.png){ loading=lazy; width="1200px" }
+
+### Managing data dictionaries
+DQOps rule mining engine uses the list of most popular values in each text column to propose the configuration of `accepted values` checks.
+The list of values does not need to be entered directly for each check. 
+DQOps supports using [data dictionaries](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#defining-data-dictionaries),
+which are stored as simple CSV files.
+The list of valid values can be copied to a data dictionary and replaced with a reference to the data dictionary.
+
+![Define a data dictionary for a data quality category check in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/convert-to-dictionary-rule-mining-step-4-min.png){ loading=lazy; width="900px" }
+
+The data dictionary is created by clicking the "Convert to dictionary" button, entering the desired dictionary name, and clicking the "Save" button.
+
+![Save a data dictionary for a data quality category check in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/save-data-dictionary-rule-mining-step-5-min.png){ loading=lazy; width="600px" }
+
 
 ### Data quality check selection
+If you disagree with the proposition of data quality check configuration, DQOps supports two ways of excluding them.
+
+The first option is to use the on/off switch to remove these checks from the proposal. 
+In that case, DQOps will propose these data quality checks the next time any user opens the rule mining screen.
+
+![Exclude a proposed data quality check in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/skip-selected-checks-rule-mining-step-6-min.png){ loading=lazy; width="1200px" }
+
+Another option is to disable the data quality check, which excludes it from execution and further propositions.
+The black "stop" icon disables the check.
+
+![Disable a proposed data quality check in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/disable-selected-checks-rule-mining-step-7-min.png){ loading=lazy; width="1200px" }
+
 
 ### Data quality check evaluation
+DQOps does not save the proposed configuration of data quality checks until the user presses the "Apply" button.
+
+![Apply proposed data quality checks in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/apply-checks-rule-mining-step-8-min.png){ loading=lazy; width="1200px" }
+
+Pressing the "Apply" button saves the configuration of data quality checks and their rules. 
+To verify the data quality health status of the table, data quality checks must be run.
+DQOps will ask to confirm adding a data quality check evaluation job to the queue.
+
+![Run proposed data quality checks in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/run-checks-rule-mining-step-9-min.png){ loading=lazy; width="700px" }
+
+The progress of running the data quality checks can be tracked in the notification panel that shows the progress of running jobs in real time.
+The "Run checks" job will be running as long as the circle icon highlighted below is visible.
+
+![Data quality run checks job status in DQOps after running proposed checks](https://dqops.com/docs/images/concepts/data-quality-rule-mining/run-checks-status-rule-mining-step-9-1-min.png){ loading=lazy; width="500px" }
+
 
 ### Data quality health review
+After the "Run checks" job finishes, as shown in the screenshot below, it is possible to switch to the "Table quality status" screen,
+which will show the summary of identified data quality issues.
+
+![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/finish-run-checks-rule-mining-step-10-min.png){ loading=lazy; width="1200px" }
+
+The "Table quality status" screen summarizes data quality issues identified for each column and each category of data quality checks. 
+Switching to the [data quality dimension](data-quality-dimensions.md) view is possible using a switch control at the top of the screen.
+
+DQOps calculates a [data quality KPI score](definition-of-data-quality-kpis.md), measured as the percentage of data quality checks that passed successfully.
+
+In order to review the data quality issues, you can expand the cell to learn which data quality check failed or click on the name of the column 
+to navigate to a detailed [data quality check editor](dqops-user-interface-overview.md#check-editor) screen.
+
+![Reviewing the data quality health status of tables and columns after using the rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/review-profiling-status-rule-mining-step-11-min.png){ loading=lazy; width="1200px" }
+
 
 ### Data quality issue review
+DQOps will [collect error samples](data-quality-error-sampling.md) of invalid values that did not pass the data quality check evaluation. 
+In the following example, the rule mining engine configured a desired list of column values, but the `Clothing Sets` value was scarce and was present in less than 2% of records.
+Because the desired percentage of invalid rows was 2%, DQOps did not add this value to the list of accepted values, assuming it is invalid.
 
-### Data quality rule tuning
+The list of invalid values can be reviewed on the "Error sampling" tab in the data quality check editor.
+If this value is valid, the list of `expected_values` should be updated in the editor to include that value.
+
+![Reviewing detected data quality issues in DQOps using the data quality error sampling module](https://dqops.com/docs/images/concepts/data-quality-rule-mining/review-error-samples-rule-mining-step-12-min.png){ loading=lazy; width="1200px" }
+
 
 ### Disabling false-positive checks
+The rule mining editor can also propose the configuration of checks that will generate false-positive results. 
+These issues are incorrectly detected due to an aggressive configuration of the desired percentage of invalid records.
+The best option for handling these checks after reviewing the error samples is disabling them. 
+You should click the "Save" button at the top of the screen to store any configuration changes.
+
+![Disabling false-positive data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/disable-false-positive-checks-rule-mining-step-13-min.png){ loading=lazy; width="1200px" }
 
 
-## Data observability
+## Rule mining parameters
+This section describes the configuration parameters shown at the top of the rule mining screen.
+
+### Propose checks for a column
+It is possible to propose the configuration of data quality checks for only one column or several columns containing the same text inside the column name.
+The following example shows how to set the column name.
+The rule engine will generate a new proposition of check configuration after clicking the "Propose" button.
+
+![Use data quality rule miner engine in DQOps to propose checks for selected columns](https://dqops.com/docs/images/concepts/data-quality-rule-mining/propose-checks-rule-mining-min.png){ loading=lazy; width="1200px" }
+
+The table had eight columns containing the word "product".
+
+![Data quality checks proposed for a subset of columns in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/propose-checks-for-column-rule-mining-min.png){ loading=lazy; width="1200px" }
+
+### Rule miner parameters
+The checkboxes are divided into two groups. The first group of fields controls how the rule mining engine handles already configured data quality checks.
+
+These parameters become very important when using the rule engine later to convert the [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md)
+to [table monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and
+[partition monitoring checks](definition-of-data-quality-checks/partition-checks.md), which is described later in this guide.
+
+| Parameter name                 | Description                                                                                                                                                                                                                                                                                                                  |
+|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Copy failed profiling checks   | Copy the configuration of profiling checks that failed during the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continuous monitoring.                     |
+| Copy disabled profiling checks | Copy the configuration of disabled profiling checks. This option is effective for monitoring and partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the [data quality KPI](definition-of-data-quality-kpis.md). |
+| Copy enabled profiling checks  | Copy the configuration of enabled profiling checks to the monitoring and partitioned checks. This option is effective for monitoring and partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks.          |
+| Reconfigure default checks     | Reconfigure the rule thresholds of data quality checks that were activated using [data observability](data-observability.md) rule patterns (data quality policies).                                                                                                                                                          |
+
+
+### Data quality checks
+The selection of data quality checks the rule mining engine will configure is managed by checkboxes below the horizontal line.
+
+| Data quality checks                                                                                                                                                  | Description                                                                                                                                                                                                                                                                                                                                                         |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Minimum row count](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md#minimum-row-count)                                          | Configure the minimum row count based on the basic statistics captured from the table                                                                                                                                                                                                                                                                               |
+| [Expected columns count](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                                                                 | Configure a table schema check that ensures that the count of column stays the same as the count of columns detected during data profiling.                                                                                                                                                                                                                         |
+| [Column exists](../checks/column/schema/column-exists.md)                                                                                                            | Configure a column exists check for each column to report when the column is no longer present.                                                                                                                                                                                                                                                                     |
+| [Timeliness checks](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)                                                           | Configure all types of table's timeliness checks (freshness, staleness, ingestion delay). This option works only when the table is correctly configured to be analyzable by timeliness check, and has the timestamp column selected in the configuration of the table in the Data sources section.                                                                  |
+| [Nulls (prohibit nulls)](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md#incomplete-columns)                            | Configure data quality checks that detect columns that have some null values in columns. When the percentage of null columns is below the value of the 'Error rate (% rows)' field, DQOps will raise a data quality issue when any null values are detected.                                                                                                        |
+| [Not nulls (require nulls)](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md#detect-a-minimum-number-of-non-null-values) | Configure data quality checks that require that columns already containing null values will contain some null values. This option could be desirable in some rare cases.                                                                                                                                                                                            |
+| [Detected datatype in texts](../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)                                               | Configure a check that verifies all values in a text column and detects a common data type. If all column values matched the same data type, such as integers, floats, dates or timestamps, DQOps will configure a check that will monitor if any values not matching that data type appear in the column. This check is usable for raw tables in the landing zone. |
+| [Uniqueness checks](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)                                                     | Configure uniqueness checks that detect columns with just a few duplicate values, and columns with a relatively low number of distinct values. DQOps will monitor if duplicate values appear, or the number of distinct values increases.                                                                                                                           |
+| [Numeric values ranges](../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)                                                 | Validate the values in numeric columns to detect if the values fall within the ranges that were observed during data profiling. DQOps will try to configure the *min*, *max* and *mean' checks.                                                                                                                                                                     |
+| [Median and percentile ranges](../checks/column/numeric/median-in-range.md)                                                                                          | Propose the default configuration of the median and percentile in range checks that validate the value at a given percentile, such as a value in middle of all column values. The default value of this parameter is 'false' because calculating the median requires running a separate query on the data source, which is not advisable for data observability.    |
+| [Text length ranges](../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)                                                       | Configure the checks that analyze text statistics of text columns, such as the minimum and maximum length of text values.                                                                                                                                                                                                                                           |
+| [Word count in range](../checks/column/text/min-word-count.md)                                                                                                       | Propose the default configuration of the minimum and maximum word count of text columns. DQOps applies this checks when the minimum and maximum row count is at least 3 words.                                                                                                                                                                                      |
+| [Percent of true/false](../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)                                                    | Configure the checks that analyze boolean values and will configure a range percent check for the less common value (true or false).                                                                                                                                                                                                                                |
+| [Dates out of range](../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)                                                                            | Configure the checks that detect invalid dates that are far in the past, or far in the future.                                                                                                                                                                                                                                                                      |
+| [Values in a set (dictionary)](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#verify-that-only-accepted-values-are-used)         | Proposes the configuration the categorical values checks `value_in_set_percent` from the `accepted_values` category. These checks will be configured to ensure that the column contains only sample values that were identified during data profiling.                                                                                                              |
+| Treat rare values as invalid                                                                                                                                         | Configure the `value_in_set_percent` checks from the `accepted_values` category to raise data quality issues for rare values. DQOps will not add rare categorical values to the list of expected values.                                                                                                                                                            |
+| [Texts in top values](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#testing-the-most-common-values)                             | Propose the configuration the `texts_in_top_values` check from the `accepted_values` category. This check find the most common values in a table and ensures that they are the same values that were identified during data profiling.                                                                                                                              |
+| [Texts parsable to data types](../categories-of-data-quality-checks/how-to-verify-text-values-are-parsable.md)                                                       | Proposes the configuration the data type conversion checks that verify if text values can be converted to more specific data types such as boolean, date, float or integer. This type of checks are used to verify raw tables in the landing zones.                                                                                                                 |
+| [Standard text patterns](../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md#built-in-patterns)                                   | Propose the default configuration for the patterns check that validate the format of popular text patterns, such as UUIDs, phone numbers, or emails. DQOps will configure these data quality checks when analyzed columns contain enough values matching a standard pattern.                                                                                        |
+| [Detect regular expressions](../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md#validating-custom-regular-expressions)           | Analyze sample text values and try to find a regular expression that detects valid values similar to the sample values.                                                                                                                                                                                                                                             |
+| [Whitespace checks](../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)                                                               | Propose the default configuration for the whitespace detection checks. Whitespace checks detect common data quality issues with storing text representations of null values, such as `null`, `None`, `n/a` and other texts that should be stored as regular *NULL* values.                                                                                          |
+| [Apply PII check rules](../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)                                                         | Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data.                                                                                                                      |
+| [Custom checks](../working-with-dqo/creating-custom-data-quality-checks.md)                                                                                          | Custom data quality checks must use DQOps built-in data quality rules, such as max_percent, min_percent or max_count to find invalid values.                                                                                                                                                                                                                        |
+
+
+## Data quality monitoring
+The next phase after performing the [data quality assessment](data-quality-process.md#data-quality-assessment) is
+configuring [data observability](data-quality-process.md#data-quality-monitoring), which is a continuous monitoring of data quality.
+
+DQOps will use its [CRON scheduler](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) to evaluate the data quality daily
+and [raise incidents](data-quality-process.md#data-quality-incident-management) for identified data quality issues.
+
+!!! tip "Enabling reviewed data quality checks for continuous data quality monitoring"
+
+    The principal idea behind DQOps is its two-stage data quality check review process. 
+    In the first stage, users should perform the data quality assessment by [configuring data profiling checks](#advanced-profiling) to [identify data quality issues](#data-quality-health-review).
+
+    The second step is the review of [false-positive data quality checks](#disabling-false-positive-checks).
+    The checks that are incorrectly configured should be [disabled](#disabling-false-positive-checks), as shown before.
+
+    Once the list of active data profiling checks is limited only to approved checks that are passing or detecting acknowledged data quality issues,
+    you should switch to the "Monitoring" section of DQOps and use the rule mining screen again to copy the configuration of checks
+    from the "Profiling" section to the "Monitoring" section, to allow DQOps continuously evaluate only valid checks.
+
+    The rule mining screen on the "Monitoring" and "Partition" sections works slightly differently and copies the already configured
+    data quality checks and their parameters from the DQOps data profiler found in the "Profiling" section of the user interface.
+
 
 ### Configuring monitoring checks
+The monitoring checks in DQOps perform regular full-table scans and analyze small to medium-sized tables or tables in which any row could be updated, such as a price list table.
+
+Pressing the "Apply" button will save the configuration of [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md)
+and run the data quality checks to save the first data quality health checkpoint.
+
+![Configuring full-table scan data quality checks in DQOps data monitoring section](https://dqops.com/docs/images/concepts/data-quality-rule-mining/apply-monitoring-checks-rule-mining-step-14-min.png){ loading=lazy; width="1200px" }
+
+The data quality check result captured during the first check execution is shown in the screenshot below.
+DQOps will store one checkpoint per day for daily monitoring checks.
+
+![Reviewing data quality checkpoints of table monitoring checks in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/review-monitoring-checkpoint-rule-mining-step-15-min.png){ loading=lazy; width="1200px" }
+
 
 ### Configuring partition checks
-
-### Incident management
+The generation of [partition checks](definition-of-data-quality-checks/partition-checks.md) that validate partitioned data is similar to configuring [monitoring checks](#configuring-monitoring-checks).
+Please read the [partition check description](definition-of-data-quality-checks/partition-checks.md) because DQOps requires additional configuration to enable these types of checks.
+Partition checks require selecting the date or timestamp column used for [time partitioning](definition-of-data-quality-checks/partition-checks.md#setting-up-date-partitioning-column).
 
 
 ## What's next
+
+- Get familiar with the [DQOps user interface](dqops-user-interface-overview.md)
+- Learn how to [connect data sources](configuring-data-sources.md)
+- Learn how to [configure data quality checks](configuring-data-quality-checks-and-rules.md)

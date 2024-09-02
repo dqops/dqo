@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.customsql.TableCustomSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.uniqueness.TableUniquenessMonthlyPartitionChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -54,6 +55,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("custom_sql", o -> o.customSql);
+            put("uniqueness", o -> o.uniqueness);
             put("comparisons", o -> o.comparisons);
 
             // accuracy checks are not supported on partitioned checks yet, but we support comparisons
@@ -74,6 +76,11 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableCustomSqlMonthlyPartitionedChecksSpec customSql;
+
+    @JsonPropertyDescription("Monthly partitioned uniqueness checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableUniquenessMonthlyPartitionChecksSpec uniqueness;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -133,6 +140,24 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.customSql, customSql));
         this.customSql = customSql;
         this.propagateHierarchyIdToField(customSql, "custom_sql");
+    }
+
+    /**
+     * Returns a container of table uniqueness checks.
+     * @return Table uniqueness checks.
+     */
+    public TableUniquenessMonthlyPartitionChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets a reference to a container with the table uniqueness checks.
+     * @param uniqueness Container of table uniqueness checks.
+     */
+    public void setUniqueness(TableUniquenessMonthlyPartitionChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**

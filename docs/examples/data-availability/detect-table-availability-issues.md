@@ -98,7 +98,7 @@ The Sensor readouts category displays the values obtained by the sensors from th
 The Execution errors category displays any error that occurred during the check's execution.
 
 The actual value in this example is 0.
-The check gives a valid result (notice the green square to the left of the check name).
+The check gives a correct result (notice the green square to the left of the check name).
 
 
 ### **Synchronize the results with the cloud account**
@@ -190,7 +190,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The number of failures is 0 and the check gives a valid result.
+The number of failures is 0 and the check gives a correct result.
 
 ```
 Check evaluation summary per table:

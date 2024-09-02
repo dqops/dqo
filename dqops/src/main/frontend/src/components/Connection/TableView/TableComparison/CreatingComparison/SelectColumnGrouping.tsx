@@ -177,7 +177,7 @@ export default function SelectColumnGrouping({
                 onClick={() => onChangeEditColumnGrouping(false)}
               />
             ) : (
-              'Column' + item
+              'Column ' + item
             )}
           </div>
         ))}

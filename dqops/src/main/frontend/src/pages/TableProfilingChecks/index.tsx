@@ -16,7 +16,6 @@ import {
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
-import { table } from 'console';
 
 const TableProfilingChecks = () => {
   const {
@@ -98,9 +97,7 @@ const TableProfilingChecks = () => {
   };
 
   return (
-    <div
-      className=" flex flex-col overflow-x-auto overflow-y-hidden h-full"
-    >
+    <div className=" flex flex-col overflow-x-auto overflow-y-hidden h-full">
       <TableActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}

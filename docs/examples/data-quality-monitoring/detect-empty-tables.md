@@ -89,7 +89,7 @@ The Sensor readouts category displays the values obtained by the sensors from th
 The Execution errors category displays any error that occurred during the check's execution.
 
 The actual value in this example is 1 748 850, which is above the maximum threshold level set in the warning (1).
-The check gives a valid result (notice the green square to the left of the check name). 
+The check gives a correct result (notice the green square to the left of the check name). 
 
 
 ### **Synchronize the results with the cloud account**

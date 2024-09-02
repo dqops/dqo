@@ -59,7 +59,7 @@ export const SelectGroupColumnsTable = ({
   const message = `The last known distinct count statistics for this column detected more than ${dqoLimit} rows or the statistics were not collected for this table yet`;
 
   return (
-    <SectionWrapper className={clsx(className, 'text-sm')} title={title}>
+    <SectionWrapper className={clsx(className, 'text-sm mt-2.5')} title={title}>
       <table className="w-full">
         <tbody>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {

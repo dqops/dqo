@@ -96,7 +96,7 @@ The Execution errors category displays any error
 that occurred during the check's execution.
 
 The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
-The check gives a valid result (notice the green square to the left of the check name).
+The check gives a correct result (notice the green square to the left of the check name).
 Now you can be sure that you table is not empty.
 
 ### **Synchronize the results with the cloud account**
@@ -279,7 +279,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The number of rows is above 1 and the check gives valid result.
+The number of rows is above 1 and the check gives correct result.
 
 ```
 Check evaluation summary per table:

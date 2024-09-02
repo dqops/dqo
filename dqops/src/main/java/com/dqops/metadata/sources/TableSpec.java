@@ -38,6 +38,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
+import com.dqops.metadata.lineage.TableLineageSourceSpecList;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
@@ -86,6 +87,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
             put("file_format", o -> o.fileFormat);
+            put("source_tables", o -> o.sourceTables);
         }
     };
 
@@ -215,6 +217,11 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
     @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> advancedProperties = new HashMap<>();
+
+    @JsonPropertyDescription("A list of source tables. This information is used to define the data lineage report for the table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableLineageSourceSpecList sourceTables;
 
     @JsonIgnore
     private String yamlParsingError;
@@ -646,6 +653,24 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
     }
 
     /**
+     * Returns a list of source tables for the data lineage report.
+     * @return List of source tables.
+     */
+    public TableLineageSourceSpecList getSourceTables() {
+        return sourceTables;
+    }
+
+    /**
+     * Sets a new reference to the container of source tables for the data lineage report.
+     * @param sourceTables List of source tables.
+     */
+    public void setSourceTables(TableLineageSourceSpecList sourceTables) {
+        setDirtyIf(!Objects.equals(this.sourceTables, sourceTables));
+        this.sourceTables = sourceTables;
+        propagateHierarchyIdToField(sourceTables, "source_tables");
+    }
+
+    /**
      * Merges (imports) source columns from a different table spec.
      * @param sourceTableSpec Source table spec.
      */
@@ -979,6 +1004,8 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
             cloned.comments = null;
             cloned.statistics = null;
             cloned.tableComparisons = null;
+            cloned.advancedProperties = null;
+            cloned.sourceTables = null;
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
@@ -995,7 +1022,6 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
             if(cloned.fileFormat != null){
                 cloned.fileFormat = cloned.fileFormat.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
-            cloned.advancedProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -1027,8 +1053,9 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
             cloned.comments = null;
             cloned.statistics = null;
             cloned.incidentGrouping = null;
-            cloned.columns = this.columns.trim();
             cloned.advancedProperties = null;
+            cloned.sourceTables = null;
+            cloned.columns = this.columns.trim();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -1059,6 +1086,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
             cloned.statistics = null;
             cloned.incidentGrouping = null;
             cloned.advancedProperties = null;
+            cloned.sourceTables = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
