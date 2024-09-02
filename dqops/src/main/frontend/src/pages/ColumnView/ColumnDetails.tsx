@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { SharedCredentialListModel } from '../../api';
+import AdvancedProperties from '../../components/AdvancedProperties/AdvancedProperties';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import NumberInput from '../../components/NumberInput';
@@ -14,6 +16,7 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
+import { SharedCredentialsApi } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
@@ -34,7 +37,9 @@ const TableDetails = ({
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
   const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
@@ -71,6 +76,12 @@ const TableDetails = ({
         columnName
       )
     );
+    const getSharedCredentials = async () => {
+      await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
+        setSharedCredentials(res.data)
+      );
+    };
+    getSharedCredentials();
   }, [checkTypes, connectionName, schemaName, columnName, tableName]);
 
   const onUpdate = async () => {
@@ -107,7 +118,7 @@ const TableDetails = ({
         isUpdating={isUpdating}
         isUpdated={isUpdatedColumnBasic}
       />
-      <table className="mb-6 w-160 text-sm">
+      <table className="w-160 text-sm">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection name</td>
@@ -211,6 +222,11 @@ const TableDetails = ({
           </tr>
         </tbody>
       </table>
+      <AdvancedProperties
+        properties={columnBasic?.advanced_properties}
+        handleChange={handleChange}
+        sharedCredentials={sharedCredentials}
+      />
     </div>
   );
 };

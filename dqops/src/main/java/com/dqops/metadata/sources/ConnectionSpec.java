@@ -52,6 +52,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import picocli.CommandLine;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -193,6 +196,10 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private LabelSetSpec labels;
+
+    @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, String> advancedProperties = new HashMap<>();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -572,6 +579,23 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns a key/value map of advanced properties.
+     * @return Key/value dictionary of advanced properties.
+     */
+    public Map<String, String> getAdvancedProperties() {
+        return advancedProperties;
+    }
+
+    /**
+     * Sets a dictionary of advanced properties.
+     * @param advancedProperties Key/value dictionary with extra parameters.
+     */
+    public void setAdvancedProperties(Map<String, String> advancedProperties) {
+        setDirtyIf(!Objects.equals(this.advancedProperties, advancedProperties));
+        this.advancedProperties = advancedProperties != null ? Collections.unmodifiableMap(advancedProperties) : null;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -653,6 +677,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             cloned.comments = null;
             cloned.schedules = null;
+            cloned.advancedProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -672,6 +697,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             cloned.comments = null;
             cloned.schedules = null;
             cloned.incidentGrouping = null;
+            cloned.advancedProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
