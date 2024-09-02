@@ -17,7 +17,7 @@ package com.dqops.bigquery.sensors.column.nulls;
 
 import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;;
+import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
