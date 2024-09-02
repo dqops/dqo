@@ -12,7 +12,7 @@ const SchemaDetail: React.FC<ISchemaDetailProps> = ({ schema }) => {
         <tbody>
           <tr>
             <td className="px-4 py-2">
-              <div>Connection name:</div>
+              <div>Connection name</div>
             </td>
             <td className="px-4 py-2">
               <div>{schema?.connection_name}</div>
@@ -20,7 +20,7 @@ const SchemaDetail: React.FC<ISchemaDetailProps> = ({ schema }) => {
           </tr>
           <tr>
             <td className="px-4 py-2">
-              <div>Schema name:</div>
+              <div>Schema name</div>
             </td>
             <td className="px-4 py-2">
               <div>{schema?.schema_name}</div>
