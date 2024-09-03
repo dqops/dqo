@@ -11,7 +11,7 @@ id:INTEGER,email:STRING,email_ok:INTEGER,surrounded_by_whitespace:STRING,surroun
 10,allowed|character@mail.com,1,"Alaska",1,undefined,1,yes,1,Margarets Avenue,1,78,86045,2022-02-10,,
 11,allowed~character@mail.com,1,"Arizona",1,married,0,no,1,Benton Harbor,1,,2345,2022-02-11,1,
 12,dot.is.allowed.in.email@mail.com,1,"",1,blank,1,no,1,OneWord,1,89.6,86435,2022-02-12,,
-13,_specialcharonbeginning@mail.com,1,"",1,married,0,no,1,Liberty Court,1,,86024,2022-02-13,1,
+13,_specialcharonbeginning@mail.com,1," ",1,married,0,no,1,Liberty Court,1,,86024,2022-02-13,1,
 14,specialcharonend_@mail.com,1,"Colorado",1,-,1,yes,1,,0,76,30601306,2022-02-14,,
 15,invalid.single.char.top.domain@mail.a,0,"Connecticu",1,missing,1,y,1,,0,34,3060830,2022-02-15,0,
 16,.dot.before.email.allowed@gmail.com,1,"Delaware",1,married,0,y,1,Branch Lane,1,21,30683,2022-02-16,0,
@@ -29,3 +29,4 @@ id:INTEGER,email:STRING,email_ok:INTEGER,surrounded_by_whitespace:STRING,surroun
 28,invalid@mail@mail.com,0,"Tennessee",1,married,0,f,1,Summerhouse St.,1,432.98,86435,2022-02-01,,
 29,12345678901234567890123456789012345678901234567890123456789012345@toolong.localpart.com,0,"Texas",1,married,0,t,1,,0,34.12,86024,2022-02-01,,
 30,domain.name.underscores.not.allowed@mail_box.com,0,"Ut ah",1,married,0,t,1,Hill Field Ave.,1,678.43,30601,2022-02-01,1,
+31,,,,,,,,,,,,,2022-02-01,,
