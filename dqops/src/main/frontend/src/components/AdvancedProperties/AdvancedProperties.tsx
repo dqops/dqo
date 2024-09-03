@@ -33,7 +33,7 @@ export default function AdvancedProperties({
           />
         </SectionWrapper>
       ) : (
-        <div className="flex items-center ml-4 mb-2 text-sm">
+        <div className="flex items-center ml-4 mb-2 text-sm font-bold">
           <SvgIcon
             name="chevron-right"
             className="w-5 h-5"

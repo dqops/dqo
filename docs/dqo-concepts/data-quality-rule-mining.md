@@ -81,11 +81,11 @@ The types of data quality checks configured by the rule mining engine are listed
     [values_found_in_set_percent](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#how-to-validate-accepted-values-in-columns) dictionary checks.
     If some values captured in the data samples are rare and present in less than the expected percentage of
     erroneous rows (the default is 2% of records), DQOps will not include these values in the list of accepted values.
-    Running the data quality checks in the "accepted values" category will generate data quality issues, and the error samples will show these invalid values.
+    Running the data quality checks in the **accepted values** category will generate data quality issues, and the error samples will show these invalid values.
 
     When a data dictionary containing valid values is already defined in DQOps, and the majority of column values are present in any of 
     the [data dictionaries](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#defining-data-dictionaries) defined by the user,
-    the rule mining engine will configure the "values in set" checks to use that dictionary. 
+    the rule mining engine will configure the **values in set** checks to use that dictionary. 
     This algorithm will configure data quality checks to detect values not present in the dictionary.
 
   * The sample values are also used to configure the [expected_texts_in_top_values](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md#testing-the-most-common-values) checks,
@@ -130,7 +130,7 @@ is [collecting basic data statistics](../working-with-dqo/collecting-basic-data-
 
 DQOps starts a statistics collection job for every table imported into DQOps using the user interface.
 If the basic statistics are outdated or statistics collection has been stopped,
-the user can click the "Collect statistics" button and wait until the screen shows the scale of null and distinct values for each column.
+the user can click the **Collect statistics** button and wait until the screen shows the scale of null and distinct values for each column.
 
 ![Basic data profiling statistics screen in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/profile-statistics-rule-mining-step-1-min.png){ loading=lazy; width="1200px" }
 
@@ -144,7 +144,7 @@ in a way the data quality checks will detect data quality issues in 2% of record
 ![Data quality rule mining screen with percentage of invalid records in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/propose-rules-rule-mining-step-2-min.png){ loading=lazy; width="1200px" }
 
 DQOps proposes the list of data quality checks instantly after entering the rule mining screen.
-If any parameter configuration is changed, pressing the "Propose" button will generate a new proposal.
+If any parameter configuration is changed, pressing the **Propose** button will generate a new proposal.
 
 The following screen shows how DQOps proposed the configuration of data quality checks.
 DQOps supports changing the data quality check parameters and data quality rule thresholds before saving (applying) the proposed configuration, as shown below.
@@ -160,7 +160,7 @@ The list of valid values can be copied to a data dictionary and replaced with a 
 
 ![Define a data dictionary for a data quality category check in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/convert-to-dictionary-rule-mining-step-4-min.png){ loading=lazy; width="900px" }
 
-The data dictionary is created by clicking the "Convert to dictionary" button, entering the desired dictionary name, and clicking the "Save" button.
+The data dictionary is created by clicking the **Convert to dictionary** button, entering the desired dictionary name, and clicking the **Save** button.
 
 ![Save a data dictionary for a data quality category check in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/save-data-dictionary-rule-mining-step-5-min.png){ loading=lazy; width="600px" }
 
@@ -174,35 +174,35 @@ In that case, DQOps will propose these data quality checks the next time any use
 ![Exclude a proposed data quality check in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/skip-selected-checks-rule-mining-step-6-min.png){ loading=lazy; width="1200px" }
 
 Another option is to disable the data quality check, which excludes it from execution and further propositions.
-The black "stop" icon disables the check.
+The red **stop** icon disables the check.
 
 ![Disable a proposed data quality check in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/disable-selected-checks-rule-mining-step-7-min.png){ loading=lazy; width="1200px" }
 
 
 ### Data quality check evaluation
-DQOps does not save the proposed configuration of data quality checks until the user presses the "Apply" button.
+DQOps does not save the proposed configuration of data quality checks until the user presses the **Apply** button.
 
 ![Apply proposed data quality checks in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/apply-checks-rule-mining-step-8-min.png){ loading=lazy; width="1200px" }
 
-Pressing the "Apply" button saves the configuration of data quality checks and their rules. 
+Pressing the **Apply** button saves the configuration of data quality checks and their rules. 
 To verify the data quality health status of the table, data quality checks must be run.
 DQOps will ask to confirm adding a data quality check evaluation job to the queue.
 
 ![Run proposed data quality checks in the DQOps rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/run-checks-rule-mining-step-9-min.png){ loading=lazy; width="700px" }
 
 The progress of running the data quality checks can be tracked in the notification panel that shows the progress of running jobs in real time.
-The "Run checks" job will be running as long as the circle icon highlighted below is visible.
+The **Run checks** job will be running as long as the circle icon highlighted below is visible.
 
 ![Data quality run checks job status in DQOps after running proposed checks](https://dqops.com/docs/images/concepts/data-quality-rule-mining/run-checks-status-rule-mining-step-9-1-min.png){ loading=lazy; width="500px" }
 
 
 ### Data quality health review
-After the "Run checks" job finishes, as shown in the screenshot below, it is possible to switch to the "Table quality status" screen,
+After the **Run checks** job finishes, as shown in the screenshot below, it is possible to switch to the **Table quality status** screen,
 which will show the summary of identified data quality issues.
 
 ![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/concepts/data-quality-rule-mining/finish-run-checks-rule-mining-step-10-min.png){ loading=lazy; width="1200px" }
 
-The "Table quality status" screen summarizes data quality issues identified for each column and each category of data quality checks. 
+The **Table quality status** screen summarizes data quality issues identified for each column and each category of data quality checks. 
 Switching to the [data quality dimension](data-quality-dimensions.md) view is possible using a switch control at the top of the screen.
 
 DQOps calculates a [data quality KPI score](definition-of-data-quality-kpis.md), measured as the percentage of data quality checks that passed successfully.
@@ -218,7 +218,7 @@ DQOps will [collect error samples](data-quality-error-sampling.md) of invalid va
 In the following example, the rule mining engine configured a desired list of column values, but the `Clothing Sets` value was scarce and was present in less than 2% of records.
 Because the desired percentage of invalid rows was 2%, DQOps did not add this value to the list of accepted values, assuming it is invalid.
 
-The list of invalid values can be reviewed on the "Error sampling" tab in the data quality check editor.
+The list of invalid values can be reviewed on the **Error sampling** tab in the data quality check editor.
 If this value is valid, the list of `expected_values` should be updated in the editor to include that value.
 
 ![Reviewing detected data quality issues in DQOps using the data quality error sampling module](https://dqops.com/docs/images/concepts/data-quality-rule-mining/review-error-samples-rule-mining-step-12-min.png){ loading=lazy; width="1200px" }
@@ -228,7 +228,7 @@ If this value is valid, the list of `expected_values` should be updated in the e
 The rule mining editor can also propose the configuration of checks that will generate false-positive results. 
 These issues are incorrectly detected due to an aggressive configuration of the desired percentage of invalid records.
 The best option for handling these checks after reviewing the error samples is disabling them. 
-You should click the "Save" button at the top of the screen to store any configuration changes.
+You should click the **Save** button at the top of the screen to store any configuration changes.
 
 ![Disabling false-positive data quality checks in DQOps](https://dqops.com/docs/images/concepts/data-quality-rule-mining/disable-false-positive-checks-rule-mining-step-13-min.png){ loading=lazy; width="1200px" }
 
@@ -239,7 +239,7 @@ This section describes the configuration parameters shown at the top of the rule
 ### Propose checks for a column
 It is possible to propose the configuration of data quality checks for only one column or several columns containing the same text inside the column name.
 The following example shows how to set the column name.
-The rule engine will generate a new proposition of check configuration after clicking the "Propose" button.
+The rule engine will generate a new proposition of check configuration after clicking the **Propose** button.
 
 ![Use data quality rule miner engine in DQOps to propose checks for selected columns](https://dqops.com/docs/images/concepts/data-quality-rule-mining/propose-checks-rule-mining-min.png){ loading=lazy; width="1200px" }
 
@@ -254,12 +254,12 @@ These parameters become very important when using the rule engine later to conve
 to [table monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and
 [partition monitoring checks](definition-of-data-quality-checks/partition-checks.md), which is described later in this guide.
 
-| Parameter name                 | Description                                                                                                                                                                                                                                                                                                                  |
-|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Copy failed profiling checks   | Copy the configuration of profiling checks that failed during the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continuous monitoring.                     |
-| Copy disabled profiling checks | Copy the configuration of disabled profiling checks. This option is effective for monitoring and partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the [data quality KPI](definition-of-data-quality-kpis.md). |
-| Copy enabled profiling checks  | Copy the configuration of enabled profiling checks to the monitoring and partitioned checks. This option is effective for monitoring and partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks.          |
-| Reconfigure default checks     | Reconfigure the rule thresholds of data quality checks that were activated using [data observability](data-observability.md) rule patterns (data quality policies).                                                                                                                                                          |
+| Parameter name                 | Description                                                                                                                                                                                                                                                                                                                 |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Copy failed profiling checks   | Copy the configuration of profiling checks that failed during the last execution. The preferred approach is to review the profiling checks, disable false-positive checks, and enable this configuration to copy the reviewed checks to the monitoring and partitioned checks for continuous monitoring.                    |
+| Copy disabled profiling checks | Copy the configuration of disabled profiling checks. This option is effective for monitoring or partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the [data quality KPI](definition-of-data-quality-kpis.md). |
+| Copy enabled profiling checks  | Copy the configuration of enabled profiling checks to the monitoring or partitioned checks. This option is effective for monitoring or partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks.           |
+| Reconfigure default checks     | Reconfigure the rule thresholds of data quality checks that were activated using [data observability](data-observability.md) rule patterns (data quality policies).                                                                                                                                                         |
 
 
 ### Data quality checks
@@ -267,7 +267,7 @@ The selection of data quality checks the rule mining engine will configure is ma
 
 | Data quality checks                                                                                                                                                  | Description                                                                                                                                                                                                                                                                                                                                                         |
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Minimum row count](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md#minimum-row-count)                                          | Configure the minimum row count based on the basic statistics captured from the table                                                                                                                                                                                                                                                                               |
+| [Minimum row count](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md#minimum-row-count)                                          | Configure the minimum row count based on the basic statistics captured from the table.                                                                                                                                                                                                                                                                              |
 | [Expected columns count](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                                                                 | Configure a table schema check that ensures that the count of column stays the same as the count of columns detected during data profiling.                                                                                                                                                                                                                         |
 | [Column exists](../checks/column/schema/column-exists.md)                                                                                                            | Configure a column exists check for each column to report when the column is no longer present.                                                                                                                                                                                                                                                                     |
 | [Timeliness checks](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)                                                           | Configure all types of table's timeliness checks (freshness, staleness, ingestion delay). This option works only when the table is correctly configured to be analyzable by timeliness check, and has the timestamp column selected in the configuration of the table in the Data sources section.                                                                  |
@@ -308,17 +308,17 @@ and [raise incidents](data-quality-process.md#data-quality-incident-management) 
     The checks that are incorrectly configured should be [disabled](#disabling-false-positive-checks), as shown before.
 
     Once the list of active data profiling checks is limited only to approved checks that are passing or detecting acknowledged data quality issues,
-    you should switch to the "Monitoring" section of DQOps and use the rule mining screen again to copy the configuration of checks
-    from the "Profiling" section to the "Monitoring" section, to allow DQOps continuously evaluate only valid checks.
+    you should switch to the **Monitoring checks** section of DQOps and use the rule mining screen again to copy the configuration of checks
+    from the **Profiling** section to the **Monitoring checks** section, to allow DQOps continuously evaluate only valid checks.
 
-    The rule mining screen on the "Monitoring" and "Partition" sections works slightly differently and copies the already configured
-    data quality checks and their parameters from the DQOps data profiler found in the "Profiling" section of the user interface.
+    The rule mining screen on the **Monitoring checks** and **Partition** sections works slightly differently and copies the already configured
+    data quality checks and their parameters from the DQOps data profiler found in the **Profiling** section of the user interface.
 
 
 ### Configuring monitoring checks
 The monitoring checks in DQOps perform regular full-table scans and analyze small to medium-sized tables or tables in which any row could be updated, such as a price list table.
 
-Pressing the "Apply" button will save the configuration of [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md)
+Pressing the **Apply** button will save the configuration of [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md)
 and run the data quality checks to save the first data quality health checkpoint.
 
 ![Configuring full-table scan data quality checks in DQOps data monitoring section](https://dqops.com/docs/images/concepts/data-quality-rule-mining/apply-monitoring-checks-rule-mining-step-14-min.png){ loading=lazy; width="1200px" }

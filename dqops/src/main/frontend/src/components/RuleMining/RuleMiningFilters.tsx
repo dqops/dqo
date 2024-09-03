@@ -91,7 +91,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2 !w-62"
             label="Copy disabled profiling checks"
-            tooltipText="Copy the configuration of disabled profiling checks. This option is effective for monitoring and partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the data quality KPI."
+            tooltipText="Copy the configuration of disabled profiling checks. This option is effective for monitoring or partitioned checks only. By default it is disabled, leaving failed or incorrectly configured profiling checks only in the profiling section to avoid decreasing the data quality KPI."
             checked={configuration.copy_disabled_profiling_checks}
             onChange={(e) =>
               onChangeConfiguration({ copy_disabled_profiling_checks: e })
@@ -100,7 +100,7 @@ export default function RuleMiningFilters({
           <Checkbox
             className="p-2 !w-62"
             label="Copy enabled profiling checks"
-            tooltipText="Copy the configuration of enabled profiling checks to the monitoring and partitioned checks. This option is effective for monitoring and partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks."
+            tooltipText="Copy the configuration of enabled profiling checks to the monitoring or partitioned checks. This option is effective for monitoring or partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks."
             checked={configuration.copy_profiling_checks}
             onChange={(e) =>
               onChangeConfiguration({ copy_profiling_checks: e })
