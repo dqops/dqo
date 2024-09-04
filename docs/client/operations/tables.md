@@ -833,8 +833,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -916,8 +916,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_statistics=True,
 				delete_check_results=True,
 				delete_sensor_readouts=True,
-				delete_error_samples=False,
-				delete_incidents=False
+				delete_error_samples=True,
+				delete_incidents=True
 			),
 			can_edit=True,
 			can_collect_statistics=True,
@@ -1000,8 +1000,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_statistics=True,
 				delete_check_results=True,
 				delete_sensor_readouts=True,
-				delete_error_samples=False,
-				delete_incidents=False
+				delete_error_samples=True,
+				delete_incidents=True
 			),
 			can_edit=True,
 			can_collect_statistics=True,
@@ -1087,8 +1087,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_statistics=True,
 				delete_check_results=True,
 				delete_sensor_readouts=True,
-				delete_error_samples=False,
-				delete_incidents=False
+				delete_error_samples=True,
+				delete_incidents=True
 			),
 			can_edit=True,
 			can_collect_statistics=True,
@@ -1174,8 +1174,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_statistics=True,
 				delete_check_results=True,
 				delete_sensor_readouts=True,
-				delete_error_samples=False,
-				delete_incidents=False
+				delete_error_samples=True,
+				delete_incidents=True
 			),
 			can_edit=True,
 			can_collect_statistics=True,
@@ -9475,8 +9475,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -9523,8 +9523,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -9571,8 +9571,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -9655,8 +9655,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -9708,8 +9708,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -9761,8 +9761,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -9847,8 +9847,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -9900,8 +9900,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -9953,8 +9953,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10042,8 +10042,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10095,8 +10095,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10148,8 +10148,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10237,8 +10237,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10290,8 +10290,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10343,8 +10343,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -10743,7 +10743,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"table_hash\":7188561880498907939,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"do_not_collect_error_samples_in_profiling\":false,\"always_collect_error_samples_in_monitoring\":false,\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":false,\"deleteIncidents\":false},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"table_hash\":7188561880498907939,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"do_not_collect_error_samples_in_profiling\":false,\"always_collect_error_samples_in_monitoring\":false,\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -10810,8 +10810,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_statistics=True,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
-			delete_error_samples=False,
-			delete_incidents=False
+			delete_error_samples=True,
+			delete_incidents=True
 		),
 		can_edit=True,
 		can_collect_statistics=True,
@@ -10892,8 +10892,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_statistics=True,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
-			delete_error_samples=False,
-			delete_incidents=False
+			delete_error_samples=True,
+			delete_incidents=True
 		),
 		can_edit=True,
 		can_collect_statistics=True,
@@ -10977,8 +10977,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_statistics=True,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
-			delete_error_samples=False,
-			delete_incidents=False
+			delete_error_samples=True,
+			delete_incidents=True
 		),
 		can_edit=True,
 		can_collect_statistics=True,
@@ -11062,8 +11062,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_statistics=True,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
-			delete_error_samples=False,
-			delete_incidents=False
+			delete_error_samples=True,
+			delete_incidents=True
 		),
 		can_edit=True,
 		can_collect_statistics=True,

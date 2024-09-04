@@ -28,6 +28,9 @@ if TYPE_CHECKING:
     from ..models.table_timeliness_profiling_checks_spec import (
         TableTimelinessProfilingChecksSpec,
     )
+    from ..models.table_uniqueness_profiling_checks_spec import (
+        TableUniquenessProfilingChecksSpec,
+    )
     from ..models.table_volume_profiling_checks_spec import (
         TableVolumeProfilingChecksSpec,
     )
@@ -49,6 +52,7 @@ class TableProfilingCheckCategoriesSpec:
         custom_sql (Union[Unset, TableCustomSqlProfilingChecksSpec]):
         availability (Union[Unset, TableAvailabilityProfilingChecksSpec]):
         schema (Union[Unset, TableSchemaProfilingChecksSpec]):
+        uniqueness (Union[Unset, TableUniquenessProfilingChecksSpec]):
         comparisons (Union[Unset, TableProfilingCheckCategoriesSpecComparisons]): Dictionary of configuration of checks
             for table comparisons. The key that identifies each comparison must match the name of a data comparison that is
             configured on the parent table.
@@ -62,6 +66,7 @@ class TableProfilingCheckCategoriesSpec:
     custom_sql: Union[Unset, "TableCustomSqlProfilingChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityProfilingChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaProfilingChecksSpec"] = UNSET
+    uniqueness: Union[Unset, "TableUniquenessProfilingChecksSpec"] = UNSET
     comparisons: Union[Unset, "TableProfilingCheckCategoriesSpecComparisons"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -98,6 +103,10 @@ class TableProfilingCheckCategoriesSpec:
         if not isinstance(self.schema, Unset):
             schema = self.schema.to_dict()
 
+        uniqueness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.uniqueness, Unset):
+            uniqueness = self.uniqueness.to_dict()
+
         comparisons: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.comparisons, Unset):
             comparisons = self.comparisons.to_dict()
@@ -121,6 +130,8 @@ class TableProfilingCheckCategoriesSpec:
             field_dict["availability"] = availability
         if schema is not UNSET:
             field_dict["schema"] = schema
+        if uniqueness is not UNSET:
+            field_dict["uniqueness"] = uniqueness
         if comparisons is not UNSET:
             field_dict["comparisons"] = comparisons
 
@@ -148,6 +159,9 @@ class TableProfilingCheckCategoriesSpec:
         )
         from ..models.table_timeliness_profiling_checks_spec import (
             TableTimelinessProfilingChecksSpec,
+        )
+        from ..models.table_uniqueness_profiling_checks_spec import (
+            TableUniquenessProfilingChecksSpec,
         )
         from ..models.table_volume_profiling_checks_spec import (
             TableVolumeProfilingChecksSpec,
@@ -210,6 +224,13 @@ class TableProfilingCheckCategoriesSpec:
         else:
             schema = TableSchemaProfilingChecksSpec.from_dict(_schema)
 
+        _uniqueness = d.pop("uniqueness", UNSET)
+        uniqueness: Union[Unset, TableUniquenessProfilingChecksSpec]
+        if isinstance(_uniqueness, Unset):
+            uniqueness = UNSET
+        else:
+            uniqueness = TableUniquenessProfilingChecksSpec.from_dict(_uniqueness)
+
         _comparisons = d.pop("comparisons", UNSET)
         comparisons: Union[Unset, TableProfilingCheckCategoriesSpecComparisons]
         if isinstance(_comparisons, Unset):
@@ -228,6 +249,7 @@ class TableProfilingCheckCategoriesSpec:
             custom_sql=custom_sql,
             availability=availability,
             schema=schema,
+            uniqueness=uniqueness,
             comparisons=comparisons,
         )
 

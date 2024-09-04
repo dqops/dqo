@@ -625,8 +625,8 @@ http://localhost:8888/api/search/tables
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -673,8 +673,8 @@ http://localhost:8888/api/search/tables
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -721,8 +721,8 @@ http://localhost:8888/api/search/tables
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
-		    "deleteErrorSamples" : false,
-		    "deleteIncidents" : false
+		    "deleteErrorSamples" : true,
+		    "deleteIncidents" : true
 		  },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
@@ -803,8 +803,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -856,8 +856,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -909,8 +909,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -993,8 +993,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1046,8 +1046,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1099,8 +1099,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1186,8 +1186,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1239,8 +1239,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1292,8 +1292,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1379,8 +1379,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1432,8 +1432,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,
@@ -1485,8 +1485,8 @@ http://localhost:8888/api/search/tables
 					delete_statistics=True,
 					delete_check_results=True,
 					delete_sensor_readouts=True,
-					delete_error_samples=False,
-					delete_incidents=False
+					delete_error_samples=True,
+					delete_incidents=True
 				),
 				can_edit=True,
 				can_collect_statistics=True,

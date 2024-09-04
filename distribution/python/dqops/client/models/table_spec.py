@@ -13,6 +13,7 @@ if TYPE_CHECKING:
         PartitionIncrementalTimeWindowSpec,
     )
     from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
+    from ..models.table_lineage_source_spec import TableLineageSourceSpec
     from ..models.table_monitoring_check_categories_spec import (
         TableMonitoringCheckCategoriesSpec,
     )
@@ -92,6 +93,8 @@ class TableSpec:
         comments (Union[Unset, List['CommentSpec']]): Comments used for change tracking and documenting changes directly
             in the table data quality specification file.
         file_format (Union[Unset, FileFormatSpec]):
+        source_tables (Union[Unset, List['TableLineageSourceSpec']]): A list of source tables. This information is used
+            to define the data lineage report for the table.
     """
 
     disabled: Union[Unset, bool] = UNSET
@@ -116,6 +119,7 @@ class TableSpec:
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     file_format: Union[Unset, "FileFormatSpec"] = UNSET
+    source_tables: Union[Unset, List["TableLineageSourceSpec"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -194,6 +198,14 @@ class TableSpec:
         if not isinstance(self.file_format, Unset):
             file_format = self.file_format.to_dict()
 
+        source_tables: Union[Unset, List[Dict[str, Any]]] = UNSET
+        if not isinstance(self.source_tables, Unset):
+            source_tables = []
+            for source_tables_item_data in self.source_tables:
+                source_tables_item = source_tables_item_data.to_dict()
+
+                source_tables.append(source_tables_item)
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -245,6 +257,8 @@ class TableSpec:
             field_dict["comments"] = comments
         if file_format is not UNSET:
             field_dict["file_format"] = file_format
+        if source_tables is not UNSET:
+            field_dict["source_tables"] = source_tables
 
         return field_dict
 
@@ -257,6 +271,7 @@ class TableSpec:
             PartitionIncrementalTimeWindowSpec,
         )
         from ..models.table_incident_grouping_spec import TableIncidentGroupingSpec
+        from ..models.table_lineage_source_spec import TableLineageSourceSpec
         from ..models.table_monitoring_check_categories_spec import (
             TableMonitoringCheckCategoriesSpec,
         )
@@ -404,6 +419,15 @@ class TableSpec:
         else:
             file_format = FileFormatSpec.from_dict(_file_format)
 
+        source_tables = []
+        _source_tables = d.pop("source_tables", UNSET)
+        for source_tables_item_data in _source_tables or []:
+            source_tables_item = TableLineageSourceSpec.from_dict(
+                source_tables_item_data
+            )
+
+            source_tables.append(source_tables_item)
+
         table_spec = cls(
             disabled=disabled,
             stage=stage,
@@ -427,6 +451,7 @@ class TableSpec:
             labels=labels,
             comments=comments,
             file_format=file_format,
+            source_tables=source_tables,
         )
 
         table_spec.additional_properties = d

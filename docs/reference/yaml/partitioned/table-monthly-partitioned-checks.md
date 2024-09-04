@@ -16,6 +16,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`volume`](./table-monthly-partitioned-checks.md#tablevolumemonthlypartitionedchecksspec)</span>|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|*[TableVolumeMonthlyPartitionedChecksSpec](./table-monthly-partitioned-checks.md#tablevolumemonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`timeliness`](./table-monthly-partitioned-checks.md#tabletimelinessmonthlypartitionedchecksspec)</span>|Monthly partitioned timeliness checks|*[TableTimelinessMonthlyPartitionedChecksSpec](./table-monthly-partitioned-checks.md#tabletimelinessmonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`custom_sql`](./table-monthly-partitioned-checks.md#tablecustomsqlmonthlypartitionedchecksspec)</span>|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|*[TableCustomSqlMonthlyPartitionedChecksSpec](./table-monthly-partitioned-checks.md#tablecustomsqlmonthlypartitionedchecksspec)*| | | |
+|<span class="no-wrap-code ">[`uniqueness`](./table-monthly-partitioned-checks.md#tableuniquenessmonthlypartitionchecksspec)</span>|Monthly partitioned uniqueness checks on a table level.|*[TableUniquenessMonthlyPartitionChecksSpec](./table-monthly-partitioned-checks.md#tableuniquenessmonthlypartitionchecksspec)*| | | |
 |<span class="no-wrap-code ">[`comparisons`](./table-monthly-partitioned-checks.md#tablecomparisonmonthlypartitionedchecksspecmap)</span>|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|*[TableComparisonMonthlyPartitionedChecksSpecMap](./table-monthly-partitioned-checks.md#tablecomparisonmonthlypartitionedchecksspecmap)*| | | |
 |<span class="no-wrap-code ">[`custom`](../profiling/table-profiling-checks.md#customcheckspecmap)</span>|Dictionary of custom checks. The keys are check names within this category.|*[CustomCheckSpecMap](../profiling/table-profiling-checks.md#customcheckspecmap)*| | | |
 
@@ -67,6 +68,22 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`monthly_partition_sql_condition_passed_percent_on_table`](../../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)</span>|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.|*[TableSqlConditionPassedPercentCheckSpec](../../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_sql_aggregate_expression_on_table`](../../../checks/table/custom_sql/sql-aggregate-expression-on-table.md)</span>|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.|*[TableSqlAggregateExpressionCheckSpec](../../../checks/table/custom_sql/sql-aggregate-expression-on-table.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_import_custom_result_on_table`](../../../checks/table/custom_sql/import-custom-result-on-table.md)</span>|Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.|*[TableSqlImportCustomResultCheckSpec](../../../checks/table/custom_sql/import-custom-result-on-table.md)*| | | |
+|<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
+
+
+
+___
+
+## TableUniquenessMonthlyPartitionChecksSpec
+Container of table level monthly partition for uniqueness data quality checks
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`monthly_partition_duplicate_record_count`](../../../checks/table/uniqueness/duplicate-record-count.md)</span>|Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.|*[TableDuplicateRecordCountCheckSpec](../../../checks/table/uniqueness/duplicate-record-count.md)*| | | |
+|<span class="no-wrap-code ">[`monthly_partition_duplicate_record_percent`](../../../checks/table/uniqueness/duplicate-record-percent.md)</span>|Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.|*[TableDuplicateRecordPercentCheckSpec](../../../checks/table/uniqueness/duplicate-record-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 

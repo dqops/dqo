@@ -51,6 +51,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments used for change tracking and documenting changes directly in the table data quality specification file.|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">[`file_format`](./TableYaml.md#fileformatspec)</span>|File format with the specification used as a source data. It overrides the connection spec&#x27;s file format when it is set|*[FileFormatSpec](./TableYaml.md#fileformatspec)*| | | |
+|<span class="no-wrap-code ">[`source_tables`](./TableYaml.md#tablelineagesourcespeclist)</span>|A list of source tables. This information is used to define the data lineage report for the table.|*[TableLineageSourceSpecList](./TableYaml.md#tablelineagesourcespeclist)*| | | |
 
 
 
@@ -852,6 +853,92 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`self`</span>||*List[string]*| | | |
+
+
+
+___
+
+## TableLineageSourceSpecList
+List of source tables of the current table to build the data lineage report.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*List[[TableLineageSource](./TableYaml.md#tablelineagesource)]*| | | |
+
+
+
+___
+
+## TableLineageSource
+Key object that identifies a source table by using the connection name, schema name and table name to identify.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`connection`</span>|Connection name|*string*| | | |
+|<span class="no-wrap-code ">`schema`</span>|Schema name|*string*| | | |
+|<span class="no-wrap-code ">`table`</span>|Table name|*string*| | | |
+
+
+
+___
+
+## TableLineageSourceSpec
+Data lineage specification for a table to identify a source table of the current table where this object is stored.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`source_connection`</span>|The name of a source connection that is defined in DQOps and contains a source table from which the current table receives data.|*string*| | | |
+|<span class="no-wrap-code ">`source_schema`</span>|The name of a source schema within the source connection that contains a source table from which the current table receives data.|*string*| | | |
+|<span class="no-wrap-code ">`source_table`</span>|The name of a source table in the source schema from which the current table receives data.|*string*| | | |
+|<span class="no-wrap-code ">`data_lineage_source_tool`</span>|The name of a source tool from which this data lineage information was copied. This field should be filled when the data lineage was imported from another data catalog or a data lineage tracking platform.|*string*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.|*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">[`columns`](./TableYaml.md#columnlineagesourcespecmap)</span>|Configuration of source columns for each column in the current table. The keys in this dictionary are column names in the current table. The object stored in the dictionary contain a list of source columns.|*[ColumnLineageSourceSpecMap](./TableYaml.md#columnlineagesourcespecmap)*| | | |
+
+
+
+___
+
+## ColumnLineageSourceSpecMap
+Dictionary of mapping of source columns to the columns in the current table.
+ The keys in this dictionary are the column names in the current table.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*Dict[string, [ColumnLineageSourceSpec](./TableYaml.md#columnlineagesourcespec)]*| | | |
+
+
+
+___
+
+## ColumnLineageSourceSpec
+Describes the list of source columns for a column in the current table.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`source_columns`](./TableYaml.md#sourcecolumnssetspec)</span>|A list of source columns from the source table name from which this column receives data.|*[SourceColumnsSetSpec](./TableYaml.md#sourcecolumnssetspec)*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.|*Dict[string, string]*| | | |
+
+
+
+___
+
+## SourceColumnsSetSpec
+A collection of unique names of source columns from which the current column receives data. This information is used to track column-level data lineage.
 
 
 

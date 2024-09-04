@@ -41312,6 +41312,10 @@
           "description" : "Daily monitoring table schema checks",
           "$ref" : "#/definitions/TableSchemaDailyMonitoringChecksSpec"
         },
+        "uniqueness" : {
+          "description" : "Daily monitoring uniqueness checks on a table level.",
+          "$ref" : "#/definitions/TableUniquenessDailyMonitoringChecksSpec"
+        },
         "comparisons" : {
           "type" : "object",
           "description" : "Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.",
@@ -41342,6 +41346,10 @@
         "custom_sql" : {
           "description" : "Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately",
           "$ref" : "#/definitions/TableCustomSqlDailyPartitionedChecksSpec"
+        },
+        "uniqueness" : {
+          "description" : "Daily partitioned uniqueness checks on a table level.",
+          "$ref" : "#/definitions/TableUniquenessDailyPartitionChecksSpec"
         },
         "comparisons" : {
           "type" : "object",
@@ -41626,6 +41634,158 @@
         }
       }
     },
+    "TableDuplicateRecordCountCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/TableDuplicateRecordCountSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
+        }
+      }
+    },
+    "TableDuplicateRecordCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        },
+        "columns" : {
+          "type" : "array",
+          "description" : "A list of columns used for uniqueness record duplicate verification.",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "TableDuplicateRecordPercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "always_collect_error_samples" : {
+          "type" : "boolean",
+          "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/TableDuplicateRecordPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
+        }
+      }
+    },
+    "TableDuplicateRecordPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        },
+        "columns" : {
+          "type" : "array",
+          "description" : "A list of columns used for uniqueness record duplicate verification.",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
     "TableIncidentGroupingSpec" : {
       "type" : "object",
       "properties" : {
@@ -41681,10 +41841,6 @@
           "additionalProperties" : {
             "$ref" : "#/definitions/ColumnLineageSourceSpec"
           }
-        },
-        "status" : {
-          "type" : "string",
-          "enum" : [ "NOT_TOUCHED", "LOAD_IN_PROGRESS", "ADDED", "UNCHANGED", "MODIFIED", "TO_BE_DELETED", "DELETED" ]
         }
       }
     },
@@ -41894,6 +42050,10 @@
           "description" : "Monthly monitoring table schema checks",
           "$ref" : "#/definitions/TableSchemaMonthlyMonitoringChecksSpec"
         },
+        "uniqueness" : {
+          "description" : "Monthly monitoring uniqueness checks on a table level.",
+          "$ref" : "#/definitions/TableUniquenessMonthlyMonitoringChecksSpec"
+        },
         "comparisons" : {
           "type" : "object",
           "description" : "Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.",
@@ -41924,6 +42084,10 @@
         "custom_sql" : {
           "description" : "Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately",
           "$ref" : "#/definitions/TableCustomSqlMonthlyPartitionedChecksSpec"
+        },
+        "uniqueness" : {
+          "description" : "Monthly partitioned uniqueness checks on a table level.",
+          "$ref" : "#/definitions/TableUniquenessMonthlyPartitionChecksSpec"
         },
         "comparisons" : {
           "type" : "object",
@@ -42084,6 +42248,10 @@
         "schema" : {
           "description" : "Configuration of schema (column count and schema) data quality checks on a table level.",
           "$ref" : "#/definitions/TableSchemaProfilingChecksSpec"
+        },
+        "uniqueness" : {
+          "description" : "Configuration of uniqueness checks on a table level.",
+          "$ref" : "#/definitions/TableUniquenessProfilingChecksSpec"
         },
         "comparisons" : {
           "type" : "object",
@@ -43577,6 +43745,106 @@
         "profile_data_ingestion_delay" : {
           "description" : "Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp",
           "$ref" : "#/definitions/TableDataIngestionDelayCheckSpec"
+        }
+      }
+    },
+    "TableUniquenessDailyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_duplicate_record_count" : {
+          "description" : "Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/TableDuplicateRecordCountCheckSpec"
+        },
+        "daily_duplicate_record_percent" : {
+          "description" : "Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/TableDuplicateRecordPercentCheckSpec"
+        }
+      }
+    },
+    "TableUniquenessDailyPartitionChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_partition_duplicate_record_count" : {
+          "description" : "Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/TableDuplicateRecordCountCheckSpec"
+        },
+        "daily_partition_duplicate_record_percent" : {
+          "description" : "Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/TableDuplicateRecordPercentCheckSpec"
+        }
+      }
+    },
+    "TableUniquenessMonthlyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_duplicate_record_count" : {
+          "description" : "Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/TableDuplicateRecordCountCheckSpec"
+        },
+        "monthly_duplicate_record_percent" : {
+          "description" : "Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/TableDuplicateRecordPercentCheckSpec"
+        }
+      }
+    },
+    "TableUniquenessMonthlyPartitionChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_partition_duplicate_record_count" : {
+          "description" : "Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/TableDuplicateRecordCountCheckSpec"
+        },
+        "monthly_partition_duplicate_record_percent" : {
+          "description" : "Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/TableDuplicateRecordPercentCheckSpec"
+        }
+      }
+    },
+    "TableUniquenessProfilingChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "profile_duplicate_record_count" : {
+          "description" : "Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/TableDuplicateRecordCountCheckSpec"
+        },
+        "profile_duplicate_record_percent" : {
+          "description" : "Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/TableDuplicateRecordPercentCheckSpec"
         }
       }
     },

@@ -247,6 +247,7 @@ public class TableLineageSourceSpec extends AbstractSpec implements ObjectName<T
      * @return Object status (added, modified, deleted, etc).
      */
     @Override
+    @JsonIgnore
     public InstanceStatus getStatus() {
         return InstanceStatus.MODIFIED; // not important
     }
@@ -257,6 +258,7 @@ public class TableLineageSourceSpec extends AbstractSpec implements ObjectName<T
      * @param status New status.
      */
     @Override
+    @JsonIgnore
     public void setStatus(InstanceStatus status) {
         // not tracked
     }

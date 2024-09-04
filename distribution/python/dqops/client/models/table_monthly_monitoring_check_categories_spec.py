@@ -27,6 +27,9 @@ if TYPE_CHECKING:
     from ..models.table_timeliness_monthly_monitoring_checks_spec import (
         TableTimelinessMonthlyMonitoringChecksSpec,
     )
+    from ..models.table_uniqueness_monthly_monitoring_checks_spec import (
+        TableUniquenessMonthlyMonitoringChecksSpec,
+    )
     from ..models.table_volume_monthly_monitoring_checks_spec import (
         TableVolumeMonthlyMonitoringChecksSpec,
     )
@@ -47,6 +50,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         custom_sql (Union[Unset, TableCustomSqlMonthlyMonitoringChecksSpec]):
         availability (Union[Unset, TableAvailabilityMonthlyMonitoringChecksSpec]):
         schema (Union[Unset, TableSchemaMonthlyMonitoringChecksSpec]):
+        uniqueness (Union[Unset, TableUniquenessMonthlyMonitoringChecksSpec]):
         comparisons (Union[Unset, TableMonthlyMonitoringCheckCategoriesSpecComparisons]): Dictionary of configuration of
             checks for table comparisons. The key that identifies each comparison must match the name of a data comparison
             that is configured on the parent table.
@@ -59,6 +63,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
     custom_sql: Union[Unset, "TableCustomSqlMonthlyMonitoringChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityMonthlyMonitoringChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaMonthlyMonitoringChecksSpec"] = UNSET
+    uniqueness: Union[Unset, "TableUniquenessMonthlyMonitoringChecksSpec"] = UNSET
     comparisons: Union[
         Unset, "TableMonthlyMonitoringCheckCategoriesSpecComparisons"
     ] = UNSET
@@ -93,6 +98,10 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         if not isinstance(self.schema, Unset):
             schema = self.schema.to_dict()
 
+        uniqueness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.uniqueness, Unset):
+            uniqueness = self.uniqueness.to_dict()
+
         comparisons: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.comparisons, Unset):
             comparisons = self.comparisons.to_dict()
@@ -114,6 +123,8 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
             field_dict["availability"] = availability
         if schema is not UNSET:
             field_dict["schema"] = schema
+        if uniqueness is not UNSET:
+            field_dict["uniqueness"] = uniqueness
         if comparisons is not UNSET:
             field_dict["comparisons"] = comparisons
 
@@ -141,6 +152,9 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         )
         from ..models.table_timeliness_monthly_monitoring_checks_spec import (
             TableTimelinessMonthlyMonitoringChecksSpec,
+        )
+        from ..models.table_uniqueness_monthly_monitoring_checks_spec import (
+            TableUniquenessMonthlyMonitoringChecksSpec,
         )
         from ..models.table_volume_monthly_monitoring_checks_spec import (
             TableVolumeMonthlyMonitoringChecksSpec,
@@ -202,6 +216,15 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         else:
             schema = TableSchemaMonthlyMonitoringChecksSpec.from_dict(_schema)
 
+        _uniqueness = d.pop("uniqueness", UNSET)
+        uniqueness: Union[Unset, TableUniquenessMonthlyMonitoringChecksSpec]
+        if isinstance(_uniqueness, Unset):
+            uniqueness = UNSET
+        else:
+            uniqueness = TableUniquenessMonthlyMonitoringChecksSpec.from_dict(
+                _uniqueness
+            )
+
         _comparisons = d.pop("comparisons", UNSET)
         comparisons: Union[Unset, TableMonthlyMonitoringCheckCategoriesSpecComparisons]
         if isinstance(_comparisons, Unset):
@@ -221,6 +244,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
             custom_sql=custom_sql,
             availability=availability,
             schema=schema,
+            uniqueness=uniqueness,
             comparisons=comparisons,
         )
 

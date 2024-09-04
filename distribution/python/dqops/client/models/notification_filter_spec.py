@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="NotificationFilterSpec")
@@ -23,8 +24,7 @@ class NotificationFilterSpec:
             'group_name_\*', '\*group', 'prefix\*suffix'.
         quality_dimension (Union[Unset, str]): Quality dimension.
         check_category (Union[Unset, str]): The target check category, for example: *nulls*, *volume*, *anomaly*.
-        check_type (Union[Unset, str]): The target type of checks to run. Supported values are *profiling*, *monitoring*
-            and *partitioned*.
+        check_type (Union[Unset, CheckType]):
         check_name (Union[Unset, str]): The target check name to run only this named check. Uses the short check name
             which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as:
             'profiling_\*', '\*_count', 'profiling_\*_percent'.
@@ -38,7 +38,7 @@ class NotificationFilterSpec:
     data_group_name: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
     check_category: Union[Unset, str] = UNSET
-    check_type: Union[Unset, str] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
     check_name: Union[Unset, str] = UNSET
     highest_severity: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -51,7 +51,10 @@ class NotificationFilterSpec:
         data_group_name = self.data_group_name
         quality_dimension = self.quality_dimension
         check_category = self.check_category
-        check_type = self.check_type
+        check_type: Union[Unset, str] = UNSET
+        if not isinstance(self.check_type, Unset):
+            check_type = self.check_type.value
+
         check_name = self.check_name
         highest_severity = self.highest_severity
 
@@ -98,7 +101,12 @@ class NotificationFilterSpec:
 
         check_category = d.pop("checkCategory", UNSET)
 
-        check_type = d.pop("checkType", UNSET)
+        _check_type = d.pop("checkType", UNSET)
+        check_type: Union[Unset, CheckType]
+        if isinstance(_check_type, Unset):
+            check_type = UNSET
+        else:
+            check_type = CheckType(_check_type)
 
         check_name = d.pop("checkName", UNSET)
 

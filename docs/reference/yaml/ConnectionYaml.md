@@ -582,7 +582,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`data_group_name`</span>|Data group name. This field accepts search patterns in the format: &#x27;group_name_\*&#x27;, &#x27;\*group&#x27;, &#x27;prefix\*suffix&#x27;.|*string*| | | |
 |<span class="no-wrap-code ">`quality_dimension`</span>|Quality dimension.|*string*| | | |
 |<span class="no-wrap-code ">`check_category`</span>|The target check category, for example: *nulls*, *volume*, *anomaly*.|*string*| | | |
-|<span class="no-wrap-code ">`check_type`</span>|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|*string*| | | |
+|<span class="no-wrap-code ">`check_type`</span>|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|*enum*|*profiling*<br/>*monitoring*<br/>*partitioned*<br/>| | |
 |<span class="no-wrap-code ">`check_name`</span>|The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: &#x27;profiling_\*&#x27;, &#x27;\*_count&#x27;, &#x27;profiling_\*_percent&#x27;.|*string*| | | |
 |<span class="no-wrap-code ">`highest_severity`</span>|Highest severity.|*integer*| | | |
 

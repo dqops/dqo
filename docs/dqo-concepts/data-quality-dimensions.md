@@ -468,3 +468,13 @@ The following table lists data quality checks that detect validity issues on col
 ## What's more
 - Review the [types of data quality dashboards](types-of-data-quality-dashboards.md) that are provided with DQOps.
 - Learn how DQOps calculates [data quality KPIs per data quality dimension](definition-of-data-quality-kpis.md#monthly-with-data-quality-dimensions).
+
+### Table uniqueness checks
+The following table lists data quality checks that detect uniqueness issues on tables.
+
+| Data quality check name | Friendly name | Check category | Description | Standard check |
+|-------------------------|---------------|----------------|-------------|----------------|
+|[*duplicate_record_count*](../checks/table/uniqueness/duplicate-record-count.md)|Maximum count of duplicate records|[uniqueness](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|This check counts duplicate records values. It raises a data quality issue when the number of duplicates is above a minimum accepted value. The default configuration detects duplicate rows by enforcing that the *min_count* of duplicates is zero.|:material-check-bold:|
+|[*duplicate_record_percent*](../checks/table/uniqueness/duplicate-record-percent.md)|Maximum percentage of duplicate records|[uniqueness](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|This check measures the percentage of duplicate records values. It raises a data quality issue when the percentage of duplicates is above a minimum accepted value. The default threshold is 0% duplicate values.|:material-check-bold:|
+
+## End of list, remove this entry and move the content up
