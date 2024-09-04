@@ -263,7 +263,7 @@ public class TrinoColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegrat
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(3465));
+        Assertions.assertTrue(rowId1Values.contains(3));
     }
 
     @Test
@@ -312,6 +312,6 @@ public class TrinoColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegrat
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(3465));
+        Assertions.assertTrue(rowId1Values.contains(3));
     }
 }

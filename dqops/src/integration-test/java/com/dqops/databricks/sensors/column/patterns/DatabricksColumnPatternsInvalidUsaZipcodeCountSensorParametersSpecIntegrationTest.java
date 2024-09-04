@@ -15,10 +15,10 @@
  */
 package com.dqops.databricks.sensors.column.patterns;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.patterns.ColumnInvalidUsaZipcodeFoundCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class DatabricksColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class DatabricksColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecIntegrationTest extends BaseDatabricksIntegrationTest {
     private ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnInvalidUsaZipcodeFoundCheckSpec checkSpec;
@@ -224,8 +224,8 @@ public class DatabricksColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecI
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertEquals(1, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains(0));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))

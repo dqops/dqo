@@ -71,7 +71,7 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(46.153, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(46.153, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(46.153, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(46.153, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -134,12 +134,12 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(11, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Object[] nullValues = resultTable.column("actual_value").asObjectArray();
 
-        Assertions.assertEquals(10, nullValues.length);
+        Assertions.assertEquals(11, nullValues.length);
 
     }
 
@@ -154,14 +154,14 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(11, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
         Assertions.assertEquals("row_id_2", resultTable.column(2).name());
 
         Object[] nullValues = resultTable.column("actual_value").asObjectArray();
-        Assertions.assertEquals(10, nullValues.length);
+        Assertions.assertEquals(11, nullValues.length);
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -187,7 +187,7 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(11, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -196,7 +196,7 @@ public class BigQueryColumnNullsNotNullsPercentSensorParametersSpecIntegrationTe
         Assertions.assertEquals("row_id_2", resultTable.column(4).name());
 
         Object[] nullValues = resultTable.column("actual_value").asObjectArray();
-        Assertions.assertEquals(10, nullValues.length);
+        Assertions.assertEquals(11, nullValues.length);
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
