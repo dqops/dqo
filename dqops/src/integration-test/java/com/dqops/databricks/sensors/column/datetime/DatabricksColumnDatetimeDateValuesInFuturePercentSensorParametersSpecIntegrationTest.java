@@ -18,6 +18,7 @@ package com.dqops.databricks.sensors.column.datetime;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -32,7 +33,6 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.datetime.ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec;
-import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class DatabricksColumnDatetimeDateValuesInFuturePercentSensorParametersSpecIntegrationTest extends BaseDatabricksIntegrationTest {
@@ -239,8 +240,8 @@ public class DatabricksColumnDatetimeDateValuesInFuturePercentSensorParametersSp
         Assertions.assertTrue(sampleValues.contains("2999-02-01"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(1, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(0));

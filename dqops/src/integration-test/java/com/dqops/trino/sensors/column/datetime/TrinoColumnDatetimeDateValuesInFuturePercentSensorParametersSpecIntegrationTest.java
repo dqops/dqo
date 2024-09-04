@@ -27,13 +27,13 @@ import com.dqops.metadata.groupings.DataGroupingDimensionSource;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.testutils.ValueConverter;
-import com.dqops.trino.BaseTrinoIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.datetime.ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
+import com.dqops.trino.BaseTrinoIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class TrinoColumnDatetimeDateValuesInFuturePercentSensorParametersSpecIntegrationTest extends BaseTrinoIntegrationTest {
@@ -239,8 +240,8 @@ public class TrinoColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
         Assertions.assertTrue(sampleValues.contains("2999-02-01"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(1, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(0));

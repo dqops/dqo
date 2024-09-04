@@ -40,9 +40,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-;import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class DatabricksColumnNullsNotNullsPercentSensorParametersSpecIntegrationTest extends BaseDatabricksIntegrationTest {
@@ -200,8 +201,8 @@ public class DatabricksColumnNullsNotNullsPercentSensorParametersSpecIntegration
         Assertions.assertEquals(11, nullValues.length);
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(2, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(1));
