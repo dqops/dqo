@@ -204,9 +204,10 @@ public class SqlServerColumnNullsNotNullsPercentSensorParametersSpecIntegrationT
                 Stream.of(resultTable.column("grouping_level_1").asObjectArray())
                         .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertEquals(3, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(0));
+        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertTrue(groupingLevel1Values.contains(null));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
