@@ -6,6 +6,7 @@ import {
   ConnectionSpecProviderTypeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
   FileFormatSpec,
+  SharedCredentialListModel,
   TableListModelProfilingChecksResultTruncationEnum
 } from '../../../api';
 import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
@@ -20,9 +21,13 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { ConnectionApiClient } from '../../../services/apiClient';
+import {
+  ConnectionApiClient,
+  SharedCredentialsApi
+} from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
+import AdvancedProperties from '../../AdvancedProperties/AdvancedProperties';
 import Checkbox from '../../Checkbox';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import FilePath from '../../FileFormatConfiguration/FilePath';
@@ -53,7 +58,9 @@ const TableDetails = () => {
     DuckdbParametersSpecFilesFormatTypeEnum.csv;
 
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
-
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecFilesFormatTypeEnum>(format);
 
@@ -89,6 +96,12 @@ const TableDetails = () => {
         setConnectionModel(res.data)
       );
     };
+    const getSharedCredentials = async () => {
+      await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
+        setSharedCredentials(res.data)
+      );
+    };
+    getSharedCredentials();
     getConnectionBasic();
   }, [checkTypes, connection, schema, table]);
 
@@ -192,6 +205,11 @@ const TableDetails = () => {
       >
         {TableDetailBody({ tableBasic, handleChange })}
       </table>
+      <AdvancedProperties
+        properties={tableBasic?.advanced_properties}
+        handleChange={handleChange}
+        sharedCredentials={sharedCredentials}
+      />
       {connectionModel.provider_type ===
         ConnectionSpecProviderTypeEnum.duckdb && (
         <FileFormatConfiguration
@@ -250,24 +268,34 @@ const TableDetailBody = ({
           </div>
         </td>
       </tr>
-            <tr>
-        <td className="px-4 py-2">Do not collect error samples for profiling checks</td>
+      <tr>
+        <td className="px-4 py-2">
+          Do not collect error samples for profiling checks
+        </td>
         <td className="px-4 py-2">
           <div className="flex">
             <Checkbox
-              onChange={(value) => handleChange({ do_not_collect_error_samples_in_profiling: value })}
+              onChange={(value) =>
+                handleChange({
+                  do_not_collect_error_samples_in_profiling: value
+                })
+              }
               checked={tableBasic?.do_not_collect_error_samples_in_profiling}
             />
           </div>
         </td>
       </tr>
       <tr>
-        <td className="px-4 py-2">Always collect error samples for scheduled monitoring checks</td>
+        <td className="px-4 py-2">
+          Always collect error samples for scheduled monitoring checks
+        </td>
         <td className="px-4 py-2">
           <div className="flex">
             <Checkbox
-              onChange={(value) => handleChange({ always_collect_error_samples: value })}
-              checked={tableBasic?.always_collect_error_samples}              
+              onChange={(value) =>
+                handleChange({ always_collect_error_samples: value })
+              }
+              checked={tableBasic?.always_collect_error_samples}
             />
           </div>
         </td>

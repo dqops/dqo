@@ -42,13 +42,15 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "ConnectionModel", description = "Connection model for with a subset of parameters, excluding all nested objects.")
+@ApiModel(value = "ConnectionModel", description = "Connection model with a subset of parameters, excluding all nested objects.")
 public class ConnectionModel {
     /**
      * Connection name.
@@ -183,6 +185,12 @@ public class ConnectionModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.
+     */
+    @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
+    private Map<String, String> advancedProperties;
+
+    /**
      * Boolean flag that decides if the current user can update or delete the connection to the data source.
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the connection to the data source.")
@@ -291,6 +299,7 @@ public class ConnectionModel {
                 setDeleteErrorSamples(true);
                 setDeleteIncidents(true);
             }});
+            setAdvancedProperties(connectionSpec.getAdvancedProperties());
         }};
     }
 
@@ -313,6 +322,7 @@ public class ConnectionModel {
         targetConnectionSpec.setPresto(this.getPresto());
         targetConnectionSpec.setTrino(this.getTrino());
         targetConnectionSpec.setDatabricks(this.getDatabricks());
+        targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 
     public static class ConnectionModelSampleFactory implements SampleValueFactory<ConnectionModel> {
