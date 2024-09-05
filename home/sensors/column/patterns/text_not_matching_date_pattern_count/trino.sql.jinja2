@@ -5,7 +5,8 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
-                WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NULL
+                WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NULL
                     THEN 1
                 ELSE 0
             END
