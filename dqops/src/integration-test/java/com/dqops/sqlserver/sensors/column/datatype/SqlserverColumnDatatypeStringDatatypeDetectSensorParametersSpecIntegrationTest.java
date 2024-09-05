@@ -42,6 +42,7 @@ import tech.tablesaw.api.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -305,12 +306,12 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         Assertions.assertTrue(sampleValues.contains("2020-01-31T03:51:22Z"));
         Assertions.assertTrue(sampleValues.contains("abc-001"));
 
-        List<Integer> groupingLevel1Values = new ArrayList<>(
+        List<String> groupingLevel1Values = new ArrayList<>(
                 Stream.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .map(val -> ValueConverter.toInteger(val))
+                        .map(Objects::toString)
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(8, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(3465));
+        Assertions.assertEquals(9, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains("3465"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))

@@ -1,6 +1,6 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 (
-{%- call lib.render_error_sampler(override_samples_limit = 5) -%} {# nulls - null #}
+{%- call lib.render_error_sampler(render_null_check = false, override_samples_limit = 5) -%} {# nulls - null #}
     {{ lib.render_target_column('analyzed_table') }} IS NULL
         OR TRIM(CAST({{lib.render_target_column('analyzed_table') }} AS STRING)) = ''
 {%- endcall %}
