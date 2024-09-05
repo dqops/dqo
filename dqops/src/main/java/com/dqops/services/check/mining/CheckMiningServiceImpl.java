@@ -112,7 +112,8 @@ public class CheckMiningServiceImpl implements CheckMiningService {
         }
 
         TableProfilingResults tableProfilingResults = this.tableProfilingResultsReadService.loadTableProfilingResults(
-                executionContext, connectionSpec, clonedTableSpec);
+                executionContext, connectionSpec, clonedTableSpec, miningParameters.isProposeChecksFromStatistics(),
+                checkType == CheckType.profiling);
 
         AbstractRootChecksContainerSpec tableCheckRootContainer = clonedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false, true);
@@ -229,7 +230,7 @@ public class CheckMiningServiceImpl implements CheckMiningService {
 
                 AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
 
-                if (checkModel.isDefaultCheck() && checkSpec.hasAnyRulesEnabled() && !miningParameters.isProposeDefaultChecks()) {
+                if (checkModel.isDefaultCheck() && checkSpec.hasAnyRulesEnabled() && !miningParameters.isReconfigurePolicyEnabledChecks()) {
                     listOfChecksInCategory.remove(checkModel);
                     continue; // skip default checks
                 }

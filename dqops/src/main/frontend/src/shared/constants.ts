@@ -185,7 +185,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-comparisons'
     },
     {
-      label: 'Rule mining',
+      label: 'Copy verified profiling checks',
       value: 'rule-mining'
     }
   ],
@@ -203,7 +203,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-comparisons'
     },
     {
-      label: 'Rule mining',
+      label: 'Copy verified profiling checks',
       value: 'rule-mining'
     }
   ]

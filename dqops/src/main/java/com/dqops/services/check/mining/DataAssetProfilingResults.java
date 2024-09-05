@@ -149,4 +149,18 @@ public abstract class DataAssetProfilingResults {
             }
         }
     }
+
+    /**
+     * Removes the results of all profiling checks that were applied by default check patterns (policies), because we don't want to reconfigure them.
+     */
+    public void removeChecksAppliedByPatterns() {
+        LinkedHashMap<String, ProfilingCheckResult> copyOfProfilingChecks = new LinkedHashMap<>(this.profilingCheckResults);
+
+        for (Map.Entry<String, ProfilingCheckResult> profilingCheckKeyValue : copyOfProfilingChecks.entrySet()) {
+            ProfilingCheckResult profilingCheckResult = profilingCheckKeyValue.getValue();
+            if (profilingCheckResult.getProfilingCheckModel() != null && profilingCheckResult.getProfilingCheckModel().isDefaultCheck()) {
+                this.profilingCheckResults.remove(profilingCheckKeyValue.getKey());
+            }
+        }
+    }
 }

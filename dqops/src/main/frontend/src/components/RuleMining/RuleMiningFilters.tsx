@@ -99,7 +99,7 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2 !w-62"
-            label="Copy enabled profiling checks"
+            label="Copy profiling checks"
             tooltipText="Copy the configuration of enabled profiling checks to the monitoring or partitioned checks. This option is effective for monitoring or partitioned checks only. By default it is enabled, allowing to migrate configured profiling checks to the monitoring section to enable Data Observability of these checks."
             checked={configuration.copy_profiling_checks}
             onChange={(e) =>
@@ -108,11 +108,11 @@ export default function RuleMiningFilters({
           />
           <Checkbox
             className="p-2 !w-62"
-            label="Reconfigure default checks"
+            label="Tune quality policy checks"
             tooltipText="Reconfigure the rule thresholds of data quality checks that were activated using data observability rule patterns (data quality policies)."
-            checked={configuration.propose_default_checks}
+            checked={configuration.reconfigure_policy_enabled_checks}
             onChange={(e) =>
-              onChangeConfiguration({ propose_default_checks: e })
+              onChangeConfiguration({ reconfigure_policy_enabled_checks: e })
             }
           />
         </div>

@@ -16770,11 +16770,14 @@ definitions:
       copy_profiling_checks:
         type: "boolean"
         description: "Copy the configuration of valid profiling checks."
-      propose_default_checks:
+      reconfigure_policy_enabled_checks:
         type: "boolean"
         description: "Propose the rules for default checks that were activated using\
           \ data quality check patterns (policies). The default value of this parameter\
           \ is 'true'."
+      propose_checks_from_statistics:
+        type: "boolean"
+        description: "Propose the configuration of data quality checks from statistics."
       propose_minimum_row_count:
         type: "boolean"
         description: "Propose the default configuration of the minimum row count for\
