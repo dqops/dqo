@@ -2,9 +2,10 @@
 SELECT
     SUM(
         CASE
-            WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                THEN 0
-            ELSE 1
+            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                THEN 1
+            ELSE 0
         END
     ) AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}

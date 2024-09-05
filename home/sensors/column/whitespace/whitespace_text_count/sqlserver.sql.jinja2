@@ -3,8 +3,8 @@ SELECT
     SUM(
         CASE
             WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-            AND LEN({{ lib.render_target_column('analyzed_table')}}) <> 0
-            AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
+                    AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                 THEN 1
             ELSE 0
         END

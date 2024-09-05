@@ -86,46 +86,46 @@ public class AthenaColumnWhitespaceWhitespaceTextPercentSensorParametersSpecInte
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "id", this.checkSpec);
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(3.571, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(3.571, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(3.571, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -138,14 +138,14 @@ public class AthenaColumnWhitespaceWhitespaceTextPercentSensorParametersSpecInte
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(3.571, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

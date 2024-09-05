@@ -43,6 +43,7 @@ import tech.tablesaw.api.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class SnowflakeColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
@@ -221,11 +222,11 @@ public class SnowflakeColumnPatternsInvalidUsaZipcodeCountSensorParametersSpecIn
         Assertions.assertTrue(sampleValues.contains("215388888"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertEquals(1, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains(0));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))

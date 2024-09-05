@@ -15,9 +15,10 @@
  */
 package com.dqops.athena.sensors.column.nulls;
 
+import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -25,6 +26,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingDimensionSource;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -32,9 +34,6 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
-import com.dqops.athena.BaseAthenaIntegrationTest;
-import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
-import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,9 +41,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-;import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+;
 
 @SpringBootTest
 public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest extends BaseAthenaIntegrationTest {
@@ -74,7 +76,7 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(52.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(53.846, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -87,7 +89,7 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(52.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(53.846, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -100,7 +102,7 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(52.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(53.846, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -126,7 +128,7 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(52.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(53.846, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -137,12 +139,12 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(11, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Object[] nullValues = resultTable.column("actual_value").asObjectArray();
 
-        Assertions.assertEquals(10, nullValues.length);
+        Assertions.assertEquals(11, nullValues.length);
 
     }
 
@@ -157,14 +159,14 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(11, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
         Assertions.assertEquals("row_id_2", resultTable.column(2).name());
 
         Object[] nullValues = resultTable.column("actual_value").asObjectArray();
-        Assertions.assertEquals(10, nullValues.length);
+        Assertions.assertEquals(11, nullValues.length);
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -190,7 +192,7 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(11, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -199,15 +201,16 @@ public class AthenaColumnNullsNullsPercentSensorParametersSpecIntegrationTest ex
         Assertions.assertEquals("row_id_2", resultTable.column(4).name());
 
         Object[] nullValues = resultTable.column("actual_value").asObjectArray();
-        Assertions.assertEquals(10, nullValues.length);
+        Assertions.assertEquals(11, nullValues.length);
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertEquals(3, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(0));
+        Assertions.assertTrue(groupingLevel1Values.contains(1));
+        Assertions.assertTrue(groupingLevel1Values.contains(null));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))

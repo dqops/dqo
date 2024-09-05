@@ -100,7 +100,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value
                 FROM (
                     SELECT COUNT(*) AS records_number,
@@ -134,7 +134,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     time_period,
                     time_period_utc
@@ -171,7 +171,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     time_period,
                     time_period_utc
@@ -211,7 +211,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     time_period,
                     time_period_utc
@@ -253,7 +253,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     time_period,
                     time_period_utc
@@ -290,7 +290,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value
                 FROM (
                     SELECT COUNT(*) AS records_number,
@@ -318,7 +318,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     time_period,
                     time_period_utc
@@ -359,7 +359,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1
                 FROM (
@@ -394,7 +394,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1
                 FROM (
@@ -429,7 +429,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1,
                     time_period,
@@ -470,7 +470,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1,
                     time_period,
@@ -518,7 +518,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1,
                     grouping_table.grouping_level_2,
@@ -563,7 +563,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1,
                     grouping_table.grouping_level_2,
@@ -604,7 +604,7 @@ public class TableUniquenessDuplicateRecordPercentSensorParametersSpecBigQueryTe
         String target_query = """
                 SELECT
                     CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                        ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                         AS actual_value,
                     grouping_table.grouping_level_1,
                     grouping_table.grouping_level_2,
