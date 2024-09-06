@@ -18,8 +18,6 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
-import com.dqops.metadata.sources.TableSpec;
-import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -96,7 +94,7 @@ public class TableLineageSourceListModel {
     /**
      * Creates a table lineage list model from a source specification.
      * @param sourceSpec Source data lineage specification.
-     * @param canEdit Truer if the current user can edit the object.
+     * @param canEdit True if the current user can edit the object.
      * @return Source table lineage model.
      */
     public static TableLineageSourceListModel fromSpecification(TableLineageSourceSpec sourceSpec, boolean canEdit) {
@@ -113,7 +111,6 @@ public class TableLineageSourceListModel {
             setCanEdit(canEdit);
         }};
     }
-
 
     public static class TableLineageSourceListModelSampleFactory implements SampleValueFactory<TableLineageSourceListModel> {
         @Override
