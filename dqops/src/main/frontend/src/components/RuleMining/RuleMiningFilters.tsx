@@ -319,7 +319,7 @@ export default function RuleMiningFilters({
             />
             <Checkbox
               className="p-2 !w-62"
-              tooltipText="Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data."
+              tooltipText="Applies rules to Personal Identifiable Information checks (sensitive data), but only when the checks were activated manually as profiling checks, or through a data quality check pattern that scans all columns for PII data."
               label="Apply PII check rules"
               checked={configuration.apply_pii_checks}
               onChange={(e) => onChangeConfiguration({ apply_pii_checks: e })}
