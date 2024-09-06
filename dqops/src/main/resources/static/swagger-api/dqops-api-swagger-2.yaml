@@ -6545,6 +6545,195 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+  : post:
+      tags:
+      - "DataLineage"
+      summary: "createTableSourceTable"
+      description: "Creates a new source table of the table's data lineage."
+      operationId: "createTableSourceTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Table lineage source list model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableLineageSourceListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Table's new source table successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Table's source table with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DataLineage"
+      summary: "updateTableSourceTable"
+      description: "Update a specific data lineage source table using a new model."
+      operationId: "updateTableSourceTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Table lineage source list model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableLineageSourceListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Table's source table successfully updated"
+        404:
+          description: "Connection or table's source table not found"
+        406:
+          description: "Incorrect request"
+        409:
+          description: "Table's source table with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "DataLineage"
+      summary: "deleteTableSourceTable"
+      description: "Deletes a specific data lineage source table of the given table."
+      operationId: "deleteTableSourceTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Table's source table removed"
+        404:
+          description: "Connection or table's source table not found"
+        406:
+          description: "Invalid request"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily:
     get:
       tags:
