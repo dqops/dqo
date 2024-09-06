@@ -5,9 +5,9 @@ import {
 } from '../../api';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 import Input from '../Input';
 import Select from '../Select';
-import SectionWrapper from '../Dashboard/SectionWrapper';
 import SvgIcon from '../SvgIcon';
 
 export default function RuleMiningFilters({
@@ -32,10 +32,7 @@ export default function RuleMiningFilters({
   return (
     <div className="p-4">
       <div className="flex items-center gap-x-4 mb-4">
-        <SectionWrapper
-            title="Filters"
-            className="ml-4 !pb-1 !pt-4 mt-4 !mb-4"
-        >
+        <SectionWrapper title="Filters" className="ml-4 !pb-1 !pt-4 mt-4 !mb-4">
           <div className="flex items-center gap-x-4 mb-4 pl-4">
             <Input
               label="Category"
@@ -60,42 +57,42 @@ export default function RuleMiningFilters({
             />
           </div>
         </SectionWrapper>
-          <div className="flex items-center gap-x-4 mb-4 pl-6 mt-5">
-            <Input
-              label="Error rate (% rows)"
-              tooltipText="The desired percentage of error rows. When a profiling data quality check identifies incorrect rows and their number is below this desired error rate, DQOps rule mining engine will configure the rule threshold make the check fail."
-              value={configuration.fail_checks_at_percent_error_rows}
-              type="number"
-              onChange={(e) =>
-                onChangeConfiguration({
-                  fail_checks_at_percent_error_rows:
-                    isNaN(Number(e.target.value)) || e.target.value === ''
-                      ? undefined
-                      : Number(e.target.value)
-                })
-              }
-            />
-            <Select
-              label="Default severity level"
-              options={Object.values(
-                CheckMiningParametersModelSeverityLevelEnum
-              ).map((value) => ({
-                label: value,
-                value
-              }))}
-              value={configuration.severity_level}
-              onChange={(e) => onChangeConfiguration({ severity_level: e })}
-              menuClassName="!top-14"
-              className="text-sm ml-6"
-            />
-          </div>
+        <div className="flex items-center gap-x-4 mb-4 pl-6 mt-5">
+          <Input
+            label="Error rate (% rows)"
+            tooltipText="The desired percentage of error rows. When a profiling data quality check identifies incorrect rows and their number is below this desired error rate, DQOps rule mining engine will configure the rule threshold make the check fail."
+            value={configuration.fail_checks_at_percent_error_rows}
+            type="number"
+            onChange={(e) =>
+              onChangeConfiguration({
+                fail_checks_at_percent_error_rows:
+                  isNaN(Number(e.target.value)) || e.target.value === ''
+                    ? undefined
+                    : Number(e.target.value)
+              })
+            }
+          />
+          <Select
+            label="Default severity level"
+            options={Object.values(
+              CheckMiningParametersModelSeverityLevelEnum
+            ).map((value) => ({
+              label: value,
+              value
+            }))}
+            value={configuration.severity_level}
+            onChange={(e) => onChangeConfiguration({ severity_level: e })}
+            menuClassName="!top-14"
+            className="text-sm ml-6"
+          />
+        </div>
       </div>
       {advancedParametersOpen ? (
         <SectionWrapper
-            title="Advanced parameters"
-            className="ml-4 !pb-1 !pt-1 mt-6 !mb-4"
-            svgIcon
-            onClick={() => setAdvancedParametersOpen(!advancedParametersOpen)}
+          title="Advanced parameters"
+          className="ml-4 !pb-1 !pt-1 mt-6 !mb-4"
+          svgIcon
+          onClick={() => setAdvancedParametersOpen(!advancedParametersOpen)}
         >
           <div className="flex flex-wrap gap-x-5 mb-4">
             <div className="flex items-center flex-wrap border-b border-b-gray-100 w-full gap-x-5 pb-2 mb-2 mt-4">
@@ -132,7 +129,9 @@ export default function RuleMiningFilters({
                 tooltipText="Reconfigure the rule thresholds of data quality checks that were activated using data observability rule patterns (data quality policies)."
                 checked={configuration.reconfigure_policy_enabled_checks}
                 onChange={(e) =>
-                  onChangeConfiguration({ reconfigure_policy_enabled_checks: e })
+                  onChangeConfiguration({
+                    reconfigure_policy_enabled_checks: e
+                  })
                 }
               />
             </div>
@@ -150,14 +149,18 @@ export default function RuleMiningFilters({
               tooltipText="Configure a table schema check that ensures that the count of column stays the same as the count of columns detected during data profiling."
               label="Expected columns count"
               checked={configuration.propose_column_count}
-              onChange={(e) => onChangeConfiguration({ propose_column_count: e })}
+              onChange={(e) =>
+                onChangeConfiguration({ propose_column_count: e })
+              }
             />
             <Checkbox
               className="p-2 !w-62"
               tooltipText="Configure a column exists check for each column to report when the column is no longer present."
               label="Column exists"
               checked={configuration.propose_column_exists}
-              onChange={(e) => onChangeConfiguration({ propose_column_exists: e })}
+              onChange={(e) =>
+                onChangeConfiguration({ propose_column_exists: e })
+              }
             />
             <Checkbox
               className="p-2 !w-62"
@@ -173,7 +176,9 @@ export default function RuleMiningFilters({
               tooltipText="Configure data quality checks that detect columns that have some null values in columns. When the percentage of null columns is below the value of the 'Error rate (% rows)' field, DQOps will raise a data quality issue when any null values are detected."
               label="Nulls (prohibit nulls)"
               checked={configuration.propose_nulls_checks}
-              onChange={(e) => onChangeConfiguration({ propose_nulls_checks: e })}
+              onChange={(e) =>
+                onChangeConfiguration({ propose_nulls_checks: e })
+              }
             />
             <Checkbox
               className="p-2 !w-62"
@@ -207,7 +212,9 @@ export default function RuleMiningFilters({
               tooltipText="Validate the values in numeric columns to detect if the values fall within the ranges that were observed during data profiling. DQOps will try to configure the 'min', 'max', 'mean' and 'median' checks."
               label="Numeric values ranges"
               checked={configuration.propose_numeric_ranges}
-              onChange={(e) => onChangeConfiguration({ propose_numeric_ranges: e })}
+              onChange={(e) =>
+                onChangeConfiguration({ propose_numeric_ranges: e })
+              }
             />
             <Checkbox
               className="p-2 !w-62"
@@ -250,7 +257,9 @@ export default function RuleMiningFilters({
               tooltipText="Configure the checks that detect invalid dates that are far in the past, or far in the future."
               label="Dates out of range"
               checked={configuration.propose_date_checks}
-              onChange={(e) => onChangeConfiguration({ propose_date_checks: e })}
+              onChange={(e) =>
+                onChangeConfiguration({ propose_date_checks: e })
+              }
             />
             <Checkbox
               className="p-2 !w-62"
@@ -329,20 +338,21 @@ export default function RuleMiningFilters({
               tooltipText="Custom data quality checks must use DQOps built-in data quality rules, such as max_percent, min_percent or max_count to find invalid values."
               label="Custom checks"
               checked={configuration.propose_custom_checks}
-              onChange={(e) => onChangeConfiguration({ propose_custom_checks: e })}
+              onChange={(e) =>
+                onChangeConfiguration({ propose_custom_checks: e })
+              }
             />
           </div>
         </SectionWrapper>
-        ) : (
-          <div className="flex items-center ml-4 mb-2 text-sm font-bold mt-2 pb-2">
-            <SvgIcon
-              name="chevron-right"
-              className="w-5 h-5"
-              onClick={() => setAdvancedParametersOpen(!advancedParametersOpen)}
-            />
-            Advanced parameters
-          </div>
-        )}
+      ) : (
+        <div
+          className="flex items-center ml-4 mb-2 text-sm font-bold mt-2 pb-2 cursor-pointer"
+          onClick={() => setAdvancedParametersOpen(!advancedParametersOpen)}
+        >
+          <SvgIcon name="chevron-right" className="w-5 h-5" />
+          Advanced parameters
+        </div>
+      )}
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-x-4">
           <Button

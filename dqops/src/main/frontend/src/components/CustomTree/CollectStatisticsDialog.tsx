@@ -5,17 +5,17 @@ import {
   DialogHeader
 } from '@material-tailwind/react';
 import React, { useState } from 'react';
-import Button from '../Button';
+import { useSelector } from 'react-redux';
 import {
   StatisticsCollectorSearchFilters,
   StatisticsCollectorSearchFiltersTargetEnum
 } from '../../api';
-import Input from '../Input';
-import LabelsView from '../Connection/LabelsView';
-import SelectInput from '../SelectInput';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import Button from '../Button';
+import LabelsView from '../Connection/LabelsView';
 import SectionWrapper from '../Dashboard/SectionWrapper';
+import Input from '../Input';
+import SelectInput from '../SelectInput';
 import SvgIcon from '../SvgIcon';
 type TCollectStatisticsDialogProps = {
   onClick: (node: StatisticsCollectorSearchFilters) => void;
@@ -95,7 +95,7 @@ export default function CollectStatisticsDialog({
         </div>
         {additionalParams === false ? (
           <div
-            className="flex items-center text-black mb-4 cursor-default"
+            className="flex items-center text-black mb-4 cursor-pointer"
             onClick={() => setAdditionalParams(true)}
           >
             <SvgIcon name="chevron-right" className="w-5 h-5" />
@@ -106,7 +106,7 @@ export default function CollectStatisticsDialog({
             title="Additional parameters"
             onClick={() => setAdditionalParams(false)}
             svgIcon={true}
-            className="cursor-default"
+            titleClassName="cursor-pointer"
           >
             <div className="flex justify-between pt-4 text-black   px-4">
               <div className="w-1/3 ml-2">
