@@ -1,74 +1,62 @@
 ---
-title: Review results from data quality assessment and automatically configure data quality checks
+title: Review initial data quality results and run monitoring checks
 ---
-# Review results from data quality assessment and automatically configure data quality checks
-This guide will show you how to review results from data quality assessment and automatically configure data quality checks to detect the most common data quality issues.
-We will run those check and review the first results and data quality issues. 
+# Review initial data quality results and run monitoring checks
+This guide will show you how to run the first data quality check, and how to review the first results and data quality issues in DQOps. 
 
 ## Overview
 
-After [adding your first connection, and starting data assessment](add-data-source-connection.md),
-we describe how to review the initial results from the basic statistics and profiling checks. Then, by using the DQOps [rule mining engine](../dqo-concepts/data-quality-rule-mining.md), we will automatically
-configure (mine) data quality checks to find the most common data quality issues. 
+After [adding your first connection, and initiating automatic monitoring](add-data-source-connection.md),
+we describe how to review the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks. 
+
+Once new tables are imported, DQOps automatically activates default profiling and monitoring checks which are scheduled to run daily at 12:00 a.m.
 
 ## Review basic statistics results
 
 Basic statistics provides you with summary information about your tables and columns. This information is
 valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
 
-The information from basic statistics is also used by [rule miner](../dqo-concepts/data-quality-rule-mining.md) 
-to propose a reasonable configuration of data quality checks.
-
-In the previous step we have collected basic statistics for imported tables and columns. 
+In the previous step we have collected basic statistics for imported tables and columns using the Advisor. 
 
 To review the results: 
 
-1. Go to the **Profiling** section. 
-2. Select the **austin_crime.csv** table on the tree view on the left. 
-3. The results are displayed under the **Basic data statistics** tab. 
+1. Go to the **Profiling** section. Select the **austin_crime.csv** table on the tree view on the left. The results are displayed under **Basic data statistics** tab. 
 
     You can filter the columns by simply clicking on the sorting icon next to any column header.
 
     For detailed description of each column go to the [Basics statistics section](../working-with-dqo/collecting-basic-data-statistics.md).
 
-    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics5.png){ loading=lazy; width="1200px" }
+    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics4.png){ loading=lazy; width="1200px" }
 
-To view detailed statistics for column, click on the name of the column or navigate to the single column on the tree view.
+2. To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
  
-![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics6.png){ loading=lazy; width="1200px" }
+    ![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics5.png){ loading=lazy; width="1200px" }
 
 
 ## Review profiling checks results
 
 [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) enable you to run more advanced data analyses than
 [**Basic data statistics**](../working-with-dqo/collecting-basic-data-statistics.md). Profiling checks are also useful for
-exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring. 
+exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
-The results of the profiling checks are also used by [rule miner](../dqo-concepts/data-quality-rule-mining.md).
-
-In the previous step we have run profiling checks for imported tables and columns. Now, let's review the results.
+In the previous step we have run profiling checks for imported tables and columns using the Advisor. Now, let's review the results.
 
 ### Review Profiling Table quality status
 
 **Table quality status** allows you to quickly evaluate the data quality status of your table. To navigate to the Table quality status,
-click on **Profiling** section, the **austin_crime.csv** table on the tree view, and **Table quality status** tab.
+click on **Profiling** section, the "austin_crime.csv" table on the tree view, and **Table quality status** tab.
 
-![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status3.png){ loading=lazy; width="1200px" }
+![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status2.png){ loading=lazy; width="1200px" }
 
-This tab provides you with an overview of the current data quality status of your table, including the number of
+This tab provides you with an overview of the current data quality status of your table, including the number of 
 executed checks, and detailed results per table and columns grouped by check categories.
 
-At the bottom of the screen, you will find a table that displays the check results per category, and per
+At the bottom of the screen, you will find a table that displays the check results per category, and per 
 table and columns.
 
 The colored boxes indicates the current or the highest severity status: green for a correct result, yellow for a warning,
-orange for an error, red for a fatal error, and grey stripes for execution error.
-
-You can click on the colored box to view a list of checks that contribute to the result. Hovering over the check name will provide more details.
-
-In our example, in our example, the "census_tract" column currently has a warning severity status, which resulted from the failed *profile_nulls_count* check.
-
-![Profiling Table quality status - details](https://dqops.com/docs/images/getting-started/profiling-table-quality-status-details.png){ loading=lazy; width="1200px" }
+orange for an error, and red for a fatal error. By clicking on the arrow next to the colored box, you can view a list 
+of checks that contribute to the result.
 
 You can group the results by data quality dimension using the radio button and filter the results by time frame 
 and severity status.
@@ -124,55 +112,7 @@ DQOps activates the following [default data quality checks](../dqo-concepts/data
 | column | [profile nulls count](../checks/column/nulls/nulls-count.md)           | Counts null values in every column and detects incomplete columns that contain null values.       |
 | column | [profile nulls percent](../checks/column/nulls/nulls-percent.md)       | Measures the percentage of null values in every column.                                           |
 | column | [profile not nulls count](../checks/column/nulls/not-nulls-count.md)   | Counts not null values in every column and detects empty columns that contain only null values.   |
-
-
-## Propose a configuration of data quality checks using rule mining
-
-Setting up data quality rules and thresholds manually can be time-consuming, especially since most checks will show that everything is okay. 
-DQOps automates this process with its data quality [rule mining engine](../dqo-concepts/data-quality-rule-mining.md). The engine
-analyzes data collectd from basic statistics, sample values and results from profiling checks to propose check configurations for detecting common data quality issues. 
-It also suggests checks that will pass for the current data and serve as a baseline for detecting changes in data distribution over time.
-
-You can find more information about [the data quality rule mining in the concept section](../dqo-concepts/data-quality-rule-mining.md). 
-
-### Navigating to rule miner
-
-To navigate to the rule miner.
-
-1. Select the **Profiling** section
-2. Select the table of interest on the tree view on the left.
-3. Click on the **Rule mining** tab
-
-![Navigating to rule miner](https://dqops.com/docs/images/getting-started/navigating-to-rule-miner1.png){ loading=lazy; width="1200px" }
-
-### Automated data quality check configuration using rule miner
-
-The rule mining screen propose a configuration of data quality checks.
-DQOps proposes the list of data quality checks instantly after entering the rule mining screen. 
-If any parameter configuration is changed, clicking the **Propose** button will generate a new proposal.
-
-You can customize the rule miner proposals with the following options:
-
-- **Filtering by check category, check name and column name:** You can use these filtering options no narrow down the 
-    list of proposals by specifying check category, check name, or column name.
-- **Error rate (% of rows):** The most critical configuration parameter of the rule miner to control its sensitivity.
-    It represents the percentage of errors that can contain invalid values. By default, it is set to 2%, but you can change this value.
-    DQOps will attempt to configure data quality checks to detect data quality issues in 2% of records containing the most outstanding values.
-- **Default severity level:** This is used to set the initial severity level for proposed checks, which can be later modified individually.
-- **Checkboxes with check categories:** These are used to select the data quality check categories that you want to include in the proposal.
-
-As an example, let's modify the initial proposition. We want to find a proposition with the following configuration:
-
-- Columns with "clearance" in the name
-- Checks monitoring the percentage of nulls - check the **Nulls (prohibit nulls)** parameter
-- Checks monitoring a set of categories, excluding rare values - check the "Values in a set (dictionary)" and "Treat rare values as invalid" parameters.
-
-Click on the **Propose** button to get the proposition.
-
-![Rule miner for values in set](https://dqops.com/docs/images/getting-started/rule-miner-for-values-in-set1.png){ loading=lazy; width="1200px" }
-
-DQOps proposed the configuration of data quality checks which is displayed as a expandable list of 
-
+    
 
 ## Run monitoring checks
 
@@ -184,7 +124,7 @@ checks were run.
 
 Now let's run monitoring checks.
 
-1. Go to the **Monitoring Checks** section, and select the **austin_crime.csv** table from the tree view and **Daily** tab.
+1. Go to the **Monitoring Checks** section, and select the **austin_crime.csv** table from the tree view and **Daily** tab. 
 
     ![Monitoring checks section](https://dqops.com/docs/images/getting-started/monitoring-checks-section3.png){ loading=lazy; width="1200px" }
 
