@@ -121,7 +121,6 @@ const SensorReadoutsTab = ({
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
-            disabled={(sensorReadouts[0]?.dataGroupNames ?? []).length === 0}
           />
         </div>
       </div>

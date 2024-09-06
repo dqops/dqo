@@ -110,13 +110,13 @@ const StringListField = ({
         </div>
       </div>
       <Dialog open={open} handler={() => setOpen(false)} className="">
-        <div className="p-4">
+        <div className="p-4 !w-full max-h-[50vh] text-sm flex flex-col overflow-y-auto">
           <LabelsView
             labels={labels}
             onChange={handleChange}
             hasAdd
             title="Text values"
-            className=" max-h-[50vh] text-sm flex flex-col overflow-y-auto "
+            className="text-sm flex flex-col"
             hasEdit={
               labels.length === 1 &&
               labels[0].startsWith('${dictionary://') &&

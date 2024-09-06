@@ -327,7 +327,6 @@ const CheckResultsTab = ({
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
-            disabled={(results[0]?.dataGroups ?? []).length === 0}
           />
         </div>
         <div className="flex space-x-4 items-center">
