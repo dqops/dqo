@@ -44,7 +44,7 @@ export default function RuleMiningFilters({
         />
         <Input
           label="Column name"
-          value={configuration.column_name_filter}
+          value={configuration.column_name_filter}The checkboxes on the rule miner should be collapsed and hidden inside a collabsible section "Advanced parameters"
           onChange={(e) =>
             onChangeConfiguration({ column_name_filter: e.target.value })
           }
