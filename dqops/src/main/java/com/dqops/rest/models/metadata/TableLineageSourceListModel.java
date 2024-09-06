@@ -112,17 +112,6 @@ public class TableLineageSourceListModel {
         }};
     }
 
-    public static TableLineageSourceSpec toSpecification(TableLineageSourceListModel sourceModel) {
-        return new TableLineageSourceSpec(){{
-            setSourceConnection(sourceModel.getSourceConnection());
-            setSourceSchema(sourceModel.getSourceSchema());
-            setSourceTable(sourceModel.getSourceTable());
-            setDataLineageSourceTool(sourceModel.getDataLineageSourceTool());
-            setProperties(sourceModel.getProperties());
-        }};
-    }
-
-
     public static class TableLineageSourceListModelSampleFactory implements SampleValueFactory<TableLineageSourceListModel> {
         @Override
         public TableLineageSourceListModel createSample() {

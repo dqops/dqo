@@ -130,10 +130,13 @@ public class DataLineageController {
 
     /**
      * Update a specific data lineage source table using a new model.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name
-     *
+     * @param connectionName                Connection name.
+     * @param schemaName                    Schema name.
+     * @param tableName                     Table name
+     * @param sourceConnection              Source connection name.
+     * @param sourceSchema                  Source schema name.
+     * @param sourceTable                   Source table name.
+     * @param tableLineageSourceListModel   The model object.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", consumes = "application/json", produces = "application/json")
@@ -196,13 +199,8 @@ public class DataLineageController {
                             HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
                 }
 
-                TableLineageSourceSpec newSpec = TableLineageSourceListModel.toSpecification(tableLineageSourceListModel);
-
-                tableLineageSourceSpec.setSourceConnection(newSpec.getSourceConnection());
-                tableLineageSourceSpec.setSourceSchema(newSpec.getSourceSchema());
-                tableLineageSourceSpec.setSourceTable(newSpec.getSourceTable());
-                tableLineageSourceSpec.setDataLineageSourceTool(newSpec.getDataLineageSourceTool());
-                tableLineageSourceSpec.setProperties(newSpec.getProperties());
+                tableLineageSourceSpec.setDataLineageSourceTool(tableLineageSourceListModel.getDataLineageSourceTool());
+                tableLineageSourceSpec.setProperties(tableLineageSourceListModel.getProperties());
 
                 userHomeContext.flush();
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -212,9 +210,13 @@ public class DataLineageController {
 
     /**
      * Creates (adds) a new source table of the table's data lineage.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name
+     * @param connectionName                Connection name.
+     * @param schemaName                    Schema name.
+     * @param tableName                     Table name
+     * @param sourceConnection              Source connection name.
+     * @param sourceSchema                  Source schema name.
+     * @param sourceTable                   Source table name.
+     * @param tableLineageSourceListModel   The model object.
      * @return Empty response.
      */
     @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", consumes = "application/json", produces = "application/json")
@@ -277,7 +279,13 @@ public class DataLineageController {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a source table with this name already exists
                 }
 
-                TableLineageSourceSpec newSpec = TableLineageSourceListModel.toSpecification(tableLineageSourceListModel);
+                TableLineageSourceSpec newSpec = new TableLineageSourceSpec(){{
+                    setSourceConnection(tableLineageSourceListModel.getSourceConnection());
+                    setSourceSchema(tableLineageSourceListModel.getSourceSchema());
+                    setSourceTable(tableLineageSourceListModel.getSourceTable());
+                    setDataLineageSourceTool(tableLineageSourceListModel.getDataLineageSourceTool());
+                    setProperties(tableLineageSourceListModel.getProperties());
+                }};
 
                 sourceTables.add(newSpec);
 
@@ -289,9 +297,12 @@ public class DataLineageController {
 
     /**
      * Deletes a specific data lineage source table of the given table.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name
+     * @param connectionName                Connection name.
+     * @param schemaName                    Schema name.
+     * @param tableName                     Table name
+     * @param sourceConnection              Source connection name.
+     * @param sourceSchema                  Source schema name.
+     * @param sourceTable                   Source table name.
      * @return Empty response.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", produces = "application/json")
@@ -302,7 +313,7 @@ public class DataLineageController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table's source table removed", response = Void.class),
-            @ApiResponse(code = 404, message = "Connection or table's source table notification not found"),
+            @ApiResponse(code = 404, message = "Connection or table's source table not found"),
             @ApiResponse(code = 406, message = "Invalid request"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
