@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { cloneDeep } from 'lodash';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -96,9 +95,6 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
-  const [copiedDatabase, setCopiedDatabase] = useState<DuckdbParametersSpec>(
-    cloneDeep(duckdb) ?? {}
-  );
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [fileFormatType, setFileFormatType] = useState<
@@ -107,42 +103,44 @@ const DuckdbConnection = ({
   const [refetchDirectoriesIndicator, setRefetchDirectoriesIndicator] =
     useState(false);
   const [selectedInput, setSelectedInput] = useState<number | string>();
-
+  // const [duckdb, setduckdb] = useState<DuckdbParametersSpec>(
+  //   duckdb ??{}
+  // );
+  const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
+    onChange({
+      ...duckdb,
+      ...obj
+    });
+  };
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
-    setCopiedDatabase((prev) => ({
-      ...prev,
+    handleChange({
       [fileFormatType]: {
-        ...(prev?.[fileFormatType] as TConfiguration),
+        ...(duckdb?.[fileFormatType] as TConfiguration),
         ...params
       }
-    }));
+    });
   };
   const cleanConfiguration = () => {};
 
   const onChangeFile = (val: DuckdbParametersSpecFilesFormatTypeEnum) => {
-    setCopiedDatabase((prev) => ({
-      ...prev,
+    handleChange({
       [fileFormatType as keyof DuckdbParametersSpec]: undefined,
       [val as keyof DuckdbParametersSpec]: {},
       files_format_type: val
-    }));
+    });
     setFileFormatType(val);
     cleanConfiguration();
   };
 
-  useEffect(() => {
-    onChange(cloneDeep(copiedDatabase) ?? {});
-  }, [copiedDatabase]);
-
-  useEffect(() => {
-    setCopiedDatabase(cloneDeep(duckdb) ?? {});
-    setRefetchDirectoriesIndicator((prev) => !prev);
-  }, [firstLevelActiveTab]);
+  // useEffect(() => {
+  //   setduckdb(cloneDeep(duckdb) ?? {});
+  //   setRefetchDirectoriesIndicator((prev) => !prev);
+  // }, [firstLevelActiveTab]);
 
   const changeStorageTypeDirectoryPrefixes = (
     storage_type: DuckdbParametersSpecStorageTypeEnum
   ) => {
-    const directories = { ...copiedDatabase?.directories };
+    const directories = { ...duckdb?.directories };
 
     Object.keys(directories ?? {}).forEach((key) => {
       if (
@@ -164,7 +162,7 @@ const DuckdbConnection = ({
         directories[key] = '';
       }
     });
-    setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
+    handleChange({ directories, storage_type });
   };
 
   const awsStorageForm = (): JSX.Element => {
@@ -174,70 +172,61 @@ const DuckdbConnection = ({
           label="AWS authentication mode"
           options={awsAuthenticationOptions}
           className="mb-4"
-          value={copiedDatabase?.aws_authentication_mode}
+          value={duckdb?.aws_authentication_mode}
           onChange={(value) => {
-            setCopiedDatabase((prev) => ({
-              ...prev,
+            handleChange({
               aws_authentication_mode: value
-            }));
+            });
           }}
           onClickValue={setSelectedInput}
           selectedMenu={selectedInput}
           menuClassName="!top-14"
         />
 
-        {copiedDatabase?.aws_authentication_mode ===
+        {duckdb?.aws_authentication_mode ===
           DuckdbParametersSpecAwsAuthenticationModeEnum.iam && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
               label="Access Key ID"
               className="mb-4 text-sm"
-              value={copiedDatabase?.user}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, user: value }))
-              }
+              value={duckdb?.user}
+              onChange={(value) => handleChange({ user: value })}
             />
             <FieldTypeInput
               data={sharedCredentials}
               label="Secret Access Key"
               className="mb-4 text-sm"
               maskingType="password"
-              value={copiedDatabase?.password}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, password: value }))
-              }
+              value={duckdb?.password}
+              onChange={(value) => handleChange({ password: value })}
             />
             <FieldTypeInput
               data={sharedCredentials}
               label="Region"
               className="mb-4 text-sm"
               maskingType="region"
-              value={copiedDatabase?.region}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, region: value }))
-              }
+              value={duckdb?.region}
+              onChange={(value) => handleChange({ region: value })}
             />
           </>
         )}
 
-        {copiedDatabase?.aws_authentication_mode ===
+        {duckdb?.aws_authentication_mode ===
           DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials && (
           <FieldTypeInput
             data={sharedCredentials}
             label="Region"
             className="mb-4 text-sm"
             maskingType="region"
-            value={copiedDatabase?.region}
+            value={duckdb?.region}
             placeholder={
               duckdb?.aws_authentication_mode ===
               DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials
                 ? 'Use the value from the ".credentials/AWS_default_config" DQOps shared credential file'
                 : ''
             }
-            onChange={(value) =>
-              setCopiedDatabase((prev) => ({ ...prev, region: value }))
-            }
+            onChange={(value) => handleChange({ region: value })}
           />
         )}
       </>
@@ -251,18 +240,15 @@ const DuckdbConnection = ({
           label="Azure authentication mode"
           options={azureAuthenticationOptions}
           className="mb-4"
-          value={copiedDatabase?.azure_authentication_mode}
+          value={duckdb?.azure_authentication_mode}
           onChange={(value) => {
-            setCopiedDatabase((prev) => ({
-              ...prev,
-              azure_authentication_mode: value
-            }));
+            handleChange({ azure_authentication_mode: value });
           }}
           onClickValue={setSelectedInput}
           selectedMenu={selectedInput}
         />
 
-        {copiedDatabase?.azure_authentication_mode ===
+        {duckdb?.azure_authentication_mode ===
           DuckdbParametersSpecAzureAuthenticationModeEnum.connection_string && (
           <>
             <FieldTypeInput
@@ -270,68 +256,56 @@ const DuckdbConnection = ({
               label="Connection string"
               className="mb-4 text-sm"
               maskingType="password"
-              value={copiedDatabase?.password}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, password: value }))
-              }
+              value={duckdb?.password}
+              onChange={(value) => handleChange({ password: value })}
             />
           </>
         )}
 
-        {copiedDatabase?.azure_authentication_mode ===
+        {duckdb?.azure_authentication_mode ===
           DuckdbParametersSpecAzureAuthenticationModeEnum.credential_chain && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
               label="Storage account name"
               className="mb-4 text-sm"
-              value={copiedDatabase?.account_name}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, account_name: value }))
-              }
+              value={duckdb?.account_name}
+              onChange={(value) => handleChange({ account_name: value })}
             />
           </>
         )}
 
-        {copiedDatabase?.azure_authentication_mode ===
+        {duckdb?.azure_authentication_mode ===
           DuckdbParametersSpecAzureAuthenticationModeEnum.service_principal && (
           <>
             <FieldTypeInput
               data={sharedCredentials}
               label="Tenant ID"
               className="mb-4 text-sm"
-              value={copiedDatabase?.tenant_id}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, tenant_id: value }))
-              }
+              value={duckdb?.tenant_id}
+              onChange={(value) => handleChange({ tenant_id: value })}
             />
             <FieldTypeInput
               data={sharedCredentials}
               label="Client ID"
               className="mb-4 text-sm"
-              value={copiedDatabase?.client_id}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, client_id: value }))
-              }
+              value={duckdb?.client_id}
+              onChange={(value) => handleChange({ client_id: value })}
             />
             <FieldTypeInput
               data={sharedCredentials}
               label="Client Secret"
               className="mb-4 text-sm"
               maskingType="password"
-              value={copiedDatabase?.client_secret}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, client_secret: value }))
-              }
+              value={duckdb?.client_secret}
+              onChange={(value) => handleChange({ client_secret: value })}
             />
             <FieldTypeInput
               data={sharedCredentials}
               label="Storage account name"
               className="mb-4 text-sm"
-              value={copiedDatabase?.account_name}
-              onChange={(value) =>
-                setCopiedDatabase((prev) => ({ ...prev, account_name: value }))
-              }
+              value={duckdb?.account_name}
+              onChange={(value) => handleChange({ account_name: value })}
             />
           </>
         )}
@@ -346,20 +320,16 @@ const DuckdbConnection = ({
           data={sharedCredentials}
           label="Access Key"
           className="mb-4 text-sm"
-          value={copiedDatabase?.user}
-          onChange={(value) =>
-            setCopiedDatabase((prev) => ({ ...prev, user: value }))
-          }
+          value={duckdb?.user}
+          onChange={(value) => handleChange({ user: value })}
         />
         <FieldTypeInput
           data={sharedCredentials}
           label="Secret"
           className="mb-4 text-sm"
           maskingType="password"
-          value={copiedDatabase?.password}
-          onChange={(value) =>
-            setCopiedDatabase((prev) => ({ ...prev, password: value }))
-          }
+          value={duckdb?.password}
+          onChange={(value) => handleChange({ password: value })}
         />
       </>
     );
@@ -374,21 +344,21 @@ const DuckdbConnection = ({
         label="Files location"
         options={storageTypeOptions}
         className="mb-4 text-sm"
-        value={copiedDatabase?.storage_type}
+        value={duckdb?.storage_type}
         onChange={changeStorageTypeDirectoryPrefixes}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
         menuClassName="!top-14"
       />
 
-      {copiedDatabase?.storage_type ===
-        DuckdbParametersSpecStorageTypeEnum.s3 && awsStorageForm()}
+      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 &&
+        awsStorageForm()}
 
-      {copiedDatabase?.storage_type ===
-        DuckdbParametersSpecStorageTypeEnum.azure && azureStorageForm()}
+      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.azure &&
+        azureStorageForm()}
 
-      {copiedDatabase?.storage_type ===
-        DuckdbParametersSpecStorageTypeEnum.gcs && googleStorageForm()}
+      {duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.gcs &&
+        googleStorageForm()}
 
       <FileFormatConfiguration
         fileFormatType={
@@ -396,7 +366,7 @@ const DuckdbConnection = ({
         }
         onChangeFile={onChangeFile}
         configuration={
-          copiedDatabase?.[
+          duckdb?.[
             fileFormatType as keyof DuckdbParametersSpec
           ] as TConfiguration
         }
@@ -405,23 +375,18 @@ const DuckdbConnection = ({
         freezeFileType={freezeFileType}
       >
         <KeyValueProperties
-          properties={copiedDatabase?.directories}
+          properties={duckdb?.directories}
           onChange={(directories) => {
-            setCopiedDatabase((prev) => ({
-              ...prev,
-              directories: directories
-            }));
+            handleChange({ directories });
           }}
           sharedCredentials={sharedCredentials}
-          storageType={copiedDatabase?.storage_type}
+          storageType={duckdb?.storage_type}
           refetchDirectoriesIndicator={refetchDirectoriesIndicator}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView
-        properties={copiedDatabase?.properties}
-        onChange={(properties) =>
-          setCopiedDatabase((prev) => ({ ...prev, properties }))
-        }
+        properties={duckdb?.properties}
+        onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
     </SectionWrapper>
