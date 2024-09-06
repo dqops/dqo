@@ -347,12 +347,11 @@ export default function RuleMiningFilters({
           </div>
         </SectionWrapper>
       ) : (
-        <div className="flex items-center ml-4 mb-2 text-sm font-bold mt-2 pb-2">
-          <SvgIcon
-            name="chevron-right"
-            className="w-5 h-5"
-            onClick={() => setAdvancedParametersOpen(!advancedParametersOpen)}
-          />
+        <div
+          className="flex items-center ml-4 mb-2 text-sm font-bold mt-2 pb-2 cursor-pointer"
+          onClick={() => setAdvancedParametersOpen(!advancedParametersOpen)}
+        >
+          <SvgIcon name="chevron-right" className="w-5 h-5" />
           Advanced parameters
         </div>
       )}
