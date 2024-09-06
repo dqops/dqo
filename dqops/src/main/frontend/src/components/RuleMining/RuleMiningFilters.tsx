@@ -9,7 +9,6 @@ import SectionWrapper from '../Dashboard/SectionWrapper';
 import Input from '../Input';
 import Select from '../Select';
 import SvgIcon from '../SvgIcon';
-import React from 'react';
 
 export default function RuleMiningFilters({
   configuration,
