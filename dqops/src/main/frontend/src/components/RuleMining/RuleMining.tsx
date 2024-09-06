@@ -334,6 +334,11 @@ export default function RuleMining({
           applyChecks={applyChecks}
           isUpdated={isUpdated}
           isUpdatedFilters={isUpdatedFilters}
+          isApplyDisabled={
+            checksUI &&
+            checksUI.table_checks?.categories?.length === 0 &&
+            Object.keys(checksUI?.column_checks ?? {}).length === 0
+          }
         />
       </div>
       {checksUI &&

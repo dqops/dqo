@@ -9,6 +9,7 @@ import SectionWrapper from '../Dashboard/SectionWrapper';
 import Input from '../Input';
 import Select from '../Select';
 import SvgIcon from '../SvgIcon';
+import React from 'react';
 
 export default function RuleMiningFilters({
   configuration,
@@ -16,7 +17,8 @@ export default function RuleMiningFilters({
   proposeChecks,
   applyChecks,
   isUpdated,
-  isUpdatedFilters
+  isUpdatedFilters,
+  isApplyDisabled
 }: {
   configuration: CheckMiningParametersModel;
   onChangeConfiguration: (
@@ -26,6 +28,7 @@ export default function RuleMiningFilters({
   applyChecks: () => Promise<void>;
   isUpdated: boolean;
   isUpdatedFilters: boolean;
+  isApplyDisabled: boolean;
 }) {
   const [advancedParametersOpen, setAdvancedParametersOpen] = useState(false);
 
@@ -35,7 +38,7 @@ export default function RuleMiningFilters({
         <SectionWrapper title="Filters" className="ml-4 !pb-1 !pt-4 mt-4 !mb-4">
           <div className="flex items-center gap-x-4 mb-4 pl-4">
             <Input
-              label="Category"
+              label="Check category"
               value={configuration.category_filter}
               onChange={(e) =>
                 onChangeConfiguration({ category_filter: e.target.value })
@@ -365,6 +368,7 @@ export default function RuleMiningFilters({
             label="Apply"
             onClick={applyChecks}
             color={isUpdatedFilters ? 'secondary' : 'primary'}
+            disabled={isApplyDisabled}
           />
         </div>
       </div>

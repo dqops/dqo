@@ -458,7 +458,7 @@ const TableHeader = ({
                 >
                   {flashRunChecks
                     ? 'Data quality checks are configured, but DQOps does not have any recent results. Please run the data quality checks to get the values.'
-                    : 'Run checks for the category'}
+                    : 'Run all table checks'}
                 </div>
               </div>
             )}

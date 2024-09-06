@@ -17083,11 +17083,10 @@ definitions:
           \ value of this parameter is 'true'."
       apply_pii_checks:
         type: "boolean"
-        description: "Apply the rules to the Personal Identifiable Information checks\
-          \ (sensitive data), but only when the checks were run as profiling checks\
-          \ activated manually, or by activating a data quality check pattern that\
-          \ scans all columns for PII data. The default value of this parameter is\
-          \ 'true'."
+        description: "Applies rules to Personal Identifiable Information checks (sensitive\
+          \ data), but only when the checks were activated manually as profiling checks,\
+          \ or through a data quality check pattern that scans all columns for PII\
+          \ data. The default value of this parameter is 'true'."
       propose_custom_checks:
         type: "boolean"
         description: "Propose the default configuration for custom checks that use\
