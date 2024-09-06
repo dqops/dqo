@@ -19,6 +19,9 @@ package com.dqops.rest.controllers;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.metadata.lineage.TableLineageSource;
+import com.dqops.metadata.lineage.TableLineageSourceSpec;
+import com.dqops.metadata.lineage.TableLineageSourceSpecList;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -28,6 +31,7 @@ import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +42,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -67,7 +72,7 @@ public class DataLineageController {
     }
 
     /**
-     * Returns a list of source tables on the data lineage that are sources of the given table"
+     * Returns a list of source tables on the data lineage that are sources of the given table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name
@@ -122,4 +127,247 @@ public class DataLineageController {
             return new ResponseEntity<>(Flux.fromStream(sourceTables.stream()), HttpStatus.OK); // 200
         }));
     }
+
+    /**
+     * Update a specific data lineage source table using a new model.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name
+     *
+     * @return Empty response.
+     */
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateTableSourceTable", notes = "Update a specific data lineage source table using a new model.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table's source table successfully updated", response = Void.class),
+            @ApiResponse(code = 404, message = "Connection or table's source table not found"),
+            @ApiResponse(code = 406, message = "Incorrect request"),
+            @ApiResponse(code = 409, message = "Table's source table with the same name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<Void>>> updateTableSourceTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Source connection name") @PathVariable String sourceConnection,
+            @ApiParam("Source schema name") @PathVariable String sourceSchema,
+            @ApiParam("Source table name") @PathVariable String sourceTable,
+            @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceListModel tableLineageSourceListModel) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    tableLineageSourceListModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+
+            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+
+                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
+                if (sourceTables == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
+
+                TableLineageSource tableLineageSourceKey = new TableLineageSource(sourceConnection, sourceSchema, sourceTable);
+                TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
+
+                if (tableLineageSourceSpec == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
+
+                TableLineageSource newTableLineageSourceKey = tableLineageSourceKey;
+                if (tableLineageSourceListModel.getSourceConnection() != null && tableLineageSourceListModel.getSourceSchema() != null
+                        && tableLineageSourceListModel.getSourceTable() != null) {
+                    newTableLineageSourceKey = new TableLineageSource(
+                            tableLineageSourceListModel.getSourceConnection(),
+                            tableLineageSourceListModel.getSourceSchema(),
+                            tableLineageSourceListModel.getSourceTable());
+                }
+
+                if (!Objects.equals(newTableLineageSourceKey, tableLineageSourceKey)
+                        && sourceTables.getByObjectName(newTableLineageSourceKey, false) != null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a source table with this name already exists
+                }
+
+                TableLineageSourceSpec newSpec = TableLineageSourceListModel.toSpecification(tableLineageSourceListModel);
+
+                if (!newTableLineageSourceKey.equals(tableLineageSourceKey)) {
+                    sourceTables.add(newSpec);
+                    sourceTables.remove(tableLineageSourceSpec);
+                } else {
+                    tableLineageSourceSpec.setSourceConnection(newSpec.getSourceConnection());
+                    tableLineageSourceSpec.setSourceSchema(newSpec.getSourceSchema());
+                    tableLineageSourceSpec.setSourceTable(newSpec.getSourceTable());
+                    tableLineageSourceSpec.setDataLineageSourceTool(newSpec.getDataLineageSourceTool());
+                    tableLineageSourceSpec.setProperties(newSpec.getProperties());
+                }
+
+                userHomeContext.flush();
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            });
+        }));
+    }
+
+    /**
+     * Creates (adds) a new source table of the table's data lineage.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name
+     * @return Empty response.
+     */
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createTableSourceTable", notes = "Creates a new source table of the table's data lineage.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Table's new source table successfully created", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 409, message = "Table's source table with the same name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<Void>>> createTableSourceTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceListModel tableLineageSourceListModel) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    tableLineageSourceListModel == null ||
+                    tableLineageSourceListModel.getSourceConnection() == null ||
+                    tableLineageSourceListModel.getSourceSchema() == null ||
+                    tableLineageSourceListModel.getSourceTable() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+
+            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+
+                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
+                if (sourceTables == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
+
+                TableLineageSource tableLineageSourceKey = new TableLineageSource(
+                        tableLineageSourceListModel.getSourceConnection(),
+                        tableLineageSourceListModel.getSourceSchema(),
+                        tableLineageSourceListModel.getSourceTable());
+                TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
+
+                if (tableLineageSourceSpec != null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a source table with this name already exists
+                }
+
+                TableLineageSourceSpec newSpec = TableLineageSourceListModel.toSpecification(tableLineageSourceListModel);
+
+                sourceTables.add(newSpec);
+
+                userHomeContext.flush();
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+            });
+        }));
+    }
+
+    /**
+     * Deletes a specific data lineage source table of the given table.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name
+     * @return Empty response.
+     */
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage", produces = "application/json")
+    @ApiOperation(value = "deleteTableSourceTable", notes = "Deletes a specific data lineage source table of the given table.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table's source table removed", response = Void.class),
+            @ApiResponse(code = 404, message = "Connection or table's source table notification not found"),
+            @ApiResponse(code = 406, message = "Invalid request"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<Void>>> deleteTableSourceTable(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceListModel tableLineageSourceListModel) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    tableLineageSourceListModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+
+            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+
+                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
+                if (sourceTables == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
+
+                TableLineageSource tableLineageSourceKey = new TableLineageSource(
+                        tableLineageSourceListModel.getSourceConnection(),
+                        tableLineageSourceListModel.getSourceSchema(),
+                        tableLineageSourceListModel.getSourceTable());
+                TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
+
+                if (tableLineageSourceSpec == null) {
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                }
+
+                sourceTables.remove(tableLineageSourceSpec);
+
+                userHomeContext.flush();
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            });
+        }));
+    }
+
+    private TableLineageSourceSpecList readTableLineageSourceSpecList(UserHomeContext userHomeContext,
+                                                                      String connectionName,
+                                                                      String schemaName,
+                                                                      String tableName) {
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return null;
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return null;
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TableLineageSourceSpecList sourceTables = tableSpec.getSourceTables();
+
+        if (sourceTables == null) {
+            sourceTables = new TableLineageSourceSpecList();
+            tableSpec.setSourceTables(sourceTables);
+        }
+
+        return sourceTables;
+    }
+
 }
