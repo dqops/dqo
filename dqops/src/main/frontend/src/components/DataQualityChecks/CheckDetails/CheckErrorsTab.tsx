@@ -89,7 +89,6 @@ const CheckErrorsTab = ({
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
-            disabled={(errors[0]?.dataGroupsNames ?? []).length === 0}
           />
         </div>
       </div>
