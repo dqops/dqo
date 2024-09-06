@@ -31,55 +31,64 @@ export default function RuleMiningFilters({
 
   return (
     <div className="p-4">
-      <div className="flex items-center gap-x-4 mb-4 pl-4">
-        <Input
-          label="Category"
-          value={configuration.category_filter}
-          onChange={(e) =>
-            onChangeConfiguration({ category_filter: e.target.value })
-          }
-        />
-        <Input
-          label="Check name"
-          value={configuration.check_name_filter}
-          onChange={(e) =>
-            onChangeConfiguration({ check_name_filter: e.target.value })
-          }
-        />
-        <Input
-          label="Column name"
-          value={configuration.column_name_filter}
-          onChange={(e) =>
-            onChangeConfiguration({ column_name_filter: e.target.value })
-          }
-        />
-        <Select
-          label="Default severity level"
-          options={Object.values(
-            CheckMiningParametersModelSeverityLevelEnum
-          ).map((value) => ({
-            label: value,
-            value
-          }))}
-          value={configuration.severity_level}
-          onChange={(e) => onChangeConfiguration({ severity_level: e })}
-          menuClassName="!top-14"
-          className="text-sm mx-10"
-        />
-        <Input
-          label="Error rate (% rows)"
-          tooltipText="The desired percentage of error rows. When a profiling data quality check identifies incorrect rows and their number is below this desired error rate, DQOps rule mining engine will configure the rule threshold make the check fail."
-          value={configuration.fail_checks_at_percent_error_rows}
-          type="number"
-          onChange={(e) =>
-            onChangeConfiguration({
-              fail_checks_at_percent_error_rows:
-                isNaN(Number(e.target.value)) || e.target.value === ''
-                  ? undefined
-                  : Number(e.target.value)
-            })
-          }
-        />
+      <div className="flex items-center gap-x-4 mb-4">
+        <SectionWrapper
+            title="Filters"
+            className="ml-4 !pb-1 !pt-4 mt-4 !mb-4"
+        >
+          <div className="flex items-center gap-x-4 mb-4 pl-4">
+            <Input
+              label="Category"
+              value={configuration.category_filter}
+              onChange={(e) =>
+                onChangeConfiguration({ category_filter: e.target.value })
+              }
+            />
+            <Input
+              label="Check name"
+              value={configuration.check_name_filter}
+              onChange={(e) =>
+                onChangeConfiguration({ check_name_filter: e.target.value })
+              }
+            />
+            <Input
+              label="Column name"
+              value={configuration.column_name_filter}
+              onChange={(e) =>
+                onChangeConfiguration({ column_name_filter: e.target.value })
+              }
+            />
+          </div>
+        </SectionWrapper>
+          <div className="flex items-center gap-x-4 mb-4 pl-6 mt-5">
+            <Input
+              label="Error rate (% rows)"
+              tooltipText="The desired percentage of error rows. When a profiling data quality check identifies incorrect rows and their number is below this desired error rate, DQOps rule mining engine will configure the rule threshold make the check fail."
+              value={configuration.fail_checks_at_percent_error_rows}
+              type="number"
+              onChange={(e) =>
+                onChangeConfiguration({
+                  fail_checks_at_percent_error_rows:
+                    isNaN(Number(e.target.value)) || e.target.value === ''
+                      ? undefined
+                      : Number(e.target.value)
+                })
+              }
+            />
+            <Select
+              label="Default severity level"
+              options={Object.values(
+                CheckMiningParametersModelSeverityLevelEnum
+              ).map((value) => ({
+                label: value,
+                value
+              }))}
+              value={configuration.severity_level}
+              onChange={(e) => onChangeConfiguration({ severity_level: e })}
+              menuClassName="!top-14"
+              className="text-sm ml-6"
+            />
+          </div>
       </div>
       {advancedParametersOpen ? (
         <SectionWrapper
@@ -325,7 +334,7 @@ export default function RuleMiningFilters({
           </div>
         </SectionWrapper>
         ) : (
-          <div className="flex items-center ml-4 mb-2 text-sm font-bold mt-2 pb-4">
+          <div className="flex items-center ml-4 mb-2 text-sm font-bold mt-2 pb-2">
             <SvgIcon
               name="chevron-right"
               className="w-5 h-5"
