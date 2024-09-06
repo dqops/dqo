@@ -121,6 +121,7 @@ const ErrorSamplesTab = ({
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
+            disabled={(errorSamples[0]?.dataGroupsNames ?? []).length === 0}
           />
         </div>
         <IconButton

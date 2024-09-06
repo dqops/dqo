@@ -112,6 +112,7 @@ const SensorReadoutsTab = ({
               })) || []
             }
             onChange={onChangeDataGroup}
+            disabled={(sensorReadouts[0]?.dataGroupNames ?? []).length === 0}
           />
         </div>
         <div className="flex space-x-4 items-center">
@@ -120,6 +121,7 @@ const SensorReadoutsTab = ({
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
+            disabled={(sensorReadouts[0]?.dataGroupNames ?? []).length === 0}
           />
         </div>
       </div>
