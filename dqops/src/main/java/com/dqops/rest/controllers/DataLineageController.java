@@ -163,6 +163,9 @@ public class DataLineageController {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(sourceConnection) ||
+                    Strings.isNullOrEmpty(sourceSchema) ||
+                    Strings.isNullOrEmpty(sourceTable) ||
                     tableLineageSourceListModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
@@ -182,32 +185,24 @@ public class DataLineageController {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
 
-                TableLineageSource newTableLineageSourceKey = tableLineageSourceKey;
-                if (tableLineageSourceListModel.getSourceConnection() != null && tableLineageSourceListModel.getSourceSchema() != null
-                        && tableLineageSourceListModel.getSourceTable() != null) {
-                    newTableLineageSourceKey = new TableLineageSource(
-                            tableLineageSourceListModel.getSourceConnection(),
-                            tableLineageSourceListModel.getSourceSchema(),
-                            tableLineageSourceListModel.getSourceTable());
-                }
-
-                if (!Objects.equals(newTableLineageSourceKey, tableLineageSourceKey)
-                        && sourceTables.getByObjectName(newTableLineageSourceKey, false) != null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a source table with this name already exists
+                if (!Objects.equals(sourceConnection, tableLineageSourceListModel.getSourceConnection()) ||
+                        !Objects.equals(sourceSchema, tableLineageSourceListModel.getSourceSchema()) ||
+                        !Objects.equals(sourceTable, tableLineageSourceListModel.getSourceTable()) ||
+                        !Objects.equals(connectionName, tableLineageSourceListModel.getTargetConnection()) ||
+                        !Objects.equals(schemaName, tableLineageSourceListModel.getTargetSchema()) ||
+                        !Objects.equals(tableName, tableLineageSourceListModel.getTargetTable())
+                ) {
+                    return new ResponseEntity<>(Mono.empty(),
+                            HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
                 }
 
                 TableLineageSourceSpec newSpec = TableLineageSourceListModel.toSpecification(tableLineageSourceListModel);
 
-                if (!newTableLineageSourceKey.equals(tableLineageSourceKey)) {
-                    sourceTables.add(newSpec);
-                    sourceTables.remove(tableLineageSourceSpec);
-                } else {
-                    tableLineageSourceSpec.setSourceConnection(newSpec.getSourceConnection());
-                    tableLineageSourceSpec.setSourceSchema(newSpec.getSourceSchema());
-                    tableLineageSourceSpec.setSourceTable(newSpec.getSourceTable());
-                    tableLineageSourceSpec.setDataLineageSourceTool(newSpec.getDataLineageSourceTool());
-                    tableLineageSourceSpec.setProperties(newSpec.getProperties());
-                }
+                tableLineageSourceSpec.setSourceConnection(newSpec.getSourceConnection());
+                tableLineageSourceSpec.setSourceSchema(newSpec.getSourceSchema());
+                tableLineageSourceSpec.setSourceTable(newSpec.getSourceTable());
+                tableLineageSourceSpec.setDataLineageSourceTool(newSpec.getDataLineageSourceTool());
+                tableLineageSourceSpec.setProperties(newSpec.getProperties());
 
                 userHomeContext.flush();
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -222,7 +217,7 @@ public class DataLineageController {
      * @param tableName      Table name
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createTableSourceTable", notes = "Creates a new source table of the table's data lineage.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -241,15 +236,18 @@ public class DataLineageController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Source connection name") @PathVariable String sourceConnection,
+            @ApiParam("Source schema name") @PathVariable String sourceSchema,
+            @ApiParam("Source table name") @PathVariable String sourceTable,
             @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceListModel tableLineageSourceListModel) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
-                    tableLineageSourceListModel == null ||
-                    tableLineageSourceListModel.getSourceConnection() == null ||
-                    tableLineageSourceListModel.getSourceSchema() == null ||
-                    tableLineageSourceListModel.getSourceTable() == null) {
+                    Strings.isNullOrEmpty(sourceConnection) ||
+                    Strings.isNullOrEmpty(sourceSchema) ||
+                    Strings.isNullOrEmpty(sourceTable) ||
+                    tableLineageSourceListModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
 
@@ -261,10 +259,18 @@ public class DataLineageController {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
 
-                TableLineageSource tableLineageSourceKey = new TableLineageSource(
-                        tableLineageSourceListModel.getSourceConnection(),
-                        tableLineageSourceListModel.getSourceSchema(),
-                        tableLineageSourceListModel.getSourceTable());
+                if (!Objects.equals(sourceConnection, tableLineageSourceListModel.getSourceConnection()) ||
+                        !Objects.equals(sourceSchema, tableLineageSourceListModel.getSourceSchema()) ||
+                        !Objects.equals(sourceTable, tableLineageSourceListModel.getSourceTable()) ||
+                        !Objects.equals(connectionName, tableLineageSourceListModel.getTargetConnection()) ||
+                        !Objects.equals(schemaName, tableLineageSourceListModel.getTargetSchema()) ||
+                        !Objects.equals(tableName, tableLineageSourceListModel.getTargetTable())
+                ) {
+                    return new ResponseEntity<>(Mono.empty(),
+                            HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
+                }
+
+                TableLineageSource tableLineageSourceKey = new TableLineageSource(sourceConnection, sourceSchema, sourceTable);
                 TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
 
                 if (tableLineageSourceSpec != null) {
@@ -288,7 +294,7 @@ public class DataLineageController {
      * @param tableName      Table name
      * @return Empty response.
      */
-    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage", produces = "application/json")
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", produces = "application/json")
     @ApiOperation(value = "deleteTableSourceTable", notes = "Deletes a specific data lineage source table of the given table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -306,12 +312,16 @@ public class DataLineageController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceListModel tableLineageSourceListModel) {
+            @ApiParam("Source connection name") @PathVariable String sourceConnection,
+            @ApiParam("Source schema name") @PathVariable String sourceSchema,
+            @ApiParam("Source table name") @PathVariable String sourceTable) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
-                    tableLineageSourceListModel == null) {
+                    Strings.isNullOrEmpty(sourceConnection) ||
+                    Strings.isNullOrEmpty(sourceSchema) ||
+                    Strings.isNullOrEmpty(sourceTable) ) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
 
@@ -323,10 +333,7 @@ public class DataLineageController {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
 
-                TableLineageSource tableLineageSourceKey = new TableLineageSource(
-                        tableLineageSourceListModel.getSourceConnection(),
-                        tableLineageSourceListModel.getSourceSchema(),
-                        tableLineageSourceListModel.getSourceTable());
+                TableLineageSource tableLineageSourceKey = new TableLineageSource(sourceConnection, sourceSchema, sourceTable);
                 TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
 
                 if (tableLineageSourceSpec == null) {
