@@ -38,7 +38,7 @@ export default function RuleMiningFilters({
         >
           <div className="flex items-center gap-x-4 mb-4 pl-4">
             <Input
-              label="Category"
+              label="Check category"
               value={configuration.category_filter}
               onChange={(e) =>
                 onChangeConfiguration({ category_filter: e.target.value })
