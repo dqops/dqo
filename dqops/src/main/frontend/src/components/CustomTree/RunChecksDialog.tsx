@@ -304,7 +304,7 @@ export default function RunChecksDialog({
             <div
               className={clsx(
                 'text-sm text-black ml-2',
-                checkType !== CheckTypes.PARTITIONED &&
+                filters.checkType !== CheckTypes.PARTITIONED &&
                   'text-gray-300 cursor-not-allowed'
               )}
             >
