@@ -44,6 +44,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Service that proposes a configuration of data quality checks for a table and a target check type. This is a data quality rule mining engine.
@@ -200,10 +201,12 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                 targetCheckRootContainer, new CheckSearchFilters(), connectionSpec, tableSpec, executionContext,
                 connectionSpec.getProviderType(), true);
         targetModel.dropConfiguredChecks();
+        String checkNameFilter = miningParameters.getCheckNameFilter().toLowerCase(Locale.ENGLISH).replace('_', ' ');
+        String categoryNameFilter = miningParameters.getCategoryFilter().toLowerCase(Locale.ENGLISH).replace('_', ' ');
 
         for (QualityCategoryModel categoryModel : new ArrayList<>(targetModel.getCategories())) {
             if (!Strings.isNullOrEmpty(miningParameters.getCategoryFilter())) {
-                if (!StringPatternComparer.matchSearchPattern(categoryModel.getCategory(), miningParameters.getCategoryFilter())) {
+                if (!StringPatternComparer.matchSearchPattern(categoryModel.getCategory().replace('_', ' '), categoryNameFilter)) {
                     targetModel.getCategories().remove(categoryModel);
                     continue;
                 }
@@ -212,7 +215,13 @@ public class CheckMiningServiceImpl implements CheckMiningService {
             List<CheckModel> listOfChecksInCategory = categoryModel.getChecks();
             for (CheckModel checkModel : new ArrayList<>(listOfChecksInCategory)) {
                 if (!Strings.isNullOrEmpty(miningParameters.getCheckNameFilter())) {
-                    if (!StringPatternComparer.matchSearchPattern(checkModel.getCheckName(), miningParameters.getCheckNameFilter())) {
+                    boolean checkNameMatch = StringPatternComparer.matchSearchPattern(checkModel.getCheckName().replace('_', ' '), checkNameFilter) ||
+                        (checkModel.getDisplayName() != null &&
+                                StringPatternComparer.matchSearchPattern(checkModel.getDisplayName().toLowerCase(Locale.ENGLISH).replace('_', ' '), checkNameFilter)) ||
+                        (checkModel.getFriendlyName() != null &&
+                                StringPatternComparer.matchSearchPattern(checkModel.getFriendlyName().toLowerCase(Locale.ENGLISH).replace('_', ' '), checkNameFilter));
+
+                    if (!checkNameMatch) {
                         listOfChecksInCategory.remove(checkModel);
                         continue;
                     }
