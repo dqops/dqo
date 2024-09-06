@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
@@ -173,6 +174,12 @@ public class ColumnListModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.
+     */
+    @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
+    private Map<String, String> advancedProperties;
+
+    /**
      * Boolean flag that decides if the current user can update or delete the column.
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete the column.")
@@ -286,6 +293,7 @@ public class ColumnListModel {
                 setDeleteErrorSamples(true);
                 setDeleteIncidents(true);
             }});
+            setAdvancedProperties(columnSpec.getAdvancedProperties());
         }};
     }
 
@@ -322,6 +330,7 @@ public class ColumnListModel {
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
             setCanDeleteData(isOperator);
+            setAdvancedProperties(columnSpec.getAdvancedProperties());
         }};
     }
 
@@ -334,6 +343,7 @@ public class ColumnListModel {
         targetColumnSpec.setDisabled(this.isDisabled());
         targetColumnSpec.setId(this.isId());
         targetColumnSpec.setTypeSnapshot(this.getTypeSnapshot());
+        targetColumnSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 
     public static class ColumnListModelSampleFactory implements SampleValueFactory<ColumnListModel> {

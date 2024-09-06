@@ -41,6 +41,7 @@ import tech.tablesaw.api.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class PostgresqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest  extends BasePostgresqlIntegrationTest {
@@ -219,8 +220,8 @@ public class PostgresqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest
         Assertions.assertTrue(sampleValues.contains("true"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(1, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(1));

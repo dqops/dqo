@@ -185,7 +185,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -226,7 +226,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -308,7 +308,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -359,7 +359,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -400,7 +400,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -452,7 +452,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -493,7 +493,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -534,7 +534,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -575,7 +575,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -616,7 +616,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -760,7 +760,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -803,7 +803,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -889,7 +889,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -947,7 +947,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -990,7 +990,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -1049,7 +1049,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1092,7 +1092,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1135,7 +1135,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1178,7 +1178,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1225,7 +1225,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -1451,7 +1451,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1492,7 +1492,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1574,7 +1574,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -1625,7 +1625,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1666,7 +1666,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -1718,7 +1718,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1759,7 +1759,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1800,7 +1800,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1841,7 +1841,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1882,7 +1882,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -2027,7 +2027,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2070,7 +2070,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2156,7 +2156,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -2214,7 +2214,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2257,7 +2257,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -2316,7 +2316,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2359,7 +2359,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2402,7 +2402,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2445,7 +2445,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2492,7 +2492,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -2718,7 +2718,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2759,7 +2759,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2841,7 +2841,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -2892,7 +2892,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2933,7 +2933,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -2985,7 +2985,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3026,7 +3026,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3067,7 +3067,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3108,7 +3108,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3149,7 +3149,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -3294,7 +3294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3337,7 +3337,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3423,7 +3423,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -3481,7 +3481,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3524,7 +3524,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -3583,7 +3583,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3626,7 +3626,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3669,7 +3669,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3712,7 +3712,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3759,7 +3759,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -3999,7 +3999,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4044,7 +4044,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4134,7 +4134,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -4191,7 +4191,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4236,7 +4236,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -4294,7 +4294,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4339,7 +4339,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4384,7 +4384,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4429,7 +4429,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4476,7 +4476,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -4639,7 +4639,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4684,7 +4684,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4774,7 +4774,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -4836,7 +4836,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4881,7 +4881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -4944,7 +4944,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4989,7 +4989,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5034,7 +5034,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5079,7 +5079,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5126,7 +5126,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -5370,7 +5370,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5415,7 +5415,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5505,7 +5505,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -5562,7 +5562,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5607,7 +5607,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -5665,7 +5665,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5710,7 +5710,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5755,7 +5755,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5800,7 +5800,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5847,7 +5847,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -6010,7 +6010,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6055,7 +6055,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                            WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6145,7 +6145,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -6207,7 +6207,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6252,7 +6252,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END
@@ -6315,7 +6315,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6360,7 +6360,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6405,7 +6405,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6450,7 +6450,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                            WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6497,7 +6497,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 1
                             ELSE 0
                         END

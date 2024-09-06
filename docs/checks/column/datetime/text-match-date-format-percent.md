@@ -271,7 +271,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -868,7 +868,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -1573,7 +1573,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -2171,7 +2171,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -2876,7 +2876,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -3474,7 +3474,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -4201,7 +4201,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -4859,7 +4859,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -5608,7 +5608,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END
@@ -6266,7 +6266,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), wrap_with_quotes = false) }}
                              THEN 1
                           ELSE 0
                         END

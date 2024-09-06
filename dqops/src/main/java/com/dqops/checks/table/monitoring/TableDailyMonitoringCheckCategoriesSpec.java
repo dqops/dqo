@@ -22,17 +22,18 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.monitoring.accuracy.TableAccuracyDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.comparison.TableComparisonDailyMonitoringChecksSpecMap;
-import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.customsql.TableCustomSqlDailyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitoringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.checks.table.monitoring.uniqueness.TableUniquenessDailyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -60,6 +61,7 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
             put("custom_sql", o -> o.customSql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
+            put("uniqueness", o -> o.uniqueness);
             put("comparisons", o -> o.comparisons);
         }
     };
@@ -94,11 +96,15 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSchemaDailyMonitoringChecksSpec schema;
 
+    @JsonPropertyDescription("Daily monitoring uniqueness checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableUniquenessDailyMonitoringChecksSpec uniqueness;
+
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonDailyMonitoringChecksSpecMap comparisons = new TableComparisonDailyMonitoringChecksSpecMap();
-
 
     /**
      * Returns the container of monitoring for volume data quality checks.
@@ -218,6 +224,24 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
         this.setDirtyIf(!Objects.equals(this.schema, schema));
         this.schema = schema;
         this.propagateHierarchyIdToField(schema, "schema");
+    }
+
+    /**
+     * Returns a container of table uniqueness checks.
+     * @return Table uniqueness checks.
+     */
+    public TableUniquenessDailyMonitoringChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets a reference to a container with the table uniqueness checks.
+     * @param uniqueness Container of table uniqueness checks.
+     */
+    public void setUniqueness(TableUniquenessDailyMonitoringChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**

@@ -5,9 +5,9 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
+                    THEN 1
+                ELSE 0
             END
         )
     END AS actual_value

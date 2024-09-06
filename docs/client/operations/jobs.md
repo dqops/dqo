@@ -1069,7 +1069,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"columnNames\":[\"sample_column\"]}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"columnNames\":[\"sample_column\"]}"
 	
     ```
 
@@ -1106,7 +1106,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
@@ -1156,7 +1156,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
@@ -1209,7 +1209,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
@@ -1262,7 +1262,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,

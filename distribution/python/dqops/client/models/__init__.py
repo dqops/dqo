@@ -567,6 +567,8 @@ from .column_invalid_uuid_format_found_check_spec import (
 from .column_invalid_uuid_format_percent_check_spec import (
     ColumnInvalidUuidFormatPercentCheckSpec,
 )
+from .column_lineage_source_spec import ColumnLineageSourceSpec
+from .column_lineage_source_spec_properties import ColumnLineageSourceSpecProperties
 from .column_list_model import ColumnListModel
 from .column_max_anomaly_differencing_check_spec import (
     ColumnMaxAnomalyDifferencingCheckSpec,
@@ -1808,7 +1810,20 @@ from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_default_checks_pattern_spec import TableDefaultChecksPatternSpec
+from .table_duplicate_record_count_check_spec import TableDuplicateRecordCountCheckSpec
+from .table_duplicate_record_count_sensor_parameters_spec import (
+    TableDuplicateRecordCountSensorParametersSpec,
+)
+from .table_duplicate_record_percent_check_spec import (
+    TableDuplicateRecordPercentCheckSpec,
+)
+from .table_duplicate_record_percent_sensor_parameters_spec import (
+    TableDuplicateRecordPercentSensorParametersSpec,
+)
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
+from .table_lineage_source_spec import TableLineageSourceSpec
+from .table_lineage_source_spec_columns import TableLineageSourceSpecColumns
+from .table_lineage_source_spec_properties import TableLineageSourceSpecProperties
 from .table_list_model import TableListModel
 from .table_model import TableModel
 from .table_monitoring_check_categories_spec import TableMonitoringCheckCategoriesSpec
@@ -1957,6 +1972,34 @@ from .table_timeliness_partition_reload_lag_sensor_parameters_spec import (
 from .table_timeliness_profiling_checks_spec import TableTimelinessProfilingChecksSpec
 from .table_timeliness_profiling_checks_spec_custom_checks import (
     TableTimelinessProfilingChecksSpecCustomChecks,
+)
+from .table_uniqueness_daily_monitoring_checks_spec import (
+    TableUniquenessDailyMonitoringChecksSpec,
+)
+from .table_uniqueness_daily_monitoring_checks_spec_custom_checks import (
+    TableUniquenessDailyMonitoringChecksSpecCustomChecks,
+)
+from .table_uniqueness_daily_partition_checks_spec import (
+    TableUniquenessDailyPartitionChecksSpec,
+)
+from .table_uniqueness_daily_partition_checks_spec_custom_checks import (
+    TableUniquenessDailyPartitionChecksSpecCustomChecks,
+)
+from .table_uniqueness_monthly_monitoring_checks_spec import (
+    TableUniquenessMonthlyMonitoringChecksSpec,
+)
+from .table_uniqueness_monthly_monitoring_checks_spec_custom_checks import (
+    TableUniquenessMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .table_uniqueness_monthly_partition_checks_spec import (
+    TableUniquenessMonthlyPartitionChecksSpec,
+)
+from .table_uniqueness_monthly_partition_checks_spec_custom_checks import (
+    TableUniquenessMonthlyPartitionChecksSpecCustomChecks,
+)
+from .table_uniqueness_profiling_checks_spec import TableUniquenessProfilingChecksSpec
+from .table_uniqueness_profiling_checks_spec_custom_checks import (
+    TableUniquenessProfilingChecksSpecCustomChecks,
 )
 from .table_volume_daily_monitoring_checks_spec import (
     TableVolumeDailyMonitoringChecksSpec,
@@ -2243,6 +2286,8 @@ __all__ = (
     "ColumnInvalidUsaZipcodePercentCheckSpec",
     "ColumnInvalidUuidFormatFoundCheckSpec",
     "ColumnInvalidUuidFormatPercentCheckSpec",
+    "ColumnLineageSourceSpec",
+    "ColumnLineageSourceSpecProperties",
     "ColumnListModel",
     "ColumnMaxAnomalyDifferencingCheckSpec",
     "ColumnMaxAnomalyStationaryCheckSpec",
@@ -2850,7 +2895,14 @@ __all__ = (
     "TableDataIngestionDelayCheckSpec",
     "TableDataStalenessCheckSpec",
     "TableDefaultChecksPatternSpec",
+    "TableDuplicateRecordCountCheckSpec",
+    "TableDuplicateRecordCountSensorParametersSpec",
+    "TableDuplicateRecordPercentCheckSpec",
+    "TableDuplicateRecordPercentSensorParametersSpec",
     "TableIncidentGroupingSpec",
+    "TableLineageSourceSpec",
+    "TableLineageSourceSpecColumns",
+    "TableLineageSourceSpecProperties",
     "TableListModel",
     "TableModel",
     "TableMonitoringCheckCategoriesSpec",
@@ -2916,6 +2968,16 @@ __all__ = (
     "TableTimelinessPartitionReloadLagSensorParametersSpec",
     "TableTimelinessProfilingChecksSpec",
     "TableTimelinessProfilingChecksSpecCustomChecks",
+    "TableUniquenessDailyMonitoringChecksSpec",
+    "TableUniquenessDailyMonitoringChecksSpecCustomChecks",
+    "TableUniquenessDailyPartitionChecksSpec",
+    "TableUniquenessDailyPartitionChecksSpecCustomChecks",
+    "TableUniquenessMonthlyMonitoringChecksSpec",
+    "TableUniquenessMonthlyMonitoringChecksSpecCustomChecks",
+    "TableUniquenessMonthlyPartitionChecksSpec",
+    "TableUniquenessMonthlyPartitionChecksSpecCustomChecks",
+    "TableUniquenessProfilingChecksSpec",
+    "TableUniquenessProfilingChecksSpecCustomChecks",
     "TableVolumeDailyMonitoringChecksSpec",
     "TableVolumeDailyMonitoringChecksSpecCustomChecks",
     "TableVolumeDailyPartitionedChecksSpec",

@@ -27,6 +27,9 @@ if TYPE_CHECKING:
     from ..models.table_timeliness_daily_monitoring_checks_spec import (
         TableTimelinessDailyMonitoringChecksSpec,
     )
+    from ..models.table_uniqueness_daily_monitoring_checks_spec import (
+        TableUniquenessDailyMonitoringChecksSpec,
+    )
     from ..models.table_volume_daily_monitoring_checks_spec import (
         TableVolumeDailyMonitoringChecksSpec,
     )
@@ -47,6 +50,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
         custom_sql (Union[Unset, TableCustomSqlDailyMonitoringChecksSpec]):
         availability (Union[Unset, TableAvailabilityDailyMonitoringChecksSpec]):
         schema (Union[Unset, TableSchemaDailyMonitoringChecksSpec]):
+        uniqueness (Union[Unset, TableUniquenessDailyMonitoringChecksSpec]):
         comparisons (Union[Unset, TableDailyMonitoringCheckCategoriesSpecComparisons]): Dictionary of configuration of
             checks for table comparisons. The key that identifies each comparison must match the name of a data comparison
             that is configured on the parent table.
@@ -59,6 +63,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
     custom_sql: Union[Unset, "TableCustomSqlDailyMonitoringChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityDailyMonitoringChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaDailyMonitoringChecksSpec"] = UNSET
+    uniqueness: Union[Unset, "TableUniquenessDailyMonitoringChecksSpec"] = UNSET
     comparisons: Union[Unset, "TableDailyMonitoringCheckCategoriesSpecComparisons"] = (
         UNSET
     )
@@ -93,6 +98,10 @@ class TableDailyMonitoringCheckCategoriesSpec:
         if not isinstance(self.schema, Unset):
             schema = self.schema.to_dict()
 
+        uniqueness: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.uniqueness, Unset):
+            uniqueness = self.uniqueness.to_dict()
+
         comparisons: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.comparisons, Unset):
             comparisons = self.comparisons.to_dict()
@@ -114,6 +123,8 @@ class TableDailyMonitoringCheckCategoriesSpec:
             field_dict["availability"] = availability
         if schema is not UNSET:
             field_dict["schema"] = schema
+        if uniqueness is not UNSET:
+            field_dict["uniqueness"] = uniqueness
         if comparisons is not UNSET:
             field_dict["comparisons"] = comparisons
 
@@ -141,6 +152,9 @@ class TableDailyMonitoringCheckCategoriesSpec:
         )
         from ..models.table_timeliness_daily_monitoring_checks_spec import (
             TableTimelinessDailyMonitoringChecksSpec,
+        )
+        from ..models.table_uniqueness_daily_monitoring_checks_spec import (
+            TableUniquenessDailyMonitoringChecksSpec,
         )
         from ..models.table_volume_daily_monitoring_checks_spec import (
             TableVolumeDailyMonitoringChecksSpec,
@@ -198,6 +212,13 @@ class TableDailyMonitoringCheckCategoriesSpec:
         else:
             schema = TableSchemaDailyMonitoringChecksSpec.from_dict(_schema)
 
+        _uniqueness = d.pop("uniqueness", UNSET)
+        uniqueness: Union[Unset, TableUniquenessDailyMonitoringChecksSpec]
+        if isinstance(_uniqueness, Unset):
+            uniqueness = UNSET
+        else:
+            uniqueness = TableUniquenessDailyMonitoringChecksSpec.from_dict(_uniqueness)
+
         _comparisons = d.pop("comparisons", UNSET)
         comparisons: Union[Unset, TableDailyMonitoringCheckCategoriesSpecComparisons]
         if isinstance(_comparisons, Unset):
@@ -215,6 +236,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
             custom_sql=custom_sql,
             availability=availability,
             schema=schema,
+            uniqueness=uniqueness,
             comparisons=comparisons,
         )
 

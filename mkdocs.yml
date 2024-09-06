@@ -295,6 +295,10 @@ nav:
         - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
         - reload lag: 'checks/table/timeliness/reload-lag.md'
+      - uniqueness:
+        - 'checks/table/uniqueness/index.md'
+        - duplicate record count: 'checks/table/uniqueness/duplicate-record-count.md'
+        - duplicate record percent: 'checks/table/uniqueness/duplicate-record-percent.md'
       - volume:
         - 'checks/table/volume/index.md'
         - row count: 'checks/table/volume/row-count.md'
@@ -498,6 +502,7 @@ nav:
         - custom_sql table sensors: 'reference/sensors/table/custom_sql-table-sensors.md'
         - schema table sensors: 'reference/sensors/table/schema-table-sensors.md'
         - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
+        - uniqueness table sensors: 'reference/sensors/table/uniqueness-table-sensors.md'
         - volume table sensors: 'reference/sensors/table/volume-table-sensors.md'
       - column:
         - 'reference/sensors/column/index.md'

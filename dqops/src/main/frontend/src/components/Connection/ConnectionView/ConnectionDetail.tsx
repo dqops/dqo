@@ -26,6 +26,7 @@ import {
 } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
+import AdvancedProperties from '../../AdvancedProperties/AdvancedProperties';
 import Button from '../../Button';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
@@ -150,7 +151,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials();
   }, []);
-
+  console.log(connectionBasic);
   return (
     <div
       className={clsx(
@@ -165,11 +166,11 @@ const ConnectionDetail = () => {
         isUpdating={isUpdating}
         isUpdated={isUpdatedConnectionBasic}
       />
-      <table className="mb-6">
+      <table className="mb-1">
         <tbody>
           <tr>
             <td className="px-4 py-2">
-              <div>Connection name:</div>
+              <div>Connection name</div>
             </td>
             <td className="px-4 py-2">
               <div>{connectionBasic?.connection_name}</div>
@@ -177,7 +178,7 @@ const ConnectionDetail = () => {
           </tr>
           <tr>
             <td className="px-4 py-2">
-              <div>Parallel jobs limit:</div>
+              <div>Parallel jobs limit</div>
             </td>
             <td className="px-4 py-2">
               <div>
@@ -200,8 +201,13 @@ const ConnectionDetail = () => {
           </tr>
         </tbody>
       </table>
+      <AdvancedProperties
+        properties={connectionBasic?.advanced_properties}
+        handleChange={onChange}
+        sharedCredentials={sharedCredentials}
+      />
 
-      <div className="px-4">
+      <div className="px-4 !mt-6">
         {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection

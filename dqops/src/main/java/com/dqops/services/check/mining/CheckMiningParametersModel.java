@@ -80,7 +80,13 @@ public class CheckMiningParametersModel implements Cloneable {
      * Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Propose the rules for default checks that were activated using data quality check patterns (policies). The default value of this parameter is 'true'.")
-    private boolean proposeDefaultChecks = true;
+    private boolean reconfigurePolicyEnabledChecks = true;
+
+    /**
+     * Propose the configuration of data quality checks from statistics.
+     */
+    @JsonPropertyDescription("Propose the configuration of data quality checks from statistics.")
+    private boolean proposeChecksFromStatistics = true;
 
     /**
      * Propose the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
@@ -209,9 +215,9 @@ public class CheckMiningParametersModel implements Cloneable {
     private boolean proposeWhitespaceChecks = true;
 
     /**
-     * Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.
+     * Applies rules to Personal Identifiable Information checks (sensitive data), but only when the checks were activated manually as profiling checks, or through a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.
      */
-    @JsonPropertyDescription("Apply the rules to the Personal Identifiable Information checks (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.")
+    @JsonPropertyDescription("Applies rules to Personal Identifiable Information checks (sensitive data), but only when the checks were activated manually as profiling checks, or through a data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.")
     private boolean applyPiiChecks = true;
 
     /**

@@ -30,9 +30,13 @@ public interface TableProfilingResultsReadService {
      * @param executionContext Execution context with access to the user home.
      * @param connectionSpec   Connection specification.
      * @param tableSpec        Table specification of the table that is analyzed.
+     * @param importStatistics Import statistics to be used by the rule miner. Without the statistics, the miner can only configure current checks or copy profiling checks.
+     * @param importDefaultChecks Imports the results of default checks. When we disable it, the rule miner will not see their results and will not propose configuring them. It is important when configuring the monitoring and partition checks to not copy them.
      * @return All loaded results for a table.
      */
     TableProfilingResults loadTableProfilingResults(ExecutionContext executionContext,
                                                     ConnectionSpec connectionSpec,
-                                                    TableSpec tableSpec);
+                                                    TableSpec tableSpec,
+                                                    boolean importStatistics,
+                                                    boolean importDefaultChecks);
 }

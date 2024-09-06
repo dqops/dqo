@@ -16,6 +16,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`volume`](./table-daily-partitioned-checks.md#tablevolumedailypartitionedchecksspec)</span>|Volume daily partitioned data quality checks that verify the quality of every day of data separately|*[TableVolumeDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#tablevolumedailypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`timeliness`](./table-daily-partitioned-checks.md#tabletimelinessdailypartitionedchecksspec)</span>|Daily partitioned timeliness checks|*[TableTimelinessDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#tabletimelinessdailypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`custom_sql`](./table-daily-partitioned-checks.md#tablecustomsqldailypartitionedchecksspec)</span>|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|*[TableCustomSqlDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#tablecustomsqldailypartitionedchecksspec)*| | | |
+|<span class="no-wrap-code ">[`uniqueness`](./table-daily-partitioned-checks.md#tableuniquenessdailypartitionchecksspec)</span>|Daily partitioned uniqueness checks on a table level.|*[TableUniquenessDailyPartitionChecksSpec](./table-daily-partitioned-checks.md#tableuniquenessdailypartitionchecksspec)*| | | |
 |<span class="no-wrap-code ">[`comparisons`](./table-daily-partitioned-checks.md#tablecomparisondailypartitionedchecksspecmap)</span>|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|*[TableComparisonDailyPartitionedChecksSpecMap](./table-daily-partitioned-checks.md#tablecomparisondailypartitionedchecksspecmap)*| | | |
 |<span class="no-wrap-code ">[`custom`](../profiling/table-profiling-checks.md#customcheckspecmap)</span>|Dictionary of custom checks. The keys are check names within this category.|*[CustomCheckSpecMap](../profiling/table-profiling-checks.md#customcheckspecmap)*| | | |
 
@@ -133,6 +134,22 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`daily_partition_sql_condition_passed_percent_on_table`](../../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)</span>|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.|*[TableSqlConditionPassedPercentCheckSpec](../../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)*| | | |
 |<span class="no-wrap-code ">[`daily_partition_sql_aggregate_expression_on_table`](../../../checks/table/custom_sql/sql-aggregate-expression-on-table.md)</span>|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each daily partition.|*[TableSqlAggregateExpressionCheckSpec](../../../checks/table/custom_sql/sql-aggregate-expression-on-table.md)*| | | |
 |<span class="no-wrap-code ">[`daily_partition_import_custom_result_on_table`](../../../checks/table/custom_sql/import-custom-result-on-table.md)</span>|Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.|*[TableSqlImportCustomResultCheckSpec](../../../checks/table/custom_sql/import-custom-result-on-table.md)*| | | |
+|<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
+
+
+
+___
+
+## TableUniquenessDailyPartitionChecksSpec
+Container of table level daily partition for uniqueness data quality checks.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`daily_partition_duplicate_record_count`](../../../checks/table/uniqueness/duplicate-record-count.md)</span>|Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.|*[TableDuplicateRecordCountCheckSpec](../../../checks/table/uniqueness/duplicate-record-count.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_duplicate_record_percent`](../../../checks/table/uniqueness/duplicate-record-percent.md)</span>|Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.|*[TableDuplicateRecordPercentCheckSpec](../../../checks/table/uniqueness/duplicate-record-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 

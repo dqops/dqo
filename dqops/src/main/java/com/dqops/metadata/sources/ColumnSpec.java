@@ -45,6 +45,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -111,6 +114,10 @@ public class ColumnSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
+
+    @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, String> advancedProperties = new HashMap<>();
 
     public ColumnSpec() {
     }
@@ -299,6 +306,23 @@ public class ColumnSpec extends AbstractSpec {
 		setDirtyIf(!Objects.equals(this.comments, comments));
         this.comments = comments;
 		propagateHierarchyIdToField(comments, "comments");
+    }
+
+    /**
+     * Returns a key/value map of advanced properties.
+     * @return Key/value dictionary of advanced properties.
+     */
+    public Map<String, String> getAdvancedProperties() {
+        return advancedProperties;
+    }
+
+    /**
+     * Sets a dictionary of advanced properties.
+     * @param advancedProperties Key/value dictionary with extra parameters.
+     */
+    public void setAdvancedProperties(Map<String, String> advancedProperties) {
+        setDirtyIf(!Objects.equals(this.advancedProperties, advancedProperties));
+        this.advancedProperties = advancedProperties != null ? Collections.unmodifiableMap(advancedProperties) : null;
     }
 
     /**
@@ -569,6 +593,7 @@ public class ColumnSpec extends AbstractSpec {
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
+            cloned.advancedProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -593,6 +618,7 @@ public class ColumnSpec extends AbstractSpec {
             cloned.partitionedChecks = null;
             cloned.labels = null;
             cloned.statistics = null;
+            cloned.advancedProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

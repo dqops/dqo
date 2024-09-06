@@ -67,7 +67,7 @@ export default function RuleMining({
     copy_failed_profiling_checks: true,
     copy_disabled_profiling_checks: false,
     copy_profiling_checks: true,
-    propose_default_checks: true,
+    reconfigure_policy_enabled_checks: true,
     propose_minimum_row_count: true,
     propose_column_count: true,
     propose_timeliness_checks: true,
@@ -211,7 +211,8 @@ export default function RuleMining({
       ...configuration,
       category_filter: addPrefix(configuration.category_filter ?? ''),
       column_name_filter: addPrefix(configuration.column_name_filter ?? ''),
-      check_name_filter: addPrefix(configuration.check_name_filter ?? '')
+      check_name_filter: addPrefix(configuration.check_name_filter ?? ''),
+      propose_checks_from_statistics: checkTypes === CheckTypes.PROFILING
     };
     setLoading(true);
     switch (checkTypes) {

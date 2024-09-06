@@ -3064,7 +3064,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format_regex(parameters.date_format)}}) IS FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -3391,7 +3391,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format_regex(parameters.date_format)}}) IS FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -3731,7 +3731,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([ \t\n\r\f\v\'\-])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.]))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([ \t\n\r\f\v\'\-.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([ \t\n\r\f\v\'\-.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$') }}
+                    WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([ \t\n\r\f\v''-])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.]))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([ \t\n\r\f\v''-.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([ \t\n\r\f\v''-.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$') }}
                         THEN 1
                     ELSE 0
                 END
@@ -4004,7 +4004,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -4027,7 +4027,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                         THEN 0
                     ELSE 1
                 END
@@ -4073,7 +4073,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -4102,7 +4102,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                         THEN 0
                     ELSE 1
                 END
@@ -4125,7 +4125,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -4155,7 +4155,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -4178,7 +4178,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -4201,7 +4201,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -4224,7 +4224,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
@@ -4247,7 +4247,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -4331,7 +4331,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -4354,7 +4354,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }}) IS TRUE
+                    WHEN NOT REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }}) IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -4400,7 +4400,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
@@ -4429,7 +4429,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }} IS TRUE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }} IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -4452,7 +4452,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
@@ -4482,7 +4482,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} ~ {{ lib.render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -4505,7 +4505,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP {{ lib.render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -4528,7 +4528,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} RLIKE {{ lib.render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -4551,7 +4551,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.make_text_constant(parameters.regex) }}
+                    WHEN NOT {{ lib.render_target_column('analyzed_table') }} LIKE {{ lib.render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -4574,7 +4574,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
+                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END

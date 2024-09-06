@@ -35,6 +35,8 @@ tags:
 - name: "DataGroupingConfigurations"
   description: "Operations for managing the configuration of data groupings on a table\
     \ level in DQOps."
+- name: "DataLineage"
+  description: "Operations related to managing and inspecting table and column lineage."
 - name: "DataSources"
   description: "Rest API controller that operates on data sources that are not yet\
     \ imported, testing connections or retrieving the metadata (schemas and tables)."
@@ -6496,6 +6498,236 @@ paths:
           description: "Table not found"
         406:
           description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage:
+    get:
+      tags:
+      - "DataLineage"
+      summary: "getTableSourceTables"
+      description: "Returns a list of source tables on the data lineage that are sources\
+        \ of the given table."
+      operationId: "getTableSourceTables"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TableLineageSourceListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+  : post:
+      tags:
+      - "DataLineage"
+      summary: "createTableSourceTable"
+      description: "Creates a new source table of the table's data lineage."
+      operationId: "createTableSourceTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Table lineage source list model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableLineageSourceListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Table's new source table successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Table's source table with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DataLineage"
+      summary: "updateTableSourceTable"
+      description: "Update a specific data lineage source table using a new model."
+      operationId: "updateTableSourceTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Table lineage source list model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableLineageSourceListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Table's source table successfully updated"
+        404:
+          description: "Connection or table's source table not found"
+        406:
+          description: "Incorrect request"
+        409:
+          description: "Table's source table with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "DataLineage"
+      summary: "deleteTableSourceTable"
+      description: "Deletes a specific data lineage source table of the given table."
+      operationId: "deleteTableSourceTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Table's source table removed"
+        404:
+          description: "Connection or table's source table not found"
+        406:
+          description: "Invalid request"
         500:
           description: "Internal Server Error"
           schema:
@@ -16727,11 +16959,14 @@ definitions:
       copy_profiling_checks:
         type: "boolean"
         description: "Copy the configuration of valid profiling checks."
-      propose_default_checks:
+      reconfigure_policy_enabled_checks:
         type: "boolean"
         description: "Propose the rules for default checks that were activated using\
           \ data quality check patterns (policies). The default value of this parameter\
           \ is 'true'."
+      propose_checks_from_statistics:
+        type: "boolean"
+        description: "Propose the configuration of data quality checks from statistics."
       propose_minimum_row_count:
         type: "boolean"
         description: "Propose the default configuration of the minimum row count for\
@@ -23494,6 +23729,22 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxPercentRule5ParametersSpec"
+  ColumnLineageSourceSpec:
+    type: "object"
+    properties:
+      source_columns:
+        type: "array"
+        description: "A list of source columns from the source table name from which\
+          \ this column receives data."
+        items:
+          type: "string"
+      properties:
+        type: "object"
+        description: "A dictionary of mapping properties stored as a key/value dictionary.\
+          \ Data lineage synchronization tools that are importing data lineage mappings\
+          \ from external data lineage sources can use it to store mapping information."
+        additionalProperties:
+          type: "string"
   ColumnListModel:
     type: "object"
     properties:
@@ -23581,6 +23832,12 @@ definitions:
           \ being supplied with a time range should be pushed to the job queue in\
           \ order to remove stored results connected with this column."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -29756,6 +30013,12 @@ definitions:
           \ the tool (serialization and deserialization will remove non tracked comments)."
         items:
           $ref: "#/definitions/CommentSpec"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   ColumnSqlAggregateExpressionCheckSpec:
     type: "object"
     properties:
@@ -34548,6 +34811,12 @@ definitions:
           \ being supplied with a time range should be pushed to the job queue in\
           \ order to remove stored results connected with this connection."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -34568,8 +34837,8 @@ definitions:
           \ file. This field is null when the YAML file is valid. If an error was\
           \ captured, this field returns the file parsing error message and the file\
           \ location."
-    description: "Connection model for with a subset of parameters, excluding all\
-      \ nested objects."
+    description: "Connection model with a subset of parameters, excluding all nested\
+      \ objects."
   ConnectionSpec:
     type: "object"
     properties:
@@ -34676,6 +34945,12 @@ definitions:
         description: "Custom labels that were assigned to the connection. Labels are\
           \ used for searching for tables when filtered data quality checks are executed."
         items:
+          type: "string"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
           type: "string"
   ConnectionSpecificationModel:
     type: "object"
@@ -39948,6 +40223,9 @@ definitions:
       schema:
         description: "Daily monitoring table schema checks"
         $ref: "#/definitions/TableSchemaDailyMonitoringChecksSpec"
+      uniqueness:
+        description: "Daily monitoring uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessDailyMonitoringChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -39975,6 +40253,9 @@ definitions:
         description: "Custom SQL daily partitioned data quality checks that verify\
           \ the quality of every day of data separately"
         $ref: "#/definitions/TableCustomSqlDailyPartitionedChecksSpec"
+      uniqueness:
+        description: "Daily partitioned uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessDailyPartitionChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40287,6 +40568,164 @@ definitions:
           \ partitioned by date, it is possible to run data quality checks for each\
           \ day or month of data separately."
         $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
+  TableDuplicateRecordCountCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/TableDuplicateRecordCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ nulls in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  TableDuplicateRecordCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      columns:
+        type: "array"
+        description: "A list of columns used for uniqueness record duplicate verification."
+        items:
+          type: "string"
+  TableDuplicateRecordPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/TableDuplicateRecordPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ nulls in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
+  TableDuplicateRecordPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      columns:
+        type: "array"
+        description: "A list of columns used for uniqueness record duplicate verification."
+        items:
+          type: "string"
   TableIncidentGroupingSpec:
     type: "object"
     properties:
@@ -40321,6 +40760,83 @@ definitions:
         type: "boolean"
         description: "Disables data quality incident creation for failed data quality\
           \ checks on the table."
+  TableLineageSourceListModel:
+    type: "object"
+    properties:
+      target_connection:
+        type: "string"
+        description: "The connection name where the target table is defined."
+      target_schema:
+        type: "string"
+        description: "The schema name in the target connection where the target table\
+          \ is defined."
+      target_table:
+        type: "string"
+        description: "The name of the target table inside the target schema."
+      source_connection:
+        type: "string"
+        description: "The name of a source connection that is defined in DQOps and\
+          \ contains a source table from which the current table receives data."
+      source_schema:
+        type: "string"
+        description: "The name of a source schema within the source connection that\
+          \ contains a source table from which the current table receives data."
+      source_table:
+        type: "string"
+        description: "The name of a source schema within the source connection that\
+          \ contains a source table from which the current table receives data."
+      data_lineage_source_tool:
+        type: "string"
+        description: "The name of a source tool from which this data lineage information\
+          \ was copied. This field should be filled when the data lineage was imported\
+          \ from another data catalog or a data lineage tracking platform."
+      properties:
+        type: "object"
+        description: "A dictionary of mapping properties stored as a key/value dictionary.\
+          \ Data lineage synchronization tools that are importing data lineage mappings\
+          \ from external data lineage sources can use it to store mapping information."
+        additionalProperties:
+          type: "string"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+    description: "Data lineage model that describes one source table of the current\
+      \ table."
+  TableLineageSourceSpec:
+    type: "object"
+    properties:
+      source_connection:
+        type: "string"
+        description: "The name of a source connection that is defined in DQOps and\
+          \ contains a source table from which the current table receives data."
+      source_schema:
+        type: "string"
+        description: "The name of a source schema within the source connection that\
+          \ contains a source table from which the current table receives data."
+      source_table:
+        type: "string"
+        description: "The name of a source table in the source schema from which the\
+          \ current table receives data."
+      data_lineage_source_tool:
+        type: "string"
+        description: "The name of a source tool from which this data lineage information\
+          \ was copied. This field should be filled when the data lineage was imported\
+          \ from another data catalog or a data lineage tracking platform."
+      properties:
+        type: "object"
+        description: "A dictionary of mapping properties stored as a key/value dictionary.\
+          \ Data lineage synchronization tools that are importing data lineage mappings\
+          \ from external data lineage sources can use it to store mapping information."
+        additionalProperties:
+          type: "string"
+      columns:
+        type: "object"
+        description: "Configuration of source columns for each column in the current\
+          \ table. The keys in this dictionary are column names in the current table.\
+          \ The object stored in the dictionary contain a list of source columns."
+        additionalProperties:
+          $ref: "#/definitions/ColumnLineageSourceSpec"
   TableListModel:
     type: "object"
     properties:
@@ -40443,6 +40959,12 @@ definitions:
           \ being supplied with a time range should be pushed to the job queue in\
           \ order to remove stored results connected with this table."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -40526,6 +41048,9 @@ definitions:
       schema:
         description: "Monthly monitoring table schema checks"
         $ref: "#/definitions/TableSchemaMonthlyMonitoringChecksSpec"
+      uniqueness:
+        description: "Monthly monitoring uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessMonthlyMonitoringChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40553,6 +41078,9 @@ definitions:
         description: "Custom SQL monthly partitioned data quality checks that verify\
           \ the quality of every month of data separately"
         $ref: "#/definitions/TableCustomSqlMonthlyPartitionedChecksSpec"
+      uniqueness:
+        description: "Monthly partitioned uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessMonthlyPartitionChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40719,6 +41247,9 @@ definitions:
         description: "Configuration of schema (column count and schema) data quality\
           \ checks on a table level."
         $ref: "#/definitions/TableSchemaProfilingChecksSpec"
+      uniqueness:
+        description: "Configuration of uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessProfilingChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -41875,6 +42406,18 @@ definitions:
         description: "File format with the specification used as a source data. It\
           \ overrides the connection spec's file format when it is set"
         $ref: "#/definitions/FileFormatSpec"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
+      source_tables:
+        type: "array"
+        description: "A list of source tables. This information is used to define\
+          \ the data lineage report for the table."
+        items:
+          $ref: "#/definitions/TableLineageSourceSpec"
   TableSqlAggregateExpressionCheckSpec:
     type: "object"
     properties:
@@ -42402,6 +42945,101 @@ definitions:
         description: "Calculates the time difference in days between the most recent\
           \ event timestamp and the most recent ingestion timestamp"
         $ref: "#/definitions/TableDataIngestionDelayCheckSpec"
+  TableUniquenessDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      daily_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessDailyPartitionChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      daily_partition_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      monthly_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessMonthlyPartitionChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      monthly_partition_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      profile_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
   TableVolumeDailyMonitoringChecksSpec:
     type: "object"
     properties:

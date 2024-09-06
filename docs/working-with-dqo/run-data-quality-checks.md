@@ -49,7 +49,7 @@ To run a check:
 
 1. Activate the check of interest by clicking the toggle button next to the check name in the list on the right.
 
-    The gray color indicates that the check is not activated, light green indicates [default checks](../dqo-concepts/data-observability.md#) that are activated, and darker green indicates manually activated checks.
+    The gray color indicates that the check is not activated, light green indicates [default checks](../dqo-concepts/data-observability.md#default-table-level-checks) that are activated, and darker green indicates manually activated checks.
 
     ![Activate check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check4.png){ loading=lazy; width="1200px" }
 

@@ -11,11 +11,11 @@ export default function CurrentTableStatus({
   return (
     <SectionWrapper title="Current table status">
       <div className="flex gap-x-2">
-        <div className="w-43 mb-0.5">Status:</div>
+        <div className="w-43 mb-0.5">Status</div>
         <div>{tableDataQualityStatus.current_severity}</div>
       </div>
       <div className="flex gap-x-2">
-        <div className="w-43 mb-0.5">Last check executed at:</div>
+        <div className="w-43 mb-0.5">Last check executed at</div>
         <div>
           {moment(tableDataQualityStatus.last_check_executed_at).format(
             'YYYY-MM-DD HH:mm:ss'
@@ -23,7 +23,7 @@ export default function CurrentTableStatus({
         </div>
       </div>
       <div className="flex gap-x-2">
-        <div className="w-43">Data quality KPI score:</div>
+        <div className="w-43">Data quality KPI score</div>
         <div>
           {tableDataQualityStatus.data_quality_kpi !== undefined
             ? Number(tableDataQualityStatus.data_quality_kpi).toFixed(2) + ' %'
