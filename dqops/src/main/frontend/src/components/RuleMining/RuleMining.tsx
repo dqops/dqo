@@ -194,7 +194,7 @@ export default function RuleMining({
           );
         }
       } else {
-        if (flash) {
+        if (flash && typeof flash === 'boolean') {
           dispatch(
             setJobAllert({
               activeTab: firstLevelActiveTab,
