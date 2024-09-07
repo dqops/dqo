@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   DuckdbParametersSpec,
   DuckdbParametersSpecAwsAuthenticationModeEnum,
@@ -11,8 +9,6 @@ import {
   SharedCredentialListModel
 } from '../../../../api';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
-import { getFirstLevelActiveTab } from '../../../../redux/selectors';
-import { CheckTypes } from '../../../../shared/routes';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
@@ -95,17 +91,11 @@ const DuckdbConnection = ({
   sharedCredentials,
   freezeFileType = false
 }: IDuckdbConnectionProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [fileFormatType, setFileFormatType] = useState<
     keyof DuckdbParametersSpec
   >(duckdb?.files_format_type ?? DuckdbParametersSpecFilesFormatTypeEnum.csv);
-  const [refetchDirectoriesIndicator, setRefetchDirectoriesIndicator] =
-    useState(false);
+
   const [selectedInput, setSelectedInput] = useState<number | string>();
-  // const [duckdb, setduckdb] = useState<DuckdbParametersSpec>(
-  //   duckdb ??{}
-  // );
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     onChange({
       ...duckdb,
@@ -131,11 +121,6 @@ const DuckdbConnection = ({
     setFileFormatType(val);
     cleanConfiguration();
   };
-
-  // useEffect(() => {
-  //   setduckdb(cloneDeep(duckdb) ?? {});
-  //   setRefetchDirectoriesIndicator((prev) => !prev);
-  // }, [firstLevelActiveTab]);
 
   const changeStorageTypeDirectoryPrefixes = (
     storage_type: DuckdbParametersSpecStorageTypeEnum
@@ -381,7 +366,6 @@ const DuckdbConnection = ({
           }}
           sharedCredentials={sharedCredentials}
           storageType={duckdb?.storage_type}
-          refetchDirectoriesIndicator={refetchDirectoriesIndicator}
         />
       </FileFormatConfiguration>
       <JdbcPropertiesView
