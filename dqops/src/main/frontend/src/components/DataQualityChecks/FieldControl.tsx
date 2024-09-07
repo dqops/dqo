@@ -6,6 +6,7 @@ import {
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
 import CheckboxColumn from '../Checkbox/CheckBoxColumn';
+import ColumnsRecordDialog from '../ColumnsRecordDialog/ColumnsRecordDialog';
 import ExtendedTextAre from '../ExtendedTextArea';
 import FieldDatePicker from '../FieldDatePicker';
 import FloatingPointInput from '../FloatingPointInput';
@@ -214,16 +215,29 @@ const FieldControl = ({
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.string_list && (
         <div className="mt-4">
-          <StringListField
-            value={value}
-            label={label}
-            tooltipText={tooltip}
-            onChange={(value: string[]) =>
-              handleChange({ string_list_value: value })
-            }
-            onSave={onSave}
-            disabled={disabled}
-          />
+          {field.definition?.display_hint === 'column_names' ? (
+            <ColumnsRecordDialog
+              value={value}
+              label={label}
+              tooltipText={tooltip}
+              onChange={(value: string[]) =>
+                handleChange({ string_list_value: value })
+              }
+              onSave={onSave}
+              disabled={disabled}
+            />
+          ) : (
+            <StringListField
+              value={value}
+              label={label}
+              tooltipText={tooltip}
+              onChange={(value: string[]) =>
+                handleChange({ string_list_value: value })
+              }
+              onSave={onSave}
+              disabled={disabled}
+            />
+          )}
         </div>
       )}
       {field?.definition?.data_type ===
