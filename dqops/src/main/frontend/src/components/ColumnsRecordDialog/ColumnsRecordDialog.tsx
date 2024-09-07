@@ -47,16 +47,20 @@ const ColumnsRecordDialog = ({
     const getColumns = async () => {
       await ColumnApiClient.getColumns(connection, schema, table).then(
         (res) => {
-          const columnsWithCheckboxes = res.data.map((column) => ({
-            ...column,
-            checked: value.includes(column.column_name ?? '')
-          }));
+          const columnsWithCheckboxes = res.data
+            .map((column) => ({
+              ...column,
+              checked: value.includes(column.column_name ?? '')
+            }))
+            .sort((a, b) =>
+              (a.column_name ?? '')?.localeCompare(b.column_name ?? '')
+            );
           setColumnsWithCheckboxes(columnsWithCheckboxes);
         }
       );
     };
-    getColumns();
-  }, []);
+    if (open) getColumns();
+  }, [open]);
 
   return (
     <div>
@@ -93,48 +97,50 @@ const ColumnsRecordDialog = ({
           />
         </div>
       </div>
-      <Dialog open={open} handler={() => setOpen(false)} className="!w-100">
-        <div className="p-4 !w-full max-h-[50vh] text-sm flex flex-col overflow-y-auto text-black">
-          <div>
-            <div className="text-2xl mb-4">Columns</div>
-            {columnsWithCheckboxes.map((column) => (
-              <div
-                key={column.column_name}
-                className="flex items-center gap-x-4  text-xl"
-              >
-                <Checkbox
-                  checked={column.checked}
-                  onChange={(value) => {
-                    const newColumns = columnsWithCheckboxes.map((c) =>
-                      c.column_name === column.column_name
-                        ? { ...c, checked: value }
-                        : c
-                    );
-                    setColumnsWithCheckboxes(newColumns);
-                  }}
-                  className="!mr-5"
-                />
-                <span>{column.column_name}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex space-x-4 p-4 justify-between mt-2">
-            <div className="flex items-center justify-center gap-x-4">
-              <Button
-                color="primary"
-                variant="outlined"
-                label="Cancel"
-                className="w-40"
-                onClick={() => setOpen(false)}
+      <Dialog
+        open={open}
+        handler={() => setOpen(false)}
+        style={{ width: '300px !important' }}
+      >
+        <div className="p-4 text-black max-h-[50vh] flex flex-col overflow-y-auto ">
+          <div className="text-3xl mb-4">Columns</div>
+          {columnsWithCheckboxes.map((column) => (
+            <div
+              key={column.column_name}
+              className="flex items-center gap-x-4  text-2xl"
+            >
+              <Checkbox
+                checked={column.checked}
+                onChange={(value) => {
+                  const newColumns = columnsWithCheckboxes.map((c) =>
+                    c.column_name === column.column_name
+                      ? { ...c, checked: value }
+                      : c
+                  );
+                  setColumnsWithCheckboxes(newColumns);
+                }}
+                className="!mr-5 !mt-0.5"
               />
-              <Button
-                variant="contained"
-                label="Save"
-                color="primary"
-                className="w-40"
-                onClick={handleSave}
-              />
+              <span>{column.column_name}</span>
             </div>
+          ))}
+        </div>
+        <div className=" w-full flex justify-center items-center space-x-4 p-4  mt-2">
+          <div className="flex items-center justify-center gap-x-4">
+            <Button
+              color="primary"
+              variant="outlined"
+              label="Cancel"
+              className="w-40"
+              onClick={() => setOpen(false)}
+            />
+            <Button
+              variant="contained"
+              label="Save"
+              color="primary"
+              className="w-40"
+              onClick={handleSave}
+            />
           </div>
         </div>
       </Dialog>
