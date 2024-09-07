@@ -151,7 +151,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials();
   }, []);
-  console.log(connectionBasic);
+
   return (
     <div
       className={clsx(
