@@ -15,6 +15,8 @@
  */
 package com.dqops.sensors.table.uniqueness;
 
+import com.dqops.metadata.fields.ControlDisplayHint;
+import com.dqops.metadata.fields.DisplayHint;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -48,6 +50,7 @@ public class TableDuplicateRecordCountSensorParametersSpec extends AbstractSenso
     @JsonPropertyDescription("A list of columns used for uniqueness record duplicate verification.")
     @SampleValues(values = { "id", "created_at" })
     @RequiredField
+    @ControlDisplayHint(DisplayHint.column_names)
     private List<String> columns;
 
     /**

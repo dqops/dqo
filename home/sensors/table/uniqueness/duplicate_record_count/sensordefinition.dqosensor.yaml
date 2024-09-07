@@ -7,5 +7,6 @@ spec:
     display_name: columns
     help_text: A list of columns used for uniqueness record duplicate verification.
     data_type: string_list
+    display_hint: column_names
     required: true
   default_value: 0.0

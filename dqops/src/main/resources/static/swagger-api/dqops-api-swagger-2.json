@@ -39109,7 +39109,7 @@
         "display_hint" : {
           "type" : "string",
           "description" : "UI control display hint.",
-          "enum" : [ "textarea" ]
+          "enum" : [ "textarea", "column_names" ]
         },
         "required" : {
           "type" : "boolean",

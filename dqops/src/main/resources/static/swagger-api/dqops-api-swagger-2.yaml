@@ -37578,6 +37578,7 @@ definitions:
         description: "UI control display hint."
         enum:
         - "textarea"
+        - "column_names"
       required:
         type: "boolean"
         description: "True when the value for the parameter must be provided."

@@ -21,6 +21,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Additional display hints for fields.
  */
 public enum DisplayHint {
+    /**
+     * Show a text area to edit bigger text values.
+     */
     @JsonProperty("textarea")
-    textarea
+    textarea,
+
+    /**
+     * Show a popup with a list of columns to select with checkboxes.
+     */
+    @JsonProperty("column_names")
+    column_names
 }
