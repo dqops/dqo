@@ -242,7 +242,7 @@ const CheckResultsTab = ({
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
 

@@ -69,14 +69,14 @@ const SensorReadoutsTab = ({
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
     },
     {
-      label: 'Data grouping',
+      label: 'Data group',
       value: 'dataGroup',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     },
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
 

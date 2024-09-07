@@ -187,14 +187,14 @@ function TreeProvider(props: any) {
       }),
       {}
     );
-
+    const url = `${ROUTES.CONNECTION_DETAIL(
+      CheckTypes.SOURCES,
+      connection.connection_name ?? '',
+      'schemas'
+    )}?import_schema=true`;
     await dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
-        url: `${ROUTES.CONNECTION_DETAIL(
-          CheckTypes.SOURCES,
-          connection.connection_name ?? '',
-          'schemas'
-        )}?import_schema=true&create_success=true`,
+        url,
         value: ROUTES.CONNECTION_LEVEL_VALUE(
           checkTypes,
           connection.connection_name ?? ''
@@ -205,13 +205,7 @@ function TreeProvider(props: any) {
     );
     setTreeDataMaps(newTreeDataMaps);
 
-    history.push(
-      `${ROUTES.CONNECTION_DETAIL(
-        CheckTypes.SOURCES,
-        connection.connection_name ?? '',
-        'schemas'
-      )}?import_schema=true&create_success=true`
-    );
+    history.push(url);
   };
 
   useEffect(() => {

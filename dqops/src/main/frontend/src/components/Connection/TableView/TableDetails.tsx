@@ -51,18 +51,20 @@ const TableDetails = () => {
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
-  const format =
-    (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
-      x.includes('format')
-    ) as DuckdbParametersSpecFilesFormatTypeEnum) ??
-    DuckdbParametersSpecFilesFormatTypeEnum.csv;
-
+  const format = Object.keys(tableBasic?.file_format ?? {}).find((x) => {
+    return DuckdbParametersSpecFilesFormatTypeEnum[
+      x as keyof typeof DuckdbParametersSpecFilesFormatTypeEnum
+    ];
+  });
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const [sharedCredentials, setSharedCredentials] = useState<
     SharedCredentialListModel[]
   >([]);
   const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecFilesFormatTypeEnum>(format);
+    useState<DuckdbParametersSpecFilesFormatTypeEnum>(
+      (format as DuckdbParametersSpecFilesFormatTypeEnum) ??
+        DuckdbParametersSpecFilesFormatTypeEnum.csv
+    );
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     // setConfiguration((prev) => ({
@@ -104,6 +106,17 @@ const TableDetails = () => {
     getSharedCredentials();
     getConnectionBasic();
   }, [checkTypes, connection, schema, table]);
+
+  useEffect(() => {
+    if (!tableBasic || !tableBasic?.file_format) {
+      return;
+    }
+
+    setFileFormatType(
+      (format as DuckdbParametersSpecFilesFormatTypeEnum) ??
+        DuckdbParametersSpecFilesFormatTypeEnum.csv
+    );
+  }, [tableBasic?.file_format]);
 
   const handleChange = (obj: any) => {
     dispatch(
