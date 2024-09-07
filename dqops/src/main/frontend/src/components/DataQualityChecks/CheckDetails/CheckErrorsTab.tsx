@@ -44,7 +44,7 @@ const CheckErrorsTab = ({
     {
       label: 'Readout id',
       value: 'readoutId',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80 text-right'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80 text-left'
     }
   ];
 
