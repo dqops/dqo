@@ -34,7 +34,7 @@ DQOps uses the DuckDB connector to work with Google Cloud Storage buckets. To na
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
 2. Select the DuckDB connection.
 

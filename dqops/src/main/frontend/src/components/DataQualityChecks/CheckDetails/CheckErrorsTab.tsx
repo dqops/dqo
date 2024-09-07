@@ -80,6 +80,7 @@ const CheckErrorsTab = ({
               })) || []
             }
             onChange={onChangeDataGroup}
+            disabled={(errors[0]?.dataGroupsNames ?? []).length === 0}
           />
         </div>
         <div className="flex space-x-4 items-center">

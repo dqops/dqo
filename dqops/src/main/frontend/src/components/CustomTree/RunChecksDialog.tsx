@@ -188,7 +188,7 @@ export default function RunChecksDialog({
         {additionalParams === false ? (
           <div
             className={clsx(
-              'flex items-center text-black mb-4 cursor-default',
+              'flex items-center text-black mb-4 cursor-pointer',
               checkType === CheckTypes.PARTITIONED && 'mb-[62px]'
             )}
             onClick={() => setAdditionalParams(true)}
@@ -201,7 +201,7 @@ export default function RunChecksDialog({
             title="Additional parameters"
             onClick={() => setAdditionalParams(false)}
             svgIcon={true}
-            className="cursor-default"
+            titleClassName="cursor-pointer"
           >
             <div className="flex justify-between py-4 text-black">
               <div className="w-1/4 ml-2">
@@ -304,7 +304,7 @@ export default function RunChecksDialog({
             <div
               className={clsx(
                 'text-sm text-black ml-2',
-                checkType !== CheckTypes.PARTITIONED &&
+                filters.checkType !== CheckTypes.PARTITIONED &&
                   'text-gray-300 cursor-not-allowed'
               )}
             >

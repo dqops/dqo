@@ -157,11 +157,11 @@ You have to configure one or both of the column names:
 ### Configuring timestamp columns from UI
 To configure the event and/or ingestion timestamp columns:
 
-1. Go to the **Data Sources** section.
+1. Go to the **Data sources** section.
 
 2. Select the table of interest from the tree view.
 
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Event timestamp column name
+3. Select the **Data and time columns** tab and select a column from the drop-down list in the "Event timestamp column name
    for timeliness checks" and/or "Ingestion timestamp column name for timeliness checks" input fields.
 
 4. Click the Save button in the upper right corner.
