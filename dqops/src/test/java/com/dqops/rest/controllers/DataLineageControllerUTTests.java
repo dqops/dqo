@@ -122,13 +122,10 @@ public class DataLineageControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        TableLineageSourceListModel newSourceTable = new TableLineageSourceListModel(){{
+        TableLineageSourceSpec newSourceTable = new TableLineageSourceSpec(){{
             setSourceConnection(TABLE_LINEAGE_SOURCE_1.getConnection());
             setSourceSchema(TABLE_LINEAGE_SOURCE_1.getSchema());
             setSourceTable(TABLE_LINEAGE_SOURCE_1.getTable());
-            setTargetConnection(sampleTable.getConnectionName());
-            setTargetSchema(sampleTableSpec.getPhysicalTableName().getSchemaName());
-            setTargetTable(sampleTableSpec.getPhysicalTableName().getTableName());
             setDataLineageSourceTool("updated_tool_name");
             setProperties(Map.of("updated_table_id_in_lineage_tool", "99"));
         }};
@@ -163,7 +160,7 @@ public class DataLineageControllerUTTests extends BaseTest {
             setTable("a_new_table_name");
         }};
 
-        TableLineageSourceListModel newSourceTable = new TableLineageSourceListModel(){{
+        TableLineageSourceSpec newSourceTable = new TableLineageSourceSpec(){{
             setSourceConnection(tableLineageSource.getConnection());
             setSourceSchema(tableLineageSource.getSchema());
             setSourceTable(tableLineageSource.getTable());
@@ -195,7 +192,7 @@ public class DataLineageControllerUTTests extends BaseTest {
             setSchema("a_new_schema_name");
         }};
 
-        TableLineageSourceListModel newSourceTable = new TableLineageSourceListModel(){{
+        TableLineageSourceSpec newSourceTable = new TableLineageSourceSpec(){{
             setSourceConnection(tableLineageSource.getConnection());
             setSourceSchema(tableLineageSource.getSchema());
             setDataLineageSourceTool("a_new_lineage_tool_name");
@@ -224,13 +221,10 @@ public class DataLineageControllerUTTests extends BaseTest {
         String newSourceSchema = "new_source_schema";
         String newSourceTable = "new_source_table";
 
-        TableLineageSourceListModel newTableLineageSourceListModel = new TableLineageSourceListModel(){{
+        TableLineageSourceSpec newTableLineageSourceListModel = new TableLineageSourceSpec(){{
             setSourceConnection(newSourceConnection);
             setSourceSchema(newSourceSchema);
             setSourceTable(newSourceTable);
-            setTargetConnection(sampleTable.getConnectionName());
-            setTargetSchema(sampleTableSpec.getPhysicalTableName().getSchemaName());
-            setTargetTable(sampleTableSpec.getPhysicalTableName().getTableName());
             setDataLineageSourceTool("new_tool");
         }};
 
@@ -256,13 +250,10 @@ public class DataLineageControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        TableLineageSourceListModel newSourceTable = new TableLineageSourceListModel(){{
+        TableLineageSourceSpec newSourceTable = new TableLineageSourceSpec(){{
             setSourceConnection(TABLE_LINEAGE_SOURCE_1.getConnection());
             setSourceSchema(TABLE_LINEAGE_SOURCE_1.getSchema());
             setSourceTable(TABLE_LINEAGE_SOURCE_1.getTable());
-            setTargetConnection(sampleTable.getConnectionName());
-            setTargetSchema(sampleTableSpec.getPhysicalTableName().getSchemaName());
-            setTargetTable(sampleTableSpec.getPhysicalTableName().getTableName());
             setDataLineageSourceTool("updated_tool_name");
             setProperties(Map.of("updated_table_id_in_lineage_tool", "99"));
         }};

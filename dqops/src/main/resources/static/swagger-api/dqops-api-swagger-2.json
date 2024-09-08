@@ -7871,6 +7871,70 @@
       }
     },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}" : {
+      "get" : {
+        "tags" : [ "DataLineage" ],
+        "summary" : "getTableSourceTable",
+        "description" : "Reads a specific data lineage source table defined on a target tale.",
+        "operationId" : "getTableSourceTable",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "sourceConnection",
+          "in" : "path",
+          "description" : "Source connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "sourceSchema",
+          "in" : "path",
+          "description" : "Source schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "sourceTable",
+          "in" : "path",
+          "description" : "Source table name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Table basic information returned",
+            "schema" : {
+              "$ref" : "#/definitions/TableLineageSourceSpec"
+            }
+          },
+          "404" : {
+            "description" : "Connection, table or table lineage not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
       "post" : {
         "tags" : [ "DataLineage" ],
         "summary" : "createTableSourceTable",
@@ -7920,7 +7984,7 @@
           "description" : "Table lineage source list model",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/TableLineageSourceListModel"
+            "$ref" : "#/definitions/TableLineageSourceSpec"
           }
         } ],
         "responses" : {
@@ -8002,7 +8066,7 @@
           "description" : "Table lineage source list model",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/TableLineageSourceListModel"
+            "$ref" : "#/definitions/TableLineageSourceSpec"
           }
         } ],
         "responses" : {
