@@ -168,24 +168,22 @@ public class DataLineageController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
 
-            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
-                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
-                if (sourceTables == null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                }
+            TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName, false);
+            if (sourceTables == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-                TableLineageSource tableLineageSourceKey = new TableLineageSource(sourceConnection, sourceSchema, sourceTable);
-                TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
+            TableLineageSource tableLineageSourceKey = new TableLineageSource(sourceConnection, sourceSchema, sourceTable);
+            TableLineageSourceSpec tableLineageSourceSpec = sourceTables.getByObjectName(tableLineageSourceKey, false);
 
-                if (tableLineageSourceSpec == null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                }
+            if (tableLineageSourceSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-                userHomeContext.flush();
-                return new ResponseEntity<>(Mono.justOrEmpty(tableLineageSourceSpec), HttpStatus.NO_CONTENT); // 204
-            });
+            userHomeContext.flush();
+            return new ResponseEntity<>(Mono.justOrEmpty(tableLineageSourceSpec), HttpStatus.NO_CONTENT); // 204
         }));
     }
 
@@ -236,10 +234,10 @@ public class DataLineageController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
 
-            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName), () -> {
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
 
-                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
+                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName, true);
                 if (sourceTables == null) {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
@@ -316,10 +314,10 @@ public class DataLineageController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
 
-            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName), () -> {
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
 
-                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
+                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName, true);
                 if (sourceTables == null) {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
@@ -388,10 +386,10 @@ public class DataLineageController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
 
-            return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName), () -> {
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
 
-                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
+                TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName, false);
                 if (sourceTables == null) {
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                 }
@@ -414,7 +412,8 @@ public class DataLineageController {
     private TableLineageSourceSpecList readTableLineageSourceSpecList(UserHomeContext userHomeContext,
                                                                       String connectionName,
                                                                       String schemaName,
-                                                                      String tableName) {
+                                                                      String tableName,
+                                                                      boolean addSourceTablesWhenMissing) {
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -432,7 +431,7 @@ public class DataLineageController {
         TableSpec tableSpec = tableWrapper.getSpec();
         TableLineageSourceSpecList sourceTables = tableSpec.getSourceTables();
 
-        if (sourceTables == null) {
+        if (sourceTables == null && addSourceTablesWhenMissing) {
             sourceTables = new TableLineageSourceSpecList();
             tableSpec.setSourceTables(sourceTables);
         }
