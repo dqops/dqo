@@ -50,12 +50,13 @@ export default function SourceColumns({
         dataLineage.source_table ?? ''
       )
         .then((res) => {
-          setSourceColumns(
-            (res.data ?? []).map((column) => ({
+          setSourceColumns([
+            { label: '', value: '' },
+            ...(res.data ?? []).map((column) => ({
               label: column.column_name ?? '',
               value: column.column_name ?? ''
             }))
-          );
+          ]);
         })
         .catch((err) => console.error(err));
     };
@@ -82,28 +83,19 @@ export default function SourceColumns({
     newValue: string,
     sourceColumnIndex: number
   ) => {
-    console.log(dataLineageSpec, column, newValue);
-    console.log({
-      ...dataLineageSpec,
-      columns: {
-        ...dataLineageSpec.columns,
-        [column]: {
-          ...dataLineageSpec.columns?.[column],
-          source_columns: [
-            ...(dataLineageSpec.columns?.[column]?.source_columns ?? []),
-            newValue
-          ]
-        }
-      }
-    });
     const newColumns = [
       ...(dataLineageSpec.columns?.[column]?.source_columns ?? [])
     ];
-    if (newColumns[sourceColumnIndex]) {
-      newColumns[sourceColumnIndex] = newValue;
+    if (newValue === '') {
+      newColumns.splice(sourceColumnIndex, 1);
     } else {
-      newColumns.push(newValue);
+      if (newColumns[sourceColumnIndex] !== undefined) {
+        newColumns[sourceColumnIndex] = newValue;
+      } else {
+        newColumns.push(newValue);
+      }
     }
+
     onChangeDataLineageSpec({
       ...dataLineageSpec,
       columns: {
@@ -119,15 +111,15 @@ export default function SourceColumns({
   return (
     <div>
       <div className="px-4">Source Columns</div>
-      <table className="min-w-full table-auto">
+      <table>
         <tbody>
           {targetColumns.map((column, columnIndex) => (
             <tr key={columnIndex}>
-              <td className=" px-4 py-2">{column}</td>
+              <td className="px-4 py-2">{column}</td>
               {[
                 ...(dataLineageSpec.columns?.[column]?.source_columns ?? []),
                 ''
-              ]?.map((sourceColumn, sourceColumnIndex) => (
+              ].map((sourceColumn, sourceColumnIndex) => (
                 <td className="px-4 py-2" key={sourceColumnIndex}>
                   <Select
                     value={sourceColumn}
@@ -138,16 +130,6 @@ export default function SourceColumns({
                   />
                 </td>
               ))}
-              {/* <td className="border px-4 py-2">
-                {selectedSourceColumn[column] && (
-                  <Select
-                    label={`Source for ${column} (2)`}
-                    value={dataLineageSpec.columns?.[column]?.source_columns ?? ''}
-                    options={sourceColumns}
-                    onChange={(newValue) => handleSelectChange(column, 'sourceColumn2', newValue)}
-                  />
-                )}
-              </td> */}
             </tr>
           ))}
         </tbody>

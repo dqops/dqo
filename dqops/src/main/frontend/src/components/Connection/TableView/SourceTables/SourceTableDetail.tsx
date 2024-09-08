@@ -3,6 +3,7 @@ import {
   TableLineageSourceListModel,
   TableLineageSourceSpec
 } from '../../../../api';
+import { DataLineageApiClient } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
 import Button from '../../../Button';
@@ -11,10 +12,16 @@ import SourceTableSelectParameters from './SourceTableSelectParameters';
 
 export default function SourceTableDetail({
   onBack,
-  sourceTableEdit
+  sourceTableEdit,
+  create
 }: {
   onBack: () => void;
-  sourceTableEdit: string;
+  sourceTableEdit: {
+    connection: string;
+    schema: string;
+    table: string;
+  } | null;
+  create?: boolean;
 }) {
   const {
     connection,
@@ -53,8 +60,40 @@ export default function SourceTableDetail({
   };
 
   const handleSave = () => {
+    if (create) {
+      DataLineageApiClient.createTableSourceTable(
+        connection,
+        schema,
+        table,
+        dataLineage.source_connection ?? '',
+        dataLineage.source_schema ?? '',
+        dataLineage.source_table ?? '',
+        {
+          source_connection: dataLineage.source_connection,
+          source_schema: dataLineage.source_schema,
+          source_table: dataLineage.source_table,
+          ...dataLineageSpec
+        }
+      );
+    } else {
+      DataLineageApiClient.updateTableSourceTable(
+        connection,
+        schema,
+        table,
+        dataLineage.source_connection ?? '',
+        dataLineage.source_schema ?? '',
+        dataLineage.source_table ?? '',
+        {
+          source_connection: dataLineage.source_connection,
+          source_schema: dataLineage.source_schema,
+          source_table: dataLineage.source_table,
+          ...dataLineageSpec
+        }
+      );
+    }
     onBack();
   };
+
   return (
     <div>
       <div className="flex space-x-4 items-center absolute right-2 top-4">

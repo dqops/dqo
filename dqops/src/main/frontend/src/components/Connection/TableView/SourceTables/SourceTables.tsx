@@ -21,7 +21,11 @@ export default function SourceTables() {
     checkTypes: CheckTypes;
   } = useDecodedParams();
   const [addSourceTable, setAddSourceTable] = React.useState(false);
-  const [sourceTableEdit, setSourceTableEdit] = React.useState('');
+  const [sourceTableEdit, setSourceTableEdit] = React.useState<{
+    connection: string;
+    schema: string;
+    table: string;
+  } | null>(null);
   const [tables, setTables] = useState<TableLineageSourceListModel[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -36,7 +40,7 @@ export default function SourceTables() {
 
   const onBack = () => {
     setAddSourceTable(false);
-    setSourceTableEdit('');
+    setSourceTableEdit(null);
   };
 
   return (
@@ -58,6 +62,7 @@ export default function SourceTables() {
           <SourceTableDetail
             onBack={onBack}
             sourceTableEdit={sourceTableEdit}
+            create={addSourceTable}
           />
         </div>
       ) : (
@@ -67,6 +72,7 @@ export default function SourceTables() {
             tables={tables}
             loading={loading}
             onChange={setTables}
+            setSourceTableEdit={setSourceTableEdit}
           />
           <Button
             label="Add source table"

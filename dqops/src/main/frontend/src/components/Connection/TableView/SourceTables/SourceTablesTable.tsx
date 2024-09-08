@@ -1,3 +1,5 @@
+import { IconButton } from '@material-tailwind/react';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { TableLineageSourceListModel } from '../../../../api';
 import { CheckTypes } from '../../../../shared/routes';
@@ -16,11 +18,15 @@ const HEADER_ELEMENTS = [
 export default function SourceTablesTable({
   tables,
   onChange,
-  loading
+  loading,
+  setSourceTableEdit
 }: {
   tables: TableLineageSourceListModel[];
   onChange: (tables: TableLineageSourceListModel[]) => void;
   loading: boolean;
+  setSourceTableEdit: (
+    obj: { connection: string; schema: string; table: string } | null
+  ) => void;
 }) {
   const {
     connection,
@@ -113,6 +119,38 @@ export default function SourceTablesTable({
               <td>{table.source_connection}</td>
               <td>{table.source_schema}</td>
               <td>{table.source_table}</td>
+              <td>
+                {' '}
+                <div className="flex items-center gap-x-4 my-0.5">
+                  <IconButton
+                    ripple={false}
+                    onClick={() =>
+                      setSourceTableEdit({
+                        connection: table.source_connection ?? '',
+                        schema: table.source_schema ?? '',
+                        table: table.source_table ?? ''
+                      })
+                    }
+                    size="sm"
+                    color="teal"
+                    className={clsx(
+                      '!shadow-none hover:!shadow-none hover:bg-[#028770]'
+                    )}
+                  >
+                    <SvgIcon name="edit" className="w-4" />
+                  </IconButton>
+                  <IconButton
+                    // onClick={() =>
+                    //   setPatternDelete(notificationPattern.name ?? '')
+                    // }
+                    size="sm"
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
