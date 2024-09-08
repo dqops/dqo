@@ -28,19 +28,22 @@ export default function SourceTables() {
   } | null>(null);
   const [tables, setTables] = useState<TableLineageSourceListModel[]>([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
+  const getTables = async () => {
     setLoading(true);
     DataLineageApiClient.getTableSourceTables(connection, schema, table)
       .then((res) => {
         setTables(res.data);
       })
       .finally(() => setLoading(false));
+  };
+  useEffect(() => {
+    getTables();
   }, []);
 
   const onBack = () => {
     setAddSourceTable(false);
     setSourceTableEdit(null);
+    getTables();
   };
 
   return (

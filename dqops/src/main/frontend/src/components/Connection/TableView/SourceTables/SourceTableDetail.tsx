@@ -21,7 +21,7 @@ export default function SourceTableDetail({
     schema: string;
     table: string;
   } | null;
-  create?: boolean;
+  create: boolean;
 }) {
   const {
     connection,
@@ -69,6 +69,7 @@ export default function SourceTableDetail({
       sourceTableEdit.schema,
       sourceTableEdit.table
     ).then((res) => {
+      console.log(res);
       setDataLineage(res.data);
     });
   }, [sourceTableEdit, create]);
@@ -123,6 +124,7 @@ export default function SourceTableDetail({
           onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
           editConfigurationParameters={dataLineage}
           onChangeParameters={onChangeParameters}
+          create={create}
         />
       </div>
       <div>

@@ -6,7 +6,6 @@ import { CheckTypes } from '../../../../shared/routes';
 import { sortPatterns, useDecodedParams } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import Loader from '../../../Loader';
-import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
 const HEADER_ELEMENTS = [
   { label: 'Source connection', key: 'source_connection' },
@@ -77,6 +76,7 @@ export default function SourceTablesTable({
     );
   }
 
+  //   const sourceTables = useMemo(() => [...tables], []);
   return (
     <>
       <table>
@@ -114,7 +114,7 @@ export default function SourceTablesTable({
           </tr>
         </thead>
         <tbody>
-          {displayedTables.map((table, index) => (
+          {tables.map((table, index) => (
             <tr key={index}>
               <td>{table.source_connection}</td>
               <td>{table.source_schema}</td>
@@ -165,11 +165,11 @@ export default function SourceTablesTable({
         onClose={() => setPatternDelete('')}
         message={`Are you sure you want to delete the ${notificationPatternDelete} notification filter?`}
       />
-      <ClientSidePagination
-        items={displayedTables}
+      {/* <ClientSidePagination
+        items={sourceTables}
         onChangeItems={setDisplayedTables}
         className="pl-0 !w-full pr-4"
-      />
+      /> */}
     </>
   );
 }

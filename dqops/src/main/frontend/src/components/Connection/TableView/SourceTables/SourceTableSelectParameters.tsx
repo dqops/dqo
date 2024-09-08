@@ -13,12 +13,14 @@ type TSelectConnectionSchemaTable = {
   editConfigurationParameters: TableLineageSourceListModel;
   onChangeEditConnectionSchemaTable: (open: boolean) => void;
   onChangeParameters: (obj: Partial<TableLineageSourceListModel>) => void;
+  create: boolean;
 };
 
 export default function SourceTableSelectParameters({
   editConfigurationParameters,
   onChangeEditConnectionSchemaTable,
-  onChangeParameters
+  onChangeParameters,
+  create
 }: TSelectConnectionSchemaTable) {
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
   const [schemaOptions, setSchemaOptions] = useState<Option[]>([]);
@@ -121,6 +123,7 @@ export default function SourceTableSelectParameters({
               source_connection: selectedOption
             });
           }}
+          disabled={!create}
         />
       </div>
       <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
@@ -137,6 +140,7 @@ export default function SourceTableSelectParameters({
               source_schema: selectedOption
             })
           }
+          disabled={!create}
         />
       </div>
       <div className="flex flex-col gap-2 w-1/3 mb-3">
@@ -155,6 +159,7 @@ export default function SourceTableSelectParameters({
           }
           triggerClassName="text-ellipsis"
           truncateText
+          disabled={!create}
         />
       </div>
     </SectionWrapper>
