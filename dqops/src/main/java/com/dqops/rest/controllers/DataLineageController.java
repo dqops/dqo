@@ -238,7 +238,7 @@ public class DataLineageController {
             }
 
             return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
 
                 TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
                 if (sourceTables == null) {
@@ -318,7 +318,7 @@ public class DataLineageController {
             }
 
             return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
 
                 TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
                 if (sourceTables == null) {
@@ -390,7 +390,7 @@ public class DataLineageController {
             }
 
             return this.lockService.callSynchronouslyOnConnection(connectionName, () -> {
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
 
                 TableLineageSourceSpecList sourceTables = readTableLineageSourceSpecList(userHomeContext, connectionName, schemaName, tableName);
                 if (sourceTables == null) {
