@@ -27,7 +27,6 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.TableLineageSourceListModel;
-import com.dqops.rest.models.metadata.TableListModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
 import io.swagger.annotations.*;
