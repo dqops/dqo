@@ -32,7 +32,7 @@ export default function SourceTables() {
         setTables(res.data);
       })
       .finally(() => setLoading(false));
-  }, [connection, schema, table]);
+  }, []);
 
   const onBack = () => {
     setAddSourceTable(false);
