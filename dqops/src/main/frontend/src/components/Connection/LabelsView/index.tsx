@@ -138,13 +138,16 @@ const LabelsView = ({
 
 export default LabelsView;
 
-function extractMiddlePart(input: string): string | null {
+function extractMiddlePart(input: string): string {
   const start = '${dictionary://';
   const end = '}';
 
   if (input.startsWith(start) && input.endsWith(end)) {
     return input.slice(start.length, -end.length);
   }
+  if (input.startsWith(start) && input.endsWith('}')) {
+    return input.slice(start.length, -1);
+  }
 
-  return null;
+  return input;
 }
