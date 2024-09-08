@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TableLineageSourceListModel,
   TableLineageSourceSpec
@@ -58,6 +58,20 @@ export default function SourceTableDetail({
       ...obj
     }));
   };
+
+  useEffect(() => {
+    if (create || !sourceTableEdit) return;
+    DataLineageApiClient.getTableSourceTable(
+      connection,
+      schema,
+      table,
+      sourceTableEdit.connection,
+      sourceTableEdit.schema,
+      sourceTableEdit.table
+    ).then((res) => {
+      setDataLineage(res.data);
+    });
+  }, [sourceTableEdit, create]);
 
   const handleSave = () => {
     if (create) {
