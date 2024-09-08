@@ -36,43 +36,43 @@ const StringListField = ({
     }
   }, [value, open]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (convertToDictionary) {
-      saveDictionary();
-      onChange([
-        '${dictionary://' +
-          (dictionary?.includes('.csv') ? dictionary : dictionary + '.csv') +
-          '}'
-      ]);
+      await DataDictionaryApiClient.createDictionary({
+        dictionary_name: dictionary?.includes('.csv')
+          ? dictionary
+          : dictionary + '.csv',
+        file_content: labels.filter((label) => label !== '').join('\n')
+      })
+        .then(() => {
+          onChange([
+            '${dictionary://' +
+              (dictionary?.includes('.csv')
+                ? dictionary
+                : dictionary + '.csv') +
+              '}'
+          ]);
 
-      setConvertToDictionary(false);
-      setDictionaryExistError(false);
-      setDictionary(null);
+          setConvertToDictionary(false);
+          setDictionaryExistError(false);
+          setDictionary(null);
+          setOpen(false);
+        })
+        .catch((err) => {
+          if (err.response?.status === 409) {
+            setDictionaryExistError(true);
+          }
+          console.error(err);
+        });
     } else {
       onChange(labels);
+      setOpen(false);
     }
-    setOpen(false);
   };
 
   const handleChange = useCallback((values: string[]) => {
     setLabels(values);
   }, []);
-
-  const saveDictionary = async () => {
-    await DataDictionaryApiClient.createDictionary({
-      dictionary_name: dictionary!,
-      file_content: labels.filter((label) => label !== '').join('\n')
-    })
-      .then(() => {
-        setOpen(false);
-      })
-      .catch((err) => {
-        if (err.response?.status === 409) {
-          setDictionaryExistError(true);
-        }
-        console.error(err);
-      });
-  };
 
   return (
     <div>
