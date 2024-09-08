@@ -143,6 +143,10 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Incident configuration',
       value: 'incident_configuration'
+    },
+    {
+      label: 'Source tables',
+      value: 'source_tables'
     }
   ],
   [CheckTypes.PROFILING]: [

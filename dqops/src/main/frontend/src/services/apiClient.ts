@@ -25,6 +25,7 @@ import {
   ConnectionsApiFactory,
   DashboardsApiFactory,
   DataGroupingConfigurationsApiFactory,
+  DataLineageApiFactory,
   DataSourcesApiFactory,
   DefaultColumnCheckPatternsApiFactory,
   DefaultTableCheckPatternsApiFactory,
@@ -183,3 +184,9 @@ export const RuleMiningApiClient = RuleMiningApiFactory(
 
 export const FilteredNotificationsConfigurationsClient =
   FilteredNotificationsConfigurationsApiFactory(new Configuration(), '', axios);
+
+export const DataLineageApiClient = DataLineageApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
