@@ -140,7 +140,7 @@ export default LabelsView;
 
 function extractMiddlePart(input: string): string | null {
   const start = '${dictionary://';
-  const end = '.csv}';
+  const end = '}';
 
   if (input.startsWith(start) && input.endsWith(end)) {
     return input.slice(start.length, -end.length);

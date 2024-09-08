@@ -60,7 +60,7 @@ const StringListField = ({
 
   const saveDictionary = async () => {
     await DataDictionaryApiClient.createDictionary({
-      dictionary_name: dictionary!,
+      dictionary_name: (dictionary?.includes('.csv') ? dictionary : dictionary + '.csv'),
       file_content: labels.filter((label) => label !== '').join('\n')
     })
       .then(() => {
