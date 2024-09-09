@@ -168,6 +168,11 @@ export default function SourceColumns({
                     handleSelectChange(column, newValue, sourceColumnIndex)
                   }
                   className="w-40"
+                  error={
+                    (
+                      dataLineageSpec.columns?.[column]?.source_columns ?? []
+                    ).filter((x) => x === sourceColumn).length > 1
+                  }
                   truncateText
                 />
               </td>

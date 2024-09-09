@@ -246,7 +246,7 @@ export default function SourceTablesTable({
                     color="teal"
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
-                    <SvgIcon name="data_sources" className="w-4" />
+                    <SvgIcon name="data_sources_white" className="w-5" />
                   </IconButton>
                 </div>
               </td>
