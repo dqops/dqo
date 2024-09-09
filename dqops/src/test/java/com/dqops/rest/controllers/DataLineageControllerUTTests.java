@@ -20,6 +20,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.metadata.lineage.ColumnLineageSourceSpec;
 import com.dqops.metadata.lineage.TableLineageSource;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
@@ -45,6 +46,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @SpringBootTest
 public class DataLineageControllerUTTests extends BaseTest {
@@ -64,7 +66,7 @@ public class DataLineageControllerUTTests extends BaseTest {
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new DataLineageController(this.userHomeContextFactory, new RestApiLockServiceImpl());
+        this.sut = new DataLineageController(this.userHomeContextFactory, new RestApiLockServiceImpl(), new TableStatusCacheStub());
         this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
@@ -106,7 +108,8 @@ public class DataLineageControllerUTTests extends BaseTest {
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
-                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
+                Optional.empty());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
 
         List<TableLineageSourceListModel> result = responseEntity.block().getBody().collectList().block();

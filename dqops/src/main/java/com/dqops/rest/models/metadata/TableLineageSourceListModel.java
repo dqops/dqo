@@ -16,6 +16,7 @@
 
 package com.dqops.rest.models.metadata;
 
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -90,6 +91,15 @@ public class TableLineageSourceListModel {
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
+
+    /**
+     * The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache.
+     * In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.
+     */
+    @JsonPropertyDescription("The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. " +
+            "In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private TableCurrentDataQualityStatusModel sourceTableDataQualityStatus;
 
     /**
      * Creates a table lineage list model from a source specification.

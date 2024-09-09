@@ -16,9 +16,13 @@
 
 package com.dqops.rest.controllers;
 
+import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
+import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.lineage.TableLineageSource;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
 import com.dqops.metadata.lineage.TableLineageSourceSpecList;
@@ -43,6 +47,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -57,18 +62,23 @@ import java.util.stream.Collectors;
 public class DataLineageController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final RestApiLockService lockService;
+    private TableStatusCache tableStatusCache;
 
     /**
      * Default dependency injection constructor.
+     *
      * @param userHomeContextFactory DQOps user home factory.
-     * @param lockService REST API lock service to avoid updating the same table yaml in two threads.
+     * @param lockService            REST API lock service to avoid updating the same table yaml in two threads.
+     * @param tableStatusCache       The cache of last known data quality status for a table.
      */
     @Autowired
     public DataLineageController(
             UserHomeContextFactory userHomeContextFactory,
-            RestApiLockService lockService) {
+            RestApiLockService lockService,
+            TableStatusCache tableStatusCache) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.lockService = lockService;
+        this.tableStatusCache = tableStatusCache;
     }
 
     /**
@@ -94,7 +104,9 @@ public class DataLineageController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName) {
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
@@ -123,6 +135,32 @@ public class DataLineageController {
                     .map(sourceSpec -> TableLineageSourceListModel.fromSpecification(
                             sourceSpec, isEditor))
                     .collect(Collectors.toList());
+
+            sourceTables.forEach(listModel -> {
+                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                        listModel.getSourceConnection(), new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()));
+                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                listModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+            });
+
+            if (sourceTables.stream().anyMatch(model -> model.getSourceTableDataQualityStatus() == null)) {
+                // the results not loaded yet, we need to wait until the queue is empty
+                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+
+                Flux<TableLineageSourceListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                        .thenMany(Flux.fromIterable(sourceTables)
+                                .map(tableListModel -> {
+                                    if (tableListModel.getSourceTableDataQualityStatus() == null) {
+                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                                tableListModel.getSourceConnection(), new PhysicalTableName(tableListModel.getSourceSchema(), tableListModel.getSourceTable()));
+                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                        tableListModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                                    }
+                                    return tableListModel;
+                                }));
+
+                return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+            }
 
             return new ResponseEntity<>(Flux.fromStream(sourceTables.stream()), HttpStatus.OK); // 200
         }));
