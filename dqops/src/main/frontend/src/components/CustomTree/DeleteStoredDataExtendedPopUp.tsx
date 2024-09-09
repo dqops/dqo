@@ -170,7 +170,7 @@ const DeleteStoredDataExtendedPopUp = ({
   return (
     <Dialog open={open} handler={onClose} className="min-w-300 p-4 pb-0">
       <DialogHeader className="font-bold text-center justify-center !py-0.5">
-        Delete data quality results
+        Delete data
       </DialogHeader>
       <DialogBody className="text-sm">
         <div className="flex flex-col">

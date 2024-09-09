@@ -389,7 +389,7 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
                     : undefined;
                 }}
               >
-                Delete data quality results
+                Delete data
               </div>
             </>
           )}
@@ -404,7 +404,7 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
                     : undefined;
                 }}
               >
-                Delete data quality results
+                Delete data
               </div>
             </>
           )}
