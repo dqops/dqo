@@ -11,7 +11,6 @@ import Select, { Option } from '../../../Select';
 
 type TSelectConnectionSchemaTable = {
   editConfigurationParameters: TableLineageSourceListModel;
-  onChangeEditConnectionSchemaTable: (open: boolean) => void;
   onChangeParameters: (obj: Partial<TableLineageSourceListModel>) => void;
   create: boolean;
   setIsUpdated?: (value: boolean) => void;
@@ -19,7 +18,6 @@ type TSelectConnectionSchemaTable = {
 
 export default function SourceTableSelectParameters({
   editConfigurationParameters,
-  onChangeEditConnectionSchemaTable,
   onChangeParameters,
   create,
   setIsUpdated
@@ -108,10 +106,6 @@ export default function SourceTableSelectParameters({
     <SectionWrapper
       title="Source table"
       className="py-8 mb-10 flex w-full items-center justify-between"
-      svgIcon={create !== true}
-      onClick={() =>
-        create !== true && onChangeEditConnectionSchemaTable(false)
-      }
     >
       <div className="flex flex-col gap-2 w-1/3 mb-3 mr-4">
         <div>Connection</div>
@@ -129,6 +123,7 @@ export default function SourceTableSelectParameters({
             });
           }}
           disabled={!create}
+          disableIcon={!create}
         />
       </div>
       <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
@@ -148,6 +143,7 @@ export default function SourceTableSelectParameters({
             });
           }}
           disabled={!create}
+          disableIcon={!create}
         />
       </div>
       <div className="flex flex-col gap-2 w-1/3 mb-3">
@@ -168,6 +164,7 @@ export default function SourceTableSelectParameters({
           triggerClassName="text-ellipsis"
           truncateText
           disabled={!create}
+          disableIcon={!create}
         />
       </div>
     </SectionWrapper>

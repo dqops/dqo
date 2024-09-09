@@ -4,7 +4,6 @@ import {
   TableLineageSourceSpec
 } from '../../../../api';
 import { ColumnApiClient } from '../../../../services/apiClient';
-import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
 import Select, { Option } from '../../../Select';
 
@@ -24,13 +23,11 @@ export default function SourceColumns({
   const {
     connection,
     schema,
-    table,
-    checkTypes
+    table
   }: {
     connection: string;
     schema: string;
     table: string;
-    checkTypes: CheckTypes;
   } = useDecodedParams();
 
   const [sourceColumns, setSourceColumns] = useState<Option[]>([]);
@@ -147,31 +144,37 @@ export default function SourceColumns({
   };
 
   return (
-    <div className="text-sm">
-      <div className="px-4">Source Columns</div>
-      <table>
-        <tbody>
-          {targetColumns.map((column, columnIndex) => (
-            <tr key={columnIndex}>
-              <td className="px-4 py-2">{column}</td>
-              {[
-                ...(dataLineageSpec.columns?.[column]?.source_columns ?? []),
-                ''
-              ].map((sourceColumn, sourceColumnIndex) => (
-                <td className="px-4 py-2" key={sourceColumnIndex}>
-                  <Select
-                    value={sourceColumn}
-                    options={sourceColumns}
-                    onChange={(newValue) =>
-                      handleSelectChange(column, newValue, sourceColumnIndex)
-                    }
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <table className="text-sm">
+      <thead>
+        <tr>
+          <th className="px-4 py-2 text-left">Target column</th>
+          <th className="px-4 py-2 text-left">Source column</th>
+        </tr>
+      </thead>
+      <div className="w-full h-0.5"></div>
+      <tbody className="border-t border-gray-100 mt-1">
+        {targetColumns.map((column, columnIndex) => (
+          <tr key={columnIndex}>
+            <td className="px-4 py-2">{column}</td>
+            {[
+              ...(dataLineageSpec.columns?.[column]?.source_columns ?? []),
+              ''
+            ].map((sourceColumn, sourceColumnIndex) => (
+              <td className="px-4 py-2" key={sourceColumnIndex}>
+                <Select
+                  value={sourceColumn}
+                  options={sourceColumns}
+                  onChange={(newValue) =>
+                    handleSelectChange(column, newValue, sourceColumnIndex)
+                  }
+                  className="w-40"
+                  truncateText
+                />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

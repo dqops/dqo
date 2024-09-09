@@ -1,8 +1,12 @@
 import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { TableLineageSourceListModel } from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { DataLineageApiClient } from '../../../../services/apiClient';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { sortPatterns, useDecodedParams } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import Loader from '../../../Loader';
@@ -96,6 +100,35 @@ export default function SourceTablesTable({
     );
   }
 
+  const dispatch = useActionDispatch();
+  const history = useHistory();
+
+  const goTable = (dataLineage: TableLineageSourceListModel) => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      dataLineage.source_connection ?? '',
+      dataLineage.source_schema ?? '',
+      dataLineage.source_table ?? '',
+      'detail'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      dataLineage.source_connection ?? '',
+      dataLineage.source_schema ?? '',
+      dataLineage.source_table ?? ''
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        label: dataLineage.source_table ?? '',
+        state: {}
+      })
+    );
+
+    history.push(url);
+  };
+
   //   const sourceTables = useMemo(() => [...tables], []);
   return (
     <>
@@ -137,11 +170,42 @@ export default function SourceTablesTable({
         <tbody className="border-t border-gray-100 mt-1">
           {displayedTables.map((table, index) => (
             <tr key={index}>
-              <td className="max-w-60 truncate px-4">
+              <td
+                className="max-w-60 truncate px-4 underline cursor-pointer"
+                onClick={() =>
+                  setSourceTableEdit({
+                    connection: table.source_connection ?? '',
+                    schema: table.source_schema ?? '',
+                    table: table.source_table ?? ''
+                  })
+                }
+              >
                 {table.source_connection}
               </td>
-              <td className="max-w-60 truncate px-4">{table.source_schema}</td>
-              <td className="max-w-100 truncate px-4">{table.source_table}</td>
+              <td
+                className="max-w-60 truncate px-4 underline cursor-pointer"
+                onClick={() =>
+                  setSourceTableEdit({
+                    connection: table.source_connection ?? '',
+                    schema: table.source_schema ?? '',
+                    table: table.source_table ?? ''
+                  })
+                }
+              >
+                {table.source_schema}
+              </td>
+              <td
+                className="max-w-100 truncate px-4 underline cursor-pointer"
+                onClick={() =>
+                  setSourceTableEdit({
+                    connection: table.source_connection ?? '',
+                    schema: table.source_schema ?? '',
+                    table: table.source_table ?? ''
+                  })
+                }
+              >
+                {table.source_table}
+              </td>
               <td>
                 {' '}
                 <div className="flex items-center gap-x-4 my-0.5">
@@ -175,6 +239,14 @@ export default function SourceTablesTable({
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
                     <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => goTable(table)}
+                    size="sm"
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="data_sources" className="w-4" />
                   </IconButton>
                 </div>
               </td>
