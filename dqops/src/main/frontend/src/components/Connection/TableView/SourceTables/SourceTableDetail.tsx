@@ -52,13 +52,6 @@ export default function SourceTableDetail({
     }));
   };
 
-  const onChangeDataLineageSpec = (obj: Partial<TableLineageSourceSpec>) => {
-    setDataLineageSpec((prevState) => ({
-      ...prevState,
-      ...obj
-    }));
-  };
-
   useEffect(() => {
     if (create || !sourceTableEdit) return;
     DataLineageApiClient.getTableSourceTable(
@@ -70,7 +63,7 @@ export default function SourceTableDetail({
       sourceTableEdit.table
     ).then((res) => {
       console.log(res);
-      setDataLineage(res.data);
+      setDataLineageSpec(res.data);
     });
   }, [sourceTableEdit, create]);
 
@@ -89,7 +82,9 @@ export default function SourceTableDetail({
           source_table: dataLineage.source_table,
           ...dataLineageSpec
         }
-      );
+      ).finally(() => {
+        onBack();
+      });
     } else {
       DataLineageApiClient.updateTableSourceTable(
         connection,
@@ -104,9 +99,10 @@ export default function SourceTableDetail({
           source_table: dataLineage.source_table,
           ...dataLineageSpec
         }
-      );
+      ).finally(() => {
+        onBack();
+      });
     }
-    onBack();
   };
 
   return (
@@ -132,6 +128,7 @@ export default function SourceTableDetail({
           dataLineage={dataLineage}
           onChangeDataLineageSpec={setDataLineageSpec}
           dataLineageSpec={dataLineageSpec}
+          create={create}
         />
       </div>
     </div>

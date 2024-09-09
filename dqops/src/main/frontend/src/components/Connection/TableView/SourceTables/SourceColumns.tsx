@@ -11,11 +11,13 @@ import Select, { Option } from '../../../Select';
 export default function SourceColumns({
   dataLineage,
   onChangeDataLineageSpec,
-  dataLineageSpec
+  dataLineageSpec,
+  create
 }: {
   dataLineage: TableLineageSourceListModel;
   onChangeDataLineageSpec: (dataLineage: TableLineageSourceSpec) => void;
   dataLineageSpec: TableLineageSourceSpec;
+  create: boolean;
 }) {
   const {
     connection,
@@ -33,42 +35,72 @@ export default function SourceColumns({
   const [targetColumns, setTargetColumns] = useState<string[]>([]);
 
   useEffect(() => {
+    const fetchSourceColumns = async (targetColumns: string[]) => {
+      try {
+        // Fetch columns from API
+        const res = await ColumnApiClient.getColumns(
+          dataLineage.source_connection ?? '',
+          dataLineage.source_schema ?? '',
+          dataLineage.source_table ?? ''
+        );
+
+        const columns = (res.data ?? []).map((column) => ({
+          label: column.column_name ?? '',
+          value: column.column_name ?? ''
+        }));
+
+        setSourceColumns([{ label: '', value: '' }, ...columns]);
+
+        const updatedColumns = { ...dataLineageSpec.columns };
+
+        targetColumns.forEach((targetColumn) => {
+          const matchedColumn = columns.find(
+            (c) =>
+              c.value.toLowerCase().replaceAll('_', '') ===
+                targetColumn.toLowerCase().replaceAll('_', '') ||
+              (targetColumn.length > 3 &&
+                c.value.length > 3 &&
+                (c.value.length - targetColumn.length <= 4 ||
+                  targetColumn.length - c.value.length <= 4) &&
+                (targetColumn.toLowerCase().startsWith(c.value) ||
+                  c.value.toLowerCase().startsWith(targetColumn)))
+          );
+
+          if (matchedColumn) {
+            updatedColumns[targetColumn] = {
+              source_columns: [matchedColumn.value]
+            };
+          }
+        });
+
+        onChangeDataLineageSpec({
+          ...dataLineageSpec,
+          columns: updatedColumns
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     const fetchColumns = async () => {
       await ColumnApiClient.getColumns(connection, schema, table)
         .then((res) => {
-          setTargetColumns(
-            (res.data ?? []).map((column) => column.column_name ?? '')
+          const columns = (res.data ?? []).map(
+            (column) => column.column_name ?? ''
           );
-        })
-        .catch((err) => console.error(err));
-    };
-
-    const fetchSourceColumns = async () => {
-      await ColumnApiClient.getColumns(
-        dataLineage.source_connection ?? '',
-        dataLineage.source_schema ?? '',
-        dataLineage.source_table ?? ''
-      )
-        .then((res) => {
-          setSourceColumns([
-            { label: '', value: '' },
-            ...(res.data ?? []).map((column) => ({
-              label: column.column_name ?? '',
-              value: column.column_name ?? ''
-            }))
-          ]);
+          setTargetColumns(columns);
+          if (
+            dataLineage.source_connection &&
+            dataLineage.source_schema &&
+            dataLineage.source_table
+          ) {
+            fetchSourceColumns(columns);
+          }
         })
         .catch((err) => console.error(err));
     };
 
     fetchColumns();
-    if (
-      dataLineage.source_connection &&
-      dataLineage.source_schema &&
-      dataLineage.source_table
-    ) {
-      fetchSourceColumns();
-    }
   }, [
     connection,
     schema,
