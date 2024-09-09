@@ -5,7 +5,7 @@ import SvgIcon from '../../SvgIcon';
 
 interface ISectionWrapperProps {
   title: string;
-  titleIcon?: React.ReactNode
+  titleIcon?: React.ReactNode;
   children?: any;
   className?: string;
   svgIcon?: boolean;
@@ -36,7 +36,9 @@ const SectionWrapper = ({
         )}
         onClick={onClick}
       >
-        {svgIcon && <SvgIcon name="chevron-down" className="w-5 h-5" />}
+        {svgIcon && (
+          <SvgIcon name="chevron-down" className="w-5 h-5 cursor-pointer" />
+        )}
         {title}
       </div>
       {children}

@@ -183,7 +183,7 @@ public class DataLineageController {
             }
 
             userHomeContext.flush();
-            return new ResponseEntity<>(Mono.justOrEmpty(tableLineageSourceSpec), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.justOrEmpty(tableLineageSourceSpec), HttpStatus.OK); // 200
         }));
     }
 

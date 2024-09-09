@@ -1,0 +1,89 @@
+import React, { useEffect, useState } from 'react';
+import { TableLineageSourceListModel } from '../../../../api';
+import { DataLineageApiClient } from '../../../../services/apiClient';
+import { useDecodedParams } from '../../../../utils';
+import Button from '../../../Button';
+import SvgIcon from '../../../SvgIcon';
+import TableActionGroup from '../TableActionGroup';
+import SourceTableDetail from './SourceTableDetail';
+import SourceTablesTable from './SourceTablesTable';
+
+export default function SourceTables() {
+  const {
+    connection,
+    schema,
+    table
+  }: {
+    connection: string;
+    schema: string;
+    table: string;
+  } = useDecodedParams();
+  const [addSourceTable, setAddSourceTable] = React.useState(false);
+  const [sourceTableEdit, setSourceTableEdit] = React.useState<{
+    connection: string;
+    schema: string;
+    table: string;
+  } | null>(null);
+  const [tables, setTables] = useState<TableLineageSourceListModel[]>([]);
+  const [loading, setLoading] = useState(false);
+  const getTables = async () => {
+    setLoading(true);
+    DataLineageApiClient.getTableSourceTables(connection, schema, table)
+      .then((res) => {
+        setTables(res.data);
+      })
+      .finally(() => setLoading(false));
+  };
+  useEffect(() => {
+    getTables();
+  }, [connection, schema, table]);
+
+  const onBack = () => {
+    setAddSourceTable(false);
+    setSourceTableEdit(null);
+    getTables();
+  };
+
+  return (
+    <div className="p-2">
+      {addSourceTable || sourceTableEdit ? (
+        <div>
+          <div className="flex space-x-4 items-center absolute right-10 top-30">
+            <Button
+              label="Back"
+              color="primary"
+              variant="text"
+              className="px-0"
+              leftIcon={
+                <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+              }
+              onClick={onBack}
+            />
+          </div>
+          <SourceTableDetail
+            onBack={onBack}
+            sourceTableEdit={sourceTableEdit}
+            create={addSourceTable}
+          />
+        </div>
+      ) : (
+        <>
+          <TableActionGroup onUpdate={onBack} isDisabled />
+          <div className="flex mb-4 text-sm"></div>
+          <SourceTablesTable
+            tables={tables}
+            loading={loading}
+            onChange={setTables}
+            setSourceTableEdit={setSourceTableEdit}
+          />
+          <Button
+            label="Add source table"
+            color="primary"
+            className="!w-50 !my-5 ml-4"
+            onClick={() => setAddSourceTable(true)}
+          />
+        </>
+      )}
+    </div>
+  );
+}
