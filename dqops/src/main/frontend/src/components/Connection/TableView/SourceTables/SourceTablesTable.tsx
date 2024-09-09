@@ -1,6 +1,6 @@
 import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TableLineageSourceListModel } from '../../../../api';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
@@ -12,6 +12,7 @@ import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import Loader from '../../../Loader';
 import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
+
 const HEADER_ELEMENTS = [
   { label: 'Source connection', key: 'source_connection' },
   { label: 'Source schema', key: 'source_schema' },
@@ -20,15 +21,15 @@ const HEADER_ELEMENTS = [
 ];
 
 export default function SourceTablesTable({
-  tables,
-  onChange,
-  loading,
+  connection: parentConnection,
+  schema: parentSchema,
+  table: parentTable,
   setSourceTableEdit
 }: {
-  tables: TableLineageSourceListModel[];
-  onChange: (tables: TableLineageSourceListModel[]) => void;
-  loading: boolean;
-  setSourceTableEdit: (
+  connection?: string;
+  schema?: string;
+  table?: string;
+  setSourceTableEdit?: (
     obj: { connection: string; schema: string; table: string } | null
   ) => void;
 }) {
@@ -36,11 +37,15 @@ export default function SourceTablesTable({
     connection,
     schema,
     table
-  }: {
-    connection: string;
-    schema: string;
-    table: string;
-  } = useDecodedParams();
+  }: { connection: string; schema: string; table: string } =
+    parentConnection && parentSchema && parentTable
+      ? {
+          connection: parentConnection,
+          schema: parentSchema,
+          table: parentTable
+        }
+      : useDecodedParams();
+
   const [dir, setDir] = useState<'asc' | 'desc'>('asc');
   const [sorceTableToDelete, setSorceTableToDelete] = useState<{
     connection: string;
@@ -51,10 +56,28 @@ export default function SourceTablesTable({
   const [displayedTables, setDisplayedTables] = useState<
     TableLineageSourceListModel[]
   >([]);
+  const [expandedLineage, setExpandedLineage] = useState<
+    { connection: string; schema: string; table: string }[] | null
+  >(null);
+  const [tables, setTables] = useState<TableLineageSourceListModel[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const getTables = async () => {
+    setLoading(true);
+    DataLineageApiClient.getTableSourceTables(connection, schema, table)
+      .then((res) => {
+        setTables(res.data);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    getTables();
+  }, [connection, schema, table]);
 
   const handleSort = (elem: { label: string; key: string }, index: number) => {
     const newDir = dir === 'asc' ? 'desc' : 'asc';
-    onChange(
+    setDisplayedTables(
       sortPatterns(
         tables,
         elem.key as keyof TableLineageSourceListModel,
@@ -66,11 +89,7 @@ export default function SourceTablesTable({
   };
 
   const handleDeleteSourceTable = (
-    source: {
-      connection: string;
-      schema: string;
-      table: string;
-    } | null
+    source: { connection: string; schema: string; table: string } | null
   ) => {
     DataLineageApiClient.deleteTableSourceTable(
       connection,
@@ -81,24 +100,16 @@ export default function SourceTablesTable({
       source?.table ?? ''
     ).then(() => {
       const newTables = tables.filter(
-        (table) =>
+        (t) =>
           !(
-            table.source_connection === source?.connection &&
-            table.source_schema === source?.schema &&
-            table.source_table === source?.table
+            t.source_connection === source?.connection &&
+            t.source_schema === source?.schema &&
+            t.source_table === source?.table
           )
       );
-      onChange(newTables);
+      setDisplayedTables(newTables);
     });
   };
-
-  if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
-      </div>
-    );
-  }
 
   const dispatch = useActionDispatch();
   const history = useHistory();
@@ -125,143 +136,185 @@ export default function SourceTablesTable({
         state: {}
       })
     );
-
     history.push(url);
   };
 
-  //   const sourceTables = useMemo(() => [...tables], []);
+  const onChangeExpandedLineage = (lineage: TableLineageSourceListModel) => {
+    const newExpandedLineage = [...(expandedLineage ?? [])];
+    if (
+      newExpandedLineage.find(
+        (expandedLiceage) =>
+          expandedLiceage.connection === lineage.source_connection &&
+          expandedLiceage.schema === lineage.source_schema &&
+          expandedLiceage.table === lineage.source_table
+      )
+    ) {
+      newExpandedLineage.splice(
+        newExpandedLineage.findIndex(
+          (expandedLiceage) =>
+            expandedLiceage.connection === lineage.source_connection &&
+            expandedLiceage.schema === lineage.source_schema &&
+            expandedLiceage.table === lineage.source_table
+        ),
+        1
+      );
+    } else {
+      newExpandedLineage.push({
+        connection: lineage.source_connection ?? '',
+        schema: lineage.source_schema ?? '',
+        table: lineage.source_table ?? ''
+      });
+    }
+    setExpandedLineage(newExpandedLineage);
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
+
   return (
     <>
-      <table className="text-sm">
+      <table className="text-sm w-full">
         <thead>
           <tr>
-            {HEADER_ELEMENTS.map((elem, index) => (
-              <th key={index} onClick={() => handleSort(elem, index)}>
-                <div
-                  className={clsx(
-                    'flex items-center gap-x-1 px-4',
-                    elem.key === 'action' && 'ml-6.5'
-                  )}
-                >
-                  {elem.label}
-                  {elem.key !== 'action' && (
-                    <div>
-                      {!(indexSortingElement === index && dir === 'asc') ? (
-                        <SvgIcon
-                          name="chevron-up"
-                          className="w-2 h-2 text-black cursor-pointer"
-                          onClick={() => handleSort(elem, index)}
-                        />
-                      ) : (
-                        <div className="w-2 h-2" />
-                      )}
-                      {!(indexSortingElement === index && dir === 'desc') ? (
-                        <SvgIcon
-                          name="chevron-down"
-                          className="w-2 h-2 text-black cursor-pointer"
-                          onClick={() => handleSort(elem, index)}
-                        />
-                      ) : (
-                        <div className="w-2 h-2" />
-                      )}
-                    </div>
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <div className="w-full h-1.5"></div>
-        <tbody className="border-t border-gray-100 mt-1">
-          {displayedTables.map((table, index) => (
-            <tr key={index}>
-              <td
-                className="max-w-60 truncate px-4 underline cursor-pointer"
-                onClick={() =>
-                  setSourceTableEdit({
-                    connection: table.source_connection ?? '',
-                    schema: table.source_schema ?? '',
-                    table: table.source_table ?? ''
-                  })
-                }
-              >
-                {table.source_connection}
-              </td>
-              <td
-                className="max-w-60 truncate px-4 underline cursor-pointer"
-                onClick={() =>
-                  setSourceTableEdit({
-                    connection: table.source_connection ?? '',
-                    schema: table.source_schema ?? '',
-                    table: table.source_table ?? ''
-                  })
-                }
-              >
-                {table.source_schema}
-              </td>
-              <td
-                className="max-w-100 truncate px-4 underline cursor-pointer"
-                onClick={() =>
-                  setSourceTableEdit({
-                    connection: table.source_connection ?? '',
-                    schema: table.source_schema ?? '',
-                    table: table.source_table ?? ''
-                  })
-                }
-              >
-                {table.source_table}
-              </td>
-              <td>
-                {' '}
-                <div className="flex items-center gap-x-4 my-0.5">
-                  <IconButton
-                    ripple={false}
-                    onClick={() =>
-                      setSourceTableEdit({
-                        connection: table.source_connection ?? '',
-                        schema: table.source_schema ?? '',
-                        table: table.source_table ?? ''
-                      })
-                    }
-                    size="sm"
-                    color="teal"
+            <th></th>
+            {HEADER_ELEMENTS.map((elem, index) => {
+              if (elem.key === 'action' && !setSourceTableEdit) {
+                return null;
+              }
+              return (
+                <th key={index} onClick={() => handleSort(elem, index)}>
+                  <div
                     className={clsx(
-                      '!shadow-none hover:!shadow-none hover:bg-[#028770]'
+                      'flex items-center gap-x-1 px-4',
+                      elem.key === 'action' && 'ml-10'
                     )}
                   >
-                    <SvgIcon name="edit" className="w-4" />
-                  </IconButton>
-                  <IconButton
-                    onClick={() =>
-                      setSorceTableToDelete({
-                        connection: table.source_connection ?? '',
-                        schema: table.source_schema ?? '',
-                        table: table.source_table ?? ''
-                      })
-                    }
-                    size="sm"
-                    color="teal"
-                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                  >
-                    <SvgIcon name="delete" className="w-4" />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => goTable(table)}
-                    size="sm"
-                    color="teal"
-                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                  >
-                    <SvgIcon name="data_sources_white" className="w-5" />
-                  </IconButton>
-                </div>
-              </td>
-            </tr>
+                    {elem.label}
+                    {elem.key !== 'action' && (
+                      <div>
+                        {!(indexSortingElement === index && dir === 'asc') ? (
+                          <SvgIcon
+                            name="chevron-up"
+                            className="w-2 h-2 text-black cursor-pointer"
+                            onClick={() => handleSort(elem, index)}
+                          />
+                        ) : (
+                          <div className="w-2 h-2" />
+                        )}
+                        {!(indexSortingElement === index && dir === 'desc') ? (
+                          <SvgIcon
+                            name="chevron-down"
+                            className="w-2 h-2 text-black cursor-pointer"
+                            onClick={() => handleSort(elem, index)}
+                          />
+                        ) : (
+                          <div className="w-2 h-2" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody className="border-t border-gray-100">
+          {displayedTables.map((table, index) => (
+            <React.Fragment key={index}>
+              <tr className="h-10">
+                <td
+                  onClick={() => onChangeExpandedLineage(table)}
+                  className="cursor-pointer px-4"
+                >
+                  {expandedLineage?.find(
+                    (lineage) =>
+                      lineage.connection === table.source_connection &&
+                      lineage.schema === table.source_schema &&
+                      lineage.table === table.source_table
+                  ) ? (
+                    <SvgIcon name="chevron-right" className="w-4" />
+                  ) : (
+                    <SvgIcon name="chevron-down" className="w-4" />
+                  )}
+                </td>
+                <td className="px-4">{table.source_connection}</td>
+                <td className="px-4">{table.source_schema}</td>
+                <td className="px-4">{table.source_table}</td>
+                {setSourceTableEdit && (
+                  <td className="px-4">
+                    <div className="flex items-center gap-x-4">
+                      <IconButton
+                        ripple={false}
+                        onClick={() =>
+                          setSourceTableEdit &&
+                          setSourceTableEdit({
+                            connection: table.source_connection ?? '',
+                            schema: table.source_schema ?? '',
+                            table: table.source_table ?? ''
+                          })
+                        }
+                        size="sm"
+                        color="teal"
+                        className={clsx(
+                          '!shadow-none hover:!shadow-none hover:bg-[#028770]'
+                        )}
+                      >
+                        <SvgIcon name="edit" className="w-4" />
+                      </IconButton>
+                      <IconButton
+                        onClick={() =>
+                          setSorceTableToDelete({
+                            connection: table.source_connection ?? '',
+                            schema: table.source_schema ?? '',
+                            table: table.source_table ?? ''
+                          })
+                        }
+                        size="sm"
+                        color="teal"
+                        className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                      >
+                        <SvgIcon name="delete" className="w-4" />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => goTable(table)}
+                        size="sm"
+                        color="teal"
+                        className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                      >
+                        <SvgIcon name="data_sources_white" className="w-5" />
+                      </IconButton>
+                    </div>
+                  </td>
+                )}
+              </tr>
+              {expandedLineage?.find(
+                (lineage) =>
+                  lineage.connection === table.source_connection &&
+                  lineage.schema === table.source_schema &&
+                  lineage.table === table.source_table
+              ) && (
+                <tr>
+                  <td colSpan={5} className="pl-4 pt-4">
+                    <SourceTablesTable
+                      connection={table.source_connection}
+                      schema={table.source_schema}
+                      table={table.source_table}
+                    />
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
           ))}
         </tbody>
       </table>
 
       <ConfirmDialog
-        open={sorceTableToDelete !== null}
+        open={!!sorceTableToDelete}
         onConfirm={async () => {
           handleDeleteSourceTable(sorceTableToDelete);
           setSorceTableToDelete(null);
