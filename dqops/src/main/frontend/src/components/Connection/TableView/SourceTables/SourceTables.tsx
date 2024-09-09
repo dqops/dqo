@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TableLineageSourceListModel } from '../../../../api';
 import { DataLineageApiClient } from '../../../../services/apiClient';
-import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
 import Button from '../../../Button';
 import SvgIcon from '../../../SvgIcon';
@@ -12,13 +11,11 @@ export default function SourceTables() {
   const {
     connection,
     schema,
-    table,
-    checkTypes
+    table
   }: {
     connection: string;
     schema: string;
     table: string;
-    checkTypes: CheckTypes;
   } = useDecodedParams();
   const [addSourceTable, setAddSourceTable] = React.useState(false);
   const [sourceTableEdit, setSourceTableEdit] = React.useState<{

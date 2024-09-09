@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { TableLineageSourceListModel } from '../../../../api';
 import { DataLineageApiClient } from '../../../../services/apiClient';
-import { CheckTypes } from '../../../../shared/routes';
 import { sortPatterns, useDecodedParams } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
 import Loader from '../../../Loader';
+import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
 const HEADER_ELEMENTS = [
   { label: 'Source connection', key: 'source_connection' },
@@ -31,13 +31,11 @@ export default function SourceTablesTable({
   const {
     connection,
     schema,
-    table,
-    checkTypes
+    table
   }: {
     connection: string;
     schema: string;
     table: string;
-    checkTypes: CheckTypes;
   } = useDecodedParams();
   const [dir, setDir] = useState<'asc' | 'desc'>('asc');
   const [sorceTableToDelete, setSorceTableToDelete] = useState<{
@@ -137,7 +135,7 @@ export default function SourceTablesTable({
         </thead>
         <div className="w-full h-1.5"></div>
         <tbody className="border-t border-gray-100 mt-1">
-          {tables.map((table, index) => (
+          {displayedTables.map((table, index) => (
             <tr key={index}>
               <td className="max-w-60 truncate px-4">
                 {table.source_connection}
@@ -194,11 +192,11 @@ export default function SourceTablesTable({
         onClose={() => setSorceTableToDelete(null)}
         message={`Are you sure you want to delete this source table?`}
       />
-      {/* <ClientSidePagination
-        items={sourceTables}
+      <ClientSidePagination
+        items={tables}
         onChangeItems={setDisplayedTables}
         className="pl-0 !w-full pr-4"
-      /> */}
+      />
     </>
   );
 }

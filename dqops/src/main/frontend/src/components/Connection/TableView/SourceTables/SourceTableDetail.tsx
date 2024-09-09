@@ -31,13 +31,11 @@ export default function SourceTableDetail({
   const {
     connection,
     schema,
-    table,
-    checkTypes
+    table
   }: {
     connection: string;
     schema: string;
     table: string;
-    checkTypes: CheckTypes;
   } = useDecodedParams();
   const [dataLineage, setDataLineage] =
     React.useState<TableLineageSourceListModel>({});
