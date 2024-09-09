@@ -38,7 +38,7 @@ public class ChecksDeleteServiceImpl implements ChecksDeleteService {
     public void deleteSelectedChecks(CheckSearchFilters filters, UserDomainIdentity userIdentity) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
-        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, filters);
+        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome.getConnections(), filters);
 
         for (AbstractCheckSpec<?,?,?,?> check : checks) {
             HierarchyId parentHierarchyId = check.getHierarchyId().getParentHierarchyId();
