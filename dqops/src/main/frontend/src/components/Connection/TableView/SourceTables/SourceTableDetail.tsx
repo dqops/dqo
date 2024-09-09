@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   TableLineageSourceListModel,
@@ -78,6 +78,7 @@ export default function SourceTableDetail({
   }, [sourceTableEdit, create]);
 
   const handleSave = () => {
+    setIsUpdating(true);
     if (create) {
       DataLineageApiClient.createTableSourceTable(
         connection,
@@ -94,6 +95,7 @@ export default function SourceTableDetail({
         }
       ).finally(() => {
         onBack();
+        setIsUpdating(false);
       });
     } else {
       DataLineageApiClient.updateTableSourceTable(
@@ -111,6 +113,7 @@ export default function SourceTableDetail({
         }
       ).finally(() => {
         onBack();
+        setIsUpdating(false);
       });
     }
   };
@@ -151,6 +154,13 @@ export default function SourceTableDetail({
       </div>
     );
   }
+  const isSaveDisabled = useMemo(() => {
+    return (
+      !dataLineage.source_connection ||
+      !dataLineage.source_schema ||
+      !dataLineage.source_table
+    );
+  }, [dataLineage]);
 
   return (
     <div>
@@ -158,6 +168,7 @@ export default function SourceTableDetail({
         onUpdate={handleSave}
         isUpdated={isUpdated}
         isUpdating={isUpdating}
+        isDisabled={isSaveDisabled}
       />
       <div className="mt-12">
         {editConnectionSchemaTable ? (
