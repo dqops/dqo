@@ -124,7 +124,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -156,7 +157,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_mdy` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -188,7 +190,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_dmy` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -220,7 +223,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_ymd` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -252,7 +256,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_bdy` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -288,7 +293,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -323,7 +329,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -354,7 +361,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -396,7 +404,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -433,7 +442,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -470,7 +480,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -519,7 +530,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -562,7 +574,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -603,7 +616,8 @@ public class ColumnPatternsTextNotMatchingDatePatternPercentSensorParametersSpec
                     WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
+                            WHEN analyzed_table.`date_iso` IS NOT NULL
+                                    AND SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
