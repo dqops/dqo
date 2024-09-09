@@ -275,6 +275,48 @@ public class DataLineageControllerUTTests extends BaseTest {
     }
 
     @Test
+    void createTableSourceTable_whenAddedTwice_thenSecondTimeReturnsConflict() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
+
+        String newSourceConnection = "new_source_connection";
+        String newSourceSchema = "new_source_schema";
+        String newSourceTable = "new_source_table";
+
+        TableLineageSourceSpec newTableLineageSourceListModel = new TableLineageSourceSpec(){{
+            setSourceConnection(newSourceConnection);
+            setSourceSchema(newSourceSchema);
+            setSourceTable(newSourceTable);
+            setDataLineageSourceTool("new_tool");
+        }};
+
+        Assertions.assertEquals(2, this.sampleTable.getTableSpec().getSourceTables().size());
+
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.createTableSourceTable(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
+                this.sampleTable.getConnectionName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
+                newSourceConnection,
+                newSourceSchema,
+                newSourceTable,
+                newTableLineageSourceListModel);
+
+        Mono<ResponseEntity<Mono<Void>>> responseEntity2 = this.sut.createTableSourceTable(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
+                this.sampleTable.getConnectionName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
+                newSourceConnection,
+                newSourceSchema,
+                newSourceTable,
+                newTableLineageSourceListModel);
+
+        Assertions.assertEquals(HttpStatus.CONFLICT, responseEntity2.block().getStatusCode());
+        Assertions.assertEquals(3, this.sampleTable.getTableSpec().getSourceTables().size());
+    }
+
+    @Test
     void deleteTableSourceTable_whenObjectExist_thenDeletesIt() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
