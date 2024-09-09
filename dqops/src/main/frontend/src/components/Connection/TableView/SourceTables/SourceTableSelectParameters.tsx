@@ -27,6 +27,7 @@ export default function SourceTableSelectParameters({
   const [tableOptions, setTableOptions] = useState<Option[]>([]);
 
   useEffect(() => {
+    if (!create) return;
     ConnectionApiClient.getAllConnections().then((res) => {
       setConnectionOptions(
         res.data.map((item) => ({
@@ -38,6 +39,7 @@ export default function SourceTableSelectParameters({
   }, []);
 
   useEffect(() => {
+    if (!create) return;
     if (editConfigurationParameters?.source_connection) {
       SchemaApiClient.getSchemas(
         editConfigurationParameters.source_connection ?? ''
@@ -55,6 +57,7 @@ export default function SourceTableSelectParameters({
   }, [editConfigurationParameters.source_connection]);
 
   useEffect(() => {
+    if (!create) return;
     if (
       editConfigurationParameters.source_connection &&
       editConfigurationParameters.source_schema
@@ -82,24 +85,24 @@ export default function SourceTableSelectParameters({
     () =>
       connectionOptions.some(
         (x) => x.value === editConfigurationParameters.source_connection
-      ),
-    [connectionOptions, editConfigurationParameters.source_connection]
+      ) || !create,
+    [connectionOptions, editConfigurationParameters.source_connection, create]
   );
 
   const isSchemaValid = useMemo(
     () =>
       schemaOptions.some(
         (x) => x.value === editConfigurationParameters.source_schema
-      ),
-    [schemaOptions, editConfigurationParameters.source_schema]
+      ) || !create,
+    [schemaOptions, editConfigurationParameters.source_schema, create]
   );
 
   const isTableValid = useMemo(
     () =>
       tableOptions.some(
         (x) => x.value === editConfigurationParameters.source_table
-      ),
-    [tableOptions, editConfigurationParameters.source_table]
+      ) || !create,
+    [tableOptions, editConfigurationParameters.source_table, create]
   );
 
   return (
@@ -114,7 +117,16 @@ export default function SourceTableSelectParameters({
             'flex-1',
             isConnectionValid ? '' : 'border border-red-500'
           )}
-          options={connectionOptions}
+          options={
+            create
+              ? connectionOptions
+              : [
+                  {
+                    label: editConfigurationParameters.source_connection,
+                    value: editConfigurationParameters.source_connection
+                  } as Option
+                ]
+          }
           value={editConfigurationParameters.source_connection}
           onChange={(selectedOption) => {
             setIsUpdated && setIsUpdated(true);
@@ -133,7 +145,16 @@ export default function SourceTableSelectParameters({
             'flex-1',
             isSchemaValid ? '' : 'border border-red-500'
           )}
-          options={schemaOptions}
+          options={
+            create
+              ? schemaOptions
+              : [
+                  {
+                    label: editConfigurationParameters.source_schema,
+                    value: editConfigurationParameters.source_schema
+                  } as Option
+                ]
+          }
           value={editConfigurationParameters.source_schema}
           onChange={(selectedOption) => {
             setIsUpdated && setIsUpdated(true);
@@ -153,7 +174,16 @@ export default function SourceTableSelectParameters({
             'flex-1',
             isTableValid ? '' : 'border border-red-500'
           )}
-          options={tableOptions}
+          options={
+            create
+              ? tableOptions
+              : [
+                  {
+                    label: editConfigurationParameters.source_table,
+                    value: editConfigurationParameters.source_table
+                  } as Option
+                ]
+          }
           value={editConfigurationParameters.source_table}
           onChange={(selectedOption) => {
             setIsUpdated && setIsUpdated(true);

@@ -5,6 +5,7 @@ import {
 } from '../../../../api';
 import { ColumnApiClient } from '../../../../services/apiClient';
 import { useDecodedParams } from '../../../../utils';
+import Loader from '../../../Loader';
 import Select, { Option } from '../../../Select';
 
 export default function SourceColumns({
@@ -32,8 +33,10 @@ export default function SourceColumns({
 
   const [sourceColumns, setSourceColumns] = useState<Option[]>([]);
   const [targetColumns, setTargetColumns] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchSourceColumns = async (targetColumns: string[]) => {
       try {
         // Fetch columns from API
@@ -42,7 +45,6 @@ export default function SourceColumns({
           dataLineage.source_schema ?? '',
           dataLineage.source_table ?? ''
         );
-
         const columns = (res.data ?? []).map((column) => ({
           label: column.column_name ?? '',
           value: column.column_name ?? ''
@@ -81,6 +83,8 @@ export default function SourceColumns({
         });
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -143,6 +147,14 @@ export default function SourceColumns({
     setIsUpdated(true);
   };
 
+  if (loading && !create) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
+
   return (
     <table className="text-sm">
       <thead>
@@ -174,6 +186,7 @@ export default function SourceColumns({
                     ).filter((x) => x === sourceColumn).length > 1
                   }
                   truncateText
+                  placeholder=""
                 />
               </td>
             ))}

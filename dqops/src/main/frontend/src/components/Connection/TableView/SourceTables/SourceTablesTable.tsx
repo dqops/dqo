@@ -137,7 +137,12 @@ export default function SourceTablesTable({
           <tr>
             {HEADER_ELEMENTS.map((elem, index) => (
               <th key={index} onClick={() => handleSort(elem, index)}>
-                <div className="flex items-center gap-x-1 px-4">
+                <div
+                  className={clsx(
+                    'flex items-center gap-x-1 px-4',
+                    elem.key === 'action' && 'ml-6.5'
+                  )}
+                >
                   {elem.label}
                   {elem.key !== 'action' && (
                     <div>

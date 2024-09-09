@@ -40,6 +40,7 @@ export default function SourceTableDetail({
   const [loading, setLoading] = React.useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onChangeParameters = (obj: Partial<TableLineageSourceListModel>) => {
     setDataLineage((prevState) => ({
@@ -88,10 +89,20 @@ export default function SourceTableDetail({
           source_table: dataLineage.source_table,
           ...dataLineageSpec
         }
-      ).finally(() => {
-        onBack();
-        setIsUpdating(false);
-      });
+      )
+        .then(() => {
+          setError(null);
+          onBack();
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.status === 409) {
+            setError('Data lineage already exists');
+          }
+        })
+        .finally(() => {
+          setIsUpdating(false);
+        });
     } else {
       DataLineageApiClient.updateTableSourceTable(
         connection,
@@ -134,7 +145,7 @@ export default function SourceTableDetail({
         isUpdating={isUpdating}
         isDisabled={isSaveDisabled}
       />
-
+      {error && <div className="text-red-500 ml-4 mt-4 font-bold">{error}</div>}
       <div className="block transition-all duration-300 ease-in-out mt-15">
         <SourceTableSelectParameters
           editConfigurationParameters={dataLineage}
