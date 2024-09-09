@@ -365,7 +365,7 @@ export default function RuleMining({
           proposeChecks();
           setRunChecksDialogOpened(false);
         }}
-        message="Do you want to run the checks?"
+        message="The proposed configuration has been applied. Do you want to run activated checks?"
         onConfirm={() => {
           setRunChecksDialogOpened(false);
           runPartitionedChecks({
