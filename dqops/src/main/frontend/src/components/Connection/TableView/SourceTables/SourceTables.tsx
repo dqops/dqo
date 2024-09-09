@@ -67,7 +67,7 @@ export default function SourceTables() {
         </div>
       ) : (
         <>
-          <div className="flex mb-4 "></div>
+          <div className="flex mb-4 text-sm"></div>
           <SourceTablesTable
             tables={tables}
             loading={loading}
@@ -77,7 +77,7 @@ export default function SourceTables() {
           <Button
             label="Add source table"
             color="primary"
-            className="!w-50 !my-5"
+            className="!w-50 !my-5 ml-4"
             onClick={() => setAddSourceTable(true)}
           />
         </>

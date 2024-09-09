@@ -192,11 +192,13 @@ export default function SourceTablesTable({
         onClose={() => setSorceTableToDelete(null)}
         message={`Are you sure you want to delete this source table?`}
       />
-      <ClientSidePagination
-        items={tables}
-        onChangeItems={setDisplayedTables}
-        className="pl-0 !w-full pr-4"
-      />
+      <div className="px-4">
+        <ClientSidePagination
+          items={tables}
+          onChangeItems={setDisplayedTables}
+          className="pl-0 !w-full pr-4"
+        />
+      </div>
     </>
   );
 }
