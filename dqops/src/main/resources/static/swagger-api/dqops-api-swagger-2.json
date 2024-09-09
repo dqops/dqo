@@ -37117,7 +37117,11 @@
         },
         "deleteIncidents" : {
           "type" : "boolean",
-          "description" : "Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples."
+          "description" : "Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the incidents."
+        },
+        "deleteChecksConfiguration" : {
+          "type" : "boolean",
+          "description" : "Delete the data quality configured checks from the table. They are detached from the configuration.Because the default value is *false*, this parameter must be set to *true* to delete the checks configuration."
         },
         "columnNames" : {
           "type" : "array",
