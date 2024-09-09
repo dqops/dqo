@@ -4,6 +4,7 @@ import { DataLineageApiClient } from '../../../../services/apiClient';
 import { useDecodedParams } from '../../../../utils';
 import Button from '../../../Button';
 import SvgIcon from '../../../SvgIcon';
+import TableActionGroup from '../TableActionGroup';
 import SourceTableDetail from './SourceTableDetail';
 import SourceTablesTable from './SourceTablesTable';
 
@@ -67,6 +68,7 @@ export default function SourceTables() {
         </div>
       ) : (
         <>
+          <TableActionGroup onUpdate={onBack} isDisabled />
           <div className="flex mb-4 text-sm"></div>
           <SourceTablesTable
             tables={tables}

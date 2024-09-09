@@ -14,13 +14,15 @@ type TSelectConnectionSchemaTable = {
   onChangeEditConnectionSchemaTable: (open: boolean) => void;
   onChangeParameters: (obj: Partial<TableLineageSourceListModel>) => void;
   create: boolean;
+  setIsUpdated?: (value: boolean) => void;
 };
 
 export default function SourceTableSelectParameters({
   editConfigurationParameters,
   onChangeEditConnectionSchemaTable,
   onChangeParameters,
-  create
+  create,
+  setIsUpdated
 }: TSelectConnectionSchemaTable) {
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
   const [schemaOptions, setSchemaOptions] = useState<Option[]>([]);
@@ -121,6 +123,7 @@ export default function SourceTableSelectParameters({
           options={connectionOptions}
           value={editConfigurationParameters.source_connection}
           onChange={(selectedOption) => {
+            setIsUpdated && setIsUpdated(true);
             onChangeParameters({
               source_connection: selectedOption
             });
@@ -137,11 +140,13 @@ export default function SourceTableSelectParameters({
           )}
           options={schemaOptions}
           value={editConfigurationParameters.source_schema}
-          onChange={(selectedOption) =>
+          onChange={(selectedOption) => {
+            setIsUpdated && setIsUpdated(true);
+
             onChangeParameters({
               source_schema: selectedOption
-            })
-          }
+            });
+          }}
           disabled={!create}
         />
       </div>
@@ -154,11 +159,12 @@ export default function SourceTableSelectParameters({
           )}
           options={tableOptions}
           value={editConfigurationParameters.source_table}
-          onChange={(selectedOption) =>
+          onChange={(selectedOption) => {
+            setIsUpdated && setIsUpdated(true);
             onChangeParameters({
               source_table: selectedOption
-            })
-          }
+            });
+          }}
           triggerClassName="text-ellipsis"
           truncateText
           disabled={!create}

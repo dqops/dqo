@@ -12,12 +12,14 @@ export default function SourceColumns({
   dataLineage,
   onChangeDataLineageSpec,
   dataLineageSpec,
-  create
+  create,
+  setIsUpdated
 }: {
   dataLineage: TableLineageSourceListModel;
   onChangeDataLineageSpec: (dataLineage: TableLineageSourceSpec) => void;
   dataLineageSpec: TableLineageSourceSpec;
   create: boolean;
+  setIsUpdated: (value: boolean) => void;
 }) {
   const {
     connection,
@@ -138,6 +140,7 @@ export default function SourceColumns({
         }
       }
     });
+    setIsUpdated(true);
   };
 
   return (

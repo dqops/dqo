@@ -9,9 +9,9 @@ import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { DataLineageApiClient } from '../../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
-import Button from '../../../Button';
 import Loader from '../../../Loader';
 import SvgIcon from '../../../SvgIcon';
+import TableActionGroup from '../TableActionGroup';
 import SourceColumns from './SourceColumns';
 import SourceTableSelectParameters from './SourceTableSelectParameters';
 
@@ -44,6 +44,8 @@ export default function SourceTableDetail({
   const [editConnectionSchemaTable, setEditConnectionSchemaTable] =
     React.useState(create);
   const [loading, setLoading] = React.useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const onChangeEditConnectionSchemaTable = (open: boolean) => {
     setEditConnectionSchemaTable(open);
   };
@@ -152,14 +154,11 @@ export default function SourceTableDetail({
 
   return (
     <div>
-      <div className="flex space-x-4 items-center absolute right-2 top-4">
-        <Button
-          label="Save"
-          color="primary"
-          className="!w-30 !mr-5 !z-[99]"
-          onClick={handleSave}
-        />
-      </div>
+      <TableActionGroup
+        onUpdate={handleSave}
+        isUpdated={isUpdated}
+        isUpdating={isUpdating}
+      />
       <div className="mt-12">
         {editConnectionSchemaTable ? (
           <SourceTableSelectParameters
@@ -169,6 +168,7 @@ export default function SourceTableDetail({
             editConfigurationParameters={dataLineage}
             onChangeParameters={onChangeParameters}
             create={create}
+            setIsUpdated={setIsUpdated}
           />
         ) : (
           <div className="flex items-center gap-4 mb-4">
@@ -190,6 +190,7 @@ export default function SourceTableDetail({
           onChangeDataLineageSpec={setDataLineageSpec}
           dataLineageSpec={dataLineageSpec}
           create={create}
+          setIsUpdated={setIsUpdated}
         />
       </div>
     </div>
