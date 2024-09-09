@@ -48,6 +48,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Queue job that deletes data stored in user's ".data" directory.
  */
@@ -208,10 +210,11 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }};
     }
 
-    protected CheckSearchFilters getCheckSearchFilters() {
+    protected CheckSearchFilters getCheckSearchFilters(String columnName) {
         return new CheckSearchFilters() {{
             setConnection(deletionParameters.getConnection());
             setFullTableName(deletionParameters.getFullTableName());
+            setColumn(columnName);
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType() != null ? CheckType.valueOf(deletionParameters.getCheckType()) : null);
@@ -271,7 +274,14 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
             result.concat(incidentsResult);
         }
         if (this.deletionParameters.isDeleteChecksConfiguration()) {
-            this.checksDeleteService.deleteSelectedChecks(this.getCheckSearchFilters(), userIdentity);
+            List<String> columnNames = deletionParameters.getColumnNames();
+            if (columnNames != null && !columnNames.isEmpty()){
+                deletionParameters.getColumnNames().forEach(columnName -> {
+                    this.checksDeleteService.deleteSelectedChecks(this.getCheckSearchFilters(columnName), userIdentity);
+                });
+            } else {
+                this.checksDeleteService.deleteSelectedChecks(this.getCheckSearchFilters(null), userIdentity);
+            }
         }
 
         return result;
