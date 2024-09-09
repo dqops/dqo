@@ -106,8 +106,10 @@ export default function SourceTableSelectParameters({
     <SectionWrapper
       title="Source table"
       className="py-8 mb-10 flex w-full items-center justify-between"
-      svgIcon={true}
-      onClick={() => onChangeEditConnectionSchemaTable(false)}
+      svgIcon={create !== true}
+      onClick={() =>
+        create !== true && onChangeEditConnectionSchemaTable(false)
+      }
     >
       <div className="flex flex-col gap-2 w-1/3 mb-3 mr-4">
         <div>Connection</div>

@@ -2,6 +2,7 @@ import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { TableLineageSourceListModel } from '../../../../api';
+import { DataLineageApiClient } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import { sortPatterns, useDecodedParams } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
@@ -39,7 +40,11 @@ export default function SourceTablesTable({
     checkTypes: CheckTypes;
   } = useDecodedParams();
   const [dir, setDir] = useState<'asc' | 'desc'>('asc');
-  const [notificationPatternDelete, setPatternDelete] = useState('');
+  const [sorceTableToDelete, setSorceTableToDelete] = useState<{
+    connection: string;
+    schema: string;
+    table: string;
+  } | null>(null);
   const [indexSortingElement, setIndexSortingElement] = useState(1);
   const [displayedTables, setDisplayedTables] = useState<
     TableLineageSourceListModel[]
@@ -58,14 +63,31 @@ export default function SourceTablesTable({
     setIndexSortingElement(index);
   };
 
-  const handleDeletePattern = (tableName: string) => {
-    // DataLineageApiClient.deleteTableSourceTable().then(() => {
-    //   onChange(
-    //     filteredNotificationsConfigurations.filter(
-    //       (pattern) => pattern.name !== patternName
-    //     )
-    //   );
-    // });
+  const handleDeleteSourceTable = (
+    source: {
+      connection: string;
+      schema: string;
+      table: string;
+    } | null
+  ) => {
+    DataLineageApiClient.deleteTableSourceTable(
+      connection,
+      schema,
+      table,
+      source?.connection ?? '',
+      source?.schema ?? '',
+      source?.table ?? ''
+    ).then(() => {
+      const newTables = tables.filter(
+        (table) =>
+          !(
+            table.source_connection === source?.connection &&
+            table.source_schema === source?.schema &&
+            table.source_table === source?.table
+          )
+      );
+      onChange(newTables);
+    });
   };
 
   if (loading) {
@@ -79,12 +101,12 @@ export default function SourceTablesTable({
   //   const sourceTables = useMemo(() => [...tables], []);
   return (
     <>
-      <table>
+      <table className="text-sm">
         <thead>
           <tr>
             {HEADER_ELEMENTS.map((elem, index) => (
               <th key={index} onClick={() => handleSort(elem, index)}>
-                <div className="flex items-center gap-x-1">
+                <div className="flex items-center gap-x-1 px-4">
                   {elem.label}
                   {elem.key !== 'action' && (
                     <div>
@@ -113,12 +135,15 @@ export default function SourceTablesTable({
             ))}
           </tr>
         </thead>
-        <tbody>
+        <div className="w-full h-1.5"></div>
+        <tbody className="border-t border-gray-100 mt-1">
           {tables.map((table, index) => (
             <tr key={index}>
-              <td>{table.source_connection}</td>
-              <td>{table.source_schema}</td>
-              <td>{table.source_table}</td>
+              <td className="max-w-60 truncate px-4">
+                {table.source_connection}
+              </td>
+              <td className="max-w-60 truncate px-4">{table.source_schema}</td>
+              <td className="max-w-100 truncate px-4">{table.source_table}</td>
               <td>
                 {' '}
                 <div className="flex items-center gap-x-4 my-0.5">
@@ -140,9 +165,13 @@ export default function SourceTablesTable({
                     <SvgIcon name="edit" className="w-4" />
                   </IconButton>
                   <IconButton
-                    // onClick={() =>
-                    //   setPatternDelete(notificationPattern.name ?? '')
-                    // }
+                    onClick={() =>
+                      setSorceTableToDelete({
+                        connection: table.source_connection ?? '',
+                        schema: table.source_schema ?? '',
+                        table: table.source_table ?? ''
+                      })
+                    }
                     size="sm"
                     color="teal"
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
@@ -157,13 +186,13 @@ export default function SourceTablesTable({
       </table>
 
       <ConfirmDialog
-        open={notificationPatternDelete.length > 0}
+        open={sorceTableToDelete !== null}
         onConfirm={async () => {
-          handleDeletePattern(notificationPatternDelete);
-          setPatternDelete('');
+          handleDeleteSourceTable(sorceTableToDelete);
+          setSorceTableToDelete(null);
         }}
-        onClose={() => setPatternDelete('')}
-        message={`Are you sure you want to delete the ${notificationPatternDelete} notification filter?`}
+        onClose={() => setSorceTableToDelete(null)}
+        message={`Are you sure you want to delete this source table?`}
       />
       {/* <ClientSidePagination
         items={sourceTables}

@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   TableLineageSourceListModel,
   TableLineageSourceSpec
 } from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { DataLineageApiClient } from '../../../../services/apiClient';
-import { CheckTypes } from '../../../../shared/routes';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
 import Button from '../../../Button';
+import Loader from '../../../Loader';
+import SvgIcon from '../../../SvgIcon';
 import SourceColumns from './SourceColumns';
 import SourceTableSelectParameters from './SourceTableSelectParameters';
 
@@ -39,8 +44,8 @@ export default function SourceTableDetail({
   const [dataLineageSpec, setDataLineageSpec] =
     useState<TableLineageSourceSpec>({});
   const [editConnectionSchemaTable, setEditConnectionSchemaTable] =
-    React.useState(true);
-
+    React.useState(create);
+  const [loading, setLoading] = React.useState(false);
   const onChangeEditConnectionSchemaTable = (open: boolean) => {
     setEditConnectionSchemaTable(open);
   };
@@ -54,6 +59,7 @@ export default function SourceTableDetail({
 
   useEffect(() => {
     if (create || !sourceTableEdit) return;
+    setLoading(true);
     DataLineageApiClient.getTableSourceTable(
       connection,
       schema,
@@ -61,10 +67,14 @@ export default function SourceTableDetail({
       sourceTableEdit.connection,
       sourceTableEdit.schema,
       sourceTableEdit.table
-    ).then((res) => {
-      console.log(res);
-      setDataLineageSpec(res.data);
-    });
+    )
+      .then((res) => {
+        console.log(res);
+        setDataLineageSpec(res.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [sourceTableEdit, create]);
 
   const handleSave = () => {
@@ -105,6 +115,43 @@ export default function SourceTableDetail({
     }
   };
 
+  const dispatch = useActionDispatch();
+  const history = useHistory();
+
+  const goTable = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      dataLineage.source_connection ?? '',
+      dataLineage.source_schema ?? '',
+      dataLineage.source_table ?? '',
+      'detail'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      dataLineage.source_connection ?? '',
+      dataLineage.source_schema ?? '',
+      dataLineage.source_table ?? ''
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        label: dataLineage.source_table ?? '',
+        state: {}
+      })
+    );
+
+    history.push(url);
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex space-x-4 items-center absolute right-2 top-4">
@@ -116,12 +163,28 @@ export default function SourceTableDetail({
         />
       </div>
       <div className="mt-12">
-        <SourceTableSelectParameters
-          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
-          editConfigurationParameters={dataLineage}
-          onChangeParameters={onChangeParameters}
-          create={create}
-        />
+        {editConnectionSchemaTable ? (
+          <SourceTableSelectParameters
+            onChangeEditConnectionSchemaTable={
+              onChangeEditConnectionSchemaTable
+            }
+            editConfigurationParameters={dataLineage}
+            onChangeParameters={onChangeParameters}
+            create={create}
+          />
+        ) : (
+          <div className="flex items-center gap-4 mb-4">
+            <SvgIcon
+              name="chevron-right"
+              className="w-5 h-5"
+              onClick={() => onChangeEditConnectionSchemaTable(true)}
+            />
+            <a className="font-bold cursor-pointer" onClick={goTable}>
+              {dataLineage.source_connection}.{dataLineage.source_schema}.
+              {dataLineage.source_table}
+            </a>
+          </div>
+        )}
       </div>
       <div>
         <SourceColumns

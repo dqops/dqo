@@ -38,7 +38,7 @@ export default function SourceTables() {
   };
   useEffect(() => {
     getTables();
-  }, []);
+  }, [connection, schema, table]);
 
   const onBack = () => {
     setAddSourceTable(false);

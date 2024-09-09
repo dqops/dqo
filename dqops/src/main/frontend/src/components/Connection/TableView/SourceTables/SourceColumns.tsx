@@ -141,7 +141,7 @@ export default function SourceColumns({
   };
 
   return (
-    <div>
+    <div className="text-sm">
       <div className="px-4">Source Columns</div>
       <table>
         <tbody>
