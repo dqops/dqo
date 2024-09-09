@@ -15,7 +15,11 @@
  */
 package com.dqops.core.jobqueue.jobs.data;
 
-import com.dqops.core.jobqueue.*;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.core.jobqueue.DqoJobExecutionContext;
+import com.dqops.core.jobqueue.DqoJobType;
+import com.dqops.core.jobqueue.DqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
@@ -24,6 +28,7 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
+import com.dqops.data.checks.services.ChecksDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.services.ErrorsDeleteService;
 import com.dqops.data.errorsamples.models.ErrorsSamplesFragmentFilter;
@@ -35,6 +40,7 @@ import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 import com.dqops.data.readouts.services.SensorReadoutsDeleteService;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
 import com.dqops.data.statistics.services.StatisticsDeleteService;
+import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.TableSearchFilters;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +60,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     private final SensorReadoutsDeleteService sensorReadoutsDeleteService;
     private final ErrorSamplesDeleteService errorSamplesDeleteService;
     private final IncidentsDeleteService incidentsDeleteService;
+    private final ChecksDeleteService checksDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
@@ -62,13 +69,15 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
                                     CheckResultsDeleteService checkResultsDeleteService,
                                     SensorReadoutsDeleteService sensorReadoutsDeleteService,
                                     ErrorSamplesDeleteService errorSamplesDeleteService,
-                                    IncidentsDeleteService incidentsDeleteService) {
+                                    IncidentsDeleteService incidentsDeleteService,
+                                    ChecksDeleteService checksDeleteService) {
         this.errorsDeleteService = errorsDeleteService;
         this.statisticsDeleteService = statisticsDeleteService;
         this.checkResultsDeleteService = checkResultsDeleteService;
         this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
         this.errorSamplesDeleteService = errorSamplesDeleteService;
         this.incidentsDeleteService = incidentsDeleteService;
+        this.checksDeleteService = checksDeleteService;
     }
 
     /**
@@ -86,7 +95,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     public void setDeletionParameters(DeleteStoredDataQueueJobParameters deletionParameters) {
         this.deletionParameters = deletionParameters;
     }
-
 
     protected ErrorsFragmentFilter getErrorsFragmentFilter() {
         return new ErrorsFragmentFilter() {{
@@ -200,6 +208,20 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }};
     }
 
+    protected CheckSearchFilters getCheckSearchFilters() {
+        return new CheckSearchFilters() {{
+            setConnection(deletionParameters.getConnection());
+            setFullTableName(deletionParameters.getFullTableName());
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType() != null ? CheckType.valueOf(deletionParameters.getCheckType()) : null);
+            setTimeScale(deletionParameters.getTimeGradient() != null ? CheckTimeScale.valueOf(deletionParameters.getTimeGradient()) : null);
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTableComparisonName(deletionParameters.getTableComparisonName());
+            setSensorName(deletionParameters.getSensorName());
+        }};
+    }
+
     /**
      * Job internal implementation method that should be implemented by derived jobs.
      *
@@ -247,6 +269,9 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
                 Strings.isNullOrEmpty(this.deletionParameters.getTableComparisonName())) {
             DeleteStoredDataResult incidentsResult = this.incidentsDeleteService.deleteSelectedIncidentsFragment(this.getIncidentsFragmentFilter(), userIdentity);
             result.concat(incidentsResult);
+        }
+        if (this.deletionParameters.isDeleteChecksConfiguration()) {
+            this.checksDeleteService.deleteSelectedChecks(this.getCheckSearchFilters(), userIdentity);
         }
 
         return result;

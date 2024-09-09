@@ -482,6 +482,14 @@ const DeleteStoredDataExtendedPopUp = ({
               label="Error samples"
               checkClassName="bg-teal-500"
             />
+            <Checkbox
+              checked={params.deleteChecksConfiguration}
+              onChange={(deleteChecksConfiguration) =>
+                onChangeParams({ deleteChecksConfiguration })
+              }
+              label="Data quality checks configuration"
+              checkClassName="bg-teal-500"
+            />
           </div>
         </div>
       </DialogBody>

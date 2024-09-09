@@ -66,8 +66,12 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     private boolean deleteErrorSamples = false;
 
     @JsonPropertyDescription("Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. " +
-            "Because the default value is *false*, this parameter must be set to *true* to delete the error samples.")
+            "Because the default value is *false*, this parameter must be set to *true* to delete the incidents.")
     private boolean deleteIncidents = false;
+
+    @JsonPropertyDescription("Delete the data quality configured checks from the table. They are detached from the configuration." +
+            "Because the default value is *false*, this parameter must be set to *true* to delete the checks configuration.")
+    private boolean deleteChecksConfiguration = false;
 
     @JsonPropertyDescription("The list of column names to delete the data for column level results or errors only for selected columns.")
     private List<String> columnNames;
