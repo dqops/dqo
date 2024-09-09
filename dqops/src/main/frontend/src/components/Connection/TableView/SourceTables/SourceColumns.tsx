@@ -53,6 +53,9 @@ export default function SourceColumns({
 
         setSourceColumns([{ label: '', value: '' }, ...columns]);
 
+        if (!create) return;
+
+        //only for creating new source table
         const updatedColumns = { ...dataLineageSpec.columns };
 
         targetColumns.forEach((targetColumn) => {

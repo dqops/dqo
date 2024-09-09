@@ -54,7 +54,7 @@ const initTabs = [
     value: 'incident_configuration'
   },
   {
-    label: 'Source tables',
+    label: 'Data lineage',
     value: 'source_tables'
   }
 ];
