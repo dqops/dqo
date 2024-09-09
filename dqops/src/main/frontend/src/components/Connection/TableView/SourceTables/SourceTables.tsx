@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { TableLineageSourceListModel } from '../../../../api';
-import { DataLineageApiClient } from '../../../../services/apiClient';
-import { useDecodedParams } from '../../../../utils';
+import React from 'react';
 import Button from '../../../Button';
 import SvgIcon from '../../../SvgIcon';
 import TableActionGroup from '../TableActionGroup';
@@ -9,39 +6,16 @@ import SourceTableDetail from './SourceTableDetail';
 import SourceTablesTable from './SourceTablesTable';
 
 export default function SourceTables() {
-  const {
-    connection,
-    schema,
-    table
-  }: {
-    connection: string;
-    schema: string;
-    table: string;
-  } = useDecodedParams();
   const [addSourceTable, setAddSourceTable] = React.useState(false);
   const [sourceTableEdit, setSourceTableEdit] = React.useState<{
     connection: string;
     schema: string;
     table: string;
   } | null>(null);
-  const [tables, setTables] = useState<TableLineageSourceListModel[]>([]);
-  const [loading, setLoading] = useState(false);
-  const getTables = async () => {
-    setLoading(true);
-    DataLineageApiClient.getTableSourceTables(connection, schema, table)
-      .then((res) => {
-        setTables(res.data);
-      })
-      .finally(() => setLoading(false));
-  };
-  useEffect(() => {
-    getTables();
-  }, [connection, schema, table]);
 
   const onBack = () => {
     setAddSourceTable(false);
     setSourceTableEdit(null);
-    getTables();
   };
 
   return (
@@ -70,12 +44,7 @@ export default function SourceTables() {
         <>
           <TableActionGroup onUpdate={onBack} isDisabled />
           <div className="flex mb-4 text-sm"></div>
-          <SourceTablesTable
-            tables={tables}
-            loading={loading}
-            onChange={setTables}
-            setSourceTableEdit={setSourceTableEdit}
-          />
+          <SourceTablesTable setSourceTableEdit={setSourceTableEdit} />
           <Button
             label="Add source table"
             color="primary"
