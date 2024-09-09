@@ -190,7 +190,7 @@ export default function SourceTablesTable({
           setSorceTableToDelete(null);
         }}
         onClose={() => setSorceTableToDelete(null)}
-        message={`Are you sure you want to delete this source table?`}
+        message={`Are you sure you want to delete this data lineage?`}
       />
       <div className="px-4">
         <ClientSidePagination

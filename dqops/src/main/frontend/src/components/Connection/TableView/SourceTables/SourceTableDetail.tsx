@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   TableLineageSourceListModel,
@@ -154,13 +154,10 @@ export default function SourceTableDetail({
       </div>
     );
   }
-  const isSaveDisabled = useMemo(() => {
-    return (
-      !dataLineage.source_connection ||
-      !dataLineage.source_schema ||
-      !dataLineage.source_table
-    );
-  }, [dataLineage]);
+  const isSaveDisabled =
+    !dataLineage.source_connection ||
+    !dataLineage.source_schema ||
+    !dataLineage.source_table;
 
   return (
     <div>
