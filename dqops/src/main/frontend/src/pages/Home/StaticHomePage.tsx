@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { EnviromentApiClient } from '../../services/apiClient';
 
 export default function StaticHomePage() {
+  const [title, setTitle] = React.useState('');
+
+  useEffect(() => {
+    EnviromentApiClient.getDqoSettings().then((res) => {
+      setTitle(String(res.data?.properties?.['dqo.ui.application-name']));
+    });
+  }, []);
+
   return (
     <div>
       <div className="bg-teal-500 text-white px-4 py-4 text-2xl font-bold mb-4">
-        Welcome to DQOps Data Quality Operations Center
+        {title ? `Welcome to ${title}` : <>&nbsp;</>}
       </div>
       <div className="px-8 py-4 w-full">
         <p className="font-bold text-lg mb-5">
