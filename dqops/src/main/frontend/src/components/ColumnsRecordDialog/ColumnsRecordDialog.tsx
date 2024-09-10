@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
 import { Dialog, Tooltip } from '@material-tailwind/react';
+import React, { useEffect, useState } from 'react';
 import { ColumnListModel } from '../../api';
 import { ColumnApiClient } from '../../services/apiClient';
 import { useDecodedParams } from '../../utils';
@@ -19,6 +18,7 @@ interface IColumnsRecordDialogProps {
 }
 
 type ColumnWithCheckbox = ColumnListModel & { checked: boolean };
+
 const ColumnsRecordDialog = ({
   label,
   value,
@@ -35,6 +35,7 @@ const ColumnsRecordDialog = ({
     ColumnWithCheckbox[]
   >([]);
   const [open, setOpen] = useState(false);
+
   const handleSave = () => {
     const selectedColumns = columnsWithCheckboxes
       .filter((column) => column.checked)
@@ -89,7 +90,7 @@ const ColumnsRecordDialog = ({
           {value?.join(', ')?.slice(0, 200)}
           {value.join(', ').length > 200 && '...'}
         </div>
-        <div className="!min-w-4 !w-4 ">
+        <div className="!min-w-4 !w-4">
           <SvgIcon
             name="edit"
             className="w-4 h-4 text-gray-700 cursor-pointer"
@@ -100,45 +101,67 @@ const ColumnsRecordDialog = ({
       <Dialog
         open={open}
         handler={() => setOpen(false)}
-        style={{ width: '300px !important' }}
+        style={{ width: '200px !important', minWidth: '25%', maxWidth: '25%' }}
+        className="pt-6"
       >
-        <div className="p-4 text-black max-h-[50vh] flex flex-col overflow-y-auto ">
-          <div className="text-3xl mb-4">Columns</div>
-          {columnsWithCheckboxes.map((column) => (
-            <div
-              key={column.column_name}
-              className="flex items-center gap-x-4  text-2xl"
-            >
-              <Checkbox
-                checked={column.checked}
-                onChange={(value) => {
-                  const newColumns = columnsWithCheckboxes.map((c) =>
-                    c.column_name === column.column_name
-                      ? { ...c, checked: value }
-                      : c
-                  );
-                  setColumnsWithCheckboxes(newColumns);
-                }}
-                className="!mr-5 !mt-0.5"
-              />
-              <span>{column.column_name}</span>
-            </div>
-          ))}
+        <div className="w-full h-full overflow-hidden">
+          <table
+            className="table-fixed text-black text-sm w-full"
+            style={{ tableLayout: 'fixed' }}
+          >
+            <thead>
+              <tr>
+                <th className="text-left px-10">Column</th>
+              </tr>
+            </thead>
+            <tbody className="border-t border-gray-100">
+              {columnsWithCheckboxes.map((column) => (
+                <tr key={column.column_name}>
+                  <td>
+                    <div className="flex items-center py-0.5 pl-4 gap-x-2">
+                      <Checkbox
+                        checked={column.checked}
+                        onChange={(value) => {
+                          const newColumns = columnsWithCheckboxes.map((c) =>
+                            c.column_name === column.column_name
+                              ? { ...c, checked: value }
+                              : c
+                          );
+                          setColumnsWithCheckboxes(newColumns);
+                        }}
+                      />
+                      <div
+                        className="ml-4 truncate"
+                        style={{
+                          minWidth: '0', // Allow flex-grow to control width
+                          maxWidth: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                      >
+                        {column.column_name}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className=" w-full flex justify-center items-center space-x-4 p-4  mt-2">
+        <div className="w-full flex justify-center items-center space-x-4 p-4 mt-2">
           <div className="flex items-center justify-center gap-x-4">
             <Button
               color="primary"
               variant="outlined"
               label="Cancel"
-              className="w-40"
+              className="w-30"
               onClick={() => setOpen(false)}
             />
             <Button
               variant="contained"
               label="Save"
               color="primary"
-              className="w-40"
+              className="w-30"
               onClick={handleSave}
             />
           </div>
