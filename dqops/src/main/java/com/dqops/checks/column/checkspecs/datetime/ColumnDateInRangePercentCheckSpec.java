@@ -288,8 +288,15 @@ public class ColumnDateInRangePercentCheckSpec
 
             List<StatisticsMetricModel> minStatistics = columnDataAssetProfilingResults.getBasicStatisticsForSensor(
                     ColumnRangeMinValueStatisticsCollectorSpec.SENSOR_NAME, true);
-            LocalDate minDateValue = !minStatistics.isEmpty() ?
-                    DateTypesConverter.toLocalDate(minStatistics.get(0).getResult(), tableProfilingResults.getTimeZoneId()) : null;
+            List<StatisticsMetricModel> maxStatistics = columnDataAssetProfilingResults.getBasicStatisticsForSensor(
+                    ColumnRangeMaxValueStatisticsCollectorSpec.SENSOR_NAME, true);
+
+            if (minStatistics.isEmpty() || minStatistics.get(0).getResult() == null ||
+                maxStatistics.isEmpty() || maxStatistics.get(0).getResult() == null) {
+                return false; // no results to propose
+            }
+
+            LocalDate minDateValue = DateTypesConverter.toLocalDate(minStatistics.get(0).getResult(), tableProfilingResults.getTimeZoneId());
 
             if (minDateValue != null) {
                 if (minDateValue.isBefore(EARLIEST_ACCEPTED_DATE_BY_RULE_MINER)) {
@@ -303,11 +310,7 @@ public class ColumnDateInRangePercentCheckSpec
                 }
             }
 
-            List<StatisticsMetricModel> maxStatistics = columnDataAssetProfilingResults.getBasicStatisticsForSensor(
-                    ColumnRangeMaxValueStatisticsCollectorSpec.SENSOR_NAME, true);
-            LocalDate maxDateValue = !maxStatistics.isEmpty() ?
-                    DateTypesConverter.toLocalDate(maxStatistics.get(0).getResult(), tableProfilingResults.getTimeZoneId()) : null;
-
+            LocalDate maxDateValue = DateTypesConverter.toLocalDate(maxStatistics.get(0).getResult(), tableProfilingResults.getTimeZoneId());
             LocalDate latestAcceptedDate = LocalDate.now().plusDays(180);
 
             if (maxDateValue != null && latestAcceptedDate.isAfter(maxDateValue)) {
