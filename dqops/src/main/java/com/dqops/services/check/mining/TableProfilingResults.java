@@ -169,8 +169,8 @@ public class TableProfilingResults {
         }
 
         for (DataAssetProfilingResults columnProfilingResults : this.columns.values()) {
-            ProfilingCheckResult notNullsCountResult = columnProfilingResults.getProfilingCheckByCheckName("profile_not_nulls_count", false);
-            ProfilingCheckResult nullsCountResult = columnProfilingResults.getProfilingCheckByCheckName("profile_nulls_count", false);
+            ProfilingCheckResult notNullsCountResult = columnProfilingResults.getProfilingCheckByCheckName("profile_not_nulls_count", true);
+            ProfilingCheckResult nullsCountResult = columnProfilingResults.getProfilingCheckByCheckName("profile_nulls_count", true);
 
             if (notNullsCountResult.getActualValue() != null && nullsCountResult.getExecutedAt() != null && notNullsCountResult.getExecutedAt() != null &&
                     notNullsCountResult.getExecutedAt().plus(2, ChronoUnit.DAYS).isAfter(nullsCountResult.getExecutedAt())) {
