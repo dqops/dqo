@@ -20,6 +20,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.metadata.lineage.ColumnLineageSourceSpec;
 import com.dqops.metadata.lineage.TableLineageSource;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
@@ -45,6 +46,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @SpringBootTest
 public class DataLineageControllerUTTests extends BaseTest {
@@ -64,7 +66,7 @@ public class DataLineageControllerUTTests extends BaseTest {
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new DataLineageController(this.userHomeContextFactory, new RestApiLockServiceImpl());
+        this.sut = new DataLineageController(this.userHomeContextFactory, new RestApiLockServiceImpl(), new TableStatusCacheStub());
         this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
@@ -106,7 +108,8 @@ public class DataLineageControllerUTTests extends BaseTest {
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
-                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
+                Optional.empty());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
 
         List<TableLineageSourceListModel> result = responseEntity.block().getBody().collectList().block();
@@ -269,6 +272,48 @@ public class DataLineageControllerUTTests extends BaseTest {
                 newSourceTable);
         Assertions.assertEquals(HttpStatus.CONFLICT, responseEntity.block().getStatusCode());
         Assertions.assertEquals(2, this.sampleTable.getTableSpec().getSourceTables().size());
+    }
+
+    @Test
+    void createTableSourceTable_whenAddedTwice_thenSecondTimeReturnsConflict() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
+
+        String newSourceConnection = "new_source_connection";
+        String newSourceSchema = "new_source_schema";
+        String newSourceTable = "new_source_table";
+
+        TableLineageSourceSpec newTableLineageSourceListModel = new TableLineageSourceSpec(){{
+            setSourceConnection(newSourceConnection);
+            setSourceSchema(newSourceSchema);
+            setSourceTable(newSourceTable);
+            setDataLineageSourceTool("new_tool");
+        }};
+
+        Assertions.assertEquals(2, this.sampleTable.getTableSpec().getSourceTables().size());
+
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.createTableSourceTable(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
+                this.sampleTable.getConnectionName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
+                newSourceConnection,
+                newSourceSchema,
+                newSourceTable,
+                newTableLineageSourceListModel);
+
+        Mono<ResponseEntity<Mono<Void>>> responseEntity2 = this.sut.createTableSourceTable(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
+                this.sampleTable.getConnectionName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
+                newSourceConnection,
+                newSourceSchema,
+                newSourceTable,
+                newTableLineageSourceListModel);
+
+        Assertions.assertEquals(HttpStatus.CONFLICT, responseEntity2.block().getStatusCode());
+        Assertions.assertEquals(3, this.sampleTable.getTableSpec().getSourceTables().size());
     }
 
     @Test
