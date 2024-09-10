@@ -42,7 +42,9 @@ import org.apache.parquet.Strings;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sensor execution parameter object that contains all objects required to run the sensor.
@@ -77,7 +79,7 @@ public class SensorExecutionRunParameters {
     private boolean success;
     @JsonIgnore
     private Throwable sensorConfigurationException;
-    private List<String> additionalFilters = new ArrayList<>();
+    private Set<String> additionalFilters = new LinkedHashSet<>();
     private int rowCountLimit = 1000;
     private boolean failOnSensorReadoutLimitExceeded = true;
     private ErrorSamplingRenderParameters errorSamplingRenderParameters;
@@ -153,6 +155,9 @@ public class SensorExecutionRunParameters {
         this.rowCountLimit = rowCountLimit;
         this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
         this.errorSamplingRenderParameters = errorSamplingRenderParameters;
+        if (timeWindowFilter != null && !Strings.isNullOrEmpty(timeWindowFilter.getWhereFilter())) {
+            this.additionalFilters.add(timeWindowFilter.getWhereFilter());
+        }
     }
 
     /**
@@ -491,7 +496,7 @@ public class SensorExecutionRunParameters {
      * Returns a list of additional filters (SQL fragments) that will be added to the WHERE clause.
      * @return List of additional filters.
      */
-    public List<String> getAdditionalFilters() {
+    public Set<String> getAdditionalFilters() {
         return additionalFilters;
     }
 
@@ -499,7 +504,7 @@ public class SensorExecutionRunParameters {
      * Sets a reference to a list of additional filters.
      * @param additionalFilters A list of additional filters.
      */
-    public void setAdditionalFilters(List<String> additionalFilters) {
+    public void setAdditionalFilters(Set<String> additionalFilters) {
         this.additionalFilters = additionalFilters;
     }
 
@@ -574,7 +579,7 @@ public class SensorExecutionRunParameters {
         }
 
         if (this.additionalFilters == null) {
-            this.additionalFilters = new ArrayList<>();
+            this.additionalFilters = new LinkedHashSet<>();
         }
         this.additionalFilters.add(filter);
     }

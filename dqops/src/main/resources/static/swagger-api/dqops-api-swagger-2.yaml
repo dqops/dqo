@@ -43488,6 +43488,17 @@ definitions:
           \ configured, it is the column that is used for filtering the date and time\
           \ ranges. Setting the end date and time overrides the parameters to disable\
           \ analyzing today or the current month."
+      where_filter:
+        type: "string"
+        description: "An additional filter which must be a valid SQL predicate (an\
+          \ SQL expression that returns 'true' or 'false') that is added to the WHERE\
+          \ clause of the SQL query that DQOps will run on the data source. The purpose\
+          \ of a custom filter is to analyze only a subset of data, for example, when\
+          \ a new batch of records is loaded, and the data quality checks are evaluated\
+          \ as a data contract. All the records in that batch must tagged with the\
+          \ same value, and the passed predicate to find records from that batch would\
+          \ use the filter in the form: \"{alias}.batch_id = 1\". The filter can use\
+          \ replacement tokens {alias} to reference the analyzed table."
     description: "Time window configuration for partitioned checks (the number of\
       \ recent days or months to analyze in an incremental mode) or an absolute time\
       \ range to analyze."
