@@ -280,25 +280,20 @@ The records should be unique for each combination of the *edition*, *report_type
 | 2021    | 2021 Health Disparities | Able-Bodied    | District of Columbia | American Indian/Alaska Native | 62.0   | 49.0     | 75.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
 
 ### Configuring multi-column duplicate checks
-The uniqueness checks in DQOps operate on single columns. To detect duplicates in a combination of columns, 
-we have to define a [calculated column](../dqo-concepts/configuring-table-metadata.md#calculated-columns)
-derived as a concatenation of all columns that should be unique when combined.
-
-The SQL expression that concatenates the values will use a `||` concatenation operator, as shown below. 
-DQOps replaces the `{alias}.` token with the alias of the table.
-
-`{alias}.edition || {alias}.report_type || {alias}.measure_name || {alias}.state_name || {alias}.subpopulation`
+A table-level uniqueness check detects duplicates in a combination of columns.
+When all columns are used, it will identify duplicate records in a table with the complete rows.
 
 ### Detect multi-column duplicates in UI
-We have to add a virtual column to the monitored table. The column will be calculated using the SQL expression shown above.
 
-![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy; width="1200px" }
+The multi-column uniqueness check is available under the table in the tree on the left, in the **Data quality checks editor** tab.
 
-After adding a calculated column,
-DQOps will show it in the metadata tree. We can now configure the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)
-data quality check.
+![Table uniqueness](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-uniqueness.png){ loading=lazy; }
 
-![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy; width="1200px" }
+To select the columns used for the duplicate verification, click the **columns** editor.
+
+![Table uniqueness column selection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-uniqueness-column-selection.png){ loading=lazy; }
+
+When columns are not configured or none are selected, then all columns are implicitly used by the check.
 
 ### Detect multi-column duplicates in YAML
 We must add our calculated column to the list of columns to detect duplicates on multiple other columns. 
