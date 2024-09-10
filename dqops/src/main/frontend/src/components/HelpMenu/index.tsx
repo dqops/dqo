@@ -28,7 +28,7 @@ const HelpMenu = () => {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="z-50 px-0">
+      <PopoverContent className="z-[9999] px-0">
         <div className="px-4">
           <a
             href="https://dqops.com/support/"
