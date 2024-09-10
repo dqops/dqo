@@ -7844,6 +7844,13 @@
           "description" : "Table name",
           "required" : true,
           "type" : "string"
+        }, {
+          "name" : "checkType",
+          "in" : "query",
+          "description" : "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type",
+          "required" : false,
+          "type" : "string",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         } ],
         "responses" : {
           "200" : {
@@ -42240,6 +42247,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "source_table_data_quality_status" : {
+          "description" : "The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.",
+          "$ref" : "#/definitions/TableCurrentDataQualityStatusModel"
         }
       },
       "description" : "Data lineage model that describes one source table of the current table."
