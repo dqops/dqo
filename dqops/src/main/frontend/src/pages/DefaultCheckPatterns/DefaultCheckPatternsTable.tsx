@@ -9,8 +9,13 @@ import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
 import SvgIcon from '../../components/SvgIcon';
+import Switch from '../../components/Switch';
 import { useDefinition } from '../../contexts/definitionContext';
 import { getFirstLevelSensorState } from '../../redux/selectors';
+import {
+  DefaultColumnCheckPatternsApiClient,
+  DefaultTableCheckPatternsApiClient
+} from '../../services/apiClient';
 import { sortPatterns } from '../../utils';
 
 type TPattern =
@@ -70,41 +75,54 @@ export default function DefaultCheckPatternsTable({
   const [indexSortingElement, setIndexSortingElement] = useState(1);
   const [displayedPatterns, setDisplayedPatterns] = useState<any[]>([]); // State for displayed patterns
 
-  const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
   const headerElement =
     type === 'column'
       ? headerElementColumnPatterns
       : headerElementTablePatterns;
-
-  const getPreparedPatterns = () => {
-    const arr: any[] = [];
-
-    patterns.forEach((x) => {
-      const targetSpec: any = x[targetSpecKey as keyof TPattern];
-      if (
-        targetSpec &&
-        typeof targetSpec === 'object' &&
-        Object.keys(targetSpec).length !== 0
-      ) {
-        arr.push({ ...x, ...targetSpec });
-      } else {
-        arr.push(x);
-      }
-    });
-
-    return arr;
-  };
 
   const sortPreparedPattern = (
     elem: THeaderElement,
     index: number,
     dir: 'asc' | 'desc'
   ) => {
-    onChange(
-      sortPatterns(getPreparedPatterns(), elem.key as keyof TPattern, dir)
-    ),
+    onChange(sortPatterns(patterns, elem.key as keyof TPattern, dir)),
       setDir(dir === 'asc' ? 'desc' : 'asc'),
       setIndexSortingElement(index);
+  };
+
+  const handleDisablePattern = (pattern: TPattern) => {
+    const newPatterns = patterns.map((x) => {
+      if (x.pattern_name === pattern.pattern_name) {
+        x.disabled = !x.disabled;
+      }
+      return x;
+    });
+    if (type === 'table') {
+      DefaultTableCheckPatternsApiClient.getDefaultTableChecksPatternTarget(
+        pattern.pattern_name ?? ''
+      ).then((res) => {
+        DefaultTableCheckPatternsApiClient.updateDefaultTableChecksPatternTarget(
+          res.data.pattern_name ?? '',
+          {
+            ...res.data,
+            disabled: !res.data.disabled
+          }
+        );
+      });
+    } else {
+      DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
+        pattern.pattern_name ?? ''
+      ).then((res) => {
+        DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
+          res.data.pattern_name ?? '',
+          {
+            ...res.data,
+            disabled: !res.data.disabled
+          }
+        );
+      });
+    }
+    onChange(newPatterns);
   };
 
   return (
@@ -112,6 +130,7 @@ export default function DefaultCheckPatternsTable({
       <table>
         <thead>
           <tr>
+            <th></th>
             {headerElement.map((elem, index) => (
               <th className="px-4" key={elem.label}>
                 <div className="flex gap-x-1 items-center cursor-default">
@@ -144,6 +163,12 @@ export default function DefaultCheckPatternsTable({
         <tbody className="border-t border-gray-100">
           {displayedPatterns.map((pattern, index) => (
             <tr key={index} className="text-sm">
+              <td>
+                <Switch
+                  checked={!pattern.disabled}
+                  onChange={() => handleDisablePattern(pattern)}
+                />
+              </td>
               <td
                 className={clsx(
                   'px-4 underline cursor-pointer',
@@ -179,7 +204,7 @@ export default function DefaultCheckPatternsTable({
         </tbody>
       </table>
       <ClientSidePagination
-        items={getPreparedPatterns()}
+        items={patterns}
         onChangeItems={setDisplayedPatterns}
       />
       <ConfirmDialog
