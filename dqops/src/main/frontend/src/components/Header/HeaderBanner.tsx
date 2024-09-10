@@ -24,18 +24,41 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const collectStatistics = async () => {
     setIsCollected(true);
 
-    JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
-      connection: advisorObject.connectionName
-    });
+    if (advisorObject.tableNames && advisorObject.tableNames.length > 0) {
+      advisorObject.tableNames.forEach((tableName) => {
+        JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+          connection: advisorObject.connectionName,
+          fullTableName: advisorObject.schemaName + "." + tableName
+        });
+      });
+    } else {
+      JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+        connection: advisorObject.connectionName,
+        fullTableName: advisorObject.schemaName + ".*"
+      });
+    }
   };
 
   const runProfilingChecks = async () => {
-    JobApiClient.runChecks(undefined, false, undefined, {
-      check_search_filters: {
-        connection: advisorObject.connectionName,
-        checkType: CheckTypes.PROFILING
-      }
-    });
+    if (advisorObject.tableNames && advisorObject.tableNames.length > 0) {
+      advisorObject.tableNames.forEach((tableName) => {
+        JobApiClient.runChecks(undefined, false, undefined, {
+          check_search_filters: {
+            connection: advisorObject.connectionName,
+            fullTableName: advisorObject.schemaName + "." + tableName,
+            checkType: CheckTypes.PROFILING
+          }
+        });
+      });
+    } else {
+      JobApiClient.runChecks(undefined, false, undefined, {
+        check_search_filters: {
+          connection: advisorObject.connectionName,
+          fullTableName: advisorObject.schemaName + ".*",
+          checkType: CheckTypes.PROFILING
+        }
+      });
+    }
   };
 
   const handleSubmit = async () => {
