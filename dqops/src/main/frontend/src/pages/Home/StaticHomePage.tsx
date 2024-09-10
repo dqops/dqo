@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { EnviromentApiClient } from '../../services/apiClient';
 
 export default function StaticHomePage() {
+  const [title, setTitle] = React.useState('');
+  const [showLinks, setShowLinks] = React.useState(false);
+
+  useEffect(() => {
+    EnviromentApiClient.getDqoSettings().then((res) => {
+      console.log(res.data);
+      setTitle(String(res.data?.properties?.['dqo.ui.application-name']));
+      setShowLinks(
+        String(res.data?.properties?.['dqo.ui.home-page.show-links']) === 'true'
+      );
+    });
+  }, []);
+
   return (
     <div>
       <div className="bg-teal-500 text-white px-4 py-4 text-2xl font-bold mb-4">
-        Welcome to DQOps Data Quality Operations Center
+        {title ? `Welcome to ${title}` : <>&nbsp;</>}
       </div>
       <div className="px-8 py-4 w-full">
         <p className="font-bold text-lg mb-5">
@@ -143,40 +157,42 @@ export default function StaticHomePage() {
               </ul>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <p>Check the docs for more tutorials</p>
-            <a href="https://dqops.com/docs/">
-              <img src="/images/home/book.svg" className="w-20 mb-2" alt="" />
-            </a>
-            <p>
-              Download our best practices for effective <br />
-              data quality improvement
-            </p>
-            <a
-              href="https://dqops.com/best-practices-for-effective-data-quality-improvement/"
-              className="mb-2"
-              target="blank"
-            >
-              <img src="/images/home/download_practice.png" alt="" />
-            </a>
+          {showLinks && (
+            <div className="flex flex-col gap-4">
+              <p>Check the docs for more tutorials</p>
+              <a href="https://dqops.com/docs/">
+                <img src="/images/home/book.svg" className="w-20 mb-2" alt="" />
+              </a>
+              <p>
+                Download our best practices for effective <br />
+                data quality improvement
+              </p>
+              <a
+                href="https://dqops.com/best-practices-for-effective-data-quality-improvement/"
+                className="mb-2"
+                target="blank"
+              >
+                <img src="/images/home/download_practice.png" alt="" />
+              </a>
 
-            <p>Contact us for more information</p>
-            <a
-              className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2 text-center"
-              href="https://dqops.com/contact-us/"
-            >
-              Contact us
-            </a>
+              <p>Contact us for more information</p>
+              <a
+                className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2 text-center"
+                href="https://dqops.com/contact-us/"
+              >
+                Contact us
+              </a>
 
-            <p>Check our progress on GitHub</p>
-            <a href="https://github.com/dqops/dqo" className="mb-2">
-              <img src="/images/home/github.png" className="w-40" alt="" />
-            </a>
-            <p>Visit DQOps website</p>
-            <a href="https://dqops.com/">
-              <img src="/logo.svg" className="w-40" alt="" />
-            </a>
-          </div>
+              <p>Check our progress on GitHub</p>
+              <a href="https://github.com/dqops/dqo" className="mb-2">
+                <img src="/images/home/github.png" className="w-40" alt="" />
+              </a>
+              <p>Visit DQOps website</p>
+              <a href="https://dqops.com/">
+                <img src="/logo.svg" className="w-40" alt="" />
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
