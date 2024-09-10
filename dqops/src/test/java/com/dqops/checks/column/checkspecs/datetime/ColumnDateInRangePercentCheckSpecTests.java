@@ -98,11 +98,11 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
+//        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
+//        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoMinMaxValuesFoundAndColumnTypeTextAndSamplesArDates_thenProposesCheckWithDefaultSettingsAndMaxDate10YearsAhead() {
+    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoMinMaxValuesFoundAndColumnTypeTextAndSamplesArDates_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -136,11 +136,7 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
     }
 
     @Test
@@ -165,7 +161,7 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMinDatePresentThatIsBefore1900_thenProposesCheckWithDefaultSettingsAndMinDate1900() {
+    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMinDatePresentThatIsBefore1900_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -179,15 +175,11 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMinDatePresentThatIsNormalDate_thenProposesCheckWithDefaultSettingsAndMinDateIsJustBeforeMinFoundDate() {
+    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMinDatePresentThatIsNormalDate_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -201,15 +193,15 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.now().minusDays(2L + 2L), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(LocalDate.now().minusDays(2L + 2L), this.sut.getParameters().getMinDate());
+//        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
+//        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMinDatePresentThatIsSpecialDate_thenProposesCheckWithDefaultSettingsAndMinDateDayAfterSpecialDate() {
+    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMinDatePresentThatIsSpecialDate_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -223,15 +215,15 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.of(1970, 01, 02), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(LocalDate.of(1970, 01, 02), this.sut.getParameters().getMinDate());
+//        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
+//        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMaxDateFarInTheFuture_thenProposesCheckWithDefaultSettingsAndMaxDate10YearsAhead() {
+    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMaxDateFarInTheFuture_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -245,15 +237,15 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
+//        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead()), this.sut.getParameters().getMaxDate());
+//        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMaxDateJustALittleAhead_thenProposesCheckWithDefaultSettingsAndMaxDate10YearsAheadFromMaxDate() {
+    void proposeCheckConfiguration_whenDatesInRangePercentWithNoProfilingCheckResultAndMaxDateJustALittleAhead_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -267,11 +259,11 @@ public class ColumnDateInRangePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
-        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead() + 100L), this.sut.getParameters().getMaxDate());
-        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(LocalDate.of(1900, 01, 02), this.sut.getParameters().getMinDate());
+//        Assertions.assertEquals(LocalDate.now().plusDays(this.checkMiningConfiguration.getDaysInRangeMaxDateDaysAhead() + 100L), this.sut.getParameters().getMaxDate());
+//        Assertions.assertEquals(100.0, this.sut.getError().getMinPercent());
     }
 
     @Test
