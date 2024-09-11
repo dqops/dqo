@@ -25,10 +25,7 @@ import DataQualityContextMenu from './DataQualityContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import SensorContextMenu from './SensorContextMenu';
 
-const defaultChecks = [
-  'Table-level checks patterns',
-  'Column-level checks patterns'
-];
+const defaultChecks = ['Table-level policies', 'Column-level policies'];
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -437,6 +434,8 @@ export const DefinitionTree = () => {
     </div>
   );
 
+  console.log(activeTab);
+
   return (
     <div className="overflow-hidden bg-white">
       {definitionFirstLevelFolder?.map((x, index) => (
@@ -470,44 +469,47 @@ export const DefinitionTree = () => {
               {renderChecksFolderTree(checksFolderTree, [])}
             </div>
           )}
-          {x.category === 'Default checks configuration' &&
-            x.isOpen === true && (
-              <div>
-                {defaultChecks.map((x, index) => (
-                  <div key={index}>
-                    <div
-                      className={clsx(
-                        'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
-                        x.includes('Column') &&
-                          activeTab?.includes('default-check/column')
-                          ? 'bg-gray-300'
-                          : '',
-                        x.includes('Table') &&
-                          activeTab?.includes('default-check/table')
-                          ? 'bg-gray-300'
-                          : ''
-                        // check.custom ? 'font-bold' : '',
-                        // selected == check.check_name ? 'bg-gray-300' : ''
-                      )}
-                      onClick={() => {
-                        openDefaultChecksPatternsFirstLevelTab(
-                          x,
-                          x.includes('Column') ? 'column' : 'table'
-                        );
-                      }}
-                    >
-                      <SvgIcon
-                        name="definitionssensors"
-                        className="w-4 h-4 min-w-4 shrink-0"
-                      />
-                      <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                        {x}
-                      </div>
+          {x.category === 'Data quality policies' && x.isOpen === true && (
+            <div>
+              {defaultChecks.map((x, index) => (
+                <div key={index}>
+                  <div
+                    className={clsx(
+                      'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
+                      x.includes('Column') &&
+                        activeTab?.includes(
+                          'default-check-patterns/Column-level%20policies'
+                        )
+                        ? 'bg-gray-300'
+                        : '',
+                      x.includes('Table') &&
+                        activeTab?.includes(
+                          'default-check-patterns/Table-level%20policies'
+                        )
+                        ? 'bg-gray-300'
+                        : ''
+                      // check.custom ? 'font-bold' : '',
+                      // selected == check.check_name ? 'bg-gray-300' : ''
+                    )}
+                    onClick={() => {
+                      openDefaultChecksPatternsFirstLevelTab(
+                        x,
+                        x.includes('Column') ? 'column' : 'table'
+                      );
+                    }}
+                  >
+                    <SvgIcon
+                      name="definitionssensors"
+                      className="w-4 h-4 min-w-4 shrink-0"
+                    />
+                    <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+                      {x}
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
       {(nodes as any[]).map((tab, index) => (

@@ -219,7 +219,7 @@ function DefinitionProvider(props: any) {
       { category: 'Sensors', isOpen: false },
       { category: 'Rules', isOpen: false },
       { category: 'Data quality checks', isOpen: false },
-      { category: 'Default checks configuration', isOpen: false }
+      { category: 'Data quality policies', isOpen: false }
     ];
     const currectConfiguration: Array<{ category: string; isOpen: boolean }> = [
       ...(configuration ?? defaultconfiguration)
