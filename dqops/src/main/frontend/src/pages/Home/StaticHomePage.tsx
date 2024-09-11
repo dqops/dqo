@@ -7,7 +7,6 @@ export default function StaticHomePage() {
 
   useEffect(() => {
     EnviromentApiClient.getDqoSettings().then((res) => {
-      console.log(res.data);
       setTitle(String(res.data?.properties?.['dqo.ui.application-name']));
       setShowLinks(
         String(res.data?.properties?.['dqo.ui.home-page.show-links']) === 'true'

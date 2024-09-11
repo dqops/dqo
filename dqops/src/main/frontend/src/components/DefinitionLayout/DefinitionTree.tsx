@@ -434,8 +434,6 @@ export const DefinitionTree = () => {
     </div>
   );
 
-  console.log(activeTab);
-
   return (
     <div className="overflow-hidden bg-white">
       {definitionFirstLevelFolder?.map((x, index) => (
