@@ -13,7 +13,7 @@ export default function DefaultCheckPatterns() {
 
   const { openDefaultCheckPatternFirstLevelTab } = useDefinition();
 
-  const addPattern = () => {
+  const addQualityPolicy = () => {
     openDefaultCheckPatternFirstLevelTab(type, 'new pattern', { create: true });
   };
 
@@ -27,10 +27,10 @@ export default function DefaultCheckPatterns() {
           </div>
         </div>
         <Button
-          label="Add pattern"
+          label="Add data quality policy"
           color="primary"
-          className="w-45"
-          onClick={addPattern}
+          className="w-55"
+          onClick={addQualityPolicy}
         />
       </div>
       {type === 'table' ? <TableLevelPatterns /> : <ColumnLevelPatterns />}
