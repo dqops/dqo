@@ -104,7 +104,7 @@ function DefinitionProvider(props: any) {
         state: {
           type,
           pattern,
-          pattern_name: pattern,
+          policy_name: pattern,
           ...state
         },
         label: pattern
@@ -174,7 +174,7 @@ function DefinitionProvider(props: any) {
         value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(type),
         state: {
           type: type,
-          pattern_name: pattern
+          policy_name: pattern
         },
         label: pattern
       })

@@ -130,7 +130,7 @@ type TTarget =
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 type TEditCheckPatternProps = {
   type: 'table' | 'column';
-  pattern_name: string;
+  policy_name: string;
   create: boolean;
 };
 const initialState: TCheckContainerDiverse = {
@@ -143,7 +143,7 @@ const initialState: TCheckContainerDiverse = {
 
 export default function EditCheckPattern({
   type,
-  pattern_name,
+  policy_name,
   create
 }: TEditCheckPatternProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job);
@@ -174,7 +174,7 @@ export default function EditCheckPattern({
     updatedTarget: Partial<TTarget> | Partial<TTargetSpec>
   ) => {
     if (
-      'pattern_name' in updatedTarget ||
+      'policy_name' in updatedTarget ||
       'priority' in updatedTarget ||
       'description' in updatedTarget ||
       'disabled' in updatedTarget
@@ -196,7 +196,7 @@ export default function EditCheckPattern({
   };
 
   const updateChecks = async () => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     const apiClients: {
       column: Record<
         TCheckTypes,
@@ -253,7 +253,7 @@ export default function EditCheckPattern({
       ) {
         const apiFunction = apiClient[key as TCheckTypes];
         promises.push(
-          apiFunction(pattern_name, checkContainers[key as TCheckTypes])
+          apiFunction(policy_name, checkContainers[key as TCheckTypes])
         );
       }
     });
@@ -262,12 +262,12 @@ export default function EditCheckPattern({
 
     if (type === 'column') {
       await ColumnQualityPoliciesApiClient.updateColumnQualityPolicyTarget(
-        pattern_name,
+        policy_name,
         target
       );
     } else {
       await TableQualityPoliciesApiClient.updateTableQualityPolicyTarget(
-        pattern_name,
+        policy_name,
         target
       );
     }
@@ -283,14 +283,14 @@ export default function EditCheckPattern({
   };
 
   const getTarget = () => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     if (type === 'column') {
       ColumnQualityPoliciesApiClient.getColumnQualityPolicyTarget(
-        pattern_name
+        policy_name
       ).then((res) => setTarget(res?.data));
     } else {
       TableQualityPoliciesApiClient.getTableQualityPolicyTarget(
-        pattern_name
+        policy_name
       ).then((res) => setTarget(res?.data));
     }
   };
@@ -333,12 +333,12 @@ export default function EditCheckPattern({
 
     const apiCall = apiClient[activeTab as CheckRunMonitoringScheduleGroup];
     if (apiCall) {
-      await apiCall(pattern_name).then(callBack);
+      await apiCall(policy_name).then(callBack);
     }
   };
 
   useEffect(() => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     if (
       !checkContainers?.[activeTab as TCheckTypes] ||
       Object.keys(checkContainers?.[activeTab as TCheckTypes] ?? {}).length ===
@@ -349,13 +349,13 @@ export default function EditCheckPattern({
   }, [activeTab]);
 
   useEffect(() => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     getChecks();
-  }, [pattern_name, create, type]);
+  }, [policy_name, create, type]);
 
   useEffect(() => {
     getTarget();
-  }, [pattern_name]);
+  }, [policy_name]);
 
   useEffect(() => {
     getTarget();
@@ -371,7 +371,7 @@ export default function EditCheckPattern({
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
               {type?.replace(/./, (c) => c.toUpperCase())} check pattern{' '}
-              {pattern_name}
+              {policy_name}
             </div>
           </div>
           <div className="flex items-center gap-x-4">
@@ -421,7 +421,7 @@ export default function EditCheckPattern({
         </div>
         <CopyCheckPatternDialog
           type={type}
-          sourceTableName={pattern_name}
+          sourceTableName={policy_name}
           open={copyPatternOpen}
           setOpen={setCopyPatternOpen}
         />

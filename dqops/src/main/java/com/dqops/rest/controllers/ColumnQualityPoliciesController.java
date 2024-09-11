@@ -118,7 +118,7 @@ public class ColumnQualityPoliciesController {
             List<ColumnQualityPolicyListModel> models = patternWrappersList.stream()
                     .map(pw -> ColumnQualityPolicyListModel.fromPatternSpecification(pw.getSpec(), canEdit))
                     .collect(Collectors.toList());
-            models.sort(Comparator.comparing(model -> model.getPatternName()));
+            models.sort(Comparator.comparing(model -> model.getPolicyName()));
 
             return new ResponseEntity<>(Flux.fromStream(models.stream()), HttpStatus.OK);
         }));
@@ -204,8 +204,8 @@ public class ColumnQualityPoliciesController {
 
             boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
             ColumnQualityPolicyModel patternModel = new ColumnQualityPolicyModel() {{
-                setPatternName(patternName);
-                setPatternSpec(defaultChecksPatternWrapper.getSpec());
+                setPolicyName(patternName);
+                setPolicySpec(defaultChecksPatternWrapper.getSpec());
                 setCanEdit(canEdit);
                 setYamlParsingError(defaultChecksPatternWrapper.getSpec().getYamlParsingError());
             }};
@@ -294,7 +294,7 @@ public class ColumnQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Default checks pattern model") @RequestBody ColumnQualityPolicyModel patternModel) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPatternSpec() == null) {
+            if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPolicySpec() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
 
@@ -311,7 +311,7 @@ public class ColumnQualityPoliciesController {
                         }
 
                         ColumnQualityPolicyWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                        defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                        defaultChecksPatternWrapper.setSpec(patternModel.getPolicySpec());
                         userHomeContext.flush();
 
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
@@ -463,7 +463,7 @@ public class ColumnQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName) {
 
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getPatternSpec() == null) {
+            if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getPolicySpec() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
 
@@ -477,10 +477,10 @@ public class ColumnQualityPoliciesController {
 
                         if (existingDefaultChecksPatternWrapper == null) {
                             ColumnQualityPolicyWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                            defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                            defaultChecksPatternWrapper.setSpec(patternModel.getPolicySpec());
                         } else {
                             ColumnQualityPolicySpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-                            existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                            existingDefaultChecksPatternWrapper.setSpec(patternModel.getPolicySpec());
                         }
                         userHomeContext.flush();
 

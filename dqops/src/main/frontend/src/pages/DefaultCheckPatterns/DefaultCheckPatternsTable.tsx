@@ -31,7 +31,7 @@ type TDefaultCheckPatternsTableProps = {
 type THeaderElement = {
   label: string;
   key:
-    | 'pattern_name'
+    | 'policy_name'
     | 'priority'
     | 'can_edit'
     | 'yaml_parsing_error'
@@ -42,7 +42,7 @@ type THeaderElement = {
 };
 
 const headerElementTablePatterns: THeaderElement[] = [
-  { label: 'Pattern name', key: 'pattern_name' },
+  { label: 'Quality policy name', key: 'policy_name' },
   { label: 'Priority', key: 'priority' },
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
@@ -50,7 +50,7 @@ const headerElementTablePatterns: THeaderElement[] = [
 ];
 
 const headerElementColumnPatterns: THeaderElement[] = [
-  { label: 'Pattern name', key: 'pattern_name' },
+  { label: 'Quality policy name', key: 'policy_name' },
   { label: 'Priority', key: 'priority' },
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
@@ -92,17 +92,17 @@ export default function DefaultCheckPatternsTable({
 
   const handleDisablePattern = (pattern: TPattern) => {
     const newPatterns = patterns.map((x) => {
-      if (x.pattern_name === pattern.pattern_name) {
+      if (x.policy_name === pattern.policy_name) {
         x.disabled = !x.disabled;
       }
       return x;
     });
     if (type === 'table') {
       TableQualityPoliciesApiClient.getTableQualityPolicyTarget(
-        pattern.pattern_name ?? ''
+        pattern.policy_name ?? ''
       ).then((res) => {
         TableQualityPoliciesApiClient.updateTableQualityPolicyTarget(
-          res.data.pattern_name ?? '',
+          res.data.policy_name ?? '',
           {
             ...res.data,
             disabled: !res.data.disabled
@@ -111,10 +111,10 @@ export default function DefaultCheckPatternsTable({
       });
     } else {
       ColumnQualityPoliciesApiClient.getColumnQualityPolicyTarget(
-        pattern.pattern_name ?? ''
+        pattern.policy_name ?? ''
       ).then((res) => {
         ColumnQualityPoliciesApiClient.updateColumnQualityPolicyTarget(
-          res.data.pattern_name ?? '',
+          res.data.policy_name ?? '',
           {
             ...res.data,
             disabled: !res.data.disabled
@@ -174,9 +174,9 @@ export default function DefaultCheckPatternsTable({
                   'px-4 underline cursor-pointer',
                   pattern.disabled && 'text-gray-200'
                 )}
-                onClick={() => editPattern(type, pattern.pattern_name ?? '')}
+                onClick={() => editPattern(type, pattern.policy_name ?? '')}
               >
-                {pattern.pattern_name}
+                {pattern.policy_name}
               </td>
               <td className="px-4">{pattern.priority}</td>
               <td className="px-4">{pattern?.connection}</td>
@@ -188,7 +188,7 @@ export default function DefaultCheckPatternsTable({
                   variant="text"
                   label="Edit"
                   color="primary"
-                  onClick={() => editPattern(type, pattern.pattern_name ?? '')}
+                  onClick={() => editPattern(type, pattern.policy_name ?? '')}
                 />
               </td>
               <td className="px-4">
@@ -196,7 +196,7 @@ export default function DefaultCheckPatternsTable({
                   variant="text"
                   label="Delete"
                   color="primary"
-                  onClick={() => setPatternDelete(pattern.pattern_name ?? '')}
+                  onClick={() => setPatternDelete(pattern.policy_name ?? '')}
                 />
               </td>
             </tr>

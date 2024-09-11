@@ -9,8 +9,8 @@ const pageSizeOptions = [
     value: 10
   },
   {
-    label: 20,
-    value: 20
+    label: 25,
+    value: 25
   },
   {
     label: 50,

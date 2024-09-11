@@ -241,7 +241,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
 
         policies.add(new ColumnQualityPolicySpec() {{
-            setPolicyName("Detect columns with any null values");
+            setPolicyName("Detect columns containing any null values");
             setDescription("Detects columns containing any null values using both monitoring checks an daily partitioned checks");
             setDisabled(true);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
@@ -398,8 +398,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
 
         policies.add(new ColumnQualityPolicySpec() {{
-            setPolicyName("Detect anomalies in the number of distinct values");
-            setDescription("Monitors the number of distinct values in a column and raises an issue when an anomaly is detected.");
+            setPolicyName("Detect anomalies in the count of distinct values");
+            setDescription("Monitors the count of distinct values in a column and raises an issue when an anomaly is detected.");
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setUniqueness(new ColumnUniquenessDailyMonitoringChecksSpec() {{
@@ -456,8 +456,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
 
         policies.add(new ColumnQualityPolicySpec() {{
-            setPolicyName("Track the number and percentage of null values");
-            setDescription("Monitors the number and the percentage of null values without raising data quality issues.");
+            setPolicyName("Track the count and percentage of null values");
+            setDescription("Monitors the count and the percentage of null values without raising data quality issues.");
             setPriority(ColumnQualityPolicySpec.DEFAULT_PATTERNS_PRIORITY * 2);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{

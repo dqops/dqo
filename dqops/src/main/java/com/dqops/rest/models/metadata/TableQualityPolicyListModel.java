@@ -37,10 +37,13 @@ public class TableQualityPolicyListModel {
     /**
      * Pattern name.
      */
-    @JsonPropertyDescription("Pattern name.")
-    private String patternName;
+    @JsonPropertyDescription("Quality policy name.")
+    private String policyName;
 
-    @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
+    /**
+     * The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.
+     */
+    @JsonPropertyDescription("The priority of the policy. Policies with lower values are applied before policies with higher priority values.")
     private int priority;
 
     /**
@@ -88,7 +91,7 @@ public class TableQualityPolicyListModel {
             TableQualityPolicySpec checksPatternSpec,
             boolean isEditor) {
         return new TableQualityPolicyListModel() {{
-            setPatternName(checksPatternSpec.getPolicyName());
+            setPolicyName(checksPatternSpec.getPolicyName());
             setPriority(checksPatternSpec.getPriority());
             setDisabled(checksPatternSpec.isDisabled());
             setDescription(checksPatternSpec.getDescription());
@@ -102,7 +105,7 @@ public class TableQualityPolicyListModel {
         @Override
         public TableQualityPolicyListModel createSample() {
             return new TableQualityPolicyListModel() {{
-                setPatternName(SampleStringsRegistry.getPatternName());
+                setPolicyName(SampleStringsRegistry.getPatternName());
                 setPriority(100);
                 setTargetTable(new TargetTablePatternSpec() {{
                     setConnection("dwh");

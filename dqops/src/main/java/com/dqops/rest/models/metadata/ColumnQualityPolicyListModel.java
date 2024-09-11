@@ -35,15 +35,16 @@ import lombok.Data;
 @ApiModel(value = "ColumnQualityPolicyListModel", description = "Default column-level checks pattern (data quality policy) list model")
 public class ColumnQualityPolicyListModel {
     /**
-     * Pattern name.
+     * Quality policy name.
      */
-    @JsonPropertyDescription("Pattern name.")
-    private String patternName;
+    @JsonPropertyDescription("Quality policy name.")
+    private String policyName;
 
     /**
+     *
      * The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.
      */
-    @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
+    @JsonPropertyDescription("The priority of the policy. Policies with lower values are applied before policies with higher priority values.")
     private int priority;
 
     /**
@@ -91,7 +92,7 @@ public class ColumnQualityPolicyListModel {
             ColumnQualityPolicySpec checksPatternSpec,
             boolean isEditor) {
         return new ColumnQualityPolicyListModel() {{
-            setPatternName(checksPatternSpec.getPolicyName());
+            setPolicyName(checksPatternSpec.getPolicyName());
             setPriority(checksPatternSpec.getPriority());
             setDisabled(checksPatternSpec.isDisabled());
             setDescription(checksPatternSpec.getDescription());
@@ -105,7 +106,7 @@ public class ColumnQualityPolicyListModel {
         @Override
         public ColumnQualityPolicyListModel createSample() {
             return new ColumnQualityPolicyListModel() {{
-                setPatternName(SampleStringsRegistry.getPatternName());
+                setPolicyName(SampleStringsRegistry.getPatternName());
                 setPriority(100);
                 setTargetColumn(new TargetColumnPatternSpec() {{
                     setConnection("dwh");

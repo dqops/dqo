@@ -29536,14 +29536,14 @@ definitions:
   ColumnQualityPolicyListModel:
     type: "object"
     properties:
-      pattern_name:
+      policy_name:
         type: "string"
-        description: "Pattern name."
+        description: "Quality policy name."
       priority:
         type: "integer"
         format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
+        description: "The priority of the policy. Policies with lower values are applied\
+          \ before policies with higher priority values."
       disabled:
         type: "boolean"
         description: "Disables this data quality check configuration. The checks will\
@@ -29568,11 +29568,11 @@ definitions:
   ColumnQualityPolicyModel:
     type: "object"
     properties:
-      pattern_name:
+      policy_name:
         type: "string"
-        description: "Pattern name"
-      pattern_spec:
-        description: "The default checks specification."
+        description: "Quality policy name"
+      policy_spec:
+        description: "The quality policy specification."
         $ref: "#/definitions/ColumnQualityPolicySpec"
       can_edit:
         type: "boolean"
@@ -41299,14 +41299,14 @@ definitions:
   TableQualityPolicyListModel:
     type: "object"
     properties:
-      pattern_name:
+      policy_name:
         type: "string"
-        description: "Pattern name."
+        description: "Quality policy name."
       priority:
         type: "integer"
         format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
+        description: "The priority of the policy. Policies with lower values are applied\
+          \ before policies with higher priority values."
       disabled:
         type: "boolean"
         description: "Disables this data quality check configuration. The checks will\
@@ -41331,11 +41331,11 @@ definitions:
   TableQualityPolicyModel:
     type: "object"
     properties:
-      pattern_name:
+      policy_name:
         type: "string"
-        description: "Pattern name"
-      pattern_spec:
-        description: "The default checks specification."
+        description: "Quality policy name"
+      policy_spec:
+        description: "The quality policy specification."
         $ref: "#/definitions/TableQualityPolicySpec"
       can_edit:
         type: "boolean"

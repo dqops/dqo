@@ -8,9 +8,9 @@ import EditCheckPattern from './EditCheckPattern';
 export default function index() {
   const {
     type,
-    pattern_name,
+    policy_name,
     create
-  }: { type: 'table' | 'column'; pattern_name: string; create: boolean } =
+  }: { type: 'table' | 'column'; policy_name: string; create: boolean } =
     useSelector(getFirstLevelSensorState);
 
   return (
@@ -20,7 +20,7 @@ export default function index() {
       ) : (
         <EditCheckPattern
           type={type}
-          pattern_name={pattern_name}
+          policy_name={policy_name}
           create={create}
         />
       )}

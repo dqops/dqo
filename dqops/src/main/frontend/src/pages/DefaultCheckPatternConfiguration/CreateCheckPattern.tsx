@@ -33,7 +33,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
     updatedTarget: Partial<TTarget> | Partial<TTargetSpec>
   ) => {
     if (
-      'pattern_name' in updatedTarget ||
+      'policy_name' in updatedTarget ||
       'priority' in updatedTarget ||
       'description' in updatedTarget ||
       'disabled' in updatedTarget
@@ -54,19 +54,19 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
   };
 
   const onSave = () => {
-    if (!target.pattern_name) return;
+    if (!target.policy_name) return;
     if (type === 'column') {
       ColumnQualityPoliciesApiClient.createColumnQualityPolicyTarget(
-        target.pattern_name,
+        target.policy_name,
         target
       );
     } else {
       TableQualityPoliciesApiClient.createTableQualityPolicyTarget(
-        target.pattern_name,
+        target.policy_name,
         target
       );
     }
-    openDefaultCheckPatternFirstLevelTab(type, target.pattern_name);
+    openDefaultCheckPatternFirstLevelTab(type, target.policy_name);
     // onChangeCreating();
   };
 
@@ -85,7 +85,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
             color="primary"
             className="pl-14 pr-14"
             onClick={onSave}
-            disabled={!target.pattern_name}
+            disabled={!target.policy_name}
           />
         </div>
         <DefaultCheckTargetConfiguration

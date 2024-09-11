@@ -38,11 +38,14 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ColumnQualityPolicyModel", description = "Default column-level checks pattern (data quality policy) model")
 public class ColumnQualityPolicyModel {
-    @JsonPropertyDescription("Pattern name")
-    private String patternName;
+    @JsonPropertyDescription("Quality policy name")
+    private String policyName;
 
-    @JsonPropertyDescription("The default checks specification.")
-    private ColumnQualityPolicySpec patternSpec;
+    /**
+     * The quality policy specification.
+     */
+    @JsonPropertyDescription("The quality policy specification.")
+    private ColumnQualityPolicySpec policySpec;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -69,8 +72,8 @@ public class ColumnQualityPolicyModel {
         @Override
         public ColumnQualityPolicyModel createSample() {
             return new ColumnQualityPolicyModel() {{
-                setPatternName("id columns not null");
-                setPatternSpec(new ColumnQualityPolicySpec() {{
+                setPolicyName("id columns not null");
+                setPolicySpec(new ColumnQualityPolicySpec() {{
                     setTarget(new TargetColumnPatternSpec() {{
                         setColumn("id");
                     }});
