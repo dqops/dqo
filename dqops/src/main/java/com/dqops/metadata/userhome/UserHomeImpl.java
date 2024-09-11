@@ -56,8 +56,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("file_indices", o -> o.fileIndices);
             put("dashboards", o -> o.dashboards);
             put("default_schedules", o -> o.defaultSchedules);
-            put("table_quality_policies", o -> o.tableDefaultChecksPatterns);
-            put("column_quality_policies", o -> o.columnDefaultChecksPatterns);
+            put("table_quality_policies", o -> o.tableQualityPolicies);
+            put("column_quality_policies", o -> o.columnQualityPolicies);
             put("default_incident_notifications", o -> o.defaultIncidentNotifications);
         }
     };
@@ -84,12 +84,12 @@ public class UserHomeImpl implements UserHome, Cloneable {
     /**
      * The collection of default checks configurations for tables matching a pattern.
      */
-    private TableQualityPolicyListImpl tableDefaultChecksPatterns;
+    private TableQualityPolicyListImpl tableQualityPolicies;
 
     /**
      * The collection of default checks configurations for columns matching a pattern.
      */
-    private ColumnQualityPolicyListImpl columnDefaultChecksPatterns;
+    private ColumnQualityPolicyListImpl columnQualityPolicies;
 
     /**
      * The default notification addresses.
@@ -119,8 +119,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setFileIndices(new FileIndexListImpl(readOnly));
         this.setDashboards(new DashboardFolderListSpecWrapperImpl(readOnly));
         this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl(readOnly));
-        this.setTableDefaultChecksPatterns(new TableQualityPolicyListImpl(readOnly));
-        this.setColumnDefaultChecksPatterns(new ColumnQualityPolicyListImpl(readOnly));
+        this.setTableQualityPolicies(new TableQualityPolicyListImpl(readOnly));
+        this.setColumnQualityPolicies(new ColumnQualityPolicyListImpl(readOnly));
         this.setDefaultIncidentNotifications(new DefaultIncidentNotificationsWrapperImpl(readOnly));
         this.readOnly = readOnly;
     }
@@ -139,8 +139,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param fileIndices File synchronization indexes.
      * @param dashboards Custom dashboards wrapper.
      * @param schedules Default monitoring schedules wrapper.
-     * @param tableDefaultChecksPatterns Default table-level checks.
-     * @param columnDefaultChecksPatterns Default column-level checks.
+     * @param tableQualityPolicies Default table-level checks.
+     * @param columnQualityPolicies Default column-level checks.
      * @param readOnly Make the user home read-only.
      */
     public UserHomeImpl(UserDomainIdentity userIdentity,
@@ -154,8 +154,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         FileIndexListImpl fileIndices,
                         DashboardFolderListSpecWrapperImpl dashboards,
                         MonitoringSchedulesWrapperImpl schedules,
-                        TableQualityPolicyListImpl tableDefaultChecksPatterns,
-                        ColumnQualityPolicyListImpl columnDefaultChecksPatterns,
+                        TableQualityPolicyListImpl tableQualityPolicies,
+                        ColumnQualityPolicyListImpl columnQualityPolicies,
                         DefaultIncidentNotificationsWrapperImpl incidentNotifications,
                         boolean readOnly) {
         this.userIdentity = userIdentity;
@@ -169,8 +169,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setFileIndices(fileIndices);
         this.setDashboards(dashboards);
         this.setDefaultSchedules(schedules);
-        this.setTableDefaultChecksPatterns(tableDefaultChecksPatterns);
-        this.setColumnDefaultChecksPatterns(columnDefaultChecksPatterns);
+        this.setTableQualityPolicies(tableQualityPolicies);
+        this.setColumnQualityPolicies(columnQualityPolicies);
         this.setDefaultIncidentNotifications(incidentNotifications);
         if (readOnly) {
             makeReadOnly(true);
@@ -410,18 +410,18 @@ public class UserHomeImpl implements UserHome, Cloneable {
      */
     @Override
     public TableQualityPolicyListImpl getTableQualityPolicies() {
-        return tableDefaultChecksPatterns;
+        return tableQualityPolicies;
     }
 
     /**
      * Sets a container of default table-level checks.
-     * @param tableDefaultChecksPatterns Default table-level checks.
+     * @param tableQualityPolicies Default table-level checks.
      */
-    public void setTableDefaultChecksPatterns(TableQualityPolicyListImpl tableDefaultChecksPatterns) {
-        this.tableDefaultChecksPatterns = tableDefaultChecksPatterns;
-        if (tableDefaultChecksPatterns != null) {
+    public void setTableQualityPolicies(TableQualityPolicyListImpl tableQualityPolicies) {
+        this.tableQualityPolicies = tableQualityPolicies;
+        if (tableQualityPolicies != null) {
             HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "table_quality_policies");
-            tableDefaultChecksPatterns.setHierarchyId(childHierarchyId);
+            tableQualityPolicies.setHierarchyId(childHierarchyId);
             assert FIELDS.get("table_quality_policies").apply(this).getHierarchyId().equals(childHierarchyId);
         }
     }
@@ -432,18 +432,18 @@ public class UserHomeImpl implements UserHome, Cloneable {
      */
     @Override
     public ColumnQualityPolicyListImpl getColumnQualityPolicies() {
-        return columnDefaultChecksPatterns;
+        return columnQualityPolicies;
     }
 
     /**
      * Sets a collection of default column checks.
-     * @param columnDefaultChecksPatterns Default column checks.
+     * @param columnQualityPolicies Default column checks.
      */
-    public void setColumnDefaultChecksPatterns(ColumnQualityPolicyListImpl columnDefaultChecksPatterns) {
-        this.columnDefaultChecksPatterns = columnDefaultChecksPatterns;
-        if (columnDefaultChecksPatterns != null) {
+    public void setColumnQualityPolicies(ColumnQualityPolicyListImpl columnQualityPolicies) {
+        this.columnQualityPolicies = columnQualityPolicies;
+        if (columnQualityPolicies != null) {
             HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "column_quality_policies");
-            columnDefaultChecksPatterns.setHierarchyId(childHierarchyId);
+            columnQualityPolicies.setHierarchyId(childHierarchyId);
             assert FIELDS.get("column_quality_policies").apply(this).getHierarchyId().equals(childHierarchyId);
         }
     }
@@ -761,11 +761,11 @@ public class UserHomeImpl implements UserHome, Cloneable {
             if (cloned.defaultSchedules != null) {
                 cloned.defaultSchedules = (MonitoringSchedulesWrapperImpl) cloned.defaultSchedules.deepClone();
             }
-            if (cloned.tableDefaultChecksPatterns != null) {
-                cloned.tableDefaultChecksPatterns = (TableQualityPolicyListImpl) cloned.tableDefaultChecksPatterns.deepClone();
+            if (cloned.tableQualityPolicies != null) {
+                cloned.tableQualityPolicies = (TableQualityPolicyListImpl) cloned.tableQualityPolicies.deepClone();
             }
-            if (cloned.columnDefaultChecksPatterns != null) {
-                cloned.columnDefaultChecksPatterns = (ColumnQualityPolicyListImpl) cloned.columnDefaultChecksPatterns.deepClone();
+            if (cloned.columnQualityPolicies != null) {
+                cloned.columnQualityPolicies = (ColumnQualityPolicyListImpl) cloned.columnQualityPolicies.deepClone();
             }
             if (cloned.defaultIncidentNotifications != null) {
                 cloned.defaultIncidentNotifications = (DefaultIncidentNotificationsWrapperImpl) cloned
