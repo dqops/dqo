@@ -34,7 +34,7 @@ public class TableQualityPolicyWrapperImpl extends AbstractElementWrapper<String
     };
 
     @JsonIgnore
-    private String patternName;
+    private String policyName;
 
     /**
      * Creates a default check configuration pattern wrapper.
@@ -52,29 +52,29 @@ public class TableQualityPolicyWrapperImpl extends AbstractElementWrapper<String
 
     /**
      * Creates a default checks pattern wrapper given a pattern name.
-     * @param patternName Pattern name.
+     * @param policyName Pattern name.
      * @param readOnly Make the wrapper read-only.
      */
-    public TableQualityPolicyWrapperImpl(String patternName, boolean readOnly) {
+    public TableQualityPolicyWrapperImpl(String policyName, boolean readOnly) {
         this(readOnly);
-        this.patternName = patternName;
+        this.policyName = policyName;
     }
 
     /**
      * Gets the default checks pattern name.
      * @return Default checks pattern name.
      */
-    public String getPatternName() {
-        return patternName;
+    public String getPolicyName() {
+        return policyName;
     }
 
     /**
      * Sets a default checks pattern name.
-     * @param patternName Default pecks pattern name.
+     * @param policyName Default pecks pattern name.
      */
-    public void setPatternName(String patternName) {
-        assert this.patternName == null || Objects.equals(this.patternName, patternName); // cannot change the name
-        this.patternName = patternName;
+    public void setPolicyName(String policyName) {
+        assert this.policyName == null || Objects.equals(this.policyName, policyName); // cannot change the name
+        this.policyName = policyName;
     }
 
     /**
@@ -85,7 +85,7 @@ public class TableQualityPolicyWrapperImpl extends AbstractElementWrapper<String
     @Override
     @JsonIgnore
     public String getObjectName() {
-        return this.getPatternName();
+        return this.getPolicyName();
     }
 
     @Override

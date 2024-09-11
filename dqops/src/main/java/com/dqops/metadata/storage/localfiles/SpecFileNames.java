@@ -75,8 +75,9 @@ public final class SpecFileNames {
     public static final String COLUMN_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML = ".dqocolumnpattern.yaml";
 
     /**
-     * The name of the "default" patterns of default checks for both tables and columns.
+     * The name of the "default" patterns of default checks for both tables and columns. It is depreciated, because the default file was divided into multiple files.
      */
+    @Deprecated
     public static final String DEFAULT_CHECKS_PATTERN_NAME = "default";
 
     /**

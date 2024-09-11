@@ -37,7 +37,7 @@ public class TableQualityPolicyListImpl extends AbstractIndexingList<String, Tab
     @Override
     protected TableQualityPolicyWrapper createNewElement(String objectName) {
         TableQualityPolicyWrapper defaultChecksPatternWrapper = new TableQualityPolicyWrapperImpl();
-        defaultChecksPatternWrapper.setPatternName(objectName);
+        defaultChecksPatternWrapper.setPolicyName(objectName);
         defaultChecksPatternWrapper.setSpec(new TableQualityPolicySpec());
         return defaultChecksPatternWrapper;
     }

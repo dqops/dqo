@@ -35,6 +35,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -56,6 +57,11 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnQualityPolicySpec extends AbstractSpec implements InvalidYamlStatusHolder {
+    /**
+     * The default pattern priority.
+     */
+    public static final int DEFAULT_PATTERNS_PRIORITY = 1000;
+
     public static final ChildHierarchyNodeFieldMapImpl<ColumnQualityPolicySpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("target", o -> o.target);
@@ -66,7 +72,7 @@ public class ColumnQualityPolicySpec extends AbstractSpec implements InvalidYaml
     };
 
     @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
-    private int priority;
+    private int priority = DEFAULT_PATTERNS_PRIORITY;
 
     @JsonPropertyDescription("Disables this data quality check configuration. The checks will not be activated.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -265,16 +271,29 @@ public class ColumnQualityPolicySpec extends AbstractSpec implements InvalidYaml
     }
 
     /**
-     * Retrieves the configuration pattern name from the hierarchy.
-     * @return Configuration pattern name or null for a standalone default checks spec object.
+     * Retrieves the quality policy name from the hierarchy.
+     * @return Quality policy name or null for a standalone default checks spec object.
      */
     @JsonIgnore
-    public String getPatternName() {
+    public String getPolicyName() {
         HierarchyId hierarchyId = this.getHierarchyId();
         if (hierarchyId == null) {
             return null;
         }
         return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Sets a policy name by creating a hierarchy ID. It can be called only when the hierarchy ID is not present.
+     * @param policyName Policy name.
+     */
+    @JsonIgnore
+    public void setPolicyName(String policyName) {
+        if (this.getHierarchyId() != null) {
+            throw new DqoRuntimeException("Cannot change the policy name");
+        }
+
+        this.setHierarchyId(new HierarchyId("column_quality_policies", policyName, "spec"));
     }
 
     /**

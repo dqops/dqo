@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 
 /**
- * Column-level default checks pattern spec wrapper.
+ * Column-level default checks pattern (quality policy) spec wrapper.
  */
 public class ColumnQualityPolicyWrapperImpl extends AbstractElementWrapper<String, ColumnQualityPolicySpec> implements ColumnQualityPolicyWrapper {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnQualityPolicyWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
@@ -33,7 +33,7 @@ public class ColumnQualityPolicyWrapperImpl extends AbstractElementWrapper<Strin
     };
 
     @JsonIgnore
-    private String patternName;
+    private String policyName;
 
     /**
      * Creates a default check configuration pattern wrapper.
@@ -46,29 +46,29 @@ public class ColumnQualityPolicyWrapperImpl extends AbstractElementWrapper<Strin
     }
 
     /**
-     * Creates a default checks pattern wrapper given a pattern name.
-     * @param patternName Pattern name.
+     * Creates a default checks pattern wrapper given a policy name.
+     * @param policyName Policy name.
      */
-    public ColumnQualityPolicyWrapperImpl(String patternName, boolean readOnly) {
+    public ColumnQualityPolicyWrapperImpl(String policyName, boolean readOnly) {
         this(readOnly);
-        this.patternName = patternName;
+        this.policyName = policyName;
     }
 
     /**
      * Gets the default checks pattern name.
      * @return Default checks pattern name.
      */
-    public String getPatternName() {
-        return patternName;
+    public String getPolicyName() {
+        return policyName;
     }
 
     /**
      * Sets a default checks pattern name.
-     * @param patternName Default pecks pattern name.
+     * @param policyName Default pecks pattern name.
      */
-    public void setPatternName(String patternName) {
-        assert this.patternName == null || Objects.equals(this.patternName, patternName); // cannot change the name
-        this.patternName = patternName;
+    public void setPolicyName(String policyName) {
+        assert this.policyName == null || Objects.equals(this.policyName, policyName); // cannot change the name
+        this.policyName = policyName;
     }
 
     /**
@@ -79,7 +79,7 @@ public class ColumnQualityPolicyWrapperImpl extends AbstractElementWrapper<Strin
     @Override
     @JsonIgnore
     public String getObjectName() {
-        return this.getPatternName();
+        return this.getPolicyName();
     }
 
     @Override

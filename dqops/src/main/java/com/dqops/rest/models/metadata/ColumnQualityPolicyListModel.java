@@ -91,7 +91,7 @@ public class ColumnQualityPolicyListModel {
             ColumnQualityPolicySpec checksPatternSpec,
             boolean isEditor) {
         return new ColumnQualityPolicyListModel() {{
-            setPatternName(checksPatternSpec.getPatternName());
+            setPatternName(checksPatternSpec.getPolicyName());
             setPriority(checksPatternSpec.getPriority());
             setDisabled(checksPatternSpec.isDisabled());
             setDescription(checksPatternSpec.getDescription());

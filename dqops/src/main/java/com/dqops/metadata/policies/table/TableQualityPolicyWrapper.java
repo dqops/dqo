@@ -23,16 +23,16 @@ import com.dqops.metadata.basespecs.ObjectName;
  */
 public interface TableQualityPolicyWrapper extends ElementWrapper<TableQualityPolicySpec>, ObjectName<String> {
     /**
-     * Gets the pattern name.
-     * @return Default configuration pattern name.
+     * Gets the policy name.
+     * @return Data quality policy name
      */
-    String getPatternName();
+    String getPolicyName();
 
     /**
-     * Sets a default checks configuration pattern name.
-     * @param patternName Default checks pattern name.
+     * Sets a data quality policy name.
+     * @param policyName Quality policy name.
      */
-    void setPatternName(String patternName);
+    void setPolicyName(String policyName);
 
     /**
      * Creates a deep clone of the object.

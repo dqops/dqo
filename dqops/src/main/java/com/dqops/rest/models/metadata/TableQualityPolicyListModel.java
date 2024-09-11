@@ -88,7 +88,7 @@ public class TableQualityPolicyListModel {
             TableQualityPolicySpec checksPatternSpec,
             boolean isEditor) {
         return new TableQualityPolicyListModel() {{
-            setPatternName(checksPatternSpec.getPatternName());
+            setPatternName(checksPatternSpec.getPolicyName());
             setPriority(checksPatternSpec.getPriority());
             setDisabled(checksPatternSpec.isDisabled());
             setDescription(checksPatternSpec.getDescription());

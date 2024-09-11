@@ -37,7 +37,7 @@ public class ColumnQualityPolicyListImpl extends AbstractIndexingList<String, Co
     @Override
     protected ColumnQualityPolicyWrapper createNewElement(String objectName) {
         ColumnQualityPolicyWrapper defaultChecksPatternWrapper = new ColumnQualityPolicyWrapperImpl();
-        defaultChecksPatternWrapper.setPatternName(objectName);
+        defaultChecksPatternWrapper.setPolicyName(objectName);
         defaultChecksPatternWrapper.setSpec(new ColumnQualityPolicySpec());
         return defaultChecksPatternWrapper;
     }
@@ -45,12 +45,12 @@ public class ColumnQualityPolicyListImpl extends AbstractIndexingList<String, Co
     /**
      * Removes a source model. The source is marked for deletion and will be removed on flush.
      *
-     * @param patternName Pattern name to remove.
+     * @param policyName Policy name to remove.
      * @return True when the model will be removed, false otherwise.
      */
     @Override
-    public boolean remove(String patternName) {
-        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = this.getByObjectName(patternName, true);
+    public boolean remove(String policyName) {
+        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = this.getByObjectName(policyName, true);
         if (defaultChecksPatternWrapper == null) {
             return false;
         }

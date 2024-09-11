@@ -19,19 +19,21 @@ package com.dqops.checks.defaults;
 import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 
+import java.util.List;
+
 /**
  * Factory that creates the default configuration of checks, when DQOps is initialized and the initial configuration is loaded into the local settings.
  */
 public interface DefaultObservabilityCheckSettingsFactory {
     /**
-     * Create an initial configuration of table-level checks.
+     * Create an initial configuration of table-level checks (data quality policies).
      * @return The configuration of the default table level checks.
      */
-    TableQualityPolicySpec createDefaultTableChecks();
+    List<TableQualityPolicySpec> createDefaultTableQualityPolicies();
 
     /**
-     * Create an initial configuration of column-level checks.
+     * Create an initial configuration of column-level checks (data quality policies).
      * @return The configuration of the default column level checks.
      */
-    ColumnQualityPolicySpec createDefaultColumnChecks();
+    List<ColumnQualityPolicySpec> createDefaultColumnQualityPolicies();
 }

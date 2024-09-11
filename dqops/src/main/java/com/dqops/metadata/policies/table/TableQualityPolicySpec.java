@@ -28,6 +28,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,6 +42,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 
+
 /**
  * The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.
  * This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.
@@ -49,6 +51,11 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableQualityPolicySpec extends AbstractSpec implements InvalidYamlStatusHolder {
+    /**
+     * The default pattern priority.
+     */
+    public static final int DEFAULT_PATTERNS_PRIORITY = 1000;
+
     public static final ChildHierarchyNodeFieldMapImpl<TableQualityPolicySpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("target", o -> o.target);
@@ -59,7 +66,7 @@ public class TableQualityPolicySpec extends AbstractSpec implements InvalidYamlS
     };
 
     @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
-    private int priority;
+    private int priority = DEFAULT_PATTERNS_PRIORITY;
 
     @JsonPropertyDescription("Disables this data quality check configuration. The checks will not be activated.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -258,16 +265,29 @@ public class TableQualityPolicySpec extends AbstractSpec implements InvalidYamlS
     }
 
     /**
-     * Retrieves the configuration pattern name from the hierarchy.
-     * @return Configuration pattern name or null for a standalone default checks spec object.
+     * Retrieves the quality policy name from the hierarchy.
+     * @return Quality policy name or null for a standalone default checks spec object.
      */
     @JsonIgnore
-    public String getPatternName() {
+    public String getPolicyName() {
         HierarchyId hierarchyId = this.getHierarchyId();
         if (hierarchyId == null) {
             return null;
         }
         return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Sets a policy name by creating a hierarchy ID. It can be called only when the hierarchy ID is not present.
+     * @param policyName Policy name.
+     */
+    @JsonIgnore
+    public void setPolicyName(String policyName) {
+        if (this.getHierarchyId() != null) {
+            throw new DqoRuntimeException("Cannot change the policy name");
+        }
+
+        this.setHierarchyId(new HierarchyId("table_quality_policies", policyName, "spec"));
     }
 
     /**
