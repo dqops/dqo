@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.policies.table;
+package com.dqops.metadata.policies.column;
 
 import java.util.List;
 
 /**
- * List of table-level default checks patterns.
+ * List of column-level default checks patterns.
  */
-public interface TableDefaultChecksPatternList extends Iterable<TableDefaultChecksPatternWrapper> {
+public interface ColumnQualityPolicyList extends Iterable<ColumnQualityPolicyWrapper> {
     /**
      * Returns the size of the collection. A call to this method will trigger a full load and will load all elements
      * from the persistence store (files or database).
@@ -34,14 +34,14 @@ public interface TableDefaultChecksPatternList extends Iterable<TableDefaultChec
      * @param loadAllWhenMissing Forces loading all elements from the persistence store when the element is missing. When false, then simply checks if the element is in the dictionary.
      * @return Existing object (model wrapper) or null when the object was not found.
      */
-    TableDefaultChecksPatternWrapper getByObjectName(String patternName, boolean loadAllWhenMissing);
+    ColumnQualityPolicyWrapper getByObjectName(String patternName, boolean loadAllWhenMissing);
 
     /**
      * Creates a new element instance that is marked as new and should be saved on flush.
      * @param patternName Pattern name.
      * @return Created object instance.
      */
-    TableDefaultChecksPatternWrapper createAndAddNew(String patternName);
+    ColumnQualityPolicyWrapper createAndAddNew(String patternName);
 
     /**
      * Removes a source model. The source is marked for deletion and will be removed on flush.
@@ -54,7 +54,7 @@ public interface TableDefaultChecksPatternList extends Iterable<TableDefaultChec
      * Returns the collection as an immutable list.
      * @return List of check pattern definition wrappers.
      */
-    List<TableDefaultChecksPatternWrapper> toList();
+    List<ColumnQualityPolicyWrapper> toList();
 
     /**
      * Flushes changes to the persistent storage. Derived classes (that are based on a real persistence store) should override

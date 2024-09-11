@@ -20,11 +20,11 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
 import com.dqops.metadata.policies.column.TargetColumnPatternFilter;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
 import com.dqops.metadata.policies.table.TargetTablePatternFilter;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -85,12 +85,12 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        List<TableDefaultChecksPatternWrapper> tableDefaultChecksPatternWrappers = new ArrayList<>(userHome.getTableDefaultChecksPatterns().toList());
-        tableDefaultChecksPatternWrappers.removeIf(wrapper -> wrapper.getSpec().isDisabled());
-        tableDefaultChecksPatternWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
+        List<TableQualityPolicyWrapper> tableQualityPolicyWrappers = new ArrayList<>(userHome.getTableQualityPolicies().toList());
+        tableQualityPolicyWrappers.removeIf(wrapper -> wrapper.getSpec().isDisabled());
+        tableQualityPolicyWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
         
-        for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : tableDefaultChecksPatternWrappers) {
-            TableDefaultChecksPatternSpec defaultChecksPattern = tableDefaultChecksPatternWrapper.getSpec();
+        for (TableQualityPolicyWrapper tableQualityPolicyWrapper : tableQualityPolicyWrappers) {
+            TableQualityPolicySpec defaultChecksPattern = tableQualityPolicyWrapper.getSpec();
             TargetTablePatternFilter patternFilter = defaultChecksPattern.getTarget().toPatternFilter();
             if (!patternFilter.match(connectionSpec, targetTableSpec, true)) {
                 continue;
@@ -116,13 +116,13 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        List<ColumnDefaultChecksPatternWrapper> columnPatternWrappers = new ArrayList<>(
-                userHome.getColumnDefaultChecksPatterns().toList());
+        List<ColumnQualityPolicyWrapper> columnPatternWrappers = new ArrayList<>(
+                userHome.getColumnQualityPolicies().toList());
         columnPatternWrappers.removeIf(wrapper -> wrapper.getSpec().isDisabled());
         columnPatternWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
 
-        for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : columnPatternWrappers) {
-            ColumnDefaultChecksPatternSpec defaultChecksPattern = columnDefaultChecksPatternWrapper.getSpec();
+        for (ColumnQualityPolicyWrapper columnQualityPolicyWrapper : columnPatternWrappers) {
+            ColumnQualityPolicySpec defaultChecksPattern = columnQualityPolicyWrapper.getSpec();
             TargetColumnPatternFilter patternFilter = defaultChecksPattern.getTarget().toPatternFilter();
             DataTypeCategory dataTypeCategory = providerDialectSettings.detectColumnType(targetColumnSpec.getTypeSnapshot());
             if (!patternFilter.match(connectionSpec, targetTableSpec, targetColumnSpec, dataTypeCategory)) {

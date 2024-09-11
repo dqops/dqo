@@ -23,8 +23,8 @@ import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapperImpl;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapperImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
@@ -36,7 +36,7 @@ import java.util.Objects;
 /**
  * File based configuration of column-level checks pattern wrapper. Loads and writes the default check patterns to a yaml file.
  */
-public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChecksPatternWrapperImpl {
+public class FileColumnQualityPolicyWrapperImpl extends ColumnQualityPolicyWrapperImpl {
     @JsonIgnore
     private final FolderTreeNode defaultsFolderNode;
     @JsonIgnore
@@ -52,11 +52,11 @@ public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChec
      * @param yamlSerializer Yaml serializer.
      * @param readOnly Make the wrapper read-only.
      */
-    public FileColumnDefaultChecksPatternWrapperImpl(FolderTreeNode defaultsFolderNode,
-                                                     String patternName,
-                                                     String patternFileNameBaseName,
-                                                     YamlSerializer yamlSerializer,
-                                                     boolean readOnly) {
+    public FileColumnQualityPolicyWrapperImpl(FolderTreeNode defaultsFolderNode,
+                                              String patternName,
+                                              String patternFileNameBaseName,
+                                              YamlSerializer yamlSerializer,
+                                              boolean readOnly) {
         super(patternName, readOnly);
         this.defaultsFolderNode = defaultsFolderNode;
         this.patternFileNameBaseName = patternFileNameBaseName;
@@ -85,21 +85,21 @@ public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChec
      * @return Loaded default checks pattern specification.
      */
     @Override
-    public ColumnDefaultChecksPatternSpec getSpec() {
-        ColumnDefaultChecksPatternSpec spec = super.getSpec();
+    public ColumnQualityPolicySpec getSpec() {
+        ColumnQualityPolicySpec spec = super.getSpec();
         if (spec == null) {
             String specFileName = FileNameSanitizer.encodeForFileSystem(this.patternFileNameBaseName) + SpecFileNames.COLUMN_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML;
             FileTreeNode fileNode = this.defaultsFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                ColumnDefaultChecksPatternSpec deserializedSpec = (ColumnDefaultChecksPatternSpec) fileContent.getCachedObjectInstance();
+                ColumnQualityPolicySpec deserializedSpec = (ColumnQualityPolicySpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
                     ColumnDefaultChecksPatternYaml deserialized = this.yamlSerializer.deserialize(textContent, ColumnDefaultChecksPatternYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
                     if (deserializedSpec == null) {
-                        deserializedSpec = new ColumnDefaultChecksPatternSpec();
+                        deserializedSpec = new ColumnQualityPolicySpec();
                     }
 
                     if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
@@ -116,14 +116,14 @@ public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChec
                     }
                     fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (ColumnDefaultChecksPatternSpec) deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (ColumnQualityPolicySpec) deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
 				this.clearDirty(false);
                 return deserializedSpec;
             }
             else {
-                ColumnDefaultChecksPatternSpec newEmptySpec = new ColumnDefaultChecksPatternSpec();
+                ColumnQualityPolicySpec newEmptySpec = new ColumnQualityPolicySpec();
 				this.setSpec(newEmptySpec);
 				this.clearDirty(true);
                 return newEmptySpec;

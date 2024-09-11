@@ -60,8 +60,8 @@ import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.*;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
@@ -84,8 +84,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
      * @return The configuration of the default table level checks.
      */
     @Override
-    public TableDefaultChecksPatternSpec createDefaultTableChecks() {
-        TableDefaultChecksPatternSpec defaultPattern = new TableDefaultChecksPatternSpec();
+    public TableQualityPolicySpec createDefaultTableChecks() {
+        TableQualityPolicySpec defaultPattern = new TableQualityPolicySpec();
         defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
         defaultPattern.setDescription("The default configuration of data quality checks that are always activated. This configuration enables the volume monitoring, anomaly monitoring, timeliness and schema change checks.");
 
@@ -182,8 +182,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
      * @return The configuration of the default column level checks.
      */
     @Override
-    public ColumnDefaultChecksPatternSpec createDefaultColumnChecks() {
-        ColumnDefaultChecksPatternSpec defaultPattern = new ColumnDefaultChecksPatternSpec();
+    public ColumnQualityPolicySpec createDefaultColumnChecks() {
+        ColumnQualityPolicySpec defaultPattern = new ColumnQualityPolicySpec();
         defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
         defaultPattern.setDescription("The default configuration of data quality checks that are always activated. This configuration enables the volume monitoring, anomaly monitoring, timeliness and schema change checks.");
 

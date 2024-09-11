@@ -16,7 +16,7 @@
 package com.dqops.metadata.storage.localfiles.tabledefaultpatterns;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -36,7 +36,7 @@ public class TableDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
     private SpecificationKind kind = SpecificationKind.default_table_checks;
 
     @JsonPropertyDescription("The specification (configuration) of default data quality checks (data observability checks) that are applied on tables matching a pattern")
-    private TableDefaultChecksPatternSpec spec = new TableDefaultChecksPatternSpec();
+    private TableQualityPolicySpec spec = new TableQualityPolicySpec();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -44,7 +44,7 @@ public class TableDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
     public TableDefaultChecksPatternYaml() {
     }
 
-    public TableDefaultChecksPatternYaml(TableDefaultChecksPatternSpec spec) {
+    public TableDefaultChecksPatternYaml(TableQualityPolicySpec spec) {
         this.spec = spec;
     }
 
@@ -84,7 +84,7 @@ public class TableDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
      * Returns a configuration of default data observability checks for tables matching a pattern.
      * @return Default checks for tables.
      */
-    public TableDefaultChecksPatternSpec getSpec() {
+    public TableQualityPolicySpec getSpec() {
         return spec;
     }
 
@@ -92,7 +92,7 @@ public class TableDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
      * Sets a configuration of default table-level checks applied for tables matching a pattern.
      * @param spec Default checks for tables.
      */
-    public void setSpec(TableDefaultChecksPatternSpec spec) {
+    public void setSpec(TableQualityPolicySpec spec) {
         this.spec = spec;
     }
 

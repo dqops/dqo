@@ -26,9 +26,9 @@ import java.util.Objects;
 /**
  * Table-level default checks pattern spec wrapper.
  */
-public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper<String, TableDefaultChecksPatternSpec>
-        implements TableDefaultChecksPatternWrapper {
-    private static final ChildHierarchyNodeFieldMapImpl<TableDefaultChecksPatternWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
+public class TableQualityPolicyWrapperImpl extends AbstractElementWrapper<String, TableQualityPolicySpec>
+        implements TableQualityPolicyWrapper {
+    private static final ChildHierarchyNodeFieldMapImpl<TableQualityPolicyWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
         {
         }
     };
@@ -39,14 +39,14 @@ public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper
     /**
      * Creates a default check configuration pattern wrapper.
      */
-    public TableDefaultChecksPatternWrapperImpl() {
+    public TableQualityPolicyWrapperImpl() {
     }
 
     /**
      * Create a default check configuration pattern wrapper in read-only mode.
      * @param readOnly Make the wrapper read-only.
      */
-    public TableDefaultChecksPatternWrapperImpl(boolean readOnly) {
+    public TableQualityPolicyWrapperImpl(boolean readOnly) {
         super(readOnly);
     }
 
@@ -55,7 +55,7 @@ public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper
      * @param patternName Pattern name.
      * @param readOnly Make the wrapper read-only.
      */
-    public TableDefaultChecksPatternWrapperImpl(String patternName, boolean readOnly) {
+    public TableQualityPolicyWrapperImpl(String patternName, boolean readOnly) {
         this(readOnly);
         this.patternName = patternName;
     }
@@ -110,7 +110,7 @@ public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper
      * @return Deeply cloned object.
      */
     @Override
-    public TableDefaultChecksPatternWrapper clone() {
-        return (TableDefaultChecksPatternWrapper) super.deepClone();
+    public TableQualityPolicyWrapper clone() {
+        return (TableQualityPolicyWrapper) super.deepClone();
     }
 }

@@ -26,9 +26,9 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -111,8 +111,8 @@ public class ColumnQualityPoliciesController {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-            List<ColumnDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
+            ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+            List<ColumnQualityPolicyWrapper> patternWrappersList = defaultChecksPatternsList.toList();
             boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
             List<ColumnQualityPolicyListModel> models = patternWrappersList.stream()
@@ -152,8 +152,8 @@ public class ColumnQualityPoliciesController {
 
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper =
-                    userHome.getColumnDefaultChecksPatterns().getByObjectName(patternName, true);
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper =
+                    userHome.getColumnQualityPolicies().getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
@@ -195,8 +195,8 @@ public class ColumnQualityPoliciesController {
 
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper =
-                    userHome.getColumnDefaultChecksPatterns().getByObjectName(patternName, true);
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper =
+                    userHome.getColumnQualityPolicies().getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
@@ -248,15 +248,15 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-                        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+                        ColumnQualityPolicyWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
                         if (existingDefaultChecksPatternWrapper != null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
                         }
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                        ColumnDefaultChecksPatternSpec patternSpec = new ColumnDefaultChecksPatternSpec();
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                        ColumnQualityPolicySpec patternSpec = new ColumnQualityPolicySpec();
                         patternSpec.setTarget(patternModel.getTargetColumn());
                         patternSpec.setPriority(patternModel.getPriority());
                         patternSpec.setDescription(patternModel.getDescription());
@@ -303,14 +303,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-                        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+                        ColumnQualityPolicyWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
                         if (existingDefaultChecksPatternWrapper != null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
                         }
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
                         defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
                         userHomeContext.flush();
 
@@ -354,23 +354,23 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-                        ColumnDefaultChecksPatternWrapper sourceDefaultChecksPatternWrapper =
+                        ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+                        ColumnQualityPolicyWrapper sourceDefaultChecksPatternWrapper =
                                 defaultChecksPatternsList.getByObjectName(sourcePatternName, true);
 
                         if (sourceDefaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
 
-                        ColumnDefaultChecksPatternWrapper existingTargetDefaultChecksPatternWrapper =
+                        ColumnQualityPolicyWrapper existingTargetDefaultChecksPatternWrapper =
                                 defaultChecksPatternsList.getByObjectName(targetPatternName, true);
 
                         if (existingTargetDefaultChecksPatternWrapper != null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
                         }
 
-                        ColumnDefaultChecksPatternWrapper targetDefaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(targetPatternName);
-                        ColumnDefaultChecksPatternSpec targetDefaultChecksPatternSpec = (ColumnDefaultChecksPatternSpec) sourceDefaultChecksPatternWrapper.getSpec().deepClone();
+                        ColumnQualityPolicyWrapper targetDefaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(targetPatternName);
+                        ColumnQualityPolicySpec targetDefaultChecksPatternSpec = (ColumnQualityPolicySpec) sourceDefaultChecksPatternWrapper.getSpec().deepClone();
                         targetDefaultChecksPatternWrapper.setSpec(targetDefaultChecksPatternSpec);
 
                         userHomeContext.flush();
@@ -413,13 +413,13 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-                        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
-                        ColumnDefaultChecksPatternSpec targetPatternSpec;
+                        ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+                        ColumnQualityPolicyWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        ColumnQualityPolicySpec targetPatternSpec;
 
                         if (existingDefaultChecksPatternWrapper == null) {
-                            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                            targetPatternSpec = new ColumnDefaultChecksPatternSpec() {{
+                            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                            targetPatternSpec = new ColumnQualityPolicySpec() {{
                                 setTarget(patternModel.getTargetColumn());
                                 setPriority(patternModel.getPriority());
                             }};
@@ -472,14 +472,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-                        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+                        ColumnQualityPolicyWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
                         if (existingDefaultChecksPatternWrapper == null) {
-                            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
                             defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
                         } else {
-                            ColumnDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                            ColumnQualityPolicySpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
                             existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
                         }
                         userHomeContext.flush();
@@ -520,8 +520,8 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
-                        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        ColumnQualityPolicyList defaultChecksPatternsList = userHome.getColumnQualityPolicies();
+                        ColumnQualityPolicyWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
                         if (existingDefaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -562,14 +562,14 @@ public class ColumnQualityPoliciesController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                     .getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
@@ -608,14 +608,14 @@ public class ColumnQualityPoliciesController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                     .getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
@@ -653,14 +653,14 @@ public class ColumnQualityPoliciesController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                     .getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
@@ -698,14 +698,14 @@ public class ColumnQualityPoliciesController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                     .getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
@@ -743,14 +743,14 @@ public class ColumnQualityPoliciesController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+            ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                     .getByObjectName(patternName, true);
 
             if (defaultChecksPatternWrapper == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
@@ -798,14 +798,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                                 .getByObjectName(patternName, true);
 
                         if (defaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
 
-                        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
                         AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
                         this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
                         defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
@@ -854,14 +854,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                                 .getByObjectName(patternName, true);
 
                         if (defaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
 
-                        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
                         AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
                         this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
                         defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
@@ -910,14 +910,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                                 .getByObjectName(patternName, true);
 
                         if (defaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
 
-                        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
                         AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
                         this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
                         defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
@@ -966,14 +966,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                                 .getByObjectName(patternName, true);
 
                         if (defaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
 
-                        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
                         AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
                         this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
                         defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
@@ -1022,14 +1022,14 @@ public class ColumnQualityPoliciesController {
                         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
                         UserHome userHome = userHomeContext.getUserHome();
 
-                        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+                        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = userHome.getColumnQualityPolicies()
                                 .getByObjectName(patternName, true);
 
                         if (defaultChecksPatternWrapper == null) {
                             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
 
-                        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        ColumnQualityPolicySpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
                         AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
                         this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
                         defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);

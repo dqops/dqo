@@ -15,7 +15,7 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.column.TargetColumnPatternSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -88,7 +88,7 @@ public class ColumnQualityPolicyListModel {
      * @return Default checks pattern list model.
      */
     public static ColumnQualityPolicyListModel fromPatternSpecification(
-            ColumnDefaultChecksPatternSpec checksPatternSpec,
+            ColumnQualityPolicySpec checksPatternSpec,
             boolean isEditor) {
         return new ColumnQualityPolicyListModel() {{
             setPatternName(checksPatternSpec.getPatternName());

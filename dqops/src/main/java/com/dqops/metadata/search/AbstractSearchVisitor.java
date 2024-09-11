@@ -34,12 +34,12 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapper;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternList;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
+import com.dqops.metadata.policies.table.TableQualityPolicyList;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
 import com.dqops.metadata.policies.table.TargetTablePatternSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
@@ -1089,36 +1089,36 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     /**
      * Accepts a default configuration of column observability checks specification.
      *
-     * @param columnDefaultChecksPatternSpec Column observability default checks specification.
+     * @param columnQualityPolicySpec Column observability default checks specification.
      * @param parameter                                Additional parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternSpec columnDefaultChecksPatternSpec, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnQualityPolicySpec columnQualityPolicySpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a default configuration of table observability checks specification.
      *
-     * @param tableDefaultChecksPatternSpec Table observability default checks specification.
+     * @param tableQualityPolicySpec Table observability default checks specification.
      * @param parameter                               Additional parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableDefaultChecksPatternSpec tableDefaultChecksPatternSpec, T parameter) {
+    public TreeNodeTraversalResult accept(TableQualityPolicySpec tableQualityPolicySpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a default configuration of table observability checks wrapper.
      *
-     * @param tableDefaultChecksPatternWrapper Table observability default checks specification.
+     * @param tableQualityPolicyWrapper Table observability default checks specification.
      * @param parameter                        Additional parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper, T parameter) {
+    public TreeNodeTraversalResult accept(TableQualityPolicyWrapper tableQualityPolicyWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -1130,19 +1130,19 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, T parameter) {
+    public TreeNodeTraversalResult accept(TableQualityPolicyList tableDefaultChecksPatternWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
      * Accepts a default configuration of column observability checks wrapper.
      *
-     * @param columnDefaultChecksPatternWrapper Column observability default checks specification.
+     * @param columnQualityPolicyWrapper Column observability default checks specification.
      * @param parameter                         Additional parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnQualityPolicyWrapper columnQualityPolicyWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -1154,7 +1154,7 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

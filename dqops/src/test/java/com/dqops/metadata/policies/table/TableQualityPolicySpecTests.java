@@ -37,15 +37,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TableDefaultChecksPatternSpecTests extends BaseTest {
-    private TableDefaultChecksPatternSpec sut;
+public class TableQualityPolicySpecTests extends BaseTest {
+    private TableQualityPolicySpec sut;
     private TableSpec targetTable;
     private ColumnSpec targetColumn;
     private ProviderDialectSettings dialectSettings;
 
     @BeforeEach
     void setUp() {
-        this.sut = new TableDefaultChecksPatternSpec();
+        this.sut = new TableQualityPolicySpec();
         this.targetTable = new TableSpec();
         this.targetColumn = new ColumnSpec();
         this.targetColumn.setTypeSnapshot(new ColumnTypeSnapshotSpec());

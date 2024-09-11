@@ -19,7 +19,7 @@ import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.column.TargetColumnPatternSpec;
 import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -42,7 +42,7 @@ public class ColumnQualityPolicyModel {
     private String patternName;
 
     @JsonPropertyDescription("The default checks specification.")
-    private ColumnDefaultChecksPatternSpec patternSpec;
+    private ColumnQualityPolicySpec patternSpec;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -70,7 +70,7 @@ public class ColumnQualityPolicyModel {
         public ColumnQualityPolicyModel createSample() {
             return new ColumnQualityPolicyModel() {{
                 setPatternName("id columns not null");
-                setPatternSpec(new ColumnDefaultChecksPatternSpec() {{
+                setPatternSpec(new ColumnQualityPolicySpec() {{
                     setTarget(new TargetColumnPatternSpec() {{
                         setColumn("id");
                     }});

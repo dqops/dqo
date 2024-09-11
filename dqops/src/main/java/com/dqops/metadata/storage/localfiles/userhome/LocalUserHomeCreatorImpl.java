@@ -29,8 +29,8 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapper;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
@@ -507,17 +507,17 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             }
         }
 
-        TableDefaultChecksPatternWrapper defaultTableChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        TableQualityPolicyWrapper defaultTableChecksPatternWrapper = userHome.getTableQualityPolicies()
                 .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
         if (defaultTableChecksPatternWrapper == null) {
-            defaultTableChecksPatternWrapper = userHome.getTableDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
+            defaultTableChecksPatternWrapper = userHome.getTableQualityPolicies().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
             defaultTableChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultTableChecks());
         }
 
-        ColumnDefaultChecksPatternWrapper defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+        ColumnQualityPolicyWrapper defaultColumnChecksPatternWrapper = userHome.getColumnQualityPolicies()
                 .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
         if (defaultColumnChecksPatternWrapper == null) {
-            defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
+            defaultColumnChecksPatternWrapper = userHome.getColumnQualityPolicies().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
             defaultColumnChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
         }
 

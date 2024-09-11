@@ -26,8 +26,8 @@ import java.util.Objects;
 /**
  * Column-level default checks pattern spec wrapper.
  */
-public class ColumnDefaultChecksPatternWrapperImpl extends AbstractElementWrapper<String, ColumnDefaultChecksPatternSpec> implements ColumnDefaultChecksPatternWrapper {
-    private static final ChildHierarchyNodeFieldMapImpl<ColumnDefaultChecksPatternWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
+public class ColumnQualityPolicyWrapperImpl extends AbstractElementWrapper<String, ColumnQualityPolicySpec> implements ColumnQualityPolicyWrapper {
+    private static final ChildHierarchyNodeFieldMapImpl<ColumnQualityPolicyWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
         {
         }
     };
@@ -38,10 +38,10 @@ public class ColumnDefaultChecksPatternWrapperImpl extends AbstractElementWrappe
     /**
      * Creates a default check configuration pattern wrapper.
      */
-    public ColumnDefaultChecksPatternWrapperImpl() {
+    public ColumnQualityPolicyWrapperImpl() {
     }
 
-    public ColumnDefaultChecksPatternWrapperImpl(boolean readOnly) {
+    public ColumnQualityPolicyWrapperImpl(boolean readOnly) {
         super(readOnly);
     }
 
@@ -49,7 +49,7 @@ public class ColumnDefaultChecksPatternWrapperImpl extends AbstractElementWrappe
      * Creates a default checks pattern wrapper given a pattern name.
      * @param patternName Pattern name.
      */
-    public ColumnDefaultChecksPatternWrapperImpl(String patternName, boolean readOnly) {
+    public ColumnQualityPolicyWrapperImpl(String patternName, boolean readOnly) {
         this(readOnly);
         this.patternName = patternName;
     }
@@ -104,7 +104,7 @@ public class ColumnDefaultChecksPatternWrapperImpl extends AbstractElementWrappe
      * @return Deeply cloned object.
      */
     @Override
-    public ColumnDefaultChecksPatternWrapper clone() {
-        return (ColumnDefaultChecksPatternWrapper) super.deepClone();
+    public ColumnQualityPolicyWrapper clone() {
+        return (ColumnQualityPolicyWrapper) super.deepClone();
     }
 }

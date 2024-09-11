@@ -15,7 +15,7 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.metadata.policies.table.TargetTablePatternSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -85,7 +85,7 @@ public class TableQualityPolicyListModel {
      * @return Default checks pattern list model.
      */
     public static TableQualityPolicyListModel fromPatternSpecification(
-            TableDefaultChecksPatternSpec checksPatternSpec,
+            TableQualityPolicySpec checksPatternSpec,
             boolean isEditor) {
         return new TableQualityPolicyListModel() {{
             setPatternName(checksPatternSpec.getPatternName());

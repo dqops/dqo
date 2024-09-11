@@ -18,9 +18,9 @@ package com.dqops.metadata.storage.localfiles.columndefaultpatterns;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternListImpl;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapperImpl;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyListImpl;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Default column-level checks pattern collection that uses a local file system (the user's home folder) to read .dqotcolumnchecks.yaml files with the default checks by a named pattern.
  */
-public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksPatternListImpl {
+public class FileColumnQualityPolicyListImpl extends ColumnQualityPolicyListImpl {
     @JsonIgnore
     private final FolderTreeNode defaultsFolder;
     @JsonIgnore
@@ -40,7 +40,7 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
      * @param yamlSerializer  Yaml serializer.
      * @param readOnly        Make the list read-only.
      */
-    public FileColumnDefaultChecksPatternListImpl(FolderTreeNode defaultsFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+    public FileColumnQualityPolicyListImpl(FolderTreeNode defaultsFolder, YamlSerializer yamlSerializer, boolean readOnly) {
         super(readOnly);
         this.defaultsFolder = defaultsFolder;
         this.yamlSerializer = yamlSerializer;
@@ -77,7 +77,7 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
                 if (this.getByObjectName(patternName, false) != null) {
                     continue; // was already added
                 }
-				this.addWithoutFullLoad(new FileColumnDefaultChecksPatternWrapperImpl(defaultChecksSpecFolderNode, patternName,
+				this.addWithoutFullLoad(new FileColumnQualityPolicyWrapperImpl(defaultChecksSpecFolderNode, patternName,
                         defaultChecksPatternModuleName, this.yamlSerializer, this.isReadOnly()));
             }
         }
@@ -90,7 +90,7 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
      * @return Created and detached new instance with the object name assigned.
      */
     @Override
-    protected ColumnDefaultChecksPatternWrapperImpl createNewElement(String patternName) {
+    protected ColumnQualityPolicyWrapperImpl createNewElement(String patternName) {
         String patternModuleName = patternName;
         String patternFolderPath = "";
         int indexOfFileLocation = patternName.lastIndexOf('/');
@@ -99,9 +99,9 @@ public class FileColumnDefaultChecksPatternListImpl extends ColumnDefaultChecksP
             patternFolderPath = patternName.substring(0, indexOfFileLocation);
         }
         FolderTreeNode ruleParentFolderNode = this.defaultsFolder.getOrAddFolderPath(patternFolderPath);
-        FileColumnDefaultChecksPatternWrapperImpl checkModelWrapper =
-                new FileColumnDefaultChecksPatternWrapperImpl(ruleParentFolderNode, patternName, patternModuleName, this.yamlSerializer, this.isReadOnly());
-        checkModelWrapper.setSpec(new ColumnDefaultChecksPatternSpec());
+        FileColumnQualityPolicyWrapperImpl checkModelWrapper =
+                new FileColumnQualityPolicyWrapperImpl(ruleParentFolderNode, patternName, patternModuleName, this.yamlSerializer, this.isReadOnly());
+        checkModelWrapper.setSpec(new ColumnQualityPolicySpec());
         return checkModelWrapper;
     }
 }

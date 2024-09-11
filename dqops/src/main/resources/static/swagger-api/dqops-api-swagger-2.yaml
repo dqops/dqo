@@ -21182,43 +21182,6 @@ definitions:
           \ date strings and raises a data quality issue when too many invalid date\
           \ strings are found."
         $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
-  ColumnDefaultChecksPatternSpec:
-    type: "object"
-    properties:
-      priority:
-        type: "integer"
-        format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
-      disabled:
-        type: "boolean"
-        description: "Disables this data quality check configuration. The checks will\
-          \ not be activated."
-      description:
-        type: "string"
-        description: "The description (documentation) of this data quality check configuration."
-      target:
-        description: "The target column filter that are filtering the column, table\
-          \ and connection on which the default checks are applied."
-        $ref: "#/definitions/TargetColumnPatternSpec"
-      profiling_checks:
-        description: "Configuration of data quality profiling checks that are enabled.\
-          \ Pick a check from a category, apply the parameters and rules to enable\
-          \ it."
-        $ref: "#/definitions/ColumnProfilingCheckCategoriesSpec"
-      monitoring_checks:
-        description: "Configuration of table level monitoring checks. Monitoring checks\
-          \ are data quality checks that are evaluated for each period of time (daily,\
-          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
-          \ data quality check result for each period of time."
-        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
-      partitioned_checks:
-        description: "Configuration of table level date/time partitioned checks. Partitioned\
-          \ data quality checks are evaluated for each partition separately, raising\
-          \ separate alerts at a partition level. The table does not need to be physically\
-          \ partitioned by date, it is possible to run data quality checks for each\
-          \ day or month of data separately."
-        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
   ColumnDetectedDatatypeInTextCheckSpec:
     type: "object"
     properties:
@@ -29610,7 +29573,7 @@ definitions:
         description: "Pattern name"
       pattern_spec:
         description: "The default checks specification."
-        $ref: "#/definitions/ColumnDefaultChecksPatternSpec"
+        $ref: "#/definitions/ColumnQualityPolicySpec"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -29622,6 +29585,43 @@ definitions:
           \ captured, this field returns the file parsing error message and the file\
           \ location."
     description: "Default column-level checks pattern (data quality policy) model"
+  ColumnQualityPolicySpec:
+    type: "object"
+    properties:
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
+      target:
+        description: "The target column filter that are filtering the column, table\
+          \ and connection on which the default checks are applied."
+        $ref: "#/definitions/TargetColumnPatternSpec"
+      profiling_checks:
+        description: "Configuration of data quality profiling checks that are enabled.\
+          \ Pick a check from a category, apply the parameters and rules to enable\
+          \ it."
+        $ref: "#/definitions/ColumnProfilingCheckCategoriesSpec"
+      monitoring_checks:
+        description: "Configuration of table level monitoring checks. Monitoring checks\
+          \ are data quality checks that are evaluated for each period of time (daily,\
+          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
+          \ data quality check result for each period of time."
+        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
+      partitioned_checks:
+        description: "Configuration of table level date/time partitioned checks. Partitioned\
+          \ data quality checks are evaluated for each partition separately, raising\
+          \ separate alerts at a partition level. The table does not need to be physically\
+          \ partitioned by date, it is possible to run data quality checks for each\
+          \ day or month of data separately."
+        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
   ColumnRangeMaxValueSensorParametersSpec:
     type: "object"
     properties:
@@ -40553,43 +40553,6 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxDaysRule7ParametersSpec"
-  TableDefaultChecksPatternSpec:
-    type: "object"
-    properties:
-      priority:
-        type: "integer"
-        format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
-      disabled:
-        type: "boolean"
-        description: "Disables this data quality check configuration. The checks will\
-          \ not be activated."
-      description:
-        type: "string"
-        description: "The description (documentation) of this data quality check configuration."
-      target:
-        description: "The target table filter that are filtering the table and connection\
-          \ on which the default checks are applied."
-        $ref: "#/definitions/TargetTablePatternSpec"
-      profiling_checks:
-        description: "Configuration of data quality profiling checks that are enabled.\
-          \ Pick a check from a category, apply the parameters and rules to enable\
-          \ it."
-        $ref: "#/definitions/TableProfilingCheckCategoriesSpec"
-      monitoring_checks:
-        description: "Configuration of table level monitoring checks. Monitoring checks\
-          \ are data quality checks that are evaluated for each period of time (daily,\
-          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
-          \ data quality check result for each period of time."
-        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
-      partitioned_checks:
-        description: "Configuration of table level date/time partitioned checks. Partitioned\
-          \ data quality checks are evaluated for each partition separately, raising\
-          \ separate alerts at a partition level. The table does not need to be physically\
-          \ partitioned by date, it is possible to run data quality checks for each\
-          \ day or month of data separately."
-        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
   TableDuplicateRecordCountCheckSpec:
     type: "object"
     properties:
@@ -41373,7 +41336,7 @@ definitions:
         description: "Pattern name"
       pattern_spec:
         description: "The default checks specification."
-        $ref: "#/definitions/TableDefaultChecksPatternSpec"
+        $ref: "#/definitions/TableQualityPolicySpec"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -41385,6 +41348,43 @@ definitions:
           \ captured, this field returns the file parsing error message and the file\
           \ location."
     description: "Default table-level checks pattern (data quality policy) model"
+  TableQualityPolicySpec:
+    type: "object"
+    properties:
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
+      target:
+        description: "The target table filter that are filtering the table and connection\
+          \ on which the default checks are applied."
+        $ref: "#/definitions/TargetTablePatternSpec"
+      profiling_checks:
+        description: "Configuration of data quality profiling checks that are enabled.\
+          \ Pick a check from a category, apply the parameters and rules to enable\
+          \ it."
+        $ref: "#/definitions/TableProfilingCheckCategoriesSpec"
+      monitoring_checks:
+        description: "Configuration of table level monitoring checks. Monitoring checks\
+          \ are data quality checks that are evaluated for each period of time (daily,\
+          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
+          \ data quality check result for each period of time."
+        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
+      partitioned_checks:
+        description: "Configuration of table level date/time partitioned checks. Partitioned\
+          \ data quality checks are evaluated for each partition separately, raising\
+          \ separate alerts at a partition level. The table does not need to be physically\
+          \ partitioned by date, it is possible to run data quality checks for each\
+          \ day or month of data separately."
+        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
   TableRowCountAnomalyDifferencingCheckSpec:
     type: "object"
     properties:

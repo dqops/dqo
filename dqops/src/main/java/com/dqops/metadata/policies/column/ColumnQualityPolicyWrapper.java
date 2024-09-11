@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.policies.table;
+package com.dqops.metadata.policies.column;
 
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.basespecs.ObjectName;
 
 /**
- * Default table-level checks pattern spec wrapper.
+ * Default column-level checks pattern spec wrapper.
  */
-public interface TableDefaultChecksPatternWrapper extends ElementWrapper<TableDefaultChecksPatternSpec>, ObjectName<String> {
+public interface ColumnQualityPolicyWrapper extends ElementWrapper<ColumnQualityPolicySpec>, ObjectName<String> {
     /**
      * Gets the pattern name.
      * @return Default configuration pattern name.
@@ -38,5 +38,5 @@ public interface TableDefaultChecksPatternWrapper extends ElementWrapper<TableDe
      * Creates a deep clone of the object.
      * @return Deeply cloned object.
      */
-    TableDefaultChecksPatternWrapper clone();
+    ColumnQualityPolicyWrapper clone();
 }

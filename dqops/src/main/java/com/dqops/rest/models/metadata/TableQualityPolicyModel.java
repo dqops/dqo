@@ -19,7 +19,7 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -42,7 +42,7 @@ public class TableQualityPolicyModel {
     private String patternName;
 
     @JsonPropertyDescription("The default checks specification.")
-    private TableDefaultChecksPatternSpec patternSpec;
+    private TableQualityPolicySpec patternSpec;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -70,7 +70,7 @@ public class TableQualityPolicyModel {
         public TableQualityPolicyModel createSample() {
             return new TableQualityPolicyModel() {{
                 setPatternName(SampleStringsRegistry.getPatternName());
-                setPatternSpec(new TableDefaultChecksPatternSpec() {{
+                setPatternSpec(new TableQualityPolicySpec() {{
                     setMonitoringChecks(new TableMonitoringCheckCategoriesSpec() {{
                         setDaily(new TableDailyMonitoringCheckCategoriesSpec() {{
                             setVolume(new TableVolumeDailyMonitoringChecksSpec() {{

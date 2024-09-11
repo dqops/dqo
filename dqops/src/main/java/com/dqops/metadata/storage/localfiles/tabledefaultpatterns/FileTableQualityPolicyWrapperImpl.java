@@ -23,8 +23,8 @@ import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternWrapperImpl;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapperImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
@@ -36,7 +36,7 @@ import java.util.Objects;
 /**
  * File based configuration of table-level checks pattern wrapper. Loads and writes the default check patterns to a yaml file.
  */
-public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecksPatternWrapperImpl {
+public class FileTableQualityPolicyWrapperImpl extends TableQualityPolicyWrapperImpl {
     @JsonIgnore
     private final FolderTreeNode defaultsFolderNode;
     @JsonIgnore
@@ -52,11 +52,11 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
      * @param yamlSerializer Yaml serializer.
      * @param readOnly Make the wrapper read-only.
      */
-    public FileTableDefaultChecksPatternWrapperImpl(FolderTreeNode defaultsFolderNode,
-                                                    String patternName,
-                                                    String patternFileNameBaseName,
-                                                    YamlSerializer yamlSerializer,
-                                                    boolean readOnly) {
+    public FileTableQualityPolicyWrapperImpl(FolderTreeNode defaultsFolderNode,
+                                             String patternName,
+                                             String patternFileNameBaseName,
+                                             YamlSerializer yamlSerializer,
+                                             boolean readOnly) {
         super(patternName, readOnly);
         this.defaultsFolderNode = defaultsFolderNode;
         this.patternFileNameBaseName = patternFileNameBaseName;
@@ -85,21 +85,21 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
      * @return Loaded default checks pattern specification.
      */
     @Override
-    public TableDefaultChecksPatternSpec getSpec() {
-        TableDefaultChecksPatternSpec spec = super.getSpec();
+    public TableQualityPolicySpec getSpec() {
+        TableQualityPolicySpec spec = super.getSpec();
         if (spec == null) {
             String specFileName = FileNameSanitizer.encodeForFileSystem(this.patternFileNameBaseName) + SpecFileNames.TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML;
             FileTreeNode fileNode = this.defaultsFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                TableDefaultChecksPatternSpec deserializedSpec = (TableDefaultChecksPatternSpec) fileContent.getCachedObjectInstance();
+                TableQualityPolicySpec deserializedSpec = (TableQualityPolicySpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
                     TableDefaultChecksPatternYaml deserialized = this.yamlSerializer.deserialize(textContent, TableDefaultChecksPatternYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
                     if (deserializedSpec == null) {
-                        deserializedSpec = new TableDefaultChecksPatternSpec();
+                        deserializedSpec = new TableQualityPolicySpec();
                     }
 
                     if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
@@ -116,14 +116,14 @@ public class FileTableDefaultChecksPatternWrapperImpl extends TableDefaultChecks
                     }
                     fileContent.setCachedObjectInstance(cachedObjectInstance);
                 } else {
-                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (TableDefaultChecksPatternSpec) deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (TableQualityPolicySpec) deserializedSpec.deepClone();
                 }
 				this.setSpec(deserializedSpec);
 				this.clearDirty(false);
                 return deserializedSpec;
             }
             else {
-                TableDefaultChecksPatternSpec newEmptySpec = new TableDefaultChecksPatternSpec();
+                TableQualityPolicySpec newEmptySpec = new TableQualityPolicySpec();
 				this.setSpec(newEmptySpec);
 				this.clearDirty(true);
                 return newEmptySpec;

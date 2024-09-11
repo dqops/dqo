@@ -18,9 +18,9 @@ package com.dqops.metadata.storage.localfiles.tabledefaultpatterns;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternListImpl;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.policies.table.TableDefaultChecksPatternWrapperImpl;
+import com.dqops.metadata.policies.table.TableQualityPolicyListImpl;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Default table-level checks pattern collection that uses a local file system (the user's home folder) to read .dqotablechecks.yaml files with the default checks by a named pattern.
  */
-public class FileTableDefaultChecksPatternListImpl extends TableDefaultChecksPatternListImpl {
+public class FileTableQualityPolicyListImpl extends TableQualityPolicyListImpl {
     @JsonIgnore
     private final FolderTreeNode defaultsFolder;
     @JsonIgnore
@@ -40,7 +40,7 @@ public class FileTableDefaultChecksPatternListImpl extends TableDefaultChecksPat
      * @param yamlSerializer  Yaml serializer.
      * @param readOnly        Make the list read-only.
      */
-    public FileTableDefaultChecksPatternListImpl(FolderTreeNode defaultsFolder, YamlSerializer yamlSerializer, boolean readOnly) {
+    public FileTableQualityPolicyListImpl(FolderTreeNode defaultsFolder, YamlSerializer yamlSerializer, boolean readOnly) {
         super(readOnly);
         this.defaultsFolder = defaultsFolder;
         this.yamlSerializer = yamlSerializer;
@@ -77,7 +77,7 @@ public class FileTableDefaultChecksPatternListImpl extends TableDefaultChecksPat
                 if (this.getByObjectName(patternName, false) != null) {
                     continue; // was already added
                 }
-				this.addWithoutFullLoad(new FileTableDefaultChecksPatternWrapperImpl(defaultChecksSpecFolderNode, patternName,
+				this.addWithoutFullLoad(new FileTableQualityPolicyWrapperImpl(defaultChecksSpecFolderNode, patternName,
                         defaultChecksPatternModuleName, this.yamlSerializer, this.isReadOnly()));
             }
         }
@@ -90,7 +90,7 @@ public class FileTableDefaultChecksPatternListImpl extends TableDefaultChecksPat
      * @return Created and detached new instance with the object name assigned.
      */
     @Override
-    protected TableDefaultChecksPatternWrapperImpl createNewElement(String patternName) {
+    protected TableQualityPolicyWrapperImpl createNewElement(String patternName) {
         String patternModuleName = patternName;
         String patternFolderPath = "";
         int indexOfFileLocation = patternName.lastIndexOf('/');
@@ -99,9 +99,9 @@ public class FileTableDefaultChecksPatternListImpl extends TableDefaultChecksPat
             patternFolderPath = patternName.substring(0, indexOfFileLocation);
         }
         FolderTreeNode ruleParentFolderNode = this.defaultsFolder.getOrAddFolderPath(patternFolderPath);
-        FileTableDefaultChecksPatternWrapperImpl checkModelWrapper =
-                new FileTableDefaultChecksPatternWrapperImpl(ruleParentFolderNode, patternName, patternModuleName, this.yamlSerializer, this.isReadOnly());
-        checkModelWrapper.setSpec(new TableDefaultChecksPatternSpec());
+        FileTableQualityPolicyWrapperImpl checkModelWrapper =
+                new FileTableQualityPolicyWrapperImpl(ruleParentFolderNode, patternName, patternModuleName, this.yamlSerializer, this.isReadOnly());
+        checkModelWrapper.setSpec(new TableQualityPolicySpec());
         return checkModelWrapper;
     }
 }

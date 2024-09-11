@@ -19,7 +19,7 @@ import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
-import com.dqops.metadata.storage.localfiles.columndefaultpatterns.FileColumnDefaultChecksPatternListImpl;
+import com.dqops.metadata.storage.localfiles.columndefaultpatterns.FileColumnQualityPolicyListImpl;
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialListImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.storage.localfiles.dictionaries.FileDictionaryListImpl;
@@ -30,7 +30,7 @@ import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinit
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.sources.FileConnectionListImpl;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.FileDefaultIncidentNotificationsWrapperImpl;
-import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.FileTableDefaultChecksPatternListImpl;
+import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.FileTableQualityPolicyListImpl;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -73,8 +73,8 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileFileIndexListImpl fileIndices,
                             FileDashboardFolderListSpecWrapperImpl dashboards,
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
-                            FileTableDefaultChecksPatternListImpl tableDefaultChecksPattern,
-                            FileColumnDefaultChecksPatternListImpl columnDefaultChecksPattern,
+                            FileTableQualityPolicyListImpl tableDefaultChecksPattern,
+                            FileColumnQualityPolicyListImpl columnDefaultChecksPattern,
                             FileDefaultIncidentNotificationsWrapperImpl incidentNotifications,
                             UserHomeContext userHomeContext,
                             boolean readOnly) {
@@ -114,8 +114,8 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer, readOnly);
         FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer, readOnly);
         FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer, readOnly);
-        FileTableDefaultChecksPatternListImpl tableDefaultChecksPatterns = new FileTableDefaultChecksPatternListImpl(patternsFolder, yamlSerializer, readOnly);
-        FileColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns = new FileColumnDefaultChecksPatternListImpl(patternsFolder, yamlSerializer, readOnly);
+        FileTableQualityPolicyListImpl tableDefaultChecksPatterns = new FileTableQualityPolicyListImpl(patternsFolder, yamlSerializer, readOnly);
+        FileColumnQualityPolicyListImpl columnDefaultChecksPatterns = new FileColumnQualityPolicyListImpl(patternsFolder, yamlSerializer, readOnly);
         FileDefaultIncidentNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentNotificationsWrapperImpl(settingsFolder, yamlSerializer, readOnly);
 
         return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,

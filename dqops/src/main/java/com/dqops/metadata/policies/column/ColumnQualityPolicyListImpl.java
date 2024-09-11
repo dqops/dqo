@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * Collection of column-level default checks patterns definitions. Tracks the status of the child elements (addition, removal).
  */
-public class ColumnDefaultChecksPatternListImpl extends AbstractIndexingList<String, ColumnDefaultChecksPatternWrapper> implements ColumnDefaultChecksPatternList {
-    public ColumnDefaultChecksPatternListImpl(boolean readOnly) {
+public class ColumnQualityPolicyListImpl extends AbstractIndexingList<String, ColumnQualityPolicyWrapper> implements ColumnQualityPolicyList {
+    public ColumnQualityPolicyListImpl(boolean readOnly) {
         super(readOnly);
     }
 
@@ -35,10 +35,10 @@ public class ColumnDefaultChecksPatternListImpl extends AbstractIndexingList<Str
      * @return Created and detached new instance with the object name assigned.
      */
     @Override
-    protected ColumnDefaultChecksPatternWrapper createNewElement(String objectName) {
-        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = new ColumnDefaultChecksPatternWrapperImpl();
+    protected ColumnQualityPolicyWrapper createNewElement(String objectName) {
+        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = new ColumnQualityPolicyWrapperImpl();
         defaultChecksPatternWrapper.setPatternName(objectName);
-        defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec());
+        defaultChecksPatternWrapper.setSpec(new ColumnQualityPolicySpec());
         return defaultChecksPatternWrapper;
     }
 
@@ -50,7 +50,7 @@ public class ColumnDefaultChecksPatternListImpl extends AbstractIndexingList<Str
      */
     @Override
     public boolean remove(String patternName) {
-        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = this.getByObjectName(patternName, true);
+        ColumnQualityPolicyWrapper defaultChecksPatternWrapper = this.getByObjectName(patternName, true);
         if (defaultChecksPatternWrapper == null) {
             return false;
         }
@@ -63,7 +63,7 @@ public class ColumnDefaultChecksPatternListImpl extends AbstractIndexingList<Str
      * @return List of default checks patterns definitions (wrappers).
      */
     @Override
-    public List<ColumnDefaultChecksPatternWrapper> toList() {
+    public List<ColumnQualityPolicyWrapper> toList() {
         return List.copyOf(this);
     }
 
