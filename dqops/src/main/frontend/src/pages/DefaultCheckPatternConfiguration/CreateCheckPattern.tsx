@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel,
   TargetColumnPatternSpec,
   TargetTablePatternSpec
 } from '../../api';
@@ -9,8 +9,8 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { useDefinition } from '../../contexts/definitionContext';
 import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
 } from '../../services/apiClient';
 import DefaultCheckTargetConfiguration from './DefaultCheckTargetConfiguration';
 
@@ -19,8 +19,8 @@ type TCreateCheckPatternProps = {
 };
 
 type TTarget =
-  | DefaultColumnChecksPatternListModel
-  | DefaultTableChecksPatternListModel;
+  | ColumnQualityPolicyListModel
+  | TableQualityPolicyListModel;
 
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 
@@ -56,12 +56,12 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
   const onSave = () => {
     if (!target.pattern_name) return;
     if (type === 'column') {
-      DefaultColumnCheckPatternsApiClient.createDefaultColumnChecksPatternTarget(
+      ColumnQualityPoliciesApiClient.createColumnQualityPolicyTarget(
         target.pattern_name,
         target
       );
     } else {
-      DefaultTableCheckPatternsApiClient.createDefaultTableChecksPatternTarget(
+      TableQualityPoliciesApiClient.createTableQualityPolicyTarget(
         target.pattern_name,
         target
       );

@@ -15,8 +15,8 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.policies.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.labels.LabelSetSpec;

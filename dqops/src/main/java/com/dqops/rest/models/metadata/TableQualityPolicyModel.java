@@ -15,13 +15,13 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.column.TargetColumnPatternSpec;
-import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
+import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,18 +31,18 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Default column-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on columns that match the filter.
+ * Default table-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on tables that match the filter.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DefaultColumnChecksPatternModel", description = "Default column-level checks pattern model")
-public class DefaultColumnChecksPatternModel {
+@ApiModel(value = "TableQualityPolicyModel", description = "Default table-level checks pattern (data quality policy) model")
+public class TableQualityPolicyModel {
     @JsonPropertyDescription("Pattern name")
     private String patternName;
 
     @JsonPropertyDescription("The default checks specification.")
-    private ColumnDefaultChecksPatternSpec patternSpec;
+    private TableDefaultChecksPatternSpec patternSpec;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -61,24 +61,21 @@ public class DefaultColumnChecksPatternModel {
     /**
      * Default constructor for TableDefaultChecksPatternEditModel.
      */
-    public DefaultColumnChecksPatternModel() {
+    public TableQualityPolicyModel() {
     }
 
 
-    public static class ColumnDefaultChecksPatternEditModelSampleFactory implements SampleValueFactory<DefaultColumnChecksPatternModel> {
+    public static class TableDefaultChecksPatternEditModelSampleFactory implements SampleValueFactory<TableQualityPolicyModel> {
         @Override
-        public DefaultColumnChecksPatternModel createSample() {
-            return new DefaultColumnChecksPatternModel() {{
-                setPatternName("id columns not null");
-                setPatternSpec(new ColumnDefaultChecksPatternSpec() {{
-                    setTarget(new TargetColumnPatternSpec() {{
-                        setColumn("id");
-                    }});
-                    setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
-                        setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
-                            setNulls(new ColumnNullsDailyMonitoringChecksSpec() {{
-                                setDailyNullsCount(new ColumnNullsCountCheckSpec() {{
-                                    setError(new MaxCountRule0ErrorParametersSpec());
+        public TableQualityPolicyModel createSample() {
+            return new TableQualityPolicyModel() {{
+                setPatternName(SampleStringsRegistry.getPatternName());
+                setPatternSpec(new TableDefaultChecksPatternSpec() {{
+                    setMonitoringChecks(new TableMonitoringCheckCategoriesSpec() {{
+                        setDaily(new TableDailyMonitoringCheckCategoriesSpec() {{
+                            setVolume(new TableVolumeDailyMonitoringChecksSpec() {{
+                                setDailyRowCount(new TableRowCountCheckSpec() {{
+                                    setWarning(new MinCountRule1ParametersSpec());
                                 }});
                             }});
                         }});

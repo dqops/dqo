@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultColumnCheckPatternsApiClient } from '../../services/apiClient';
+import { ColumnQualityPoliciesApiClient } from '../../services/apiClient';
 
-import { DefaultColumnChecksPatternListModel } from '../../api';
+import { ColumnQualityPolicyListModel } from '../../api';
 import Loader from '../../components/Loader';
 import { sortPatterns } from '../../utils';
 import DefaultCheckPatternsTable from './DefaultCheckPatternsTable';
 
 const getPreparedPatterns = (
-  patterns: DefaultColumnChecksPatternListModel[]
+  patterns: ColumnQualityPolicyListModel[]
 ) => {
   const arr: any[] = [];
 
@@ -29,13 +29,13 @@ const getPreparedPatterns = (
 
 export default function ColumnLevelPatterns() {
   const [patterns, setPatterns] = useState<
-    DefaultColumnChecksPatternListModel[]
+    ColumnQualityPolicyListModel[]
   >([]);
   const [loading, setLoading] = useState(false);
 
   const getPatterns = async () => {
     setLoading(true);
-    DefaultColumnCheckPatternsApiClient.getAllDefaultColumnChecksPatterns()
+    ColumnQualityPoliciesApiClient.getColumnQualityPolicies()
       .then((res) =>
         setPatterns(
           sortPatterns(getPreparedPatterns(res.data ?? []), 'priority', 'asc')
@@ -49,7 +49,7 @@ export default function ColumnLevelPatterns() {
   }, []);
 
   const deletePattern = (patternName: string) => {
-    DefaultColumnCheckPatternsApiClient.deleteDefaultColumnChecksPattern(
+    ColumnQualityPoliciesApiClient.deleteColumnQualityPolicy(
       patternName
     ).then(() => getPatterns());
   };

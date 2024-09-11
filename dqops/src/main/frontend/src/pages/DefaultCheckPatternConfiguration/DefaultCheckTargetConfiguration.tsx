@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel,
   TargetColumnPatternSpec,
   TargetColumnPatternSpecDataTypeCategoryEnum,
   TargetTablePatternSpec
@@ -13,8 +13,8 @@ import Select from '../../components/Select';
 import TextArea from '../../components/TextArea';
 
 type TTarget =
-  | DefaultColumnChecksPatternListModel
-  | DefaultTableChecksPatternListModel;
+  | ColumnQualityPolicyListModel
+  | TableQualityPolicyListModel;
 
 type TDefaultCheckTargetConfigurationProps = {
   type: 'table' | 'column';

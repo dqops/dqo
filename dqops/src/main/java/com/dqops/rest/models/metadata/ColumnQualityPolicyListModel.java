@@ -15,8 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.column.TargetColumnPatternSpec;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.TargetColumnPatternSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,8 +32,8 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DefaultColumnChecksPatternListModel", description = "Default column-level checks pattern list model")
-public class DefaultColumnChecksPatternListModel {
+@ApiModel(value = "ColumnQualityPolicyListModel", description = "Default column-level checks pattern (data quality policy) list model")
+public class ColumnQualityPolicyListModel {
     /**
      * Pattern name.
      */
@@ -78,7 +78,7 @@ public class DefaultColumnChecksPatternListModel {
             "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
     private String yamlParsingError;
 
-    public DefaultColumnChecksPatternListModel() {
+    public ColumnQualityPolicyListModel() {
     }
 
     /**
@@ -87,10 +87,10 @@ public class DefaultColumnChecksPatternListModel {
      * @param isEditor       The current user has the editor permission.
      * @return Default checks pattern list model.
      */
-    public static DefaultColumnChecksPatternListModel fromPatternSpecification(
+    public static ColumnQualityPolicyListModel fromPatternSpecification(
             ColumnDefaultChecksPatternSpec checksPatternSpec,
             boolean isEditor) {
-        return new DefaultColumnChecksPatternListModel() {{
+        return new ColumnQualityPolicyListModel() {{
             setPatternName(checksPatternSpec.getPatternName());
             setPriority(checksPatternSpec.getPriority());
             setDisabled(checksPatternSpec.isDisabled());
@@ -101,10 +101,10 @@ public class DefaultColumnChecksPatternListModel {
         }};
     }
 
-    public static class ColumnDefaultChecksPatternListModelSampleFactory implements SampleValueFactory<DefaultColumnChecksPatternListModel> {
+    public static class ColumnDefaultChecksPatternListModelSampleFactory implements SampleValueFactory<ColumnQualityPolicyListModel> {
         @Override
-        public DefaultColumnChecksPatternListModel createSample() {
-            return new DefaultColumnChecksPatternListModel() {{
+        public ColumnQualityPolicyListModel createSample() {
+            return new ColumnQualityPolicyListModel() {{
                 setPatternName(SampleStringsRegistry.getPatternName());
                 setPriority(100);
                 setTargetColumn(new TargetColumnPatternSpec() {{

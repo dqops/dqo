@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.defaultchecks.column;
+package com.dqops.metadata.policies.table;
 
 import java.util.List;
 
 /**
- * List of column-level default checks patterns.
+ * List of table-level default checks patterns.
  */
-public interface ColumnDefaultChecksPatternList extends Iterable<ColumnDefaultChecksPatternWrapper> {
+public interface TableDefaultChecksPatternList extends Iterable<TableDefaultChecksPatternWrapper> {
     /**
      * Returns the size of the collection. A call to this method will trigger a full load and will load all elements
      * from the persistence store (files or database).
@@ -34,14 +34,14 @@ public interface ColumnDefaultChecksPatternList extends Iterable<ColumnDefaultCh
      * @param loadAllWhenMissing Forces loading all elements from the persistence store when the element is missing. When false, then simply checks if the element is in the dictionary.
      * @return Existing object (model wrapper) or null when the object was not found.
      */
-    ColumnDefaultChecksPatternWrapper getByObjectName(String patternName, boolean loadAllWhenMissing);
+    TableDefaultChecksPatternWrapper getByObjectName(String patternName, boolean loadAllWhenMissing);
 
     /**
      * Creates a new element instance that is marked as new and should be saved on flush.
      * @param patternName Pattern name.
      * @return Created object instance.
      */
-    ColumnDefaultChecksPatternWrapper createAndAddNew(String patternName);
+    TableDefaultChecksPatternWrapper createAndAddNew(String patternName);
 
     /**
      * Removes a source model. The source is marked for deletion and will be removed on flush.
@@ -54,7 +54,7 @@ public interface ColumnDefaultChecksPatternList extends Iterable<ColumnDefaultCh
      * Returns the collection as an immutable list.
      * @return List of check pattern definition wrappers.
      */
-    List<ColumnDefaultChecksPatternWrapper> toList();
+    List<TableDefaultChecksPatternWrapper> toList();
 
     /**
      * Flushes changes to the persistent storage. Derived classes (that are based on a real persistence store) should override

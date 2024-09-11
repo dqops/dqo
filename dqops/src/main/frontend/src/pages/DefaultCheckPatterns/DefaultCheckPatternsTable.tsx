@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel
 } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
@@ -13,14 +13,14 @@ import Switch from '../../components/Switch';
 import { useDefinition } from '../../contexts/definitionContext';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
 } from '../../services/apiClient';
 import { sortPatterns } from '../../utils';
 
 type TPattern =
-  | DefaultTableChecksPatternListModel
-  | DefaultColumnChecksPatternListModel;
+  | TableQualityPolicyListModel
+  | ColumnQualityPolicyListModel;
 
 type TDefaultCheckPatternsTableProps = {
   patterns: TPattern[];
@@ -98,10 +98,10 @@ export default function DefaultCheckPatternsTable({
       return x;
     });
     if (type === 'table') {
-      DefaultTableCheckPatternsApiClient.getDefaultTableChecksPatternTarget(
+      TableQualityPoliciesApiClient.getTableQualityPolicyTarget(
         pattern.pattern_name ?? ''
       ).then((res) => {
-        DefaultTableCheckPatternsApiClient.updateDefaultTableChecksPatternTarget(
+        TableQualityPoliciesApiClient.updateTableQualityPolicyTarget(
           res.data.pattern_name ?? '',
           {
             ...res.data,
@@ -110,10 +110,10 @@ export default function DefaultCheckPatternsTable({
         );
       });
     } else {
-      DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
+      ColumnQualityPoliciesApiClient.getColumnQualityPolicyTarget(
         pattern.pattern_name ?? ''
       ).then((res) => {
-        DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
+        ColumnQualityPoliciesApiClient.updateColumnQualityPolicyTarget(
           res.data.pattern_name ?? '',
           {
             ...res.data,

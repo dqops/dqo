@@ -15,8 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
+import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.table.TargetTablePatternSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,8 +32,8 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DefaultTableChecksPatternListModel", description = "Default table-level checks pattern list model")
-public class DefaultTableChecksPatternListModel {
+@ApiModel(value = "TableQualityPolicyListModel", description = "Default table-level checks pattern (data quality policy) list model")
+public class TableQualityPolicyListModel {
     /**
      * Pattern name.
      */
@@ -75,7 +75,7 @@ public class DefaultTableChecksPatternListModel {
             "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
     private String yamlParsingError;
 
-    public DefaultTableChecksPatternListModel() {
+    public TableQualityPolicyListModel() {
     }
 
     /**
@@ -84,10 +84,10 @@ public class DefaultTableChecksPatternListModel {
      * @param isEditor       The current user has the editor permission.
      * @return Default checks pattern list model.
      */
-    public static DefaultTableChecksPatternListModel fromPatternSpecification(
+    public static TableQualityPolicyListModel fromPatternSpecification(
             TableDefaultChecksPatternSpec checksPatternSpec,
             boolean isEditor) {
-        return new DefaultTableChecksPatternListModel() {{
+        return new TableQualityPolicyListModel() {{
             setPatternName(checksPatternSpec.getPatternName());
             setPriority(checksPatternSpec.getPriority());
             setDisabled(checksPatternSpec.isDisabled());
@@ -98,10 +98,10 @@ public class DefaultTableChecksPatternListModel {
         }};
     }
 
-    public static class TableDefaultChecksPatternListModelSampleFactory implements SampleValueFactory<DefaultTableChecksPatternListModel> {
+    public static class TableDefaultChecksPatternListModelSampleFactory implements SampleValueFactory<TableQualityPolicyListModel> {
         @Override
-        public DefaultTableChecksPatternListModel createSample() {
-            return new DefaultTableChecksPatternListModel() {{
+        public TableQualityPolicyListModel createSample() {
+            return new TableQualityPolicyListModel() {{
                 setPatternName(SampleStringsRegistry.getPatternName());
                 setPriority(100);
                 setTargetTable(new TargetTablePatternSpec() {{

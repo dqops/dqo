@@ -16,8 +16,8 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
 
 /**
  * Factory that creates the default configuration of checks, when DQOps is initialized and the initial configuration is loaded into the local settings.

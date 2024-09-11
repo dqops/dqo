@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.defaultchecks.column;
+package com.dqops.metadata.policies.column;
 
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternFilter;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
+import com.dqops.metadata.policies.table.TargetTablePatternSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;

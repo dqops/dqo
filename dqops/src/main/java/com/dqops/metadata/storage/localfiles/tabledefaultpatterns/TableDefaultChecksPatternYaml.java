@@ -16,8 +16,7 @@
 package com.dqops.metadata.storage.localfiles.tabledefaultpatterns;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
+import com.dqops.metadata.policies.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;

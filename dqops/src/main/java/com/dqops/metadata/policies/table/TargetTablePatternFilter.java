@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.defaultchecks.table;
+package com.dqops.metadata.policies.table;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ConnectionSpec;

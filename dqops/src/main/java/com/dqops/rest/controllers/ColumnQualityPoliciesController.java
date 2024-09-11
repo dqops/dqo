@@ -20,24 +20,20 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.DefaultRuleSeverityLevel;
-import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.DefaultColumnChecksPatternListModel;
-import com.dqops.rest.models.metadata.DefaultColumnChecksPatternModel;
+import com.dqops.rest.models.metadata.ColumnQualityPolicyListModel;
+import com.dqops.rest.models.metadata.ColumnQualityPolicyModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
@@ -64,8 +60,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "DefaultColumnCheckPatterns", description = "Operations for managing the configuration of the default column-level checks for columns matching a pattern.")
-public class DefaultColumnCheckPatternsController {
+@Api(value = "ColumnQualityPolicies", description = "Operations for managing the configuration of data quality policies at a column level. Policies are the default configuration of data quality checks for columns matching a pattern.")
+public class ColumnQualityPoliciesController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ExecutionContextFactory executionContextFactory;
     private final SpecToModelCheckMappingService specToModelCheckMappingService;
@@ -81,11 +77,11 @@ public class DefaultColumnCheckPatternsController {
      * @param lockService Object lock service.
      */
     @Autowired
-    public DefaultColumnCheckPatternsController(UserHomeContextFactory userHomeContextFactory,
-                                                ExecutionContextFactory executionContextFactory,
-                                                SpecToModelCheckMappingService specToModelCheckMappingService,
-                                                ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                                                RestApiLockService lockService) {
+    public ColumnQualityPoliciesController(UserHomeContextFactory userHomeContextFactory,
+                                           ExecutionContextFactory executionContextFactory,
+                                           SpecToModelCheckMappingService specToModelCheckMappingService,
+                                           ModelToSpecCheckMappingService modelToSpecCheckMappingService,
+                                           RestApiLockService lockService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.executionContextFactory = executionContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
@@ -97,20 +93,20 @@ public class DefaultColumnCheckPatternsController {
      * Returns a flat list of all default check templates.
      * @return List of all default check templates.
      */
-    @GetMapping(value = "/default/checks/column", produces = "application/json")
-    @ApiOperation(value = "getAllDefaultColumnChecksPatterns",
+    @GetMapping(value = "/policies/checks/column", produces = "application/json")
+    @ApiOperation(value = "getColumnQualityPolicies",
             notes = "Returns a flat list of all column-level default check patterns configured for this instance. Default checks are applied on columns dynamically.",
-            response = DefaultColumnChecksPatternListModel[].class,
+            response = ColumnQualityPolicyListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DefaultColumnChecksPatternListModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = ColumnQualityPolicyListModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Flux<DefaultColumnChecksPatternListModel>>> getAllDefaultColumnChecksPatterns(
+    public Mono<ResponseEntity<Flux<ColumnQualityPolicyListModel>>> getColumnQualityPolicies(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
@@ -119,8 +115,8 @@ public class DefaultColumnCheckPatternsController {
             List<ColumnDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
             boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
-            List<DefaultColumnChecksPatternListModel> models = patternWrappersList.stream()
-                    .map(pw -> DefaultColumnChecksPatternListModel.fromPatternSpecification(pw.getSpec(), canEdit))
+            List<ColumnQualityPolicyListModel> models = patternWrappersList.stream()
+                    .map(pw -> ColumnQualityPolicyListModel.fromPatternSpecification(pw.getSpec(), canEdit))
                     .collect(Collectors.toList());
             models.sort(Comparator.comparing(model -> model.getPatternName()));
 
@@ -133,19 +129,19 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName Pattern name.
      * @return Model of the default checks pattern.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}/target", produces = "application/json")
-    @ApiOperation(value = "getDefaultColumnChecksPatternTarget", notes = "Returns a default checks pattern definition", response = DefaultColumnChecksPatternListModel.class,
+    @GetMapping(value = "/policies/checks/column/{patternName}/target", produces = "application/json")
+    @ApiOperation(value = "getColumnQualityPolicyTarget", notes = "Returns a default checks pattern definition", response = ColumnQualityPolicyListModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DefaultColumnChecksPatternListModel.class),
+            @ApiResponse(code = 200, message = "OK", response = ColumnQualityPolicyListModel.class),
             @ApiResponse(code = 404, message = "Pattern name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<DefaultColumnChecksPatternListModel>>> getDefaultColumnChecksPatternTarget(
+    public Mono<ResponseEntity<Mono<ColumnQualityPolicyListModel>>> getColumnQualityPolicyTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Column pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -164,8 +160,8 @@ public class DefaultColumnCheckPatternsController {
             }
 
             boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-            DefaultColumnChecksPatternListModel patternModel =
-                    DefaultColumnChecksPatternListModel.fromPatternSpecification(defaultChecksPatternWrapper.getSpec(), canEdit);
+            ColumnQualityPolicyListModel patternModel =
+                    ColumnQualityPolicyListModel.fromPatternSpecification(defaultChecksPatternWrapper.getSpec(), canEdit);
 
             return new ResponseEntity<>(Mono.just(patternModel), HttpStatus.OK);
         }));
@@ -176,19 +172,19 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName Pattern name.
      * @return Model of the default checks pattern.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}", produces = "application/json")
-    @ApiOperation(value = "getDefaultColumnChecksPattern", notes = "Returns a default checks pattern definition as a full specification object", response = DefaultColumnChecksPatternModel.class,
+    @GetMapping(value = "/policies/checks/column/{patternName}", produces = "application/json")
+    @ApiOperation(value = "getColumnQualityPolicy", notes = "Returns a default checks pattern definition as a full specification object", response = ColumnQualityPolicyModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DefaultColumnChecksPatternModel.class),
+            @ApiResponse(code = 200, message = "OK", response = ColumnQualityPolicyModel.class),
             @ApiResponse(code = 404, message = "Pattern name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<DefaultColumnChecksPatternModel>>> getDefaultColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<ColumnQualityPolicyModel>>> getColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Column pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -207,7 +203,7 @@ public class DefaultColumnCheckPatternsController {
             }
 
             boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-            DefaultColumnChecksPatternModel patternModel = new DefaultColumnChecksPatternModel() {{
+            ColumnQualityPolicyModel patternModel = new ColumnQualityPolicyModel() {{
                 setPatternName(patternName);
                 setPatternSpec(defaultChecksPatternWrapper.getSpec());
                 setCanEdit(canEdit);
@@ -224,8 +220,8 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PostMapping(value = "/default/checks/column/{patternName}/target", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createDefaultColumnChecksPatternTarget", notes = "Creates (adds) a new default column-level checks pattern configuration.", response = Void.class,
+    @PostMapping(value = "/policies/checks/column/{patternName}/target", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createColumnQualityPolicyTarget", notes = "Creates (adds) a new default column-level checks pattern configuration.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -238,10 +234,10 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> createDefaultColumnChecksPatternTarget(
+    public Mono<ResponseEntity<Mono<Void>>> createColumnQualityPolicyTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
-            @ApiParam("Default checks pattern model with only the target filters") @RequestBody DefaultColumnChecksPatternListModel patternModel) {
+            @ApiParam("Default checks pattern model with only the target filters") @RequestBody ColumnQualityPolicyListModel patternModel) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (patternModel == null || Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -279,8 +275,8 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PostMapping(value = "/default/checks/column/{patternName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createDefaultColumnChecksPattern", notes = "Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.", response = Void.class,
+    @PostMapping(value = "/policies/checks/column/{patternName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createColumnQualityPolicy", notes = "Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -293,10 +289,10 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> createDefaultColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> createColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
-            @ApiParam("Default checks pattern model") @RequestBody DefaultColumnChecksPatternModel patternModel) {
+            @ApiParam("Default checks pattern model") @RequestBody ColumnQualityPolicyModel patternModel) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPatternSpec() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -329,8 +325,8 @@ public class DefaultColumnCheckPatternsController {
      * @param sourcePatternName Name of the existing checks pattern.
      * @return Empty response.
      */
-    @PostMapping(value = "/default/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}", produces = "application/json")
-    @ApiOperation(value = "copyFromDefaultColumnChecksPattern", notes = "Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.", response = Void.class,
+    @PostMapping(value = "/policies/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}", produces = "application/json")
+    @ApiOperation(value = "copyFromColumnQualityPolicy", notes = "Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -344,7 +340,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> copyFromDefaultColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> copyFromColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Target pattern name") @PathVariable String targetPatternName,
             @ApiParam("Source pattern name") @PathVariable String sourcePatternName) {
@@ -389,8 +385,8 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}/target", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultColumnChecksPatternTarget", notes = "Updates an default column-level checks pattern, changing only the target object", response = Void.class,
+    @PutMapping(value = "/policies/checks/column/{patternName}/target", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateColumnQualityPolicyTarget", notes = "Updates an default column-level checks pattern, changing only the target object", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -402,9 +398,9 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultColumnChecksPatternTarget(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnQualityPolicyTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Default checks pattern model") @RequestBody DefaultColumnChecksPatternListModel patternModel,
+            @ApiParam("Default checks pattern model") @RequestBody ColumnQualityPolicyListModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
@@ -448,8 +444,8 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultColumnChecksPattern", notes = "Updates an default column-level checks pattern by saving a full specification object", response = Void.class,
+    @PutMapping(value = "/policies/checks/column/{patternName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateColumnQualityPolicy", notes = "Updates an default column-level checks pattern by saving a full specification object", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -461,9 +457,9 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Default checks pattern model") @RequestBody DefaultColumnChecksPatternModel patternModel,
+            @ApiParam("Default checks pattern model") @RequestBody ColumnQualityPolicyModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
 
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -498,8 +494,8 @@ public class DefaultColumnCheckPatternsController {
      * @param patternName  Pattern name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/default/checks/column/{patternName}", produces = "application/json")
-    @ApiOperation(value = "deleteDefaultColumnChecksPattern", notes = "Deletes a default column-level checks pattern", response = Void.class,
+    @DeleteMapping(value = "/policies/checks/column/{patternName}", produces = "application/json")
+    @ApiOperation(value = "deleteColumnQualityPolicy", notes = "Deletes a default column-level checks pattern", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -510,7 +506,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> deleteDefaultColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> deleteColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -543,8 +539,8 @@ public class DefaultColumnCheckPatternsController {
      * Returns the UI model for the default configuration of default profiling checks on a column level.
      * @return Check UI model with the configuration of the profiling checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getDefaultProfilingColumnChecksPattern",
+    @GetMapping(value = "/policies/checks/column/{patternName}/profiling", produces = "application/json")
+    @ApiOperation(value = "getProfilingColumnQualityPolicy",
             notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
@@ -557,7 +553,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultProfilingColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getProfilingColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -589,8 +585,8 @@ public class DefaultColumnCheckPatternsController {
      * Returns the UI model for the default configuration of default daily monitoring checks on a column level.
      * @return Check UI model with the configuration of the daily monitoring checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}/monitoring/daily", produces = "application/json")
-    @ApiOperation(value = "getDefaultMonitoringDailyColumnChecksPattern",
+    @GetMapping(value = "/policies/checks/column/{patternName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getMonitoringDailyColumnQualityPolicy",
             notes = "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
@@ -603,7 +599,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultMonitoringDailyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getMonitoringDailyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -634,8 +630,8 @@ public class DefaultColumnCheckPatternsController {
      * Returns the UI model for the default configuration of default monthly monitoring checks on a column level.
      * @return Check UI model with the configuration of the monthly monitoring checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}/monitoring/monthly", produces = "application/json")
-    @ApiOperation(value = "getDefaultMonitoringMonthlyColumnChecksPattern",
+    @GetMapping(value = "/policies/checks/column/{patternName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getMonitoringMonthlyColumnQualityPolicy",
             notes = "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
@@ -648,7 +644,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultMonitoringMonthlyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getMonitoringMonthlyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -679,8 +675,8 @@ public class DefaultColumnCheckPatternsController {
      * Returns the UI model for the default configuration of default daily partitioned checks on a column level.
      * @return Check UI model with the configuration of the daily partitioned checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getDefaultPartitionedDailyColumnChecksPattern",
+    @GetMapping(value = "/policies/checks/column/{patternName}/partitioned/daily", produces = "application/json")
+    @ApiOperation(value = "getPartitionedDailyColumnQualityPolicy",
             notes = "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
@@ -693,7 +689,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultPartitionedDailyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getPartitionedDailyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -724,8 +720,8 @@ public class DefaultColumnCheckPatternsController {
      * Returns the UI model for the default configuration of default monthly partitioned checks on a column level.
      * @return Check UI model with the configuration of the monthly partitioned checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/column/{patternName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getDefaultPartitionedMonthlyColumnChecksPattern",
+    @GetMapping(value = "/policies/checks/column/{patternName}/partitioned/monthly", produces = "application/json")
+    @ApiOperation(value = "getPartitionedMonthlyColumnQualityPolicy",
             notes = "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
@@ -738,7 +734,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultPartitionedMonthlyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getPartitionedMonthlyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -770,8 +766,8 @@ public class DefaultColumnCheckPatternsController {
      * @param checkContainerModel New configuration of the default profiling checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingColumnChecksPattern",
+    @PutMapping(value = "/policies/checks/column/{patternName}/profiling", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateProfilingColumnQualityPolicy",
             notes = "New configuration of the default profiling checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -785,7 +781,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultProfilingColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateProfilingColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
@@ -826,8 +822,8 @@ public class DefaultColumnCheckPatternsController {
      * @param checkContainerModel New configuration of the default daily monitoring checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}/monitoring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultMonitoringDailyColumnChecksPattern",
+    @PutMapping(value = "/policies/checks/column/{patternName}/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateMonitoringDailyColumnQualityPolicy",
             notes = "New configuration of the default daily monitoring checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -841,7 +837,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultMonitoringDailyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateMonitoringDailyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily monitoring checks configuration")
@@ -882,8 +878,8 @@ public class DefaultColumnCheckPatternsController {
      * @param checkContainerModel New configuration of the default monthly monitoring checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultMonitoringMonthlyColumnChecksPattern",
+    @PutMapping(value = "/policies/checks/column/{patternName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateMonitoringMonthlyColumnQualityPolicy",
             notes = "New configuration of the default monthly monitoring checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -897,7 +893,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultMonitoringMonthlyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateMonitoringMonthlyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly monitoring checks configuration")
@@ -938,8 +934,8 @@ public class DefaultColumnCheckPatternsController {
      * @param checkContainerModel New configuration of the default daily partitioned checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultPartitionedDailyColumnChecksPattern",
+    @PutMapping(value = "/policies/checks/column/{patternName}/partitioned/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updatePartitionedDailyColumnQualityPolicy",
             notes = "New configuration of the default daily partitioned checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -953,7 +949,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultPartitionedDailyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updatePartitionedDailyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily partitioned checks configuration")
@@ -994,8 +990,8 @@ public class DefaultColumnCheckPatternsController {
      * @param checkContainerModel New configuration of the default monthly partitioned checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/column/{patternName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultPartitionedMonthlyColumnChecksPattern",
+    @PutMapping(value = "/policies/checks/column/{patternName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updatePartitionedMonthlyColumnQualityPolicy",
             notes = "New configuration of the default monthly partitioned checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -1009,7 +1005,7 @@ public class DefaultColumnCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public Mono<ResponseEntity<Mono<Void>>> updateDefaultPartitionedMonthlyColumnChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updatePartitionedMonthlyColumnQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly partitioned checks configuration")

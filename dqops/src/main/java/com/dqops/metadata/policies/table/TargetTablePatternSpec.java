@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.defaultchecks.table;
+package com.dqops.metadata.policies.table;
 
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;

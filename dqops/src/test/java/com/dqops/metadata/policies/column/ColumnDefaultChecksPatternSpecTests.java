@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.defaultchecks.column;
+package com.dqops.metadata.policies.column;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
@@ -29,18 +29,9 @@ import com.dqops.checks.column.partitioned.text.ColumnTextDailyPartitionedChecks
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
-import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
-import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
-import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
 import com.dqops.connectors.ProviderType;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;

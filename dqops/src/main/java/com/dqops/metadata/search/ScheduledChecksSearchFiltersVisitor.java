@@ -17,8 +17,8 @@ package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.policies.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;

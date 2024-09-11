@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.defaultchecks.table;
+package com.dqops.metadata.policies.column;
 
 import com.dqops.metadata.basespecs.AbstractElementWrapper;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -24,11 +24,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 
 /**
- * Table-level default checks pattern spec wrapper.
+ * Column-level default checks pattern spec wrapper.
  */
-public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper<String, TableDefaultChecksPatternSpec>
-        implements TableDefaultChecksPatternWrapper {
-    private static final ChildHierarchyNodeFieldMapImpl<TableDefaultChecksPatternWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
+public class ColumnDefaultChecksPatternWrapperImpl extends AbstractElementWrapper<String, ColumnDefaultChecksPatternSpec> implements ColumnDefaultChecksPatternWrapper {
+    private static final ChildHierarchyNodeFieldMapImpl<ColumnDefaultChecksPatternWrapperImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractElementWrapper.FIELDS) {
         {
         }
     };
@@ -39,23 +38,18 @@ public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper
     /**
      * Creates a default check configuration pattern wrapper.
      */
-    public TableDefaultChecksPatternWrapperImpl() {
+    public ColumnDefaultChecksPatternWrapperImpl() {
     }
 
-    /**
-     * Create a default check configuration pattern wrapper in read-only mode.
-     * @param readOnly Make the wrapper read-only.
-     */
-    public TableDefaultChecksPatternWrapperImpl(boolean readOnly) {
+    public ColumnDefaultChecksPatternWrapperImpl(boolean readOnly) {
         super(readOnly);
     }
 
     /**
      * Creates a default checks pattern wrapper given a pattern name.
      * @param patternName Pattern name.
-     * @param readOnly Make the wrapper read-only.
      */
-    public TableDefaultChecksPatternWrapperImpl(String patternName, boolean readOnly) {
+    public ColumnDefaultChecksPatternWrapperImpl(String patternName, boolean readOnly) {
         this(readOnly);
         this.patternName = patternName;
     }
@@ -110,7 +104,7 @@ public class TableDefaultChecksPatternWrapperImpl extends AbstractElementWrapper
      * @return Deeply cloned object.
      */
     @Override
-    public TableDefaultChecksPatternWrapper clone() {
-        return (TableDefaultChecksPatternWrapper) super.deepClone();
+    public ColumnDefaultChecksPatternWrapper clone() {
+        return (ColumnDefaultChecksPatternWrapper) super.deepClone();
     }
 }

@@ -16,7 +16,7 @@
 package com.dqops.metadata.storage.localfiles.columndefaultpatterns;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnDefaultChecksPatternSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;

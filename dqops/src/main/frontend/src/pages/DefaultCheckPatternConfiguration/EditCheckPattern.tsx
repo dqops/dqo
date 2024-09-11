@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckContainerModel,
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel,
   TargetColumnPatternSpec,
   TargetTablePatternSpec
 } from '../../api';
@@ -14,8 +14,8 @@ import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { IRootState } from '../../redux/reducers';
 import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
 } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import CopyCheckPatternDialog from './CopyCheckPatternDialog';
@@ -125,8 +125,8 @@ type TCheckContainerDiverse = {
 };
 
 type TTarget =
-  | DefaultColumnChecksPatternListModel
-  | DefaultTableChecksPatternListModel;
+  | ColumnQualityPolicyListModel
+  | TableQualityPolicyListModel;
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 type TEditCheckPatternProps = {
   type: 'table' | 'column';
@@ -217,27 +217,27 @@ export default function EditCheckPattern({
     } = {
       column: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultProfilingColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updateProfilingColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultMonitoringDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updateMonitoringDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultMonitoringMonthlyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updateMonitoringMonthlyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultPartitionedDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updatePartitionedDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultPartitionedMonthlyColumnChecksPattern
+          ColumnQualityPoliciesApiClient.updatePartitionedMonthlyColumnQualityPolicy
       },
       table: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultTableCheckPatternsApiClient.updateDefaultProfilingTableChecksPattern,
+          TableQualityPoliciesApiClient.updateProfilingTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultTableCheckPatternsApiClient.updateDefaultMonitoringDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.updateMonitoringDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultTableCheckPatternsApiClient.updateDefaultMonitoringMonthlyTableChecksPattern,
+          TableQualityPoliciesApiClient.updateMonitoringMonthlyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultTableCheckPatternsApiClient.updateDefaultPartitionedDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.updatePartitionedDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultTableCheckPatternsApiClient.updateDefaultPartitionedMonthlyTableChecksPattern
+          TableQualityPoliciesApiClient.updatePartitionedMonthlyTableQualityPolicy
       }
     };
 
@@ -261,12 +261,12 @@ export default function EditCheckPattern({
     await Promise.all(promises);
 
     if (type === 'column') {
-      await DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
+      await ColumnQualityPoliciesApiClient.updateColumnQualityPolicyTarget(
         pattern_name,
         target
       );
     } else {
-      await DefaultTableCheckPatternsApiClient.updateDefaultTableChecksPatternTarget(
+      await TableQualityPoliciesApiClient.updateTableQualityPolicyTarget(
         pattern_name,
         target
       );
@@ -285,11 +285,11 @@ export default function EditCheckPattern({
   const getTarget = () => {
     if (!pattern_name) return;
     if (type === 'column') {
-      DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
+      ColumnQualityPoliciesApiClient.getColumnQualityPolicyTarget(
         pattern_name
       ).then((res) => setTarget(res?.data));
     } else {
-      DefaultTableCheckPatternsApiClient.getDefaultTableChecksPatternTarget(
+      TableQualityPoliciesApiClient.getTableQualityPolicyTarget(
         pattern_name
       ).then((res) => setTarget(res?.data));
     }
@@ -305,27 +305,27 @@ export default function EditCheckPattern({
     const apiClients = {
       column: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultColumnCheckPatternsApiClient.getDefaultProfilingColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getProfilingColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultColumnCheckPatternsApiClient.getDefaultMonitoringDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getMonitoringDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultColumnCheckPatternsApiClient.getDefaultMonitoringMonthlyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getMonitoringMonthlyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultColumnCheckPatternsApiClient.getDefaultPartitionedDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getPartitionedDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultColumnCheckPatternsApiClient.getDefaultPartitionedMonthlyColumnChecksPattern
+          ColumnQualityPoliciesApiClient.getPartitionedMonthlyColumnQualityPolicy
       },
       table: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultTableCheckPatternsApiClient.getDefaultProfilingTableChecksPattern,
+          TableQualityPoliciesApiClient.getProfilingTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultTableCheckPatternsApiClient.getDefaultMonitoringDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.getMonitoringDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultTableCheckPatternsApiClient.getDefaultMonitoringMonthlyTableChecksPattern,
+          TableQualityPoliciesApiClient.getMonitoringMonthlyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultTableCheckPatternsApiClient.getDefaultPartitionedDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.getPartitionedDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultTableCheckPatternsApiClient.getDefaultPartitionedMonthlyTableChecksPattern
+          TableQualityPoliciesApiClient.getPartitionedMonthlyTableQualityPolicy
       }
     };
 

@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.defaultchecks.table;
+package com.dqops.metadata.policies.table;
 
 import com.dqops.BaseTest;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCheckSpec;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
-import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;

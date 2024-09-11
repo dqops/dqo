@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.defaultchecks.column;
+package com.dqops.metadata.policies.column;
 
 import com.dqops.connectors.DataTypeCategory;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternFilter;
+import com.dqops.metadata.policies.table.TargetTablePatternFilter;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;

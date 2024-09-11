@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.defaultchecks.table;
+package com.dqops.metadata.policies.column;
 
 import com.dqops.metadata.basespecs.AbstractIndexingList;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -21,10 +21,10 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import java.util.List;
 
 /**
- * Collection of table-level default checks patterns definitions. Tracks the status of the child elements (addition, removal).
+ * Collection of column-level default checks patterns definitions. Tracks the status of the child elements (addition, removal).
  */
-public class TableDefaultChecksPatternListImpl extends AbstractIndexingList<String, TableDefaultChecksPatternWrapper> implements TableDefaultChecksPatternList {
-    public TableDefaultChecksPatternListImpl(boolean readOnly) {
+public class ColumnDefaultChecksPatternListImpl extends AbstractIndexingList<String, ColumnDefaultChecksPatternWrapper> implements ColumnDefaultChecksPatternList {
+    public ColumnDefaultChecksPatternListImpl(boolean readOnly) {
         super(readOnly);
     }
 
@@ -35,10 +35,10 @@ public class TableDefaultChecksPatternListImpl extends AbstractIndexingList<Stri
      * @return Created and detached new instance with the object name assigned.
      */
     @Override
-    protected TableDefaultChecksPatternWrapper createNewElement(String objectName) {
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = new TableDefaultChecksPatternWrapperImpl();
+    protected ColumnDefaultChecksPatternWrapper createNewElement(String objectName) {
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = new ColumnDefaultChecksPatternWrapperImpl();
         defaultChecksPatternWrapper.setPatternName(objectName);
-        defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec());
+        defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec());
         return defaultChecksPatternWrapper;
     }
 
@@ -50,7 +50,7 @@ public class TableDefaultChecksPatternListImpl extends AbstractIndexingList<Stri
      */
     @Override
     public boolean remove(String patternName) {
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = this.getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = this.getByObjectName(patternName, true);
         if (defaultChecksPatternWrapper == null) {
             return false;
         }
@@ -63,7 +63,7 @@ public class TableDefaultChecksPatternListImpl extends AbstractIndexingList<Stri
      * @return List of default checks patterns definitions (wrappers).
      */
     @Override
-    public List<TableDefaultChecksPatternWrapper> toList() {
+    public List<ColumnDefaultChecksPatternWrapper> toList() {
         return List.copyOf(this);
     }
 

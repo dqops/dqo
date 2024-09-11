@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
 } from '../../services/apiClient';
 interface CopyCheckPatternDialogProps {
   type: 'column' | 'table';
@@ -22,13 +22,13 @@ export default function CopyCheckPatternDialog({
   const [tableName, setTableName] = useState('');
   const handleSubmit = () => {
     if (type === 'column') {
-      DefaultColumnCheckPatternsApiClient.copyFromDefaultColumnChecksPattern(
+      ColumnQualityPoliciesApiClient.copyFromColumnQualityPolicy(
         tableName,
         sourceTableName
       );
     }
     if (type === 'table') {
-      DefaultTableCheckPatternsApiClient.copyFromDefaultTableChecksPattern(
+      TableQualityPoliciesApiClient.copyFromTableQualityPolicy(
         tableName,
         sourceTableName
       );

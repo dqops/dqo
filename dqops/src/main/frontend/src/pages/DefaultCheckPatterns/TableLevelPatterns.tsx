@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultTableCheckPatternsApiClient } from '../../services/apiClient';
+import { TableQualityPoliciesApiClient } from '../../services/apiClient';
 
-import { DefaultTableChecksPatternListModel } from '../../api';
+import { TableQualityPolicyListModel } from '../../api';
 import Loader from '../../components/Loader';
 import { sortPatterns } from '../../utils';
 import DefaultCheckPatternsTable from './DefaultCheckPatternsTable';
 const getPreparedPatterns = (
-  patterns: DefaultTableChecksPatternListModel[]
+  patterns: TableQualityPolicyListModel[]
 ) => {
   const arr: any[] = [];
 
@@ -27,12 +27,12 @@ const getPreparedPatterns = (
 };
 export default function TableLevelPatterns() {
   const [patterns, setPatterns] = useState<
-    DefaultTableChecksPatternListModel[]
+    TableQualityPolicyListModel[]
   >([]);
   const [loading, setLoading] = useState(false);
   const getPatterns = async () => {
     setLoading(true);
-    DefaultTableCheckPatternsApiClient.getAllDefaultTableChecksPatterns()
+    TableQualityPoliciesApiClient.getTableQualityPolicies()
       .then((res) => {
         setPatterns(
           sortPatterns(getPreparedPatterns(res.data ?? []), 'priority', 'asc')
@@ -45,7 +45,7 @@ export default function TableLevelPatterns() {
   }, []);
 
   const deletePattern = (patternName: string) => {
-    DefaultTableCheckPatternsApiClient.deleteDefaultTableChecksPattern(
+    TableQualityPoliciesApiClient.deleteTableQualityPolicy(
       patternName
     ).then(() => getPatterns());
   };

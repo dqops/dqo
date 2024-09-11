@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.defaultchecks.table;
+package com.dqops.metadata.policies.table;
 
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.basespecs.ObjectName;
