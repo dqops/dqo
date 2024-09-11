@@ -170,8 +170,8 @@ function DefinitionProvider(props: any) {
   ) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.DEFAULT_CHECKS_PATTERNS(pattern),
-        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(pattern),
+        url: ROUTES.DEFAULT_CHECKS_PATTERNS(type),
+        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(type),
         state: {
           type: type,
           pattern_name: pattern
@@ -219,7 +219,7 @@ function DefinitionProvider(props: any) {
       { category: 'Sensors', isOpen: false },
       { category: 'Rules', isOpen: false },
       { category: 'Data quality checks', isOpen: false },
-      { category: 'Default checks configuration', isOpen: false }
+      { category: 'Data quality policies', isOpen: false }
     ];
     const currectConfiguration: Array<{ category: string; isOpen: boolean }> = [
       ...(configuration ?? defaultconfiguration)
