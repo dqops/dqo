@@ -170,8 +170,8 @@ function DefinitionProvider(props: any) {
   ) => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.DEFAULT_CHECKS_PATTERNS(pattern),
-        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(pattern),
+        url: ROUTES.DEFAULT_CHECKS_PATTERNS(type),
+        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(type),
         state: {
           type: type,
           pattern_name: pattern

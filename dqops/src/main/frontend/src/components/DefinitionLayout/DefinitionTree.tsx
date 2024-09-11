@@ -476,16 +476,10 @@ export const DefinitionTree = () => {
                   <div
                     className={clsx(
                       'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 ml-2  hover:bg-gray-300',
-                      x.includes('Column') &&
-                        activeTab?.includes(
-                          'default-check-patterns/Column-level%20policies'
-                        )
+                      x.includes('Column') && activeTab?.includes('column')
                         ? 'bg-gray-300'
                         : '',
-                      x.includes('Table') &&
-                        activeTab?.includes(
-                          'default-check-patterns/Table-level%20policies'
-                        )
+                      x.includes('Table') && activeTab?.includes('table')
                         ? 'bg-gray-300'
                         : ''
                       // check.custom ? 'font-bold' : '',
