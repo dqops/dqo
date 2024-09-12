@@ -85,7 +85,6 @@ export default function RunChecksDialog({
   const onChangeTimeFilterWindow = (
     obj: Partial<TimeWindowFilterParameters>
   ) => {
-    console.log(obj);
     setTimeWindowFilter((prev) => ({
       ...prev,
       ...obj
@@ -112,6 +111,7 @@ export default function RunChecksDialog({
       ? isDateValid(timeWindowFilter?.to_date) &&
         isDateValid(timeWindowFilter?.from_date)
       : true;
+
   return (
     <Dialog
       open={open}
@@ -410,6 +410,16 @@ export default function RunChecksDialog({
                 <div></div>
               </div>
             </div>
+            <div>
+              <Input
+                label="SQL WHERE filters"
+                placeholder="{alias}.batch_id=1"
+                value={timeWindowFilter?.where_filter}
+                onChange={(e) =>
+                  onChangeTimeFilterWindow({ where_filter: e.target.value })
+                }
+              />
+            </div>
           </SectionWrapper>
         )}
       </DialogBody>
@@ -430,14 +440,15 @@ export default function RunChecksDialog({
             isSaveEnabled
               ? (onClick(
                   prepareFilters(filters),
-                  checkType === CheckTypes.PARTITIONED
-                    ? timeWindowPartitioned
-                      ? RUN_CHECK_TIME_WINDOW_FILTERS[
+                  checkType === CheckTypes.PARTITIONED && timeWindowPartitioned
+                    ? {
+                        ...RUN_CHECK_TIME_WINDOW_FILTERS[
                           filters.timeWindowFilter ??
                             'Default incremental time window'
-                        ] ?? undefined
-                      : timeWindowFilter
-                    : undefined,
+                        ],
+                        where_filter: timeWindowFilter?.where_filter
+                      }
+                    : timeWindowFilter,
                   filters.collectErrorSample
                 ),
                 setFilters(runChecksJobTemplate))
