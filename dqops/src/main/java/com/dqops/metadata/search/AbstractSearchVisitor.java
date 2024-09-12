@@ -34,6 +34,8 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
 import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
@@ -1288,6 +1290,30 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(SourceColumnsSetSpec sourceColumnsSetSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts the configuration object of a local data domain.
+     *
+     * @param localDataDomainSpec Local data domain specification.
+     * @param parameter           Visitor parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(LocalDataDomainSpec localDataDomainSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts the map (dictionary) object containing the configuration of local data domain.
+     *
+     * @param localDataDomainSpecMap Local data domain map.
+     * @param parameter              Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(LocalDataDomainSpecMap localDataDomainSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

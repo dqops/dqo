@@ -34,6 +34,8 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
 import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
@@ -970,4 +972,20 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(SourceColumnsSetSpec sourceColumnsSetSpec, P parameter);
+
+    /**
+     * Accepts the configuration object of a local data domain.
+     * @param localDataDomainSpec Local data domain specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(LocalDataDomainSpec localDataDomainSpec, P parameter);
+
+    /**
+     * Accepts the map (dictionary) object containing the configuration of local data domain.
+     * @param localDataDomainSpecMap Local data domain map.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(LocalDataDomainSpecMap localDataDomainSpecMap, P parameter);
 }
