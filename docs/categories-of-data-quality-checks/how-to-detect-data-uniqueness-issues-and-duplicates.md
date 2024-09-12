@@ -293,28 +293,8 @@ To select the columns used for the duplicate verification, click the **columns**
 
 ![Table uniqueness column selection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-uniqueness-column-selection.png){ loading=lazy; }
 
-When columns are not configured or none are selected, then all columns are implicitly used by the check.
+When columns are not configured or none are selected, then all columns are implicitly used by the uniqueness check.
 
-### Detect multi-column duplicates in YAML
-We must add our calculated column to the list of columns to detect duplicates on multiple other columns. 
-This column will have an additional configuration, the SQL expression discussed before.
-
-``` { .yaml linenums="1" hl_lines="7-8 12-14" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
-apiVersion: dqo/v1
-kind: table
-spec:
-  columns:
-    unique_columns:
-      sql_expression: "{alias}.edition || {alias}.report_type || {alias}.measure_name\
-        \ || {alias}.state_name || {alias}.subpopulation"
-      monitoring_checks:
-        daily:
-          uniqueness:
-            daily_duplicate_count:
-              error:
-                max_count: 0 
-```
 
 ## Configuring other uniqueness checks
 The DQOps data quality check editor shows the remaining uniqueness checks after clicking the **Show advanced checks** checkbox.
