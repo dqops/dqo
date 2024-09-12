@@ -171,7 +171,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-comparisons'
     },
     {
-      label: 'Rule mining',
+      label: 'Data quality rule mining',
       value: 'rule-mining'
     }
   ],
