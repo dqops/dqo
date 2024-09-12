@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import JdbcPropertiesView from '../Dashboard/DatabaseConnection/JdbcProperties';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SvgIcon from '../SvgIcon';
@@ -12,7 +12,13 @@ export default function AdvancedProperties({
   handleChange: any;
   sharedCredentials: any;
 }) {
-  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] = useState(false);
+  const isExpanded = Object.keys(properties ?? {}).length > 0;
+  const [advancedPropertiesOpen, setAdvancedPropertiesOpen] =
+    useState(isExpanded);
+
+  useEffect(() => {
+    setAdvancedPropertiesOpen(isExpanded);
+  }, [isExpanded]);
 
   return (
     <div>
