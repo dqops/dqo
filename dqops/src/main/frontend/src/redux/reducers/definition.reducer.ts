@@ -49,7 +49,12 @@ const initialState: IDefinitionState = {
   tabs: [],
   ruleState: {},
   dataQualityChecksState: {},
-  definitionFirstLevelFolder: [],
+  definitionFirstLevelFolder: [
+    { category: 'Sensors', isOpen: false },
+    { category: 'Rules', isOpen: false },
+    { category: 'Data quality checks', isOpen: false },
+    { category: 'Data quality policies', isOpen: false }
+  ],
   refreshChecksTreeIndicator: false,
   refreshRulesTreeIndicator: false,
   refreshSensorsTreeIndicator: false
