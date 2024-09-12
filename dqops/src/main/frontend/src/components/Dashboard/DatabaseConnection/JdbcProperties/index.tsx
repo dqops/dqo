@@ -12,6 +12,7 @@ interface IJdbcPropertiesViewProps {
   sharedCredentials?: SharedCredentialListModel[];
   title?: string;
 }
+
 function convertObjectToArray(obj: {
   [key: string]: string;
 }): { [key: string]: string }[] {
@@ -31,6 +32,19 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
   }, {});
 }
 
+function arePropertiesEqual(obj1: IProperties, obj2: IProperties): boolean {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) return false;
+
+  for (const key of keys1) {
+    if (obj1[key] !== obj2[key]) return false;
+  }
+
+  return true;
+}
+
 const JdbcPropertiesView = ({
   properties = { ['']: '' },
   onChange,
@@ -41,22 +55,19 @@ const JdbcPropertiesView = ({
     convertObjectToArray(properties ?? { ['']: '' })
   );
 
-  const onChangeArr = (
-    array: {
-      [key: string]: string;
-    }[]
-  ) => {
+  const onChangeArr = (array: { [key: string]: string }[]) => {
     setArr(array);
     onChange(convertArrayToObject(array));
   };
 
   useEffect(() => {
-    if (properties && arr.length === 1 && Object.keys(properties)[0] === '') {
+    if (!arePropertiesEqual(convertArrayToObject(arr), properties)) {
       setArr(convertObjectToArray(properties ?? { ['']: '' }));
-    } else if (Object.keys(properties).length === 0) {
+    }
+    if (Object.keys(properties).length === 0 || properties === undefined) {
       setArr([{ ['']: '' }]);
     }
-  }, []);
+  }, [properties]);
 
   return (
     <div className="py-4">
