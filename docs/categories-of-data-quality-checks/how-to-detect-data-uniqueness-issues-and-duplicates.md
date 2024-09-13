@@ -285,7 +285,14 @@ When all columns are used, it will identify duplicate records in a table with th
 
 ### Detect multi-column duplicates in UI
 
-The multi-column uniqueness check is available under the table in the tree on the left, in the **Data quality checks editor** tab.
+The duplicate records check is available in count and percentage versions.
+
+The [*duplicate_records_count*](../checks/table/uniqueness/duplicate-record-count.md) check counts the distinct records based on the selected columns in columns parameter.
+
+The [*duplicate_records_percent*](../checks/table/uniqueness/duplicate-record-percent.md) check compares the count of distinct records to the count of all records excluding that containing only nulls based on the selected columns in columns parameter.
+
+
+The multi-column uniqueness checks are available under the table in the tree on the left, in the **Data quality checks editor** tab.
 
 ![Table uniqueness](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-uniqueness.png){ loading=lazy; }
 
