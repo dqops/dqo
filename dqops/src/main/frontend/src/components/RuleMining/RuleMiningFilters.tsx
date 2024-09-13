@@ -32,7 +32,7 @@ export default function RuleMiningFilters({
   const [advancedParametersOpen, setAdvancedParametersOpen] = useState(false);
 
   return (
-    <div className="p-4">
+    <div className="p-2">
       <div className="flex items-center gap-x-4 mb-4">
         <SectionWrapper title="Filters" className="ml-4 !pb-1 !pt-4 mt-4 !mb-4">
           <div className="flex items-center gap-x-4 mb-4 pl-4">

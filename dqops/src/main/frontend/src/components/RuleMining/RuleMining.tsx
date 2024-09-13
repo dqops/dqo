@@ -326,6 +326,16 @@ export default function RuleMining({
             />
           </div>
         )}
+      {checkTypes !== CheckTypes.PROFILING && (
+        <div className="text-sm px-8 pt-4">
+          The number of propositions shown depends on the activated checks in
+          the Profiling section.
+          <br />
+          To increase the number of propositions, you can either activate more
+          checks manually or use the data quality rule miner in the Profiling
+          section.
+        </div>
+      )}
       <div>
         <RuleMiningFilters
           configuration={configuration}
