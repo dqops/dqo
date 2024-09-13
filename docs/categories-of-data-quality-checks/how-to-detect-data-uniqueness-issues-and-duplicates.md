@@ -299,7 +299,7 @@ When columns are not configured or none are selected, then all columns are impli
 ### Detect multi-column duplicates in YAML
 The configuration of the [*duplicate_records_percent*](../checks/table/uniqueness/duplicate-record-percent.md) check in a YAML file is shown below.
 
-``` { .yaml linenums="1" hl_lines="7-8 12-14" }
+``` { .yaml linenums="1" hl_lines="8-10" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
