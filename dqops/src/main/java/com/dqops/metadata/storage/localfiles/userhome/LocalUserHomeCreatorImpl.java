@@ -417,7 +417,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 log.debug("Using a DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
             }
             activateFileLoggingInUserHome();
-            applyDefaultConfigurationWhenMissing();
+            upgradeUserHomeConfigurationWhenMissing(this.userConfigurationProperties.getDefaultDataDomain());
             return;
         }
 
@@ -459,9 +459,10 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     /**
      * Verifies if the user home configuration (and the local settings) are valid and are not missing configuration.
      * Applies missing default observability check configuration when it is not configured.
+     * @param dataDomain Data Domain name.
      */
-    public void applyDefaultConfigurationWhenMissing() {
-        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(this.userConfigurationProperties.getDefaultDataDomain());
+    public void upgradeUserHomeConfigurationWhenMissing(String dataDomain) {
+        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(dataDomain);
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();

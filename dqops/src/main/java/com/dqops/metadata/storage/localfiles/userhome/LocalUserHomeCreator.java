@@ -50,4 +50,11 @@ public interface LocalUserHomeCreator {
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
      */
     void ensureDefaultUserHomeIsInitialized(boolean isHeadless);
+
+    /**
+     * Verifies if the user home configuration (and the local settings) are valid and are not missing configuration.
+     * Applies missing default observability check configuration when it is not configured.
+     * @param dataDomain Data Domain name.
+     */
+    void upgradeUserHomeConfigurationWhenMissing(String dataDomain);
 }
