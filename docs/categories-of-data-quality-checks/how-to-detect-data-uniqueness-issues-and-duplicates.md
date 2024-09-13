@@ -308,6 +308,13 @@ spec:
     daily:
       uniqueness:
         daily_duplicate_record_percent:
+          parameters:
+            columns:
+            - edition
+            - measure_name
+            - report_type
+            - state_name
+            - subpopulation
           error:
             max_percent: 0.0
 ```
