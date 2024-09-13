@@ -729,7 +729,8 @@ public class JobsController {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             try {
                 Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
-                        sequenceNumber, this.dqoQueueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
+                        sequenceNumber, this.dqoQueueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS,
+                        principal.getDataDomainIdentity().getDataDomainCloud());
                 Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
                         error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(
                                 new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)));

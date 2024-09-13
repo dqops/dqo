@@ -35885,6 +35885,8 @@ definitions:
       statusChangedAt:
         type: "integer"
         format: "int64"
+      domainName:
+        type: "string"
   DqoJobEntryParametersModel:
     type: "object"
     properties:
@@ -35970,6 +35972,8 @@ definitions:
       statusChangedAt:
         type: "integer"
         format: "int64"
+      dataDomain:
+        type: "string"
   DqoJobQueueIncrementalSnapshotModel:
     type: "object"
     properties:

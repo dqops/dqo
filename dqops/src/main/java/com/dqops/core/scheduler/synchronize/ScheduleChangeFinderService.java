@@ -27,7 +27,8 @@ public interface ScheduleChangeFinderService {
      * Returns two list of schedules, those new schedules to add and outdated schedules to remove.
      *
      * @param currentRunningSchedules Current running schedules.
+     * @param dataDomainName Data domain name.
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
-    JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules);
+    JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName);
 }

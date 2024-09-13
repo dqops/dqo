@@ -24,7 +24,6 @@ import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
-import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -150,7 +149,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
 
         String authorizationToken = extractAuthenticationBearerToken(request);
         if (authorizationToken != null) {
-            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createLocalDomainUserPrincipal();
             DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getDataDomainIdentity());  // NOTE: this operation will support only the api key of the primary data domain
             if (apiKey != null && Objects.equals(authorizationToken, apiKey.getApiKeyToken())) {
                 Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
@@ -296,7 +295,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 }
             }
 
-            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createLocalDomainUserPrincipal();
             if (this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getDataDomainIdentity()) == null) {
                 log.warn("DQOps Cloud pairing API Key missing, cannot use federated authentication");
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));

@@ -40,6 +40,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
     private DqoJobStatus status;
     private String errorMessage;
     private Instant statusChangedAt;
+    private String dataDomain;
     @JsonIgnore
     private DqoJobQueueEntry jobQueueEntry;
 
@@ -64,6 +65,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
         this.status = DqoJobStatus.queued;
         this.statusChangedAt = Instant.now();
         this.jobQueueEntry = jobQueueEntry;
+        this.dataDomain = jobQueueEntry.getJob().getPrincipal().getDataDomainIdentity().getDataDomainCloud();
     }
 
     /**
@@ -77,6 +79,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
         this.status = DqoJobStatus.queued;
         this.statusChangedAt = jobQueueEntry.getJobId().getCreatedAt();
         this.jobQueueEntry = jobQueueEntry;
+        this.dataDomain = jobQueueEntry.getJob().getPrincipal().getDataDomainIdentity().getDataDomainCloud();
     }
 
     /**
@@ -160,6 +163,14 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
      */
     public void setStatusChangedAt(Instant statusChangedAt) {
         this.statusChangedAt = statusChangedAt;
+    }
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDataDomain() {
+        return dataDomain;
     }
 
     /**

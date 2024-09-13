@@ -99,9 +99,10 @@ public interface DqoJobQueueMonitoringService {
      * @param lastChangeId Last change id to get changes after.
      * @param timeout Timeout to wait.
      * @param timeUnit Timeout unit.
+     * @param domainName Data domain name.
      * @return Mono with a list of changes and the next sequence id.
      */
-    Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit);
+    Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit, String domainName);
 
     /**
      * Publishes the current folder synchronization status.

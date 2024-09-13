@@ -71,7 +71,7 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAuthenticatedWithDefaultDqoCloudApiKey() {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainUserPrincipal();
         UsernamePasswordAuthenticationToken localUserAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userPrincipal, userPrincipal.getApiKeyPayload(), userPrincipal.getPrivileges());
         return localUserAuthenticationToken;

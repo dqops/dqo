@@ -18,6 +18,8 @@ package com.dqops.core.domains;
 
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.locks.UserHomeLockManager;
+import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,20 +38,28 @@ public class DataDomainManagerImpl implements DataDomainManager {
     private final LocalUserHomeCreator localUserHomeCreator;
     private final HomeLocationFindService homeLocationFindService;
     private final DataDomainRegistry dataDomainRegistry;
+    private final UserHomeLockManager userHomeLockManager;
+    private final JobSchedulerService jobSchedulerService;
 
     /**
      * Dependency injection constructor.
      * @param localUserHomeCreator User home creator to set up the domain folder structure.
      * @param homeLocationFindService Service to find the home location.
-     * @param dataDomainRegistry Data domain registry
+     * @param dataDomainRegistry Data domain registry.
+     * @param userHomeLockManager User home lock manager - to register locks.
+     * @param jobSchedulerService Job scheduler service.
      */
     @Autowired
     public DataDomainManagerImpl(LocalUserHomeCreator localUserHomeCreator,
                                  HomeLocationFindService homeLocationFindService,
-                                 DataDomainRegistry dataDomainRegistry) {
+                                 DataDomainRegistry dataDomainRegistry,
+                                 UserHomeLockManager userHomeLockManager,
+                                 JobSchedulerService jobSchedulerService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.homeLocationFindService = homeLocationFindService;
         this.dataDomainRegistry = dataDomainRegistry;
+        this.userHomeLockManager = userHomeLockManager;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -72,6 +82,8 @@ public class DataDomainManagerImpl implements DataDomainManager {
         Path dataDomainRootFolder = pathToRootUserHome.resolve(domainRootVirtualFolder.toRelativePath());
         String pathToDataDomainFolder = dataDomainRootFolder.toString();
 
+        this.userHomeLockManager.createLocksForDataDomain(dataDomainName);
+
         if (this.localUserHomeCreator.isDqoUserHomeInitialized(pathToDataDomainFolder)) {
             this.localUserHomeCreator.upgradeUserHomeConfigurationWhenMissing(dataDomainName);
         } else {
@@ -93,6 +105,6 @@ public class DataDomainManagerImpl implements DataDomainManager {
         boolean deleteDomain = updatedDataDomainSpec == null;
         boolean updateDomainSettings = existingDataDomainSpec != null && updatedDataDomainSpec != null;
 
-        // TODO...
+        this.jobSchedulerService.reconcileScheduledDomains(); // update the list of schedules (activate or deactivate)
     }
 }

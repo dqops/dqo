@@ -132,7 +132,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
             Instant keyLatestExpiresAt = Instant.now().plus(15, ChronoUnit.MINUTES);
             if (this.grantingTicketPayloadSignedObject == null ||
                     this.grantingTicketPayloadSignedObject.getTarget().getExpiresAt().isAfter(keyLatestExpiresAt)) {
-                DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
+                DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalDomainUserPrincipal();
 
                 UserDomainIdentity userIdentity = userPrincipalForAdministrator.getDataDomainIdentity();
                 ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userIdentity);
@@ -174,7 +174,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
         }
 
         String ticketGrantingTicket = this.getTicketGrantingTicket();
-        DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalDomainUserPrincipal();
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
         String dqoCloudUiUrlBase = this.dqoCloudConfigurationProperties.getUiBaseUrl();
 

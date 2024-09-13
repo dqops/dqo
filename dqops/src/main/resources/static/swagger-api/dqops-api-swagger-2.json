@@ -37269,6 +37269,9 @@
         "statusChangedAt" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "domainName" : {
+          "type" : "string"
         }
       }
     },
@@ -37352,6 +37355,9 @@
         "statusChangedAt" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "dataDomain" : {
+          "type" : "string"
         }
       }
     },

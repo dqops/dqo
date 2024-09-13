@@ -57,6 +57,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
      * Sets up lock roots for a given data domain.
      * @param dataDomain Data domain name.
      */
+    @Override
     public void createLocksForDataDomain(String dataDomain) {
         long lockWaitTimeoutSeconds = this.coreConfigurationProperties.getLockWaitTimeoutSeconds();
 

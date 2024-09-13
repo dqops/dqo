@@ -23,6 +23,7 @@ import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.scheduler.quartz.JobDataMapAdapter;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJobParameters;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -57,6 +58,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     private ParentDqoJobQueue dqoJobQueue;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private DqoUserPrincipalProvider principalProvider;
+    private JobDataMapAdapter jobDataMapAdapter;
     private static LocalDateTime lastExecutedAtHour;
     private static int jobRunCount;
     private static Random random = new Random();
@@ -69,16 +71,19 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
      * @param dqoJobQueue DQOps job queue to push the actual job to execute.
      * @param dqoSchedulerConfigurationProperties DQOps cron scheduler configuration properties.
      * @param principalProvider Principal provider for the local instance.
+     * @param jobDataMapAdapter Job data map adapter.
      */
     @Autowired
     public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
                                            ParentDqoJobQueue dqoJobQueue,
                                            DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
-                                           DqoUserPrincipalProvider principalProvider) {
+                                           DqoUserPrincipalProvider principalProvider,
+                                           JobDataMapAdapter jobDataMapAdapter) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.principalProvider = principalProvider;
+        this.jobDataMapAdapter = jobDataMapAdapter;
     }
 
     /**
@@ -89,7 +94,8 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator(); // TODO: get the principal from the job
+            String dataDomain = this.jobDataMapAdapter.getDataDomain(jobExecutionContext.getTrigger().getJobDataMap());
+            DqoUserPrincipal principal = this.principalProvider.createLocalDomainUserPrincipal(dataDomain);
             DqoCloudApiKeyPayload cloudApiKeyPayload = principal.getApiKeyPayload();
             if (cloudApiKeyPayload == null) {
                 return;

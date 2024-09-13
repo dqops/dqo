@@ -31,6 +31,7 @@ public class DqoJobChangeModel implements Comparable<DqoJobChangeModel> {
     private long changeSequence;
     private DqoJobHistoryEntryModel updatedModel;
     private Instant statusChangedAt;
+    private String domainName;
 
     /**
      * Creates a job change model by assigning a change sequence number.
@@ -42,6 +43,7 @@ public class DqoJobChangeModel implements Comparable<DqoJobChangeModel> {
         this.jobId = jobChange.getJobId();
         this.updatedModel = jobChange.getUpdatedModel();
         this.changeSequence = changeSequence;
+        this.domainName = jobChange.getDomainName();
         if (jobChange.getUpdatedModel() != null) {
             this.statusChangedAt = jobChange.getUpdatedModel().getStatusChangedAt();
         } else {
@@ -71,6 +73,14 @@ public class DqoJobChangeModel implements Comparable<DqoJobChangeModel> {
      */
     public long getChangeSequence() {
         return changeSequence;
+    }
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDomainName() {
+        return domainName;
     }
 
     /**

@@ -69,6 +69,12 @@ public interface JobSchedulerService {
     void triggerMetadataSynchronization();
 
     /**
+     * Analyzes the list of active data domains for which the job scheduler is scheduling jobs.
+     * Adds or removes jobs for all nested data domains.
+     */
+    void reconcileScheduledDomains();
+
+    /**
      * Returns the default job scheduler. The scheduler must be started first.
      *
      * @return Quartz scheduler instance.
@@ -79,15 +85,17 @@ public interface JobSchedulerService {
      * Retrieves all schedules configured on triggers for a given job.
      *
      * @param jobKey Job key for one of the known jobs like the run checks or scan metadata.
+     * @param dataDomainName Data domain name.
      * @return Returns a list of active schedules.
      */
-    UniqueSchedulesCollection getActiveSchedules(JobKey jobKey);
+    UniqueSchedulesCollection getActiveSchedules(JobKey jobKey, String dataDomainName);
 
     /**
      * Applies changes for a new list of schedules, new triggers are added, unused triggers are removed.
      *
      * @param schedulesDelta Schedule delta with schedules to add and schedules to remove.
      * @param jobKey         Target job to configure. Jobs are specified in the {@link JobKeys}
+     * @param dataDomainName Data domain name.
      */
-    void applyScheduleDeltaToJob(JobSchedulesDelta schedulesDelta, JobKey jobKey);
+    void applyScheduleDeltaToJob(JobSchedulesDelta schedulesDelta, JobKey jobKey, String dataDomainName);
 }

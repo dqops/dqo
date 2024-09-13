@@ -31,6 +31,7 @@ import com.dqops.core.synchronization.filesystems.local.LocalSynchronizationFile
 import com.dqops.metadata.fileindices.FileIndexName;
 import com.dqops.metadata.fileindices.FileIndexWrapper;
 import com.dqops.metadata.fileindices.FileLocation;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -151,9 +152,10 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     public void detectNotSynchronizedChangesAllDomains() {
         this.detectNotSynchronizedChangesInDomain(this.dqoUserConfigurationProperties.getDefaultDataDomain());
 
-        Collection<String> nestedDataDomainNames = this.dataDomainRegistry.getNestedDataDomainNames();
-        for (String nestedDataDomainName : nestedDataDomainNames) {
-            this.detectNotSynchronizedChangesInDomain(nestedDataDomainName);
+        Collection<LocalDataDomainSpec> nestedDataDomains = this.dataDomainRegistry.getNestedDataDomainNames();
+        for (LocalDataDomainSpec nestedDataDomain : nestedDataDomains) {
+            String dataDomainName = nestedDataDomain.getDataDomainName();
+            this.detectNotSynchronizedChangesInDomain(dataDomainName);
         }
     }
 

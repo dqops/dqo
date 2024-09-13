@@ -58,11 +58,12 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
 
     /**
      * Loads (finds) all current schedules that are specified in the metadata.
+     * @param dataDomainName Data domain name.
      * @return All unique schedules to run data quality checks.
      */
-    public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true); // TODO: to support multiple data domains, we must iterate over data domains and scan them all
+    public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks(String dataDomainName) {
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainUserPrincipal(dataDomainName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 
@@ -95,13 +96,14 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * Loads all schedules configured in the metadata and compares the list with the current running schedules.
      * Returns two list of schedules, those new schedules to add and outdated schedules to remove.
      * @param currentRunningSchedules Current running schedules.
+     * @param dataDomainName Data domain name.
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
     @Override
-    public JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules) {
+    public JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName) {
         assert currentRunningSchedules != null;
 
-        UniqueSchedulesCollection currentMetadataSchedules = loadCurrentSchedulesForDataQualityChecks();
+        UniqueSchedulesCollection currentMetadataSchedules = loadCurrentSchedulesForDataQualityChecks(dataDomainName);
 
         UniqueSchedulesCollection schedulesToAdd = currentMetadataSchedules.minus(currentRunningSchedules);
         UniqueSchedulesCollection schedulesToRemove = currentRunningSchedules.minus(currentMetadataSchedules);

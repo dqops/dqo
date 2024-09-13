@@ -108,13 +108,13 @@ public class DataDomainRegistryImpl implements DataDomainRegistry {
      * @return List of nested domains.
      */
     @Override
-    public Collection<String> getNestedDataDomainNames() {
+    public Collection<LocalDataDomainSpec> getNestedDataDomainNames() {
         if (this.dataDomainManager == null) {
             throw new DqoRuntimeException("Data domain registry not initialized yet");
         }
 
         synchronized (this.lock) {
-            return Collections.unmodifiableCollection(new LinkedHashSet<>(this.loadedDomains.keySet()));
+            return Collections.unmodifiableCollection(new ArrayList<>(this.loadedDomains.values()));
         }
     }
 }

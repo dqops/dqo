@@ -27,17 +27,20 @@ public class DqoJobChange {
     private DqoJobType jobType;
     private String errorMessage;
     private DqoJobHistoryEntryModel updatedModel;
+    private String domainName;
 
     /**
      * Creates a job change entry.
      * @param status Job status.
      * @param updatedModel New job's model or an updated model.
+     * @param domainName Data domain name.
      */
-    public DqoJobChange(DqoJobStatus status, DqoJobHistoryEntryModel updatedModel) {
+    public DqoJobChange(DqoJobStatus status, DqoJobHistoryEntryModel updatedModel, String domainName) {
         this.status = status;
         this.updatedModel = updatedModel;
         this.jobId = updatedModel.getJobId();
         this.jobType = updatedModel.getJobType();
+        this.domainName = domainName;
     }
 
     /**
@@ -45,11 +48,13 @@ public class DqoJobChange {
      * @param status New job status.
      * @param jobId Job id.
      * @param jobType Job type.
+     * @param domainName Data domain name.
      */
-    public DqoJobChange(DqoJobStatus status, DqoQueueJobId jobId, DqoJobType jobType) {
+    public DqoJobChange(DqoJobStatus status, DqoQueueJobId jobId, DqoJobType jobType, String domainName) {
         this.status = status;
         this.jobId = jobId;
         this.jobType = jobType;
+        this.domainName = domainName;
     }
 
     /**
@@ -57,12 +62,14 @@ public class DqoJobChange {
      * @param jobId Job id.
      * @param errorMessage Error message.
      * @param jobType Job type.
+     * @param domainName Data domain name.
      */
-    public DqoJobChange(DqoQueueJobId jobId, String errorMessage, DqoJobType jobType) {
+    public DqoJobChange(DqoQueueJobId jobId, String errorMessage, DqoJobType jobType, String domainName) {
         this.status = DqoJobStatus.failed;
         this.jobId = jobId;
         this.errorMessage = errorMessage;
         this.jobType = jobType;
+        this.domainName = domainName;
     }
 
     /**
@@ -103,5 +110,13 @@ public class DqoJobChange {
      */
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDomainName() {
+        return domainName;
     }
 }

@@ -16,6 +16,8 @@
 
 package com.dqops.core.domains;
 
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
+
 import java.util.Collection;
 
 /**
@@ -34,5 +36,5 @@ public interface DataDomainRegistry {
      *
      * @return List of nested domains.
      */
-    Collection<String> getNestedDataDomainNames();
+    Collection<LocalDataDomainSpec> getNestedDataDomainNames();
 }

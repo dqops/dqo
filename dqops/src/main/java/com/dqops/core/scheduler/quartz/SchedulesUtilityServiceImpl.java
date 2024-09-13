@@ -15,6 +15,7 @@
  */
 package com.dqops.core.scheduler.quartz;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.scheduler.JobSchedulerException;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -55,7 +56,7 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
 
         Trigger scheduleTrigger;
         try {
-            scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY);
+            scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
         } catch (JobSchedulerException e) {
             return null;
         }

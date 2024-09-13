@@ -25,26 +25,30 @@ public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
     private DqoQueueJob<?> job;
     private DqoQueueJobId jobId;
     private JobConcurrencyConstraint[] jobConcurrencyConstraints;
+    private String domainName;
 
     /**
      * Creates a dqo job queue entry.
      * @param job Job.
      * @param jobId Job id.
      * @param jobConcurrencyConstraints Optional array of job concurrency constraints retrieved from the job. It is cached for the whole time when the job is awaiting on the queue.
+     * @param domainName Data domain name.
      */
-    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId, JobConcurrencyConstraint[] jobConcurrencyConstraints) {
+    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId, JobConcurrencyConstraint[] jobConcurrencyConstraints, String domainName) {
         this.job = job;
         this.jobId = jobId;
         this.jobConcurrencyConstraints = jobConcurrencyConstraints;
+        this.domainName = domainName;
     }
 
     /**
      * Creates a dqo job queue entry for a job that has no concurrency constrains (parallel execution limits).
      * @param job Job.
      * @param jobId Job id.
+     * @param domainName Domain name.
      */
-    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId) {
-        this(job, jobId, job.getConcurrencyConstraints());
+    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId, String domainName) {
+        this(job, jobId, job.getConcurrencyConstraints(), domainName);
     }
 
     /**
@@ -69,6 +73,14 @@ public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
      */
     public JobConcurrencyConstraint[] getJobConcurrencyConstraints() {
         return jobConcurrencyConstraints;
+    }
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDomainName() {
+        return domainName;
     }
 
     @Override

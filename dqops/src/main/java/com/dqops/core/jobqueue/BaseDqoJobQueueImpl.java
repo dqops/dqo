@@ -23,6 +23,7 @@ import com.dqops.core.jobqueue.exceptions.DqoJobQueuePushFailedException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
@@ -261,7 +262,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             for (int i = 0; i < startedThreadsCount; i++) {
                 try {
                     DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-                    this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
+                    this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId, UserDomainIdentity.DEFAULT_DATA_DOMAIN));
                 } catch (InterruptedException ex) {
                     log.error("Job queue stop() operation failed to publish a poison message", ex);
                 }
@@ -362,7 +363,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 newJobId.setJobBusinessKey(job.getJobBusinessKey());
                 job.setJobId(newJobId);
             }
-            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
             job.setPrincipal(principal);
             synchronized (this) {
                 this.jobsQueuedBeforeStart.add(jobQueueEntry);
@@ -382,7 +383,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 newJobId.setJobBusinessKey(job.getJobBusinessKey());
                 job.setJobId(newJobId);
             }
-            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
+            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
             job.setPrincipal(principal);
             this.jobEntriesByJobId.put(job.getJobId(), jobQueueEntry);
             if (job.getJobBusinessKey() != null) {

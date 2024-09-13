@@ -71,7 +71,9 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
         try {
             this.runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
             this.runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
-            DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal(); // TODO: user identity must be passed to the job, or at least the user identity, so we can get the principal
+            String dataDomain = this.jobDataMapAdapter.getDataDomain(jobExecutionContext.getTrigger().getJobDataMap());
+
+            DqoUserPrincipal principal = this.principalProvider.createLocalDomainUserPrincipal(dataDomain);
             this.dqoJobQueue.pushJob(this.runScheduledChecksJob, principal);
 
             this.runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
