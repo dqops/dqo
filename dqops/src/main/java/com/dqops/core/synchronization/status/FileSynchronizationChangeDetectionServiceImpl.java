@@ -152,7 +152,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     public void detectNotSynchronizedChangesAllDomains() {
         this.detectNotSynchronizedChangesInDomain(this.dqoUserConfigurationProperties.getDefaultDataDomain());
 
-        Collection<LocalDataDomainSpec> nestedDataDomains = this.localDataDomainRegistry.getNestedDataDomainNames();
+        Collection<LocalDataDomainSpec> nestedDataDomains = this.localDataDomainRegistry.getNestedDataDomains();
         for (LocalDataDomainSpec nestedDataDomain : nestedDataDomains) {
             String dataDomainName = nestedDataDomain.getDataDomainName();
             this.detectNotSynchronizedChangesInDomain(dataDomainName);

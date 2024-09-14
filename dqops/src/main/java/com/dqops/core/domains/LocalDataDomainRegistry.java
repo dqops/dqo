@@ -19,6 +19,7 @@ package com.dqops.core.domains;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Data domain registry that maintains the list of active data domains. When the list of domains is changed, it asks the data domain manager to update the domains.
@@ -36,5 +37,23 @@ public interface LocalDataDomainRegistry {
      *
      * @return List of nested domains.
      */
-    Collection<LocalDataDomainSpec> getNestedDataDomainNames();
+    Collection<LocalDataDomainSpec> getNestedDataDomains();
+
+    /**
+     * Replaces the current list of data domains with a new list of domains. Some domains are deleted, other created locally.
+     * @param newDataDomainList New list of data domains.
+     */
+    void replaceDataDomainList(List<LocalDataDomainSpec> newDataDomainList);
+
+    /**
+     * Adds a local data domain. Saves the domain to the local settings and starts the data domain locally.
+     * @param localDataDomainSpec Data domain specification.
+     */
+    void addDataDomain(LocalDataDomainSpec localDataDomainSpec);
+
+    /**
+     * Deletes a local data domain. Operations for the domain (job scheduling) is stopped, but the local data is preserved.
+     * @param dataDomainName Data domain name.
+     */
+    boolean deleteDataDomain(String dataDomainName);
 }

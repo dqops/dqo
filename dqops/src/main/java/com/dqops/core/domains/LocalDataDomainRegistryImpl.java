@@ -19,6 +19,7 @@ package com.dqops.core.domains;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Data domain registry that maintains the list of active data domains. When the list of domains is changed, it asks the data domain manager to update the domains.
@@ -82,24 +84,46 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
 
     /**
      * Activates a local data domain.
-     * @param dataDomainSpec Data domain specification.
+     * @param newDataDomainSpec Data domain specification.
      */
-    public void updateLocalDataDomain(LocalDataDomainSpec dataDomainSpec) {
+    public void updateLocalDataDomain(LocalDataDomainSpec newDataDomainSpec) {
+        LocalDataDomainSpec existingDomain;
+        LocalDataDomainSpec clonedNewDomainSpec = newDataDomainSpec.deepClone();
+
         synchronized (this.lock) {
-            String dataDomainName = dataDomainSpec.getDataDomainName();
-            LocalDataDomainSpec existingDomain = this.loadedDomains.get(dataDomainName);
-            if (existingDomain != null && !Objects.equals(existingDomain, dataDomainSpec)) {
+            String dataDomainName = newDataDomainSpec.getDataDomainName();
+            existingDomain = this.loadedDomains.get(dataDomainName);
+            if (existingDomain != null && !Objects.equals(existingDomain, newDataDomainSpec)) {
                 return; // no changes
             }
 
+            this.loadedDomains.put(dataDomainName, clonedNewDomainSpec);
+        }
+
+        if (existingDomain == null) {
+            this.localDataDomainManager.initializeLocalDataDomain(clonedNewDomainSpec);
+        } else {
+            this.localDataDomainManager.updateLocalDataDomain(existingDomain, clonedNewDomainSpec);
+        }
+    }
+
+    /**
+     * Deletes a local data domain.
+     * @param oldDomainName Local data domain name.
+     */
+    public void deleteLocalDataDomain(String oldDomainName) {
+        LocalDataDomainSpec existingDomain;
+
+        synchronized (this.lock) {
+            existingDomain = this.loadedDomains.get(oldDomainName);
             if (existingDomain == null) {
-                this.localDataDomainManager.initializeLocalDataDomain(dataDomainSpec);
-            } else {
-                this.localDataDomainManager.updateLocalDataDomain(existingDomain, dataDomainSpec);
+                return; // domain already deleted
             }
 
-            this.loadedDomains.put(dataDomainName, dataDomainSpec.deepClone());
+            this.loadedDomains.remove(oldDomainName);
         }
+
+        this.localDataDomainManager.updateLocalDataDomain(existingDomain, null);
     }
 
     /**
@@ -108,7 +132,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
      * @return List of nested domains.
      */
     @Override
-    public Collection<LocalDataDomainSpec> getNestedDataDomainNames() {
+    public Collection<LocalDataDomainSpec> getNestedDataDomains() {
         if (this.localDataDomainManager == null) {
             throw new DqoRuntimeException("Data domain registry not initialized yet");
         }
@@ -116,5 +140,92 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         synchronized (this.lock) {
             return Collections.unmodifiableCollection(new ArrayList<>(this.loadedDomains.values()));
         }
+    }
+
+    /**
+     * Replaces the current list of data domains with a new list of domains. Some domains are deleted, other created locally.
+     *
+     * @param newDataDomainList New list of data domains.
+     */
+    @Override
+    public void replaceDataDomainList(List<LocalDataDomainSpec> newDataDomainList) {
+        Map<String, LocalDataDomainSpec> currentDataDomainsMap = getNestedDataDomains()
+                .stream()
+                .collect(Collectors.toMap(spec -> spec.getDataDomainName(), spec -> spec));
+
+        Map<String, LocalDataDomainSpec> newDataDomainsMap = newDataDomainList
+                .stream()
+                .collect(Collectors.toMap(spec -> spec.getDataDomainName(), spec -> spec));
+
+        for (Map.Entry<String, LocalDataDomainSpec> newDomainEntry : newDataDomainsMap.entrySet()) {
+            String domainName = newDomainEntry.getKey();
+
+            LocalDataDomainSpec newDomainSpec = newDomainEntry.getValue();
+            LocalDataDomainSpec clonedNewDomainSpec = newDomainSpec.deepClone();
+            LocalDataDomainSpec existingDomain = currentDataDomainsMap.get(domainName);
+            if (existingDomain != null) {
+                clonedNewDomainSpec.copyLocalPropertiesFrom(existingDomain);
+            }
+
+            this.updateLocalDataDomain(newDomainSpec);
+        }
+
+        for (String oldDomainName : currentDataDomainsMap.keySet()) {
+            if (newDataDomainsMap.containsKey(oldDomainName)) {
+                continue; // this domain still exists
+            }
+
+            this.deleteLocalDataDomain(oldDomainName);
+        }
+    }
+
+    /**
+     * Adds a local data domain. Saves the domain to the local settings and starts the data domain locally.
+     *
+     * @param localDataDomainSpec Data domain specification.
+     */
+    @Override
+    public void addDataDomain(LocalDataDomainSpec localDataDomainSpec) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
+        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
+        }
+
+        LocalDataDomainSpecMap dataDomains = localSettingsSpec.getDataDomains();
+        dataDomains.put(localDataDomainSpec.getDataDomainName(), localDataDomainSpec);
+
+        this.updateLocalDataDomain(localDataDomainSpec); // start the domain
+
+        userHomeContext.flush(); // save the configuration
+    }
+
+    /**
+     * Deletes a local data domain. Operations for the domain (job scheduling) is stopped, but the local data is preserved.
+     *
+     * @param dataDomainName Data domain name.
+     */
+    @Override
+    public boolean deleteDataDomain(String dataDomainName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
+        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            return false;
+        }
+
+        LocalDataDomainSpecMap dataDomains = localSettingsSpec.getDataDomains();
+        if (!dataDomains.containsKey(dataDomainName)) {
+            return false;
+        }
+
+        dataDomains.remove(dataDomainName);
+        userHomeContext.flush(); // save the configuration
+
+        this.deleteLocalDataDomain(dataDomainName);
+
+        return true;
     }
 }

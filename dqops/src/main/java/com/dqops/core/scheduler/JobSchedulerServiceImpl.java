@@ -260,7 +260,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         Set<String> allNewDataDomains = new LinkedHashSet<>();
         DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalDomainUserPrincipal();
         allNewDataDomains.add(userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud());
-        Set<String> nestedDataDomainNames = this.localDataDomainRegistry.getNestedDataDomainNames()
+        Set<String> nestedDataDomainNames = this.localDataDomainRegistry.getNestedDataDomains()
                 .stream()
                 .filter(dataDomainSpec -> dataDomainSpec.isEnableScheduler())
                 .map(dataDomainSpec -> dataDomainSpec.getDataDomainName())

@@ -72,6 +72,8 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
             case data_incidents:
                 return accessTokenIssueApi.issueBucketIncidentsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 
+            // NOTE: error samples are not synchronized to the cloud because they can contain sensitive information (they are not statistics)
+
             case sources:
                 return accessTokenIssueApi.issueBucketSourcesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), tenantIdFull);
 

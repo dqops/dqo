@@ -16,11 +16,13 @@
 
 package com.dqops.metadata.settings.domains;
 
+import com.dqops.cloud.rest.model.DataDomainModel;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -53,6 +55,21 @@ public class LocalDataDomainSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Enables the job scheduler for this domain.")
     private boolean enableScheduler = true;
+
+    /**
+     * Creates a local data domain specification from the data domain model returned by the DQOps Cloud.
+     * @param cloudDataDomainModel DQOps Cloud data domain.
+     * @return Local data domain.
+     */
+    public static LocalDataDomainSpec createFromCloudDomainModel(DataDomainModel cloudDataDomainModel) {
+        LocalDataDomainSpec localDataDomainSpec = new LocalDataDomainSpec() {{
+            setDataDomainName(cloudDataDomainModel.getDataDomainName());
+            setDisplayName(cloudDataDomainModel.getDisplayName());
+            setCreatedAt(cloudDataDomainModel.getCreatedAt());
+        }};
+
+        return localDataDomainSpec;
+    }
 
     /**
      * Returns true when the job scheduler is enabled for this domain.
@@ -142,11 +159,33 @@ public class LocalDataDomainSpec extends AbstractSpec {
     }
 
     /**
+     * Sets the data domain name. Works only when the object has no domain name yet.
+     * @param dataDomainName Data domain name.
+     */
+    @JsonIgnore
+    public void setDataDomainName(String dataDomainName) {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId != null) {
+            throw new DqoRuntimeException("Cannot change the data domain name once it is already set");
+        }
+
+        this.setHierarchyId(new HierarchyId("settings", "spec", "data_domains", dataDomainName));
+    }
+
+    /**
      * Creates and returns a copy of this object.
      */
     @Override
     public LocalDataDomainSpec deepClone() {
         LocalDataDomainSpec cloned = (LocalDataDomainSpec) super.deepClone();
         return cloned;
+    }
+
+    /**
+     * Copies local settings from an old domain specification.
+     * @param existingDomain Existing domain.
+     */
+    public void copyLocalPropertiesFrom(LocalDataDomainSpec existingDomain) {
+        this.setEnableScheduler(existingDomain.isEnableScheduler());
     }
 }
