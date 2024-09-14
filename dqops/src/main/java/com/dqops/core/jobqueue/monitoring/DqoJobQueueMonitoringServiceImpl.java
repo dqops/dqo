@@ -348,7 +348,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
-                    .values());
+                    .values())
+                    .stream()
+                    .filter(dqoJobChangeModel -> Objects.equals(dqoJobChangeModel.getDomainName(), domainName))
+                    .collect(Collectors.toList());
 
             if (this.started && changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
@@ -375,7 +378,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                             long nextChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
                             List<DqoJobChangeModel> newChangesList = new ArrayList<>(this.jobChanges
                                     .tailMap(lastChangeId, false)
-                                    .values());
+                                    .values())
+                                    .stream()
+                                    .filter(dqoJobChangeModel -> Objects.equals(dqoJobChangeModel.getDomainName(), domainName))
+                                    .collect(Collectors.toList());
 
                             return new DqoJobQueueIncrementalSnapshotModel(newChangesList, this.currentSynchronizationStatus, nextChangeId);
                         }
