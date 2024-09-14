@@ -36,6 +36,8 @@ tags:
 - name: "Dashboards"
   description: "Operations for retrieving the list of data quality dashboards supported\
     \ by DQOps and issuing short-term access keys to open a dashboard."
+- name: "DataDomains"
+  description: "Data domain management API to create different data domains."
 - name: "DataGroupingConfigurations"
   description: "Operations for managing the configuration of data groupings on a table\
     \ level in DQOps."
@@ -12402,6 +12404,149 @@ paths:
               format: "byte"
         404:
           description: "Data dictionary not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/:
+    get:
+      tags:
+      - "DataDomains"
+      summary: "getLocalDataDomains"
+      description: "Returns a list of local data domains that this instance is maintaining.\
+        \ Data domains are supported only in an ENTERPRISE versions of DQOps."
+      operationId: "getLocalDataDomains"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LocalDataDomainModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DataDomains"
+      summary: "createDataDomain"
+      description: "Creates a new data domain given a data domain display name."
+      operationId: "createDataDomain"
+      consumes:
+      - "text/plain"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data domain display name"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LocalDataDomainModel"
+        201:
+          description: "New data domain successfully created"
+          schema:
+            $ref: "#/definitions/LocalDataDomainModel"
+        400:
+          description: "Bad request, adjust before retrying"
+        409:
+          description: "Data domain with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    patch:
+      tags:
+      - "DataDomains"
+      summary: "synchronizeDataDomains"
+      description: "Synchronizes the domains in the SaaS cloud to this instance. All\
+        \ data domains will be created locally."
+      operationId: "synchronizeDataDomains"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data domain successfully synchronized"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/{dataDomainName}:
+    delete:
+      tags:
+      - "DataDomains"
+      summary: "deleteDataDomain"
+      description: "Deletes a data domain. The domain is deleted in the DQOps SaaS\
+        \ cloud and locally."
+      operationId: "deleteDataDomain"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataDomainName"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data domain successfully deleted"
+        404:
+          description: "Data domain not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/{dataDomainName}/switch:
+    get:
+      tags:
+      - "DataDomains"
+      summary: "switchToDataDomain"
+      description: "Switches to a different data domain. This operation sends a special\
+        \ cookie."
+      operationId: "switchToDataDomain"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataDomainName"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        303:
+          description: "Redirect to a valid screen sent"
         500:
           description: "Internal Server Error"
           schema:
@@ -36146,6 +36291,10 @@ definitions:
         type: "boolean"
         description: "User can change his own password in DQOps Cloud, because the\
           \ DQOps Cloud Pairing API Key is valid and synchronization is enabled."
+      can_use_data_domains:
+        type: "boolean"
+        description: "User can use data domains. Support for data domains requires\
+          \ an ENTERPRISE license of DQOps."
     description: "The model that describes the current user and his access rights."
   DuckdbParametersSpec:
     type: "object"
@@ -37217,6 +37366,24 @@ definitions:
     description: "Label model that is returned by the REST API. A label is a tag that\
       \ was assigned to a data source, table, column or a single check. Labels play\
       \ the role of a business glossary."
+  LocalDataDomainModel:
+    type: "object"
+    properties:
+      domain_name:
+        type: "string"
+        description: "Data domain name."
+      display_name:
+        type: "string"
+        description: "Data domain display name (user-friendly name)."
+      created_at:
+        type: "string"
+        format: "date-time"
+        description: "Data domain creation time."
+      enable_scheduler:
+        type: "boolean"
+        description: "Enables the job scheduler for this domain."
+    description: "Model that describes a local data domain. It is also used to create\
+      \ new data domains."
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:

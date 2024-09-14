@@ -56,4 +56,11 @@ public interface LocalDataDomainRegistry {
      * @param dataDomainName Data domain name.
      */
     boolean deleteDataDomain(String dataDomainName);
+
+    /**
+     * Returns a data domain given the technical domain name.
+     * @param dataDomainName Data domain name.
+     * @return Data domain or null, when this domain is not maintained locally.
+     */
+    LocalDataDomainSpec getDomain(String dataDomainName);
 }

@@ -228,4 +228,17 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
 
         return true;
     }
+
+    /**
+     * Returns a data domain given the technical domain name.
+     *
+     * @param dataDomainName Data domain name.
+     * @return Data domain or null, when this domain is not maintained locally.
+     */
+    @Override
+    public LocalDataDomainSpec getDomain(String dataDomainName) {
+        synchronized (this.lock) {
+            return this.loadedDomains.get(dataDomainName);
+        }
+    }
 }

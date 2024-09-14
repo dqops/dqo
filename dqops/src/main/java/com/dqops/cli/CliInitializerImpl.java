@@ -36,7 +36,7 @@ import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.storage.TablesawParquetSupportFix;
 import com.dqops.metadata.labels.labelloader.LabelsIndexer;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
-import com.dqops.rest.server.LocalUrlAddresses;
+import com.dqops.rest.server.LocalUrlAddressesProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.python.PythonExecutionException;
 import com.dqops.utils.python.PythonVirtualEnv;
@@ -66,7 +66,7 @@ public class CliInitializerImpl implements CliInitializer {
     private FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private TerminalWriter terminalWriter;
-    private LocalUrlAddresses localUrlAddresses;
+    private LocalUrlAddressesProvider localUrlAddressesProvider;
     private PythonVirtualEnvService pythonVirtualEnvService;
     private RootConfigurationProperties rootConfigurationProperties;
     private DqoUserPrincipalProvider dqoUserPrincipalProvider;
@@ -89,7 +89,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param fileSynchronizationChangeDetectionService File synchronization changes detection service compares the dates, sizes and existence of all files that can be synchronized to the DQOps Cloud with an index of previously synchronized files.
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
-     * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
+     * @param localUrlAddressesProvider Local URL addresses - used to store centralized information regarding URLs.
      * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
      * @param rootConfigurationProperties Root configuration parameters that are mapped to parameters not configured without any prefix, such as --silent.
      * @param dqoUserPrincipalProvider User principal provider.
@@ -111,7 +111,7 @@ public class CliInitializerImpl implements CliInitializer {
                               FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService,
                               DefaultTimeZoneProvider defaultTimeZoneProvider,
                               TerminalWriter terminalWriter,
-                              LocalUrlAddresses localUrlAddresses,
+                              LocalUrlAddressesProvider localUrlAddressesProvider,
                               PythonVirtualEnvService pythonVirtualEnvService,
                               RootConfigurationProperties rootConfigurationProperties,
                               DqoUserPrincipalProvider dqoUserPrincipalProvider,
@@ -131,7 +131,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.fileSynchronizationChangeDetectionService = fileSynchronizationChangeDetectionService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.terminalWriter = terminalWriter;
-        this.localUrlAddresses = localUrlAddresses;
+        this.localUrlAddressesProvider = localUrlAddressesProvider;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
         this.rootConfigurationProperties = rootConfigurationProperties;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
@@ -182,7 +182,7 @@ public class CliInitializerImpl implements CliInitializer {
      * Shows the initial information with the links to the UI.
      */
     protected void displayUiLinks() {
-        String dqoUiHome = this.localUrlAddresses.getDqopsUiUrl();
+        String dqoUiHome = this.localUrlAddressesProvider.getDqopsUiUrl();
         this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
         this.terminalWriter.writeUrl(dqoUiHome, "- DQOps User Interface Console (" + dqoUiHome + ")\n");
 

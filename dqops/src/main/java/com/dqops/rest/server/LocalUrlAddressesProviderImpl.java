@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * Returns the configuration of the default web server url.
  */
 @Component
-public class LocalUrlAddressesImpl implements LocalUrlAddresses {
+public class LocalUrlAddressesProviderImpl implements LocalUrlAddressesProvider {
     public static final String PROTOCOL = "http://";
     public static final String DEFAULT_HOST = "localhost";
     public static final String SWAGGER_UI_PATH = "/swagger-ui";
@@ -36,7 +36,7 @@ public class LocalUrlAddressesImpl implements LocalUrlAddresses {
      * @param serverConfigurationProperties Server configuration properties.
      */
     @Autowired
-    public LocalUrlAddressesImpl(ServerConfigurationProperties serverConfigurationProperties) {
+    public LocalUrlAddressesProviderImpl(ServerConfigurationProperties serverConfigurationProperties) {
         this.serverConfigurationProperties = serverConfigurationProperties;
     }
 

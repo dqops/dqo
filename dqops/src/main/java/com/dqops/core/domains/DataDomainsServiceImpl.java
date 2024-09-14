@@ -203,10 +203,10 @@ public class DataDomainsServiceImpl implements DataDomainsService {
     /**
      * Creates a new data domain on the server and then create a local data domain.
      * @param dataDomainDisplayName Data domain display name.
-     * @return Data domain technical name.
+     * @return Data domain model.
      */
     @Override
-    public String createDataDomain(String dataDomainDisplayName) {
+    public LocalDataDomainModel createDataDomain(String dataDomainDisplayName) {
         try {
             boolean isValidName = validateProposedDataDomainName(dataDomainDisplayName);
             if (!isValidName) {
@@ -224,7 +224,8 @@ public class DataDomainsServiceImpl implements DataDomainsService {
 
             this.localDataDomainRegistry.addDataDomain(localDataDomainSpec);
 
-            return cloudDataDomainModel.getDataDomainName();
+            LocalDataDomainModel localDataDomainModel = LocalDataDomainModel.createFromSpec(localDataDomainSpec);
+            return localDataDomainModel;
         }
         catch (Exception ex) {
             throw new DqoDataDomainException("Cannot create a new data domain. Your DQOps Cloud API Key is invalid, or you don't have an ENTERPRISE license of DQOps.", ex);

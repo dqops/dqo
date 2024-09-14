@@ -24,9 +24,11 @@ import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -145,6 +147,9 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         HttpCookie selectedDataDomain = exchange.getRequest().getCookies().getFirst(DATA_DOMAIN_COOKIE);
         if (selectedDataDomain != null) {
             activeDataDomainCloudName = selectedDataDomain.getValue();
+            if (Strings.isNullOrEmpty(activeDataDomainCloudName) || Objects.equals(activeDataDomainCloudName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME)) {
+                activeDataDomainCloudName = UserDomainIdentity.DEFAULT_DATA_DOMAIN; // switching to the default (root) domain
+            }
         }
 
         String authorizationToken = extractAuthenticationBearerToken(request);

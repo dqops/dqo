@@ -19,7 +19,7 @@ package com.dqops.rest.server;
 /**
  * Returns the configuration of the default web server url.
  */
-public interface LocalUrlAddresses {
+public interface LocalUrlAddressesProvider {
     /**
      * Returns the url of the DQOps user interface.
      *

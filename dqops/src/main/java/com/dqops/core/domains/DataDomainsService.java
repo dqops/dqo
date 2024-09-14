@@ -38,9 +38,9 @@ public interface DataDomainsService {
      * Creates a new data domain on the server and then create a local data domain.
      *
      * @param dataDomainDisplayName Data domain display name.
-     * @return Data domain technical name.
+     * @return Data domain model.
      */
-    String createDataDomain(String dataDomainDisplayName);
+    LocalDataDomainModel createDataDomain(String dataDomainDisplayName);
 
     /**
      * Deletes a data domain from the server and locally.
