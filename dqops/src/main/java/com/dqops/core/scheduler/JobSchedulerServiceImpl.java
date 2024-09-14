@@ -16,7 +16,7 @@
 package com.dqops.core.scheduler;
 
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
-import com.dqops.core.domains.DataDomainRegistry;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -69,7 +69,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private DqoUserPrincipalProvider principalProvider;
-    private DataDomainRegistry dataDomainRegistry;
+    private LocalDataDomainRegistry localDataDomainRegistry;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
@@ -89,7 +89,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param defaultTimeZoneProvider Default time zone provider.
      * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
      * @param principalProvider Local user principal provider.
-     * @param dataDomainRegistry Local data domain registry.
+     * @param localDataDomainRegistry Local data domain registry.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -103,7 +103,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    DefaultTimeZoneProvider defaultTimeZoneProvider,
                                    DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                    DqoUserPrincipalProvider principalProvider,
-                                   DataDomainRegistry dataDomainRegistry) {
+                                   LocalDataDomainRegistry localDataDomainRegistry) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
@@ -115,7 +115,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.principalProvider = principalProvider;
-        this.dataDomainRegistry = dataDomainRegistry;
+        this.localDataDomainRegistry = localDataDomainRegistry;
     }
 
     /**
@@ -260,7 +260,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         Set<String> allNewDataDomains = new LinkedHashSet<>();
         DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalDomainUserPrincipal();
         allNewDataDomains.add(userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud());
-        Set<String> nestedDataDomainNames = this.dataDomainRegistry.getNestedDataDomainNames()
+        Set<String> nestedDataDomainNames = this.localDataDomainRegistry.getNestedDataDomainNames()
                 .stream()
                 .filter(dataDomainSpec -> dataDomainSpec.isEnableScheduler())
                 .map(dataDomainSpec -> dataDomainSpec.getDataDomainName())

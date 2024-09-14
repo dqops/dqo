@@ -16,7 +16,7 @@
 package com.dqops.core.synchronization.status;
 
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
-import com.dqops.core.domains.DataDomainRegistry;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.filesystem.metadata.FileDifference;
 import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.locks.AcquiredSharedReadLock;
@@ -56,7 +56,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     private DqoUserPrincipalProvider principalProvider;
     private DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private UserDomainIdentityFactory userDomainIdentityFactory;
-    private DataDomainRegistry dataDomainRegistry;
+    private LocalDataDomainRegistry localDataDomainRegistry;
 
     /**
      * Creates a local file change detection service.
@@ -67,7 +67,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      * @param principalProvider Principal provider.
      * @param dqoUserConfigurationProperties Default configuration parameters.
      * @param userDomainIdentityFactory User data domain identity factory.
-     * @param dataDomainRegistry Data domain registry.
+     * @param localDataDomainRegistry Data domain registry.
      */
     @Autowired
     public FileSynchronizationChangeDetectionServiceImpl(
@@ -78,7 +78,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
             DqoUserPrincipalProvider principalProvider,
             DqoUserConfigurationProperties dqoUserConfigurationProperties,
             UserDomainIdentityFactory userDomainIdentityFactory,
-            DataDomainRegistry dataDomainRegistry) {
+            LocalDataDomainRegistry localDataDomainRegistry) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.localSynchronizationFileSystemFactory = localSynchronizationFileSystemFactory;
         this.userHomeLockManager = userHomeLockManager;
@@ -86,7 +86,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
         this.principalProvider = principalProvider;
         this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
-        this.dataDomainRegistry = dataDomainRegistry;
+        this.localDataDomainRegistry = localDataDomainRegistry;
     }
 
     /**
@@ -152,7 +152,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     public void detectNotSynchronizedChangesAllDomains() {
         this.detectNotSynchronizedChangesInDomain(this.dqoUserConfigurationProperties.getDefaultDataDomain());
 
-        Collection<LocalDataDomainSpec> nestedDataDomains = this.dataDomainRegistry.getNestedDataDomainNames();
+        Collection<LocalDataDomainSpec> nestedDataDomains = this.localDataDomainRegistry.getNestedDataDomainNames();
         for (LocalDataDomainSpec nestedDataDomain : nestedDataDomains) {
             String dataDomainName = nestedDataDomain.getDataDomainName();
             this.detectNotSynchronizedChangesInDomain(dataDomainName);

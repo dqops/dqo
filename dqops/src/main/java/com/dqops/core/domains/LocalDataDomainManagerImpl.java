@@ -34,10 +34,10 @@ import java.nio.file.Path;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class DataDomainManagerImpl implements DataDomainManager {
+public class LocalDataDomainManagerImpl implements LocalDataDomainManager {
     private final LocalUserHomeCreator localUserHomeCreator;
     private final HomeLocationFindService homeLocationFindService;
-    private final DataDomainRegistry dataDomainRegistry;
+    private final LocalDataDomainRegistry localDataDomainRegistry;
     private final UserHomeLockManager userHomeLockManager;
     private final JobSchedulerService jobSchedulerService;
 
@@ -45,19 +45,19 @@ public class DataDomainManagerImpl implements DataDomainManager {
      * Dependency injection constructor.
      * @param localUserHomeCreator User home creator to set up the domain folder structure.
      * @param homeLocationFindService Service to find the home location.
-     * @param dataDomainRegistry Data domain registry.
+     * @param localDataDomainRegistry Data domain registry.
      * @param userHomeLockManager User home lock manager - to register locks.
      * @param jobSchedulerService Job scheduler service.
      */
     @Autowired
-    public DataDomainManagerImpl(LocalUserHomeCreator localUserHomeCreator,
-                                 HomeLocationFindService homeLocationFindService,
-                                 DataDomainRegistry dataDomainRegistry,
-                                 UserHomeLockManager userHomeLockManager,
-                                 JobSchedulerService jobSchedulerService) {
+    public LocalDataDomainManagerImpl(LocalUserHomeCreator localUserHomeCreator,
+                                      HomeLocationFindService homeLocationFindService,
+                                      LocalDataDomainRegistry localDataDomainRegistry,
+                                      UserHomeLockManager userHomeLockManager,
+                                      JobSchedulerService jobSchedulerService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.homeLocationFindService = homeLocationFindService;
-        this.dataDomainRegistry = dataDomainRegistry;
+        this.localDataDomainRegistry = localDataDomainRegistry;
         this.userHomeLockManager = userHomeLockManager;
         this.jobSchedulerService = jobSchedulerService;
     }
@@ -67,7 +67,7 @@ public class DataDomainManagerImpl implements DataDomainManager {
      */
     @Override
     public void start() {
-        this.dataDomainRegistry.start(this);
+        this.localDataDomainRegistry.start(this);
     }
 
     /**

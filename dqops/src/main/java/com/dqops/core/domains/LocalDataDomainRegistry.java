@@ -23,13 +23,13 @@ import java.util.Collection;
 /**
  * Data domain registry that maintains the list of active data domains. When the list of domains is changed, it asks the data domain manager to update the domains.
  */
-public interface DataDomainRegistry {
+public interface LocalDataDomainRegistry {
     /**
      * Starts the service and loads the data domain list.
      *
-     * @param dataDomainManager Back reference to the data domain manager that will be used to manage local domains. It is provided a back reference to avoid circular references.
+     * @param localDataDomainManager Back reference to the data domain manager that will be used to manage local domains. It is provided a back reference to avoid circular references.
      */
-    void start(DataDomainManager dataDomainManager);
+    void start(LocalDataDomainManager localDataDomainManager);
 
     /**
      * Return a collection of nested data domain names (excluding the default domain).

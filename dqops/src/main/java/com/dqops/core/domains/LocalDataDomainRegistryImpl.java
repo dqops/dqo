@@ -36,12 +36,12 @@ import java.util.*;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class DataDomainRegistryImpl implements DataDomainRegistry {
+public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private final Object lock = new Object();
     private final LocalDataDomainSpecMap loadedDomains = new LocalDataDomainSpecMap();
-    private DataDomainManager dataDomainManager;
+    private LocalDataDomainManager localDataDomainManager;
 
     /**
      * Dependency injection constructor.
@@ -49,19 +49,19 @@ public class DataDomainRegistryImpl implements DataDomainRegistry {
      * @param dqoUserConfigurationProperties User home configuration parameters to detect if the instance was started with the default (root) domain and can have subdomain, or it is a single domain instance.
      */
     @Autowired
-    public DataDomainRegistryImpl(UserHomeContextFactory userHomeContextFactory,
-                                  DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+    public LocalDataDomainRegistryImpl(UserHomeContextFactory userHomeContextFactory,
+                                       DqoUserConfigurationProperties dqoUserConfigurationProperties) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
     }
 
     /**
      * Starts the service and loads the data domain list.
-     * @param dataDomainManager Back reference to the data domain manager that will be used to manage local domains. It is provided a back reference to avoid circular references.
+     * @param localDataDomainManager Back reference to the data domain manager that will be used to manage local domains. It is provided a back reference to avoid circular references.
      */
     @Override
-    public void start(DataDomainManager dataDomainManager) {
-        this.dataDomainManager = dataDomainManager;
+    public void start(LocalDataDomainManager localDataDomainManager) {
+        this.localDataDomainManager = localDataDomainManager;
 
         String defaultDataDomain = this.dqoUserConfigurationProperties.getDefaultDataDomain();
         if (!Objects.equals(defaultDataDomain, UserDomainIdentity.DEFAULT_DATA_DOMAIN)) {
@@ -76,7 +76,7 @@ public class DataDomainRegistryImpl implements DataDomainRegistry {
 
         for (Map.Entry<String, LocalDataDomainSpec> domainKeySpec : localSettingsSpec.getDataDomains().entrySet()) {
             this.loadedDomains.put(domainKeySpec.getKey(), domainKeySpec.getValue());
-            this.dataDomainManager.initializeLocalDataDomain(domainKeySpec.getValue());
+            this.localDataDomainManager.initializeLocalDataDomain(domainKeySpec.getValue());
         }
     }
 
@@ -93,9 +93,9 @@ public class DataDomainRegistryImpl implements DataDomainRegistry {
             }
 
             if (existingDomain == null) {
-                this.dataDomainManager.initializeLocalDataDomain(dataDomainSpec);
+                this.localDataDomainManager.initializeLocalDataDomain(dataDomainSpec);
             } else {
-                this.dataDomainManager.updateLocalDataDomain(existingDomain, dataDomainSpec);
+                this.localDataDomainManager.updateLocalDataDomain(existingDomain, dataDomainSpec);
             }
 
             this.loadedDomains.put(dataDomainName, dataDomainSpec.deepClone());
@@ -109,7 +109,7 @@ public class DataDomainRegistryImpl implements DataDomainRegistry {
      */
     @Override
     public Collection<LocalDataDomainSpec> getNestedDataDomainNames() {
-        if (this.dataDomainManager == null) {
+        if (this.localDataDomainManager == null) {
             throw new DqoRuntimeException("Data domain registry not initialized yet");
         }
 

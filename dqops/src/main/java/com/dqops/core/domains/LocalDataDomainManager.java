@@ -21,7 +21,7 @@ import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 /**
  * Data domain manager that maintains the configuration and activation of local data domains.
  */
-public interface DataDomainManager {
+public interface LocalDataDomainManager {
     /**
      * Activates the data domains.
      */
