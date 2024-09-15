@@ -48,8 +48,9 @@ public interface LocalUserHomeCreator {
      * Ensures that the DQOps User home is initialized at the default location. Prompts the user before creating the user home to confirm.
      * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQOps User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
+     * @return True when a new user home was initialized. False when the existing user home was used.
      */
-    void ensureDefaultUserHomeIsInitialized(boolean isHeadless);
+    boolean ensureDefaultUserHomeIsInitialized(boolean isHeadless);
 
     /**
      * Verifies if the user home configuration (and the local settings) are valid and are not missing configuration.

@@ -46,14 +46,14 @@ public class UserDomainIdentityFactoryImpl implements UserDomainIdentityFactory 
      */
     @Override
     public String mapDataDomainCloudNameToFolder(String dataDomainCloudName) {
-        String effectiveCloudDomainName = dataDomainCloudName == null ? UserDomainIdentity.DEFAULT_DATA_DOMAIN : dataDomainCloudName;
+        String effectiveCloudDomainName = dataDomainCloudName == null ? UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomainCloudName;
 
-        if (Objects.equals(UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
+        if (Objects.equals(UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
             return effectiveCloudDomainName;
         } else {
             if (Objects.equals(effectiveCloudDomainName, this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
-                return UserDomainIdentity.DEFAULT_DATA_DOMAIN;
-            } else if (Objects.equals(effectiveCloudDomainName, UserDomainIdentity.DEFAULT_DATA_DOMAIN)) {
+                return UserDomainIdentity.ROOT_DATA_DOMAIN;
+            } else if (Objects.equals(effectiveCloudDomainName, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
                 return UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME;
             } else {
                 return effectiveCloudDomainName;
@@ -69,7 +69,7 @@ public class UserDomainIdentityFactoryImpl implements UserDomainIdentityFactory 
      */
     @Override
     public UserDomainIdentity createDataDomainAdminIdentityForCloudDomain(String dataDomainCloudName) {
-        String effectiveCloudDomainName = dataDomainCloudName == null ? UserDomainIdentity.DEFAULT_DATA_DOMAIN : dataDomainCloudName;
+        String effectiveCloudDomainName = dataDomainCloudName == null ? UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomainCloudName;
         String dataDomainFolderName = mapDataDomainCloudNameToFolder(effectiveCloudDomainName);
         UserDomainIdentity dataDomainAdminIdentity = UserDomainIdentity.createDataDomainAdminIdentity(dataDomainFolderName, effectiveCloudDomainName);
         return dataDomainAdminIdentity;
@@ -83,8 +83,8 @@ public class UserDomainIdentityFactoryImpl implements UserDomainIdentityFactory 
      */
     @Override
     public UserDomainIdentity createDataDomainAdminIdentityForLocalDomain(String localDataDomainName) {
-        if (!Objects.equals(UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain()) &&
-            Objects.equals(localDataDomainName, UserDomainIdentity.DEFAULT_DATA_DOMAIN)) {
+        if (!Objects.equals(UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain()) &&
+            Objects.equals(localDataDomainName, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
             return createDataDomainAdminIdentityForCloudDomain(this.dqoUserConfigurationProperties.getDefaultDataDomain());
         }
 

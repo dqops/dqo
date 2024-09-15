@@ -37,7 +37,7 @@ public class DqoDqoUserPrincipalProviderStub implements DqoUserPrincipalProvider
      * @return User principal that has full admin rights when the instance is not authenticated to DQO Cloud or limited to the role in the DQO Cloud Api key.
      */
     @Override
-    public DqoUserPrincipal createLocalDomainUserPrincipal() {
+    public DqoUserPrincipal createLocalInstanceAdminPrincipal() {
         return this.principal;
     }
 
@@ -59,7 +59,7 @@ public class DqoDqoUserPrincipalProviderStub implements DqoUserPrincipalProvider
      * @return User principal that has full admin rights when the instance is not authenticated to DQOps Cloud or limited to the role in the DQOps Cloud Api key.
      */
     @Override
-    public DqoUserPrincipal createLocalDomainUserPrincipal(String dataDomainName) {
+    public DqoUserPrincipal createLocalDomainAdminPrincipal(String dataDomainName) {
         return this.principal;
     }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { DqoCloudUserModelAccountRoleEnum } from '../../api';
+import { DqoUserRolesModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
@@ -14,7 +14,7 @@ export default function UserDetail() {
   const { create, email, role } = useSelector(getFirstLevelSensorState);
   const [userEmail, setUserEmail] = useState<string>(email);
   const [userRole, setUserRole] =
-    useState<DqoCloudUserModelAccountRoleEnum>(role);
+    useState<DqoUserRolesModelAccountRoleEnum>(role);
   const [isUpdated, setIsUpdated] = useState(false);
   const [message, setMessage] = useState<string>();
 
@@ -81,7 +81,7 @@ export default function UserDetail() {
         {message ? <div className="text-red-500">{message}</div> : null}
         <Select
           label="Select user role"
-          options={Object.values(DqoCloudUserModelAccountRoleEnum).map((x) => ({
+          options={Object.values(DqoUserRolesModelAccountRoleEnum).map((x) => ({
             label: x,
             value: x
           }))}

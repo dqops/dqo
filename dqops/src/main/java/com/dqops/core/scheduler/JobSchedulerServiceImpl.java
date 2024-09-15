@@ -44,6 +44,7 @@ import javax.annotation.PreDestroy;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.quartz.JobBuilder.newJob;
@@ -74,7 +75,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
     private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.silent;
-    private LinkedHashSet<String> scheduledDataDomains = new LinkedHashSet<>();
+    private Set<String> scheduledDataDomains = ConcurrentHashMap.newKeySet();
 
     /**
      * Job scheduler service constructor.
@@ -224,7 +225,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
-            DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalDomainUserPrincipal();
+            DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
             DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
             if (dqoCloudApiKey != null) {
                 DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
@@ -258,7 +259,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         Set<String> allNewDataDomains = new LinkedHashSet<>();
-        DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalDomainUserPrincipal();
+        DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
         allNewDataDomains.add(userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud());
         Set<String> nestedDataDomainNames = this.localDataDomainRegistry.getNestedDataDomains()
                 .stream()
@@ -278,6 +279,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                     JobKeys.SYNCHRONIZE_METADATA, newDomainName);
             try {
                 this.scheduler.scheduleJob(scanMetadataTrigger);
+                this.scheduledDataDomains.add(newDomainName);
+
+                JobDataMap jobDataMap = new JobDataMap();
+                this.jobDataMapAdapter.setDataDomain(jobDataMap, newDomainName);
+                this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap); // scan for new cron jobs
             }
             catch (SchedulerException ex) {
                 log.error("Failed to schedule metadata scan for a new data domain because " + ex.getMessage(), ex);
@@ -285,7 +291,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
         }
 
-        for (String existingDomainName : new ArrayList<>(this.scheduledDataDomains)) {
+        for (String existingDomainName : List.of(this.scheduledDataDomains.toArray(new String[this.scheduledDataDomains.size()]))) {
             if (allNewDataDomains.contains(existingDomainName)) {
                 continue; // nothing to change
             }
@@ -315,6 +321,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 log.error("Failed to unschedule jobs for an unloaded data domain because " + ex.getMessage(), ex);
                 throw new JobSchedulerException(ex);
             }
+
+            this.scheduledDataDomains.remove(existingDomainName);
         }
     }
 

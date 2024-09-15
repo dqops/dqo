@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * DQOps authentication token factory that creates Spring Security {@link org.springframework.security.core.Authentication} token
@@ -57,7 +58,7 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAnonymousToken() {
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(UserDomainIdentity.DEFAULT_DATA_DOMAIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(UserDomainIdentity.ROOT_DATA_DOMAIN, UserDomainIdentity.ROOT_DATA_DOMAIN);
         ArrayList<GrantedAuthority> emptyListOfRoles = new ArrayList<>();
         UsernamePasswordAuthenticationToken anonymousAuthenticationToken = new UsernamePasswordAuthenticationToken(dqoUserPrincipal, null, emptyListOfRoles);
         return anonymousAuthenticationToken;
@@ -67,11 +68,12 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      * Creates an authenticated DQOps user principal that is identified by the DQOps Cloud API key stored in the local DQOps instance.
      * This type of authentication is used when authentication via DQOps Cloud is not used and a single user is accessing a local DQOps instance, having
      * full (ADMIN) access rights when the DQOps Cloud API key is not present (not working with a DQOps Cloud connection) or limited the role in the DQOps Cloud API Key.
+     * @param dataDomain Data domain name.
      * @return Authenticated user principal, based on the identity stored in the DQOps Cloud API Key.
      */
     @Override
-    public Authentication createAuthenticatedWithDefaultDqoCloudApiKey() {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainUserPrincipal();
+    public Authentication createAuthenticatedWithDefaultDqoCloudApiKey(String dataDomain) {
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainAdminPrincipal(dataDomain);
         UsernamePasswordAuthenticationToken localUserAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userPrincipal, userPrincipal.getApiKeyPayload(), userPrincipal.getPrivileges());
         return localUserAuthenticationToken;
@@ -86,13 +88,17 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload, String dataDomain) {
-        String effectiveCloudDataDomainName = dataDomain == null ? UserDomainIdentity.DEFAULT_DATA_DOMAIN : dataDomain;
+        String effectiveCloudDataDomainName = dataDomain == null ? UserDomainIdentity.ROOT_DATA_DOMAIN :
+                Objects.equals(dataDomain, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME) ? UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomain;
         String dataDomainFolderName = this.userDomainIdentityFactory.mapDataDomainCloudNameToFolder(effectiveCloudDataDomainName);
 
         DqoUserRole effectiveRole = userTokenPayload.getAccountRole();
 
         if (userTokenPayload.getDomainRoles() != null) {
             DqoUserRole dataDomainRole = userTokenPayload.getDomainRoles().get(dataDomain);
+            if (dataDomainRole == DqoUserRole.ADMIN) {
+                dataDomainRole = DqoUserRole.EDITOR; // downgrade a domain role
+            }
             effectiveRole = DqoUserRole.strongest(userTokenPayload.getAccountRole(), dataDomainRole);
         }
 

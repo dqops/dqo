@@ -67,7 +67,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
      * @return User principal that has full admin rights when the instance is not authenticated to DQOps Cloud or limited to the role in the DQOps Cloud Api key.
      */
     @Override
-    public DqoUserPrincipal createLocalDomainUserPrincipal() {
+    public DqoUserPrincipal createLocalInstanceAdminPrincipal() {
         /******** Uncomment the following code and comment the rest to use a hardcoded principal with limited access rights for testing purposes */
     //    DqoUserRole testedRole = DqoUserRole.VIEWER;
     //    List<GrantedAuthority> testPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(testedRole);
@@ -80,7 +80,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
             DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
-                    UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
+                    UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
             return dqoUserPrincipalLocal;
         }
 
@@ -88,7 +88,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
         List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(apiKeyPayload.getAccountRole());
         String defaultDataDomainCloud = this.dqoUserConfigurationProperties.getDefaultDataDomain();
         DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
-                grantedPrivileges, apiKeyPayload, UserDomainIdentity.DEFAULT_DATA_DOMAIN, defaultDataDomainCloud);
+                grantedPrivileges, apiKeyPayload, UserDomainIdentity.ROOT_DATA_DOMAIN, defaultDataDomainCloud);
 
         return dqoUserPrincipal;
     }
@@ -101,9 +101,9 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
      * @return User principal that has full admin rights when the instance is not authenticated to DQOps Cloud or limited to the role in the DQOps Cloud Api key.
      */
     @Override
-    public DqoUserPrincipal createLocalDomainUserPrincipal(String dataDomainName) {
+    public DqoUserPrincipal createLocalDomainAdminPrincipal(String dataDomainName) {
         String domainMountName = Objects.equals(dataDomainName, this.dqoUserConfigurationProperties.getDefaultDataDomain()) ?
-                UserDomainIdentity.DEFAULT_DATA_DOMAIN : dataDomainName;
+                UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomainName;
 
         DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(null);
         if (dqoCloudApiKey == null) {
@@ -134,7 +134,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
             DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
-                    UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
+                    UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
             return dqoUserPrincipalLocal;
         }
 

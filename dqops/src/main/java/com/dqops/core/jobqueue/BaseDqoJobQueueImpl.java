@@ -32,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 /**
  * DQOps job queue - manages a pool of threads that are executing operations.
@@ -262,7 +261,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             for (int i = 0; i < startedThreadsCount; i++) {
                 try {
                     DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-                    this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId, UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+                    this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId, UserDomainIdentity.ROOT_DATA_DOMAIN));
                 } catch (InterruptedException ex) {
                     log.error("Job queue stop() operation failed to publish a poison message", ex);
                 }

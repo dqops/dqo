@@ -18,6 +18,7 @@ package com.dqops.execution.rules.finder;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
@@ -54,15 +55,16 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
 
         String pythonFileNameRelativeToHome = BuiltInFolderNames.RULES + "/" + ruleName + ".py";
         String dataDomain = executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder();
-        HomeFilePath pythonFileHomePath = HomeFilePath.fromFilePath(dataDomain, pythonFileNameRelativeToHome);
 
         RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(bareRuleName, true);
         if (userRuleDefinitionWrapper != null) {
             FileContent userRuleModuleContent = userRuleDefinitionWrapper.getRulePythonModuleContent();
+            HomeFilePath pythonFileUserHomePath = HomeFilePath.fromFilePath(dataDomain, pythonFileNameRelativeToHome);
+
             RuleDefinitionFindResult userRuleResult = new RuleDefinitionFindResult() {{
 				setHome(HomeType.USER_HOME);
 				setRuleDefinitionSpec(userRuleDefinitionWrapper.getSpec());
-				setRulePythonFilePath(pythonFileHomePath);
+				setRulePythonFilePath(pythonFileUserHomePath);
                 setRulePythonFileLastModified(userRuleModuleContent != null ? userRuleModuleContent.getLastModified() : Instant.now());
             }};
             return userRuleResult;
@@ -72,10 +74,12 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
         RuleDefinitionWrapper dqoRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(bareRuleName, true);
         if (dqoRuleDefinitionWrapper != null) {
             FileContent dqoRulePythonModuleContent = dqoRuleDefinitionWrapper.getRulePythonModuleContent();
+            HomeFilePath pythonFileUserDqoHomePath = HomeFilePath.fromFilePath(UserDomainIdentity.ROOT_DATA_DOMAIN, pythonFileNameRelativeToHome);
+
             RuleDefinitionFindResult dqoRuleResult = new RuleDefinitionFindResult() {{
 				setHome(HomeType.DQO_HOME);
 				setRuleDefinitionSpec(dqoRuleDefinitionWrapper.getSpec());
-				setRulePythonFilePath(pythonFileHomePath);
+				setRulePythonFilePath(pythonFileUserDqoHomePath);
                 setRulePythonFileLastModified(dqoRulePythonModuleContent != null ? dqoRulePythonModuleContent.getLastModified() : Instant.now());
             }};
             return dqoRuleResult;

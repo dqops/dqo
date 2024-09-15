@@ -16,7 +16,6 @@
 
 package com.dqops.rest.controllers;
 
-import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.domains.DataDomainsService;
 import com.dqops.core.domains.LocalDataDomainModel;
@@ -25,6 +24,7 @@ import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -33,11 +33,12 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.server.LocalUrlAddressesProvider;
 import com.dqops.rest.server.authentication.AuthenticateWithDqoCloudWebFilter;
+import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.LinkedMultiValueMap;
@@ -45,6 +46,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +65,7 @@ public class DataDomainsController {
     private final LocalDataDomainRegistry localDataDomainRegistry;
     private final DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
-    private final LocalUrlAddressesProvider localUrlAddressesProvider;
+
 
     /**
      * Dependency injection constructor.
@@ -73,21 +75,18 @@ public class DataDomainsController {
      * @param localDataDomainRegistry Local data domain registry.
      * @param dqoInstanceConfigurationProperties DQOps instance configuration - the cookie expiration time.
      * @param instanceCloudLoginService Cloud login controller.
-     * @param localUrlAddressesProvider Service that returns the url of the current instance.
      */
     @Autowired
     public DataDomainsController(DataDomainsService dataDomainsService,
                                  UserHomeContextFactory userHomeContextFactory,
                                  LocalDataDomainRegistry localDataDomainRegistry,
                                  DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
-                                 InstanceCloudLoginService instanceCloudLoginService,
-                                 LocalUrlAddressesProvider localUrlAddressesProvider) {
+                                 InstanceCloudLoginService instanceCloudLoginService) {
         this.dataDomainsService = dataDomainsService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.localDataDomainRegistry = localDataDomainRegistry;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
-        this.localUrlAddressesProvider = localUrlAddressesProvider;
     }
 
     /**
@@ -112,8 +111,20 @@ public class DataDomainsController {
             List<LocalDataDomainModel> allDataDomains = this.dataDomainsService.getAllDataDomains();
             LinkedHashMap<String, DqoUserRole> allowedUserRoles = principal.getUserTokenPayload().getDomainRoles();
 
-            if (principal.getUserTokenPayload().getAccountRole() != DqoUserRole.ADMIN) {
-                allDataDomains.removeIf(model -> allowedUserRoles != null && allowedUserRoles.containsKey(model.getDomainName()));
+            if (principal.getAccountRole() == DqoUserRole.NONE) {
+                allDataDomains.removeIf(model -> {
+                    if (allowedUserRoles == null) {
+                        return true;
+                    }
+
+                    String domainName = model.getDomainName();
+                    if (Objects.equals(domainName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME)) {
+                        domainName = UserDomainIdentity.ROOT_DATA_DOMAIN;
+                    }
+
+                    return !allowedUserRoles.containsKey(domainName) ||
+                            allowedUserRoles.get(domainName) == DqoUserRole.NONE;
+                });
             }
 
             return new ResponseEntity<>(Flux.fromStream(allDataDomains.stream()), HttpStatus.OK);
@@ -219,7 +230,7 @@ public class DataDomainsController {
     public Mono<ResponseEntity<Mono<Void>>> synchronizeDataDomains(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            this.dataDomainsService.synchronizeDataDomainList();
+            this.dataDomainsService.synchronizeDataDomainList(false);
 
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
         }));
@@ -227,11 +238,13 @@ public class DataDomainsController {
 
     /**
      * Switches the data domain.
+     * @param principal User principal.
+     * @param httpRequest Http server request - to get the base URL.
      * @param dataDomainName  Data domain name.
      * @return Empty response.
      */
     @GetMapping(value = "/{dataDomainName}/switch", produces = "application/json")
-    @ApiOperation(value = "switchToDataDomain", notes = "Switches to a different data domain. This operation sends a special cookie.", response = Void.class,
+    @ApiOperation(value = "switchToDataDomain", notes = "Switches to a different data domain. This operation sends a special cookie and redirects the user to the home screen.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -243,6 +256,7 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<Void>>> switchToDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
+            ServerHttpRequest httpRequest,
             @ApiParam("Data domain name") @PathVariable String dataDomainName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
@@ -251,25 +265,32 @@ public class DataDomainsController {
             }
 
             LinkedMultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-            String returnUrl = this.localUrlAddressesProvider.getDqopsUiUrl();
+            String returnUrl = httpRequest.getURI().resolve("/").toString();
+            URI instanceUri = URI.create(returnUrl);
+            String urlHost = instanceUri.getHost();
+            String realDataDomainName = Objects.equals(dataDomainName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME) ?
+                    UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomainName;
 
-            LocalDataDomainSpec localDataDomainSpec = this.localDataDomainRegistry.getDomain(dataDomainName);
-            if (localDataDomainSpec == null) {
-                headers.add("Location", returnUrl);
-                return new ResponseEntity<>(Mono.empty(), headers, HttpStatus.SEE_OTHER);
+            if (!Objects.equals(realDataDomainName, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
+                LocalDataDomainSpec localDataDomainSpec = this.localDataDomainRegistry.getNestedDomain(dataDomainName);
+                if (localDataDomainSpec == null) {
+                    headers.add("Location", returnUrl);
+                    return new ResponseEntity<>(Mono.empty(), headers, HttpStatus.SEE_OTHER);
+                }
             }
 
             headers.add("Set-Cookie", AuthenticateWithDqoCloudWebFilter.DATA_DOMAIN_COOKIE + "=" + dataDomainName +"; Max-Age=" +
-                    this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes() * 60L);
+                    (this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes() * 60L) + "; Path=/; Domain=" + urlHost);
 
-            if (principal.getUserTokenPayload().getAccountRole() != DqoUserRole.ADMIN &&
-                    !principal.getUserTokenPayload().getDomainRoles().containsKey(dataDomainName)) {
+            if (principal.getUserTokenPayload().getAccountRole() != DqoUserRole.NONE ||
+                    (principal.getUserTokenPayload().getDomainRoles().containsKey(realDataDomainName) &&
+                    principal.getUserTokenPayload().getDomainRoles().get(realDataDomainName) != DqoUserRole.NONE)) {
                 // need to update the token and jump to the DQOps login
 
                 String dqoCloudLoginUrl = this.instanceCloudLoginService.makeDqoLoginUrl(returnUrl);
                 headers.add("Location", dqoCloudLoginUrl);
             } else {
-                headers.add("Location", returnUrl);
+                headers.add("Location", returnUrl); // ignore and reload
             }
 
             return new ResponseEntity<>(Mono.empty(), headers, HttpStatus.SEE_OTHER); // 303

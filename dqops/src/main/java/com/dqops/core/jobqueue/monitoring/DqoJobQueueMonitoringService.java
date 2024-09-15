@@ -89,10 +89,11 @@ public interface DqoJobQueueMonitoringService {
     /**
      * Creates an initial job list model that is retrieved by the UI when UI start up and the notification panel
      * must be filled with a list of jobs that are on the queue or jobs that have already finished.
+     * @param domainName Data domain name.
      *
      * @return Initial job queue snapshot.
      */
-    Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList();
+    Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList(String domainName);
 
     /**
      * Waits for a next batch of changes after the <code>lastChangeId</code>. May return an empty list after the timeout.
@@ -113,15 +114,17 @@ public interface DqoJobQueueMonitoringService {
     /**
      * Finds the job identified by a job id.
      * @param jobId Job id to find.
+     * @param dataDomain Data domain.
      * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
      */
-    DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId);
+    DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId, String dataDomain);
 
     /**
      * Tries to find a job id of a job that was assigned also a business key (a user assigned job id).
      * If there is a known (tracked) job with that business key, this method will return the job id. Otherwise, when not found, returns null.
      * @param jobBusinessKey Job business key to look up.
+     * @param dataDomain Data domain name.
      * @return Job id or null when not found.
      */
-    DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey);
+    DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey, String dataDomain);
 }

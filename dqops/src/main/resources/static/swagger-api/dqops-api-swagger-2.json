@@ -14974,7 +14974,7 @@
       "get" : {
         "tags" : [ "DataDomains" ],
         "summary" : "switchToDataDomain",
-        "description" : "Switches to a different data domain. This operation sends a special cookie.",
+        "description" : "Switches to a different data domain. This operation sends a special cookie and redirects the user to the home screen.",
         "operationId" : "switchToDataDomain",
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -16254,6 +16254,9 @@
           },
           "204" : {
             "description" : "Job was cancelled"
+          },
+          "404" : {
+            "description" : "Job not found"
           },
           "500" : {
             "description" : "Internal Server Error",
@@ -19275,7 +19278,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/DqoCloudUserModel"
+                "$ref" : "#/definitions/DqoUserRolesModel"
               }
             }
           },
@@ -19306,7 +19309,7 @@
           "description" : "User model",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/DqoCloudUserModel"
+            "$ref" : "#/definitions/DqoUserRolesModel"
           }
         } ],
         "responses" : {
@@ -19358,7 +19361,7 @@
           "200" : {
             "description" : "OK",
             "schema" : {
-              "$ref" : "#/definitions/DqoCloudUserModel"
+              "$ref" : "#/definitions/DqoUserRolesModel"
             }
           },
           "403" : {
@@ -19397,7 +19400,7 @@
           "description" : "User model",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/DqoCloudUserModel"
+            "$ref" : "#/definitions/DqoUserRolesModel"
           }
         } ],
         "responses" : {
@@ -37414,21 +37417,6 @@
       },
       "description" : "The summary of the current data quality status for one data quality dimension"
     },
-    "DqoCloudUserModel" : {
-      "type" : "object",
-      "properties" : {
-        "email" : {
-          "type" : "string",
-          "description" : "User's email that identifies the user."
-        },
-        "accountRole" : {
-          "type" : "string",
-          "description" : "Account role.",
-          "enum" : [ "admin", "editor", "operator", "viewer", "none" ]
-        }
-      },
-      "description" : "DQOps Cloud user model - identifies a user in a multi-user DQOps deployment."
-    },
     "DqoJobChangeModel" : {
       "type" : "object",
       "properties" : {
@@ -37742,6 +37730,29 @@
         }
       },
       "description" : "The model that describes the current user and his access rights."
+    },
+    "DqoUserRolesModel" : {
+      "type" : "object",
+      "properties" : {
+        "email" : {
+          "type" : "string",
+          "description" : "User's email that identifies the user."
+        },
+        "accountRole" : {
+          "type" : "string",
+          "description" : "User role at the whole account level. This role is applicable to all data domains.",
+          "enum" : [ "admin", "editor", "operator", "viewer", "none" ]
+        },
+        "dataDomainRoles" : {
+          "type" : "object",
+          "description" : "User roles within each data domain. Data domains are supported in an ENTERPRISE version of DQOps and they are managed by the SaaS components of DQOps Cloud.",
+          "additionalProperties" : {
+            "type" : "string",
+            "enum" : [ "admin", "editor", "operator", "viewer", "none" ]
+          }
+        }
+      },
+      "description" : "DQOps user model - identifies a user in a multi-user DQOps deployment and the user's roles."
     },
     "DuckdbParametersSpec" : {
       "type" : "object",

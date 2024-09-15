@@ -41,7 +41,7 @@ public class HomeFolderPathUtility {
             );
         }
 
-        String dataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+        String dataDomain = UserDomainIdentity.ROOT_DATA_DOMAIN;
         if (!homeRelativeFoldersList.isEmpty()) {
             if (Objects.equals(homeRelativeFoldersList.get(0).getObjectName(), BuiltInFolderNames.DATA_DOMAINS)) {
                 dataDomain = homeRelativeFoldersList.get(0).getObjectName();

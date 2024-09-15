@@ -72,7 +72,7 @@ public enum DqoUserRole {
      * @param accountRole Account role enum from the code generated from swagger.
      * @return DQOps account role.
      */
-    public static DqoUserRole convertFromApiEnum(DqoUserModel.AccountRoleEnum accountRole) {
+    public static DqoUserRole convertFromApiAccountRoleEnum(DqoUserModel.AccountRoleEnum accountRole) {
         if (accountRole == null) {
             return null;
         }
@@ -102,7 +102,7 @@ public enum DqoUserRole {
      * Converts the account role to a role defined in the DQOps Cloud api.
      * @return DQOps Cloud API role.
      */
-    public DqoUserModel.AccountRoleEnum convertToApiEnum() {
+    public DqoUserModel.AccountRoleEnum convertToApiAccountRoleEnum() {
         switch (this) {
             case ADMIN:
                 return DqoUserModel.AccountRoleEnum.ADMIN;
@@ -121,6 +121,63 @@ public enum DqoUserRole {
 
             default:
                 throw new IllegalArgumentException("Account role " + this + " not supported");
+        }
+    }
+
+    /**
+     * Converts a data domain role from a client generated from DQOps Cloud Swagger.
+     * @param domainRole Data domain role enum from the code generated from swagger.
+     * @return DQOps local data domain role.
+     */
+    public static DqoUserRole convertFromApiDomainRole(DqoUserModel.InnerEnum domainRole) {
+        if (domainRole == null) {
+            return null;
+        }
+
+        switch (domainRole) {
+            case ADMIN:
+                return ADMIN;
+
+            case EDITOR:
+                return EDITOR;
+
+            case OPERATOR:
+                return OPERATOR;
+
+            case VIEWER:
+                return VIEWER;
+
+            case NONE:
+                return NONE;
+
+            default:
+                throw new IllegalArgumentException("Data domain role " + domainRole + " not supported");
+        }
+    }
+
+    /**
+     * Converts the domain role to a domain role defined in the DQOps Cloud API.
+     * @return DQOps Cloud API data domain role.
+     */
+    public DqoUserModel.InnerEnum convertToApiDomainRoleEnum() {
+        switch (this) {
+            case ADMIN:
+                return DqoUserModel.InnerEnum.ADMIN;
+
+            case EDITOR:
+                return DqoUserModel.InnerEnum.EDITOR;
+
+            case OPERATOR:
+                return DqoUserModel.InnerEnum.OPERATOR;
+
+            case VIEWER:
+                return DqoUserModel.InnerEnum.VIEWER;
+
+            case NONE:
+                return DqoUserModel.InnerEnum.NONE;
+
+            default:
+                throw new IllegalArgumentException("Domain role " + this + " not supported");
         }
     }
 

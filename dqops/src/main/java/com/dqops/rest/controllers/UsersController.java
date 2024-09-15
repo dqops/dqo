@@ -18,7 +18,7 @@ package com.dqops.rest.controllers;
 
 import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
-import com.dqops.core.dqocloud.users.DqoCloudUserModel;
+import com.dqops.core.dqocloud.users.DqoUserRolesModel;
 import com.dqops.core.dqocloud.users.DqoUserLimitExceededException;
 import com.dqops.core.dqocloud.users.DqoUserNotFoundException;
 import com.dqops.core.dqocloud.users.UserManagementService;
@@ -63,23 +63,23 @@ public class UsersController {
      */
     @GetMapping(value = "users", produces = "application/json")
     @ApiOperation(value = "getAllUsers", notes = "Returns a list of all users.",
-            response = DqoCloudUserModel[].class,
+            response = DqoUserRolesModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DqoCloudUserModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = DqoUserRolesModel[].class),
             @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Flux<DqoCloudUserModel>>> getAllUsers(
+    public Mono<ResponseEntity<Flux<DqoUserRolesModel>>> getAllUsers(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             try {
-                Collection<DqoCloudUserModel> dqoCloudUserModels = this.userManagementService.listUsers(principal);
-                Stream<DqoCloudUserModel> sortedStream = dqoCloudUserModels.stream()
+                Collection<DqoUserRolesModel> dqoUserRolesModels = this.userManagementService.listUsers(principal);
+                Stream<DqoUserRolesModel> sortedStream = dqoUserRolesModels.stream()
                         .sorted(Comparator.comparing(model -> model.getEmail()));
                 return new ResponseEntity<>(Flux.fromStream(sortedStream), HttpStatus.OK);
             }
@@ -95,19 +95,19 @@ public class UsersController {
      * @return User's model that describes the user's role.
      */
     @GetMapping(value = "users/{email}", produces = "application/json")
-    @ApiOperation(value = "getUser", notes = "Returns the user model that describes the role of a user identified by an email", response = DqoCloudUserModel.class,
+    @ApiOperation(value = "getUser", notes = "Returns the user model that describes the role of a user identified by an email", response = DqoUserRolesModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DqoCloudUserModel.class),
+            @ApiResponse(code = 200, message = "OK", response = DqoUserRolesModel.class),
             @ApiResponse(code = 403, message = "DQOps instance is not authenticated to DQOps Cloud"),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<DqoCloudUserModel>>> getUser(
+    public Mono<ResponseEntity<Mono<DqoUserRolesModel>>> getUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -117,7 +117,7 @@ public class UsersController {
             }
 
             try {
-                DqoCloudUserModel userByEmail = this.userManagementService.getUserByEmail(principal, email);
+                DqoUserRolesModel userByEmail = this.userManagementService.getUserByEmail(principal, email);
                 if (userByEmail == null) {
                     return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 }
@@ -151,7 +151,7 @@ public class UsersController {
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
     public Mono<ResponseEntity<Mono<Void>>> createUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
+            @ApiParam("User model") @RequestBody DqoUserRolesModel userModel) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (userModel == null || Strings.isNullOrEmpty(userModel.getEmail())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -194,7 +194,7 @@ public class UsersController {
     public Mono<ResponseEntity<Mono<Void>>> updateUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
-            @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
+            @ApiParam("User model") @RequestBody DqoUserRolesModel userModel) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (userModel == null || Strings.isNullOrEmpty(email) ||
                     !Objects.equals(email, userModel.getEmail())) {

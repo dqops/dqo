@@ -22,6 +22,7 @@ import com.dqops.connectors.jdbc.JdbcTypeColumnMapping;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
 import com.dqops.core.configuration.RootConfigurationProperties;
+import com.dqops.core.domains.DataDomainsService;
 import com.dqops.core.domains.LocalDataDomainManager;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -73,6 +74,7 @@ public class CliInitializerImpl implements CliInitializer {
     private TableStatusCache tableStatusCache;
     private LabelsIndexer labelsIndexer;
     private LocalDataDomainManager localDataDomainManager;
+    private DataDomainsService dataDomainsService;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -95,7 +97,8 @@ public class CliInitializerImpl implements CliInitializer {
      * @param dqoUserPrincipalProvider User principal provider.
      * @param tableStatusCache Table status cache.
      * @param labelsIndexer Label indexer service that finds all labels.
-     * @param localDataDomainManager Local data domain manager.
+     * @param localDataDomainManager Local data domain manager - to initialize local domains.
+     * @param dataDomainsService Data domains service to synchronize domains from the SaaS backend.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -117,7 +120,8 @@ public class CliInitializerImpl implements CliInitializer {
                               DqoUserPrincipalProvider dqoUserPrincipalProvider,
                               TableStatusCache tableStatusCache,
                               LabelsIndexer labelsIndexer,
-                              LocalDataDomainManager localDataDomainManager) {
+                              LocalDataDomainManager localDataDomainManager,
+                              DataDomainsService dataDomainsService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -138,6 +142,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.tableStatusCache = tableStatusCache;
         this.labelsIndexer = labelsIndexer;
         this.localDataDomainManager = localDataDomainManager;
+        this.dataDomainsService = dataDomainsService;
     }
 
     /**
@@ -200,9 +205,13 @@ public class CliInitializerImpl implements CliInitializer {
         JdbcTypeColumnMapping.ensureInitializedJdbc();
 
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
-        this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
+        boolean newUserHomeInitialized = this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
         this.defaultTimeZoneProvider.invalidate();
         this.localDataDomainManager.start();
+
+        if (newUserHomeInitialized) {
+            this.dataDomainsService.synchronizeDataDomainList(true);
+        }
 
         if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
             this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQOps system home directory.");

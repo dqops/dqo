@@ -18,10 +18,8 @@ package com.dqops.metadata.storage.localfiles.dqohome;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
-import org.springframework.beans.factory.BeanFactory;
 
 /**
  * Dqo home context object mother. Provides access to the dqo home object.
@@ -33,7 +31,7 @@ public class DqoHomeContextObjectMother {
      */
     public static DqoHomeContext createEmptyInMemoryFileHomeContext() {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.createNew();
-        DqoHomeContext dqoHomeContext = new DqoHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN)));
+        DqoHomeContext dqoHomeContext = new DqoHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN)));
         FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer, false);
         dqoHomeContext.setDqoHome(fileDqoHomeModel);
         return dqoHomeContext;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { DqoCloudUserModel, DqoCloudUserModelAccountRoleEnum } from '../../api';
+import { DqoUserRolesModel, DqoUserRolesModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Loader from '../../components/Loader';
@@ -14,8 +14,8 @@ import ChangeUserPasswordDialog from './ChangeUserPasswordDialog';
 
 export default function UserListDetail() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-  const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoCloudUserModel[]>([]);
-  const [displayedUsers, setDisplayedUsers] = useState<DqoCloudUserModel[]>([]); // State for displayed users
+  const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoUserRolesModel[]>([]);
+  const [displayedUsers, setDisplayedUsers] = useState<DqoUserRolesModel[]>([]); // State for displayed users
   const [reshreshUsersIndicator, setRefreshUsersIndicator] =
     useState<boolean>(false);
   const [selectedEmailToChangePassword, setSelectedEmailToChangePassword] =
@@ -35,7 +35,7 @@ export default function UserListDetail() {
 
   const editDqoCloudUser = (
     email: string,
-    role?: DqoCloudUserModelAccountRoleEnum
+    role?: DqoUserRolesModelAccountRoleEnum
   ) => {
     dispatch(
       addFirstLevelTab({

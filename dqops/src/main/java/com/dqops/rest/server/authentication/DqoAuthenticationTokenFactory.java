@@ -35,10 +35,11 @@ public interface DqoAuthenticationTokenFactory {
      * Creates an authenticated DQOps user principal that is identified by the DQOps Cloud API key stored in the local DQOps instance.
      * This type of authentication is used when authentication via DQOps Cloud is not used and a single user is accessing a local DQOps instance, having
      * full (ADMIN) access rights when the DQOps Cloud API key is not present (not working with a DQOps Cloud connection) or limited the role in the DQOps Cloud API Key.
+     * @param dataDomain Data domain name.
      *
      * @return Authenticated user principal, based on the identity stored in the DQOps Cloud API Key.
      */
-    Authentication createAuthenticatedWithDefaultDqoCloudApiKey();
+    Authentication createAuthenticatedWithDefaultDqoCloudApiKey(String dataDomain);
 
     /**
      * Creates an authentication principal from a DQOps Cloud issued user token. User tokens are issued for multi-user accounts.

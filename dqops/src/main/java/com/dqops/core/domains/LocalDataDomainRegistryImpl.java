@@ -17,6 +17,9 @@
 package com.dqops.core.domains;
 
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
@@ -41,20 +44,24 @@ import java.util.stream.Collectors;
 public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private final DqoUserPrincipalProvider userPrincipalProvider;
     private final Object lock = new Object();
-    private final LocalDataDomainSpecMap loadedDomains = new LocalDataDomainSpecMap();
+    private LocalDataDomainSpecMap loadedNestedDomains;
     private LocalDataDomainManager localDataDomainManager;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home factory to load the default domain.
      * @param dqoUserConfigurationProperties User home configuration parameters to detect if the instance was started with the default (root) domain and can have subdomain, or it is a single domain instance.
+     * @param userPrincipalProvider User principal provider to detect support for local data domains.
      */
     @Autowired
     public LocalDataDomainRegistryImpl(UserHomeContextFactory userHomeContextFactory,
-                                       DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+                                       DqoUserConfigurationProperties dqoUserConfigurationProperties,
+                                       DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -66,7 +73,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         this.localDataDomainManager = localDataDomainManager;
 
         String defaultDataDomain = this.dqoUserConfigurationProperties.getDefaultDataDomain();
-        if (!Objects.equals(defaultDataDomain, UserDomainIdentity.DEFAULT_DATA_DOMAIN)) {
+        if (!Objects.equals(defaultDataDomain, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
             return; // this instance is bound to a non-default domain, it is a single domain instance
         }
 
@@ -76,9 +83,15 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
             return;
         }
 
-        for (Map.Entry<String, LocalDataDomainSpec> domainKeySpec : localSettingsSpec.getDataDomains().entrySet()) {
-            this.loadedDomains.put(domainKeySpec.getKey(), domainKeySpec.getValue());
-            this.localDataDomainManager.initializeLocalDataDomain(domainKeySpec.getValue());
+        DqoUserPrincipal localInstanceAdminPrincipal = this.userPrincipalProvider.createLocalInstanceAdminPrincipal();
+
+        if (localSettingsSpec.getDataDomains() != null && localInstanceAdminPrincipal.getApiKeyPayload() != null &&
+                localInstanceAdminPrincipal.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.ENTERPRISE) {
+            this.loadedNestedDomains = new LocalDataDomainSpecMap();
+            for (Map.Entry<String, LocalDataDomainSpec> domainKeySpec : localSettingsSpec.getDataDomains().entrySet()) {
+                this.loadedNestedDomains.put(domainKeySpec.getKey(), domainKeySpec.getValue());
+                this.localDataDomainManager.initializeLocalDataDomain(domainKeySpec.getValue());
+            }
         }
     }
 
@@ -91,13 +104,17 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         LocalDataDomainSpec clonedNewDomainSpec = newDataDomainSpec.deepClone();
 
         synchronized (this.lock) {
+            if (this.loadedNestedDomains == null) {
+                this.loadedNestedDomains = new LocalDataDomainSpecMap();
+            }
+
             String dataDomainName = newDataDomainSpec.getDataDomainName();
-            existingDomain = this.loadedDomains.get(dataDomainName);
-            if (existingDomain != null && !Objects.equals(existingDomain, newDataDomainSpec)) {
+            existingDomain = this.loadedNestedDomains.get(dataDomainName);
+            if (existingDomain != null && Objects.equals(existingDomain, newDataDomainSpec)) {
                 return; // no changes
             }
 
-            this.loadedDomains.put(dataDomainName, clonedNewDomainSpec);
+            this.loadedNestedDomains.put(dataDomainName, clonedNewDomainSpec);
         }
 
         if (existingDomain == null) {
@@ -115,12 +132,16 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         LocalDataDomainSpec existingDomain;
 
         synchronized (this.lock) {
-            existingDomain = this.loadedDomains.get(oldDomainName);
+            if (this.loadedNestedDomains == null) {
+                return;
+            }
+
+            existingDomain = this.loadedNestedDomains.get(oldDomainName);
             if (existingDomain == null) {
                 return; // domain already deleted
             }
 
-            this.loadedDomains.remove(oldDomainName);
+            this.loadedNestedDomains.remove(oldDomainName);
         }
 
         this.localDataDomainManager.updateLocalDataDomain(existingDomain, null);
@@ -138,8 +159,35 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         }
 
         synchronized (this.lock) {
-            return Collections.unmodifiableCollection(new ArrayList<>(this.loadedDomains.values()));
+            if (this.loadedNestedDomains == null) {
+                return null; // no domains supported
+            }
+
+            return Collections.unmodifiableCollection(new ArrayList<>(this.loadedNestedDomains.values()));
         }
+    }
+
+    /**
+     * Returns a list all local data domains, including the default domain (if it is loaded).
+     *
+     * @return List of local data domains.
+     */
+    @Override
+    public Collection<LocalDataDomainSpec> getAllLocalDataDomains() {
+        Collection<LocalDataDomainSpec> nestedDataDomains = getNestedDataDomains();
+        if (nestedDataDomains == null) {
+            return null;
+        }
+
+        ArrayList<LocalDataDomainSpec> allDomains = new ArrayList<>();
+        allDomains.add(new LocalDataDomainSpec() {{
+            setDataDomainName(UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME);
+            setDisplayName("Root data domain");
+        }});
+
+        allDomains.addAll(nestedDataDomains);
+
+        return allDomains;
     }
 
     /**
@@ -149,7 +197,12 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
      */
     @Override
     public void replaceDataDomainList(List<LocalDataDomainSpec> newDataDomainList) {
-        Map<String, LocalDataDomainSpec> currentDataDomainsMap = getNestedDataDomains()
+        Collection<LocalDataDomainSpec> nestedDataDomains = getNestedDataDomains();
+        if (nestedDataDomains == null) {
+            nestedDataDomains = new ArrayList<>();
+        }
+
+        Map<String, LocalDataDomainSpec> currentDataDomainsMap = nestedDataDomains
                 .stream()
                 .collect(Collectors.toMap(spec -> spec.getDataDomainName(), spec -> spec));
 
@@ -185,7 +238,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
      * @param localDataDomainSpec Data domain specification.
      */
     @Override
-    public void addDataDomain(LocalDataDomainSpec localDataDomainSpec) {
+    public void addNestedDataDomain(LocalDataDomainSpec localDataDomainSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
         LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
@@ -208,7 +261,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
      * @param dataDomainName Data domain name.
      */
     @Override
-    public boolean deleteDataDomain(String dataDomainName) {
+    public boolean deleteNestedDataDomain(String dataDomainName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
         SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
         LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
@@ -230,15 +283,45 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
     }
 
     /**
+     * Changes the status of running the job scheduler on this data domain.
+     *
+     * @param dataDomainName      Data domain name.
+     * @param enableJobScheduling Enable job scheduling.
+     */
+    @Override
+    public void changeJobSchedulerStatusForDomain(String dataDomainName, boolean enableJobScheduling) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY, false);
+        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            return;
+        }
+
+        LocalDataDomainSpecMap dataDomains = localSettingsSpec.getDataDomains();
+        LocalDataDomainSpec localDataDomainSpec = dataDomains.get(dataDomainName);
+        if (localDataDomainSpec == null) {
+            return;
+        }
+
+        localDataDomainSpec.setEnableScheduler(enableJobScheduling);
+        userHomeContext.flush(); // save the configuration
+
+        this.updateLocalDataDomain(localDataDomainSpec);
+    }
+
+    /**
      * Returns a data domain given the technical domain name.
      *
      * @param dataDomainName Data domain name.
      * @return Data domain or null, when this domain is not maintained locally.
      */
     @Override
-    public LocalDataDomainSpec getDomain(String dataDomainName) {
+    public LocalDataDomainSpec getNestedDomain(String dataDomainName) {
         synchronized (this.lock) {
-            return this.loadedDomains.get(dataDomainName);
+            if (this.loadedNestedDomains == null) {
+                return null;
+            }
+            return this.loadedNestedDomains.get(dataDomainName);
         }
     }
 }

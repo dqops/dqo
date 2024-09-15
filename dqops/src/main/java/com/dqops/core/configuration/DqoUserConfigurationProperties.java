@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Lazy;
 @Lazy(false)
 public class DqoUserConfigurationProperties implements Cloneable {
     private String home;
-    private String defaultDataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+    private String defaultDataDomain = UserDomainIdentity.ROOT_DATA_DOMAIN;
     private boolean hasLocalHome;
     private boolean initializeUserHome;
     private boolean initializeDefaultCloudCredentials;

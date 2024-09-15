@@ -76,7 +76,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
             }
         }
 
-        UserDomainIdentity userIdentity = this.dqoUserPrincipalProvider.createLocalDomainUserPrincipal().getDataDomainIdentity();
+        UserDomainIdentity userIdentity = this.dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal().getDataDomainIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory != null ? this.userHomeContextFactory.openLocalUserHome(userIdentity, true) : null;
         ZoneId defaultTimeZoneId = getDefaultTimeZoneId(userHomeContext);
 

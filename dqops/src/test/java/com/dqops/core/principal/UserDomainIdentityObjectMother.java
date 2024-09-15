@@ -27,7 +27,7 @@ public class UserDomainIdentityObjectMother {
      * @return Admin user identity.
      */
     public static UserDomainIdentity createAdminIdentity() {
-        return new UserDomainIdentity("test", DqoUserRole.ADMIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN,
-                UserDomainIdentity.DEFAULT_DATA_DOMAIN, null, null, null);
+        return new UserDomainIdentity("test", DqoUserRole.ADMIN, UserDomainIdentity.ROOT_DATA_DOMAIN,
+                UserDomainIdentity.ROOT_DATA_DOMAIN, null, null, null);
     }
 }

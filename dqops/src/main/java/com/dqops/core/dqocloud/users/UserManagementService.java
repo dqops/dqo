@@ -30,7 +30,7 @@ public interface UserManagementService {
      * @param userPrincipal User principal.
      * @return List of users for this DQOps instance.
      */
-    Collection<DqoCloudUserModel> listUsers(DqoUserPrincipal userPrincipal);
+    Collection<DqoUserRolesModel> listUsers(DqoUserPrincipal userPrincipal);
 
     /**
      * Retrieves a user from the list of users known to DQOps Cloud, given a user email.
@@ -39,7 +39,7 @@ public interface UserManagementService {
      * @param email         User's email.
      * @return User's model or null when the user was not found.
      */
-    DqoCloudUserModel getUserByEmail(DqoUserPrincipal userPrincipal, String email);
+    DqoUserRolesModel getUserByEmail(DqoUserPrincipal userPrincipal, String email);
 
     /**
      * Creates a user in DQOps Cloud. An optional password may be passed.
@@ -49,7 +49,7 @@ public interface UserManagementService {
      * @param password      User's password, optional.
      * @throws DqoUserLimitExceededException when the user limit was exceeded for the account.
      */
-    void createUser(DqoUserPrincipal userPrincipal, DqoCloudUserModel userModel, String password);
+    void createUser(DqoUserPrincipal userPrincipal, DqoUserRolesModel userModel, String password);
 
     /**
      * Update a user in DQOps Cloud. Supports changing the role.
@@ -57,7 +57,7 @@ public interface UserManagementService {
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
      * @param userModel     User model that is updated.
      */
-    void updateUser(DqoUserPrincipal userPrincipal, DqoCloudUserModel userModel);
+    void updateUser(DqoUserPrincipal userPrincipal, DqoUserRolesModel userModel);
 
     /**
      * Deletes a user in DQOps Cloud, given a user email.

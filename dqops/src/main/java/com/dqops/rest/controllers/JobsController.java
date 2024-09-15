@@ -18,6 +18,9 @@ package com.dqops.rest.controllers;
 import com.dqops.core.configuration.DqoQueueConfigurationProperties;
 import com.dqops.core.configuration.DqoQueueWaitTimeoutsConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.domains.LocalDataDomainManager;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
@@ -58,6 +61,7 @@ import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgr
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.utils.conversion.NumericTypeConverter;
@@ -73,6 +77,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -98,6 +103,8 @@ public class JobsController {
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private DqoQueueWaitTimeoutsConfigurationProperties dqoQueueWaitTimeoutsConfigurationProperties;
     private SynchronizationStatusTracker synchronizationStatusTracker;
+    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private LocalDataDomainRegistry localDataDomainRegistry;
 
     /**
      * Creates a new controller, injecting dependencies.
@@ -113,6 +120,8 @@ public class JobsController {
      * @param dqoSchedulerConfigurationProperties DQOps job scheduler configuration properties.
      * @param dqoQueueWaitTimeoutsConfigurationProperties DQOps queue default wait time parameters.
      * @param synchronizationStatusTracker Synchronization change tracker.
+     * @param dqoUserConfigurationProperties DQO User home configuration properties - to detect the default domain.
+     * @param localDataDomainRegistry Local data domain registry - to enable/disable job scheduling only for the data domain.
      */
     @Autowired
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
@@ -126,7 +135,9 @@ public class JobsController {
                           DqoQueueConfigurationProperties dqoQueueConfigurationProperties,
                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
                           DqoQueueWaitTimeoutsConfigurationProperties dqoQueueWaitTimeoutsConfigurationProperties,
-                          SynchronizationStatusTracker synchronizationStatusTracker) {
+                          SynchronizationStatusTracker synchronizationStatusTracker,
+                          DqoUserConfigurationProperties dqoUserConfigurationProperties,
+                          LocalDataDomainRegistry localDataDomainRegistry) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.parentDqoJobQueue = parentDqoJobQueue;
@@ -139,6 +150,8 @@ public class JobsController {
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.dqoQueueWaitTimeoutsConfigurationProperties = dqoQueueWaitTimeoutsConfigurationProperties;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.localDataDomainRegistry = localDataDomainRegistry;
     }
 
     /**
@@ -193,7 +206,7 @@ public class JobsController {
                         .map(summary -> {
                             RunChecksResult runChecksResult = RunChecksResult.fromCheckExecutionSummary(summary);
                             DqoJobCompletionStatus jobCompletionStatus = runChecksJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
                         });
@@ -210,10 +223,11 @@ public class JobsController {
      * Tries to find and parse a job id. Looks up the job by the business key in the job monitoring service.
      * If the job is not found, parses it to a long. If parsing fails (because it is a business key, but the job no longer exists), just returns a fake job id.
      * @param jobIdOrBusinessKey Job id or a job business key.
+     * @param dataDomain Data domain.
      * @return Job id object.
      */
-    private DqoQueueJobId findJobId(String jobIdOrBusinessKey) {
-        DqoQueueJobId dqoQueueJobId = this.jobQueueMonitoringService.lookupJobIdByBusinessKey(jobIdOrBusinessKey);
+    private DqoQueueJobId findJobId(String jobIdOrBusinessKey, String dataDomain) {
+        DqoQueueJobId dqoQueueJobId = this.jobQueueMonitoringService.lookupJobIdByBusinessKey(jobIdOrBusinessKey, dataDomain);
         if (dqoQueueJobId == null) {
             Long jobIdNumeric = NumericTypeConverter.tryParseLong(jobIdOrBusinessKey);
             if (jobIdNumeric == null) {
@@ -251,9 +265,9 @@ public class JobsController {
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId, principal.getDataDomainIdentity().getDataDomainCloud());
 
-            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
             if (jobHistoryEntryModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -271,7 +285,7 @@ public class JobsController {
 
             Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(_none -> {
-                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
                         if (mostRecentJobModel == null) {
                             return null;
                         }
@@ -342,7 +356,7 @@ public class JobsController {
                         .map(summary -> {
                             ErrorSamplerResult runChecksResult = ErrorSamplerResult.fromErrorSamplerExecutionSummary(summary);
                             DqoJobCompletionStatus jobCompletionStatus = collectErrorSamplesJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(collectErrorSamplesJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(collectErrorSamplesJob.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new CollectErrorSamplesResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
                         });
@@ -380,9 +394,9 @@ public class JobsController {
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId, principal.getDataDomainIdentity().getDataDomainCloud());
 
-            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
             if (jobHistoryEntryModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
@@ -400,7 +414,7 @@ public class JobsController {
 
             Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(_none -> {
-                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
                         if (mostRecentJobModel == null) {
                             return null;
                         }
@@ -474,7 +488,7 @@ public class JobsController {
                         .map(summary -> {
                             CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
                             DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
                         });
@@ -543,7 +557,7 @@ public class JobsController {
                         .map(summary -> {
                             CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
                             DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
                         });
@@ -576,7 +590,7 @@ public class JobsController {
     public Mono<ResponseEntity<Mono<DqoJobQueueInitialSnapshotModel>>> getAllJobs(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList();
+            Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList(principal.getDataDomainIdentity().getDataDomainCloud());
             return new ResponseEntity<>(initialJobList, HttpStatus.OK); // 200
         }));
     }
@@ -604,10 +618,14 @@ public class JobsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id") @PathVariable String jobId) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId, principal.getDataDomainIdentity().getDataDomainCloud());
 
-            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
             if (jobHistoryEntryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            if (!Objects.equals(principal.getDataDomainIdentity().getDataDomainCloud(), jobHistoryEntryModel.getDataDomain())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
@@ -640,10 +658,14 @@ public class JobsController {
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId, principal.getDataDomainIdentity().getDataDomainCloud());
 
-            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
             if (jobHistoryEntryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            if (!Objects.equals(principal.getDataDomainIdentity().getDataDomainCloud(), jobHistoryEntryModel.getDataDomain())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
@@ -658,7 +680,7 @@ public class JobsController {
 
             Mono<DqoJobHistoryEntryModel> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                     .map(_none -> {
-                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId, principal.getDataDomainIdentity().getDataDomainCloud());
                         DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
                         DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
 
@@ -691,6 +713,7 @@ public class JobsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Job was cancelled", response = Void.class),
+            @ApiResponse(code = 404, message = "Job not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
@@ -698,7 +721,11 @@ public class JobsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id") @PathVariable String jobId) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId, principal.getDataDomainIdentity().getDataDomainCloud());
+            if (dqoQueueJobId == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
             this.dqoJobQueue.cancelJob(dqoQueueJobId);
             this.parentDqoJobQueue.cancelJob(dqoQueueJobId);  // we don't know on which queue the job is running, but it cannot run on both and it is safe to cancel a missing job, so we cancel on both the queues
 
@@ -790,7 +817,7 @@ public class JobsController {
                 Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                         .map(importTablesResult -> {
                             DqoJobCompletionStatus jobCompletionStatus = importTablesJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(importTablesJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(importTablesJob.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new ImportTablesQueueJobResult(pushJobResult.getJobId(), importTablesResult, dqoJobStatus);
                         });
@@ -850,7 +877,7 @@ public class JobsController {
                 Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                         .map(deleteStoredDataResult -> {
                             DqoJobCompletionStatus jobCompletionStatus = deleteStoredDataJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(deleteStoredDataJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(deleteStoredDataJob.getJobId(), principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new DeleteStoredDataQueueJobResult(pushJobResult.getJobId(), deleteStoredDataResult, dqoJobStatus);
                         });
@@ -911,7 +938,8 @@ public class JobsController {
                 Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
                         .then(Mono.fromCallable(() -> {
                             DqoJobCompletionStatus jobCompletionStatus = synchronizeMultipleFoldersJob.getCompletionStatus();
-                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId());
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId(),
+                                    principal.getDataDomainIdentity().getDataDomainCloud());
                             DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
                             return new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId(), dqoJobStatus);
                         }));
@@ -945,7 +973,14 @@ public class JobsController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             Boolean started = this.jobSchedulerService.isStarted();
-            return new ResponseEntity<>(Mono.just(started), HttpStatus.OK); // 200
+
+            if (Objects.equals(principal.getDataDomainIdentity().getDataDomainCloud(), this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
+                return new ResponseEntity<>(Mono.just(started), HttpStatus.OK); // 200
+            } else {
+                LocalDataDomainSpec localDomainSpec = this.localDataDomainRegistry.getNestedDomain(principal.getDataDomainIdentity().getDataDomainCloud());
+                started = started && localDomainSpec != null && localDomainSpec.isEnableScheduler();
+                return new ResponseEntity<>(Mono.just(started), HttpStatus.OK); // 200
+            }
         }));
     }
 
@@ -969,13 +1004,18 @@ public class JobsController {
     public Mono<ResponseEntity<Mono<Void>>> startCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            if (!this.jobSchedulerService.isStarted()) {
-                this.jobSchedulerService.start(
-                        this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
-                        this.dqoSchedulerConfigurationProperties.getCheckRunMode());
-                this.jobSchedulerService.triggerMetadataSynchronization();
+            if (Objects.equals(principal.getDataDomainIdentity().getDataDomainCloud(), this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
+                if (!this.jobSchedulerService.isStarted()) {
+                    this.jobSchedulerService.start(
+                            this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                            this.dqoSchedulerConfigurationProperties.getCheckRunMode());
+                    this.jobSchedulerService.triggerMetadataSynchronization();
+                }
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            } else {
+                this.localDataDomainRegistry.changeJobSchedulerStatusForDomain(principal.getDataDomainIdentity().getDataDomainCloud(), true);
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
             }
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }));
     }
 
@@ -999,10 +1039,15 @@ public class JobsController {
     public Mono<ResponseEntity<Mono<Void>>> stopCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            if (this.jobSchedulerService.isStarted()) {
-                this.jobSchedulerService.stop();
+            if (Objects.equals(principal.getDataDomainIdentity().getDataDomainCloud(), this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
+                if (this.jobSchedulerService.isStarted()) {
+                    this.jobSchedulerService.stop();
+                }
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            } else {
+                this.localDataDomainRegistry.changeJobSchedulerStatusForDomain(principal.getDataDomainIdentity().getDataDomainCloud(), false);
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
             }
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }));
     }
 }

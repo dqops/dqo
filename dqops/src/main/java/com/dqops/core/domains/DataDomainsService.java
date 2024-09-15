@@ -24,8 +24,9 @@ import java.util.List;
 public interface DataDomainsService {
     /**
      * Downloads the list of data domains from DQOps cloud and configures the domains in the local DQOps instance.
+     * @param silent When synchronization fails, just move silently on, without throwing an exception.
      */
-    void synchronizeDataDomainList();
+    void synchronizeDataDomainList(boolean silent);
 
     /**
      * Returns a list of all local data domains. It also returns the default data domain.

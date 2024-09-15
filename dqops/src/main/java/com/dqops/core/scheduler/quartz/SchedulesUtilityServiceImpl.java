@@ -56,7 +56,7 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
 
         Trigger scheduleTrigger;
         try {
-            scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
+            scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY, UserDomainIdentity.ROOT_DATA_DOMAIN);
         } catch (JobSchedulerException e) {
             return null;
         }

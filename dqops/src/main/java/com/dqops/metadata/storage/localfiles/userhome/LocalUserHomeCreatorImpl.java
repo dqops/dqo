@@ -403,12 +403,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * Ensures that the DQOps User home is initialized at the default location. Prompts the user before creating the user home to confirm.
      * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQOps User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
+     * @return True when a new user home was initialized. False when the existing user home was used.
      */
     @Override
-    public void ensureDefaultUserHomeIsInitialized(boolean isHeadless) {
+    public boolean ensureDefaultUserHomeIsInitialized(boolean isHeadless) {
         String userHomePathString = this.homeLocationFindService.getUserHomePath();
         if (userHomePathString == null) {
-            return; // the dqo user home is not required for some reason (configurable)
+            return false; // the dqo user home is not required for some reason (configurable)
         }
 
         Path userHomePath = Paths.get(userHomePathString);
@@ -418,7 +419,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             }
             activateFileLoggingInUserHome();
             upgradeUserHomeConfigurationWhenMissing(this.userConfigurationProperties.getDefaultDataDomain());
-            return;
+            return false;
         }
 
         if (this.isUninitializedInUnmountedDockerVolume(userHomePath) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
@@ -433,6 +434,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             terminalWriter.writeLine("DQOps will quit.");
             log.error("DQOps User Home folder cannot be initialized at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(101);
+            return false;
         }
 
         if (isHeadless || this.userConfigurationProperties.isInitializeUserHome()) {
@@ -440,6 +442,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 System.exit(101);
             }
             activateFileLoggingInUserHome();
+            return true;
         }
         else {
             if (this.terminalFactory.getReader().promptBoolean("Initialize a DQOps user home at " + userHomePathString, true)) {
@@ -447,12 +450,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                     System.exit(101);
                 }
                 activateFileLoggingInUserHome();
-                return;
+                return true;
             }
 
             this.terminalFactory.getWriter().writeLine("DQOps user home will not be created, exiting.");
             log.error("DQOps User Home folder initialization cancelled, cannot create the DQOps User Home at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(100);
+            return true; // will not reach here
         }
     }
 

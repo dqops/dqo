@@ -35,9 +35,15 @@ public interface LocalDataDomainRegistry {
     /**
      * Return a collection of nested data domain names (excluding the default domain).
      *
-     * @return List of nested domains.
+     * @return List of nested domains or null when data domains are not supported.
      */
     Collection<LocalDataDomainSpec> getNestedDataDomains();
+
+    /**
+     * Returns a list all local data domains, including the default domain (if it is loaded).
+     * @return List of local data domains.
+     */
+    Collection<LocalDataDomainSpec> getAllLocalDataDomains();
 
     /**
      * Replaces the current list of data domains with a new list of domains. Some domains are deleted, other created locally.
@@ -49,18 +55,25 @@ public interface LocalDataDomainRegistry {
      * Adds a local data domain. Saves the domain to the local settings and starts the data domain locally.
      * @param localDataDomainSpec Data domain specification.
      */
-    void addDataDomain(LocalDataDomainSpec localDataDomainSpec);
+    void addNestedDataDomain(LocalDataDomainSpec localDataDomainSpec);
 
     /**
      * Deletes a local data domain. Operations for the domain (job scheduling) is stopped, but the local data is preserved.
      * @param dataDomainName Data domain name.
      */
-    boolean deleteDataDomain(String dataDomainName);
+    boolean deleteNestedDataDomain(String dataDomainName);
 
     /**
      * Returns a data domain given the technical domain name.
      * @param dataDomainName Data domain name.
      * @return Data domain or null, when this domain is not maintained locally.
      */
-    LocalDataDomainSpec getDomain(String dataDomainName);
+    LocalDataDomainSpec getNestedDomain(String dataDomainName);
+
+    /**
+     * Changes the status of running the job scheduler on this data domain.
+     * @param dataDomainName Data domain name.
+     * @param enableJobScheduling Enable job scheduling.
+     */
+    void changeJobSchedulerStatusForDomain(String dataDomainName, boolean enableJobScheduling);
 }

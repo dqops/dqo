@@ -95,7 +95,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             String dataDomain = this.jobDataMapAdapter.getDataDomain(jobExecutionContext.getTrigger().getJobDataMap());
-            DqoUserPrincipal principal = this.principalProvider.createLocalDomainUserPrincipal(dataDomain);
+            DqoUserPrincipal principal = this.principalProvider.createLocalDomainAdminPrincipal(dataDomain);
             DqoCloudApiKeyPayload cloudApiKeyPayload = principal.getApiKeyPayload();
             if (cloudApiKeyPayload == null) {
                 return;

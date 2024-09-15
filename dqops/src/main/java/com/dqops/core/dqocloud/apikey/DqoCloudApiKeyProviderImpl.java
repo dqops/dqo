@@ -121,7 +121,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
             DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
             String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDefaultDomain();
             if (Strings.isNullOrEmpty(apiKeyDomain)) {
-                apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+                apiKeyDomain = UserDomainIdentity.ROOT_DATA_DOMAIN;
             }
 
             synchronized (this.lock) {

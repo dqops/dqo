@@ -85,7 +85,7 @@ public class HomeFilePath implements Cloneable {
 
                 return HomeFilePath.fromFilePath(dataDomainName, pathInDomainFolder);
             } else {
-                return HomeFilePath.fromFilePath(UserDomainIdentity.DEFAULT_DATA_DOMAIN,
+                return HomeFilePath.fromFilePath(UserDomainIdentity.ROOT_DATA_DOMAIN,
                         pathRelativeToUserHome.toString().replace('\\', '/'));
             }
         }

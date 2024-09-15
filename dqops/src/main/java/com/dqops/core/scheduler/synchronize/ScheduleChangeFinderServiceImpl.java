@@ -62,7 +62,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * @return All unique schedules to run data quality checks.
      */
     public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks(String dataDomainName) {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainUserPrincipal(dataDomainName);
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainAdminPrincipal(dataDomainName);
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);

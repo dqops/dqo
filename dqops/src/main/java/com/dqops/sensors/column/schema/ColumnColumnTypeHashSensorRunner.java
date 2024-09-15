@@ -210,8 +210,7 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
 
                     if (introspectedColumnSpec == null || introspectedColumnSpec.getTypeSnapshot() == null) {
                         // column not found
-                        Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
-                                this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
+                        Table table = GenericSensorResultsFactory.createEmptyResultTable();
                         return new SensorExecutionResult(sensorRunParameters, table);
                     }
 

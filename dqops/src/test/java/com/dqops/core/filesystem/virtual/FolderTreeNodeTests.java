@@ -17,7 +17,6 @@ package com.dqops.core.filesystem.virtual;
 
 import com.dqops.BaseTest;
 import com.dqops.core.filesystem.BuiltInFolderNames;
-import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.principal.UserDomainIdentity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,14 +29,14 @@ import java.util.List;
 public class FolderTreeNodeTests extends BaseTest {
     @Test
     void getSubFolders_whenNewObject_thenIsEmpty() {
-        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         Assertions.assertNotNull(sut.getSubFolders());
         Assertions.assertEquals(0, sut.getSubFolders().size());
     }
 
     @Test
     void getFiles_whenNewObject_thenIsEmpty() {
-        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         Assertions.assertNotNull(sut.getFiles());
         Assertions.assertEquals(0, sut.getFiles().size());
     }
@@ -50,19 +49,19 @@ public class FolderTreeNodeTests extends BaseTest {
 
     @Test
     void getKind_whenNewObjectForRootFolder_thenIsHome() {
-        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         Assertions.assertEquals(FolderKind.HOME, sut.getKind());
     }
 
     @Test
     void getKind_whenNewObjectForRootFolder_thenIsUnknown() {
-        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("name")));
+        FolderTreeNode sut = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, FolderName.fromObjectName("name")));
         Assertions.assertEquals(FolderKind.UNKNOWN, sut.getKind());
     }
 
     @Test
     void constructor_whenNameAndKindGiven_thenBothStored() {
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName(BuiltInFolderNames.SOURCES), FolderName.fromObjectName("src1"));
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, FolderName.fromObjectName(BuiltInFolderNames.SOURCES), FolderName.fromObjectName("src1"));
         FolderTreeNode sut = new FolderTreeNode(folderPath, FolderKind.SOURCE);
         Assertions.assertSame(folderPath, sut.getFolderPath());
         Assertions.assertEquals(FolderKind.SOURCE, sut.getKind());
@@ -71,7 +70,7 @@ public class FolderTreeNodeTests extends BaseTest {
     @Test
     void createRootFolderNode_whenCalled_thenReturnsHomeRoot() {
         FolderTreeNode home = FolderTreeNode.createRootFolderNode();
-        Assertions.assertEquals(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), home.getFolderPath());
+        Assertions.assertEquals(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), home.getFolderPath());
         Assertions.assertEquals(FolderKind.HOME, home.getKind());
     }
 

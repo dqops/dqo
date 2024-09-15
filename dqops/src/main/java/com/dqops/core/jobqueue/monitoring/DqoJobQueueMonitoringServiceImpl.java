@@ -311,17 +311,20 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     /**
      * Creates an initial job list model that is retrieved by the UI when UI start up and the notification panel
      * must be filled with a list of jobs that are on the queue or jobs that have already finished.
+     * @param dataDomain Data domain name.
      * @return Initial job queue snapshot.
      */
     @Override
-    public Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList() {
+    public Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList(String dataDomain) {
         Mono<DqoJobQueueInitialSnapshotModel> jobsMono = Mono.defer(() -> {
             long changeSequence;
             List<DqoJobHistoryEntryModel> jobs;
 
             synchronized (this.lock) {
                 changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
-                jobs = new ArrayList<>(this.allJobs.values());
+                jobs = this.allJobs.values().stream()
+                        .filter(dqoJobHistoryEntryModel -> Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain))
+                        .collect(Collectors.toList());
             }
 
             return Mono.just(new DqoJobQueueInitialSnapshotModel(jobs, this.currentSynchronizationStatus, changeSequence));
@@ -356,7 +359,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             if (this.started && changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
-
 
                 Map<Long, CompletableFuture<Long>> domainAwaitersMap = this.waitingClientsPerDomain.get(domainName);
                 if (domainAwaitersMap == null) {
@@ -579,12 +581,16 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * Finds the job identified by a job id.
      *
      * @param jobId Job id to find.
+     * @param dataDomain Data domain name.
      * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
      */
     @Override
-    public DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId) {
+    public DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId, String dataDomain) {
         synchronized (this.lock) {
             DqoJobHistoryEntryModel dqoJobHistoryEntryModel = this.allJobs.get(jobId);
+            if (dqoJobHistoryEntryModel != null && !Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain)) {
+                return null;
+            }
             return dqoJobHistoryEntryModel;
         }
     }
@@ -594,16 +600,25 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * If there is a known (tracked) job with that business key, this method will return the job id. Otherwise, when not found, returns null.
      *
      * @param jobBusinessKey Job business key to look up.
+     * @param dataDomain Data domain name.
      * @return Job id or null when not found.
      */
     @Override
-    public DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey) {
+    public DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey, String dataDomain) {
         if (Strings.isNullOrEmpty(jobBusinessKey)) {
             return null;
         }
 
         synchronized (this.lock) {
-            return this.businessKeyToJobIdMap.get(jobBusinessKey);
+            DqoQueueJobId dqoQueueJobId = this.businessKeyToJobIdMap.get(jobBusinessKey);
+            if (dqoQueueJobId != null) {
+                DqoJobHistoryEntryModel dqoJobHistoryEntryModel = this.allJobs.get(dqoQueueJobId);
+                if (dqoJobHistoryEntryModel != null && !Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain)) {
+                    return null;
+                }
+            }
+
+            return dqoQueueJobId;
         }
     }
 }

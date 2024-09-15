@@ -50,7 +50,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
         this.coreConfigurationProperties = coreConfigurationProperties;
         this.threadLocksCounter = threadLocksCounter;
         this.locks = new LinkedHashMap<>();
-        this.createLocksForDataDomain(UserDomainIdentity.DEFAULT_DATA_DOMAIN);
+        this.createLocksForDataDomain(UserDomainIdentity.ROOT_DATA_DOMAIN);
     }
 
     /**
