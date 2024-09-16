@@ -18,8 +18,10 @@ package com.dqops.rest.server.authentication;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -86,6 +88,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
     private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private final LocalDataDomainRegistry localDataDomainRegistry;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
@@ -94,7 +97,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                                              DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
                                              DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                              DqoUserPrincipalProvider dqoUserPrincipalProvider,
-                                             DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+                                             DqoUserConfigurationProperties dqoUserConfigurationProperties,
+                                             LocalDataDomainRegistry localDataDomainRegistry) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
@@ -102,6 +106,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
         this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.localDataDomainRegistry = localDataDomainRegistry;
     }
 
     /**
@@ -144,9 +149,9 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         ServerHttpRequest request = exchange.getRequest();
         String requestPath = request.getPath().value();
         String activeDataDomainCloudName = this.dqoUserConfigurationProperties.getDefaultDataDomain();
-        HttpCookie selectedDataDomain = exchange.getRequest().getCookies().getFirst(DATA_DOMAIN_COOKIE);
-        if (selectedDataDomain != null) {
-            activeDataDomainCloudName = selectedDataDomain.getValue();
+        HttpCookie selectedDataDomainCookie = exchange.getRequest().getCookies().getFirst(DATA_DOMAIN_COOKIE);
+        if (selectedDataDomainCookie != null) {
+            activeDataDomainCloudName = selectedDataDomainCookie.getValue();
             if (Strings.isNullOrEmpty(activeDataDomainCloudName) || Objects.equals(activeDataDomainCloudName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME)) {
                 activeDataDomainCloudName = UserDomainIdentity.ROOT_DATA_DOMAIN; // switching to the default (root) domain
             }
@@ -253,11 +258,25 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             exchange.getResponse().getCookies().add(AUTHENTICATION_TOKEN_COOKIE, dqoAccessTokenCookie);
 
             String defaultDataDomainFromLogin = signedAuthenticationToken.getTarget().getActiveDataDomain();
-            if (defaultDataDomainFromLogin != null) {
-                if (Objects.equals(defaultDataDomainFromLogin, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
-                    defaultDataDomainFromLogin = UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME;
+            if (defaultDataDomainFromLogin != null || selectedDataDomainCookie != null) {
+                String effectiveDataDomain = defaultDataDomainFromLogin;
+
+                if (selectedDataDomainCookie != null) {
+                    if (Objects.equals(activeDataDomainCloudName, this.dqoUserConfigurationProperties.getDefaultDataDomain()) ||
+                        this.localDataDomainRegistry.getNestedDomain(activeDataDomainCloudName) != null) {
+                        if (signedAuthenticationToken.getTarget().getAccountRole() != null && signedAuthenticationToken.getTarget().getAccountRole() != DqoUserRole.NONE ||
+                            signedAuthenticationToken.getTarget().getDomainRoles() != null && signedAuthenticationToken.getTarget().getDomainRoles().get(activeDataDomainCloudName) != null &&
+                            signedAuthenticationToken.getTarget().getDomainRoles().get(activeDataDomainCloudName) != DqoUserRole.NONE) {
+                            effectiveDataDomain = activeDataDomainCloudName;
+                        }
+                    }
                 }
-                ResponseCookie activeDataDomainTokenCookie = ResponseCookie.from(DATA_DOMAIN_COOKIE, defaultDataDomainFromLogin)
+
+                if (Objects.equals(effectiveDataDomain, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
+                    effectiveDataDomain = UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME;
+                }
+
+                ResponseCookie activeDataDomainTokenCookie = ResponseCookie.from(DATA_DOMAIN_COOKIE, effectiveDataDomain)
                         .maxAge(Duration.ofMinutes(this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes()))
                         .domain(hostHeader)
                         .path("/")
