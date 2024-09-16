@@ -1,37 +1,107 @@
 ---
-title: Review initial data quality results and run monitoring checks
+title: Review results from data quality assessment and automatically configure data quality checks
 ---
-# Review initial data quality results and run monitoring checks
-This guide will show you how to run the first data quality check, and how to review the first results and data quality issues in DQOps. 
+# Review results from data quality assessment and automatically configure data quality checks
+This guide will show you how to review results from data quality assessment and automatically configure data quality checks to detect the most common data quality issues.
+We will run those check and review the first results and data quality issues. 
 
 ## Overview
 
-After [adding your first connection, and initiating automatic monitoring](add-data-source-connection.md),
-we describe how to review the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks. 
-
-Once new tables are imported, DQOps automatically activates default profiling and monitoring checks which are scheduled to run daily at 12:00 a.m.
+After [adding your first connection, and starting data assessment](add-data-source-connection.md),
+we describe how to review the initial results from the basic statistics and profiling checks. Then, by using the DQOps [rule mining engine](../dqo-concepts/data-quality-rule-mining.md), we will automatically
+configure (mine) data quality checks to find the most common data quality issues. 
 
 ## Review basic statistics results
 
 Basic statistics provides you with summary information about your tables and columns. This information is
 valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
 
-In the previous step we have collected basic statistics for imported tables and columns using the Advisor. 
+The information from basic statistics is also used by [rule miner](../dqo-concepts/data-quality-rule-mining.md) 
+to propose a reasonable configuration of data quality checks.
+
+In the previous step we have collected basic statistics for imported tables and columns. 
 
 To review the results: 
 
-1. Go to the **Profiling** section. Select the **austin_crime.csv** table on the tree view on the left. The results are displayed under **Basic data statistics** tab. 
+1. Go to the **Profiling** section. 
+2. Select the **orders.csv** table on the tree view on the left. 
+3. The results are displayed under the **Basic data statistics** tab. 
 
     You can filter the columns by simply clicking on the sorting icon next to any column header.
 
     For detailed description of each column go to the [Basics statistics section](../working-with-dqo/collecting-basic-data-statistics.md).
 
-    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics4.png){ loading=lazy; width="1200px" }
+    ![Basic statistics results for orders](https://dqops.com/docs/images/getting-started/orders-statistics1.png){ loading=lazy; width="1200px" }
 
-2. To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
+To view detailed statistics for column, click on the name of the column or navigate to the single column on the tree view.
  
-    ![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics5.png){ loading=lazy; width="1200px" }
+![Basic statistics results for orders - details](https://dqops.com/docs/images/getting-started/orders-column-statistics1.png){ loading=lazy; width="1200px" }
 
+## Propose a configuration of data quality checks using rule mining
+
+Setting up data quality rules and thresholds manually can be time-consuming, especially since most checks will show that everything is okay.
+DQOps automates this process with its data quality [rule mining engine](../dqo-concepts/data-quality-rule-mining.md). The engine
+analyzes data collected from basic statistics, sample values and results from profiling checks to propose check configurations for detecting common data quality issues.
+It also suggests checks that will pass for the current data and serve as a baseline for detecting changes in data distribution over time.
+
+You can find more information about [the data quality rule mining in the concept section](../dqo-concepts/data-quality-rule-mining.md).
+
+### Navigating to the rule miner
+
+To navigate to the data quality rule miner.
+
+1. Select the **Profiling** section
+2. Select the table of interest on the tree view on the left.
+3. Click on the **Data quality rule mining** tab
+
+![Navigating to rule miner](https://dqops.com/docs/images/getting-started/navigating-to-rule-miner2.png){ loading=lazy; width="1200px" }
+
+The rule mining screen allows you to view and select the automatically proposed configuration of data quality checks.
+DQOps proposes a list of data quality checks instantly upon entering the rule mining screen.
+If any parameter configuration is changed, clicking the **Propose** button will generate a new proposal.
+Use the **Apply** button to save (apply) the proposed check configuration.
+
+The rule miner shows proposed configurations as a list of checks divided by table, columns and check types. 
+The column names can be expanded to view the proposed checks. You can change the proposed data quality check
+parameters and data quality rule thresholds before applying the proposed configuration. 
+
+You can also customize the rule miner proposals with the following options:
+
+- **Filtering by check category, check name and column name:** You can use these filtering options no narrow down the
+list of proposals by specifying check category, check name, or column name.
+- **Error rate (% of rows):** The most critical configuration parameter of the rule miner to control its sensitivity.
+It represents the percentage of errors that can contain invalid values. By default, it is set to 2%, but you can change this value.
+DQOps will attempt to configure data quality checks to detect data quality issues in 2% of records containing the most outstanding values.
+- **Default severity level:** This is used to set the initial severity level for proposed checks, which can be later modified individually.
+- **Advanced parameters:** These parameters contains checkboxes that allows control how the rule mining engine handles 
+    already configured data quality checks and select data quality check categories that you want to include
+    in the proposal. More information about [Rule mining parameters](../dqo-concepts/data-quality-rule-mining.md#Rule-mining-parameters). 
+
+### Automated data quality check configuration using rule miner
+As an example, let's filter the initial proposition with the column name **gender**.
+
+Click on the **Propose** button to get the filtered proposition.
+
+![Rule miner gender column](https://dqops.com/docs/images/getting-started/rule-mining-proposition-gender-column1.png){ loading=lazy; width="1200px" }
+
+From the list of propositions, we will make the following modifications: 
+
+- In the **Nulls** category, keep only the **profile_null_percent** check with suggested max_percent parameter to value of 0.
+- In the **Uniqueness** category, adjust the **profile_distinct_count** check to have a range value of 2 to ensure 2 distinct values (M and F) are present.
+- In the **Accepted Values** category, keep the **profile_text_found_in_set_percent** check with the suggested values M and F.
+- In the **Text** and **PII** categories, deactivate all checks using the green toggle button.
+
+Click on the **Apply** button to apply the proposed check configuration.
+
+![Rule miner gender column proposition modification](https://dqops.com/docs/images/getting-started/rule-mining-proposition-modifications1.png){ loading=lazy; width="1200px" }
+
+A popup window will appear, notifying you that the checks have been activated, and that you can run activated check by clicking on the **Confirm** button.
+
+![Rule miner proposition - run activated checks](https://dqops.com/docs/images/getting-started/rule-mining-proposition-run-activated-checks1.png){ loading=lazy }
+
+A notification will appear indicating that the job has begun, and the **Table quality status** tab will start flashing.
+
+If desired, you can use the rule miner to activate more checks for table or other columns.
 
 ## Review profiling checks results
 
@@ -39,159 +109,186 @@ To review the results:
 [**Basic data statistics**](../working-with-dqo/collecting-basic-data-statistics.md). Profiling checks are also useful for
 exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
-In the previous step we have run profiling checks for imported tables and columns using the Advisor. Now, let's review the results.
+In the previous step we have run several profiling checks suggested by the [rule mining](../dqo-concepts/data-quality-rule-mining.md). Now, let's review the results.
 
 ### Review Profiling Table quality status
 
-**Table quality status** allows you to quickly evaluate the data quality status of your table. To navigate to the Table quality status,
-click on **Profiling** section, the "austin_crime.csv" table on the tree view, and **Table quality status** tab.
+**Table quality status** allows you to quickly evaluate the data quality status of your table.
 
-![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status2.png){ loading=lazy; width="1200px" }
+To navigate to the Table quality status:
 
-This tab provides you with an overview of the current data quality status of your table, including the number of 
+1. Click on **Profiling** section
+2. Select the **orders.csv** table on the tree view on the left.
+3. Click on the **Table quality status** tab
+
+![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status5.png){ loading=lazy; width="1200px" }
+
+This tab provides an overview of the current data quality status of your table. It includes the number of
 executed checks, and detailed results per table and columns grouped by check categories.
 
-At the bottom of the screen, you will find a table that displays the check results per category, and per 
-table and columns.
+At the bottom of the screen, you will find a table that displays the check results per category, table, and columns.
 
-The colored boxes indicates the current or the highest severity status: green for a correct result, yellow for a warning,
-orange for an error, and red for a fatal error. By clicking on the arrow next to the colored box, you can view a list 
-of checks that contribute to the result.
+The colored boxes indicate the current or the highest severity status: green for a correct result, yellow for a warning,
+orange for an error, red for a fatal error, and grey stripes for execution error.
 
-You can group the results by data quality dimension using the radio button and filter the results by time frame 
+You can click on the colored box to view a list of checks that contribute to the result. Hovering over the check name will provide more details.
+
+In our example, the "gender" column currently has an error severity status, which resulted from the failed checks in the **Accepted values**, **Nulls**, and **Uniqueness** categories.
+
+![Profiling Table quality status - details](https://dqops.com/docs/images/getting-started/profiling-table-quality-status-details2.png){ loading=lazy; width="1200px" }
+
+You can group the results by data quality dimension using the radio button and filter the results by time frame
 and severity status.
 
+### Review check results on the Profiling check editor
 
-### Navigate to the Profiling checks editor
+We can also review more detailed check results and error samples on the **Profiling check editor**.
 
-To navigate to the Profiling checks editor, click on **Profiling** section, the **austin_crime.csv** table on the tree view, and **Profiling checks** tab.
+To navigate to the Profiling checks editor, click on the **gender** column on the tree view on the left
+and select the **Profiling checks editor** tab. 
 
-![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list3.png){ loading=lazy; width="1200px" }
+![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list6.png){ loading=lazy; width="1200px" }
 
-Here you can view the list of all table profiling checks. Notice that the toggle button next to the name of the 
-default checks activated upon importing new tables have a light green color. If the check has
-been activated manually, the toggle button will have a darker green color.
+On the **Profiling checks editor** you can view the list of all table profiling checks. Notice that the toggle button next to the name of the 
+default checks activated upon importing new tables has a light green color. If the check has
+been activated manually or through the rule miner, the toggle button will have a darker green color.
 
-The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check,
-review results, and get more information about it.
+The icons located before the name of each check allow you to:
 
-For activated checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
+- Activate and deactivate it using toggle button. 
+- Enable or disable check.
+- Configure check settings.
+- Get information if the check has activated scheduling.
+- [Run a check](../working-with-dqo/run-data-quality-checks.md),
+- Review results
+- View the check description.
 
-- green for a correct result
-- yellow for a warning
-- orange for an error
-- red for a fatal error
-- black for execution error
+For activated checks, notice a square next to the name indicating the results of the check:
 
-### Review the profiling checks results
+- Green for a correct result.
+- Yellow for a warning.
+- Orange for an error.
+- Red for a fatal error.
+- Black for execution error.
 
-To review the profiling checks results, click the **Results** icon to view more details of the results.
+You can find more information about the check editor in the [User interface overview section of the documentation](../dqo-concepts/dqops-user-interface-overview.md#Check-editor).
 
-![Checking results](https://dqops.com/docs/images/getting-started/checking-results3.png){ loading=lazy; width="1200px" }
+To review the checks results, click the **Results** icon. Let's review the results for the **profile_text_found_in_set_percent**
+check in the **Accepted values** category.
 
-A table will appear with more details about the run check. The check displayed Valid results with the actual value 1 000. 
+![Checking results](https://dqops.com/docs/images/getting-started/checking-results5.png){ loading=lazy; width="1200px" }
 
-You can also review the results of other table checks on the list, as well as review the list of the column-level checks. 
-Just select the column of interest form the tree view on the left. 
+A table will appear with more details about the run check. The check displayed an Error result with the actual value of 99.599%, indicating that not
+all values in the table are in the expected_values set defined as a check parameter.
 
-On the list of checks you can activate other checks, change their thresholds and run them.
+### Review the profiling checks results error samples
 
-Note that some activated checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
-For those check a [sensor](../dqo-concepts/definition-of-data-quality-sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
-Based on the results, you can set the threshold for these checks.
+To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling.
+You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
+**Error sampling** tab in the results section.
 
-### Default data profiling checks
-To perform [initial data profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score),
-DQOps activates the following [default data quality checks](../dqo-concepts/data-observability.md) 
+![Checking error samples](https://dqops.com/docs/images/getting-started/checking-error-samples2.png){ loading=lazy; width="1200px" }
 
-| Target | Check name                                                             | Description                                                                                       |
-|--------|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../checks/table/volume/row-count.md)               | Captures the row count of the table and identifies empty tables.                                  |
-| table  | [profile data freshness](../checks/table/timeliness/data-freshness.md) | Measures data freshness of the table.                                                             |
-| table  | [profile column count](../checks/table/schema/column-count.md)         | Retrieves the metadata of the monitored table from the data source and captures the column count. |
-| column | [profile nulls count](../checks/column/nulls/nulls-count.md)           | Counts null values in every column and detects incomplete columns that contain null values.       |
-| column | [profile nulls percent](../checks/column/nulls/nulls-percent.md)       | Measures the percentage of null values in every column.                                           |
-| column | [profile not nulls count](../checks/column/nulls/not-nulls-count.md)   | Counts not null values in every column and detects empty columns that contain only null values.   |
-    
+We can see that there are four values that do not match the set defined as a check parameter.
+
+For additional information about error sampling, please refer to [the Data Quality Error Sampling documentation](../dqo-concepts/data-quality-error-sampling.md).
+You can check there how to configure ID column that will help in identifying error sample or download error samples as a CSV file. 
+
+## Copy the verified profiling check to monitoring checks 
+To start monitoring your data using checks configured in the Profiling sections we can copy the configuration to monitoring checks.
+[**Monitoring checks**](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are standard checks that monitor the data quality of a
+table or column. These checks create a single data quality result for the entire table or column. When run multiple times per day, the **daily checks** store only
+the most recent result for each day.
+
+To copy the configuration of checks activated in the Profiling section to Monitoring:
+
+1. Navigate to the **Monitoring checks** section.
+2. Select the **orders.csv** table from the tree view on the left.
+3. Click on the **Copy verified profiling checks** tab
+
+     Here you can see a proposition of checks based on checks that have been activated in the Profiling section.
+     To increase the number of propositions, you can either activate more profiling checks manually or use the data quality rule miner in the Profiling section.
+
+     ![Copy verified profiling checks to monitoring](https://dqops.com/docs/images/getting-started/copy-verified-profiling-checks-to-monitoring1.png){ loading=lazy; width="1200px" }
+
+4. Click on the **Apply** button to activate the proposed monitoring checks. 
+5. A popup window will appear, notifying you that the checks have been activated, and that you can run activated check by clicking on the **Confirm** button.
+6. A notification will appear indicating that the job has begun, and the **Table quality status** tab will start flashing.
+
+### Review Monitoring Table quality status
+
+**Table quality status** allows you to quickly evaluate the data quality status of your table.
+
+To navigate to the monitoring checks Table quality status:
+
+1. Click on **Monitoring** section
+2. Select the **orders.csv** table on the tree view on the left.
+3. Click on the **Table quality status** tab
+
+![Monitoring Table quality status](https://dqops.com/docs/images/getting-started/monitoring-table-quality-status1.png){ loading=lazy; width="1200px" }
+
+We can see, that the "gender" column currently has an error severity status, which resulted from the failed checks in the **Accepted values**, **Nulls**, and **Uniqueness** categories.
 
 ## Run monitoring checks
 
-[**Monitoring checks**](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are standard checks that monitor the data quality of a
-table or column. These checks create a single data quality result for the entire table or column. There are two categories
-of monitoring checks: daily checks and monthly checks. When run multiple times per day, the **daily checks** store only
-the most recent result for each day. **Monthly checks** store the most recent results for each month the data quality
-checks were run.
+Now let's run some more monitoring checks, which have been automatically activated upon importing the tables. 
 
-Now let's run monitoring checks.
+In the **Monitoring checks** section, select the gender column to open the **Data quality check editor**.
 
-1. Go to the **Monitoring Checks** section, and select the **austin_crime.csv** table from the tree view and **Daily** tab. 
+![Monitoring check editor](https://dqops.com/docs/images/getting-started/monitoring-check-editor.png){ loading=lazy; width="1200px" }
 
-    ![Monitoring checks section](https://dqops.com/docs/images/getting-started/monitoring-checks-section3.png){ loading=lazy; width="1200px" }
+Notice that the toggle button next to the name of the default checks activated upon importing new tables has a light green color. If the check has
+been activated manually or through the rule miner, the toggle button will have a darker green color.
 
-2. Click the **Run check** icon next to daily_row_count check. This check verifies that the number of rows in the table
-    does not exceed the minimum accepted count set as the threshold level which is 1 in this case.
-   
-    You can read more about [issue severity levels in DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
+To run a single check, click the **Run check** icon next to its name. To run all activated checks in a category, click the icon on the category row.
+To run all activated checks in a table or column, click the icon in the top right corner of the Check Editor table.
 
-    ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check3.png){ loading=lazy; width="1200px" }
-    
-    A green square should appear next to the name of the checks indicating that the result of the run check is valid.
-    You can view the details by placing the mouse cursor on the green square or view more detail results by clicking the
-    **Results** icon
+![Run monitoring checks](https://dqops.com/docs/images/getting-started/run-monitoring-checks1.png){ loading=lazy; width="1200px" }
 
-    You can run checks for your entire connection, schema, table, or column from the tree view on the left-hand side of
-    the screen. To do so, click on the three-dot icon and select the Run check option. Check more information how to 
-    [Run checks from a tree view](../working-with-dqo/run-data-quality-checks.md#Run-checks-from-a-tree-view).
+You can also run checks for your entire connection, schema, table, or column from the tree view on the left-hand side of
+the screen. To do so, click on the three-dot icon and select the Run check option. Check more information how to
+[Run checks from a tree view](../working-with-dqo/run-data-quality-checks.md#Run-checks-from-a-tree-view).
 
-    You can activate and run other monitoring checks and adjust their thresholds.
+Let's execute all the monitoring checks activated in the **demo_connection** by clicking on the three-dot icon and selecting the **Run check** option. 
+Click on **Run checks** in the popup.
 
-### Default daily monitoring checks
-DQOps activates the following [daily monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)
-on every table and column to apply [data observability](../dqo-concepts/data-observability.md) of the data source.
+![Run monitoring checks from three view](https://dqops.com/docs/images/getting-started/run-monitoring-checks-from-three-view1.png){ loading=lazy }
 
-| Target | Check name                                                                                                | Description                                                                                                                                                                                                                                |
-|--------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [daily row count](../checks/table/volume/row-count.md)                                                    | Captures the row count of the table every day and identifies empty tables.                                                                                                                                                                 |
-| table  | [daily row count anomaly](../checks/table/volume/row-count-anomaly.md)                                    | Detects day-to-day anomalies in the table volume. Raises a data quality issue when the increase or decrease in the row count is in the top 1% of most significant changes.                                                                 |
-| table  | [daily row count change](../checks/table/volume/row-count-change.md)                                      | Detects significant day-to-day changes in the table volume. Raises a data quality issue when the increase or decrease in the row count is greater than 10%.                                                                                |
-| table  | [daily data freshness](../checks/table/timeliness/data-freshness.md)                                      | Measures data freshness of the table. Raises a data quality issue when the data is outdated by 2 days.                                                                                                                                     |
-| table  | [daily data staleness](../checks/table/timeliness/data-staleness.md)                                      | Measures data staleness (the time since the last data loading) of the table. Raises a data quality issue when the table was not updated for 2 or more days.                                                                                |
-| table  | [daily table availability](../checks/table/availability/table-availability.md)                            | Verifies that a table exists, can be accessed, and queried without errors. Detects corrupted tables and expired credentials to data sources.                                                                                               |
-| table  | [daily column count](../checks/table/schema/column-count.md)                                              | Retrieves the metadata of the monitored table from the data source and counts the number of columns.                                                                                                                                       |
-| table  | [daily column count changed](../checks/table/schema/column-count-changed.md)                              | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                                                                                                                           |
-| table  | [daily column list changed](../checks/table/schema/column-list-changed.md)                                | Detects if the list of columns has changed since the last time the check was run.                                                                                                                                                          |
-| table  | [daily column list or order changed](../checks/table/schema/column-list-or-order-changed.md)              | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                                                                                                                           |
-| table  | [daily column types changed](../checks/table/schema/column-types-changed.md)                              | Detects if the column names or column types have changed since the last time the check was run.                                                                                                                                            |
-| column | [daily nulls count](../checks/column/nulls/nulls-count.md)                                                | Counts null values in every column without raising any data quality issues.                                                                                                                                                                |
-| column | [daily nulls percent](../checks/column/nulls/nulls-percent.md)                                            | Measures the percentage of null values in every column without raising any data quality issues.                                                                                                                                            |
-| column | [daily nulls percent anomaly](../checks/column/nulls/nulls-percent-anomaly.md)                            | Measures the percentage of null values in every column and detects anomalous changes in the percentage of null value. Raises a data quality issue for the top 1% biggest day-to-day changes.                                               |
-| column | [daily not nulls percent](../checks/column/nulls/not-nulls-percent.md)                                    | Measures the percentage of null values in every column without raising any data quality issues.                                                                                                                                            |
-| column | [daily nulls percent change](../checks/column/nulls/nulls-percent-change.md)                              | Detects significant day-to-day changes in the percentage of null values in every column. Raises a data quality issue when the increase or decrease in the percentage of null values is greater than 10%.                                   |
-| column | [daily distinct count anomaly](../checks/column/uniqueness/distinct-count-anomaly.md)                     | Counts distinct values in every column and detects anomalous changes in the percentage of null value. Raises a data quality issue for the top 1% biggest day-to-day changes of the count of distinct values.                               |
-| column | [daily detected datatype in text changed](../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a text column and detects the data type of all values in a column. Raises a data quality issue when the type of texts changes. For example, when a column contained always numeric values, but a text value was found. |
-| column | [daily sum anomaly](../checks/column/anomaly/sum-anomaly.md)                                              | Sums values in all numeric columns. Detects day-to-day anomalies in the sum of numeric values. Raises a data quality issue for the top 1% biggest day-to-day changes.                                                                      |
-| column | [daily mean anomaly](../checks/column/anomaly/mean-anomaly.md)                                            | Calculates a mean (average) value in all numeric columns. Detects day-to-day anomalies of the mean of numeric values. Raises a data quality issue for the top 1% biggest day-to-day changes.                                               |
-| column | [daily column exists](../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                                                                                                                    |
-| column | [daily column type changed](../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                                                                                                                   |
-
-For more [general information about checks, see the DQOps concepts](../dqo-concepts/definition-of-data-quality-checks/index.md) section.
+Now you can check the Table status again or check details results as before. 
 
 ## View Tables summary
 
 To review the overall health summary of your data, navigate to the Home screen and use the Tables and Columns summaries.
 These summaries are based on previously executed monitoring and partition data quality checks, excluding the results from profiling checks.
 
-To access **Tables summary**, click on the DQOps logo in the top left corner and select the **Tables** tab.
+To access the **Tables summary**, click on the DQOps logo in the top left corner and select the **Data quality summary** tab and Tables subtab.
 
-![Navigating to Tables summary](https://dqops.com/docs/images/getting-started/austin-crime-table-summary.png){ loading=lazy; width="1200px" }
+![Navigating to the Tables summary](https://dqops.com/docs/images/getting-started/table-summary2.png){ loading=lazy; width="1200px" }
 
 You can view a list of tables with measured total data quality KPI and a breakdown of KPIs calculated from executed checks
-categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display 
+categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display
 a tooltip containing more details.
 
 The calculated KPIs in our example are at 100% because we ran one monitoring check that gave a correct result.
 
 For a deeper dive into [Tables and Columns summaries, see the DQOps concepts section](../dqo-concepts/dqops-user-interface-overview.md#home-screen)
+
+## View Incidents summary
+
+![Navigating to the Incidents summary](https://dqops.com/docs/images/getting-started/incidents-summary2.png){ loading=lazy; width="1200px" }
+
+
+## Create incident notification
+
+![Open the Accepted values incidents](https://dqops.com/docs/images/getting-started/open-the-accepted-values-incidents1.png){ loading=lazy; width="1200px" }
+
+![Open the incident details](https://dqops.com/docs/images/getting-started/open-the-incident-details1.png){ loading=lazy; width="1200px" }
+
+![Incident details](https://dqops.com/docs/images/getting-started/incident-details1.png){ loading=lazy; width="1200px" }
+
+![Creating notification for the incident](https://dqops.com/docs/images/getting-started/creating-notification-for-the-incident1.png){ loading=lazy }
+
+![Configuring notification for the incident](https://dqops.com/docs/images/getting-started/configure-new-notification-for-the-incident1.png){ loading=lazy; width="1200px" }
 
 ## Next step
 

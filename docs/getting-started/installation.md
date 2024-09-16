@@ -160,7 +160,7 @@ Now that you have installed and opened DQOps, it is time to
 ## Questions and answers
 If you have any questions, here are a few of the most common questions we answered.
 
-### What happens after the trial period
+### What happens after the trial period?
 You can always use almost all the features of our open-source platform as a free user. 
 However, we sponsor your [data quality data warehouse](../dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse), 
 which powers the [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md).
@@ -171,20 +171,20 @@ Your complimentary [data quality data warehouse](../dqo-concepts/architecture/dq
 will store the data quality results only for the first five tables that you monitor.
 Every other DQOps feature will continue to work without any implications.
 
-### Do I need a DQOps Cloud account
+### Do I need a DQOps Cloud account?
 You don't need a DQOps Cloud account to use DQOps.
 Without a DQOps Cloud account, you won't have access to data quality dashboards, 
 making it difficult to demonstrate data reliability to business sponsors and data customers.
 
-### How to install DQOps without Python
+### How to install DQOps without Python?
 Starting [DQOps locally as a Python package](../dqops-installation/install-dqops-using-pip.md) is not the only option. 
 Review other [installation options](../dqops-installation/index.md) to learn more.
 
-### How to run DQOps on a server
+### How to run DQOps on a server?
 Using our docker image is the preferred way to start a long-running DQOps instance that constantly monitors your data sources.
 Follow the installation guide for [running DQOps in Docker](../dqops-installation/run-dqops-as-docker-container.md) to learn more.
 
-### How to activate user & role management
+### How to activate user & role management?
 FREE and PERSONAL editions are limited to a single user who runs DQOps locally.
 You must [contact our sales team](https://dqops.com/contact-us/) and request a trial period for a TEAM or ENTERPRISE edition
 that provides [multi-user management](../working-with-dqo/access-management.md) and integration with your single sign-on authentication.

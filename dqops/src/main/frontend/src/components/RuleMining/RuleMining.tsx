@@ -332,7 +332,7 @@ export default function RuleMining({
           the Profiling section.
           <br />
           To increase the number of propositions, you can either activate more
-          checks manually or use the data quality rule miner in the Profiling
+          profiling checks manually or use the data quality rule miner in the Profiling
           section.
         </div>
       )}

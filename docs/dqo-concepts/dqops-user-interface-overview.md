@@ -248,11 +248,13 @@ In the **Data Source** section, you can access:
 - **Schedule:** Allows you to [configure of the check execution schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) at the connection level.
 - **Comments:** Allows adding comments to your connection.
 - **Labels:** Allows adding labels to your connection.
-- **Tables:** Displays a summary of the data quality status for tables in this connection. 
-- **Columns:** Displays a summary of the data quality status for columns in this connection. 
+- **Schemas:** Allow importing schemas and tables.
+- **Data quality summary:** Displays summaries of the data quality status. You have the option to choose one of two subtabs:
+    - **Tables:** This subtab provides a summary of the data quality status for tables in this connection.
+    - **Columns:** This subtab provides a summary of the data quality status for columns in this connection.
 - **Default grouping template:** Allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
-- **Incident grouping**: Allows configuring incidents grouping level. [Learn more about incidents](./grouping-data-quality-issues-to-incidents.md) that let you keep track of the issues that arise during data quality monitoring.
-- **Notifications:** Allows configuring incidents and Webhooks for notifications. [Learn how to configure notifications](./grouping-data-quality-issues-to-incidents.md#configure-notification-for-an-incident) whenever a new incident is created or modified.
+- **Incident grouping**: Allows configuring incidents grouping level. [Learn more about incidents](../dqo-concepts/grouping-data-quality-issues-to-incidents.md) that let you keep track of the issues that arise during data quality monitoring.
+- **Notifications:** Allows configuring incidents and Webhooks for notifications. [Learn how to configure notifications](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#configure-notification-for-an-incident) whenever a new incident is created or modified.
 
 ![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling2.png){ loading=lazy; width="1200px" }
 
