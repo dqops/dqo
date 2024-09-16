@@ -33,6 +33,7 @@ import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -261,7 +262,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         Set<String> allNewDataDomains = new LinkedHashSet<>();
         DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
         allNewDataDomains.add(userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud());
-        Set<String> nestedDataDomainNames = this.localDataDomainRegistry.getNestedDataDomains()
+        Collection<LocalDataDomainSpec> nestedDataDomains = this.localDataDomainRegistry.getNestedDataDomains();
+        if (nestedDataDomains == null) {
+            return;
+        }
+
+        Set<String> nestedDataDomainNames = nestedDataDomains
                 .stream()
                 .filter(dataDomainSpec -> dataDomainSpec.isEnableScheduler())
                 .map(dataDomainSpec -> dataDomainSpec.getDataDomainName())
