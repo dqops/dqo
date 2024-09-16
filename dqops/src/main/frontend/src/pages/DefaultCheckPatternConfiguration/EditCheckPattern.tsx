@@ -124,9 +124,7 @@ type TCheckContainerDiverse = {
   [key in TCheckTypes]: CheckContainerModel | undefined;
 };
 
-type TTarget =
-  | ColumnQualityPolicyListModel
-  | TableQualityPolicyListModel;
+type TTarget = ColumnQualityPolicyListModel | TableQualityPolicyListModel;
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 type TEditCheckPatternProps = {
   type: 'table' | 'column';
@@ -333,6 +331,7 @@ export default function EditCheckPattern({
 
     const apiCall = apiClient[activeTab as CheckRunMonitoringScheduleGroup];
     if (apiCall) {
+      if (!policy_name) return;
       await apiCall(policy_name).then(callBack);
     }
   };
