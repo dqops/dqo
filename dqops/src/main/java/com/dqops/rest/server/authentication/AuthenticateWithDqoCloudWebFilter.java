@@ -260,6 +260,20 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             String defaultDataDomainFromLogin = signedAuthenticationToken.getTarget().getActiveDataDomain();
             if (defaultDataDomainFromLogin != null || selectedDataDomainCookie != null) {
                 String effectiveDataDomain = defaultDataDomainFromLogin;
+                if (effectiveDataDomain == null && signedAuthenticationToken.getTarget().getDomainRoles() != null) {
+                    effectiveDataDomain = signedAuthenticationToken.getTarget().getDomainRoles()
+                            .entrySet()
+                            .stream()
+                            .filter(kv -> kv.getValue() != null && kv.getValue() != DqoUserRole.NONE)
+                            .map(kv -> kv.getKey())
+                            .findFirst()
+                            .orElse(null);
+                }
+
+                if (effectiveDataDomain == null && signedAuthenticationToken.getTarget().getAccountRole() != null &&
+                        signedAuthenticationToken.getTarget().getAccountRole() != DqoUserRole.NONE) {
+                    effectiveDataDomain = this.dqoUserConfigurationProperties.getDefaultDataDomain();
+                }
 
                 if (selectedDataDomainCookie != null) {
                     if (Objects.equals(activeDataDomainCloudName, this.dqoUserConfigurationProperties.getDefaultDataDomain()) ||
@@ -270,6 +284,12 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                             effectiveDataDomain = activeDataDomainCloudName;
                         }
                     }
+                }
+
+                if (effectiveDataDomain == null) {
+                    log.warn("The user " + signedAuthenticationToken.getTarget().getUser() + " does not have access to any data domain on this instance");
+                    exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
+                    return exchange.getResponse().writeAndFlushWith(Mono.empty());
                 }
 
                 if (Objects.equals(effectiveDataDomain, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
