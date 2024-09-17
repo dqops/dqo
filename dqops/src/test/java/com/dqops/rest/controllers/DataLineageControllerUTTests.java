@@ -121,6 +121,27 @@ public class DataLineageControllerUTTests extends BaseTest {
     }
 
     @Test
+    void getTableSourceTables_whenSourceTableNotExist_thenTableCurrentDataQualityStatusTablePartiallySetAndExistIsFalse() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+
+        Mono<ResponseEntity<Flux<TableLineageSourceListModel>>> responseEntity = this.sut.getTableSourceTables(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
+                Optional.empty());
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
+
+        List<TableLineageSourceListModel> result = responseEntity.block().getBody().collectList().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getConnection(), result.get(0).getSourceTableDataQualityStatus().getConnectionName());
+        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getSchema(), result.get(0).getSourceTableDataQualityStatus().getSchemaName());
+        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getTable(), result.get(0).getSourceTableDataQualityStatus().getTableName());
+        Assertions.assertFalse(result.get(0).getSourceTableDataQualityStatus().isTableExist());
+
+    }
+
+    @Test
     void updateTableSourceTable_whenUpdateAllExceptForTableLineageSourceKey_thenUpdate() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();

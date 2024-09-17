@@ -137,6 +137,24 @@ public class DataLineageController {
                     .collect(Collectors.toList());
 
             sourceTables.forEach(listModel -> {
+                TableCurrentDataQualityStatusModel notFoundTableStatus = new TableCurrentDataQualityStatusModel(){{
+                    setConnectionName(listModel.getSourceConnection());
+                    setSchemaName(listModel.getSourceSchema());
+                    setTableName(listModel.getSourceTable());
+                    setTableExist(false);
+                }};
+                ConnectionWrapper sourceConnectionWrapper = connections.getByObjectName(listModel.getSourceConnection(), true);
+                if (sourceConnectionWrapper == null) {
+                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    return;
+                }
+                TableWrapper sourceTableWrapper = connectionWrapper.getTables().getByObjectName(
+                        new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()), true);
+                if (sourceTableWrapper == null) {
+                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    return;
+                }
+
                 CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getSourceConnection(), new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()));
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));

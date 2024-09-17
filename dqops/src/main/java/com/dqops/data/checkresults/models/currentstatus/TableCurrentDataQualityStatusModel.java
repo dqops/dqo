@@ -16,7 +16,6 @@
 
 package com.dqops.data.checkresults.models.currentstatus;
 
-import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleListUtility;
@@ -34,7 +33,6 @@ import lombok.Data;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -160,6 +158,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      */
     @JsonPropertyDescription("Dictionary of the current data quality statues for each data quality dimension.")
     private Map<String, DimensionCurrentDataQualityStatusModel> dimensions = new LinkedHashMap<>();
+
+    /**
+     * The flag informing whether the table exist. The table might not exist for the imported data lineage source tables.
+     */
+    @JsonPropertyDescription("The flag informing whether the table exist. The table might not exist for the imported data lineage source tables.")
+    private boolean tableExist = true;
 
     /**
      * Analyzes all table level checks and column level checks to calculate the highest severity level at a table level.
