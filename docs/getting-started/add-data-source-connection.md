@@ -225,4 +225,4 @@ At the table level in the **Data sources** section, there are the following tabs
 ## Next step
 
 Now that you have connected a data source and initiated data assessment, it is time to 
-[review the results and automatically configure data quality checks to detect the most common data quality issues](review-results-and-run-monitoring-checks.md).
+[review the results, automatically configure data quality checks to detect the most common data quality issues and create an incident notification](review-results-and-run-monitoring-checks.md).

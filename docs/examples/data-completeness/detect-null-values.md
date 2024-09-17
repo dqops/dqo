@@ -30,7 +30,7 @@ In this example, we will set three maximum number thresholds levels for the chec
 - error: 10
 - fatal: 15
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -290,7 +290,7 @@ null values in a column does not exceed the minimum accepted count. If it does, 
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQO as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [nulls_count check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
 - You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/detect-empty-or-incomplete-tables.md).  
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).

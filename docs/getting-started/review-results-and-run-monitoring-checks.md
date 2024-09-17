@@ -3,7 +3,7 @@ title: Review results from data quality assessment and automatically configure d
 ---
 # Review results from data quality assessment and automatically configure data quality checks
 This guide will show you how to review results from data quality assessment and automatically configure data quality checks to detect the most common data quality issues.
-We will run those check and review the first results and data quality issues. 
+We will run those check, review the first results and create an incident notification for data quality issues. 
 
 ## Overview
 

@@ -554,7 +554,7 @@ Then take the key and use it as the token when creating an `AuthenticatedClient`
 ``` { .python linenums="1" }
 from dqops import client
 
-dqops_client = client.AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO API Key")
+dqops_client = client.AuthenticatedClient(base_url="http://localhost:8888", token="Your DQOps API Key")
 ```
 
 Now you can call operations on DQOps. The following code shows how to execute data quality checks
