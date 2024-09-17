@@ -24,7 +24,8 @@ export default function SourceTablesTable({
   connection: parentConnection,
   schema: parentSchema,
   table: parentTable,
-  setSourceTableEdit
+  setSourceTableEdit,
+  showHeader: showHeader = true
 }: {
   connection?: string;
   schema?: string;
@@ -32,6 +33,7 @@ export default function SourceTablesTable({
   setSourceTableEdit?: (
     obj: { connection: string; schema: string; table: string } | null
   ) => void;
+  showHeader: boolean
 }) {
   const {
     connection,
@@ -179,51 +181,53 @@ export default function SourceTablesTable({
   return (
     <>
       <table className="text-sm w-full">
-        <thead>
-          <tr>
-            <th></th>
-            {HEADER_ELEMENTS.map((elem, index) => {
-              if (elem.key === 'action' && !setSourceTableEdit) {
-                return null;
-              }
-              return (
-                <th key={index} onClick={() => handleSort(elem, index)}>
-                  <div
-                    className={clsx(
-                      'flex items-center gap-x-1 px-4',
-                      elem.key === 'action' && 'ml-10'
-                    )}
-                  >
-                    {elem.label}
-                    {elem.key !== 'action' && (
-                      <div>
-                        {!(indexSortingElement === index && dir === 'asc') ? (
-                          <SvgIcon
-                            name="chevron-up"
-                            className="w-2 h-2 text-black cursor-pointer"
-                            onClick={() => handleSort(elem, index)}
-                          />
-                        ) : (
-                          <div className="w-2 h-2" />
-                        )}
-                        {!(indexSortingElement === index && dir === 'desc') ? (
-                          <SvgIcon
-                            name="chevron-down"
-                            className="w-2 h-2 text-black cursor-pointer"
-                            onClick={() => handleSort(elem, index)}
-                          />
-                        ) : (
-                          <div className="w-2 h-2" />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody className="border-t border-gray-100">
+        {showHeader &&
+          <thead>
+            <tr>
+              <th></th>
+              {HEADER_ELEMENTS.map((elem, index) => {
+                if (elem.key === 'action' && !setSourceTableEdit) {
+                  return null;
+                }
+                return (
+                  <th key={index} onClick={() => handleSort(elem, index)}>
+                    <div
+                      className={clsx(
+                        'flex items-center gap-x-1 px-4',
+                        elem.key === 'action' && 'ml-10'
+                      )}
+                    >
+                      {elem.label}
+                      {elem.key !== 'action' && (
+                        <div>
+                          {!(indexSortingElement === index && dir === 'asc') ? (
+                            <SvgIcon
+                              name="chevron-up"
+                              className="w-2 h-2 text-black cursor-pointer"
+                              onClick={() => handleSort(elem, index)}
+                            />
+                          ) : (
+                            <div className="w-2 h-2" />
+                          )}
+                          {!(indexSortingElement === index && dir === 'desc') ? (
+                            <SvgIcon
+                              name="chevron-down"
+                              className="w-2 h-2 text-black cursor-pointer"
+                              onClick={() => handleSort(elem, index)}
+                            />
+                          ) : (
+                            <div className="w-2 h-2" />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+        }
+        <tbody className={clsx('', showHeader && 'border-t border-gray-100')}>
           {displayedTables.map((table, index) => (
             <React.Fragment key={index}>
               <tr className="h-10">
@@ -237,9 +241,9 @@ export default function SourceTablesTable({
                       lineage.schema === table.source_schema &&
                       lineage.table === table.source_table
                   ) ? (
-                    <SvgIcon name="chevron-right" className="w-4" />
-                  ) : (
                     <SvgIcon name="chevron-down" className="w-4" />
+                  ) : (
+                    <SvgIcon name="chevron-right" className="w-4" />
                   )}
                 </td>
                 <td className="px-4">{table.source_connection}</td>
@@ -296,7 +300,8 @@ export default function SourceTablesTable({
                 (lineage) =>
                   lineage.connection === table.source_connection &&
                   lineage.schema === table.source_schema &&
-                  lineage.table === table.source_table
+                  lineage.table === table.source_table &&
+                  table.source_table_data_quality_status?.table_exist
               ) && (
                 <tr>
                   <td colSpan={5} className="pl-4 pt-4">
@@ -304,6 +309,7 @@ export default function SourceTablesTable({
                       connection={table.source_connection}
                       schema={table.source_schema}
                       table={table.source_table}
+                      showHeader={false}
                     />
                   </td>
                 </tr>
