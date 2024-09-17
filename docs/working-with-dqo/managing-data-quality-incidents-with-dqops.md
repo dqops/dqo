@@ -107,6 +107,7 @@ filter, sort, and view detailed information about the incidents.
 For each incident the following information is provided:
 
 - **Resolution status**: A status assigned to the incident (Open, Acknowledged, Resolved or Muted)
+- **Severity**: A colored square indicating the severity level, yellow for warning, orange for error and red for fata error. 
 - **Total issues**: The number of times the data quality issue has occurred in the selected time range
 - **Schema**: Name of the schema in which data quality issues were detected
 - **Table**: Name of the table in which data quality issues were detected
@@ -178,12 +179,12 @@ filter and sort them.
 
 The upper right corner of the Incident details screen provides access to several helpful actions:
 
-![Incident details links](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-links.png)
+![Incident details links](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-links2.png)
 
-- **Check Editor link**: Clicking this link will take you directly to the **Check editor** for the specific check that triggered the incident. This allows you to examine the check's configuration.
 - **Disable checks for the incident**: This button allows you to temporarily disable the check responsible for the incident. Disabling a check can be useful when you are actively working to resolve the underlying issue.
-- **Recalibrate checks for the incident**: Clicking on this button will decrease the check's thresholds by 30%.
+- **Reconfigure rule thresholds**: Clicking on this button will decrease the rule threshold for the data quality check that caused the incident by 30% to reduce the number of data quality issues.
 - **Change incident configuration**: This button opens the **Incident configuration** screen for the table where the incident originated. This allows you to manage incident settings, such as grouping and severity levels.
+- **Configure notification for this incident**: This button allows you to create new or modify existing notification for this incident.
 
 ### **Filter data quality check results**
 

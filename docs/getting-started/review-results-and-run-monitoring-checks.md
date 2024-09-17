@@ -75,7 +75,7 @@ DQOps will attempt to configure data quality checks to detect data quality issue
 - **Default severity level:** This is used to set the initial severity level for proposed checks, which can be later modified individually.
 - **Advanced parameters:** These parameters contains checkboxes that allows control how the rule mining engine handles 
     already configured data quality checks and select data quality check categories that you want to include
-    in the proposal. More information about [Rule mining parameters](../dqo-concepts/data-quality-rule-mining.md#Rule-mining-parameters). 
+    in the proposal. More information about [Rule mining parameters](../dqo-concepts/data-quality-rule-mining.md#rule-mining-parameters). 
 
 ### Automated data quality check configuration using rule miner
 As an example, let's filter the initial proposition with the column name **gender**.
@@ -97,7 +97,7 @@ Click on the **Apply** button to apply the proposed check configuration.
 
 A popup window will appear, notifying you that the checks have been activated, and that you can run activated check by clicking on the **Confirm** button.
 
-![Rule miner proposition - run activated checks](https://dqops.com/docs/images/getting-started/rule-mining-proposition-run-activated-checks1.png){ loading=lazy }
+![Rule miner proposition - run activated checks](https://dqops.com/docs/images/getting-started/rule-mining-proposition-run-activated-checks1.png){ loading=lazy; width="600px" }
 
 A notification will appear indicating that the job has begun, and the **Table quality status** tab will start flashing.
 
@@ -117,19 +117,19 @@ In the previous step we have run several profiling checks suggested by the [rule
 
 To navigate to the Table quality status:
 
-1. Click on **Profiling** section
+1. Click on the **Profiling** section
 2. Select the **orders.csv** table on the tree view on the left.
-3. Click on the **Table quality status** tab
+3. Click on the **Table quality status** tab.
 
 ![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status5.png){ loading=lazy; width="1200px" }
 
 This tab provides an overview of the current data quality status of your table. It includes the number of
-executed checks, and detailed results per table and columns grouped by check categories.
+executed checks and detailed results per table and columns grouped by check categories.
 
-At the bottom of the screen, you will find a table that displays the check results per category, table, and columns.
+At the bottom of the screen, you will find a table that displays the check results per category, table, and column.
 
 The colored boxes indicate the current or the highest severity status: green for a correct result, yellow for a warning,
-orange for an error, red for a fatal error, and grey stripes for execution error.
+orange for an error, red for a fatal error, and grey stripes for an execution error.
 
 You can click on the colored box to view a list of checks that contribute to the result. Hovering over the check name will provide more details.
 
@@ -155,7 +155,7 @@ been activated manually or through the rule miner, the toggle button will have a
 
 The icons located before the name of each check allow you to:
 
-- Activate and deactivate it using toggle button. 
+- Activate and deactivate it using the toggle button. 
 - Enable or disable check.
 - Configure check settings.
 - Get information if the check has activated scheduling.
@@ -171,7 +171,7 @@ For activated checks, notice a square next to the name indicating the results of
 - Red for a fatal error.
 - Black for execution error.
 
-You can find more information about the check editor in the [User interface overview section of the documentation](../dqo-concepts/dqops-user-interface-overview.md#Check-editor).
+You can find more information about the check editor in the [User interface overview section of the documentation](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 To review the checks results, click the **Results** icon. Let's review the results for the **profile_text_found_in_set_percent**
 check in the **Accepted values** category.
@@ -204,7 +204,7 @@ To copy the configuration of checks activated in the Profiling section to Monito
 
 1. Navigate to the **Monitoring checks** section.
 2. Select the **orders.csv** table from the tree view on the left.
-3. Click on the **Copy verified profiling checks** tab
+3. Click on the **Copy verified profiling checks** tab.
 
      Here you can see a proposition of checks based on checks that have been activated in the Profiling section.
      To increase the number of propositions, you can either activate more profiling checks manually or use the data quality rule miner in the Profiling section.
@@ -212,14 +212,14 @@ To copy the configuration of checks activated in the Profiling section to Monito
      ![Copy verified profiling checks to monitoring](https://dqops.com/docs/images/getting-started/copy-verified-profiling-checks-to-monitoring1.png){ loading=lazy; width="1200px" }
 
 4. Click on the **Apply** button to activate the proposed monitoring checks. 
-5. A popup window will appear, notifying you that the checks have been activated, and that you can run activated check by clicking on the **Confirm** button.
+5. A popup window will appear, notifying you that the checks have been activated and that you can run the activated check by clicking on the **Confirm** button.
 6. A notification will appear indicating that the job has begun, and the **Table quality status** tab will start flashing.
 
-### Review Monitoring Table quality status
+## Review Monitoring Table quality status
 
 **Table quality status** allows you to quickly evaluate the data quality status of your table.
 
-To navigate to the monitoring checks Table quality status:
+To navigate to the **Table quality** status of the **Monitoring checks** section:
 
 1. Click on **Monitoring** section
 2. Select the **orders.csv** table on the tree view on the left.
@@ -227,7 +227,7 @@ To navigate to the monitoring checks Table quality status:
 
 ![Monitoring Table quality status](https://dqops.com/docs/images/getting-started/monitoring-table-quality-status1.png){ loading=lazy; width="1200px" }
 
-We can see, that the "gender" column currently has an error severity status, which resulted from the failed checks in the **Accepted values**, **Nulls**, and **Uniqueness** categories.
+We can see that the **gender** column currently has an error severity status, which resulted from the failed checks in the **Accepted values**, **Nulls**, and **Uniqueness** categories.
 
 ## Run monitoring checks
 
@@ -246,22 +246,22 @@ To run all activated checks in a table or column, click the icon in the top righ
 ![Run monitoring checks](https://dqops.com/docs/images/getting-started/run-monitoring-checks1.png){ loading=lazy; width="1200px" }
 
 You can also run checks for your entire connection, schema, table, or column from the tree view on the left-hand side of
-the screen. To do so, click on the three-dot icon and select the Run check option. Check more information how to
-[Run checks from a tree view](../working-with-dqo/run-data-quality-checks.md#Run-checks-from-a-tree-view).
+the screen. To do so, click on the three-dot icon and select the Run check option. Check more information on how to
+[Run checks from a tree view](../working-with-dqo/run-data-quality-checks.md#run-checks-from-a-tree-view).
 
 Let's execute all the monitoring checks activated in the **demo_connection** by clicking on the three-dot icon and selecting the **Run check** option. 
 Click on **Run checks** in the popup.
 
-![Run monitoring checks from three view](https://dqops.com/docs/images/getting-started/run-monitoring-checks-from-three-view1.png){ loading=lazy }
+![Run monitoring checks from three view](https://dqops.com/docs/images/getting-started/run-monitoring-checks-from-three-view1.png){ loading=lazy; width="600px"}
 
-Now you can check the Table status again or check details results as before. 
+Now you can check the Table status again or check the details results as before. 
 
 ## View Tables summary
 
-To review the overall health summary of your data, navigate to the Home screen and use the Tables and Columns summaries.
+To review the overall health summary of your data, you can use the Tables and Columns summaries.
 These summaries are based on previously executed monitoring and partition data quality checks, excluding the results from profiling checks.
 
-To access the **Tables summary**, click on the DQOps logo in the top left corner and select the **Data quality summary** tab and Tables subtab.
+To access the **Tables summary**, click on the DQOps logo in the top left corner and select the **Data quality summary** tab and **Tables** subtab.
 
 ![Navigating to the Tables summary](https://dqops.com/docs/images/getting-started/table-summary2.png){ loading=lazy; width="1200px" }
 
@@ -269,28 +269,89 @@ You can view a list of tables with measured total data quality KPI and a breakdo
 categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display
 a tooltip containing more details.
 
-The calculated KPIs in our example are at 100% because we ran one monitoring check that gave a correct result.
+The summary **Data quality KPI** calculated for the orders.csv table in our example is 94%. 
+You can also check Column summaries by clicking on the **Column** subtab.
 
-For a deeper dive into [Tables and Columns summaries, see the DQOps concepts section](../dqo-concepts/dqops-user-interface-overview.md#home-screen)
+For a deeper dive into [Tables and Columns summaries, see the DQOps concepts section](../dqo-concepts/dqops-user-interface-overview.md#home-screen).
 
-## View Incidents summary
+## Data quality incidents
+The failure of the data quality check is a data quality issue. To prevent overwhelming the support team with numerous individual data quality issues, 
+DQOps groups similar data quality issues that share the same properties into data quality incident.
+For more information on incidents, please refer to the [Data quality incident management, grouping and notifications section](../dqo-concepts/grouping-data-quality-issues-to-incidents.md).
+
+### View Incidents summary
+The **Incidents summary** provides an overview of all incidents created in DQOps, which are groupings of similar data quality issues.
+To access the **Incidents summary**, click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
 
 ![Navigating to the Incidents summary](https://dqops.com/docs/images/getting-started/incidents-summary2.png){ loading=lazy; width="1200px" }
 
+The **Incidents summary** screen gives an overview of data quality incidents categorized by either check category or data quality dimension.
+You can easily switch between these groupings using the provided radio buttons.
 
-## Create incident notification
+On the summary screen for Incidents, there are two sections displaying the summaries of **Open** and **Acknowledged**
+incidents. Each section is further divided into three blocks based on severity level: Warnings, Errors, and Fatal errors.
+Within each block, you will find a summary of new incidents from the last 2 months, along with detailed data showing the
+number of incidents detected in the last 24 hours, last 7 days, current month, and previous month.
+
+Below the **Open** and **Acknowledged** incidents summaries, there is a table listing incidents grouped by the selected 
+check category or the quality dimension, depending on your grouping selection.
+
+The DQOps user interface overview section provides [a more detailed description of the **Incident summary** screen](../dqo-concepts/dqops-user-interface-overview.md#incidents_summary).
+
+### View an incident details 
+To view and manage incidents that occur during data quality monitoring, navigate to the **Incidents** section. 
+You can also access the Incidents section by clicking on the check category link or table name on the Incidents summary screen. 
+
+Let's open the Incidents section displaying incidents in the Accepted values by clicking on the **Accepted values** lin.
 
 ![Open the Accepted values incidents](https://dqops.com/docs/images/getting-started/open-the-accepted-values-incidents1.png){ loading=lazy; width="1200px" }
 
+On the left side of the **Incidents** section screen, there is a list displaying the connections and the number of incidents that have
+occurred for each one. On the right panel, you can view incidents for the connections you have selected, and you can
+filter, sort, and view detailed information about the incidents. You can find [more information about managing incidents in the Working with DQOps section](../working-with-dqo/managing-data-quality-incidents-with-dqops.md#view-and-manage-incidents). 
+
+Click on the Data quality issue grouping column to view more details of the incident. 
+
 ![Open the incident details](https://dqops.com/docs/images/getting-started/open-the-incident-details1.png){ loading=lazy; width="1200px" }
 
-![Incident details](https://dqops.com/docs/images/getting-started/incident-details1.png){ loading=lazy; width="1200px" }
+The detailed data quality incident screen shows a list of data quality issues that are grouped in the incident and allows you to
+filter and sort them.
+
+![Incident details screen](https://dqops.com/docs/images/getting-started/incident-details-screen2.png){ loading=lazy; width="1200px" }
+
+The upper right corner of the Incident details screen provides access to several helpful actions:
+
+- **Disable checks for the incident**: This button allows you to temporarily disable the check responsible for the incident. Disabling a check can be helpful when you are actively working to resolve the underlying issue.
+- **Reconfigure rule thresholds**: Clicking on this button will decrease the rule threshold for the data quality check that caused the incident by 30% to reduce the number of data quality issues.
+- **Change incident configuration**: This button opens the **Incident configuration** screen for the table where the incident originated. This allows you to manage incident settings, such as grouping and severity levels.
+- **Configure notification for this incident**: This button allows you to create a new or modify the existing notification filter for this incident.
+
+Follow the link to learn [more about the Incidents details screen](../working-with-dqo/managing-data-quality-incidents-with-dqops.md#view-details-of-the-incident)
+
+### Create a notification for the incident
+To receive notifications for specific data quality incidents, you can create or edit notification filters.
+To do this, click on the envelope icon located in the top right corner of the incident details screen.
+
+![Incident details screen](https://dqops.com/docs/images/getting-started/incident-details-envelope-icon1.png){ loading=lazy; width="1200px" }
+
+If no notification has ever been configured for the incident, you will see a popup message informing you to create a new notification configuration.
 
 ![Creating notification for the incident](https://dqops.com/docs/images/getting-started/creating-notification-for-the-incident1.png){ loading=lazy }
 
+Once approved, you will be redirected to the page to create the new incident notification filter.
+The configuration form will be partially filled based on the incident's data. The details of the filter configuration can be
+found in the section [Notification filters](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#notification-filters) below.
+
 ![Configuring notification for the incident](https://dqops.com/docs/images/getting-started/configure-new-notification-for-the-incident1.png){ loading=lazy; width="1200px" }
+
+Add a name for the notification and optional message. Modify the target filters and fill in the **email address** or **webhook URL** for the appropriate status fields. You can also use multiple email addresses separated by the 
+comma character (,). Mixing email addresses with webhook addresses is also allowed if you use commas between them.
+
+After configuring the notification, click on the **Save** button to save the changes. 
+
+Learn more about [the configuration of the notification filtering in the Concept section](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-notifications).
 
 ## Next step
 
-Now that you have reviewed the initial results from basic statistics and profiling checks and run monitoring checks, 
+Now that you have reviewed the initial results from basic statistics, configured checks using rule miner, run monitoring checks, and created incident notification, 
 you can [review the results on the dashboards](review-results-on-dashboards.md).

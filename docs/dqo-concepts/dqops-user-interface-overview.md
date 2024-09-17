@@ -89,7 +89,7 @@ The **Refresh** button located at the top right of the screen, allows you to ref
 
 At the top of The Incidents summary screen, there are two sections displaying the summaries of **Open** and **Acknowledged** incidents.
 Each section is divided into three blocks based on severity level: Warnings, Errors and Fatal errors. In each block,
-there is a summary of new incidents from the last 2 months along with detailed data showing the number of incidents detected in the last 24h, last 7 days,
+there is a summary of new incidents from the last 2 months, along with detailed data showing the number of incidents detected in the last 24h, last 7 days,
 current month and previous month.
 
 Below the **Open** and **Acknowledged** incidents summaries, there is a table that list incidents grouped by the selected check category or the quality dimension, depending on your grouping selection.
