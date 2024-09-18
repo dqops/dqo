@@ -1,23 +1,18 @@
-import { IconButton, Tooltip } from '@material-tailwind/react';
+import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  DimensionCurrentDataQualityStatusModel,
-  DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
-  TableLineageSourceListModel
-} from '../../../../api';
+import { TableLineageSourceListModel } from '../../../../api';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { DataLineageApiClient } from '../../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { sortPatterns, useDecodedParams } from '../../../../utils';
 import ConfirmDialog from '../../../CustomTree/ConfirmDialog';
+import QualityDimensionStatuses from '../../../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import Loader from '../../../Loader';
 import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
-import { getDimensionColor } from '../TableQualityStatus/TableQualityStatusUtils';
-import moment from 'moment';
 
 const HEADER_ELEMENTS = [
   { label: 'Source connection', key: 'source_connection' },
@@ -176,25 +171,6 @@ export default function SourceTablesTable({
     setExpandedLineage(newExpandedLineage);
   };
 
-  const getBasicDimmensionsKeys = (
-    column: TableLineageSourceListModel,
-    type: string
-  ) => {
-    const basicDimensions = Object.keys(
-      column?.source_table_data_quality_status?.dimensions ?? {}
-    )?.find((x) => x === type);
-    return basicDimensions;
-  };
-  const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-
-  const getAdditionalDimentionsKeys = (column: TableLineageSourceListModel) => {
-    return (
-      Object.keys(
-        column?.source_table_data_quality_status?.dimensions ?? {}
-      )?.filter((x) => !basicDimensionTypes.includes(x)) ?? []
-    );
-  };
-
   if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -275,87 +251,11 @@ export default function SourceTablesTable({
                   )}
                 </td>
                 <td>
-                  {' '}
-                  <div className="flex items-center gap-x-0.5">
-                    {basicDimensionTypes.map((dimType) => {
-                      const dimensionKey = getBasicDimmensionsKeys(
-                        table,
-                        dimType
-                      );
-                      const currentSeverity = (table
-                        ?.source_table_data_quality_status?.dimensions ?? {})?.[
-                        dimensionKey as any
-                      ]?.current_severity;
-                      const lastCheckExecutedAt = (table
-                        ?.source_table_data_quality_status?.dimensions ?? {})?.[
-                        dimensionKey as any
-                      ]?.last_check_executed_at;
-                      const severityColor = getDimensionColor(
-                        currentSeverity as any
-                      );
-                      const hasNoSeverity = severityColor.length === 0;
-
-                      const dimensionsClassNames = clsx(
-                        'w-3 h-3 border border-gray-150',
-                        {
-                          'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
-                          [severityColor]: !hasNoSeverity
-                        }
-                      );
-                      return (
-                        <Tooltip
-                          key={`Dimensionindex${dimType}`}
-                          content={renderSecondLevelTooltip(
-                            (table?.source_table_data_quality_status
-                              ?.dimensions ?? {})?.[dimensionKey as any] ?? {
-                              dimension: dimType
-                            }
-                          )}
-                        >
-                          <div
-                            className={dimensionsClassNames}
-                            style={{ borderRadius: '6px' }}
-                          />
-                        </Tooltip>
-                      );
-                    })}
-                    {getAdditionalDimentionsKeys(table).map(
-                      (dimensionKey: string, dimIndex) => {
-                        return (
-                          <Tooltip
-                            key={`DimensionTooltipindex${dimIndex}`}
-                            content={renderSecondLevelTooltip(
-                              (table?.source_table_data_quality_status
-                                ?.dimensions ?? {})?.[dimensionKey as any]
-                            )}
-                          >
-                            <div
-                              className={clsx(
-                                'w-3 h-3 border border-gray-150',
-                                getDimensionColor(
-                                  (table?.source_table_data_quality_status
-                                    ?.dimensions ?? {})?.[dimensionKey as any]
-                                    ?.current_severity as
-                                    | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
-                                    | undefined
-                                ).length === 0
-                                  ? 'bg-gray-150'
-                                  : getDimensionColor(
-                                      (table?.source_table_data_quality_status
-                                        ?.dimensions ?? {})?.[
-                                        dimensionKey as any
-                                      ]?.current_severity as
-                                        | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
-                                        | undefined
-                                    )
-                              )}
-                              style={{ borderRadius: '6px' }}
-                            />
-                          </Tooltip>
-                        );
-                      }
-                    )}
-                  </div>
+                  <QualityDimensionStatuses
+                    dimensions={
+                      table.source_table_data_quality_status?.dimensions
+                    }
+                  />
                 </td>
                 <td className="px-4">{table.source_connection}</td>
                 <td className="px-4">{table.source_schema}</td>
@@ -449,69 +349,3 @@ export default function SourceTablesTable({
     </>
   );
 }
-
-const renderSecondLevelTooltip = (
-  data: DimensionCurrentDataQualityStatusModel | undefined
-) => {
-  if (data && data.last_check_executed_at) {
-    return (
-      <div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Last executed at:</div>
-          <div>
-            {moment(data?.last_check_executed_at).format('YYYY-MM-DD HH:mm:ss')}
-          </div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Current severity level:</div>
-          <div>{data?.current_severity}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Highest historical severity level:</div>
-          <div>{data?.highest_historical_severity}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Quality Dimension:</div>
-          <div>{data?.dimension}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Executed checks:</div>
-          <div>{data?.executed_checks}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Valid results:</div>
-          <div>{data?.valid_results}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Warnings:</div>
-          <div>{data?.warnings}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Errors:</div>
-          <div>{data?.errors}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Fatals:</div>
-          <div>{data?.fatals}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Data quality KPI:</div>
-          <div>
-            {data.data_quality_kpi !== undefined
-              ? Number(data.data_quality_kpi).toFixed(2) + ' %'
-              : '-'}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <div className="flex gap-x-2">
-        <div className="w-42">Quality Dimension:</div>
-        <div>{data?.dimension}</div>
-      </div>
-      <div className="w-full">No data quality checks configured</div>
-    </div>
-  );
-};
