@@ -166,7 +166,7 @@ export default function SingleSharedCredential({
             </div>
           </div>
           <div className="w-100 px-5 ">
-            <div className="text-lg py-3">Type of credential:</div>
+            <div className="text-sm py-3">Type of credential:</div>
             <div className="flex items-center space-x-4">
               <RadioButton
                 label="Text"
