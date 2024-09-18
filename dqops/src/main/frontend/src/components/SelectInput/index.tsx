@@ -60,11 +60,11 @@ const SelectInput = ({
   const filteredOptions = useMemo(() => {
     if (!isChanged) return options;
 
-    return options.filter(
-      (option) =>
-        option.label === 'None' ||
-        option.label.toLowerCase().indexOf((value || '').toLowerCase()) > -1
-    );
+    return options.filter((option) => {
+      const optionLabel = option.label || '';
+      const inputValue = value || '';
+      return optionLabel.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
+    });
   }, [value, options, isChanged]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
