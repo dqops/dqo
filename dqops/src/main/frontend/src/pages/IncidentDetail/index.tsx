@@ -582,7 +582,7 @@ export const IncidentDetail = () => {
                         href={incidentDetail?.issueUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-blue-600 underline"
+                        className="underline"
                       >
                         <Tooltip
                           content={incidentDetail?.issueUrl}
