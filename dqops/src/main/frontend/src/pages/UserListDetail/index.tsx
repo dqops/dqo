@@ -96,7 +96,7 @@ export default function UserListDetail() {
   return (
     <>
       <table className="w-full ">
-        <thead className="border-b w-full border-b-gray-400 relative flex items-center">
+        <thead className="border-b w-full border-b-gray-400 relative flex items-center text-sm">
           <th className="px-6 py-4 text-left block w-80">User email</th>
           <th className="px-6 py-4 text-left block w-40">User role</th>
           <th className="px-6 py-4 text-left block w-40 ml-10">Action</th>

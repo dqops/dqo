@@ -70,7 +70,7 @@ const DeleteStoredDataExtendedPopUp = ({
 
   const [allChecks, setAllChecks] = useState<CheckDefinitionFolderModel>();
   const [basicStatisticsFiltersOpen, setBasicStatisticsFiltersOpen] =
-    useState(true);
+    useState(false);
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
@@ -438,7 +438,7 @@ const DeleteStoredDataExtendedPopUp = ({
               }
             />
           </div>
-          <div className="flex flex-col space-y-5 w-1/4 items-start">
+          <div className="flex flex-col space-y-5 w-1/4 items-start mb-16">
             <Checkbox
               checked={params.deleteIncidents}
               onChange={(deleteIncidents) =>
