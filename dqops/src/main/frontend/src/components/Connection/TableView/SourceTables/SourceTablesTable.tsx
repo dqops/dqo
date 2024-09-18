@@ -33,7 +33,7 @@ export default function SourceTablesTable({
   setSourceTableEdit?: (
     obj: { connection: string; schema: string; table: string } | null
   ) => void;
-  showHeader: boolean
+  showHeader?: boolean;
 }) {
   const {
     connection,
@@ -181,7 +181,7 @@ export default function SourceTablesTable({
   return (
     <>
       <table className="text-sm w-full">
-        {showHeader &&
+        {showHeader && (
           <thead>
             <tr>
               <th></th>
@@ -209,7 +209,9 @@ export default function SourceTablesTable({
                           ) : (
                             <div className="w-2 h-2" />
                           )}
-                          {!(indexSortingElement === index && dir === 'desc') ? (
+                          {!(
+                            indexSortingElement === index && dir === 'desc'
+                          ) ? (
                             <SvgIcon
                               name="chevron-down"
                               className="w-2 h-2 text-black cursor-pointer"
@@ -226,7 +228,7 @@ export default function SourceTablesTable({
               })}
             </tr>
           </thead>
-        }
+        )}
         <tbody className={clsx('', showHeader && 'border-t border-gray-100')}>
           {displayedTables.map((table, index) => (
             <React.Fragment key={index}>
