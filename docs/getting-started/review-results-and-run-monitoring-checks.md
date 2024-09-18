@@ -9,7 +9,7 @@ We will run those check, review the first results and create an incident notific
 
 After [adding your first connection, and starting data assessment](add-data-source-connection.md),
 we describe how to review the initial results from the basic statistics and profiling checks. Then, by using the DQOps [rule mining engine](../dqo-concepts/data-quality-rule-mining.md), we will automatically
-configure (mine) data quality checks to find the most common data quality issues. 
+configure (mine) data quality checks to find the most common data quality issues. Next, we will run monitoring checks, review results and create an incident notification for data quality issues.
 
 ## Review basic statistics results
 
