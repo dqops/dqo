@@ -6,12 +6,12 @@ import {
 } from '../../api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import RadioButton from '../../components/RadioButton';
 import SvgIcon from '../../components/SvgIcon';
 import TextArea from '../../components/TextArea';
 import { IRootState } from '../../redux/reducers';
 import { SharedCredentialsApi } from '../../services/apiClient';
-import Loader from '../../components/Loader';
 
 export default function SingleSharedCredential({
   credential_name = '',
@@ -123,7 +123,7 @@ export default function SingleSharedCredential({
               <Input
                 value={credentialName}
                 onChange={(e) => setCredentialName(e.target.value)}
-                disabled={!credential_name.length}
+                disabled={!!credential_name.length}
               />
             </div>
             <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
