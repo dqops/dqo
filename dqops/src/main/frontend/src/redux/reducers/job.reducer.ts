@@ -178,8 +178,6 @@ const schemaReducer = (state = initialState, action: any) => {
       };
       const jobList = { ...state.jobList };
       let notificationCount = state.notificationCount;
-      const parentChildMap = new Map();
-
       jobChanges.forEach((jobChange: DqoJobChangeModel) => {
         if (!jobChange.jobId?.jobId) return;
 
@@ -192,28 +190,6 @@ const schemaReducer = (state = initialState, action: any) => {
         } else if (parentId && !jobList[parentId]) {
           jobList[parentId] = [];
         }
-
-        // New parent (dictionary)
-        if (!parentId && !job_dictionary_state[jobId]) {
-          const newJobState = { ...jobChange.updatedModel, childs: [] };
-          job_dictionary_state[jobId] = newJobState;
-          notificationCount++;
-        }
-
-        // New child
-        if (parentId && jobId && !parentChildMap.has(parentId)) {
-          notificationCount++;
-          parentChildMap.set(parentId, new Map());
-        }
-
-        const parentChilds = parentChildMap.get(parentId);
-        if (parentId && jobId && !parentChilds.has(jobId)) {
-          const childState = jobChange.updatedModel ?? {};
-          job_dictionary_state[parentId].childs.push(childState);
-          jobList[parentId].push(String(jobId));
-          parentChilds.set(jobId, childState);
-        }
-
         // Updated existing parent
         if (job_dictionary_state[jobId]) {
           let newJobState = { ...job_dictionary_state[jobId] };
@@ -223,20 +199,40 @@ const schemaReducer = (state = initialState, action: any) => {
           if (jobChange.updatedModel)
             newJobState = { ...newJobState, ...jobChange.updatedModel };
           job_dictionary_state[jobId] = newJobState;
+        } else {
+          // New parent (dictionary)
+          if (!parentId && !job_dictionary_state[jobId]) {
+            const newJobState = { ...jobChange.updatedModel, childs: [] };
+            job_dictionary_state[jobId] = newJobState;
+            notificationCount++;
+          }
         }
-
         // Updated existing child
-        if (parentId && jobId && parentChilds.has(jobId)) {
-          let childState = parentChilds.get(jobId);
-          if (jobChange.status) childState.status = jobChange.status;
-          if (jobChange.statusChangedAt)
-            childState.statusChangedAt = jobChange.statusChangedAt;
-          if (jobChange.updatedModel)
-            childState = { ...childState, ...jobChange.updatedModel };
-          parentChilds.set(jobId, childState);
+        if (parentId && jobId && job_dictionary_state[jobId]) {
+          const childState = {
+            ...job_dictionary_state[jobId],
+            status: jobChange.status || job_dictionary_state[jobId].status,
+            statusChangedAt:
+              jobChange.statusChangedAt ||
+              job_dictionary_state[jobId].statusChangedAt,
+            ...(jobChange.updatedModel || {})
+          };
+          const childIndex = job_dictionary_state[parentId].childs.findIndex(
+            (child) => child.jobId?.jobId === jobId
+          );
+          job_dictionary_state[parentId].childs[childIndex] = childState;
+          job_dictionary_state[jobId] = childState;
+        } else {
+          // New child
+          if (parentId && jobId && !job_dictionary_state[jobId]) {
+            notificationCount++;
+            const childState = jobChange.updatedModel ?? {};
+            job_dictionary_state[parentId].childs.push(childState);
+            jobList[parentId].push(String(jobId));
+            job_dictionary_state[jobId] = { ...childState } as any;
+          }
         }
       });
-
       return {
         ...state,
         loading: false,

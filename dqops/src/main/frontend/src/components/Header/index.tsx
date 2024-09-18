@@ -196,7 +196,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-2">
+    <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-[99] border-b border-gray-300 px-2">
       {isAdvisorOpen && (
         <div className="fixed top-0 left-0 z-50 right-0">
           <HeaderBanner onClose={onCloseAdvisor} />
