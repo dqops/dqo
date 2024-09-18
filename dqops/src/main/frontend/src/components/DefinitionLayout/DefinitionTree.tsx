@@ -25,7 +25,10 @@ import DataQualityContextMenu from './DataQualityContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import SensorContextMenu from './SensorContextMenu';
 
-const defaultChecks = ['Table-level quality policies', 'Column-level quality policies'];
+const defaultChecks = [
+  'Table-level quality policies',
+  'Column-level quality policies'
+];
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();

@@ -1,3 +1,4 @@
+import { IconButton } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DqoUserRolesModel, DqoUserRolesModelAccountRoleEnum } from '../../api';
@@ -5,6 +6,7 @@ import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Loader from '../../components/Loader';
 import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
+import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
@@ -95,8 +97,9 @@ export default function UserListDetail() {
     <>
       <table className="w-full ">
         <thead className="border-b w-full border-b-gray-400 relative flex items-center text-sm">
-          <th className="px-6 py-4 text-left block w-100">User email</th>
-          <th className="px-6 py-4 text-left block w-50">User role</th>
+          <th className="px-6 py-4 text-left block w-80">User email</th>
+          <th className="px-6 py-4 text-left block w-40">User role</th>
+          <th className="px-6 py-4 text-left block w-40 ml-10">Action</th>
           {userProfile.license_type?.toLowerCase() !== 'free' ? (
             <Button
               label="Add user"
@@ -117,61 +120,62 @@ export default function UserListDetail() {
         <tbody>
           {displayedUsers?.map((user, index) => (
             <tr key={index} className="flex items-center text-sm">
-              <td className="px-6 py-2 text-left block w-100">{user.email}</td>
-              <td className="px-6 py-2 text-left block w-50">
+              <td className="px-6 py-2 text-left block w-80">{user.email}</td>
+              <td className="px-6 py-2 text-left block w-40">
                 {user.accountRole}
               </td>
               <td className="px-6 py-2 text-left block max-w-100">
-                {userProfile.license_type?.toLowerCase() !== 'free' ? (
-                  <Button
-                    label="Edit"
-                    variant="text"
-                    color={canUserPerformActions ? 'primary' : 'secondary'}
-                    onClick={() =>
-                      user.email
-                        ? editDqoCloudUser(user.email, user.accountRole)
-                        : null
-                    }
-                    disabled={!canUserPerformActions}
-                  />
-                ) : (
-                  <div className="w-24"></div>
-                )}
-              </td>
-              <td className="px-6 py-2 text-left block max-w-100">
-                {userProfile.user !== user.email &&
-                userProfile.license_type?.toLowerCase() !== 'free' ? (
-                  <Button
-                    label="Delete"
-                    variant="text"
-                    color={canUserPerformActions ? 'primary' : 'secondary'}
+                <div className="flex items-center gap-x-4">
+                  {userProfile.license_type?.toLowerCase() !== 'free' ? (
+                    <IconButton
+                      size="sm"
+                      onClick={() =>
+                        user.email
+                          ? editDqoCloudUser(user.email, user.accountRole)
+                          : null
+                      }
+                      ripple={false}
+                      color="teal"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                      disabled={!canUserPerformActions}
+                    >
+                      <SvgIcon name="edit" className="w-4" />
+                    </IconButton>
+                  ) : (
+                    <div className="w-24"></div>
+                  )}
+
+                  <IconButton
+                    size="sm"
                     onClick={() => setSelectedEmailToDelete(user.email ?? '')}
-                    disabled={!canUserPerformActions}
-                  />
-                ) : (
-                  <div className="w-22.5"></div>
-                )}
-              </td>
-              <td className="px-6 py-2 text-left block max-w-100">
-                <Button
-                  label="Change password"
-                  variant="text"
-                  color={
-                    !(
+                    disabled={
+                      !canUserPerformActions ||
+                      !(
+                        userProfile.user !== user.email &&
+                        userProfile.license_type?.toLowerCase() !== 'free'
+                      )
+                    }
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+
+                  <IconButton
+                    size="sm"
+                    onClick={() =>
+                      setSelectedEmailToChangePassword(user.email ?? '')
+                    }
+                    disabled={
                       userProfile.account_role !== 'admin' &&
                       !canUserPerformActions
-                    )
-                      ? 'primary'
-                      : 'secondary'
-                  }
-                  onClick={() =>
-                    setSelectedEmailToChangePassword(user.email ?? '')
-                  }
-                  disabled={
-                    userProfile.account_role !== 'admin' &&
-                    !canUserPerformActions
-                  }
-                />
+                    }
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="lock" className="w-4" />
+                  </IconButton>
+                </div>
               </td>
             </tr>
           ))}

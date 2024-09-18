@@ -78,6 +78,7 @@ export default function SharedCredentialsDetail() {
           <thead className="border-b w-full border-b-gray-400 relative flex items-center text-sm">
             <th className="px-6 py-4 text-left block w-100">Credential name</th>
             <th className="px-6 py-4 text-left block w-100">Credential type</th>
+            <th className="px-2 py-4 text-left block ml-11">Action</th>
             <Button
               label="Add credential"
               color="primary"

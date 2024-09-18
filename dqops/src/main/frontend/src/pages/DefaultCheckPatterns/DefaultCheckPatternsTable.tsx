@@ -1,3 +1,4 @@
+import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -5,7 +6,6 @@ import {
   ColumnQualityPolicyListModel,
   TableQualityPolicyListModel
 } from '../../api';
-import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
 import SvgIcon from '../../components/SvgIcon';
@@ -18,9 +18,7 @@ import {
 } from '../../services/apiClient';
 import { sortPatterns } from '../../utils';
 
-type TPattern =
-  | TableQualityPolicyListModel
-  | ColumnQualityPolicyListModel;
+type TPattern = TableQualityPolicyListModel | ColumnQualityPolicyListModel;
 
 type TDefaultCheckPatternsTableProps = {
   patterns: TPattern[];
@@ -38,7 +36,8 @@ type THeaderElement = {
     | 'connection'
     | 'schema'
     | 'table'
-    | 'column';
+    | 'column'
+    | 'action';
 };
 
 const headerElementTablePatterns: THeaderElement[] = [
@@ -46,7 +45,8 @@ const headerElementTablePatterns: THeaderElement[] = [
   { label: 'Priority', key: 'priority' },
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
-  { label: 'Table', key: 'table' }
+  { label: 'Table', key: 'table' },
+  { label: 'Action', key: 'action' }
 ];
 
 const headerElementColumnPatterns: THeaderElement[] = [
@@ -55,7 +55,8 @@ const headerElementColumnPatterns: THeaderElement[] = [
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
   { label: 'Table', key: 'table' },
-  { label: 'Column', key: 'column' }
+  { label: 'Column', key: 'column' },
+  { label: 'Action', key: 'action' }
 ];
 
 export default function DefaultCheckPatternsTable({
@@ -133,28 +134,39 @@ export default function DefaultCheckPatternsTable({
             <th></th>
             {headerElement.map((elem, index) => (
               <th className="px-4" key={elem.label}>
-                <div className="flex gap-x-1 items-center cursor-default">
+                <div
+                  className={clsx(
+                    'flex gap-x-1 items-center cursor-default',
+                    elem.key === 'action' && 'ml-3.5'
+                  )}
+                >
                   <div>{elem.label}</div>
-                  <div>
-                    {!(indexSortingElement === index && dir === 'asc') ? (
-                      <SvgIcon
-                        name="chevron-up"
-                        className="w-2 h-2 text-black"
-                        onClick={() => sortPreparedPattern(elem, index, 'desc')}
-                      />
-                    ) : (
-                      <div className="w-2 h-2" />
-                    )}
-                    {!(indexSortingElement === index && dir === 'desc') ? (
-                      <SvgIcon
-                        name="chevron-down"
-                        className="w-2 h-2 text-black"
-                        onClick={() => sortPreparedPattern(elem, index, 'asc')}
-                      />
-                    ) : (
-                      <div className="w-2 h-2" />
-                    )}
-                  </div>
+                  {elem.key !== 'action' && (
+                    <div>
+                      {!(indexSortingElement === index && dir === 'asc') ? (
+                        <SvgIcon
+                          name="chevron-up"
+                          className="w-2 h-2 text-black"
+                          onClick={() =>
+                            sortPreparedPattern(elem, index, 'desc')
+                          }
+                        />
+                      ) : (
+                        <div className="w-2 h-2" />
+                      )}
+                      {!(indexSortingElement === index && dir === 'desc') ? (
+                        <SvgIcon
+                          name="chevron-down"
+                          className="w-2 h-2 text-black"
+                          onClick={() =>
+                            sortPreparedPattern(elem, index, 'asc')
+                          }
+                        />
+                      ) : (
+                        <div className="w-2 h-2" />
+                      )}
+                    </div>
+                  )}
                 </div>
               </th>
             ))}
@@ -184,20 +196,25 @@ export default function DefaultCheckPatternsTable({
               <td className="px-4">{pattern?.table}</td>
               {type === 'column' && <td className="px-4">{pattern?.column}</td>}
               <td className="px-4">
-                <Button
-                  variant="text"
-                  label="Edit"
-                  color="primary"
-                  onClick={() => editPattern(type, pattern.policy_name ?? '')}
-                />
-              </td>
-              <td className="px-4">
-                <Button
-                  variant="text"
-                  label="Delete"
-                  color="primary"
-                  onClick={() => setPatternDelete(pattern.policy_name ?? '')}
-                />
+                <div className="flex items-center gap-x-4">
+                  <IconButton
+                    size="sm"
+                    onClick={() => editPattern(type, pattern.policy_name ?? '')}
+                    ripple={false}
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="edit" className="w-4" />
+                  </IconButton>
+                  <IconButton
+                    size="sm"
+                    onClick={() => setPatternDelete(pattern.policy_name ?? '')}
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                </div>
               </td>
             </tr>
           ))}
