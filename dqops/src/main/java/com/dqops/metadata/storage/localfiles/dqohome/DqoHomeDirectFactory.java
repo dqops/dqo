@@ -28,6 +28,8 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProviderImpl;
 import com.dqops.metadata.labels.labelloader.DummyLabelsIndexer;
 import com.dqops.metadata.labels.labelloader.LabelsIndexerProviderImpl;
+import com.dqops.metadata.lineage.lineagecache.DummyTableLineageCache;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCacheProviderImpl;
 import com.dqops.utils.StaticBeanFactory;
 import com.dqops.utils.logging.UserErrorLoggerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
@@ -53,6 +55,7 @@ public class DqoHomeDirectFactory {
         LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheConfigurationProperties,
                 new TableStatusCacheProviderImpl(StaticBeanFactory.getBeanFactory()),
                 new LabelsIndexerProviderImpl(StaticBeanFactory.getBeanFactory(), new DummyLabelsIndexer()),
+                new TableLineageCacheProviderImpl(StaticBeanFactory.getBeanFactory(), new DummyTableLineageCache()),
                 new HomeLocationFindServiceImpl(new DqoUserConfigurationProperties(), new DqoConfigurationProperties()));
         LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);

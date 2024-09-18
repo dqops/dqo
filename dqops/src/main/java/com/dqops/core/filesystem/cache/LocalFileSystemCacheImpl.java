@@ -32,6 +32,9 @@ import com.dqops.metadata.labels.labelloader.LabelRefreshKey;
 import com.dqops.metadata.labels.labelloader.LabelRefreshTarget;
 import com.dqops.metadata.labels.labelloader.LabelsIndexer;
 import com.dqops.metadata.labels.labelloader.LabelsIndexerProvider;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCacheKey;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCacheProvider;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -72,6 +75,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
     private final TableStatusCacheProvider tableStatusCacheProvider;
     private final LabelsIndexerProvider labelsIndexerProvider;
+    private final TableLineageCacheProvider tableLineageCacheProvider;
     private final HomeLocationFindService homeLocationFindService;
     private final Path userHomeRootPath;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
@@ -82,16 +86,19 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param dqoCacheConfigurationProperties Cache configuration parameters.
      * @param tableStatusCacheProvider Table status cache provider.
      * @param labelsIndexerProvider Labels indexer, notified to update labels for loaded or modified connections and tables.
+     * @param tableLineageCacheProvider Table lineage cache provider to inform about loaded table yamls.
      * @param homeLocationFindService Service that finds the location of the user home, used to translate file paths of updated files to relative file paths in the user home.
      */
     @Autowired
     public LocalFileSystemCacheImpl(DqoCacheConfigurationProperties dqoCacheConfigurationProperties,
                                     TableStatusCacheProvider tableStatusCacheProvider,
                                     LabelsIndexerProvider labelsIndexerProvider,
+                                    TableLineageCacheProvider tableLineageCacheProvider,
                                     HomeLocationFindService homeLocationFindService) {
         this.dqoCacheConfigurationProperties = dqoCacheConfigurationProperties;
         this.tableStatusCacheProvider = tableStatusCacheProvider;
         this.labelsIndexerProvider = labelsIndexerProvider;
+        this.tableLineageCacheProvider = tableLineageCacheProvider;
         this.homeLocationFindService = homeLocationFindService;
         this.userHomeRootPath = homeLocationFindService.getUserHomePath() != null ? Path.of(homeLocationFindService.getUserHomePath()) : Path.of(".");
 
@@ -294,12 +301,12 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
             }
 
             fileContent = this.fileContentsCache.get(filePath, readFunction);
-            this.invalidateTableStatusCacheAndLabelsIndexer(filePath, false);
+            this.invalidateTableCaches(filePath, false);
             return fileContent;
         }
 
         FileContent fileContentWithoutCache = readFunction.apply(filePath);
-        this.invalidateTableStatusCacheAndLabelsIndexer(filePath, false);
+        this.invalidateTableCaches(filePath, false);
         return fileContentWithoutCache;
     }
 
@@ -311,7 +318,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     @Override
     public void storeFile(Path filePath, FileContent fileContent) {
         if (!this.dqoCacheConfigurationProperties.isEnable()) {
-            this.invalidateTableStatusCacheAndLabelsIndexer(filePath, false);
+            this.invalidateTableCaches(filePath, false);
             return;
         }
 
@@ -323,7 +330,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         boolean replacingCachedFile = this.fileContentsCache.getIfPresent(filePath) != null;
         this.fileContentsCache.put(filePath, fileContent.clone());
-        this.invalidateTableStatusCacheAndLabelsIndexer(filePath, replacingCachedFile);
+        this.invalidateTableCaches(filePath, replacingCachedFile);
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -356,7 +363,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     @Override
     public void storeParquetFile(Path filePath, LoadedMonthlyPartition table) {
         if (!this.dqoCacheConfigurationProperties.isEnable()) {
-            this.invalidateTableStatusCacheAndLabelsIndexer(filePath, false);
+            this.invalidateTableCaches(filePath, false);
             return;
         }
 
@@ -368,7 +375,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         boolean replacingCachedFile = this.parquetFilesCache.getIfPresent(filePath) != null;
         this.parquetFilesCache.put(filePath, table);
-        this.invalidateTableStatusCacheAndLabelsIndexer(filePath, replacingCachedFile);
+        this.invalidateTableCaches(filePath, replacingCachedFile);
 
         Path parentFolderPath = filePath.getParent();
         this.fileListsCache.invalidate(parentFolderPath);
@@ -390,7 +397,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
         this.wasRecentlyInvalidated = true;
-        this.invalidateTableStatusCacheAndLabelsIndexer(filePath, true);
+        this.invalidateTableCaches(filePath, true);
 
 
         Path parentFolderPath = filePath.getParent();
@@ -413,7 +420,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
-        this.invalidateTableStatusCacheAndLabelsIndexer(folderPath, true);
+        this.invalidateTableCaches(folderPath, true);
 
         this.stopFolderWatcher(folderPath);
 
@@ -435,7 +442,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
 
         this.folderListsCache.invalidate(folderPath);
         this.fileListsCache.invalidate(folderPath);
-        this.invalidateTableStatusCacheAndLabelsIndexer(folderPath, true);
+        this.invalidateTableCaches(folderPath, true);
     }
 
     /**
@@ -451,7 +458,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.fileContentsCache.invalidate(filePath);
         this.parquetFilesCache.invalidate(filePath);
         this.wasRecentlyInvalidated = true;
-        this.invalidateTableStatusCacheAndLabelsIndexer(filePath, true);
+        this.invalidateTableCaches(filePath, true);
 
         Path folderPath = filePath.getParent();
         if (folderPath != null) {
@@ -468,7 +475,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
-    public void invalidateTableStatusCacheAndLabelsIndexer(Path filePath, boolean replacingCachedFile) {
+    public void invalidateTableCaches(Path filePath, boolean replacingCachedFile) {
         if (!filePath.startsWith(this.userHomeRootPath)) {
             return;
         }
@@ -516,6 +523,9 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 labelsIndexer.invalidateObject(
                         new LabelRefreshKey(LabelRefreshTarget.TABLE, folder.getDataDomain(), connectionName, physicalTableName),
                         replacingCachedFile);
+
+                TableLineageCache tableLineageCache = this.tableLineageCacheProvider.getTableLineageCache();
+                tableLineageCache.invalidateObject(new TableLineageCacheKey(folder.getDataDomain(), connectionName, physicalTableName), replacingCachedFile);
             }
         }
     }

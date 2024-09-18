@@ -74,7 +74,7 @@ public class SynchronizationStatusTrackerImpl implements SynchronizationStatusTr
         }
 
         // send the notification
-        this.dqoJobQueueMonitoringService.publishFolderSynchronizationStatus(newSynchronizationStatus);
+        this.dqoJobQueueMonitoringService.publishFolderSynchronizationStatus(dataDomain, newSynchronizationStatus);
     }
 
     /**
