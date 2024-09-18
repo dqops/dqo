@@ -337,7 +337,7 @@ export const IncidentConnection = () => {
 
         return (
           <a
-            className="text-blue-700 cursor-pointer text-sm"
+            className="underline cursor-pointer text-sm"
             onClick={() => openIncidentDetail(row)}
           >
             {values.join(', ')} (more)
@@ -403,7 +403,7 @@ export const IncidentConnection = () => {
                   href={value}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-blue-600 underline"
+                  className="underline"
                 >
                   <Tooltip
                     content={value}

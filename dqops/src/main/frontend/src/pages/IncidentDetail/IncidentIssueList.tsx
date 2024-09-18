@@ -155,10 +155,7 @@ export const IncidentIssueRow = ({
         ) : null}
         {doesColumnHaveValues('checkName') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            <a
-              className="text-blue-700 underline cursor-pointer"
-              onClick={navigate}
-            >
+            <a className="underline cursor-pointer" onClick={navigate}>
               {issue.checkName}
             </a>
           </td>
