@@ -111,7 +111,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = create_table.sync(
@@ -181,7 +184,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await create_table.asyncio(
@@ -254,7 +260,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = create_table.sync(
@@ -327,7 +336,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await create_table.asyncio(
@@ -834,8 +846,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -917,8 +931,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True
+				delete_incidents=True,
+				delete_checks_configuration=False
 			),
+			advanced_properties={
+			
+			},
 			can_edit=True,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -1001,8 +1019,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True
+				delete_incidents=True,
+				delete_checks_configuration=False
 			),
+			advanced_properties={
+			
+			},
 			can_edit=True,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -1088,8 +1110,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True
+				delete_incidents=True,
+				delete_checks_configuration=False
 			),
+			advanced_properties={
+			
+			},
 			can_edit=True,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -1175,8 +1201,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True
+				delete_incidents=True,
+				delete_checks_configuration=False
 			),
+			advanced_properties={
+			
+			},
 			can_edit=True,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -9476,8 +9506,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -9524,8 +9556,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -9572,8 +9606,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -9656,8 +9692,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -9709,8 +9749,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -9762,8 +9806,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -9848,8 +9896,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -9901,8 +9953,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -9954,8 +10010,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10043,8 +10103,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10096,8 +10160,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10149,8 +10217,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10238,8 +10310,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10291,8 +10367,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10344,8 +10424,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -10465,7 +10549,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = update_table.sync(
@@ -10535,7 +10622,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await update_table.asyncio(
@@ -10608,7 +10698,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = update_table.sync(
@@ -10681,7 +10774,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 		partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-		columns=ColumnSpecMap()
+		columns=ColumnSpecMap(),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await update_table.asyncio(
@@ -10743,7 +10839,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"table_hash\":7188561880498907939,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"do_not_collect_error_samples_in_profiling\":false,\"always_collect_error_samples_in_monitoring\":false,\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"table_hash\":7188561880498907939,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"do_not_collect_error_samples_in_profiling\":false,\"always_collect_error_samples_in_monitoring\":false,\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"deleteChecksConfiguration\":false},\"advanced_properties\":{},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -10811,8 +10907,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=True,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -10893,8 +10993,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=True,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -10978,8 +11082,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=True,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -11063,8 +11171,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=True,
 		can_collect_statistics=True,
 		can_run_checks=True,

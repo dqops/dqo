@@ -508,9 +508,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -526,9 +527,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1033,9 +1035,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1050,9 +1053,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -1618,9 +1622,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1636,9 +1641,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -2144,9 +2150,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2161,9 +2168,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -2729,9 +2737,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2747,9 +2756,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -3255,9 +3265,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3272,9 +3283,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -3894,9 +3906,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3912,9 +3925,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
@@ -4466,9 +4480,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4483,9 +4498,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -5109,9 +5125,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5127,9 +5144,10 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
@@ -5681,9 +5699,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5698,9 +5717,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                                AND TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,

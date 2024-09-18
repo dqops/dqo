@@ -62,8 +62,8 @@ def sync_detailed(
 
     Args:
         connection_name (str):
-        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
-            all nested objects.
+        json_body (ConnectionModel): Connection model with a subset of parameters, excluding all
+            nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,8 +97,8 @@ async def asyncio_detailed(
 
     Args:
         connection_name (str):
-        json_body (ConnectionModel): Connection model for with a subset of parameters, excluding
-            all nested objects.
+        json_body (ConnectionModel): Connection model with a subset of parameters, excluding all
+            nested objects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

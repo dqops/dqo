@@ -568,7 +568,8 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -589,7 +590,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1163,7 +1165,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1183,7 +1186,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1818,7 +1822,8 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1839,7 +1844,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2414,7 +2420,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2434,7 +2441,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3069,7 +3077,8 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3090,7 +3099,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3665,7 +3675,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3685,7 +3696,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4374,7 +4386,8 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4395,7 +4408,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5016,7 +5030,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5036,7 +5051,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5729,7 +5745,8 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5750,7 +5767,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6371,7 +6389,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6391,7 +6410,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                            WHEN analyzed_table.[target_column] IS NOT NULL
+                                    AND TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
                                 THEN 1
                             ELSE 0
                         END

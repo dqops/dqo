@@ -25,8 +25,10 @@ class CheckMiningParametersModel:
         copy_disabled_profiling_checks (Union[Unset, bool]): Copy also the configuration of profiling checks that are
             disabled.
         copy_profiling_checks (Union[Unset, bool]): Copy the configuration of valid profiling checks.
-        propose_default_checks (Union[Unset, bool]): Propose the rules for default checks that were activated using data
-            quality check patterns (policies). The default value of this parameter is 'true'.
+        reconfigure_policy_enabled_checks (Union[Unset, bool]): Propose the rules for default checks that were activated
+            using data quality check patterns (policies). The default value of this parameter is 'true'.
+        propose_checks_from_statistics (Union[Unset, bool]): Propose the configuration of data quality checks from
+            statistics.
         propose_minimum_row_count (Union[Unset, bool]): Propose the default configuration of the minimum row count for
             monitoring checks (full table scans). The default value of this parameter is 'true'.
         propose_column_count (Union[Unset, bool]): Propose the default configuration of the column count check. The
@@ -85,9 +87,9 @@ class CheckMiningParametersModel:
             checks. Whitespace checks detect common data quality issues with storing text representations of null values,
             such as 'null', 'None', 'n/a' and other texts that should be stored as regular NULL values. The default value of
             this parameter is 'true'.
-        apply_pii_checks (Union[Unset, bool]): Apply the rules to the Personal Identifiable Information checks
-            (sensitive data), but only when the checks were run as profiling checks activated manually, or by activating a
-            data quality check pattern that scans all columns for PII data. The default value of this parameter is 'true'.
+        apply_pii_checks (Union[Unset, bool]): Applies rules to Personal Identifiable Information checks (sensitive
+            data), but only when the checks were activated manually as profiling checks, or through a data quality check
+            pattern that scans all columns for PII data. The default value of this parameter is 'true'.
         propose_custom_checks (Union[Unset, bool]): Propose the default configuration for custom checks that use built-
             in data quality rules. The default value of this parameter is 'true'.
         fail_checks_at_percent_error_rows (Union[Unset, float]): The percentage value captured by a profiling check (for
@@ -104,7 +106,8 @@ class CheckMiningParametersModel:
     copy_failed_profiling_checks: Union[Unset, bool] = UNSET
     copy_disabled_profiling_checks: Union[Unset, bool] = UNSET
     copy_profiling_checks: Union[Unset, bool] = UNSET
-    propose_default_checks: Union[Unset, bool] = UNSET
+    reconfigure_policy_enabled_checks: Union[Unset, bool] = UNSET
+    propose_checks_from_statistics: Union[Unset, bool] = UNSET
     propose_minimum_row_count: Union[Unset, bool] = UNSET
     propose_column_count: Union[Unset, bool] = UNSET
     propose_timeliness_checks: Union[Unset, bool] = UNSET
@@ -143,7 +146,8 @@ class CheckMiningParametersModel:
         copy_failed_profiling_checks = self.copy_failed_profiling_checks
         copy_disabled_profiling_checks = self.copy_disabled_profiling_checks
         copy_profiling_checks = self.copy_profiling_checks
-        propose_default_checks = self.propose_default_checks
+        reconfigure_policy_enabled_checks = self.reconfigure_policy_enabled_checks
+        propose_checks_from_statistics = self.propose_checks_from_statistics
         propose_minimum_row_count = self.propose_minimum_row_count
         propose_column_count = self.propose_column_count
         propose_timeliness_checks = self.propose_timeliness_checks
@@ -193,8 +197,14 @@ class CheckMiningParametersModel:
             )
         if copy_profiling_checks is not UNSET:
             field_dict["copy_profiling_checks"] = copy_profiling_checks
-        if propose_default_checks is not UNSET:
-            field_dict["propose_default_checks"] = propose_default_checks
+        if reconfigure_policy_enabled_checks is not UNSET:
+            field_dict["reconfigure_policy_enabled_checks"] = (
+                reconfigure_policy_enabled_checks
+            )
+        if propose_checks_from_statistics is not UNSET:
+            field_dict["propose_checks_from_statistics"] = (
+                propose_checks_from_statistics
+            )
         if propose_minimum_row_count is not UNSET:
             field_dict["propose_minimum_row_count"] = propose_minimum_row_count
         if propose_column_count is not UNSET:
@@ -280,7 +290,11 @@ class CheckMiningParametersModel:
 
         copy_profiling_checks = d.pop("copy_profiling_checks", UNSET)
 
-        propose_default_checks = d.pop("propose_default_checks", UNSET)
+        reconfigure_policy_enabled_checks = d.pop(
+            "reconfigure_policy_enabled_checks", UNSET
+        )
+
+        propose_checks_from_statistics = d.pop("propose_checks_from_statistics", UNSET)
 
         propose_minimum_row_count = d.pop("propose_minimum_row_count", UNSET)
 
@@ -348,7 +362,8 @@ class CheckMiningParametersModel:
             copy_failed_profiling_checks=copy_failed_profiling_checks,
             copy_disabled_profiling_checks=copy_disabled_profiling_checks,
             copy_profiling_checks=copy_profiling_checks,
-            propose_default_checks=propose_default_checks,
+            reconfigure_policy_enabled_checks=reconfigure_policy_enabled_checks,
+            propose_checks_from_statistics=propose_checks_from_statistics,
             propose_minimum_row_count=propose_minimum_row_count,
             propose_column_count=propose_column_count,
             propose_timeliness_checks=propose_timeliness_checks,

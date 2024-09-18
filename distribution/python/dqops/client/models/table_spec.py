@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from ..models.table_profiling_check_categories_spec import (
         TableProfilingCheckCategoriesSpec,
     )
+    from ..models.table_spec_advanced_properties import TableSpecAdvancedProperties
     from ..models.table_spec_columns import TableSpecColumns
     from ..models.table_spec_groupings import TableSpecGroupings
     from ..models.table_spec_table_comparisons import TableSpecTableComparisons
@@ -93,6 +94,8 @@ class TableSpec:
         comments (Union[Unset, List['CommentSpec']]): Comments used for change tracking and documenting changes directly
             in the table data quality specification file.
         file_format (Union[Unset, FileFormatSpec]):
+        advanced_properties (Union[Unset, TableSpecAdvancedProperties]): A dictionary of advanced properties that can be
+            used for e.g. to support mapping data to data catalogs, a key/value dictionary.
         source_tables (Union[Unset, List['TableLineageSourceSpec']]): A list of source tables. This information is used
             to define the data lineage report for the table.
     """
@@ -119,6 +122,7 @@ class TableSpec:
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     file_format: Union[Unset, "FileFormatSpec"] = UNSET
+    advanced_properties: Union[Unset, "TableSpecAdvancedProperties"] = UNSET
     source_tables: Union[Unset, List["TableLineageSourceSpec"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -198,6 +202,10 @@ class TableSpec:
         if not isinstance(self.file_format, Unset):
             file_format = self.file_format.to_dict()
 
+        advanced_properties: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.advanced_properties, Unset):
+            advanced_properties = self.advanced_properties.to_dict()
+
         source_tables: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.source_tables, Unset):
             source_tables = []
@@ -257,6 +265,8 @@ class TableSpec:
             field_dict["comments"] = comments
         if file_format is not UNSET:
             field_dict["file_format"] = file_format
+        if advanced_properties is not UNSET:
+            field_dict["advanced_properties"] = advanced_properties
         if source_tables is not UNSET:
             field_dict["source_tables"] = source_tables
 
@@ -282,6 +292,7 @@ class TableSpec:
         from ..models.table_profiling_check_categories_spec import (
             TableProfilingCheckCategoriesSpec,
         )
+        from ..models.table_spec_advanced_properties import TableSpecAdvancedProperties
         from ..models.table_spec_columns import TableSpecColumns
         from ..models.table_spec_groupings import TableSpecGroupings
         from ..models.table_spec_table_comparisons import TableSpecTableComparisons
@@ -419,6 +430,15 @@ class TableSpec:
         else:
             file_format = FileFormatSpec.from_dict(_file_format)
 
+        _advanced_properties = d.pop("advanced_properties", UNSET)
+        advanced_properties: Union[Unset, TableSpecAdvancedProperties]
+        if isinstance(_advanced_properties, Unset):
+            advanced_properties = UNSET
+        else:
+            advanced_properties = TableSpecAdvancedProperties.from_dict(
+                _advanced_properties
+            )
+
         source_tables = []
         _source_tables = d.pop("source_tables", UNSET)
         for source_tables_item_data in _source_tables or []:
@@ -451,6 +471,7 @@ class TableSpec:
             labels=labels,
             comments=comments,
             file_format=file_format,
+            advanced_properties=advanced_properties,
             source_tables=source_tables,
         )
 

@@ -40230,6 +40230,10 @@ definitions:
           \ quality dimension."
         additionalProperties:
           $ref: "#/definitions/DimensionCurrentDataQualityStatusModel"
+      table_exist:
+        type: "boolean"
+        description: "The flag informing whether the table exist. The table might\
+          \ not exist for the imported data lineage source tables."
     description: "The table's most recent data quality status. It is a summary of\
       \ the results of the most recently executed data quality checks on the table.\
       \ Verify the value of the highest_severity_level to see if there are any data\

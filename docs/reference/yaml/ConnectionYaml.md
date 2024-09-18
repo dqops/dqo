@@ -48,6 +48,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`incident_grouping`](./ConnectionYaml.md#connectionincidentgroupingspec)</span>|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|*[ConnectionIncidentGroupingSpec](./ConnectionYaml.md#connectionincidentgroupingspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
+|<span class="no-wrap-code ">`advanced_properties`</span>|A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 

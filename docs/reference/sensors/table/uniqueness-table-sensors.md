@@ -457,7 +457,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -487,7 +487,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -517,7 +517,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -547,8 +547,8 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                AS actual_value
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+            AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
     FROM (
@@ -577,7 +577,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -612,9 +612,9 @@ The templates used to generate the SQL query for each data source supported by D
     {% endmacro %}
     
     SELECT
-            CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                AS actual_value
+        CASE WHEN SUM(distinct_records) IS NULL THEN 0
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+            AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
     FROM (
@@ -643,7 +643,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+            ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -679,7 +679,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -709,7 +709,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -739,7 +739,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -769,7 +769,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+            ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -799,7 +799,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
-            ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+            ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
             AS actual_value
         {{- lib.render_data_grouping_projections_reference('grouping_table') }}
         {{- lib.render_time_dimension_projection_reference('grouping_table') }}

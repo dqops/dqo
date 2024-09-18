@@ -22,6 +22,7 @@ The references of all objects used by [jobs](../operations/jobs.md) REST API ope
 |<span class="no-wrap-code">`from_date_time`</span>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|*datetime*|
 |<span class="no-wrap-code">`to_date`</span>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|*date*|
 |<span class="no-wrap-code">`to_date_time`</span>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|*datetime*|
+|<span class="no-wrap-code">`where_filter`</span>|An additional filter which must be a valid SQL predicate (an SQL expression that returns 'true' or 'false') that is added to the WHERE clause of the SQL query that DQOps will run on the data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch of records is loaded, and the data quality checks are evaluated as a data contract. All the records in that batch must tagged with the same value, and the passed predicate to find records from that batch would use the filter in the form: "{alias}.batch_id = 1". The filter can use replacement tokens {alias} to reference the analyzed table.|*string*|
 
 
 ___
@@ -156,7 +157,8 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |<span class="no-wrap-code">`delete_check_results`</span>|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|*boolean*|
 |<span class="no-wrap-code">`delete_sensor_readouts`</span>|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|*boolean*|
 |<span class="no-wrap-code">`delete_error_samples`</span>|Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
-|<span class="no-wrap-code">`delete_incidents`</span>|Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
+|<span class="no-wrap-code">`delete_incidents`</span>|Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the incidents.|*boolean*|
+|<span class="no-wrap-code">`delete_checks_configuration`</span>|Delete the data quality configured checks from the table. They are detached from the configuration.Because the default value is *false*, this parameter must be set to *true* to delete the checks configuration.|*boolean*|
 |<span class="no-wrap-code">`column_names`</span>|The list of column names to delete the data for column level results or errors only for selected columns.|*List[string]*|
 |<span class="no-wrap-code">`check_category`</span>|The check category name, for example *volume* or *anomaly*.|*string*|
 |<span class="no-wrap-code">`table_comparison_name`</span>|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|*string*|
@@ -596,6 +598,7 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 |<span class="no-wrap-code">[`parameters`](#dqojobentryparametersmodel)</span>||*[DqoJobEntryParametersModel](#dqojobentryparametersmodel)*|
 |<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>||*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 |<span class="no-wrap-code">`error_message`</span>||*string*|
+|<span class="no-wrap-code">`data_domain`</span>||*string*|
 
 
 ___
@@ -613,6 +616,7 @@ Describes a change to the job status or the job queue (such as a new job was add
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>||*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
 |<span class="no-wrap-code">`change_sequence`</span>||*long*|
 |<span class="no-wrap-code">[`updated_model`](./jobs.md#dqojobhistoryentrymodel)</span>||*[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)*|
+|<span class="no-wrap-code">`domain_name`</span>||*string*|
 
 
 ___

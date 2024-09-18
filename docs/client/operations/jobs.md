@@ -1069,7 +1069,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"columnNames\":[\"sample_column\"]}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"deleteChecksConfiguration\":false,\"columnNames\":[\"sample_column\"]}"
 	
     ```
 
@@ -1111,6 +1111,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -1161,6 +1162,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -1214,6 +1216,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -1267,6 +1270,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -2207,7 +2211,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),
@@ -2287,7 +2294,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),
@@ -2370,7 +2380,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),
@@ -2453,7 +2466,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),

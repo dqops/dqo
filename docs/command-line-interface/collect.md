@@ -38,7 +38,8 @@ $ dqo [dqo options...] collect errorsamples [-deh] [--daily-partitioning-include
                       [-sc=<scope>] [-t=<table>] [--to-date=<toDate>]
                       [--to-date-time=<toDateTime>]
                       [--to-date-time-offset=<toDateTimeOffset>]
-                      [-ts=<timeScale>] [-l=<labels>]... [-tag=<tags>]...
+                      [-ts=<timeScale>] [--where-filter=<whereFilter>]
+                      [-l=<labels>]... [-tag=<tags>]...
 
 ```
 
@@ -59,7 +60,8 @@ dqo> collect errorsamples [-deh] [--daily-partitioning-include-today] [-fe] [-fw
                       [-sc=<scope>] [-t=<table>] [--to-date=<toDate>]
                       [--to-date-time=<toDateTime>]
                       [--to-date-time-offset=<toDateTimeOffset>]
-                      [-ts=<timeScale>] [-l=<labels>]... [-tag=<tags>]...
+                      [-ts=<timeScale>] [--where-filter=<whereFilter>]
+                      [-l=<labels>]... [-tag=<tags>]...
 
 ```
 
@@ -100,6 +102,7 @@ All parameters supported by the command are listed below.
 |<div id="collect errorsamples--to-date" class="no-wrap-code">`--to-date`</div>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.| ||
 |<div id="collect errorsamples--to-date-time" class="no-wrap-code">`--to-date-time`</div>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||
 |<div id="collect errorsamples--to-date-time-offset" class="no-wrap-code">`--to-date-time-offset`</div>|Analyze the data until the given date and time with a time zone offset (exclusive). The date and time should be an ISO 8601 date and time followed by a time zone offset (yyyy-MM-dd HH\:mm:ss). For example: 2023-02-20 14:10:00+02. The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||
+|<div id="collect errorsamples--where-filter" class="no-wrap-code">`--where-filter`</div>|An additional filter which must be a valid SQL predicate (an SQL expression that returns 'true' or 'false') that is added to the WHERE clause of the SQL query that DQOps will run on the data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch of records is loaded, and the data quality checks are evaluated as a data contract. All the records in that batch must tagged with the same value, and the passed predicate to find records from that batch would use the filter in the form: "{alias}.batch_id = 1". The filter can use replacement tokens {alias} to reference the analyzed table.| ||
 
 
 

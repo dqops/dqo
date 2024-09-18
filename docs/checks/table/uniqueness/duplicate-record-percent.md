@@ -147,7 +147,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -168,7 +168,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -194,7 +194,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -215,7 +215,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -241,7 +241,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -262,7 +262,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -288,8 +288,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -311,8 +311,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
                     COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records
@@ -337,7 +337,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -366,7 +366,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 FROM (
                     SELECT COUNT(*) AS records_number,
@@ -395,9 +395,9 @@ spec:
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -418,9 +418,9 @@ spec:
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
                     COUNT(*) OVER (PARTITION BY "id", "created_at") AS distinct_records
@@ -445,7 +445,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -474,7 +474,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -504,7 +504,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -527,7 +527,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -553,7 +553,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -576,7 +576,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -602,7 +602,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -625,7 +625,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -651,7 +651,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -672,7 +672,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -698,7 +698,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -727,7 +727,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -805,7 +805,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -825,7 +825,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2
@@ -856,7 +856,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -876,7 +876,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2
@@ -907,7 +907,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -927,7 +927,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -960,8 +960,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -982,8 +982,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -1015,7 +1015,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1043,7 +1043,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1085,9 +1085,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -1107,9 +1107,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -1141,7 +1141,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1169,7 +1169,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1212,7 +1212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1234,7 +1234,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1267,7 +1267,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1289,7 +1289,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1322,7 +1322,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1344,7 +1344,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1377,7 +1377,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1397,7 +1397,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1434,7 +1434,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1462,7 +1462,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -1630,7 +1630,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1651,7 +1651,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -1677,7 +1677,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1698,7 +1698,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -1724,7 +1724,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1745,7 +1745,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -1771,8 +1771,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -1794,8 +1794,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
                     COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records
@@ -1820,7 +1820,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1849,7 +1849,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 FROM (
                     SELECT COUNT(*) AS records_number,
@@ -1878,9 +1878,9 @@ spec:
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -1901,9 +1901,9 @@ spec:
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
                     COUNT(*) OVER (PARTITION BY "id", "created_at") AS distinct_records
@@ -1928,7 +1928,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -1957,7 +1957,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -1987,7 +1987,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2010,7 +2010,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -2036,7 +2036,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2059,7 +2059,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -2085,7 +2085,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2108,7 +2108,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -2134,7 +2134,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2155,7 +2155,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -2181,7 +2181,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2210,7 +2210,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -2289,7 +2289,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2309,7 +2309,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2
@@ -2340,7 +2340,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2360,7 +2360,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2
@@ -2391,7 +2391,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2411,7 +2411,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2444,8 +2444,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -2466,8 +2466,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -2499,7 +2499,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2527,7 +2527,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2569,9 +2569,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -2591,9 +2591,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -2625,7 +2625,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2653,7 +2653,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2696,7 +2696,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2718,7 +2718,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2751,7 +2751,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2773,7 +2773,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2806,7 +2806,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2828,7 +2828,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2861,7 +2861,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2881,7 +2881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -2918,7 +2918,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -2946,7 +2946,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -3114,7 +3114,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3135,7 +3135,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3161,7 +3161,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3182,7 +3182,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3208,7 +3208,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3229,7 +3229,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3255,8 +3255,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -3278,8 +3278,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
                     COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records
@@ -3304,7 +3304,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3333,7 +3333,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 FROM (
                     SELECT COUNT(*) AS records_number,
@@ -3362,9 +3362,9 @@ spec:
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -3385,9 +3385,9 @@ spec:
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
                     COUNT(*) OVER (PARTITION BY "id", "created_at") AS distinct_records
@@ -3412,7 +3412,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3441,7 +3441,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3471,7 +3471,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3494,7 +3494,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3520,7 +3520,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3543,7 +3543,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3569,7 +3569,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3592,7 +3592,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3618,7 +3618,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3639,7 +3639,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3665,7 +3665,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3694,7 +3694,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
             FROM (
                 SELECT COUNT(*) AS records_number,
@@ -3773,7 +3773,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3793,7 +3793,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2
@@ -3824,7 +3824,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3844,7 +3844,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2
@@ -3875,7 +3875,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -3895,7 +3895,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -3928,8 +3928,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -3950,8 +3950,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -3983,7 +3983,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4011,7 +4011,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4053,9 +4053,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -4075,9 +4075,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -4109,7 +4109,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4137,7 +4137,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4180,7 +4180,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4202,7 +4202,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4235,7 +4235,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4257,7 +4257,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4290,7 +4290,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4312,7 +4312,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4345,7 +4345,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4365,7 +4365,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4402,7 +4402,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4430,7 +4430,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -4608,7 +4608,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4629,7 +4629,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -4661,7 +4661,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4682,7 +4682,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -4714,7 +4714,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4735,7 +4735,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -4767,8 +4767,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -4790,8 +4790,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -4822,7 +4822,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4851,7 +4851,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -4888,9 +4888,9 @@ spec:
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -4911,9 +4911,9 @@ spec:
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -4944,7 +4944,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -4973,7 +4973,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -5011,7 +5011,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5034,7 +5034,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -5066,7 +5066,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5089,7 +5089,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -5121,7 +5121,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5144,7 +5144,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -5176,7 +5176,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5197,7 +5197,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -5231,7 +5231,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5260,7 +5260,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -5357,7 +5357,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5377,7 +5377,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2,
@@ -5412,7 +5412,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5432,7 +5432,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2,
@@ -5467,7 +5467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5487,7 +5487,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -5524,8 +5524,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -5546,8 +5546,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -5583,7 +5583,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5611,7 +5611,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -5659,9 +5659,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -5681,9 +5681,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -5719,7 +5719,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5747,7 +5747,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -5796,7 +5796,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5818,7 +5818,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -5855,7 +5855,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5877,7 +5877,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -5914,7 +5914,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5936,7 +5936,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -5973,7 +5973,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -5993,7 +5993,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -6032,7 +6032,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6060,7 +6060,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -6244,7 +6244,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6265,7 +6265,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6297,7 +6297,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6318,7 +6318,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6350,7 +6350,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6371,7 +6371,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6403,8 +6403,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -6426,8 +6426,8 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -6458,7 +6458,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6487,7 +6487,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6524,9 +6524,9 @@ spec:
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -6547,9 +6547,9 @@ spec:
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
                 time_period,
                 time_period_utc
             FROM (
@@ -6580,7 +6580,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6609,7 +6609,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6647,7 +6647,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6670,7 +6670,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6702,7 +6702,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6725,7 +6725,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6757,7 +6757,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6780,7 +6780,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6812,7 +6812,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6833,7 +6833,7 @@ spec:
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6867,7 +6867,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -6896,7 +6896,7 @@ spec:
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
                 time_period,
                 time_period_utc
@@ -6993,7 +6993,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7013,7 +7013,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2,
@@ -7048,7 +7048,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7068,7 +7068,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
                 grouping_table.grouping_level_1,
                 grouping_table.grouping_level_2,
@@ -7103,7 +7103,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7123,7 +7123,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7160,8 +7160,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -7182,8 +7182,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -7219,7 +7219,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7247,7 +7247,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7295,9 +7295,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% endmacro %}
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
             FROM (
@@ -7317,9 +7317,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             
             SELECT
-                    CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                        ELSE 1 - SUM(distinct_records) / SUM(records_number) END
-                        AS actual_value,
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
             
                             grouping_table.grouping_level_1,
             
@@ -7355,7 +7355,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7383,7 +7383,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7432,7 +7432,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7454,7 +7454,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7491,7 +7491,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7513,7 +7513,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7550,7 +7550,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7572,7 +7572,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7609,7 +7609,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7629,7 +7629,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) * 1.0 / SUM(records_number) END
+                    ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,
@@ -7668,7 +7668,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value
                 {{- lib.render_data_grouping_projections_reference('grouping_table') }}
                 {{- lib.render_time_dimension_projection_reference('grouping_table') }}
@@ -7696,7 +7696,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
-                    ELSE 1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE) END
+                    ELSE (1 - SUM(distinct_records) / CAST(SUM(records_number) AS DOUBLE)) * 100.0 END
                     AS actual_value,
             
                             grouping_table.grouping_level_1,

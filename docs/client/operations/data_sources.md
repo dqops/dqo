@@ -469,7 +469,7 @@ http://localhost:8888/api/datasource/testconnection
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"deleteChecksConfiguration\":false},\"advanced_properties\":{},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -546,8 +546,12 @@ http://localhost:8888/api/datasource/testconnection
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -634,8 +638,12 @@ http://localhost:8888/api/datasource/testconnection
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -725,8 +733,12 @@ http://localhost:8888/api/datasource/testconnection
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -816,8 +828,12 @@ http://localhost:8888/api/datasource/testconnection
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True
+			delete_incidents=True,
+			delete_checks_configuration=False
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,

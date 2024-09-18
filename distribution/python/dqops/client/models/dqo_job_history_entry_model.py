@@ -25,6 +25,7 @@ class DqoJobHistoryEntryModel:
         status (Union[Unset, DqoJobStatus]):
         error_message (Union[Unset, str]):
         status_changed_at (Union[Unset, int]):
+        data_domain (Union[Unset, str]):
     """
 
     job_id: Union[Unset, "DqoQueueJobId"] = UNSET
@@ -33,6 +34,7 @@ class DqoJobHistoryEntryModel:
     status: Union[Unset, DqoJobStatus] = UNSET
     error_message: Union[Unset, str] = UNSET
     status_changed_at: Union[Unset, int] = UNSET
+    data_domain: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -54,6 +56,7 @@ class DqoJobHistoryEntryModel:
 
         error_message = self.error_message
         status_changed_at = self.status_changed_at
+        data_domain = self.data_domain
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -70,6 +73,8 @@ class DqoJobHistoryEntryModel:
             field_dict["errorMessage"] = error_message
         if status_changed_at is not UNSET:
             field_dict["statusChangedAt"] = status_changed_at
+        if data_domain is not UNSET:
+            field_dict["dataDomain"] = data_domain
 
         return field_dict
 
@@ -111,6 +116,8 @@ class DqoJobHistoryEntryModel:
 
         status_changed_at = d.pop("statusChangedAt", UNSET)
 
+        data_domain = d.pop("dataDomain", UNSET)
+
         dqo_job_history_entry_model = cls(
             job_id=job_id,
             job_type=job_type,
@@ -118,6 +125,7 @@ class DqoJobHistoryEntryModel:
             status=status,
             error_message=error_message,
             status_changed_at=status_changed_at,
+            data_domain=data_domain,
         )
 
         dqo_job_history_entry_model.additional_properties = d

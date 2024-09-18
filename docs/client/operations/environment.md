@@ -253,7 +253,8 @@ http://localhost:8888/api/environment/profile
 		  "can_compare_tables" : false,
 		  "can_manage_users" : false,
 		  "can_manage_and_view_shared_credentials" : false,
-		  "can_change_own_password" : false
+		  "can_change_own_password" : false,
+		  "can_use_data_domains" : false
 		}
         ```
     
@@ -299,7 +300,8 @@ http://localhost:8888/api/environment/profile
 			can_compare_tables=False,
 			can_manage_users=False,
 			can_manage_and_view_shared_credentials=False,
-			can_change_own_password=False
+			can_change_own_password=False,
+			can_use_data_domains=False
 		)
         ```
     
@@ -346,7 +348,8 @@ http://localhost:8888/api/environment/profile
 			can_compare_tables=False,
 			can_manage_users=False,
 			can_manage_and_view_shared_credentials=False,
-			can_change_own_password=False
+			can_change_own_password=False,
+			can_use_data_domains=False
 		)
         ```
     
@@ -396,7 +399,8 @@ http://localhost:8888/api/environment/profile
 			can_compare_tables=False,
 			can_manage_users=False,
 			can_manage_and_view_shared_credentials=False,
-			can_change_own_password=False
+			can_change_own_password=False,
+			can_use_data_domains=False
 		)
         ```
     
@@ -446,7 +450,8 @@ http://localhost:8888/api/environment/profile
 			can_compare_tables=False,
 			can_manage_users=False,
 			can_manage_and_view_shared_credentials=False,
-			can_change_own_password=False
+			can_change_own_password=False,
+			can_use_data_domains=False
 		)
         ```
     

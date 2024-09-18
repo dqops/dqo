@@ -12,6 +12,9 @@ if TYPE_CHECKING:
     from ..models.connection_incident_grouping_spec import (
         ConnectionIncidentGroupingSpec,
     )
+    from ..models.connection_spec_advanced_properties import (
+        ConnectionSpecAdvancedProperties,
+    )
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
     from ..models.databricks_parameters_spec import DatabricksParametersSpec
     from ..models.default_schedules_spec import DefaultSchedulesSpec
@@ -57,6 +60,8 @@ class ConnectionSpec:
             deserialization will remove non tracked comments).
         labels (Union[Unset, List[str]]): Custom labels that were assigned to the connection. Labels are used for
             searching for tables when filtered data quality checks are executed.
+        advanced_properties (Union[Unset, ConnectionSpecAdvancedProperties]): A dictionary of advanced properties that
+            can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.
     """
 
     provider_type: Union[Unset, ProviderType] = UNSET
@@ -80,6 +85,7 @@ class ConnectionSpec:
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
+    advanced_properties: Union[Unset, "ConnectionSpecAdvancedProperties"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -162,6 +168,10 @@ class ConnectionSpec:
         if not isinstance(self.labels, Unset):
             labels = self.labels
 
+        advanced_properties: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.advanced_properties, Unset):
+            advanced_properties = self.advanced_properties.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -205,6 +215,8 @@ class ConnectionSpec:
             field_dict["comments"] = comments
         if labels is not UNSET:
             field_dict["labels"] = labels
+        if advanced_properties is not UNSET:
+            field_dict["advanced_properties"] = advanced_properties
 
         return field_dict
 
@@ -214,6 +226,9 @@ class ConnectionSpec:
         from ..models.comment_spec import CommentSpec
         from ..models.connection_incident_grouping_spec import (
             ConnectionIncidentGroupingSpec,
+        )
+        from ..models.connection_spec_advanced_properties import (
+            ConnectionSpecAdvancedProperties,
         )
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
@@ -359,6 +374,15 @@ class ConnectionSpec:
 
         labels = cast(List[str], d.pop("labels", UNSET))
 
+        _advanced_properties = d.pop("advanced_properties", UNSET)
+        advanced_properties: Union[Unset, ConnectionSpecAdvancedProperties]
+        if isinstance(_advanced_properties, Unset):
+            advanced_properties = UNSET
+        else:
+            advanced_properties = ConnectionSpecAdvancedProperties.from_dict(
+                _advanced_properties
+            )
+
         connection_spec = cls(
             provider_type=provider_type,
             bigquery=bigquery,
@@ -379,6 +403,7 @@ class ConnectionSpec:
             incident_grouping=incident_grouping,
             comments=comments,
             labels=labels,
+            advanced_properties=advanced_properties,
         )
 
         connection_spec.additional_properties = d

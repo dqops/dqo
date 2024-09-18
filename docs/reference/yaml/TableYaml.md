@@ -51,6 +51,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments used for change tracking and documenting changes directly in the table data quality specification file.|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">[`file_format`](./TableYaml.md#fileformatspec)</span>|File format with the specification used as a source data. It overrides the connection spec&#x27;s file format when it is set|*[FileFormatSpec](./TableYaml.md#fileformatspec)*| | | |
+|<span class="no-wrap-code ">`advanced_properties`</span>|A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">[`source_tables`](./TableYaml.md#tablelineagesourcespeclist)</span>|A list of source tables. This information is used to define the data lineage report for the table.|*[TableLineageSourceSpecList](./TableYaml.md#tablelineagesourcespeclist)*| | | |
 
 
@@ -338,6 +339,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`statistics`](./TableYaml.md#columnstatisticscollectorsrootcategoriesspec)</span>|Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.|*[ColumnStatisticsCollectorsRootCategoriesSpec](./TableYaml.md#columnstatisticscollectorsrootcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
+|<span class="no-wrap-code ">`advanced_properties`</span>|A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 

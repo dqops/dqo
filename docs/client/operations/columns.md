@@ -97,7 +97,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = create_column.sync(
@@ -153,7 +156,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await create_column.asyncio(
@@ -212,7 +218,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = create_column.sync(
@@ -271,7 +280,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await create_column.asyncio(
@@ -632,7 +644,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						)
 					),
 					comparisons=ColumnComparisonProfilingChecksSpecMap()
-				)
+				),
+				advanced_properties={
+				
+				}
 			),
 			can_edit=True
 		)
@@ -695,7 +710,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						)
 					),
 					comparisons=ColumnComparisonProfilingChecksSpecMap()
-				)
+				),
+				advanced_properties={
+				
+				}
 			),
 			can_edit=True
 		)
@@ -761,7 +779,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						)
 					),
 					comparisons=ColumnComparisonProfilingChecksSpecMap()
-				)
+				),
+				advanced_properties={
+				
+				}
 			),
 			can_edit=True
 		)
@@ -827,7 +848,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						)
 					),
 					comparisons=ColumnComparisonProfilingChecksSpecMap()
-				)
+				),
+				advanced_properties={
+				
+				}
 			),
 			can_edit=True
 		)
@@ -904,6 +928,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -958,6 +983,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				nullable=False,
 				length=256
 			),
+			advanced_properties={
+			
+			},
 			can_edit=False,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -1013,6 +1041,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				nullable=False,
 				length=256
 			),
+			advanced_properties={
+			
+			},
 			can_edit=False,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -1071,6 +1102,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				nullable=False,
 				length=256
 			),
+			advanced_properties={
+			
+			},
 			can_edit=False,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -1129,6 +1163,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				nullable=False,
 				length=256
 			),
+			advanced_properties={
+			
+			},
 			can_edit=False,
 			can_collect_statistics=True,
 			can_run_checks=True,
@@ -6929,6 +6966,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -6947,6 +6985,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -6965,6 +7004,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -7020,6 +7060,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7043,6 +7086,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7066,6 +7112,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7123,6 +7172,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7146,6 +7198,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7169,6 +7224,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7229,6 +7287,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7252,6 +7313,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7275,6 +7339,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7335,6 +7402,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7358,6 +7428,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -7381,6 +7454,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -8455,7 +8531,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = update_column.sync(
@@ -8511,7 +8590,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await update_column.asyncio(
@@ -8570,7 +8652,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = update_column.sync(
@@ -8629,7 +8714,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				)
 			),
 			comparisons=ColumnComparisonProfilingChecksSpecMap()
-		)
+		),
+		advanced_properties={
+		
+		}
 	)
 	
 	call_result = await update_column.asyncio(
@@ -8693,7 +8781,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"column_name\":\"sample_column\",\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"column_name\":\"sample_column\",\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"advanced_properties\":{},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -8732,6 +8820,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -8784,6 +8875,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -8839,6 +8933,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,
@@ -8894,6 +8991,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		advanced_properties={
+		
+		},
 		can_edit=False,
 		can_collect_statistics=True,
 		can_run_checks=True,

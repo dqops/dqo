@@ -164,6 +164,7 @@ public class SampleStringsRegistry {
     public static String getSampleFilter() { return "fact*"; };
 
     public static String getLabelPrefix() { return "address"; };
+    public static String getDataDomainName() { return "crm"; }
 
     /**
      * Gets sample string fitting the parameter.
@@ -241,6 +242,8 @@ public class SampleStringsRegistry {
             return getSampleFilter();
         } else if (parameterNameLower.contains("prefix")) {
             return getLabelPrefix();
+        } else if (parameterNameLower.contains("data_domain_name")) {
+            return getDataDomainName();
         }
 
         throw new IllegalArgumentException("No value found fitting the parameter \"" + parameterName + "\".");

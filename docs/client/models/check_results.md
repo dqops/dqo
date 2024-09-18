@@ -50,6 +50,7 @@ The table validity status. It is a summary of the results of the most recently e
 |<span class="no-wrap-code">`checks`</span>|The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses that describe the most current status.|*Dict[string, [CheckCurrentDataQualityStatusModel](./common.md#checkcurrentdataqualitystatusmodel)]*|
 |<span class="no-wrap-code">`columns`</span>|Dictionary of data statues for all columns that have any known data quality results. The keys in the dictionary are the column names.|*Dict[string, [ColumnCurrentDataQualityStatusModel](./common.md#columncurrentdataqualitystatusmodel)]*|
 |<span class="no-wrap-code">`dimensions`</span>|Dictionary of the current data quality statues for each data quality dimension.|*Dict[string, [DimensionCurrentDataQualityStatusModel](./common.md#dimensioncurrentdataqualitystatusmodel)]*|
+|<span class="no-wrap-code">`table_exist`</span>|The flag informing whether the table exist. The table might not exist for the imported data lineage source tables.|*boolean*|
 
 
 ___

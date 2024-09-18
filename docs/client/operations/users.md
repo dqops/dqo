@@ -320,7 +320,7 @@ http://localhost:8888/api/users
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|*[DqoCloudUserModel](../models/users.md#dqocloudusermodel)*| |
+|User model|*[DqoUserRolesModel](../models/users.md#dqouserrolesmodel)*| |
 
 
 
@@ -336,7 +336,7 @@ http://localhost:8888/api/users
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
+		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\",\"dataDomainRoles\":{\"(default)\":\"editor\",\"datalake\":\"editor\"}}"
 	
     ```
 
@@ -349,16 +349,17 @@ http://localhost:8888/api/users
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = create_user.sync(
@@ -377,16 +378,17 @@ http://localhost:8888/api/users
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = await create_user.asyncio(
@@ -405,8 +407,8 @@ http://localhost:8888/api/users
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -415,9 +417,10 @@ http://localhost:8888/api/users
 	    token=token
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = create_user.sync(
@@ -436,8 +439,8 @@ http://localhost:8888/api/users
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -446,9 +449,10 @@ http://localhost:8888/api/users
 	    token=token
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = await create_user.asyncio(
@@ -609,7 +613,7 @@ http://localhost:8888/api/users
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`dqo_cloud_user_model`</span>||*List[[DqoCloudUserModel](../models/users.md#dqocloudusermodel)]*|
+|<span class="no-wrap-code">`dqo_user_roles_model`</span>||*List[[DqoUserRolesModel](../models/users.md#dqouserrolesmodel)]*|
 
 
 
@@ -637,13 +641,25 @@ http://localhost:8888/api/users
         ```
         [ {
 		  "email" : "sample_user@mail.com",
-		  "accountRole" : "operator"
+		  "accountRole" : "operator",
+		  "dataDomainRoles" : {
+		    "(default)" : "editor",
+		    "datalake" : "editor"
+		  }
 		}, {
 		  "email" : "sample_user@mail.com",
-		  "accountRole" : "operator"
+		  "accountRole" : "operator",
+		  "dataDomainRoles" : {
+		    "(default)" : "editor",
+		    "datalake" : "editor"
+		  }
 		}, {
 		  "email" : "sample_user@mail.com",
-		  "accountRole" : "operator"
+		  "accountRole" : "operator",
+		  "dataDomainRoles" : {
+		    "(default)" : "editor",
+		    "datalake" : "editor"
+		  }
 		} ]
         ```
     
@@ -673,17 +689,20 @@ http://localhost:8888/api/users
     
         ```
         [
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			)
 		]
         ```
@@ -715,17 +734,20 @@ http://localhost:8888/api/users
     
         ```
         [
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			)
 		]
         ```
@@ -760,17 +782,20 @@ http://localhost:8888/api/users
     
         ```
         [
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			)
 		]
         ```
@@ -805,17 +830,20 @@ http://localhost:8888/api/users
     
         ```
         [
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			),
-			DqoCloudUserModel(
+			DqoUserRolesModel(
 				email='sample_user@mail.com',
-				account_role=DqoUserRole.OPERATOR
+				account_role=DqoUserRole.OPERATOR,
+				data_domain_roles=LinkedHashMap()
 			)
 		]
         ```
@@ -841,7 +869,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`dqo_cloud_user_model`](../models/users.md#dqocloudusermodel)</span>||*[DqoCloudUserModel](../models/users.md#dqocloudusermodel)*|
+|<span class="no-wrap-code">[`dqo_user_roles_model`](../models/users.md#dqouserrolesmodel)</span>||*[DqoUserRolesModel](../models/users.md#dqouserrolesmodel)*|
 
 
 
@@ -876,7 +904,11 @@ http://localhost:8888/api/users/{email}
         ```
         {
 		  "email" : "sample_user@mail.com",
-		  "accountRole" : "operator"
+		  "accountRole" : "operator",
+		  "dataDomainRoles" : {
+		    "(default)" : "editor",
+		    "datalake" : "editor"
+		  }
 		}
         ```
     
@@ -906,9 +938,10 @@ http://localhost:8888/api/users/{email}
     ??? example "Expand to see the returned result"
     
         ```
-        DqoCloudUserModel(
+        DqoUserRolesModel(
 			email='sample_user@mail.com',
-			account_role=DqoUserRole.OPERATOR
+			account_role=DqoUserRole.OPERATOR,
+			data_domain_roles=LinkedHashMap()
 		)
         ```
     
@@ -939,9 +972,10 @@ http://localhost:8888/api/users/{email}
     ??? example "Expand to see the returned result"
     
         ```
-        DqoCloudUserModel(
+        DqoUserRolesModel(
 			email='sample_user@mail.com',
-			account_role=DqoUserRole.OPERATOR
+			account_role=DqoUserRole.OPERATOR,
+			data_domain_roles=LinkedHashMap()
 		)
         ```
     
@@ -975,9 +1009,10 @@ http://localhost:8888/api/users/{email}
     ??? example "Expand to see the returned result"
     
         ```
-        DqoCloudUserModel(
+        DqoUserRolesModel(
 			email='sample_user@mail.com',
-			account_role=DqoUserRole.OPERATOR
+			account_role=DqoUserRole.OPERATOR,
+			data_domain_roles=LinkedHashMap()
 		)
         ```
     
@@ -1011,9 +1046,10 @@ http://localhost:8888/api/users/{email}
     ??? example "Expand to see the returned result"
     
         ```
-        DqoCloudUserModel(
+        DqoUserRolesModel(
 			email='sample_user@mail.com',
-			account_role=DqoUserRole.OPERATOR
+			account_role=DqoUserRole.OPERATOR,
+			data_domain_roles=LinkedHashMap()
 		)
         ```
     
@@ -1049,7 +1085,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|*[DqoCloudUserModel](../models/users.md#dqocloudusermodel)*| |
+|User model|*[DqoUserRolesModel](../models/users.md#dqouserrolesmodel)*| |
 
 
 
@@ -1065,7 +1101,7 @@ http://localhost:8888/api/users/{email}
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
+		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\",\"dataDomainRoles\":{\"(default)\":\"editor\",\"datalake\":\"editor\"}}"
 	
     ```
 
@@ -1078,16 +1114,17 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = update_user.sync(
@@ -1107,16 +1144,17 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = await update_user.asyncio(
@@ -1136,8 +1174,8 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1146,9 +1184,10 @@ http://localhost:8888/api/users/{email}
 	    token=token
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = update_user.sync(
@@ -1168,8 +1207,8 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
-	from dqops.client.models import DqoCloudUserModel, \
-	                                DqoUserRole
+	from dqops.client.models import DqoUserRole, \
+	                                DqoUserRolesModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1178,9 +1217,10 @@ http://localhost:8888/api/users/{email}
 	    token=token
 	)
 	
-	request_body = DqoCloudUserModel(
+	request_body = DqoUserRolesModel(
 		email='sample_user@mail.com',
-		account_role=DqoUserRole.OPERATOR
+		account_role=DqoUserRole.OPERATOR,
+		data_domain_roles=LinkedHashMap()
 	)
 	
 	call_result = await update_user.asyncio(

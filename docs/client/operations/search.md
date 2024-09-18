@@ -76,6 +76,7 @@ http://localhost:8888/api/search/columns
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -94,6 +95,7 @@ http://localhost:8888/api/search/columns
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -112,6 +114,7 @@ http://localhost:8888/api/search/columns
 		    "nullable" : false,
 		    "length" : 256
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -164,6 +167,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -187,6 +193,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -210,6 +219,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -264,6 +276,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -287,6 +302,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -310,6 +328,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -367,6 +388,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -390,6 +414,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -413,6 +440,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -470,6 +500,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -493,6 +526,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -516,6 +552,9 @@ http://localhost:8888/api/search/columns
 					nullable=False,
 					length=256
 				),
+				advanced_properties={
+				
+				},
 				can_edit=False,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -626,8 +665,10 @@ http://localhost:8888/api/search/tables
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -674,8 +715,10 @@ http://localhost:8888/api/search/tables
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -722,8 +765,10 @@ http://localhost:8888/api/search/tables
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true
+		    "deleteIncidents" : true,
+		    "deleteChecksConfiguration" : false
 		  },
+		  "advanced_properties" : { },
 		  "can_edit" : true,
 		  "can_collect_statistics" : true,
 		  "can_run_checks" : true,
@@ -804,8 +849,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -857,8 +906,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -910,8 +963,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -994,8 +1051,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1047,8 +1108,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1100,8 +1165,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1187,8 +1256,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1240,8 +1313,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1293,8 +1370,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1380,8 +1461,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1433,8 +1518,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
@@ -1486,8 +1575,12 @@ http://localhost:8888/api/search/tables
 					delete_check_results=True,
 					delete_sensor_readouts=True,
 					delete_error_samples=True,
-					delete_incidents=True
+					delete_incidents=True,
+					delete_checks_configuration=False
 				),
+				advanced_properties={
+				
+				},
 				can_edit=True,
 				can_collect_statistics=True,
 				can_run_checks=True,
