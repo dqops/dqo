@@ -107,9 +107,10 @@ public interface DqoJobQueueMonitoringService {
 
     /**
      * Publishes the current folder synchronization status.
+     * @param dataDomainName Data domain name.
      * @param synchronizationStatus Folder synchronization status.
      */
-    void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus);
+    void publishFolderSynchronizationStatus(String dataDomainName, CloudSynchronizationFoldersStatusModel synchronizationStatus);
 
     /**
      * Finds the job identified by a job id.

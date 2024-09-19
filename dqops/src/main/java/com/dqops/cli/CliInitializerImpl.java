@@ -36,6 +36,7 @@ import com.dqops.core.synchronization.status.FileSynchronizationChangeDetectionS
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.storage.TablesawParquetSupportFix;
 import com.dqops.metadata.labels.labelloader.LabelsIndexer;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import com.dqops.rest.server.LocalUrlAddressesProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -73,6 +74,7 @@ public class CliInitializerImpl implements CliInitializer {
     private DqoUserPrincipalProvider dqoUserPrincipalProvider;
     private TableStatusCache tableStatusCache;
     private LabelsIndexer labelsIndexer;
+    private TableLineageCache tableLineageCache;
     private LocalDataDomainManager localDataDomainManager;
     private DataDomainsService dataDomainsService;
 
@@ -97,6 +99,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param dqoUserPrincipalProvider User principal provider.
      * @param tableStatusCache Table status cache.
      * @param labelsIndexer Label indexer service that finds all labels.
+     * @param tableLineageCache Table data lineage cache.
      * @param localDataDomainManager Local data domain manager - to initialize local domains.
      * @param dataDomainsService Data domains service to synchronize domains from the SaaS backend.
      */
@@ -120,6 +123,7 @@ public class CliInitializerImpl implements CliInitializer {
                               DqoUserPrincipalProvider dqoUserPrincipalProvider,
                               TableStatusCache tableStatusCache,
                               LabelsIndexer labelsIndexer,
+                              TableLineageCache tableLineageCache,
                               LocalDataDomainManager localDataDomainManager,
                               DataDomainsService dataDomainsService) {
         this.localUserHomeCreator = localUserHomeCreator;
@@ -141,6 +145,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
         this.tableStatusCache = tableStatusCache;
         this.labelsIndexer = labelsIndexer;
+        this.tableLineageCache = tableLineageCache;
         this.localDataDomainManager = localDataDomainManager;
         this.dataDomainsService = dataDomainsService;
     }
@@ -231,6 +236,7 @@ public class CliInitializerImpl implements CliInitializer {
             this.jobQueueMonitoringService.start();
             this.labelsIndexer.start();
             this.tableStatusCache.start();
+            this.tableLineageCache.start();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 

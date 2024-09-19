@@ -286,10 +286,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     /**
      * Publishes the current folder synchronization status.
      *
+     * @param dataDomainName Data domain name.
      * @param synchronizationStatus Folder synchronization status.
      */
     @Override
-    public void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus) {
+    public void publishFolderSynchronizationStatus(String dataDomainName, CloudSynchronizationFoldersStatusModel synchronizationStatus) {
         synchronized (this.lock) {
             this.currentSynchronizationStatus = synchronizationStatus;
             this.currentSynchronizationStatusChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
@@ -301,7 +302,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
-            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(synchronizationStatus), emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dataDomainName, synchronizationStatus), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishFolderSynchronizationStatus failed, error: " + ex.getMessage(), ex);
@@ -470,7 +471,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 removeOldJobChanges();
 
                 if (this.waitingClientsPerDomain.size() > 0) {
-                    Map<Long, CompletableFuture<Long>> domainAwaitingClients = this.waitingClientsPerDomain.get(changeNotificationEntry.getJobChange().getDomainName());
+                    Map<Long, CompletableFuture<Long>> domainAwaitingClients = this.waitingClientsPerDomain.get(changeNotificationEntry.getDataDomainName());
                     if (domainAwaitingClients != null) {
                         awaitersToNotify = new ArrayList<>(domainAwaitingClients.values());
                         domainAwaitingClients.clear();
