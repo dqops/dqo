@@ -79,7 +79,7 @@ const TableActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
         <Button
-          className="!h-10"
+          className="!h-[37px]"
           color={
             !(userProfile.can_manage_data_sources !== true)
               ? 'primary'
@@ -97,7 +97,7 @@ const TableActionGroup = ({
       )}
       {shouldDelete && (
         <Button
-          className="!h-10"
+          className="!h-[37px]"
           color={
             !(userProfile.can_manage_data_sources !== true)
               ? 'primary'
@@ -132,7 +132,7 @@ const TableActionGroup = ({
           <Button
             label="Create data grouping"
             color="secondary"
-            className="text-black "
+            className="text-black !h-[37px]"
             disabled={userProfile.can_manage_data_sources !== true}
           />
         </div>
@@ -148,7 +148,7 @@ const TableActionGroup = ({
         >
           <div>
             <Button
-              className="flex items-center gap-x-2 justify-center "
+              className="flex items-center gap-x-2 justify-center !h-[37px]"
               label={
                 collectStatisticsSpinner
                   ? 'Collecting...'
@@ -190,7 +190,7 @@ const TableActionGroup = ({
           }
           variant="contained"
           label="Save"
-          className="w-40 !h-10"
+          className="w-40 !h-[37px]"
           onClick={onUpdate}
           loading={isUpdating}
           disabled={isDisabled || userProfile.can_manage_data_sources !== true}

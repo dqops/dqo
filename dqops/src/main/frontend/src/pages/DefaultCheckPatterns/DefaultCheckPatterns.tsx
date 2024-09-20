@@ -29,7 +29,7 @@ export default function DefaultCheckPatterns() {
         <Button
           label="Add data quality policy"
           color="primary"
-          className="w-55"
+          className="w-55 !h-[37px]"
           onClick={addQualityPolicy}
         />
       </div>

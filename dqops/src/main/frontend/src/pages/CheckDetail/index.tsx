@@ -312,7 +312,7 @@ export const SensorDetail = () => {
                   : 'contained'
               }
               label="Delete check"
-              className="w-40 !h-10"
+              className="w-40 !h-[37px]"
               onClick={() => setDialogOpen(true)}
               disabled={userProfile.can_manage_definitions !== true}
             />
@@ -321,23 +321,16 @@ export const SensorDetail = () => {
             color="primary"
             variant="outlined"
             label="Copy"
-            className="w-40 !h-10"
+            className="w-40 !h-[37px]"
             disabled={userProfile.can_manage_definitions !== true}
             onClick={onCopy}
           />
           <Button
-            color={
-              !(userProfile.can_manage_definitions !== true)
-                ? 'primary'
-                : 'secondary'
-            }
+            color={isUpdated ? 'primary' : 'secondary'}
             variant="contained"
             label={'Save'}
-            className="w-40 !h-10"
-            disabled={
-              (!isUpdated && !copied) ||
-              userProfile.can_manage_definitions !== true
-            }
+            className="w-40 !h-[37px]"
+            disabled={userProfile.can_manage_definitions !== true}
             onClick={onCreateUpdateCheck}
             loading={isUpdating}
           />
