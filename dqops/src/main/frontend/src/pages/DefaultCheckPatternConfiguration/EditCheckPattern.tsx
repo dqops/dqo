@@ -1,6 +1,8 @@
 import { AxiosPromise, AxiosResponse } from 'axios';
+import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   CheckContainerModel,
   ColumnQualityPolicyListModel,
@@ -12,6 +14,7 @@ import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
   ColumnQualityPoliciesApiClient,
@@ -157,15 +160,16 @@ export default function EditCheckPattern({
       : type === 'column'
       ? tabsColumnChecksFreeTrial
       : tabsTableChecksFreeTrial;
-
-  const [activeTab, setActiveTab] = useState('table-target');
+  const history = useHistory();
+  const dispatch = useActionDispatch();
+  const { activeTab = 'table-target' } = qs.parse(location.search) as any;
   const [checkContainers, setCheckContainers] =
     useState<TCheckContainerDiverse>(initialState);
   const [target, setTarget] = useState<TTarget>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [copyPatternOpen, setCopyPatternOpen] = useState(false);
-  const onChangeTab = (tab: any) => {
-    setActiveTab(tab);
+  const onChangeTab = (tab: string) => {
+    history.push(`${location.pathname}?activeTab=${tab}`);
   };
 
   const onChangeTarget = (
