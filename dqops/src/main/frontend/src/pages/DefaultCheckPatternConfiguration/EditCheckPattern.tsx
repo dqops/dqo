@@ -1,8 +1,6 @@
 import { AxiosPromise, AxiosResponse } from 'axios';
-import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import {
   CheckContainerModel,
   ColumnQualityPolicyListModel,
@@ -15,6 +13,7 @@ import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setSecondLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import {
   ColumnQualityPoliciesApiClient,
@@ -148,6 +147,12 @@ export default function EditCheckPattern({
   create
 }: TEditCheckPatternProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job);
+  const { tabs: pageTabs, activeTab: baseTab } = useSelector(
+    (state: IRootState) => state.definition
+  );
+  const activeTab =
+    (pageTabs.find((x) => x.url === baseTab)?.state?.secondTab as string) ??
+    'table-target';
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
   const tabs =
     userProfile &&
@@ -160,16 +165,14 @@ export default function EditCheckPattern({
       : type === 'column'
       ? tabsColumnChecksFreeTrial
       : tabsTableChecksFreeTrial;
-  const history = useHistory();
   const dispatch = useActionDispatch();
-  const { activeTab = 'table-target' } = qs.parse(location.search) as any;
   const [checkContainers, setCheckContainers] =
     useState<TCheckContainerDiverse>(initialState);
   const [target, setTarget] = useState<TTarget>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [copyPatternOpen, setCopyPatternOpen] = useState(false);
   const onChangeTab = (tab: string) => {
-    history.push(`${location.pathname}?activeTab=${tab}`);
+    dispatch(setSecondLevelTab(tab, baseTab ?? ''));
   };
 
   const onChangeTarget = (

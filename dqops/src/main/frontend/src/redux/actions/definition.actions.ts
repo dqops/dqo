@@ -466,3 +466,14 @@ export const updateTabLabel = (
   activeTab,
   state
 });
+
+export const setSecondLevelTab = (
+  secondTab: string,
+  activeTab: string,
+  state?: any
+) => ({
+  type: DEFINITION_ACTION.SET_SECOND_LEVEL_TAB,
+  secondTab,
+  activeTab,
+  state
+});
