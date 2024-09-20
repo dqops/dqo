@@ -276,12 +276,6 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             if (columnSpec.getHierarchyId() != null) {
                 statisticsCollector.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "statistics_collector"));
             }
-
-            if (this.filters.getSamplesLimit() != null) {
-                ColumnSamplingColumnSamplesSensorParametersSpec columnSamplingColumnSamplesSensorParametersSpec =
-                        statisticsCollector.getSampling().getColumnSamples().getParameters();
-                columnSamplingColumnSamplesSensorParametersSpec.setLimit(this.filters.getSamplesLimit());
-            }
         }
 
         return TreeNodeTraversalResult.traverseSelectedChildNodes(statisticsCollector);

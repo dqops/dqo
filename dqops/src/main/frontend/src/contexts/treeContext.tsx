@@ -1144,6 +1144,8 @@ function TreeProvider(props: any) {
         undefined,
         false,
         undefined,
+        false,
+        undefined,
         node.collect_statistics_job_template
       );
       return;

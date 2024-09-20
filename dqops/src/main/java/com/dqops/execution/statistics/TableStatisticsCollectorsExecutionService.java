@@ -43,6 +43,8 @@ public interface TableStatisticsCollectorsExecutionService {
      * @param dummySensorExecution             When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param collectionSessionStartAt         Timestamp when the statistics collection session started. All statistics results will be saved with the same timestamp.
      * @param statisticsDataScope              Collector data scope to analyze - the whole table or each data stream separately.
+     * @param samplesLimit                     The limit of column samples to capture.
+     * @param configureTable                   True when the table should be configured (timestamp and ID columns).
      * @param jobCancellationToken             Job cancellation token, used to detect if the job should be cancelled.
      * @return Table level statistics.
      */
@@ -55,5 +57,7 @@ public interface TableStatisticsCollectorsExecutionService {
                                                                   boolean dummySensorExecution,
                                                                   LocalDateTime collectionSessionStartAt,
                                                                   StatisticsDataScope statisticsDataScope,
+                                                                  Integer samplesLimit,
+                                                                  boolean configureTable,
                                                                   JobCancellationToken jobCancellationToken);
 }

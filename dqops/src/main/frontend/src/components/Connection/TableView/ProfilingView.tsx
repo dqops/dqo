@@ -263,7 +263,7 @@ const ProfilingView = () => {
   };
 
   const collectStatistics = async () => {
-    await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+    await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, false, undefined, {
       ...statistics?.collect_column_statistics_job_template,
       columnNames: checkedColumns
     }).then((res) => {

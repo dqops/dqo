@@ -164,6 +164,7 @@ public class SampleStringsRegistry {
     public static String getSampleFilter() { return "fact*"; };
 
     public static String getLabelPrefix() { return "address"; };
+
     public static String getDataDomainName() { return "crm"; }
 
     /**

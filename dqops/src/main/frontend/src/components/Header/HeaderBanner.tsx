@@ -26,13 +26,13 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
 
     if (advisorObject.tableNames && advisorObject.tableNames.length > 0) {
       advisorObject.tableNames.forEach((tableName) => {
-        JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+        JobApiClient.collectStatisticsOnTable(undefined, true, undefined, false, undefined, {
           connection: advisorObject.connectionName,
           fullTableName: advisorObject.schemaName + "." + tableName
         });
       });
     } else {
-      JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+      JobApiClient.collectStatisticsOnTable(undefined, true, undefined, false, undefined, {
         connection: advisorObject.connectionName,
         fullTableName: advisorObject.schemaName + ".*"
       });

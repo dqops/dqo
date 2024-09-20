@@ -87,6 +87,8 @@ export default function TableColumnsBody({
               undefined,
               false,
               undefined,
+              false,
+              undefined,
               statistics?.column_statistics?.at(index)
                 ?.collect_column_statistics_job_template
             ).then((res) => setJobId(res.data.jobId?.jobId))

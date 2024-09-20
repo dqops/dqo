@@ -35,6 +35,8 @@ public interface StatisticsCollectorsExecutionService {
      * @param statisticsCollectorSearchFilters Collector search filters to find the right checks.
      * @param progressListener      Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
+     * @param samplesLimit The limit of column samples to capture.
+     * @param configureTable Configure a table.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
      * @param parentJobId Parent job id.
@@ -46,6 +48,8 @@ public interface StatisticsCollectorsExecutionService {
                                                                      StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                                      StatisticsCollectorExecutionProgressListener progressListener,
                                                                      StatisticsDataScope statisticsDataScope,
+                                                                     Integer samplesLimit,
+                                                                     boolean configureTable,
                                                                      boolean dummySensorExecution,
                                                                      boolean startChildJobsPerTable,
                                                                      DqoQueueJobId parentJobId,
@@ -61,6 +65,8 @@ public interface StatisticsCollectorsExecutionService {
      * @param statisticsCollectorSearchFilters Collector search filters to find the right checks.
      * @param progressListener      Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
+     * @param samplesLimit The limit of column samples to capture.
+     * @param configureTable Configure the table.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Collector summary table with the count of executed and successful profile executions for the selected table. The result should have 0 or 1 rows.
@@ -71,6 +77,8 @@ public interface StatisticsCollectorsExecutionService {
                                                                             StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                                             StatisticsCollectorExecutionProgressListener progressListener,
                                                                             StatisticsDataScope statisticsDataScope,
+                                                                            Integer samplesLimit,
+                                                                            boolean configureTable,
                                                                             boolean dummySensorExecution,
                                                                             JobCancellationToken jobCancellationToken);
 }

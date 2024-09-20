@@ -78,10 +78,30 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         if (allData == null) {
             return tableStatisticsResults; // no statistics data
         }
-        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).isEqualTo(dataGroup));
+
+        return parseStatisticsResults(connectionName, physicalTableName, dataGroup, includeColumnLevelStatistics, allData, tableStatisticsResults);
+    }
+
+    /**
+     * Parses and filters results from statistics and returns a statistics model.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param dataGroup Data group name.
+     * @param includeColumnLevelStatistics True when column level statistics should be included.
+     * @param statisticsDataTable Dataset (table) with statistics to parse.
+     * @param targetStatisticsResultsModel Target model to import additional results.
+     * @return Target model returned.
+     */
+    public StatisticsResultsForTableModel parseStatisticsResults(String connectionName,
+                                                                 PhysicalTableName physicalTableName,
+                                                                 String dataGroup,
+                                                                 boolean includeColumnLevelStatistics,
+                                                                 Table statisticsDataTable,
+                                                                 StatisticsResultsForTableModel targetStatisticsResultsModel) {
+        Table selectedDataStreamData = statisticsDataTable.where(statisticsDataTable.textColumn(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME).isEqualTo(dataGroup));
         if (!includeColumnLevelStatistics) {
             selectedDataStreamData = selectedDataStreamData.where(
-                    allData.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
+                    statisticsDataTable.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
         }
 
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
@@ -102,14 +122,14 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
             if (columnNameColumn.isMissing(i)) {
                 // table level
 
-                if (tableStatisticsResults.getMetrics().stream()
+                if (targetStatisticsResultsModel.getMetrics().stream()
                         .noneMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getCollector(), collectorName))) {
-                    tableStatisticsResults.getMetrics().add(createMetricModel(sortedResults.row(i)));
+                    targetStatisticsResultsModel.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }
             else {
                 String columnName = columnNameColumn.get(i);
-                StatisticsResultsForColumnModel columnModel = tableStatisticsResults.getColumns().get(columnName);
+                StatisticsResultsForColumnModel columnModel = targetStatisticsResultsModel.getColumns().get(columnName);
 
                 if (columnModel == null) {
                     columnModel = new StatisticsResultsForColumnModel(connectionName, physicalTableName, columnName);
@@ -119,7 +139,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                         getColumnNames().add(columnName);
                         setEnabled(true);
                     }});
-                    tableStatisticsResults.getColumns().put(columnName, columnModel);
+                    targetStatisticsResultsModel.getColumns().put(columnName, columnModel);
                 }
 
                 Optional<StatisticsMetricModel> firstMetric = columnModel.getMetrics()
@@ -134,7 +154,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
             }
         }
 
-        return tableStatisticsResults;
+        return targetStatisticsResultsModel;
     }
 
     /**

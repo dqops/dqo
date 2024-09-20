@@ -445,6 +445,8 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`samples_limit`</span>|The limit of column samples to collect.|*long*| |
+|<span class="no-wrap-code">`configure_table`</span>|Configures timestamp and ID column on the table based on the results identified in statistics.|*boolean*| |
 |<span class="no-wrap-code">`wait`</span>|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
 |<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
@@ -744,6 +746,8 @@ http://localhost:8888/api/jobs/collectstatistics/table
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`configure_table`</span>|Configures timestamp and ID column on the table based on the results identified in statistics.|*boolean*| |
+|<span class="no-wrap-code">`samples_limit`</span>|The limit of column samples to collect.|*long*| |
 |<span class="no-wrap-code">`wait`</span>|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
 |<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 

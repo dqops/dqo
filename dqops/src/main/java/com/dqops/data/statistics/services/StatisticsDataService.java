@@ -19,6 +19,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.metadata.sources.PhysicalTableName;
+import tech.tablesaw.api.Table;
 
 /**
  * Service that provides access to read requested data statistics results.
@@ -63,4 +64,21 @@ public interface StatisticsDataService {
      * @return True when there are any results, false when there are no results.
      */
     boolean hasAnyRecentStatisticsResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Parses and filters results from statistics and returns a statistics model.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param dataGroup Data group name.
+     * @param includeColumnLevelStatistics True when column level statistics should be included.
+     * @param statisticsDataTable Dataset (table) with statistics to parse.
+     * @param targetStatisticsResultsModel Target model to import additional results.
+     * @return Target model returned.
+     */
+    StatisticsResultsForTableModel parseStatisticsResults(String connectionName,
+                                                          PhysicalTableName physicalTableName,
+                                                          String dataGroup,
+                                                          boolean includeColumnLevelStatistics,
+                                                          Table statisticsDataTable,
+                                                          StatisticsResultsForTableModel targetStatisticsResultsModel);
 }

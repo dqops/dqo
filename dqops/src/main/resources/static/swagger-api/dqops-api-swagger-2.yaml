@@ -13369,6 +13369,18 @@ paths:
           \ identifier, instead of the DQOps assigned job identifier."
         required: false
         type: "string"
+      - name: "configureTable"
+        in: "query"
+        description: "Configures timestamp and ID column on the table based on the\
+          \ results identified in statistics."
+        required: false
+        type: "boolean"
+      - name: "samplesLimit"
+        in: "query"
+        description: "The limit of column samples to collect."
+        required: false
+        type: "integer"
+        format: "int32"
       - name: "wait"
         in: "query"
         description: "Wait until the statistic collection job finishes to run, the\
@@ -13429,6 +13441,18 @@ paths:
           \ identifier, instead of the DQOps assigned job identifier."
         required: false
         type: "string"
+      - name: "samplesLimit"
+        in: "query"
+        description: "The limit of column samples to collect."
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "configureTable"
+        in: "query"
+        description: "Configures timestamp and ID column on the table based on the\
+          \ results identified in statistics."
+        required: false
+        type: "boolean"
       - name: "wait"
         in: "query"
         description: "Wait until the statistic collection job finishes to run, the\
@@ -18116,6 +18140,15 @@ definitions:
         enum:
         - "table"
         - "data_group"
+      samples_limit:
+        type: "integer"
+        format: "int32"
+        description: "The default limit of column samples that are collected."
+      configure_table:
+        type: "boolean"
+        description: "Turns on a special mode of collecting statistics that will configure\
+          \ the timestamp and ID columns. It should be used only during the first\
+          \ statistics collection."
       dummy_sensor_execution:
         type: "boolean"
         description: "Boolean flag that enables a dummy statistics collection (sensors\
@@ -18140,6 +18173,15 @@ definitions:
         enum:
         - "table"
         - "data_group"
+      configure_table:
+        type: "boolean"
+        description: "Turns on a special mode of collecting statistics that will configure\
+          \ the timestamp and ID columns. It should be used only during the first\
+          \ statistics collection."
+      samples_limit:
+        type: "integer"
+        format: "int32"
+        description: "The default limit of column samples that are collected."
       dummy_sensor_execution:
         type: "boolean"
         description: "Boolean flag that enables a dummy statistics collection (sensors\
@@ -39110,10 +39152,6 @@ definitions:
         enum:
         - "table"
         - "column"
-      samplesLimit:
-        type: "integer"
-        format: "int32"
-        description: "The default limit of column samples that are collected."
       collectorsHierarchyIdsModels:
         type: "array"
         items:

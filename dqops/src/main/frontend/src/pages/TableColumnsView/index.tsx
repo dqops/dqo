@@ -82,7 +82,7 @@ const TableColumnsView = () => {
   const collectStatistics = async () => {
     dispatch(setJobAllert({}));
     try {
-      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, false, undefined, {
         connection: connectionName,
         fullTableName: schemaName + '.' + tableName,
         enabled: true,

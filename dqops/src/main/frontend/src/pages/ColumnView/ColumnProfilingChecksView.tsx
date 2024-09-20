@@ -185,6 +185,8 @@ const ColumnProfilingChecksView = ({
       undefined,
       false,
       undefined,
+      false,
+      undefined,
       columnStatistics?.collect_column_statistics_job_template
     ).then((res) => setJobId(res.data.jobId?.jobId));
   };

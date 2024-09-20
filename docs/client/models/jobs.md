@@ -426,7 +426,6 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`collector_category`</span>|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|*string*|
 |<span class="no-wrap-code">[`target`](#statisticscollectortarget)</span>|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|*[StatisticsCollectorTarget](#statisticscollectortarget)*|
-|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
 |<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
 |<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|
@@ -459,6 +458,8 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">[`data_scope`](#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](#statisticsdatascope)*|
+|<span class="no-wrap-code">`configure_table`</span>|Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection.|*boolean*|
+|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -479,6 +480,8 @@ ___
 |<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
+|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
+|<span class="no-wrap-code">`configure_table`</span>|Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection.|*boolean*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 

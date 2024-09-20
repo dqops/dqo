@@ -74,6 +74,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param statisticsCollectorSearchFilters Statistics collector search filters to find the right checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
+     * @param samplesLimit The limit of column samples to collect.
+     * @param configureTable Configures the table.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
      * @param parentJobId Parent job id.
@@ -86,6 +88,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                                                             StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                                             StatisticsCollectorExecutionProgressListener progressListener,
                                                                             StatisticsDataScope statisticsDataScope,
+                                                                            Integer samplesLimit,
+                                                                            boolean configureTable,
                                                                             boolean dummySensorExecution,
                                                                             boolean startChildJobsPerTable,
                                                                             DqoQueueJobId parentJobId,
@@ -98,9 +102,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         jobCancellationToken.throwIfCancelled();
 
         StatisticsCollectorSearchFilters searchFiltersWithLimit = statisticsCollectorSearchFilters.clone();
-        if (searchFiltersWithLimit.getSamplesLimit() == null) {
-            searchFiltersWithLimit.setSamplesLimit(this.statisticsCollectorConfigurationProperties.getSamplesLimit());
-        }
+        Integer effectiveSamplesLimit =  samplesLimit != null ? samplesLimit : this.statisticsCollectorConfigurationProperties.getSamplesLimit();
 
         if (startChildJobsPerTable) {
             List<DqoQueueJob<StatisticsCollectionExecutionSummary>> childTableJobs = new ArrayList<>();
@@ -113,6 +115,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                     setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelJobsLimit());
                     setTable(targetTable.getPhysicalTableName());
                     setStatisticsCollectorSearchFilters(searchFiltersWithLimit);
+                    setSamplesLimit(effectiveSamplesLimit);
+                    setConfigureTable(configureTable);
                     setDataScope(statisticsDataScope);
                     setProgressListener(progressListener);
                     setDummySensorExecution(dummySensorExecution);
@@ -134,7 +138,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                 ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
                 statisticsCollectorExecutionSummary = this.tableStatisticsCollectorsExecutionService.executeCollectorsOnTable(executionContext, userHome,
                         connectionWrapper, targetTable, searchFiltersWithLimit, progressListener,
-                        dummySensorExecution, profilingSessionStartAt, statisticsDataScope, jobCancellationToken);
+                        dummySensorExecution, profilingSessionStartAt, statisticsDataScope, samplesLimit, configureTable, jobCancellationToken);
             }
         }
 
@@ -151,6 +155,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param statisticsCollectorSearchFilters Collector search filters to find the right checks.
      * @param progressListener                 Progress listener that receives progress calls.
      * @param statisticsDataScope              Collector data scope to analyze - the whole table or each data stream separately.
+     * @param samplesLimit                     The limit of column samples to capture.
+     * @param configureTable                   Configures the table.
      * @param dummySensorExecution             When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken             Job cancellation token, used to detect if the job should be cancelled.
      * @return Collector summary table with the count of executed and successful profile executions for the selected table. The result should have 0 or 1 rows.
@@ -162,6 +168,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                                                                    StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                                                    StatisticsCollectorExecutionProgressListener progressListener,
                                                                                    StatisticsDataScope statisticsDataScope,
+                                                                                   Integer samplesLimit,
+                                                                                   boolean configureTable,
                                                                                    boolean dummySensorExecution,
                                                                                    JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
@@ -180,7 +188,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary =
                 this.tableStatisticsCollectorsExecutionService.executeCollectorsOnTable(executionContext, userHome,
                         connectionWrapper, tableWrapper, statisticsCollectorSearchFilters, progressListener,
-                        dummySensorExecution, profilingSessionStartAt,statisticsDataScope, jobCancellationToken);
+                        dummySensorExecution, profilingSessionStartAt, statisticsDataScope, samplesLimit, configureTable, jobCancellationToken);
 
         return statisticsCollectionExecutionSummary;
     }

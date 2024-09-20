@@ -456,6 +456,10 @@ public class JobsController {
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
+            @ApiParam(name = "configureTable", value = "Configures timestamp and ID column on the table based on the results identified in statistics.", required = false)
+            @RequestParam(required = false) Optional<Boolean> configureTable,
+            @ApiParam(name = "samplesLimit", value = "The limit of column samples to collect.", required = false)
+            @RequestParam(required = false) Optional<Integer> samplesLimit,
             @ApiParam(name = "wait", value = "Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
@@ -468,6 +472,8 @@ public class JobsController {
                     statisticsCollectorSearchFilters,
                     progressListener,
                     StatisticsDataScope.table,
+                    samplesLimit.orElse(null),
+                    configureTable.orElse(false),
                     false);
             runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
             runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
@@ -525,6 +531,10 @@ public class JobsController {
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
+            @ApiParam(name = "samplesLimit", value = "The limit of column samples to collect.", required = false)
+            @RequestParam(required = false) Optional<Integer> samplesLimit,
+            @ApiParam(name = "configureTable", value = "Configures timestamp and ID column on the table based on the results identified in statistics.", required = false)
+            @RequestParam(required = false) Optional<Boolean> configureTable,
             @ApiParam(name = "wait", value = "Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
@@ -537,6 +547,8 @@ public class JobsController {
                     statisticsCollectorSearchFilters,
                     progressListener,
                     StatisticsDataScope.data_group,
+                    samplesLimit.orElse(null),
+                    configureTable.orElse(false),
                     false);
             runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
             runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));

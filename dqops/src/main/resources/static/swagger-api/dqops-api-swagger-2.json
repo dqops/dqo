@@ -15910,6 +15910,19 @@
           "required" : false,
           "type" : "string"
         }, {
+          "name" : "configureTable",
+          "in" : "query",
+          "description" : "Configures timestamp and ID column on the table based on the results identified in statistics.",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "samplesLimit",
+          "in" : "query",
+          "description" : "The limit of column samples to collect.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)",
@@ -15973,6 +15986,19 @@
           "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "samplesLimit",
+          "in" : "query",
+          "description" : "The limit of column samples to collect.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "configureTable",
+          "in" : "query",
+          "description" : "Configures timestamp and ID column on the table based on the results identified in statistics.",
+          "required" : false,
+          "type" : "boolean"
         }, {
           "name" : "wait",
           "in" : "query",
@@ -21165,6 +21191,15 @@
           "description" : "The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.",
           "enum" : [ "table", "data_group" ]
         },
+        "samples_limit" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The default limit of column samples that are collected."
+        },
+        "configure_table" : {
+          "type" : "boolean",
+          "description" : "Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection."
+        },
         "dummy_sensor_execution" : {
           "type" : "boolean",
           "description" : "Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files)."
@@ -21186,6 +21221,15 @@
           "type" : "string",
           "description" : "The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.",
           "enum" : [ "table", "data_group" ]
+        },
+        "configure_table" : {
+          "type" : "boolean",
+          "description" : "Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection."
+        },
+        "samples_limit" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The default limit of column samples that are collected."
         },
         "dummy_sensor_execution" : {
           "type" : "boolean",
@@ -40672,11 +40716,6 @@
           "type" : "string",
           "description" : "The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.",
           "enum" : [ "table", "column" ]
-        },
-        "samplesLimit" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The default limit of column samples that are collected."
         },
         "collectorsHierarchyIdsModels" : {
           "type" : "array",

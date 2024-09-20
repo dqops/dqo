@@ -26,10 +26,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Model object with the statistics results for a column.
@@ -76,6 +73,21 @@ public class StatisticsResultsForColumnModel {
      */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
+
+    /**
+     * Finds a collector by a collector name.
+     * @param collectorName Collector name.
+     * @return Metric model for a given collector or null when not found.
+     */
+    public StatisticsMetricModel getMetricByCollectorName(String collectorName) {
+        for (StatisticsMetricModel metricModel : this.metrics) {
+            if (Objects.equals(collectorName, metricModel.getCollector())) {
+                return metricModel;
+            }
+        }
+
+        return null;
+    }
 
     public static class StatisticsResultsForColumnModelSampleFactory implements SampleValueFactory<StatisticsResultsForColumnModel> {
         @Override

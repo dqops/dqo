@@ -82,6 +82,8 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
                 this.parameters.getStatisticsCollectorSearchFilters(),
                 this.parameters.getProgressListener(),
                 this.parameters.getDataScope(),
+                this.parameters.getSamplesLimit(),
+                this.parameters.isConfigureTable(),
                 this.parameters.isDummySensorExecution(),
                 true,
                 jobExecutionContext.getJobId(),

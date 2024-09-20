@@ -47,6 +47,11 @@ public class ColumnUniquenessDuplicateCountStatisticsCollectorSpec extends Abstr
      */
     public static final String SENSOR_NAME = ColumnUniquenessDuplicateCountSensorParametersSpec.SENSOR_NAME;
 
+    /**
+     * The name of this collector.
+     */
+    public static final String COLLECTOR_NAME = "duplicate_count";
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

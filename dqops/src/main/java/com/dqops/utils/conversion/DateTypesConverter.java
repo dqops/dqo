@@ -33,6 +33,10 @@ public final class DateTypesConverter {
      * @return Parsed instant value or null, when the value is not an instant.
      */
     public static Instant toInstant(Object value, ZoneId timeZoneId) {
+        if (value == null) {
+            return null;
+        }
+
         if (value instanceof String) {
             try {
                 value = LocalDate.parse(value.toString());
@@ -67,6 +71,10 @@ public final class DateTypesConverter {
      * @return Parsed local date value or null, when the value is not a local date, or cannot be converted to such.
      */
     public static LocalDate toLocalDate(Object value, ZoneId timeZoneId) {
+        if (value == null) {
+            return null;
+        }
+
         if (value instanceof String) {
             try {
                 value = LocalDate.parse(value.toString());
