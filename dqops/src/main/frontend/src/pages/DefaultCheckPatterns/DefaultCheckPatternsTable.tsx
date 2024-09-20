@@ -136,8 +136,8 @@ export default function DefaultCheckPatternsTable({
               <th className="px-4" key={elem.label}>
                 <div
                   className={clsx(
-                    'flex gap-x-1 items-center cursor-default',
-                    elem.key === 'action' && 'ml-3.5'
+                    'flex gap-x-1 items-center cursor-default text-sm',
+                    elem.key === 'action' && 'ml-4'
                   )}
                 >
                   <div>{elem.label}</div>
