@@ -167,7 +167,7 @@ export default function DefaultWebhooksDetail() {
                 label="Add notification filter"
                 onClick={createNotificationPattern}
                 color="primary"
-                className="!w-44 !my-5"
+                className="!w-44 !my-5 !h-[37px]"
               />
             </div>
           </div>

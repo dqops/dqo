@@ -207,7 +207,7 @@ const TableColumnsView = () => {
           >
             <div>
               <Button
-                className="flex items-center gap-x-2 justify-center"
+                className="flex items-center gap-x-2 justify-center !h-[37px]"
                 label={
                   isCollectingStatistics
                     ? 'Collecting...'

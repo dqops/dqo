@@ -103,10 +103,9 @@ const DefaultSchedulesDetail = () => {
         </div>
         <Button
           label="Save"
-          color="primary"
-          className="w-45"
+          color={isDefaultUpdated ? 'primary' : 'secondary'}
+          className="w-45 !h-[37px]"
           onClick={updateDefaultSchedules}
-          disabled={!isDefaultUpdated}
         />
       </div>
       <div className="border-b border-gray-300">

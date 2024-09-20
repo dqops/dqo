@@ -67,7 +67,7 @@ const ConnectionActionGroup = ({
       {isSourceScreen && (
         <>
           <Button
-            className="!h-10"
+            className="!h-[37px]"
             variant={
               !(userProfile.can_manage_data_sources !== true)
                 ? 'outlined'
@@ -101,7 +101,7 @@ const ConnectionActionGroup = ({
           {!location.href.includes('schemas?import_schema=true') &&
             (tab === 'schemas' ? (
               <Button
-                className="!h-10"
+                className="!h-[37px]"
                 label="Manage metadata"
                 color={
                   !(userProfile.can_manage_data_sources !== true)
@@ -118,7 +118,7 @@ const ConnectionActionGroup = ({
               />
             ) : (
               <Button
-                className="!h-10"
+                className="!h-[37px]"
                 label="Import metadata"
                 color={
                   !(userProfile.can_manage_data_sources !== true)
@@ -148,7 +148,7 @@ const ConnectionActionGroup = ({
           }
           variant="contained"
           label="Save"
-          className="w-40 !h-10"
+          className="w-40 !h-[37px]"
           onClick={onUpdate}
           loading={isUpdating}
           disabled={isDisabled || userProfile.can_manage_data_sources !== true}

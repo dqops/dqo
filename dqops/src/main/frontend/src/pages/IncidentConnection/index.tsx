@@ -488,7 +488,7 @@ export const IncidentConnection = () => {
         url: ROUTES.CONNECTION_DETAIL(
           CheckTypes.SOURCES,
           connection,
-          'incidents'
+          'incidents-grouping'
         ),
         value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
         state: {},
@@ -496,7 +496,11 @@ export const IncidentConnection = () => {
       })
     );
     history.push(
-      ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents')
+      ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents-grouping'
+      )
     );
   };
 
