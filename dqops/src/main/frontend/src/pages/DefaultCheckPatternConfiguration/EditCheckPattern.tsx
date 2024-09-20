@@ -12,6 +12,8 @@ import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setSecondLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import {
   ColumnQualityPoliciesApiClient,
@@ -145,6 +147,12 @@ export default function EditCheckPattern({
   create
 }: TEditCheckPatternProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job);
+  const { tabs: pageTabs, activeTab: baseTab } = useSelector(
+    (state: IRootState) => state.definition
+  );
+  const activeTab =
+    (pageTabs.find((x) => x.url === baseTab)?.state?.secondTab as string) ??
+    'table-target';
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
   const tabs =
     userProfile &&
@@ -157,15 +165,14 @@ export default function EditCheckPattern({
       : type === 'column'
       ? tabsColumnChecksFreeTrial
       : tabsTableChecksFreeTrial;
-
-  const [activeTab, setActiveTab] = useState('table-target');
+  const dispatch = useActionDispatch();
   const [checkContainers, setCheckContainers] =
     useState<TCheckContainerDiverse>(initialState);
   const [target, setTarget] = useState<TTarget>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [copyPatternOpen, setCopyPatternOpen] = useState(false);
-  const onChangeTab = (tab: any) => {
-    setActiveTab(tab);
+  const onChangeTab = (tab: string) => {
+    dispatch(setSecondLevelTab(tab, baseTab ?? ''));
   };
 
   const onChangeTarget = (

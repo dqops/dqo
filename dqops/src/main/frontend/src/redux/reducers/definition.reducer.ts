@@ -441,6 +441,22 @@ const definitionReducer = (state = initialState, action: any) => {
         )
       };
     }
+    case DEFINITION_ACTION.SET_SECOND_LEVEL_TAB: {
+      return {
+        ...state,
+        tabs: state.tabs.map((item) =>
+          item.url === action.activeTab
+            ? {
+                ...item,
+                state: {
+                  ...item.state,
+                  secondTab: action.secondTab
+                }
+              }
+            : item
+        )
+      };
+    }
     default:
       return state;
   }
