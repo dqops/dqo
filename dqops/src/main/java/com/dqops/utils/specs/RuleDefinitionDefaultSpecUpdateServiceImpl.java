@@ -31,10 +31,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -89,6 +86,11 @@ public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitio
                 if (ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent() != null) {
                     ruleDefinitionSpec.setType(RuleRunnerType.python);
                 }
+            }
+
+            Map<String, String> ruleParametersTemplate = abstractRuleParametersSpec.getRuleParametersTemplate();
+            if (!Objects.equals(ruleDefinitionSpec.getParameters(), ruleParametersTemplate)) {
+                ruleDefinitionSpec.setParameters(ruleParametersTemplate);
             }
 
             List<ParameterDefinitionSpec> fieldDefinitionList = this.specToModelCheckMappingService.createFieldsForRuleParameters(abstractRuleParametersSpec)

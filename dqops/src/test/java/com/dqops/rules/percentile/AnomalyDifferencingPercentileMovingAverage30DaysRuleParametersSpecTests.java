@@ -81,8 +81,8 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecT
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(165.01, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(162.01, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(168.00, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(161.56, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(168.46, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
