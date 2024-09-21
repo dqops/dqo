@@ -12,10 +12,10 @@ spec:
   fields:
   - field_name: anomaly_percent
     display_name: anomaly_percent
-    help_text: "The probability (in percent) that the current sensor readout (measure)\
-      \ is an anomaly, because the value is outside the regular range of previous\
-      \ readouts. The default time window of 90 time periods (days, etc.) is used,\
-      \ but at least 30 readouts must exist to run the calculation."
+    help_text: "The probability (in percent) that the current daily row cont is an\
+      \ anomaly, because the value is outside the regular range of previous partition\
+      \ volume measures. The default time window of 90 time periods (days, etc.) is\
+      \ used, but at least 30 readouts must exist to run the calculation."
     data_type: double
     required: true
     default_value: 0.5
