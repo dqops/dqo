@@ -249,7 +249,7 @@ export default function SourceTablesTable({
           {(tables.length > 25 ? displayedTables : tables).map(
             (table, index) => (
               <React.Fragment key={index}>
-                <tr className="h-10">
+                <tr className="!h-6">
                   <td
                     onClick={() => onChangeExpandedLineage(table)}
                     className="cursor-pointer"
@@ -270,7 +270,7 @@ export default function SourceTablesTable({
                     )}
                   </td>
                   <td>
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2 !w-25 !max-w-25">
                       {table.source_table_data_quality_status ? (
                         <QualityDimensionStatuses
                           dimensions={
@@ -296,30 +296,46 @@ export default function SourceTablesTable({
                       )}
                     </div>
                   </td>
-                  <td className="px-4">{table.source_connection}</td>
-                  <td className="px-4">{table.source_schema}</td>
-                  <td className="px-4">{table.source_table}</td>
+                  <td className="px-4">
+                    <div className="!w-40 !max-w-40 truncate">
+                      {table.source_connection}
+                    </div>
+                  </td>
+                  <td className="px-4">
+                    <div className="!w-40 !max-w-40 truncate">
+                      {table.source_schema}
+                    </div>
+                  </td>
+                  <td className="px-4">
+                    <div className="!w-40 !max-w-40 truncate">
+                      {table.source_table}
+                    </div>
+                  </td>
                   {setSourceTableEdit && (
                     <td className="px-4">
                       <div className="flex items-center gap-x-4">
-                        <IconButton
-                          ripple={false}
-                          onClick={() =>
-                            setSourceTableEdit &&
-                            setSourceTableEdit({
-                              connection: table.source_connection ?? '',
-                              schema: table.source_schema ?? '',
-                              table: table.source_table ?? ''
-                            })
-                          }
-                          size="sm"
-                          color="teal"
-                          className={clsx(
-                            '!shadow-none hover:!shadow-none hover:bg-[#028770]'
-                          )}
-                        >
-                          <SvgIcon name="edit" className="w-4" />
-                        </IconButton>
+                        {table.source_table_data_quality_status?.table_exist ? (
+                          <IconButton
+                            ripple={false}
+                            onClick={() =>
+                              setSourceTableEdit &&
+                              setSourceTableEdit({
+                                connection: table.source_connection ?? '',
+                                schema: table.source_schema ?? '',
+                                table: table.source_table ?? ''
+                              })
+                            }
+                            size="sm"
+                            color="teal"
+                            className={clsx(
+                              '!shadow-none hover:!shadow-none hover:bg-[#028770]'
+                            )}
+                          >
+                            <SvgIcon name="edit" className="w-4" />
+                          </IconButton>
+                        ) : (
+                          <div className="w-8" />
+                        )}
                         <IconButton
                           onClick={() =>
                             setSorceTableToDelete({
@@ -334,14 +350,20 @@ export default function SourceTablesTable({
                         >
                           <SvgIcon name="delete" className="w-4" />
                         </IconButton>
-                        <IconButton
-                          onClick={() => goTable(table)}
-                          size="sm"
-                          color="teal"
-                          className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                        >
-                          <SvgIcon name="data_sources_white" className="w-5" />
-                        </IconButton>
+                        {table.source_table_data_quality_status
+                          ?.table_exist && (
+                          <IconButton
+                            onClick={() => goTable(table)}
+                            size="sm"
+                            color="teal"
+                            className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                          >
+                            <SvgIcon
+                              name="data_sources_white"
+                              className="w-5"
+                            />
+                          </IconButton>
+                        )}
                       </div>
                     </td>
                   )}
@@ -354,7 +376,7 @@ export default function SourceTablesTable({
                     table.source_table_data_quality_status?.table_exist
                 ) && (
                   <tr>
-                    <td colSpan={5} className="pl-4 pt-4">
+                    <td colSpan={5} className="pl-4 py-1">
                       <SourceTablesTable
                         connection={table.source_connection}
                         schema={table.source_schema}

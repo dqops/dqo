@@ -90,6 +90,7 @@ export default function UserDetail() {
             setIsUpdated(true), setUserRole(value);
           }}
           className="my-5 "
+          menuClassName="top-[64px]"
         />
       </div>
     </>
