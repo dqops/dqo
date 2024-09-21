@@ -2,19 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DqoUserRolesModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
+import DataDomains from '../../components/DataDomains/DataDomains';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
+import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { UsersApi } from '../../services/apiClient';
 import { urlencodeDecoder } from '../../utils';
 
 export default function UserDetail() {
   const { create, email, role } = useSelector(getFirstLevelSensorState);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const [userEmail, setUserEmail] = useState<string>(email);
   const [userRole, setUserRole] =
     useState<DqoUserRolesModelAccountRoleEnum>(role);
+  const [dataDomainRoles, setDataDomainRoles] = useState<{
+    [key: string]: string;
+  }>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [message, setMessage] = useState<string>();
 
@@ -92,6 +98,9 @@ export default function UserDetail() {
           className="my-5 "
         />
       </div>
+      {userProfile.license_type?.toLowerCase() !== 'free' && (
+        <DataDomains dataDomainRoles={dataDomainRoles} />
+      )}
     </>
   );
 }
