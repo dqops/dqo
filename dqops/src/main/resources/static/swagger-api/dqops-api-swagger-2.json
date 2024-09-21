@@ -19616,6 +19616,36 @@
         }
       }
     },
+    "AnomalyPartitionDistinctCountRuleError05PctParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "anomaly_percent" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The probability (in percent) that the distinct count in the current partition is an anomaly because the value is outside the regular range of distinct counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        }
+      }
+    },
+    "AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "anomaly_percent" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The probability (in percent) that the distinct count in the current partition is an anomaly because the value is outside the regular range of distinct counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        }
+      }
+    },
+    "AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "anomaly_percent" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The probability (in percent) that the distinct count in the current partition is an anomaly because the value is outside the regular range of distinct counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+        }
+      }
+    },
     "AnomalyPartitionRowCountRuleError05PctParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -24148,15 +24178,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+          "$ref" : "#/definitions/AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+          "$ref" : "#/definitions/AnomalyPartitionDistinctCountRuleError05PctParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+          "$ref" : "#/definitions/AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec"
         }
       }
     },

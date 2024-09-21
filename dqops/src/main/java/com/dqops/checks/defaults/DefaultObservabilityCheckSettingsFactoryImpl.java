@@ -60,10 +60,7 @@ import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.*;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyPartitionRowCountRuleWarning1PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyTimelinessDelayRuleWarning1PctParametersSpec;
+import com.dqops.rules.percentile.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -414,7 +411,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyPartitionedCheckCategoriesSpec() {{
                     setUniqueness(new ColumnUniquenessDailyPartitionedChecksSpec() {{
                         setDailyPartitionDistinctCountAnomaly(new ColumnDistinctCountAnomalyStationaryPartitionCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
