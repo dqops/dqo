@@ -25,12 +25,15 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
@@ -63,6 +66,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -294,22 +298,32 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(defaultSchedulesPath, defaultSchedules);
             }
 
-            Path tableDefaultChecksChecksPath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
-                    .resolve(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME + SpecFileNames.TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML);
-            if (!Files.exists(tableDefaultChecksChecksPath)) {
-                TableDefaultChecksPatternYaml defaultObservabilityChecksYaml = new TableDefaultChecksPatternYaml();
-                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultTableChecks());
-                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
-                Files.writeString(tableDefaultChecksChecksPath, defaultObservabilityChecks);
+            List<TableQualityPolicySpec> defaultTableQualityPolicies = this.defaultObservabilityCheckSettingsFactory.createDefaultTableQualityPolicies();
+            for (TableQualityPolicySpec tableQualityPolicySpec : defaultTableQualityPolicies) {
+                String policyFileName = FileNameSanitizer.encodeForFileSystem(tableQualityPolicySpec.getPolicyName()) + SpecFileNames.TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML;
+                Path tablePolicyFilePath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
+                    .resolve(policyFileName);
+
+                if (!Files.exists(tablePolicyFilePath)) {
+                    TableDefaultChecksPatternYaml qualityPolicyYaml = new TableDefaultChecksPatternYaml();
+                    qualityPolicyYaml.setSpec(tableQualityPolicySpec);
+                    String serializedQualityPolicy = this.yamlSerializer.serialize(qualityPolicyYaml);
+                    Files.writeString(tablePolicyFilePath, serializedQualityPolicy);
+                }
             }
 
-            Path columnDefaultChecksChecksPath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
-                    .resolve(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME + SpecFileNames.COLUMN_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML);
-            if (!Files.exists(columnDefaultChecksChecksPath)) {
-                ColumnDefaultChecksPatternYaml defaultObservabilityChecksYaml = new ColumnDefaultChecksPatternYaml();
-                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
-                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
-                Files.writeString(columnDefaultChecksChecksPath, defaultObservabilityChecks);
+            List<ColumnQualityPolicySpec> defaultColumnQualityPolicies = this.defaultObservabilityCheckSettingsFactory.createDefaultColumnQualityPolicies();
+            for (ColumnQualityPolicySpec columnQualityPolicySpec : defaultColumnQualityPolicies) {
+                String policyFileName = FileNameSanitizer.encodeForFileSystem(columnQualityPolicySpec.getPolicyName()) + SpecFileNames.COLUMN_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML;
+                Path columnPolicyFilePath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
+                        .resolve(policyFileName);
+
+                if (!Files.exists(columnPolicyFilePath)) {
+                    ColumnDefaultChecksPatternYaml qualityPolicyYaml = new ColumnDefaultChecksPatternYaml();
+                    qualityPolicyYaml.setSpec(columnQualityPolicySpec);
+                    String serializedQualityPolicy = this.yamlSerializer.serialize(qualityPolicyYaml);
+                    Files.writeString(columnPolicyFilePath, serializedQualityPolicy);
+                }
             }
 
             Path defaultNotificationWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
@@ -389,12 +403,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * Ensures that the DQOps User home is initialized at the default location. Prompts the user before creating the user home to confirm.
      * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQOps User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
+     * @return True when a new user home was initialized. False when the existing user home was used.
      */
     @Override
-    public void ensureDefaultUserHomeIsInitialized(boolean isHeadless) {
+    public boolean ensureDefaultUserHomeIsInitialized(boolean isHeadless) {
         String userHomePathString = this.homeLocationFindService.getUserHomePath();
         if (userHomePathString == null) {
-            return; // the dqo user home is not required for some reason (configurable)
+            return false; // the dqo user home is not required for some reason (configurable)
         }
 
         Path userHomePath = Paths.get(userHomePathString);
@@ -403,8 +418,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 log.debug("Using a DQOps User Home folder at " + userHomePath.normalize().toAbsolutePath().toString());
             }
             activateFileLoggingInUserHome();
-            applyDefaultConfigurationWhenMissing();
-            return;
+            upgradeUserHomeConfigurationWhenMissing(this.userConfigurationProperties.getDefaultDataDomain());
+            return false;
         }
 
         if (this.isUninitializedInUnmountedDockerVolume(userHomePath) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
@@ -419,6 +434,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             terminalWriter.writeLine("DQOps will quit.");
             log.error("DQOps User Home folder cannot be initialized at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(101);
+            return false;
         }
 
         if (isHeadless || this.userConfigurationProperties.isInitializeUserHome()) {
@@ -426,6 +442,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 System.exit(101);
             }
             activateFileLoggingInUserHome();
+            return true;
         }
         else {
             if (this.terminalFactory.getReader().promptBoolean("Initialize a DQOps user home at " + userHomePathString, true)) {
@@ -433,21 +450,23 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                     System.exit(101);
                 }
                 activateFileLoggingInUserHome();
-                return;
+                return true;
             }
 
             this.terminalFactory.getWriter().writeLine("DQOps user home will not be created, exiting.");
             log.error("DQOps User Home folder initialization cancelled, cannot create the DQOps User Home at " + userHomePath.normalize().toAbsolutePath().toString());
             System.exit(100);
+            return true; // will not reach here
         }
     }
 
     /**
      * Verifies if the user home configuration (and the local settings) are valid and are not missing configuration.
      * Applies missing default observability check configuration when it is not configured.
+     * @param dataDomain Data Domain name.
      */
-    public void applyDefaultConfigurationWhenMissing() {
-        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(this.userConfigurationProperties.getDefaultDataDomain());
+    public void upgradeUserHomeConfigurationWhenMissing(String dataDomain) {
+        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(dataDomain);
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity, false);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
@@ -507,18 +526,40 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             }
         }
 
-        TableDefaultChecksPatternWrapper defaultTableChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        List<TableQualityPolicySpec> defaultTableQualityPolicies = this.defaultObservabilityCheckSettingsFactory.createDefaultTableQualityPolicies();
+        if (defaultTableQualityPolicies.stream().noneMatch(
+                policy -> userHome.getTableQualityPolicies().getByObjectName(policy.getPolicyName(), true) != null)) {
+
+            for (TableQualityPolicySpec expectedPolicySpec : defaultTableQualityPolicies) {
+                String policyName = expectedPolicySpec.getPolicyName();
+                TableQualityPolicyWrapper newPolicyWrapper = userHome.getTableQualityPolicies().createAndAddNew(policyName);
+                newPolicyWrapper.setSpec(expectedPolicySpec);
+            }
+
+            // migrate the old "default" policy file by deleting it
+            TableQualityPolicyWrapper oldDefaultPolicy = userHome.getTableQualityPolicies()
                 .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
-        if (defaultTableChecksPatternWrapper == null) {
-            defaultTableChecksPatternWrapper = userHome.getTableDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
-            defaultTableChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultTableChecks());
+            if (oldDefaultPolicy != null) {
+                oldDefaultPolicy.markForDeletion();
+            }
         }
 
-        ColumnDefaultChecksPatternWrapper defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
-                .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
-        if (defaultColumnChecksPatternWrapper == null) {
-            defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
-            defaultColumnChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
+        List<ColumnQualityPolicySpec> defaultColumnQualityPolicies = this.defaultObservabilityCheckSettingsFactory.createDefaultColumnQualityPolicies();
+        if (defaultColumnQualityPolicies.stream().noneMatch(
+                policy -> userHome.getColumnQualityPolicies().getByObjectName(policy.getPolicyName(), true) != null)) {
+
+            for (ColumnQualityPolicySpec expectedPolicySpec : defaultColumnQualityPolicies) {
+                String policyName = expectedPolicySpec.getPolicyName();
+                ColumnQualityPolicyWrapper newPolicyWrapper = userHome.getColumnQualityPolicies().createAndAddNew(policyName);
+                newPolicyWrapper.setSpec(expectedPolicySpec);
+            }
+
+            // migrate the old "default" policy file by deleting it
+            ColumnQualityPolicyWrapper oldDefaultPolicy = userHome.getColumnQualityPolicies()
+                    .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
+            if (oldDefaultPolicy != null) {
+                oldDefaultPolicy.markForDeletion();
+            }
         }
 
         userHomeContext.flush();

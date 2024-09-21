@@ -76,21 +76,21 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         String sensorName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
 
-        SensorDefinitionFindResult sensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
+        SensorDefinitionFindResult sensorDefinitionFindResult = this.sensorDefinitionFindService.findProviderSensorDefinition(
                 executionContext, sensorName, providerType);
 
-        if (sensorDefinition == null) {
+        if (sensorDefinitionFindResult == null) {
             return SensorPrepareResult.createForPrepareException(sensorRunParameters, null,
                     new RuntimeException("The sensorDefinition is null. The sensor name: " + sensorName)
             );
         }
 
-        ProviderSensorDefinitionSpec providerSensorSpec = sensorDefinition.getProviderSensorDefinitionSpec();
+        ProviderSensorDefinitionSpec providerSensorSpec = sensorDefinitionFindResult.getProviderSensorDefinitionSpec();
         AbstractSensorRunner sensorRunner = this.sensorRunnerFactory.getSensorRunner(providerSensorSpec.getType(),
                 providerSensorSpec.getJavaClassName());
 
         try {
-            SensorPrepareResult sensorPrepareResult = sensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinition, progressListener);
+            SensorPrepareResult sensorPrepareResult = sensorRunner.prepareSensor(executionContext, sensorRunParameters, sensorDefinitionFindResult, progressListener);
             String renderedSensorSql = sensorPrepareResult.getRenderedSensorSql();
             if (renderedSensorSql != null) {
                 if (renderedSensorSql.contains(sensorRunParameters.getActualValueAlias())) {
@@ -118,7 +118,7 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         }
         catch (Throwable ex) {
             log.error("Sensor failed to render, sensor name: " + sensorName, ex);
-            return SensorPrepareResult.createForPrepareException(sensorRunParameters, sensorDefinition, ex);
+            return SensorPrepareResult.createForPrepareException(sensorRunParameters, sensorDefinitionFindResult, ex);
         }
     }
 

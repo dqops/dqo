@@ -60,6 +60,8 @@ class TableCurrentDataQualityStatusModel:
                 that have any known data quality results. The keys in the dictionary are the column names.
             dimensions (Union[Unset, TableCurrentDataQualityStatusModelDimensions]): Dictionary of the current data quality
                 statues for each data quality dimension.
+            table_exist (Union[Unset, bool]): The flag informing whether the table exist. The table might not exist for the
+                imported data lineage source tables.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -78,6 +80,7 @@ class TableCurrentDataQualityStatusModel:
     checks: Union[Unset, "TableCurrentDataQualityStatusModelChecks"] = UNSET
     columns: Union[Unset, "TableCurrentDataQualityStatusModelColumns"] = UNSET
     dimensions: Union[Unset, "TableCurrentDataQualityStatusModelDimensions"] = UNSET
+    table_exist: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -111,6 +114,8 @@ class TableCurrentDataQualityStatusModel:
         dimensions: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.dimensions, Unset):
             dimensions = self.dimensions.to_dict()
+
+        table_exist = self.table_exist
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -147,6 +152,8 @@ class TableCurrentDataQualityStatusModel:
             field_dict["columns"] = columns
         if dimensions is not UNSET:
             field_dict["dimensions"] = dimensions
+        if table_exist is not UNSET:
+            field_dict["table_exist"] = table_exist
 
         return field_dict
 
@@ -224,6 +231,8 @@ class TableCurrentDataQualityStatusModel:
                 _dimensions
             )
 
+        table_exist = d.pop("table_exist", UNSET)
+
         table_current_data_quality_status_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
@@ -241,6 +250,7 @@ class TableCurrentDataQualityStatusModel:
             checks=checks,
             columns=columns,
             dimensions=dimensions,
+            table_exist=table_exist,
         )
 
         table_current_data_quality_status_model.additional_properties = d

@@ -2,7 +2,11 @@ import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { KeyboardEvent } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../redux/actions/definition.actions';
 import { IRootState } from '../../../redux/reducers';
+import { ROUTES } from '../../../shared/routes';
 import Input from '../../Input';
 import SvgIcon from '../../SvgIcon';
 import LabelItem from './LabelItem';
@@ -14,6 +18,7 @@ interface ILabelsViewProps {
   title?: string;
   titleClassName?: string;
   className?: string;
+  hasEdit?: boolean;
 }
 
 const LabelsView = ({
@@ -22,10 +27,12 @@ const LabelsView = ({
   hasAdd,
   title,
   titleClassName,
-  className
+  className,
+  hasEdit
 }: ILabelsViewProps) => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-
+  const history = useHistory();
+  const dispatch = useActionDispatch();
   const onChangeLabel = (key: number, value: string) => {
     onChange(labels.map((label, index) => (key === index ? value : label)));
   };
@@ -54,6 +61,19 @@ const LabelsView = ({
         )
       );
     }
+  };
+
+  const onEdit = (dictionary: string) => {
+    const newDictionary = extractMiddlePart(dictionary);
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.DATA_DICTIONARY_LIST_DETAIL(),
+        value: ROUTES.DATA_DICTIONARY_LIST_VALUE(),
+        state: { dictionary: newDictionary },
+        label: newDictionary
+      })
+    );
+    history.push(ROUTES.DATA_DICTIONARY_LIST_DETAIL());
   };
 
   return (
@@ -88,8 +108,9 @@ const LabelsView = ({
           />
         </div>
         <div className="px-0 pr-8 max-w-34 min-w-34 py-2">
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-x-1">
             <IconButton
+              ripple={false}
               size="sm"
               className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
               onClick={onAdd}
@@ -97,6 +118,17 @@ const LabelsView = ({
             >
               <SvgIcon name="add" className="w-4" />
             </IconButton>
+            {hasEdit && (
+              <IconButton
+                ripple={false}
+                size="sm"
+                className="bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]"
+                onClick={() => onEdit(labels[0])}
+                disabled={userProfile.can_edit_labels === false}
+              >
+                <SvgIcon name="edit" className="w-4" />
+              </IconButton>
+            )}
           </div>
         </div>
       </div>
@@ -105,3 +137,17 @@ const LabelsView = ({
 };
 
 export default LabelsView;
+
+function extractMiddlePart(input: string): string {
+  const start = '${dictionary://';
+  const end = '}';
+
+  if (input.startsWith(start) && input.endsWith(end)) {
+    return input.slice(start.length, -end.length);
+  }
+  if (input.startsWith(start) && input.endsWith('}')) {
+    return input.slice(start.length, -1);
+  }
+
+  return input;
+}

@@ -31,7 +31,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void markForDeletion_whenNew_thenMarkedForDeletion() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("aaa"), FileTreeNodeStatus.NEW);
         sut.markForDeletion();
         Assertions.assertEquals(FileTreeNodeStatus.TO_BE_DELETED, sut.getStatus());
@@ -39,7 +39,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void markForDeletion_whenLoadedNotModified_thenMarkedForDeletion() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("aaa"), FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         sut.markForDeletion();
         Assertions.assertEquals(FileTreeNodeStatus.TO_BE_DELETED, sut.getStatus());
@@ -47,7 +47,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void markForDeletion_whenModified_thenMarkedForDeletion() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("aaa"), FileTreeNodeStatus.MODIFIED);
         sut.markForDeletion();
         Assertions.assertEquals(FileTreeNodeStatus.TO_BE_DELETED, sut.getStatus());
@@ -55,7 +55,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void markForDeletion_whenDeleted_thenPreservesDeleted() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("aaa"), FileTreeNodeStatus.DELETED);
         sut.markForDeletion();
         Assertions.assertEquals(FileTreeNodeStatus.DELETED, sut.getStatus());
@@ -63,7 +63,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void changeContent_whenNotLoaded_thenSetsContentAndStatusIsModified() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 null, FileTreeNodeStatus.NOT_LOADED);
         FileContent newContent = new FileContent("new");
         sut.changeContent(newContent);
@@ -73,7 +73,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void changeContent_whenLoadedNotModified_thenSetsContentAndStatusIsModified() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         FileContent newContent = new FileContent("new");
         sut.changeContent(newContent);
@@ -83,7 +83,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void changeContent_whenNew_thenSetsContentAndStatusIsNew() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.NEW);
         FileContent newContent = new FileContent("new");
         sut.changeContent(newContent);
@@ -93,7 +93,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void changeContent_whenStatusToBeDeleted_thenSetsContentAndStatusIsModified() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         sut.markForDeletion();
         FileContent newContent = new FileContent("new");
@@ -104,7 +104,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void changeContent_whenStatusDeleted_thenSetsContentAndStatusIsNew() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         sut.markForDeletion();
         sut.flush();
@@ -116,7 +116,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void flush_whenToBeDeleted_thenChangesToDeleted() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         sut.markForDeletion();
         sut.flush();
@@ -125,7 +125,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void flush_whenStatusModified_thenChangesToLoadedNotModified() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         sut.changeContent(new FileContent("new"));
         Assertions.assertEquals(FileTreeNodeStatus.MODIFIED, sut.getStatus());
@@ -135,7 +135,7 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void flush_whenStatusNew_thenChangesToLoadedNotModified() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.NEW);
         sut.flush();
         Assertions.assertEquals(FileTreeNodeStatus.LOADED_NOT_MODIFIED, sut.getStatus());
@@ -143,14 +143,14 @@ public class FileTreeNodeTest extends BaseTest {
 
     @Test
     void isLocalFileSystem_whenDefaultMethodCalled_thenReturnsFalseBecauseItIsVirtual() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.NEW);
         Assertions.assertFalse(sut.isLocalFileSystem());
     }
 
     @Test
     void getPhysicalAbsolutePath_whenDefaultMethodCalled_thenReturnsFalseBecauseItIsVirtual() {
-        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt"),
+        FileTreeNode sut = new FileTreeNode(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt"),
                 new FileContent("old"), FileTreeNodeStatus.NEW);
         Assertions.assertNull(sut.getPhysicalAbsolutePath());
     }

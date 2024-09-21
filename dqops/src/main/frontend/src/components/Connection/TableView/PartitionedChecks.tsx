@@ -44,7 +44,7 @@ const initTabs = [
     value: 'table-comparisons'
   },
   {
-    label: 'Rule mining',
+    label: 'Copy verified profiling checks',
     value: 'rule-mining'
   }
 ];

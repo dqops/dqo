@@ -5,7 +5,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDefinition } from '../../contexts/definitionContext';
 import CheckDetail from '../../pages/CheckDetail';
 import DataDictionary from '../../pages/DataDictionaryConfiguration';
-import DataDictionaryItemOverview from '../../pages/DataDictionaryConfiguration/DataDictionaryItemOverview';
 import DefaultCheckPatternConfiguration from '../../pages/DefaultCheckPatternConfiguration';
 import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail';
@@ -15,7 +14,6 @@ import IncidentConnection from '../../pages/IncidentConnection';
 import RuleDetail from '../../pages/RuleDetail';
 import SensorDetail from '../../pages/SensorDetail';
 import SharedCredentialsDetail from '../../pages/SharedCredentialsDetail';
-import SingleSharedCredential from '../../pages/SharedCredentialsDetail/SingleSharedCredential';
 import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
 import {
@@ -93,12 +91,12 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <DefaultWebhooksDetail />;
       case ROUTES.PATTERNS.SHARED_CREDENTIALS_LIST_DETAIL:
         return <SharedCredentialsDetail />;
-      case ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL:
-        return <SingleSharedCredential />;
+      // case ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL:
+      //   return <SingleSharedCredential />;
       case ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL:
         return <DataDictionary />;
-      case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
-        return <DataDictionaryItemOverview />;
+      // case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
+      //   return <DataDictionaryItemOverview />;
       case ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS:
         return <DefaultCheckPatterns />;
       case ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL:

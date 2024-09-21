@@ -5,9 +5,9 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN {{lib.render_target_column('analyzed_table')}}
-                        ~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
-                    THEN 0
-                ELSE 1
+                        !~ '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
+                    THEN 1
+                ELSE 0
             END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value

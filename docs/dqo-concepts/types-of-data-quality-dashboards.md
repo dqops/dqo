@@ -30,7 +30,7 @@ to the data quality lakehouse.
 
 ## Navigating dashboards
 
-To view dashboards, simply go to the **Data Quality Dashboard** section, and select the dashboard of interest from the tree
+To view dashboards, simply go to the **Data quality dashboard** section, and select the dashboard of interest from the tree
 view on the left. There are several groups and subgroups of data quality dashboards dedicated to analyzing results from 
 data quality checks. 
 

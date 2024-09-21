@@ -19,20 +19,18 @@ package com.dqops.core.dqocloud.users;
 import com.dqops.cloud.rest.api.AccountUsersApi;
 import com.dqops.cloud.rest.handler.ApiClient;
 import com.dqops.cloud.rest.model.DqoUserModel;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
-import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,15 +38,19 @@ import java.util.stream.Collectors;
  */
 @Component
 public class UserManagementServiceImpl implements UserManagementService {
-    private DqoCloudApiClientFactory dqoCloudApiClientFactory;
+    private final DqoCloudApiClientFactory dqoCloudApiClientFactory;
+    private final LocalDataDomainRegistry dataDomainRegistry;
 
     /**
      * Dependency injection constructor.
      * @param dqoCloudApiClientFactory DQOps Cloud client factory.
+     * @param dataDomainRegistry Local data domain registry.
      */
     @Autowired
-    public UserManagementServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory) {
+    public UserManagementServiceImpl(DqoCloudApiClientFactory dqoCloudApiClientFactory,
+                                     LocalDataDomainRegistry dataDomainRegistry) {
         this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
+        this.dataDomainRegistry = dataDomainRegistry;
     }
 
     /**
@@ -57,7 +59,7 @@ public class UserManagementServiceImpl implements UserManagementService {
      * @return List of users for this DQOps instance.
      */
     @Override
-    public Collection<DqoCloudUserModel> listUsers(DqoUserPrincipal userPrincipal) {
+    public Collection<DqoUserRolesModel> listUsers(DqoUserPrincipal userPrincipal) {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
@@ -70,13 +72,11 @@ public class UserManagementServiceImpl implements UserManagementService {
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             List<DqoUserModel> cloudUserList = accountUsersApi.listAccountUsers(
                     userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
+            Collection<LocalDataDomainSpec> localDataDomainSpecs = this.dataDomainRegistry.getAllLocalDataDomains();
 
-            List<DqoCloudUserModel> users =
+            List<DqoUserRolesModel> users =
                     cloudUserList.stream()
-                            .map(cloudUserModel -> new DqoCloudUserModel() {{
-                                setEmail(cloudUserModel.getEmail());
-                                setAccountRole(DqoUserRole.convertFromApiEnum(cloudUserModel.getAccountRole()));
-                            }})
+                            .map(cloudUserModel -> DqoUserRolesModel.createFromCloudModel(cloudUserModel, localDataDomainSpecs))
                             .collect(Collectors.toList());
             return users;
         }
@@ -96,7 +96,7 @@ public class UserManagementServiceImpl implements UserManagementService {
      * @return User's model or null when the user was not found.
      */
     @Override
-    public DqoCloudUserModel getUserByEmail(DqoUserPrincipal userPrincipal, String email) {
+    public DqoUserRolesModel getUserByEmail(DqoUserPrincipal userPrincipal, String email) {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
@@ -108,13 +108,11 @@ public class UserManagementServiceImpl implements UserManagementService {
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel cloudUserModel = accountUsersApi.getAccountUser(email,
                     userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
+            Collection<LocalDataDomainSpec> localDataDomainSpecs = this.dataDomainRegistry.getAllLocalDataDomains();
 
-            DqoCloudUserModel dqoCloudUserModel = new DqoCloudUserModel() {{
-                setEmail(cloudUserModel.getEmail());
-                setAccountRole(DqoUserRole.convertFromApiEnum(cloudUserModel.getAccountRole()));
-            }};
+            DqoUserRolesModel dqoUserRolesModel = DqoUserRolesModel.createFromCloudModel(cloudUserModel, localDataDomainSpecs);
 
-            return dqoCloudUserModel;
+            return dqoUserRolesModel;
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().value() == 404) {
@@ -132,11 +130,11 @@ public class UserManagementServiceImpl implements UserManagementService {
     /**
      * Creates a user in DQOps Cloud. An optional password may be passed.
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
-     * @param userModel User model that is created.
+     * @param localUserModel User model that is created.
      * @param password User's password, optional.
      */
     @Override
-    public void createUser(DqoUserPrincipal userPrincipal, DqoCloudUserModel userModel, String password) {
+    public void createUser(DqoUserPrincipal userPrincipal, DqoUserRolesModel localUserModel, String password) {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
@@ -146,13 +144,10 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
-            DqoUserModel dqoUserModel = new DqoUserModel() {{
-                setEmail(userModel.getEmail());
-                setAccountRole(userModel.getAccountRole().convertToApiEnum());
-                setNewPassword(password);
-            }};
+            DqoUserModel dqoBackendUserModel = localUserModel.toCloudUserModel();
+            dqoBackendUserModel.setNewPassword(password);
 
-            accountUsersApi.createAccountUser(dqoUserModel,
+            accountUsersApi.createAccountUser(dqoBackendUserModel,
                     userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
         }
         catch (DqoCloudInvalidKeyException ex) {
@@ -174,10 +169,10 @@ public class UserManagementServiceImpl implements UserManagementService {
     /**
      * Update a user in DQOps Cloud. Supports changing the role.
      * @param userPrincipal Caller principal, requires an ADMIN role to run.
-     * @param userModel User model that is updated.
+     * @param localUserModel User model that is updated.
      */
     @Override
-    public void updateUser(DqoUserPrincipal userPrincipal, DqoCloudUserModel userModel) {
+    public void updateUser(DqoUserPrincipal userPrincipal, DqoUserRolesModel localUserModel) {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
@@ -187,12 +182,9 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
-            DqoUserModel dqoUserModel = new DqoUserModel() {{
-                setEmail(userModel.getEmail());
-                setAccountRole(userModel.getAccountRole().convertToApiEnum());
-            }};
+            DqoUserModel dqoUserModel = localUserModel.toCloudUserModel();
 
-            accountUsersApi.updateAccountUser(userModel.getEmail(), dqoUserModel,
+            accountUsersApi.updateAccountUser(localUserModel.getEmail(), dqoUserModel,
                     userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
         }
         catch (DqoCloudInvalidKeyException ex) {
@@ -200,7 +192,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().value() == 404) {
-                throw new DqoUserNotFoundException("User " + userModel.getEmail() + " not found");
+                throw new DqoUserNotFoundException("User " + localUserModel.getEmail() + " not found");
             }
 
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {

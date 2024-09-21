@@ -438,7 +438,6 @@ from .column_datetime_profiling_checks_spec import ColumnDatetimeProfilingChecks
 from .column_datetime_profiling_checks_spec_custom_checks import (
     ColumnDatetimeProfilingChecksSpecCustomChecks,
 )
-from .column_default_checks_pattern_spec import ColumnDefaultChecksPatternSpec
 from .column_detected_datatype_in_text_check_spec import (
     ColumnDetectedDatatypeInTextCheckSpec,
 )
@@ -567,7 +566,10 @@ from .column_invalid_uuid_format_found_check_spec import (
 from .column_invalid_uuid_format_percent_check_spec import (
     ColumnInvalidUuidFormatPercentCheckSpec,
 )
+from .column_lineage_source_spec import ColumnLineageSourceSpec
+from .column_lineage_source_spec_properties import ColumnLineageSourceSpecProperties
 from .column_list_model import ColumnListModel
+from .column_list_model_advanced_properties import ColumnListModelAdvancedProperties
 from .column_max_anomaly_differencing_check_spec import (
     ColumnMaxAnomalyDifferencingCheckSpec,
 )
@@ -974,6 +976,9 @@ from .column_profiling_check_categories_spec_comparisons import (
 from .column_profiling_check_categories_spec_custom import (
     ColumnProfilingCheckCategoriesSpecCustom,
 )
+from .column_quality_policy_list_model import ColumnQualityPolicyListModel
+from .column_quality_policy_model import ColumnQualityPolicyModel
+from .column_quality_policy_spec import ColumnQualityPolicySpec
 from .column_range_max_value_sensor_parameters_spec import (
     ColumnRangeMaxValueSensorParametersSpec,
 )
@@ -1028,6 +1033,7 @@ from .column_schema_profiling_checks_spec_custom_checks import (
 )
 from .column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
 from .column_spec import ColumnSpec
+from .column_spec_advanced_properties import ColumnSpecAdvancedProperties
 from .column_sql_aggregate_expression_check_spec import (
     ColumnSqlAggregateExpressionCheckSpec,
 )
@@ -1374,7 +1380,9 @@ from .comparison_check_result_model import ComparisonCheckResultModel
 from .compression_type import CompressionType
 from .connection_incident_grouping_spec import ConnectionIncidentGroupingSpec
 from .connection_model import ConnectionModel
+from .connection_model_advanced_properties import ConnectionModelAdvancedProperties
 from .connection_spec import ConnectionSpec
+from .connection_spec_advanced_properties import ConnectionSpecAdvancedProperties
 from .connection_specification_model import ConnectionSpecificationModel
 from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
@@ -1402,14 +1410,8 @@ from .data_type_category import DataTypeCategory
 from .databricks_parameters_spec import DatabricksParametersSpec
 from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
-from .default_column_checks_pattern_list_model import (
-    DefaultColumnChecksPatternListModel,
-)
-from .default_column_checks_pattern_model import DefaultColumnChecksPatternModel
 from .default_rule_severity_level import DefaultRuleSeverityLevel
 from .default_schedules_spec import DefaultSchedulesSpec
-from .default_table_checks_pattern_list_model import DefaultTableChecksPatternListModel
-from .default_table_checks_pattern_model import DefaultTableChecksPatternModel
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
@@ -1425,7 +1427,6 @@ from .dimension_current_data_quality_status_model import (
     DimensionCurrentDataQualityStatusModel,
 )
 from .display_hint import DisplayHint
-from .dqo_cloud_user_model import DqoCloudUserModel
 from .dqo_job_change_model import DqoJobChangeModel
 from .dqo_job_entry_parameters_model import DqoJobEntryParametersModel
 from .dqo_job_history_entry_model import DqoJobHistoryEntryModel
@@ -1444,6 +1445,8 @@ from .dqo_settings_model_properties_additional_property import (
 )
 from .dqo_user_profile_model import DqoUserProfileModel
 from .dqo_user_role import DqoUserRole
+from .dqo_user_roles_model import DqoUserRolesModel
+from .dqo_user_roles_model_data_domain_roles import DqoUserRolesModelDataDomainRoles
 from .duckdb_files_format_type import DuckdbFilesFormatType
 from .duckdb_parameters_spec import DuckdbParametersSpec
 from .duckdb_parameters_spec_directories import DuckdbParametersSpecDirectories
@@ -1503,6 +1506,7 @@ from .json_file_format_spec import JsonFileFormatSpec
 from .json_format_type import JsonFormatType
 from .json_records_type import JsonRecordsType
 from .label_model import LabelModel
+from .local_data_domain_model import LocalDataDomainModel
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -1807,9 +1811,26 @@ from .table_data_freshness_anomaly_check_spec import TableDataFreshnessAnomalyCh
 from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
-from .table_default_checks_pattern_spec import TableDefaultChecksPatternSpec
+from .table_duplicate_record_count_check_spec import TableDuplicateRecordCountCheckSpec
+from .table_duplicate_record_count_sensor_parameters_spec import (
+    TableDuplicateRecordCountSensorParametersSpec,
+)
+from .table_duplicate_record_percent_check_spec import (
+    TableDuplicateRecordPercentCheckSpec,
+)
+from .table_duplicate_record_percent_sensor_parameters_spec import (
+    TableDuplicateRecordPercentSensorParametersSpec,
+)
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
+from .table_lineage_source_list_model import TableLineageSourceListModel
+from .table_lineage_source_list_model_properties import (
+    TableLineageSourceListModelProperties,
+)
+from .table_lineage_source_spec import TableLineageSourceSpec
+from .table_lineage_source_spec_columns import TableLineageSourceSpecColumns
+from .table_lineage_source_spec_properties import TableLineageSourceSpecProperties
 from .table_list_model import TableListModel
+from .table_list_model_advanced_properties import TableListModelAdvancedProperties
 from .table_model import TableModel
 from .table_monitoring_check_categories_spec import TableMonitoringCheckCategoriesSpec
 from .table_monthly_monitoring_check_categories_spec import (
@@ -1842,6 +1863,9 @@ from .table_profiling_check_categories_spec_custom import (
     TableProfilingCheckCategoriesSpecCustom,
 )
 from .table_profiling_setup_status_model import TableProfilingSetupStatusModel
+from .table_quality_policy_list_model import TableQualityPolicyListModel
+from .table_quality_policy_model import TableQualityPolicyModel
+from .table_quality_policy_spec import TableQualityPolicySpec
 from .table_row_count_anomaly_differencing_check_spec import (
     TableRowCountAnomalyDifferencingCheckSpec,
 )
@@ -1889,6 +1913,7 @@ from .table_schema_profiling_checks_spec_custom_checks import (
 )
 from .table_schema_statistics_collectors_spec import TableSchemaStatisticsCollectorsSpec
 from .table_spec import TableSpec
+from .table_spec_advanced_properties import TableSpecAdvancedProperties
 from .table_spec_columns import TableSpecColumns
 from .table_spec_groupings import TableSpecGroupings
 from .table_spec_table_comparisons import TableSpecTableComparisons
@@ -1957,6 +1982,34 @@ from .table_timeliness_partition_reload_lag_sensor_parameters_spec import (
 from .table_timeliness_profiling_checks_spec import TableTimelinessProfilingChecksSpec
 from .table_timeliness_profiling_checks_spec_custom_checks import (
     TableTimelinessProfilingChecksSpecCustomChecks,
+)
+from .table_uniqueness_daily_monitoring_checks_spec import (
+    TableUniquenessDailyMonitoringChecksSpec,
+)
+from .table_uniqueness_daily_monitoring_checks_spec_custom_checks import (
+    TableUniquenessDailyMonitoringChecksSpecCustomChecks,
+)
+from .table_uniqueness_daily_partition_checks_spec import (
+    TableUniquenessDailyPartitionChecksSpec,
+)
+from .table_uniqueness_daily_partition_checks_spec_custom_checks import (
+    TableUniquenessDailyPartitionChecksSpecCustomChecks,
+)
+from .table_uniqueness_monthly_monitoring_checks_spec import (
+    TableUniquenessMonthlyMonitoringChecksSpec,
+)
+from .table_uniqueness_monthly_monitoring_checks_spec_custom_checks import (
+    TableUniquenessMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .table_uniqueness_monthly_partition_checks_spec import (
+    TableUniquenessMonthlyPartitionChecksSpec,
+)
+from .table_uniqueness_monthly_partition_checks_spec_custom_checks import (
+    TableUniquenessMonthlyPartitionChecksSpecCustomChecks,
+)
+from .table_uniqueness_profiling_checks_spec import TableUniquenessProfilingChecksSpec
+from .table_uniqueness_profiling_checks_spec_custom_checks import (
+    TableUniquenessProfilingChecksSpecCustomChecks,
 )
 from .table_volume_daily_monitoring_checks_spec import (
     TableVolumeDailyMonitoringChecksSpec,
@@ -2194,7 +2247,6 @@ __all__ = (
     "ColumnDatetimeProfilingChecksSpec",
     "ColumnDatetimeProfilingChecksSpecCustomChecks",
     "ColumnDateValuesInFuturePercentCheckSpec",
-    "ColumnDefaultChecksPatternSpec",
     "ColumnDetectedDatatypeInTextCheckSpec",
     "ColumnDistinctCountAnomalyDifferencingCheckSpec",
     "ColumnDistinctCountAnomalyStationaryPartitionCheckSpec",
@@ -2243,7 +2295,10 @@ __all__ = (
     "ColumnInvalidUsaZipcodePercentCheckSpec",
     "ColumnInvalidUuidFormatFoundCheckSpec",
     "ColumnInvalidUuidFormatPercentCheckSpec",
+    "ColumnLineageSourceSpec",
+    "ColumnLineageSourceSpecProperties",
     "ColumnListModel",
+    "ColumnListModelAdvancedProperties",
     "ColumnMaxAnomalyDifferencingCheckSpec",
     "ColumnMaxAnomalyStationaryCheckSpec",
     "ColumnMaxInRangeCheckSpec",
@@ -2404,6 +2459,9 @@ __all__ = (
     "ColumnProfilingCheckCategoriesSpec",
     "ColumnProfilingCheckCategoriesSpecComparisons",
     "ColumnProfilingCheckCategoriesSpecCustom",
+    "ColumnQualityPolicyListModel",
+    "ColumnQualityPolicyModel",
+    "ColumnQualityPolicySpec",
     "ColumnRangeMaxValueSensorParametersSpec",
     "ColumnRangeMaxValueStatisticsCollectorSpec",
     "ColumnRangeMeanValueStatisticsCollectorSpec",
@@ -2426,6 +2484,7 @@ __all__ = (
     "ColumnSchemaProfilingChecksSpecCustomChecks",
     "ColumnSchemaTypeChangedCheckSpec",
     "ColumnSpec",
+    "ColumnSpecAdvancedProperties",
     "ColumnSqlAggregatedExpressionSensorParametersSpec",
     "ColumnSqlAggregateExpressionCheckSpec",
     "ColumnSqlConditionFailedCheckSpec",
@@ -2558,7 +2617,9 @@ __all__ = (
     "CompressionType",
     "ConnectionIncidentGroupingSpec",
     "ConnectionModel",
+    "ConnectionModelAdvancedProperties",
     "ConnectionSpec",
+    "ConnectionSpecAdvancedProperties",
     "ConnectionSpecificationModel",
     "ConnectionTestModel",
     "ConnectionTestStatus",
@@ -2584,12 +2645,8 @@ __all__ = (
     "DataGroupingDimensionSpec",
     "DataTypeCategory",
     "DatetimeBuiltInDateFormats",
-    "DefaultColumnChecksPatternListModel",
-    "DefaultColumnChecksPatternModel",
     "DefaultRuleSeverityLevel",
     "DefaultSchedulesSpec",
-    "DefaultTableChecksPatternListModel",
-    "DefaultTableChecksPatternModel",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
@@ -2599,7 +2656,6 @@ __all__ = (
     "DetectedDatatypeEqualsRuleParametersSpec",
     "DimensionCurrentDataQualityStatusModel",
     "DisplayHint",
-    "DqoCloudUserModel",
     "DqoJobChangeModel",
     "DqoJobEntryParametersModel",
     "DqoJobHistoryEntryModel",
@@ -2614,6 +2670,8 @@ __all__ = (
     "DqoSettingsModelPropertiesAdditionalProperty",
     "DqoUserProfileModel",
     "DqoUserRole",
+    "DqoUserRolesModel",
+    "DqoUserRolesModelDataDomainRoles",
     "DuckdbFilesFormatType",
     "DuckdbParametersSpec",
     "DuckdbParametersSpecDirectories",
@@ -2669,6 +2727,7 @@ __all__ = (
     "JsonFormatType",
     "JsonRecordsType",
     "LabelModel",
+    "LocalDataDomainModel",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",
@@ -2849,9 +2908,18 @@ __all__ = (
     "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
     "TableDataStalenessCheckSpec",
-    "TableDefaultChecksPatternSpec",
+    "TableDuplicateRecordCountCheckSpec",
+    "TableDuplicateRecordCountSensorParametersSpec",
+    "TableDuplicateRecordPercentCheckSpec",
+    "TableDuplicateRecordPercentSensorParametersSpec",
     "TableIncidentGroupingSpec",
+    "TableLineageSourceListModel",
+    "TableLineageSourceListModelProperties",
+    "TableLineageSourceSpec",
+    "TableLineageSourceSpecColumns",
+    "TableLineageSourceSpecProperties",
     "TableListModel",
+    "TableListModelAdvancedProperties",
     "TableModel",
     "TableMonitoringCheckCategoriesSpec",
     "TableMonthlyMonitoringCheckCategoriesSpec",
@@ -2868,6 +2936,9 @@ __all__ = (
     "TableProfilingCheckCategoriesSpecComparisons",
     "TableProfilingCheckCategoriesSpecCustom",
     "TableProfilingSetupStatusModel",
+    "TableQualityPolicyListModel",
+    "TableQualityPolicyModel",
+    "TableQualityPolicySpec",
     "TableRowCountAnomalyDifferencingCheckSpec",
     "TableRowCountAnomalyStationaryPartitionCheckSpec",
     "TableRowCountChange1DayCheckSpec",
@@ -2889,6 +2960,7 @@ __all__ = (
     "TableSchemaProfilingChecksSpecCustomChecks",
     "TableSchemaStatisticsCollectorsSpec",
     "TableSpec",
+    "TableSpecAdvancedProperties",
     "TableSpecColumns",
     "TableSpecGroupings",
     "TableSpecTableComparisons",
@@ -2916,6 +2988,16 @@ __all__ = (
     "TableTimelinessPartitionReloadLagSensorParametersSpec",
     "TableTimelinessProfilingChecksSpec",
     "TableTimelinessProfilingChecksSpecCustomChecks",
+    "TableUniquenessDailyMonitoringChecksSpec",
+    "TableUniquenessDailyMonitoringChecksSpecCustomChecks",
+    "TableUniquenessDailyPartitionChecksSpec",
+    "TableUniquenessDailyPartitionChecksSpecCustomChecks",
+    "TableUniquenessMonthlyMonitoringChecksSpec",
+    "TableUniquenessMonthlyMonitoringChecksSpecCustomChecks",
+    "TableUniquenessMonthlyPartitionChecksSpec",
+    "TableUniquenessMonthlyPartitionChecksSpecCustomChecks",
+    "TableUniquenessProfilingChecksSpec",
+    "TableUniquenessProfilingChecksSpecCustomChecks",
     "TableVolumeDailyMonitoringChecksSpec",
     "TableVolumeDailyMonitoringChecksSpecCustomChecks",
     "TableVolumeDailyPartitionedChecksSpec",

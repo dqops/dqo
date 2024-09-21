@@ -13,7 +13,7 @@ export default function DefaultCheckPatterns() {
 
   const { openDefaultCheckPatternFirstLevelTab } = useDefinition();
 
-  const addPattern = () => {
+  const addQualityPolicy = () => {
     openDefaultCheckPatternFirstLevelTab(type, 'new pattern', { create: true });
   };
 
@@ -22,14 +22,15 @@ export default function DefaultCheckPatterns() {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
         <div className="flex items-center justify-between w-full">
           <div className="text-lg font-semibold truncate">
-            Default {type}-level check patterns
+            {type?.replace(/./, (x) => x.toUpperCase())}-level data quality
+            policies
           </div>
         </div>
         <Button
-          label="Add pattern"
+          label="Add data quality policy"
           color="primary"
-          className="w-45"
-          onClick={addPattern}
+          className="w-55 !h-[37px]"
+          onClick={addQualityPolicy}
         />
       </div>
       {type === 'table' ? <TableLevelPatterns /> : <ColumnLevelPatterns />}

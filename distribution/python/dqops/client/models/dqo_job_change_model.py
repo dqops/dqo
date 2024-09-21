@@ -23,6 +23,7 @@ class DqoJobChangeModel:
         change_sequence (Union[Unset, int]):
         updated_model (Union[Unset, DqoJobHistoryEntryModel]):
         status_changed_at (Union[Unset, int]):
+        domain_name (Union[Unset, str]):
     """
 
     status: Union[Unset, DqoJobStatus] = UNSET
@@ -30,6 +31,7 @@ class DqoJobChangeModel:
     change_sequence: Union[Unset, int] = UNSET
     updated_model: Union[Unset, "DqoJobHistoryEntryModel"] = UNSET
     status_changed_at: Union[Unset, int] = UNSET
+    domain_name: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -47,6 +49,7 @@ class DqoJobChangeModel:
             updated_model = self.updated_model.to_dict()
 
         status_changed_at = self.status_changed_at
+        domain_name = self.domain_name
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,6 +64,8 @@ class DqoJobChangeModel:
             field_dict["updatedModel"] = updated_model
         if status_changed_at is not UNSET:
             field_dict["statusChangedAt"] = status_changed_at
+        if domain_name is not UNSET:
+            field_dict["domainName"] = domain_name
 
         return field_dict
 
@@ -95,12 +100,15 @@ class DqoJobChangeModel:
 
         status_changed_at = d.pop("statusChangedAt", UNSET)
 
+        domain_name = d.pop("domainName", UNSET)
+
         dqo_job_change_model = cls(
             status=status,
             job_id=job_id,
             change_sequence=change_sequence,
             updated_model=updated_model,
             status_changed_at=status_changed_at,
+            domain_name=domain_name,
         )
 
         dqo_job_change_model.additional_properties = d

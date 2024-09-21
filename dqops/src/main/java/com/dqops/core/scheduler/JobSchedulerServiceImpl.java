@@ -16,6 +16,7 @@
 package com.dqops.core.scheduler;
 
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -32,6 +33,7 @@ import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -42,7 +44,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static org.quartz.JobBuilder.newJob;
 
@@ -67,10 +71,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private DqoUserPrincipalProvider principalProvider;
+    private LocalDataDomainRegistry localDataDomainRegistry;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
     private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.silent;
+    private Set<String> scheduledDataDomains = ConcurrentHashMap.newKeySet();
 
     /**
      * Job scheduler service constructor.
@@ -85,6 +91,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param defaultTimeZoneProvider Default time zone provider.
      * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
      * @param principalProvider Local user principal provider.
+     * @param localDataDomainRegistry Local data domain registry.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -97,7 +104,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    ParentDqoJobQueue parentDqoJobQueue,
                                    DefaultTimeZoneProvider defaultTimeZoneProvider,
                                    DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
-                                   DqoUserPrincipalProvider principalProvider) {
+                                   DqoUserPrincipalProvider principalProvider,
+                                   LocalDataDomainRegistry localDataDomainRegistry) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
@@ -109,6 +117,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.principalProvider = principalProvider;
+        this.localDataDomainRegistry = localDataDomainRegistry;
     }
 
     /**
@@ -162,7 +171,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         if (!schedulerWasPreviouslyRunning) {
             defineDefaultJobs();
         }
+       
         this.started = true;
+
+        reconcileScheduledDomains();
     }
 
     /**
@@ -214,7 +226,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
-            DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
+            DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
             DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
             if (dqoCloudApiKey != null) {
                 DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
@@ -225,13 +237,98 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 }
             }
 
+            String mountedRootDomainName = userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud();
+            this.scheduledDataDomains.add(mountedRootDomainName);
             MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
-            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
-
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA,
+                    mountedRootDomainName);
             this.scheduler.scheduleJob(scanMetadataTrigger);
         } catch (SchedulerException ex) {
             log.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
+        }
+    }
+
+    /**
+     * Analyzes the list of active data domains for which the job scheduler is scheduling jobs.
+     * Adds or removes jobs for all nested data domains.
+     */
+    @Override
+    public void reconcileScheduledDomains() {
+        if (!this.started || this.scheduler == null) {
+            return;
+        }
+
+        Set<String> allNewDataDomains = new LinkedHashSet<>();
+        DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
+        allNewDataDomains.add(userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud());
+        Collection<LocalDataDomainSpec> nestedDataDomains = this.localDataDomainRegistry.getNestedDataDomains();
+        if (nestedDataDomains == null) {
+            return;
+        }
+
+        Set<String> nestedDataDomainNames = nestedDataDomains
+                .stream()
+                .filter(dataDomainSpec -> dataDomainSpec.isEnableScheduler())
+                .map(dataDomainSpec -> dataDomainSpec.getDataDomainName())
+                .collect(Collectors.toSet());
+        allNewDataDomains.addAll(nestedDataDomainNames);
+
+        for (String newDomainName : allNewDataDomains) {
+            if (this.scheduledDataDomains.contains(newDomainName)) {
+                continue; // already scheduled
+            }
+
+            String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
+            MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec,
+                    JobKeys.SYNCHRONIZE_METADATA, newDomainName);
+            try {
+                this.scheduler.scheduleJob(scanMetadataTrigger);
+                this.scheduledDataDomains.add(newDomainName);
+
+                JobDataMap jobDataMap = new JobDataMap();
+                this.jobDataMapAdapter.setDataDomain(jobDataMap, newDomainName);
+                this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap); // scan for new cron jobs
+            }
+            catch (SchedulerException ex) {
+                log.error("Failed to schedule metadata scan for a new data domain because " + ex.getMessage(), ex);
+                throw new JobSchedulerException(ex);
+            }
+        }
+
+        for (String existingDomainName : List.of(this.scheduledDataDomains.toArray(new String[this.scheduledDataDomains.size()]))) {
+            if (allNewDataDomains.contains(existingDomainName)) {
+                continue; // nothing to change
+            }
+
+            try {
+                List<? extends Trigger> triggersOfRunChecks = this.scheduler.getTriggersOfJob(JobKeys.RUN_CHECKS);
+                if (triggersOfRunChecks != null) {
+                    for (Trigger trigger : triggersOfRunChecks) {
+                        String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(trigger.getJobDataMap());
+                        if (Objects.equals(dataDomainInJob, existingDomainName)) {
+                            this.scheduler.unscheduleJob(trigger.getKey());
+                        }
+                    }
+                }
+
+                List<? extends Trigger> triggersOfSynchronizeMetadata = this.scheduler.getTriggersOfJob(JobKeys.SYNCHRONIZE_METADATA);
+                if (triggersOfRunChecks != null) {
+                    for (Trigger trigger : triggersOfSynchronizeMetadata) {
+                        String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(trigger.getJobDataMap());
+                        if (Objects.equals(dataDomainInJob, existingDomainName)) {
+                            this.scheduler.unscheduleJob(trigger.getKey());
+                        }
+                    }
+                }
+            }
+            catch (SchedulerException ex) {
+                log.error("Failed to unschedule jobs for an unloaded data domain because " + ex.getMessage(), ex);
+                throw new JobSchedulerException(ex);
+            }
+
+            this.scheduledDataDomains.remove(existingDomainName);
         }
     }
 
@@ -311,7 +408,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         log.debug("Triggering the SYNCHRONIZE_METADATA job on the job scheduler.");
 
         try {
-            this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA);
+            for (String dataDomainName : new ArrayList<>(this.scheduledDataDomains)) {
+                JobDataMap jobDataMap = new JobDataMap();
+                this.jobDataMapAdapter.setDataDomain(jobDataMap, dataDomainName);
+                this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+            }
         }
         catch (Exception ex) {
             log.error("Failed to trigger the metadata synchronization in the job scheduler because " + ex.getMessage(), ex);
@@ -332,10 +433,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     /**
      * Retrieves all schedules configured on triggers for a given job.
      * @param jobKey Job key for one of the known jobs like the run checks or scan metadata.
+     * @param dataDomainName Data domain name.
      * @return Returns a list of active schedules.
      */
     @Override
-    public UniqueSchedulesCollection getActiveSchedules(JobKey jobKey) {
+    public UniqueSchedulesCollection getActiveSchedules(JobKey jobKey, String dataDomainName) {
         try {
             UniqueSchedulesCollection schedulesCollection = new UniqueSchedulesCollection();
             if (this.scheduler == null) {
@@ -345,8 +447,13 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
 
             for (Trigger trigger : triggersOfJob) {
-                MonitoringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
-                schedulesCollection.add(schedule);
+                JobDataMap jobDataMap = trigger.getJobDataMap();
+                String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(jobDataMap);
+
+                if (Objects.equals(dataDomainInJob, dataDomainName)) {
+                    MonitoringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(jobDataMap);
+                    schedulesCollection.add(schedule);
+                }
             }
 
             return schedulesCollection;
@@ -361,9 +468,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * Applies changes for a new list of schedules, new triggers are added, unused triggers are removed.
      * @param schedulesDelta Schedule delta with schedules to add and schedules to remove.
      * @param jobKey Target job to configure. Jobs are specified in the {@link JobKeys}
+     * @param dataDomainName Data domain name.
      */
     @Override
-    public void applyScheduleDeltaToJob(JobSchedulesDelta schedulesDelta, JobKey jobKey) {
+    public void applyScheduleDeltaToJob(JobSchedulesDelta schedulesDelta, JobKey jobKey, String dataDomainName) {
         Exception firstException = null;
         List<? extends Trigger> triggersOfJob = null;
 
@@ -397,7 +505,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
         for (MonitoringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
             try {
-                Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
+                Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey, dataDomainName);
 
                 if (!this.scheduler.checkExists(triggerToAdd.getKey())) {
                     this.scheduler.scheduleJob(triggerToAdd);

@@ -43,6 +43,7 @@ const TableColumnsView = () => {
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [isCollected, setIsCollected] = useState<boolean>(false);
   const [checkedColumns, setCheckedColumns] = useState<string[]>([]);
   const [jobId, setJobId] = useState<number>();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -60,7 +61,8 @@ const TableColumnsView = () => {
       if (
         !res.data.column_statistics?.find(
           (column) => column.statistics && column.statistics.length > 0
-        )
+        ) &&
+        !isCollected
       ) {
         dispatch(
           setJobAllert({
@@ -80,25 +82,34 @@ const TableColumnsView = () => {
   const collectStatistics = async () => {
     dispatch(setJobAllert({}));
     try {
-      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, false, undefined, {
         connection: connectionName,
         fullTableName: schemaName + '.' + tableName,
         enabled: true,
         columnNames: checkedColumns
-      }).then((res) => setJobId(res.data.jobId?.jobId));
+      }).then((res) => {
+        setIsCollected(true);
+        dispatch(setJobAllert({}));
+        setJobId(res.data.jobId?.jobId);
+      });
     } catch (err) {
       console.error(err);
     }
   };
 
-  const filteredJobs = useMemo(() => {
+  const isCollectingStatistics = useMemo(() => {
     return (
       job &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.connection === connectionName &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.fullTableName ===
+        schemaName + '.' + tableName &&
       (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
         job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
-  }, [job]);
+  }, [job, checkTypes, connectionName, schemaName, tableName]);
 
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -196,18 +207,18 @@ const TableColumnsView = () => {
           >
             <div>
               <Button
-                className="flex items-center gap-x-2 justify-center"
+                className="flex items-center gap-x-2 justify-center !h-[37px]"
                 label={
-                  filteredJobs
+                  isCollectingStatistics
                     ? 'Collecting...'
                     : checkedColumns.length !== 0
                     ? 'Collect statistics on selected'
                     : 'Collect statistics'
                 }
-                color={filteredJobs ? 'secondary' : 'primary'}
+                color={isCollectingStatistics ? 'secondary' : 'primary'}
                 leftIcon={
-                  filteredJobs ? (
-                    <SvgIcon name="sync" className="w-4 h-4" />
+                  isCollectingStatistics ? (
+                    <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
                   ) : (
                     ''
                   )

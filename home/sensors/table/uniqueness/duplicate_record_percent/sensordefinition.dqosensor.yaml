@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: columns
+    display_name: columns
+    help_text: A list of columns used for uniqueness record duplicate verification.
+    data_type: string_list
+    display_hint: column_names
+    required: true
+  default_value: 0.0

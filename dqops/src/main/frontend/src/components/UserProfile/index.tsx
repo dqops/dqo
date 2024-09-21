@@ -91,43 +91,43 @@ export default function UserProfile({ name, email }: UserProfile) {
   };
   const profileItems = [
     {
-      label: 'Data quality dashboards:',
+      label: 'Data quality dashboards',
       value: userProfile?.data_quality_data_warehouse_enabled
         ? 'enabled'
         : 'disabled'
     },
     {
-      label: 'Users:',
+      label: 'Users',
       value: userProfile?.users_limit
         ? formatNumberWithSegments(userProfile.users_limit)
         : '-'
     },
     {
-      label: 'Monitored connections:',
+      label: 'Monitored connections',
       value: userProfile?.connections_limit
         ? formatNumberWithSegments(userProfile.connections_limit)
         : '-'
     },
     {
-      label: 'Total monitored tables:',
+      label: 'Total monitored tables',
       value: userProfile?.tables_limit
         ? formatNumberWithSegments(userProfile.tables_limit)
         : '-'
     },
     {
-      label: 'Tables per connection:',
+      label: 'Tables per connection',
       value: userProfile?.connection_tables_limit
         ? formatNumberWithSegments(userProfile.connection_tables_limit)
         : '-'
     },
     {
-      label: 'Concurrent jobs:',
+      label: 'Concurrent jobs',
       value: userProfile?.jobs_limit
         ? formatNumberWithSegments(userProfile.jobs_limit)
         : '-'
     },
     {
-      label: 'Months in data quality warehouse:',
+      label: 'Months in data quality warehouse',
       value: userProfile?.months_limit
         ? formatNumberWithSegments(userProfile.months_limit)
         : '-'

@@ -62,7 +62,7 @@ public class LocalFileSystemFactoryImpl implements LocalFileSystemFactory {
     public LocalFolderTreeNode openLocalDqoHome() {
         LocalDqoHomeFileStorageService localDqoHomeFileStorageService = this.beanFactory.getBean(LocalDqoHomeFileStorageService.class);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
-        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         return userHomeFolder;
     }
 }

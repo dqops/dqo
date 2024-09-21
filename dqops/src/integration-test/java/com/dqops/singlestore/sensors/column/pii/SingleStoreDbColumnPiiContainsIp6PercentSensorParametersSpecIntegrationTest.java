@@ -44,6 +44,7 @@ import tech.tablesaw.api.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 class SingleStoreDbColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
@@ -326,8 +327,8 @@ class SingleStoreDbColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTes
         Assertions.assertTrue(sampleValues.contains("c219:0b3f:96f6:da15:bcac:856a:dd1a:9e71"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(2, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(1));

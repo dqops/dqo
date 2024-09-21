@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
-import static com.dqops.rest.server.LocalUrlAddressesImpl.SWAGGER_UI_PATH;
+import static com.dqops.rest.server.LocalUrlAddressesProviderImpl.SWAGGER_UI_PATH;
 
 /**
  * Spring boot swagger configuration. Configures how Swagger shows the UI.

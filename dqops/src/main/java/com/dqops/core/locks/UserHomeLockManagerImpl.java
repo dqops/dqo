@@ -50,13 +50,14 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
         this.coreConfigurationProperties = coreConfigurationProperties;
         this.threadLocksCounter = threadLocksCounter;
         this.locks = new LinkedHashMap<>();
-        this.createLocksForDataDomain(UserDomainIdentity.DEFAULT_DATA_DOMAIN);
+        this.createLocksForDataDomain(UserDomainIdentity.ROOT_DATA_DOMAIN);
     }
 
     /**
      * Sets up lock roots for a given data domain.
      * @param dataDomain Data domain name.
      */
+    @Override
     public void createLocksForDataDomain(String dataDomain) {
         long lockWaitTimeoutSeconds = this.coreConfigurationProperties.getLockWaitTimeoutSeconds();
 

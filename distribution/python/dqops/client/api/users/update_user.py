@@ -5,14 +5,14 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.dqo_cloud_user_model import DqoCloudUserModel
+from ...models.dqo_user_roles_model import DqoUserRolesModel
 from ...types import Response
 
 
 def _get_kwargs(
     email: str,
     *,
-    json_body: DqoCloudUserModel,
+    json_body: DqoUserRolesModel,
 ) -> Dict[str, Any]:
 
     pass
@@ -54,7 +54,7 @@ def sync_detailed(
     email: str,
     *,
     client: AuthenticatedClient,
-    json_body: DqoCloudUserModel,
+    json_body: DqoUserRolesModel,
 ) -> Response[Any]:
     """updateUser
 
@@ -62,8 +62,8 @@ def sync_detailed(
 
     Args:
         email (str):
-        json_body (DqoCloudUserModel): DQOps Cloud user model - identifies a user in a multi-user
-            DQOps deployment.
+        json_body (DqoUserRolesModel): DQOps user model - identifies a user in a multi-user DQOps
+            deployment and the user's roles.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -89,7 +89,7 @@ async def asyncio_detailed(
     email: str,
     *,
     client: AuthenticatedClient,
-    json_body: DqoCloudUserModel,
+    json_body: DqoUserRolesModel,
 ) -> Response[Any]:
     """updateUser
 
@@ -97,8 +97,8 @@ async def asyncio_detailed(
 
     Args:
         email (str):
-        json_body (DqoCloudUserModel): DQOps Cloud user model - identifies a user in a multi-user
-            DQOps deployment.
+        json_body (DqoUserRolesModel): DQOps user model - identifies a user in a multi-user DQOps
+            deployment and the user's roles.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

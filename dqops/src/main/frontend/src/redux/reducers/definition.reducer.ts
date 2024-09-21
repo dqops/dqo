@@ -49,7 +49,12 @@ const initialState: IDefinitionState = {
   tabs: [],
   ruleState: {},
   dataQualityChecksState: {},
-  definitionFirstLevelFolder: [],
+  definitionFirstLevelFolder: [
+    { category: 'Sensors', isOpen: false },
+    { category: 'Rules', isOpen: false },
+    { category: 'Data quality checks', isOpen: false },
+    { category: 'Data quality policies', isOpen: false }
+  ],
   refreshChecksTreeIndicator: false,
   refreshRulesTreeIndicator: false,
   refreshSensorsTreeIndicator: false
@@ -426,7 +431,27 @@ const definitionReducer = (state = initialState, action: any) => {
           item.url === action.activeTab
             ? {
                 ...item,
-                label: action.label
+                label: action.label,
+                state: {
+                  ...item.state,
+                  ...action.state
+                }
+              }
+            : item
+        )
+      };
+    }
+    case DEFINITION_ACTION.SET_SECOND_LEVEL_TAB: {
+      return {
+        ...state,
+        tabs: state.tabs.map((item) =>
+          item.url === action.activeTab
+            ? {
+                ...item,
+                state: {
+                  ...item.state,
+                  secondTab: action.secondTab
+                }
               }
             : item
         )

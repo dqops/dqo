@@ -5,6 +5,7 @@ import MonitoringView from '../../components/Connection/TableView/MonitoringView
 import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
 import ProfilingView from '../../components/Connection/TableView/ProfilingView';
 import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
+import SourceTables from '../../components/Connection/TableView/SourceTables/SourceTables';
 import TableCommentView from '../../components/Connection/TableView/TableCommentView';
 import TableDataGroupingConfiguration from '../../components/Connection/TableView/TableDataGroupingConfigurations';
 import TableDetails from '../../components/Connection/TableView/TableDetails';
@@ -51,6 +52,10 @@ const initTabs = [
   {
     label: 'Incident configuration',
     value: 'incident_configuration'
+  },
+  {
+    label: 'Data lineage',
+    value: 'source_tables'
   }
 ];
 
@@ -266,6 +271,7 @@ const TablePage = () => {
                 <TableIncidentsNotificationsView />
               )}
             </div>
+            <div>{activeTab === 'source_tables' && <SourceTables />}</div>
           </>
         )}
       </div>

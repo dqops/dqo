@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckContainerModel,
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel,
   TargetColumnPatternSpec,
   TargetTablePatternSpec
 } from '../../api';
@@ -12,10 +12,12 @@ import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setSecondLevelTab } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
 } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import CopyCheckPatternDialog from './CopyCheckPatternDialog';
@@ -124,13 +126,11 @@ type TCheckContainerDiverse = {
   [key in TCheckTypes]: CheckContainerModel | undefined;
 };
 
-type TTarget =
-  | DefaultColumnChecksPatternListModel
-  | DefaultTableChecksPatternListModel;
+type TTarget = ColumnQualityPolicyListModel | TableQualityPolicyListModel;
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 type TEditCheckPatternProps = {
   type: 'table' | 'column';
-  pattern_name: string;
+  policy_name: string;
   create: boolean;
 };
 const initialState: TCheckContainerDiverse = {
@@ -143,10 +143,16 @@ const initialState: TCheckContainerDiverse = {
 
 export default function EditCheckPattern({
   type,
-  pattern_name,
+  policy_name,
   create
 }: TEditCheckPatternProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job);
+  const { tabs: pageTabs, activeTab: baseTab } = useSelector(
+    (state: IRootState) => state.definition
+  );
+  const activeTab =
+    (pageTabs.find((x) => x.url === baseTab)?.state?.secondTab as string) ??
+    'table-target';
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
   const tabs =
     userProfile &&
@@ -159,22 +165,21 @@ export default function EditCheckPattern({
       : type === 'column'
       ? tabsColumnChecksFreeTrial
       : tabsTableChecksFreeTrial;
-
-  const [activeTab, setActiveTab] = useState('table-target');
+  const dispatch = useActionDispatch();
   const [checkContainers, setCheckContainers] =
     useState<TCheckContainerDiverse>(initialState);
   const [target, setTarget] = useState<TTarget>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [copyPatternOpen, setCopyPatternOpen] = useState(false);
-  const onChangeTab = (tab: any) => {
-    setActiveTab(tab);
+  const onChangeTab = (tab: string) => {
+    dispatch(setSecondLevelTab(tab, baseTab ?? ''));
   };
 
   const onChangeTarget = (
     updatedTarget: Partial<TTarget> | Partial<TTargetSpec>
   ) => {
     if (
-      'pattern_name' in updatedTarget ||
+      'policy_name' in updatedTarget ||
       'priority' in updatedTarget ||
       'description' in updatedTarget ||
       'disabled' in updatedTarget
@@ -196,7 +201,7 @@ export default function EditCheckPattern({
   };
 
   const updateChecks = async () => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     const apiClients: {
       column: Record<
         TCheckTypes,
@@ -217,27 +222,27 @@ export default function EditCheckPattern({
     } = {
       column: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultProfilingColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updateProfilingColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultMonitoringDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updateMonitoringDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultMonitoringMonthlyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updateMonitoringMonthlyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultPartitionedDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.updatePartitionedDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultColumnCheckPatternsApiClient.updateDefaultPartitionedMonthlyColumnChecksPattern
+          ColumnQualityPoliciesApiClient.updatePartitionedMonthlyColumnQualityPolicy
       },
       table: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultTableCheckPatternsApiClient.updateDefaultProfilingTableChecksPattern,
+          TableQualityPoliciesApiClient.updateProfilingTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultTableCheckPatternsApiClient.updateDefaultMonitoringDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.updateMonitoringDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultTableCheckPatternsApiClient.updateDefaultMonitoringMonthlyTableChecksPattern,
+          TableQualityPoliciesApiClient.updateMonitoringMonthlyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultTableCheckPatternsApiClient.updateDefaultPartitionedDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.updatePartitionedDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultTableCheckPatternsApiClient.updateDefaultPartitionedMonthlyTableChecksPattern
+          TableQualityPoliciesApiClient.updatePartitionedMonthlyTableQualityPolicy
       }
     };
 
@@ -253,7 +258,7 @@ export default function EditCheckPattern({
       ) {
         const apiFunction = apiClient[key as TCheckTypes];
         promises.push(
-          apiFunction(pattern_name, checkContainers[key as TCheckTypes])
+          apiFunction(policy_name, checkContainers[key as TCheckTypes])
         );
       }
     });
@@ -261,13 +266,13 @@ export default function EditCheckPattern({
     await Promise.all(promises);
 
     if (type === 'column') {
-      await DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
-        pattern_name,
+      await ColumnQualityPoliciesApiClient.updateColumnQualityPolicyTarget(
+        policy_name,
         target
       );
     } else {
-      await DefaultTableCheckPatternsApiClient.updateDefaultTableChecksPatternTarget(
-        pattern_name,
+      await TableQualityPoliciesApiClient.updateTableQualityPolicyTarget(
+        policy_name,
         target
       );
     }
@@ -283,14 +288,14 @@ export default function EditCheckPattern({
   };
 
   const getTarget = () => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     if (type === 'column') {
-      DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
-        pattern_name
+      ColumnQualityPoliciesApiClient.getColumnQualityPolicyTarget(
+        policy_name
       ).then((res) => setTarget(res?.data));
     } else {
-      DefaultTableCheckPatternsApiClient.getDefaultTableChecksPatternTarget(
-        pattern_name
+      TableQualityPoliciesApiClient.getTableQualityPolicyTarget(
+        policy_name
       ).then((res) => setTarget(res?.data));
     }
   };
@@ -305,27 +310,27 @@ export default function EditCheckPattern({
     const apiClients = {
       column: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultColumnCheckPatternsApiClient.getDefaultProfilingColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getProfilingColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultColumnCheckPatternsApiClient.getDefaultMonitoringDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getMonitoringDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultColumnCheckPatternsApiClient.getDefaultMonitoringMonthlyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getMonitoringMonthlyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultColumnCheckPatternsApiClient.getDefaultPartitionedDailyColumnChecksPattern,
+          ColumnQualityPoliciesApiClient.getPartitionedDailyColumnQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultColumnCheckPatternsApiClient.getDefaultPartitionedMonthlyColumnChecksPattern
+          ColumnQualityPoliciesApiClient.getPartitionedMonthlyColumnQualityPolicy
       },
       table: {
         [CheckRunMonitoringScheduleGroup.profiling]:
-          DefaultTableCheckPatternsApiClient.getDefaultProfilingTableChecksPattern,
+          TableQualityPoliciesApiClient.getProfilingTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_daily]:
-          DefaultTableCheckPatternsApiClient.getDefaultMonitoringDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.getMonitoringDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.monitoring_monthly]:
-          DefaultTableCheckPatternsApiClient.getDefaultMonitoringMonthlyTableChecksPattern,
+          TableQualityPoliciesApiClient.getMonitoringMonthlyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_daily]:
-          DefaultTableCheckPatternsApiClient.getDefaultPartitionedDailyTableChecksPattern,
+          TableQualityPoliciesApiClient.getPartitionedDailyTableQualityPolicy,
         [CheckRunMonitoringScheduleGroup.partitioned_monthly]:
-          DefaultTableCheckPatternsApiClient.getDefaultPartitionedMonthlyTableChecksPattern
+          TableQualityPoliciesApiClient.getPartitionedMonthlyTableQualityPolicy
       }
     };
 
@@ -333,12 +338,13 @@ export default function EditCheckPattern({
 
     const apiCall = apiClient[activeTab as CheckRunMonitoringScheduleGroup];
     if (apiCall) {
-      await apiCall(pattern_name).then(callBack);
+      if (!policy_name) return;
+      await apiCall(policy_name).then(callBack);
     }
   };
 
   useEffect(() => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     if (
       !checkContainers?.[activeTab as TCheckTypes] ||
       Object.keys(checkContainers?.[activeTab as TCheckTypes] ?? {}).length ===
@@ -349,13 +355,13 @@ export default function EditCheckPattern({
   }, [activeTab]);
 
   useEffect(() => {
-    if (!pattern_name) return;
+    if (!policy_name) return;
     getChecks();
-  }, [pattern_name, create, type]);
+  }, [policy_name, create, type]);
 
   useEffect(() => {
     getTarget();
-  }, [pattern_name]);
+  }, [policy_name]);
 
   useEffect(() => {
     getTarget();
@@ -371,7 +377,7 @@ export default function EditCheckPattern({
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
               {type?.replace(/./, (c) => c.toUpperCase())} check pattern{' '}
-              {pattern_name}
+              {policy_name}
             </div>
           </div>
           <div className="flex items-center gap-x-4">
@@ -421,7 +427,7 @@ export default function EditCheckPattern({
         </div>
         <CopyCheckPatternDialog
           type={type}
-          sourceTableName={pattern_name}
+          sourceTableName={policy_name}
           open={copyPatternOpen}
           setOpen={setCopyPatternOpen}
         />

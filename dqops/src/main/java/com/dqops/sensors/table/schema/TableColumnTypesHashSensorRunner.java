@@ -126,8 +126,7 @@ public class TableColumnTypesHashSensorRunner extends AbstractSensorRunner {
 
             if (introspectedTableSpec == null) {
                 // table not found
-                Table table = GenericSensorResultsFactory.createResultTableWithResult((Double) null,
-                        this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
+                Table table = GenericSensorResultsFactory.createEmptyResultTable();
                 return new SensorExecutionResult(sensorRunParameters, table);
             }
 

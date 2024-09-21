@@ -38,6 +38,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
+import java.util.Map;
+
 /**
  * Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
  */
@@ -212,6 +214,12 @@ public class TableListModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
+     * A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.
+     */
+    @JsonPropertyDescription("A dictionary of advanced properties that can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.")
+    private Map<String, String> advancedProperties;
+
+    /**
      * Boolean flag that decides if the current user can update or delete this object.
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
@@ -311,6 +319,7 @@ public class TableListModel {
                 setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
+            setAdvancedProperties(tableSpec.getAdvancedProperties());
         }};
     }
 
@@ -391,7 +400,10 @@ public class TableListModel {
                 setDeleteErrors(true);
                 setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
+                setDeleteErrorSamples(true);
+                setDeleteIncidents(true);
             }});
+            setAdvancedProperties(tableSpec.getAdvancedProperties());
         }};
     }
 
@@ -413,6 +425,7 @@ public class TableListModel {
             targetTableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         }
         targetTableSpec.getProfilingChecks().setResultTruncation(this.profilingChecksResultTruncation);
+        targetTableSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 
     public static class TableListModelSampleFactory implements SampleValueFactory<TableListModel> {

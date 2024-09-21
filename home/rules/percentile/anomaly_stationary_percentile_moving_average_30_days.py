@@ -39,6 +39,10 @@ class RuleTimeWindowSettingsSpec:
     min_periods_with_readouts: int
 
 
+class AnomalyConfigurationParameters:
+    degrees_of_freedom: float
+
+
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
@@ -46,6 +50,7 @@ class RuleExecutionRunParameters:
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
+    configuration_parameters: AnomalyConfigurationParameters
 
 
 # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
@@ -76,13 +81,14 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = np.array(extracted, dtype=float)
     filtered_std = scipy.stats.tstd(filtered)
     filtered_mean = np.mean(filtered)
+    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
 
     if filtered_std == 0:
         threshold_lower = float(filtered_mean)
         threshold_upper = float(filtered_mean)
     else:
-        # Assumption: the historical data follows normal distribution
-        readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
+        # Assumption: the historical data follows t-student distribution
+        readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=filtered_mean, scale=filtered_std)
         one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
 
         threshold_lower = float(readout_distribution.ppf(one_sided_tail))

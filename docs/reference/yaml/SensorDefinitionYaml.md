@@ -65,7 +65,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`display_name`</span>|Field display name that should be shown as a label for the control.|*string*| | | |
 |<span class="no-wrap-code ">`help_text`</span>|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|*string*| | | |
 |<span class="no-wrap-code ">`data_type`</span>|Parameter data type.|*enum*|*string*<br/>*boolean*<br/>*integer*<br/>*long*<br/>*double*<br/>*date*<br/>*datetime*<br/>*column_name*<br/>*enum*<br/>*string_list*<br/>*integer_list*<br/>*object*<br/>| | |
-|<span class="no-wrap-code ">`display_hint`</span>|UI control display hint.|*enum*|*textarea*<br/>| | |
+|<span class="no-wrap-code ">`display_hint`</span>|UI control display hint.|*enum*|*textarea*<br/>*column_names*<br/>| | |
 |<span class="no-wrap-code ">`required`</span>|True when the value for the parameter must be provided.|*boolean*| | | |
 |<span class="no-wrap-code ">`allowed_values`</span>|List of allowed values for a field that is of an enum type.|*List[string]*| | | |
 |<span class="no-wrap-code ">`default_value`</span>|The default value for a parameter in a custom check or a custom rule.|*string*| | | |

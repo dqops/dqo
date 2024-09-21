@@ -66,8 +66,12 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     private boolean deleteErrorSamples = false;
 
     @JsonPropertyDescription("Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. " +
-            "Because the default value is *false*, this parameter must be set to *true* to delete the error samples.")
+            "Because the default value is *false*, this parameter must be set to *true* to delete the incidents.")
     private boolean deleteIncidents = false;
+
+    @JsonPropertyDescription("Delete the data quality configured checks from the table. They are detached from the configuration." +
+            "Because the default value is *false*, this parameter must be set to *true* to delete the checks configuration.")
+    private boolean deleteChecksConfiguration = false;
 
     @JsonPropertyDescription("The list of column names to delete the data for column level results or errors only for selected columns.")
     private List<String> columnNames;
@@ -132,10 +136,13 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     /**
      * Creates a job parameters object by relying on info provided in CheckSearchFilters.
      * @param checkSearchFilters Check search filters object providing the basis for the job parameters.
-     * @param deleteStatistics Delete also statistics.
+     * @param deleteStatistics Delete also the statistics.
+     * @param deleteIncidents Delete also the incidents.
      * @return Delete stored data job parameters based on the filters.
      */
-    public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, boolean deleteStatistics) {
+    public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters,
+                                                                            boolean deleteStatistics,
+                                                                            boolean deleteIncidents) {
         if (checkSearchFilters == null) {
             return null;
         }
@@ -157,10 +164,14 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
             setDeleteStatistics(deleteStatistics);
             setDeleteSensorReadouts(true);
             setDeleteErrorSamples(true);
-            setDeleteIncidents(true);
+            setDeleteIncidents(deleteIncidents);
         }};
     }
 
+    /**
+     * Creates a deep clone of the job parameters object.
+     * @return Cloned delete data job parameter object.
+     */
     @Override
     public DeleteStoredDataQueueJobParameters clone() {
         try {
@@ -174,7 +185,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     public static class DeleteStoredDataQueueJobParametersSampleFactory implements SampleValueFactory<DeleteStoredDataQueueJobParameters> {
         @Override
         public DeleteStoredDataQueueJobParameters createSample() {
-            return fromCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample(), false);
+            return fromCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample(), true, true);
         }
     }
 }

@@ -94,12 +94,13 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
 
     /**
      * Finds new or deleted CRON schedules (cron expressions) and updates the triggers in the quartz scheduler.
+     * @param dataDomainName Data domain name.
      */
-    protected void updateListOfSchedulesInQuartzScheduler() {
+    protected void updateListOfSchedulesInQuartzScheduler(String dataDomainName) {
         if (this.jobSchedulerService.isStarted()) {
-            UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
-            JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);
-            this.jobSchedulerService.applyScheduleDeltaToJob(schedulesToAddOrRemove, JobKeys.RUN_CHECKS);
+            UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS, dataDomainName);
+            JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules, dataDomainName);
+            this.jobSchedulerService.applyScheduleDeltaToJob(schedulesToAddOrRemove, JobKeys.RUN_CHECKS, dataDomainName);
         }
     }
 
@@ -205,7 +206,7 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
         // TODO: the child folder synchronization jobs should return a summary of files uploaded and downloaded, when the "sources" folder has incoming changes, we should always update the schedules
 
         if (clonedParameters.isDetectCronSchedules() || clonedParameters.isSources()) {
-            this.updateListOfSchedulesInQuartzScheduler();
+            this.updateListOfSchedulesInQuartzScheduler(domainIdentity.getDataDomainCloud());
         }
 
         return null;

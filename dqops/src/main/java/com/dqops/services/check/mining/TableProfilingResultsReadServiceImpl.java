@@ -73,12 +73,16 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
      * @param executionContext Execution context with access to the user home.
      * @param connectionSpec Connection specification.
      * @param tableSpec Table specification of the table that is analyzed.
+     * @param importStatistics Import statistics to be used by the rule miner. Without the statistics, the miner can only configure current checks or copy profiling checks.
+     * @param importDefaultChecks Imports the results of default checks. When we disable it, the rule miner will not see their results and will not propose configuring them. It is important when configuring the monitoring and partition checks to not copy them.
      * @return All loaded results for a table.
      */
     @Override
     public TableProfilingResults loadTableProfilingResults(ExecutionContext executionContext,
                                                            ConnectionSpec connectionSpec,
-                                                           TableSpec tableSpec) {
+                                                           TableSpec tableSpec,
+                                                           boolean importStatistics,
+                                                           boolean importDefaultChecks) {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserDomainIdentity userDomainIdentity = userHomeContext.getUserIdentity();
         TableProfilingResults tableProfilingResults = this.checkResultsDataService.loadProfilingChecksResultsForTable(
@@ -96,6 +100,9 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
             tableProfilingResults.setMissingProfilingChecksResults(false);
         }
         tableAssetProfilingResults.importChecksModels(tableChecksModel);
+        if (!importDefaultChecks) {
+            tableAssetProfilingResults.removeChecksAppliedByPatterns();
+        }
 
         for (ColumnSpec columnSpec : tableSpec.getColumns().values()) {
             AbstractRootChecksContainerSpec columnProfilingChecksContainer = columnSpec.getColumnCheckRootContainer(
@@ -110,14 +117,20 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
                 tableProfilingResults.setMissingProfilingChecksResults(false);
             }
             columnAssetProfilingResultsContainer.importChecksModels(columnChecksModel);
+            if (!importDefaultChecks) {
+                columnAssetProfilingResultsContainer.removeChecksAppliedByPatterns();
+            }
         }
-
-        StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
-                tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
 
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId(userHomeContext);
         tableProfilingResults.setTimeZoneId(defaultTimeZoneId);
-        tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
+
+        if (importStatistics) {
+            StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
+                    tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
+            tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
+        }
+
         tableProfilingResults.calculateMissingNotNullCounts();
 
         for (DictionaryWrapper dictionaryWrapper : userHomeContext.getUserHome().getDictionaries()) {

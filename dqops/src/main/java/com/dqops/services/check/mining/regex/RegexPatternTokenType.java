@@ -59,7 +59,7 @@ public enum RegexPatternTokenType {
     PLUS("+", false, true),
     AMPERSAND("&"),
     PIPE("|", false, true),
-    QUOTE("'"),
+    QUOTE("'", false, true),
     DOUBLE_QUOTE("\""),
     QUESTION_MARK("?", false, true),
     SECTION("§"),

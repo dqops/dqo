@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel,
   TargetColumnPatternSpec,
   TargetTablePatternSpec
 } from '../../api';
@@ -9,8 +9,8 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { useDefinition } from '../../contexts/definitionContext';
 import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
 } from '../../services/apiClient';
 import DefaultCheckTargetConfiguration from './DefaultCheckTargetConfiguration';
 
@@ -19,8 +19,8 @@ type TCreateCheckPatternProps = {
 };
 
 type TTarget =
-  | DefaultColumnChecksPatternListModel
-  | DefaultTableChecksPatternListModel;
+  | ColumnQualityPolicyListModel
+  | TableQualityPolicyListModel;
 
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 
@@ -33,7 +33,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
     updatedTarget: Partial<TTarget> | Partial<TTargetSpec>
   ) => {
     if (
-      'pattern_name' in updatedTarget ||
+      'policy_name' in updatedTarget ||
       'priority' in updatedTarget ||
       'description' in updatedTarget ||
       'disabled' in updatedTarget
@@ -54,19 +54,19 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
   };
 
   const onSave = () => {
-    if (!target.pattern_name) return;
+    if (!target.policy_name) return;
     if (type === 'column') {
-      DefaultColumnCheckPatternsApiClient.createDefaultColumnChecksPatternTarget(
-        target.pattern_name,
+      ColumnQualityPoliciesApiClient.createColumnQualityPolicyTarget(
+        target.policy_name,
         target
       );
     } else {
-      DefaultTableCheckPatternsApiClient.createDefaultTableChecksPatternTarget(
-        target.pattern_name,
+      TableQualityPoliciesApiClient.createTableQualityPolicyTarget(
+        target.policy_name,
         target
       );
     }
-    openDefaultCheckPatternFirstLevelTab(type, target.pattern_name);
+    openDefaultCheckPatternFirstLevelTab(type, target.policy_name);
     // onChangeCreating();
   };
 
@@ -85,7 +85,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
             color="primary"
             className="pl-14 pr-14"
             onClick={onSave}
-            disabled={!target.pattern_name}
+            disabled={!target.policy_name}
           />
         </div>
         <DefaultCheckTargetConfiguration

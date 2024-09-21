@@ -106,7 +106,7 @@ The Sensor readouts category displays the values obtained by the sensors from th
 The Execution errors category displays any error that occurred during the check's execution.
 
 The actual value in this example is 99%, which is above the minimum threshold level set in the warning (99%).
-The check gives a valid result (notice the green square to the left of the check name).
+The check gives a correct result (notice the green square to the left of the check name).
 
 
 ### **Synchronize the results with the cloud account**
@@ -231,7 +231,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The check shows a valid results what means that the percentage of false values in the `invalidOcr` column exceeds 99%.
+The check shows a correct results what means that the percentage of false values in the `invalidOcr` column exceeds 99%.
 
 ```
 Check evaluation summary per table:

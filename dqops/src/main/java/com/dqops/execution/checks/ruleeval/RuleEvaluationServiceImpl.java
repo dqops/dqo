@@ -46,6 +46,7 @@ import tech.tablesaw.table.TableSliceGroup;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -105,6 +106,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
         RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult != null && ruleFindResult.getRuleDefinitionSpec() != null ?
                 ruleFindResult.getRuleDefinitionSpec().getTimeWindow() : null;
+        Map<String, String> ruleConfigurationParameters = ruleFindResult != null && ruleFindResult.getRuleDefinitionSpec() != null ?
+                ruleFindResult.getRuleDefinitionSpec().getParameters() : null;
         TableComparisonConfigurationSpec tableComparisonConfiguration = sensorRunParameters.getTableComparisonConfiguration();
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
@@ -219,7 +222,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters);
                     ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
 
                     if (ruleExecutionResultFatal.getPassed() != null && !ruleExecutionResultFatal.getPassed()) {
@@ -239,7 +242,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters);
                     ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
 
                     if (ruleExecutionResultError.getPassed() != null && highestSeverity == null && !ruleExecutionResultError.getPassed()) {
@@ -259,7 +262,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (customSeverity == null && warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
-                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings, ruleConfigurationParameters);
                     ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
 
                     if (ruleExecutionResultWarning.getPassed() != null && highestSeverity == null && !ruleExecutionResultWarning.getPassed()) {

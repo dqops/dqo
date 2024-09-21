@@ -164,6 +164,30 @@ public class SensorExecutionRunParametersObjectMother {
     }
 
     /**
+     * Creates a sensor run parameters object to run an error sampling query to capture error samples.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param checkSpec Check specification.
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableForErrorSampling(
+            SampleTableMetadata sampleTableMetadata,
+            AbstractCheckSpec<?,?,?,?> checkSpec) {
+        SensorExecutionRunParameters sensorExecutionRunParameters = createForTableForProfilingCheck(sampleTableMetadata, checkSpec);
+
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        ErrorSamplingRenderParameters errorSamplingRenderParameters = new ErrorSamplingRenderParameters();
+        List<String> idColumns = tableSpec.getColumns().values().stream()
+                .filter(c -> c.isId())
+                .map(c -> c.getColumnName())
+                .collect(Collectors.toList());
+        errorSamplingRenderParameters.setIdColumns(idColumns);
+
+        sensorExecutionRunParameters.setErrorSamplingRenderParameters(errorSamplingRenderParameters);
+
+        return sensorExecutionRunParameters;
+    }
+
+    /**
      * Creates a sensor run parameters object by extracting the given connection name, schema name, table name, column and using given sensor parameters.
      * @param userHome User home with the requested connection and table.
      * @param connectionName Connection name.

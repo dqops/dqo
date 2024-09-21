@@ -20,7 +20,7 @@ To navigate to the Spark connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
 2. Select Spark database type.
 
@@ -78,13 +78,24 @@ Now we can import schemas and tables.
 
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png){ loading=lazy; width="1200px" }
 
-When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
-table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
-By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
-or modify the schedule for newly imported tables.
+Upon import, you will receive information that a new tables have been imported. You can then begin collecting basic statistics
+and profiling data by running default data profiling checks. Simply click on the **Start profiling** button to initiate this process.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
+![Collect basic statistics and profile data with default profiling checks](https://dqops.com/docs/images/getting-started/collect-basic-statistics-and-profile-data.png)
 
+!!! info "Automatically activated checks"
+
+    Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../dqo-concepts/definition-of-data-quality-checks/index.md).
+    These checks include row count, table availability, and checks detecting schema changes. The profiling checks are scheduled 
+    to run at 1:00 a.m. on the 1st day of every month, and the monitoring checks are scheduled to run daily at 12:00 p.m.
+    
+    [**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) are designed to assess
+    the initial data quality score of a data source. Profiling checks are also useful for exploring and experimenting with 
+    various types of checks and determining the most suitable ones for regular data quality monitoring.
+    
+    [**Monitoring checks**](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are 
+    standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
+    These checks capture a single data quality result for the entire table or column.
 
 ## Add a Spark connection using DQOps Shell
 

@@ -33,7 +33,7 @@ public class UserDomainIdentity {
     /**
      * The name of the default data domain.
      */
-    public static final String DEFAULT_DATA_DOMAIN = "";
+    public static final String ROOT_DATA_DOMAIN = "";
 
     /**
      * The alternative name for the root domain if this DQOps instance was started with a --dqo.user.default-domain-name=other  parameter, mounting a different domain as the root domain.
@@ -43,8 +43,8 @@ public class UserDomainIdentity {
     /**
      * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
      */
-    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER_NAME, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN,
-            DEFAULT_DATA_DOMAIN, null, null, null);
+    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER_NAME, DqoUserRole.ADMIN, ROOT_DATA_DOMAIN,
+            ROOT_DATA_DOMAIN, null, null, null);
 
     private final String userName;
     private final DqoUserRole domainRole;
@@ -73,7 +73,7 @@ public class UserDomainIdentity {
                               Integer tenantGroupId) {
         this.userName = userName;
         this.domainRole = domainRole;
-        this.dataDomainFolder = !Strings.isNullOrEmpty(dataDomainFolder) ? dataDomainFolder : DEFAULT_DATA_DOMAIN;
+        this.dataDomainFolder = !Strings.isNullOrEmpty(dataDomainFolder) ? dataDomainFolder : ROOT_DATA_DOMAIN;
         this.dataDomainCloud = dataDomainCloud;
         this.tenantOwner = tenantOwner;
         this.tenantId = tenantId;

@@ -78,15 +78,17 @@ public class TriggerFactoryImpl implements TriggerFactory {
      * Creates a Quartz trigger for a given schedule.
      * @param schedule Schedule specification.
      * @param jobKey Job key to identify a predefined job.
+     * @param dataDomainName Data domain name.
      * @return Trigger.
      */
     @Override
-    public Trigger createTrigger(MonitoringScheduleSpec schedule, JobKey jobKey) {
+    public Trigger createTrigger(MonitoringScheduleSpec schedule, JobKey jobKey, String dataDomainName) {
         JobDataMap triggerJobData = new JobDataMap();
         jobDataMapAdapter.setSchedule(triggerJobData, schedule);
+        jobDataMapAdapter.setDataDomain(triggerJobData, dataDomainName);
 
         TriggerBuilder<Trigger> triggerBuilder = newTrigger()
-                .withIdentity(schedule.toString())
+                .withIdentity(schedule.toString() + "/" + dataDomainName)
                 .usingJobData(triggerJobData);
 
         ScheduleBuilder<?> scheduleBuilder = null;

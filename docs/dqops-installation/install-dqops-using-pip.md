@@ -4,7 +4,7 @@ This guide shows how to quickly download DQOps from PyPi, and start a local deve
 ## Overview
 
 DQOps is available as a Python package [dqops](https://pypi.org/project/dqops/). This package contains a bootstrapper that
-will download a full DQOps distribution from [DQO GitHub](https://github.com/dqops/dqo) and install a Java JRE 17 in a version
+will download a full DQOps distribution from [DQOps GitHub](https://github.com/dqops/dqo) and install a Java JRE 17 in a version
 specific to the current platform. DQOps runs on Windows, Linux and MacOS. Both x64 and arm8 platforms are supported.
 
 !!! note "Running DQOps as a server"

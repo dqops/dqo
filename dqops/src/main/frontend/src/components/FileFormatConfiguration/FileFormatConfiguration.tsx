@@ -120,7 +120,7 @@ export default function FileFormatConfiguration({
         return null;
     }
   };
-
+  console.log(fileFormatType);
   return (
     <div className="mt-8">
       <SectionWrapper

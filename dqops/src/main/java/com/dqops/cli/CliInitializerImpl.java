@@ -22,6 +22,8 @@ import com.dqops.connectors.jdbc.JdbcTypeColumnMapping;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoSchedulerConfigurationProperties;
 import com.dqops.core.configuration.RootConfigurationProperties;
+import com.dqops.core.domains.DataDomainsService;
+import com.dqops.core.domains.LocalDataDomainManager;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
@@ -34,8 +36,9 @@ import com.dqops.core.synchronization.status.FileSynchronizationChangeDetectionS
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.storage.TablesawParquetSupportFix;
 import com.dqops.metadata.labels.labelloader.LabelsIndexer;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
-import com.dqops.rest.server.LocalUrlAddresses;
+import com.dqops.rest.server.LocalUrlAddressesProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.python.PythonExecutionException;
 import com.dqops.utils.python.PythonVirtualEnv;
@@ -65,12 +68,15 @@ public class CliInitializerImpl implements CliInitializer {
     private FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private TerminalWriter terminalWriter;
-    private LocalUrlAddresses localUrlAddresses;
+    private LocalUrlAddressesProvider localUrlAddressesProvider;
     private PythonVirtualEnvService pythonVirtualEnvService;
     private RootConfigurationProperties rootConfigurationProperties;
     private DqoUserPrincipalProvider dqoUserPrincipalProvider;
     private TableStatusCache tableStatusCache;
     private LabelsIndexer labelsIndexer;
+    private TableLineageCache tableLineageCache;
+    private LocalDataDomainManager localDataDomainManager;
+    private DataDomainsService dataDomainsService;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -87,12 +93,15 @@ public class CliInitializerImpl implements CliInitializer {
      * @param fileSynchronizationChangeDetectionService File synchronization changes detection service compares the dates, sizes and existence of all files that can be synchronized to the DQOps Cloud with an index of previously synchronized files.
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
-     * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
+     * @param localUrlAddressesProvider Local URL addresses - used to store centralized information regarding URLs.
      * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
      * @param rootConfigurationProperties Root configuration parameters that are mapped to parameters not configured without any prefix, such as --silent.
      * @param dqoUserPrincipalProvider User principal provider.
      * @param tableStatusCache Table status cache.
      * @param labelsIndexer Label indexer service that finds all labels.
+     * @param tableLineageCache Table data lineage cache.
+     * @param localDataDomainManager Local data domain manager - to initialize local domains.
+     * @param dataDomainsService Data domains service to synchronize domains from the SaaS backend.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -108,12 +117,15 @@ public class CliInitializerImpl implements CliInitializer {
                               FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService,
                               DefaultTimeZoneProvider defaultTimeZoneProvider,
                               TerminalWriter terminalWriter,
-                              LocalUrlAddresses localUrlAddresses,
+                              LocalUrlAddressesProvider localUrlAddressesProvider,
                               PythonVirtualEnvService pythonVirtualEnvService,
                               RootConfigurationProperties rootConfigurationProperties,
                               DqoUserPrincipalProvider dqoUserPrincipalProvider,
                               TableStatusCache tableStatusCache,
-                              LabelsIndexer labelsIndexer) {
+                              LabelsIndexer labelsIndexer,
+                              TableLineageCache tableLineageCache,
+                              LocalDataDomainManager localDataDomainManager,
+                              DataDomainsService dataDomainsService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -127,12 +139,15 @@ public class CliInitializerImpl implements CliInitializer {
         this.fileSynchronizationChangeDetectionService = fileSynchronizationChangeDetectionService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.terminalWriter = terminalWriter;
-        this.localUrlAddresses = localUrlAddresses;
+        this.localUrlAddressesProvider = localUrlAddressesProvider;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
         this.rootConfigurationProperties = rootConfigurationProperties;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
         this.tableStatusCache = tableStatusCache;
         this.labelsIndexer = labelsIndexer;
+        this.tableLineageCache = tableLineageCache;
+        this.localDataDomainManager = localDataDomainManager;
+        this.dataDomainsService = dataDomainsService;
     }
 
     /**
@@ -177,7 +192,7 @@ public class CliInitializerImpl implements CliInitializer {
      * Shows the initial information with the links to the UI.
      */
     protected void displayUiLinks() {
-        String dqoUiHome = this.localUrlAddresses.getDqopsUiUrl();
+        String dqoUiHome = this.localUrlAddressesProvider.getDqopsUiUrl();
         this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
         this.terminalWriter.writeUrl(dqoUiHome, "- DQOps User Interface Console (" + dqoUiHome + ")\n");
 
@@ -195,8 +210,13 @@ public class CliInitializerImpl implements CliInitializer {
         JdbcTypeColumnMapping.ensureInitializedJdbc();
 
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
-        this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
+        boolean newUserHomeInitialized = this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
         this.defaultTimeZoneProvider.invalidate();
+        this.localDataDomainManager.start();
+
+        if (newUserHomeInitialized) {
+            this.dataDomainsService.synchronizeDataDomainList(true);
+        }
 
         if (!this.pythonVirtualEnvService.isVirtualEnvInitialized()) {
             this.terminalWriter.writeLine("Please wait, checking Python installation. This may take 30 seconds for the first time if DQOps needs to initialize a Python virtual environment in DQOps system home directory.");
@@ -216,6 +236,7 @@ public class CliInitializerImpl implements CliInitializer {
             this.jobQueueMonitoringService.start();
             this.labelsIndexer.start();
             this.tableStatusCache.start();
+            this.tableLineageCache.start();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 

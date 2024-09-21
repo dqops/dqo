@@ -341,8 +341,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -359,8 +359,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -377,8 +377,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -395,8 +395,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -413,8 +413,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -437,8 +437,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -455,8 +455,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -480,8 +480,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -498,8 +498,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -516,8 +516,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -534,8 +534,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -552,8 +552,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -90.0 OR {{ lib.render_target_column('analyzed_table') }} > 90.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -602,8 +602,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -620,8 +620,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -638,8 +638,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -656,8 +656,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -674,8 +674,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -698,8 +698,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -716,8 +716,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -741,8 +741,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -759,8 +759,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 AND {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -777,8 +777,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -795,8 +795,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -813,8 +813,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} < -180.0 OR {{ lib.render_target_column('analyzed_table') }} > 180.0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}

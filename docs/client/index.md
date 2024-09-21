@@ -422,7 +422,10 @@ ImportTablesQueueJobResult(
 				),
 				monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 				partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-				columns=ColumnSpecMap()
+				columns=ColumnSpecMap(),
+				advanced_properties={
+				
+				}
 			)
 		]
 	),
@@ -624,7 +627,8 @@ TableCurrentDataQualityStatusModel(
 	},
 	dimensions={
 	
-	}
+	},
+	table_exist=True
 )
 ```
 
@@ -673,13 +677,14 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[CheckResults](./operations/check_results.md)|Returns all the data quality check results of executed checks on tables and columns.|
 |[CheckResultsOverview](./operations/check_results_overview.md)|Returns the overview of the recently executed checks on tables and columns, returning a summary of the last 5 runs.|
 |[Checks](./operations/checks.md)|Data quality check definition management operations for adding/removing/changing custom data quality checks.|
+|[ColumnQualityPolicies](./operations/column_quality_policies.md)|Operations for managing the configuration of data quality policies at a column level. Policies are the default configuration of data quality checks for columns matching a pattern.|
 |[Columns](./operations/columns.md)|Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.|
 |[Connections](./operations/connections.md)|Operations for adding/updating/deleting the configuration of data sources managed by DQOps.|
 |[Dashboards](./operations/dashboards.md)|Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.|
+|[DataDomains](./operations/data_domains.md)|Data domain management API to create different data domains.|
 |[DataGroupingConfigurations](./operations/data_grouping_configurations.md)|Operations for managing the configuration of data groupings on a table level in DQOps.|
+|[DataLineage](./operations/data_lineage.md)|Operations related to managing and inspecting table and column lineage.|
 |[DataSources](./operations/data_sources.md)|Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).|
-|[DefaultColumnCheckPatterns](./operations/default_column_check_patterns.md)|Operations for managing the configuration of the default column-level checks for columns matching a pattern.|
-|[DefaultTableCheckPatterns](./operations/default_table_check_patterns.md)|Operations for managing the configuration of the default table-level checks for tables matching a pattern.|
 |[Defaults](./operations/defaults.md)|Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.|
 |[Dictionaries](./operations/dictionaries.md)|Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.|
 |[Environment](./operations/environment.md)|DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.|
@@ -700,6 +705,7 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[SharedCredentials](./operations/shared_credentials.md)|Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.|
 |[TableComparisonResults](./operations/table_comparison_results.md)|Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).|
 |[TableComparisons](./operations/table_comparisons.md)|Operations for managing the configurations of table comparisons between tables on the same or different data sources|
+|[TableQualityPolicies](./operations/table_quality_policies.md)|Operations for managing the configuration of data quality policies at a table level. Policies are the default configuration of data quality checks for tables matching a pattern.|
 |[Tables](./operations/tables.md)|Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.|
 |[Timezones](./operations/timezones.md)|Operations for returning time zone names and codes supported by DQOps.|
 |[Users](./operations/users.md)|Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.|

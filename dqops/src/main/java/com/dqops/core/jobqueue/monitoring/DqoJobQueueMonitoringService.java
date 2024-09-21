@@ -89,38 +89,43 @@ public interface DqoJobQueueMonitoringService {
     /**
      * Creates an initial job list model that is retrieved by the UI when UI start up and the notification panel
      * must be filled with a list of jobs that are on the queue or jobs that have already finished.
+     * @param domainName Data domain name.
      *
      * @return Initial job queue snapshot.
      */
-    Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList();
+    Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList(String domainName);
 
     /**
      * Waits for a next batch of changes after the <code>lastChangeId</code>. May return an empty list after the timeout.
      * @param lastChangeId Last change id to get changes after.
      * @param timeout Timeout to wait.
      * @param timeUnit Timeout unit.
+     * @param domainName Data domain name.
      * @return Mono with a list of changes and the next sequence id.
      */
-    Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit);
+    Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit, String domainName);
 
     /**
      * Publishes the current folder synchronization status.
+     * @param dataDomainName Data domain name.
      * @param synchronizationStatus Folder synchronization status.
      */
-    void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus);
+    void publishFolderSynchronizationStatus(String dataDomainName, CloudSynchronizationFoldersStatusModel synchronizationStatus);
 
     /**
      * Finds the job identified by a job id.
      * @param jobId Job id to find.
+     * @param dataDomain Data domain.
      * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
      */
-    DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId);
+    DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId, String dataDomain);
 
     /**
      * Tries to find a job id of a job that was assigned also a business key (a user assigned job id).
      * If there is a known (tracked) job with that business key, this method will return the job id. Otherwise, when not found, returns null.
      * @param jobBusinessKey Job business key to look up.
+     * @param dataDomain Data domain name.
      * @return Job id or null when not found.
      */
-    DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey);
+    DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey, String dataDomain);
 }

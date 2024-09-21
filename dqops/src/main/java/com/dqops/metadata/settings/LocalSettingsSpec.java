@@ -21,12 +21,15 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -41,6 +44,7 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	private static final ChildHierarchyNodeFieldMapImpl<LocalSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
 			put("smtp_server_configuration", o -> o.smtpServerConfiguration);
+			put("data_domains", o -> o.dataDomains);
 		}
 	};
 
@@ -50,10 +54,10 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	@JsonPropertyDescription("Editor path on user's computer")
 	private String editorPath;
 
-	@JsonPropertyDescription("Api key")
+	@JsonPropertyDescription("DQOps CLoud API key")
 	private String apiKey;
 
-	@JsonPropertyDescription("Disable synchronization with DQOps cloud")
+	@JsonPropertyDescription("Disable synchronization with DQOps Cloud")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private boolean disableCloudSync;
 
@@ -66,6 +70,11 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 
 	@JsonPropertyDescription("SMTP server configuration for incident notifications.")
 	private SmtpServerConfigurationSpec smtpServerConfiguration;
+
+	@JsonPropertyDescription("The dictionary containing the configuration of local data domains.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+	private LocalDataDomainSpecMap dataDomains = new LocalDataDomainSpecMap();
 
 	@JsonIgnore
 	private String yamlParsingError;
@@ -220,6 +229,25 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	public void setSmtpServerConfiguration(SmtpServerConfigurationSpec smtpServerConfiguration) {
 		setDirtyIf(!Objects.equals(this.smtpServerConfiguration, smtpServerConfiguration));
 		this.smtpServerConfiguration = smtpServerConfiguration;
+		propagateHierarchyIdToField(dataDomains, "smtp_server_configuration");
+	}
+
+	/**
+	 * Returns the dictionary of local data domains.
+	 * @return Dictioary of local data domains.
+	 */
+	public LocalDataDomainSpecMap getDataDomains() {
+		return dataDomains;
+	}
+
+	/**
+	 * Stores the dictionary of local data domains.
+	 * @param dataDomains The new dictionary of local data domains.
+	 */
+	public void setDataDomains(LocalDataDomainSpecMap dataDomains) {
+		setDirtyIf(!Objects.equals(this.dataDomains, dataDomains));
+		this.dataDomains = dataDomains;
+		propagateHierarchyIdToField(dataDomains, "data_domains");
 	}
 
 	/**
@@ -253,9 +281,18 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 		cloned.editorPath = secretValueProvider.expandValue(this.editorPath, lookupContext);
 		cloned.editorName = secretValueProvider.expandValue(this.editorName, lookupContext);
 		cloned.timeZone = secretValueProvider.expandValue(this.timeZone, lookupContext);
+		if (this.smtpServerConfiguration != null) {
+			cloned.smtpServerConfiguration = this.smtpServerConfiguration.expandAndTrim(secretValueProvider, lookupContext);
+		}
         return cloned;
 	}
 
+	/**
+	 * Calls the visitor.
+	 * @param visitor Visitor instance.
+	 * @param parameter Additional parameter that will be passed back to the visitor.
+	 * @return Visitor's result.
+	 */
 	@Override
 	public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
 		return visitor.accept(this, parameter);

@@ -19,3 +19,5 @@ spec:
     data_type: double
     required: true
     default_value: 0.5
+  parameters:
+    degrees_of_freedom: 5

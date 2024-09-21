@@ -169,6 +169,24 @@ A table-level check that calculates the maximum difference in days between inges
 
 
 
+## table-level uniqueness checks
+
+
+### [duplicate record count](./uniqueness/duplicate-record-count.md)
+This check counts duplicate records values. It raises a data quality issue when the number of duplicates is above a minimum accepted value.
+ The default configuration detects duplicate rows by enforcing that the *min_count* of duplicates is zero.
+
+
+
+### [duplicate record percent](./uniqueness/duplicate-record-percent.md)
+This check measures the percentage of duplicate records values. It raises a data quality issue when the percentage of duplicates is above a minimum accepted value.
+ The default threshold is 0% duplicate values.
+
+
+
+
+
+
 ## table-level volume checks
 Evaluates the overall quality of the table by verifying the number of rows.
 

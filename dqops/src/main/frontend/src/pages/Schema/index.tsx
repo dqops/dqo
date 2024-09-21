@@ -12,8 +12,7 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
-import ColumnListView from '../ColumnListView/ColumnListView';
-import TableListView from '../TableListView/TableListView';
+import DataQualitySummary from '../DataQualitySummary';
 import { MultiChecks } from './MultiCheck/MultiChecks';
 
 const SchemaPage = () => {
@@ -38,12 +37,8 @@ const SchemaPage = () => {
   const tabs = useMemo(
     () => [
       {
-        label: 'Tables',
-        value: 'tables'
-      },
-      {
-        label: 'Columns',
-        value: 'columns'
+        label: 'Data quality summary',
+        value: 'data-quality-summary'
       },
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
@@ -116,16 +111,7 @@ const SchemaPage = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      {activeTab === 'tables' && (
-        <div className="p-4">
-          <TableListView />
-        </div>
-      )}
-      {activeTab === 'columns' && (
-        <div className="p-4">
-          <ColumnListView />
-        </div>
-      )}
+      {activeTab === 'data-quality-summary' && <DataQualitySummary />}
       {activeTab === 'import-tables' && <SourceTablesView />}
       {checkTypes !== CheckTypes.SOURCES && activeTab === 'multiple_checks' && (
         <MultiChecks />

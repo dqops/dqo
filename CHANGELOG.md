@@ -1,5 +1,9 @@
-# 1.7.0
-* Rule miner that proposes data quality rule configuration
-* Notifications can be filtered by various parameters, allowing to send notifications to the correct teams
-* Estimated word count checks added to support analyzing data for GenAI use cases
-* Some pattern validation checks renamed to use a unified naming convention "invalid" in the check names 
+# 1.8.0
+
+* Small layout fixes in the UI, mostly related to the colors of issue severity colors
+* Documentation for the data quality process and rule mining
+* Duplicate record detection check
+* Some column-level checks fixed to skip NULL values, instead of treating them as invalid (not passing checks)
+* Store data lineage definition (links to source tables)
+* Default observability check patterns renamed to data quality policies
+* Default quality policy named "default" deleted, and replaced with multiple smaller policies to allow more control 

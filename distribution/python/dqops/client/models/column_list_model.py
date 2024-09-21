@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from ..models.column_current_data_quality_status_model import (
         ColumnCurrentDataQualityStatusModel,
     )
+    from ..models.column_list_model_advanced_properties import (
+        ColumnListModelAdvancedProperties,
+    )
     from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
@@ -61,6 +64,8 @@ class ColumnListModel:
                 identifies which checks on which tables and columns should be executed.
             collect_statistics_job_template (Union[Unset, StatisticsCollectorSearchFilters]):
             data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
+            advanced_properties (Union[Unset, ColumnListModelAdvancedProperties]): A dictionary of advanced properties that
+                can be used for e.g. to support mapping data to data catalogs, a key/value dictionary.
             can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete the column.
             can_collect_statistics (Union[Unset, bool]): Boolean flag that decides if the current user can collect
                 statistics.
@@ -90,6 +95,7 @@ class ColumnListModel:
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
+    advanced_properties: Union[Unset, "ColumnListModelAdvancedProperties"] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     can_collect_statistics: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
@@ -155,6 +161,10 @@ class ColumnListModel:
         if not isinstance(self.data_clean_job_template, Unset):
             data_clean_job_template = self.data_clean_job_template.to_dict()
 
+        advanced_properties: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.advanced_properties, Unset):
+            advanced_properties = self.advanced_properties.to_dict()
+
         can_edit = self.can_edit
         can_collect_statistics = self.can_collect_statistics
         can_run_checks = self.can_run_checks
@@ -217,6 +227,8 @@ class ColumnListModel:
             )
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
+        if advanced_properties is not UNSET:
+            field_dict["advanced_properties"] = advanced_properties
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
         if can_collect_statistics is not UNSET:
@@ -233,6 +245,9 @@ class ColumnListModel:
         from ..models.check_search_filters import CheckSearchFilters
         from ..models.column_current_data_quality_status_model import (
             ColumnCurrentDataQualityStatusModel,
+        )
+        from ..models.column_list_model_advanced_properties import (
+            ColumnListModelAdvancedProperties,
         )
         from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
         from ..models.delete_stored_data_queue_job_parameters import (
@@ -359,6 +374,15 @@ class ColumnListModel:
                 _data_clean_job_template
             )
 
+        _advanced_properties = d.pop("advanced_properties", UNSET)
+        advanced_properties: Union[Unset, ColumnListModelAdvancedProperties]
+        if isinstance(_advanced_properties, Unset):
+            advanced_properties = UNSET
+        else:
+            advanced_properties = ColumnListModelAdvancedProperties.from_dict(
+                _advanced_properties
+            )
+
         can_edit = d.pop("can_edit", UNSET)
 
         can_collect_statistics = d.pop("can_collect_statistics", UNSET)
@@ -388,6 +412,7 @@ class ColumnListModel:
             run_partition_checks_job_template=run_partition_checks_job_template,
             collect_statistics_job_template=collect_statistics_job_template,
             data_clean_job_template=data_clean_job_template,
+            advanced_properties=advanced_properties,
             can_edit=can_edit,
             can_collect_statistics=can_collect_statistics,
             can_run_checks=can_run_checks,

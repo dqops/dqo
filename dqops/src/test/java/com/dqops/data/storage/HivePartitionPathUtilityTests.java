@@ -38,7 +38,7 @@ public class HivePartitionPathUtilityTests extends BaseTest {
     @Test
     void makeHivePartitionPath_whenSimpleFolderWithoutEncoding_thenReturnsFolderName() {
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                UserDomainIdentity.DEFAULT_DATA_DOMAIN,
+                UserDomainIdentity.ROOT_DATA_DOMAIN,
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 new PhysicalTableName("sch", "tab"),
@@ -51,7 +51,7 @@ public class HivePartitionPathUtilityTests extends BaseTest {
     @Test
     void makeHivePartitionPath_whenSimpleFolderConnectionEncoded_thenReturnsFolderName() {
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                UserDomainIdentity.DEFAULT_DATA_DOMAIN,
+                UserDomainIdentity.ROOT_DATA_DOMAIN,
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection 1/%&\\",
                 new PhysicalTableName("sch", "tab"),
@@ -64,7 +64,7 @@ public class HivePartitionPathUtilityTests extends BaseTest {
     @Test
     void makeHivePartitionPath_whenSimpleFolderAndTableEncoded_thenReturnsFolderName() {
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                UserDomainIdentity.DEFAULT_DATA_DOMAIN,
+                UserDomainIdentity.ROOT_DATA_DOMAIN,
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 new PhysicalTableName("sch", "tab 1/%&\\"),

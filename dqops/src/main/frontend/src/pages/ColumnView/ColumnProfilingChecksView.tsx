@@ -185,18 +185,28 @@ const ColumnProfilingChecksView = ({
       undefined,
       false,
       undefined,
+      false,
+      undefined,
       columnStatistics?.collect_column_statistics_job_template
     ).then((res) => setJobId(res.data.jobId?.jobId));
   };
 
-  const filteredCollectStatisticsJobs = useMemo(() => {
+  const isCollectingStatistics = useMemo(() => {
     return (
       job &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.connection === connectionName &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.fullTableName ===
+        schemaName + '.' + tableName &&
+      job.parameters?.collectStatisticsParameters
+        ?.statistics_collector_search_filters?.columnNames?.[0] ===
+        columnName &&
       (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
         job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
         job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
-  }, [job]);
+  }, [job, checkTypes, connectionName, schemaName, tableName, columnName]);
 
   useEffect(() => {
     if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
@@ -241,9 +251,9 @@ const ColumnProfilingChecksView = ({
         isUpdating={isUpdating}
         isStatistics={activeTab === 'statistics'}
         onCollectStatistics={onCollectStatistics}
-        collectStatisticsSpinner={filteredCollectStatisticsJobs}
+        collectStatisticsSpinner={isCollectingStatistics}
       />
-      <div className="border-b border-gray-300">  
+      <div className="border-b border-gray-300">
         <Tabs
           tabs={tabs}
           activeTab={activeTab}

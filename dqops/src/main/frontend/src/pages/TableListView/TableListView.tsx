@@ -177,7 +177,7 @@ export default function TableListView() {
               );
             }}
             color="primary"
-            className="mt-5 z-[100]"
+            className="mt-5 z-[10]"
           />
         </div>
         <Button

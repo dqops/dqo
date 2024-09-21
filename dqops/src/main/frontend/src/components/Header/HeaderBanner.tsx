@@ -24,18 +24,41 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const collectStatistics = async () => {
     setIsCollected(true);
 
-    JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
-      connection: advisorObject.connectionName
-    });
+    if (advisorObject.tableNames && advisorObject.tableNames.length > 0) {
+      advisorObject.tableNames.forEach((tableName) => {
+        JobApiClient.collectStatisticsOnTable(undefined, true, undefined, false, undefined, {
+          connection: advisorObject.connectionName,
+          fullTableName: advisorObject.schemaName + "." + tableName
+        });
+      });
+    } else {
+      JobApiClient.collectStatisticsOnTable(undefined, true, undefined, false, undefined, {
+        connection: advisorObject.connectionName,
+        fullTableName: advisorObject.schemaName + ".*"
+      });
+    }
   };
 
   const runProfilingChecks = async () => {
-    JobApiClient.runChecks(undefined, false, undefined, {
-      check_search_filters: {
-        connection: advisorObject.connectionName,
-        checkType: CheckTypes.PROFILING
-      }
-    });
+    if (advisorObject.tableNames && advisorObject.tableNames.length > 0) {
+      advisorObject.tableNames.forEach((tableName) => {
+        JobApiClient.runChecks(undefined, false, undefined, {
+          check_search_filters: {
+            connection: advisorObject.connectionName,
+            fullTableName: advisorObject.schemaName + "." + tableName,
+            checkType: CheckTypes.PROFILING
+          }
+        });
+      });
+    } else {
+      JobApiClient.runChecks(undefined, false, undefined, {
+        check_search_filters: {
+          connection: advisorObject.connectionName,
+          fullTableName: advisorObject.schemaName + ".*",
+          checkType: CheckTypes.PROFILING
+        }
+      });
+    }
   };
 
   const handleSubmit = async () => {
@@ -55,7 +78,7 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
     <Dialog open={isAdvisorOpen} handler={onClose}>
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="text-2xl text-gray-700 text-center whitespace-normal mb-5">
-          New tables were imported into DQOps. You should collect statistics to
+          New tables have been imported into DQOps. It is recommended to collect statistics to
           enable data quality rule mining based on data samples.
         </div>
         <div>
@@ -80,9 +103,9 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
             </div>
           </div>
           <div className="text-md text-orange-500 text-center whitespace-normal">
-            Warning: If you imported a lot of tables, do not profile all tables
-            at once. Click the {'"'}Cancel{'"'} button and collect statistics on
-            each table individually
+            Warning: If you have imported many tables, avoid profiling all tables simultaneously
+            Instead, click the {'"'}Cancel{'"'} button and collect statistics for
+            each table individually.
           </div>
         </div>
       </DialogBody>

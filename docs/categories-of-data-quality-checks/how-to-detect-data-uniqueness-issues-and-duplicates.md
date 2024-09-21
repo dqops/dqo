@@ -199,7 +199,7 @@ takes one parameter **max_count**, which is the maximum accepted number of dupli
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for uniqueness checks.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Duplicate count data quality check in DQOps - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-count-check-in-dqops-min-error-samples2.png){ loading=lazy; width="1200px" }
 
@@ -280,46 +280,52 @@ The records should be unique for each combination of the *edition*, *report_type
 | 2021    | 2021 Health Disparities | Able-Bodied    | District of Columbia | American Indian/Alaska Native | 62.0   | 49.0     | 75.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
 
 ### Configuring multi-column duplicate checks
-The uniqueness checks in DQOps operate on single columns. To detect duplicates in a combination of columns, 
-we have to define a [calculated column](../dqo-concepts/configuring-table-metadata.md#calculated-columns)
-derived as a concatenation of all columns that should be unique when combined.
-
-The SQL expression that concatenates the values will use a `||` concatenation operator, as shown below. 
-DQOps replaces the `{alias}.` token with the alias of the table.
-
-`{alias}.edition || {alias}.report_type || {alias}.measure_name || {alias}.state_name || {alias}.subpopulation`
+A table-level uniqueness check detects duplicates in a combination of columns.
+When all columns are used, it will identify duplicate records in a table with the complete rows.
 
 ### Detect multi-column duplicates in UI
-We have to add a virtual column to the monitored table. The column will be calculated using the SQL expression shown above.
 
-![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy; width="1200px" }
+The duplicate records check is available in count and percentage versions.
 
-After adding a calculated column,
-DQOps will show it in the metadata tree. We can now configure the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)
-data quality check.
+The [*duplicate_records_count*](../checks/table/uniqueness/duplicate-record-count.md) check counts the distinct records based on the selected columns in columns parameter.
 
-![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy; width="1200px" }
+The [*duplicate_records_percent*](../checks/table/uniqueness/duplicate-record-percent.md) check compares the count of distinct records to the count of all records excluding that containing only nulls based on the selected columns in columns parameter.
+
+
+The multi-column uniqueness checks are available under the table in the tree on the left, in the **Data quality checks editor** tab.
+
+![Table uniqueness](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-uniqueness.png){ loading=lazy; }
+
+To select the columns used for the duplicate verification, click the **columns** editor.
+
+![Table uniqueness column selection](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-uniqueness-column-selection.png){ loading=lazy; }
+
+When columns are not configured or none are selected, then all columns are implicitly used by the uniqueness check.
+
 
 ### Detect multi-column duplicates in YAML
-We must add our calculated column to the list of columns to detect duplicates on multiple other columns. 
-This column will have an additional configuration, the SQL expression discussed before.
+The configuration of the [*duplicate_records_percent*](../checks/table/uniqueness/duplicate-record-percent.md) check in a YAML file is shown below.
 
-``` { .yaml linenums="1" hl_lines="7-8 12-14" }
+``` { .yaml linenums="1" hl_lines="8-10" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  columns:
-    unique_columns:
-      sql_expression: "{alias}.edition || {alias}.report_type || {alias}.measure_name\
-        \ || {alias}.state_name || {alias}.subpopulation"
-      monitoring_checks:
-        daily:
-          uniqueness:
-            daily_duplicate_count:
-              error:
-                max_count: 0 
+  monitoring_checks:
+    daily:
+      uniqueness:
+        daily_duplicate_record_percent:
+          parameters:
+            columns:
+            - edition
+            - measure_name
+            - report_type
+            - state_name
+            - subpopulation
+          error:
+            max_percent: 0.0
 ```
+
 
 ## Configuring other uniqueness checks
 The DQOps data quality check editor shows the remaining uniqueness checks after clicking the **Show advanced checks** checkbox.
@@ -356,6 +362,20 @@ _(click to expand)_
 **Reference and samples**
 
 The full list of all data quality checks in this category is located in the [column/uniqueness](../checks/column/uniqueness/index.md) reference.
+The reference section provides YAML code samples that are ready to copy-paste to the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files,
+the parameters reference, and samples of data source specific SQL queries generated by [data quality sensors](../dqo-concepts/definition-of-data-quality-sensors.md)
+that are used by those checks.
+
+## List of uniqueness checks at a table level
+| Data quality check name | Friendly name | Data quality dimension | Description | Standard check |
+|-------------------------|---------------|------------------------|-------------|----------------|
+|[*duplicate_record_count*](../checks/table/uniqueness/duplicate-record-count.md)|Maximum count of duplicate records|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check counts duplicate records values. It raises a data quality issue when the number of duplicates is above a minimum accepted value. The default configuration detects duplicate rows by enforcing that the *min_count* of duplicates is zero.|:material-check-bold:|
+|[*duplicate_record_percent*](../checks/table/uniqueness/duplicate-record-percent.md)|Maximum percentage of duplicate records|[Uniqueness](../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|This check measures the percentage of duplicate records values. It raises a data quality issue when the percentage of duplicates is above a minimum accepted value. The default threshold is 0% duplicate values.|:material-check-bold:|
+
+
+**Reference and samples**
+
+The full list of all data quality checks in this category is located in the [table/uniqueness](../checks/table/uniqueness/index.md) reference.
 The reference section provides YAML code samples that are ready to copy-paste to the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files,
 the parameters reference, and samples of data source specific SQL queries generated by [data quality sensors](../dqo-concepts/definition-of-data-quality-sensors.md)
 that are used by those checks.

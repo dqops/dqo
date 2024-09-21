@@ -85,9 +85,35 @@ const transformIncidentsState = (state: IIncidentsState): IIncidentsState => {
   };
 };
 
+const getCookie = (cookieName: string): string | undefined => {
+  const cookiePrefix = cookieName + "=";
+  const cookies = document.cookie.split(';');
+  for(let i = 0; i < cookies.length; i++) {
+    let cookie = cookies[i];
+    while (cookie.charAt(0) == ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(cookiePrefix) == 0) {
+      return cookie.substring(cookiePrefix.length, cookie.length);
+    }
+  }
+
+  return undefined;
+}
+
+export const getTreeLocalStorageKey = () : string => {
+  const currentDataDomain = getCookie('DQODataDomain');
+
+  if (currentDataDomain && currentDataDomain !== '' && currentDataDomain !== '(default)') {
+    return 'root-' + currentDataDomain;
+  }
+
+  return 'root';
+};
+
 export const loadState = () => {
   try {
-    const serializedState = localStorage.getItem('root');
+    const serializedState = localStorage.getItem(getTreeLocalStorageKey());
     if (serializedState === null) return undefined;
 
     return JSON.parse(serializedState);
@@ -105,7 +131,7 @@ export const saveState = (state: IRootState) => {
     };
     const serializedState = JSON.stringify(newState);
 
-    localStorage.setItem('root', serializedState);
+    localStorage.setItem(getTreeLocalStorageKey(), serializedState);
   } catch (err) {
     console.error(err);
   }

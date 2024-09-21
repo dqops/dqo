@@ -15,7 +15,11 @@
  */
 package com.dqops.core.jobqueue.jobs.data;
 
-import com.dqops.core.jobqueue.*;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
+import com.dqops.core.jobqueue.DqoJobExecutionContext;
+import com.dqops.core.jobqueue.DqoJobType;
+import com.dqops.core.jobqueue.DqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
@@ -24,6 +28,7 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
+import com.dqops.data.checks.services.ChecksDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.services.ErrorsDeleteService;
 import com.dqops.data.errorsamples.models.ErrorsSamplesFragmentFilter;
@@ -35,11 +40,15 @@ import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 import com.dqops.data.readouts.services.SensorReadoutsDeleteService;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
 import com.dqops.data.statistics.services.StatisticsDeleteService;
+import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.TableSearchFilters;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Queue job that deletes data stored in user's ".data" directory.
@@ -53,6 +62,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     private final SensorReadoutsDeleteService sensorReadoutsDeleteService;
     private final ErrorSamplesDeleteService errorSamplesDeleteService;
     private final IncidentsDeleteService incidentsDeleteService;
+    private final ChecksDeleteService checksDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
@@ -61,13 +71,15 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
                                     CheckResultsDeleteService checkResultsDeleteService,
                                     SensorReadoutsDeleteService sensorReadoutsDeleteService,
                                     ErrorSamplesDeleteService errorSamplesDeleteService,
-                                    IncidentsDeleteService incidentsDeleteService) {
+                                    IncidentsDeleteService incidentsDeleteService,
+                                    ChecksDeleteService checksDeleteService) {
         this.errorsDeleteService = errorsDeleteService;
         this.statisticsDeleteService = statisticsDeleteService;
         this.checkResultsDeleteService = checkResultsDeleteService;
         this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
         this.errorSamplesDeleteService = errorSamplesDeleteService;
         this.incidentsDeleteService = incidentsDeleteService;
+        this.checksDeleteService = checksDeleteService;
     }
 
     /**
@@ -85,7 +97,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     public void setDeletionParameters(DeleteStoredDataQueueJobParameters deletionParameters) {
         this.deletionParameters = deletionParameters;
     }
-
 
     protected ErrorsFragmentFilter getErrorsFragmentFilter() {
         return new ErrorsFragmentFilter() {{
@@ -199,6 +210,21 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }};
     }
 
+    protected CheckSearchFilters getCheckSearchFilters(String columnName) {
+        return new CheckSearchFilters() {{
+            setConnection(deletionParameters.getConnection());
+            setFullTableName(deletionParameters.getFullTableName());
+            setColumn(columnName);
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType() != null ? CheckType.valueOf(deletionParameters.getCheckType()) : null);
+            setTimeScale(deletionParameters.getTimeGradient() != null ? CheckTimeScale.valueOf(deletionParameters.getTimeGradient()) : null);
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTableComparisonName(deletionParameters.getTableComparisonName());
+            setSensorName(deletionParameters.getSensorName());
+        }};
+    }
+
     /**
      * Job internal implementation method that should be implemented by derived jobs.
      *
@@ -232,13 +258,30 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
             DeleteStoredDataResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter(), userIdentity);
             result.concat(sensorReadoutsResult);
         }
-        if (this.deletionParameters.isDeleteErrorSamples()){
+        if (this.deletionParameters.isDeleteErrorSamples()) {
             DeleteStoredDataResult errorSamplesResult = this.errorSamplesDeleteService.deleteSelectedErrorSamplesFragment(this.getErrorsSamplesFragmentFilter(), userIdentity);
             result.concat(errorSamplesResult);
         }
-        if (this.deletionParameters.isDeleteIncidents()){
+        if (this.deletionParameters.isDeleteIncidents() &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCheckName()) &&   // delete incidents only when no specific filters are present, filtering values that are not stored in an incident's row, to avoid deleting too much data
+                (this.deletionParameters.getColumnNames() == null || this.deletionParameters.getColumnNames().isEmpty()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getSensorName()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCollectorCategory()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCollectorName()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getCollectorTarget()) &&
+                Strings.isNullOrEmpty(this.deletionParameters.getTableComparisonName())) {
             DeleteStoredDataResult incidentsResult = this.incidentsDeleteService.deleteSelectedIncidentsFragment(this.getIncidentsFragmentFilter(), userIdentity);
             result.concat(incidentsResult);
+        }
+        if (this.deletionParameters.isDeleteChecksConfiguration()) {
+            List<String> columnNames = deletionParameters.getColumnNames();
+            if (columnNames != null && !columnNames.isEmpty()){
+                deletionParameters.getColumnNames().forEach(columnName -> {
+                    this.checksDeleteService.deleteSelectedChecks(this.getCheckSearchFilters(columnName), userIdentity);
+                });
+            } else {
+                this.checksDeleteService.deleteSelectedChecks(this.getCheckSearchFilters(null), userIdentity);
+            }
         }
 
         return result;

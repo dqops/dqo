@@ -1,8 +1,11 @@
+import { IconButton } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { DqoCloudUserModel, DqoCloudUserModelAccountRoleEnum } from '../../api';
+import { DqoUserRolesModel, DqoUserRolesModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import Loader from '../../components/Loader';
+import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
@@ -13,7 +16,8 @@ import ChangeUserPasswordDialog from './ChangeUserPasswordDialog';
 
 export default function UserListDetail() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-  const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoCloudUserModel[]>([]);
+  const [dqoCloudUsers, setDqoCloudUsers] = useState<DqoUserRolesModel[]>([]);
+  const [displayedUsers, setDisplayedUsers] = useState<DqoUserRolesModel[]>([]); // State for displayed users
   const [reshreshUsersIndicator, setRefreshUsersIndicator] =
     useState<boolean>(false);
   const [selectedEmailToChangePassword, setSelectedEmailToChangePassword] =
@@ -33,7 +37,7 @@ export default function UserListDetail() {
 
   const editDqoCloudUser = (
     email: string,
-    role?: DqoCloudUserModelAccountRoleEnum
+    role?: DqoUserRolesModelAccountRoleEnum
   ) => {
     dispatch(
       addFirstLevelTab({
@@ -62,7 +66,7 @@ export default function UserListDetail() {
     await UsersApi.changeCallerPassword(selectedEmailToChangePassword, password)
       .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
       .catch((err) => console.error(err));
-    setSelectedEmailToChangePassword(''); 
+    setSelectedEmailToChangePassword('');
   };
 
   const addDqoCloudUser = () => {
@@ -83,20 +87,19 @@ export default function UserListDetail() {
 
   if (loading) {
     return (
-      <>
-        <div className="w-full h-screen flex items-center justify-center">
-          <SvgIcon name="sync" className="w-6 h-6 animate-spin" />
-        </div>
-      </>
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
     );
   }
 
   return (
     <>
       <table className="w-full ">
-        <thead className="border-b w-full border-b-gray-400 relative flex items-center">
-          <th className="px-6 py-4 text-left block w-100">User email</th>
-          <th className="px-6 py-4 text-left block w-50">User role</th>
+        <thead className="border-b w-full border-b-gray-400 relative flex items-center text-sm">
+          <th className="px-6 py-4 text-left block w-80">User email</th>
+          <th className="px-6 py-4 text-left block w-40">User role</th>
+          <th className="px-6 py-4 text-left block w-40 ml-10">Action</th>
           {userProfile.license_type?.toLowerCase() !== 'free' ? (
             <Button
               label="Add user"
@@ -115,68 +118,73 @@ export default function UserListDetail() {
           ) : null}
         </thead>
         <tbody>
-          {dqoCloudUsers?.map((user, index) => (
+          {displayedUsers?.map((user, index) => (
             <tr key={index} className="flex items-center text-sm">
-              <td className="px-6 py-2 text-left block w-100">{user.email}</td>
-              <td className="px-6 py-2 text-left block w-50">
+              <td className="px-6 py-2 text-left block w-80">{user.email}</td>
+              <td className="px-6 py-2 text-left block w-40">
                 {user.accountRole}
               </td>
               <td className="px-6 py-2 text-left block max-w-100">
-                {userProfile.license_type?.toLowerCase() !== 'free' ? (
-                  <Button
-                    label="Edit"
-                    variant="text"
-                    color={canUserPerformActions ? 'primary' : 'secondary'}
-                    onClick={() =>
-                      user.email
-                        ? editDqoCloudUser(user.email, user.accountRole)
-                        : null
-                    }
-                    disabled={!canUserPerformActions}
-                  />
-                ) : (
-                  <div className="w-24"></div>
-                )}
-              </td>
-              <td className="px-6 py-2 text-left block max-w-100">
-                {userProfile.user !== user.email &&
-                userProfile.license_type?.toLowerCase() !== 'free' ? (
-                  <Button
-                    label="Delete"
-                    variant="text"
-                    color={canUserPerformActions ? 'primary' : 'secondary'}
+                <div className="flex items-center gap-x-4">
+                  {userProfile.license_type?.toLowerCase() !== 'free' ? (
+                    <IconButton
+                      size="sm"
+                      onClick={() =>
+                        user.email
+                          ? editDqoCloudUser(user.email, user.accountRole)
+                          : null
+                      }
+                      ripple={false}
+                      color="teal"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                      disabled={!canUserPerformActions}
+                    >
+                      <SvgIcon name="edit" className="w-4" />
+                    </IconButton>
+                  ) : (
+                    <div className="w-24"></div>
+                  )}
+
+                  <IconButton
+                    size="sm"
                     onClick={() => setSelectedEmailToDelete(user.email ?? '')}
-                    disabled={!canUserPerformActions}
-                  />
-                ) : (
-                  <div className="w-22.5"></div>
-                )}
-              </td>
-              <td className="px-6 py-2 text-left block max-w-100">
-                <Button
-                  label="Change password"
-                  variant="text"
-                  color={
-                    !(
+                    disabled={
+                      !canUserPerformActions ||
+                      !(
+                        userProfile.user !== user.email &&
+                        userProfile.license_type?.toLowerCase() !== 'free'
+                      )
+                    }
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+
+                  <IconButton
+                    size="sm"
+                    onClick={() =>
+                      setSelectedEmailToChangePassword(user.email ?? '')
+                    }
+                    disabled={
                       userProfile.account_role !== 'admin' &&
                       !canUserPerformActions
-                    )
-                      ? 'primary'
-                      : 'secondary'
-                  }
-                  onClick={() =>
-                    setSelectedEmailToChangePassword(user.email ?? '')
-                  }
-                  disabled={
-                    userProfile.account_role !== 'admin' &&
-                    !canUserPerformActions
-                  }
-                />
+                    }
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="lock" className="w-4" />
+                  </IconButton>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <ClientSidePagination
+        items={dqoCloudUsers} // Pass the full list of users
+        onChangeItems={setDisplayedUsers} // Update the displayed users based on pagination
+      />
       <ConfirmDialog
         open={selectedEmailToDelete.length !== 0}
         onClose={() => setSelectedEmailToDelete('')}

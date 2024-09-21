@@ -337,7 +337,7 @@ export const IncidentConnection = () => {
 
         return (
           <a
-            className="text-blue-700 cursor-pointer text-sm"
+            className="underline cursor-pointer text-sm"
             onClick={() => openIncidentDetail(row)}
           >
             {values.join(', ')} (more)
@@ -403,7 +403,7 @@ export const IncidentConnection = () => {
                   href={value}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-blue-600 underline"
+                  className="underline"
                 >
                   <Tooltip
                     content={value}
@@ -416,6 +416,7 @@ export const IncidentConnection = () => {
                   </Tooltip>
                 </a>
                 <IconButton
+                  ripple={false}
                   color="teal"
                   size="sm"
                   onClick={() => addIssueUrl(row)}
@@ -426,6 +427,7 @@ export const IncidentConnection = () => {
               </div>
             ) : (
               <IconButton
+                ripple={false}
                 color="teal"
                 size="sm"
                 onClick={() => addIssueUrl(row)}
@@ -486,7 +488,7 @@ export const IncidentConnection = () => {
         url: ROUTES.CONNECTION_DETAIL(
           CheckTypes.SOURCES,
           connection,
-          'incidents'
+          'incidents-grouping'
         ),
         value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
         state: {},
@@ -494,7 +496,11 @@ export const IncidentConnection = () => {
       })
     );
     history.push(
-      ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents')
+      ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents-grouping'
+      )
     );
   };
 

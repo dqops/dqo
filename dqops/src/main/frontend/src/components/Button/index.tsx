@@ -78,13 +78,14 @@ const Button = ({
         'rounded-lg focus:outline-none flex items-center justify-center',
         (!className || className.indexOf('py-') === -1) && 'py-2',
         (!className || className.indexOf('px-') === -1) && 'px-6',
-        { 'cursor-not-allowed': disabled },
+        { 'cursor-not-allowed bg-gray-100': disabled },
         { 'flash-red-border': flashRedBorder },
         classes === colorsMap.primary.contained && 'hover:bg-[#028770]',
         classes === colorsMap.primary.outlined && 'hover:bg-[#DDF2EF]'
       )}
       disabled={disabled}
       data-testid={dataTestId}
+      style={disabled ? { backgroundColor: '#e1e5e9', color: 'black' } : {}}
     >
       {loading ? (
         <Loader className="w-6 h-6" isFull={false} />

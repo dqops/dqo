@@ -63,10 +63,18 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
         data_type: double
         required: true
         default_value: 0.5
+      parameters:
+        degrees_of_freedom: 4
     ```
 
 
 
+
+**Additional rule parameters**
+
+| Parameters name | Value |
+|-----------------|-------|
+|*degrees_of_freedom*|4|
 
 
 
@@ -95,7 +103,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     #
     
     from datetime import datetime
-    from typing import Sequence
+    from typing import Sequence, Dict
     import numpy as np
     import scipy
     import scipy.stats
@@ -119,6 +127,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         min_periods_with_readouts: int
     
     
+    class AnomalyConfigurationParameters:
+        degrees_of_freedom: float
+    
+    
     # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
     class RuleExecutionRunParameters:
         actual_value: float
@@ -126,6 +138,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         time_period_local: datetime
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
+        configuration_parameters: AnomalyConfigurationParameters
     
     
     # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
@@ -157,6 +170,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         differences = np.diff(filtered)
         differences_std = float(scipy.stats.tstd(differences))
         differences_mean = float(np.mean(differences))
+        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     
         last_readout = float(filtered[-1])
         actual_difference = rule_parameters.actual_value - last_readout
@@ -165,8 +179,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             threshold_lower = float(differences_mean)
             threshold_upper = float(differences_mean)
         else:
-            # Assumption: the historical data follows normal distribution
-            readout_distribution = scipy.stats.norm(loc=differences_mean, scale=differences_std)
+            # Assumption: the historical data follows t-student distribution
+            readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=differences_mean, scale=differences_std)
             one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
             threshold_lower = float(readout_distribution.ppf(one_sided_tail))
@@ -241,10 +255,18 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
         data_type: double
         required: true
         default_value: 0.5
+      parameters:
+        degrees_of_freedom: 4
     ```
 
 
 
+
+**Additional rule parameters**
+
+| Parameters name | Value |
+|-----------------|-------|
+|*degrees_of_freedom*|4|
 
 
 
@@ -297,6 +319,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         min_periods_with_readouts: int
     
     
+    class AnomalyConfigurationParameters:
+        degrees_of_freedom: float
+    
+    
     # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
     class RuleExecutionRunParameters:
         actual_value: float
@@ -304,6 +330,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         time_period_local: datetime
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
+        configuration_parameters: AnomalyConfigurationParameters
     
     
     # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
@@ -335,6 +362,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         differences = np.diff(filtered)
         differences_std = float(scipy.stats.tstd(differences))
         differences_mean = float(np.mean(differences))
+        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     
         last_readout = float(filtered[-1])
         actual_difference = rule_parameters.actual_value - last_readout
@@ -343,8 +371,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
             threshold_lower = float(differences_mean)
             threshold_upper = float(differences_mean)
         else:
-            # Assumption: the historical data follows normal distribution
-            readout_distribution = scipy.stats.norm(loc=differences_mean, scale=differences_std)
+            # Assumption: the historical data follows t-student distribution
+            readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=differences_mean, scale=differences_std)
             one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
             threshold_lower = float(readout_distribution.ppf(one_sided_tail))
@@ -417,10 +445,18 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
         data_type: double
         required: true
         default_value: 0.5
+      parameters:
+        degrees_of_freedom: 4
     ```
 
 
 
+
+**Additional rule parameters**
+
+| Parameters name | Value |
+|-----------------|-------|
+|*degrees_of_freedom*|4|
 
 
 
@@ -473,6 +509,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         min_periods_with_readouts: int
     
     
+    class AnomalyConfigurationParameters:
+        degrees_of_freedom: float
+    
+    
     # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
     class RuleExecutionRunParameters:
         actual_value: float
@@ -480,6 +520,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         time_period_local: datetime
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
+        configuration_parameters: AnomalyConfigurationParameters
     
     
     # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
@@ -510,13 +551,14 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered = np.array(extracted, dtype=float)
         filtered_std = scipy.stats.tstd(filtered)
         filtered_mean = np.mean(filtered)
+        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     
         if filtered_std == 0:
             threshold_lower = float(filtered_mean)
             threshold_upper = float(filtered_mean)
         else:
-            # Assumption: the historical data follows normal distribution
-            readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
+            # Assumption: the historical data follows t-student distribution
+            readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=filtered_mean, scale=filtered_std)
             one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
             threshold_lower = float(readout_distribution.ppf(one_sided_tail))
@@ -589,10 +631,18 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
         data_type: double
         required: true
         default_value: 0.5
+      parameters:
+        degrees_of_freedom: 4
     ```
 
 
 
+
+**Additional rule parameters**
+
+| Parameters name | Value |
+|-----------------|-------|
+|*degrees_of_freedom*|4|
 
 
 
@@ -645,6 +695,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         min_periods_with_readouts: int
     
     
+    class AnomalyConfigurationParameters:
+        degrees_of_freedom: float
+    
+    
     # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
     class RuleExecutionRunParameters:
         actual_value: float
@@ -652,6 +706,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         time_period_local: datetime
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
+        configuration_parameters: AnomalyConfigurationParameters
     
     
     # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
@@ -682,13 +737,14 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         filtered = np.array(extracted, dtype=float)
         filtered_std = scipy.stats.tstd(filtered)
         filtered_mean = np.mean(filtered)
+        degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     
         if filtered_std == 0:
             threshold_lower = float(filtered_mean)
             threshold_upper = float(filtered_mean)
         else:
-            # Assumption: the historical data follows normal distribution
-            readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
+            # Assumption: the historical data follows t-student distribution
+            readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=filtered_mean, scale=filtered_std)
             one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
     
             threshold_lower = float(readout_distribution.ppf(one_sided_tail))

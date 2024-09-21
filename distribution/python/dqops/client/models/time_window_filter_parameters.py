@@ -52,6 +52,13 @@ class TimeWindowFilterParameters:
                 offset (yyyy-MM-dd HH:mm:ss). For example: 2023-02-20 14:10:00+02. The analyzed table must have the timestamp
                 column properly configured, it is the column that is used for filtering the date and time ranges. Setting the
                 end date and time overrides the parameters to disable analyzing today or the current month.
+            where_filter (Union[Unset, str]): An additional filter which must be a valid SQL predicate (an SQL expression
+                that returns 'true' or 'false') that is added to the WHERE clause of the SQL query that DQOps will run on the
+                data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch
+                of records is loaded, and the data quality checks are evaluated as a data contract. All the records in that
+                batch must tagged with the same value, and the passed predicate to find records from that batch would use the
+                filter in the form: "{alias}.batch_id = 1". The filter can use replacement tokens {alias} to reference the
+                analyzed table.
     """
 
     daily_partitioning_recent_days: Union[Unset, int] = UNSET
@@ -64,6 +71,7 @@ class TimeWindowFilterParameters:
     to_date: Union[Unset, datetime.date] = UNSET
     to_date_time: Union[Unset, datetime.datetime] = UNSET
     to_date_time_offset: Union[Unset, datetime.datetime] = UNSET
+    where_filter: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -97,6 +105,8 @@ class TimeWindowFilterParameters:
         if not isinstance(self.to_date_time_offset, Unset):
             to_date_time_offset = self.to_date_time_offset.isoformat()
 
+        where_filter = self.where_filter
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -128,6 +138,8 @@ class TimeWindowFilterParameters:
             field_dict["to_date_time"] = to_date_time
         if to_date_time_offset is not UNSET:
             field_dict["to_date_time_offset"] = to_date_time_offset
+        if where_filter is not UNSET:
+            field_dict["where_filter"] = where_filter
 
         return field_dict
 
@@ -190,6 +202,8 @@ class TimeWindowFilterParameters:
         else:
             to_date_time_offset = isoparse(_to_date_time_offset)
 
+        where_filter = d.pop("where_filter", UNSET)
+
         time_window_filter_parameters = cls(
             daily_partitioning_recent_days=daily_partitioning_recent_days,
             daily_partitioning_include_today=daily_partitioning_include_today,
@@ -201,6 +215,7 @@ class TimeWindowFilterParameters:
             to_date=to_date,
             to_date_time=to_date_time,
             to_date_time_offset=to_date_time_offset,
+            where_filter=where_filter,
         )
 
         time_window_filter_parameters.additional_properties = d

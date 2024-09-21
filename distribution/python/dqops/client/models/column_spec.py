@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from ..models.column_profiling_check_categories_spec import (
         ColumnProfilingCheckCategoriesSpec,
     )
+    from ..models.column_spec_advanced_properties import ColumnSpecAdvancedProperties
     from ..models.column_statistics_collectors_root_categories_spec import (
         ColumnStatisticsCollectorsRootCategoriesSpec,
     )
@@ -50,6 +51,8 @@ class ColumnSpec:
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
+        advanced_properties (Union[Unset, ColumnSpecAdvancedProperties]): A dictionary of advanced properties that can
+            be used for e.g. to support mapping data to data catalogs, a key/value dictionary.
     """
 
     disabled: Union[Unset, bool] = UNSET
@@ -62,6 +65,7 @@ class ColumnSpec:
     statistics: Union[Unset, "ColumnStatisticsCollectorsRootCategoriesSpec"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
+    advanced_properties: Union[Unset, "ColumnSpecAdvancedProperties"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -100,6 +104,10 @@ class ColumnSpec:
 
                 comments.append(comments_item)
 
+        advanced_properties: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.advanced_properties, Unset):
+            advanced_properties = self.advanced_properties.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -123,6 +131,8 @@ class ColumnSpec:
             field_dict["labels"] = labels
         if comments is not UNSET:
             field_dict["comments"] = comments
+        if advanced_properties is not UNSET:
+            field_dict["advanced_properties"] = advanced_properties
 
         return field_dict
 
@@ -136,6 +146,9 @@ class ColumnSpec:
         )
         from ..models.column_profiling_check_categories_spec import (
             ColumnProfilingCheckCategoriesSpec,
+        )
+        from ..models.column_spec_advanced_properties import (
+            ColumnSpecAdvancedProperties,
         )
         from ..models.column_statistics_collectors_root_categories_spec import (
             ColumnStatisticsCollectorsRootCategoriesSpec,
@@ -202,6 +215,15 @@ class ColumnSpec:
 
             comments.append(comments_item)
 
+        _advanced_properties = d.pop("advanced_properties", UNSET)
+        advanced_properties: Union[Unset, ColumnSpecAdvancedProperties]
+        if isinstance(_advanced_properties, Unset):
+            advanced_properties = UNSET
+        else:
+            advanced_properties = ColumnSpecAdvancedProperties.from_dict(
+                _advanced_properties
+            )
+
         column_spec = cls(
             disabled=disabled,
             sql_expression=sql_expression,
@@ -213,6 +235,7 @@ class ColumnSpec:
             statistics=statistics,
             labels=labels,
             comments=comments,
+            advanced_properties=advanced_properties,
         )
 
         column_spec.additional_properties = d

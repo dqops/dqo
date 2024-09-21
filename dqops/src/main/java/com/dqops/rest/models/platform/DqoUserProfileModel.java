@@ -205,6 +205,12 @@ public class DqoUserProfileModel {
     private boolean canChangeOwnPassword;
 
     /**
+     * User can use data domains. Support for data domains requires an ENTERPRISE license of DQOps.
+     */
+    @JsonPropertyDescription("User can use data domains. Support for data domains requires an ENTERPRISE license of DQOps.")
+    private boolean canUseDataDomains;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQOps Cloud api key.
      * @return User profile.
@@ -245,6 +251,7 @@ public class DqoUserProfileModel {
             model.setDataQualityDataWarehouseEnabled(dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == null ||
                     dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == true);
             model.setCanChangeOwnPassword(true);
+            model.setCanUseDataDomains(dqoCloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.ENTERPRISE);
         } else {
             model.setTenant("Standalone");
             model.setLicenseType(DqoCloudLicenseType.FREE.name());

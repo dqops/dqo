@@ -280,7 +280,7 @@ export const IncidentDetail = () => {
       const url = ROUTES.CONNECTION_DETAIL(
         CheckTypes.SOURCES,
         connection,
-        'incidents'
+        'notifications'
       );
       dispatch(
         addFirstLevelTab(CheckTypes.SOURCES, {
@@ -582,7 +582,7 @@ export const IncidentDetail = () => {
                         href={incidentDetail?.issueUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-blue-600 underline"
+                        className="underline"
                       >
                         <Tooltip
                           content={incidentDetail?.issueUrl}
@@ -598,6 +598,7 @@ export const IncidentDetail = () => {
                         </Tooltip>
                       </a>
                       <IconButton
+                        ripple={false}
                         color="teal"
                         size="sm"
                         onClick={() => setOpen(true)}
@@ -608,6 +609,7 @@ export const IncidentDetail = () => {
                     </div>
                   ) : (
                     <IconButton
+                      ripple={false}
                       color="teal"
                       size="sm"
                       onClick={() => setOpen(true)}
@@ -720,7 +722,7 @@ export const IncidentDetail = () => {
         open={createNotificationDialogOpen}
         onClose={() => setCreateNotificationDialogOpen(false)}
         onConfirm={createConfirmNotification}
-        message="No notification filters are defined for this incident, do you want to create a notification configuration for incidents similar to this incident?"
+        message="No notification filters have been defined for this incident. Would you like to create a notification configuration based on this incident?"
         yesNo
       />
     </>

@@ -19,6 +19,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`custom_sql`](./table-monthly-monitoring-checks.md#tablecustomsqlmonthlymonitoringchecksspec)</span>|Monthly monitoring of custom SQL checks|*[TableCustomSqlMonthlyMonitoringChecksSpec](./table-monthly-monitoring-checks.md#tablecustomsqlmonthlymonitoringchecksspec)*| | | |
 |<span class="no-wrap-code ">[`availability`](./table-monthly-monitoring-checks.md#tableavailabilitymonthlymonitoringchecksspec)</span>|Daily partitioned availability checks|*[TableAvailabilityMonthlyMonitoringChecksSpec](./table-monthly-monitoring-checks.md#tableavailabilitymonthlymonitoringchecksspec)*| | | |
 |<span class="no-wrap-code ">[`schema`](./table-monthly-monitoring-checks.md#tableschemamonthlymonitoringchecksspec)</span>|Monthly monitoring table schema checks|*[TableSchemaMonthlyMonitoringChecksSpec](./table-monthly-monitoring-checks.md#tableschemamonthlymonitoringchecksspec)*| | | |
+|<span class="no-wrap-code ">[`uniqueness`](./table-monthly-monitoring-checks.md#tableuniquenessmonthlymonitoringchecksspec)</span>|Monthly monitoring uniqueness checks on a table level.|*[TableUniquenessMonthlyMonitoringChecksSpec](./table-monthly-monitoring-checks.md#tableuniquenessmonthlymonitoringchecksspec)*| | | |
 |<span class="no-wrap-code ">[`comparisons`](./table-monthly-monitoring-checks.md#tablecomparisonmonthlymonitoringchecksspecmap)</span>|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|*[TableComparisonMonthlyMonitoringChecksSpecMap](./table-monthly-monitoring-checks.md#tablecomparisonmonthlymonitoringchecksspecmap)*| | | |
 |<span class="no-wrap-code ">[`custom`](../profiling/table-profiling-checks.md#customcheckspecmap)</span>|Dictionary of custom checks. The keys are check names within this category.|*[CustomCheckSpecMap](../profiling/table-profiling-checks.md#customcheckspecmap)*| | | |
 
@@ -120,6 +121,22 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`monthly_column_list_changed`](../../../checks/table/schema/column-list-changed.md)</span>|Detects if new columns were added or existing columns were removed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|*[TableSchemaColumnListChangedCheckSpec](../../../checks/table/schema/column-list-changed.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_column_list_or_order_changed`](../../../checks/table/schema/column-list-or-order-changed.md)</span>|Detects if new columns were added, existing columns were removed or the columns were reordered since the last month. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|*[TableSchemaColumnListOrOrderChangedCheckSpec](../../../checks/table/schema/column-list-or-order-changed.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_column_types_changed`](../../../checks/table/schema/column-types-changed.md)</span>|Detects if new columns were added, removed or their data types have changed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|*[TableSchemaColumnTypesChangedCheckSpec](../../../checks/table/schema/column-types-changed.md)*| | | |
+|<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
+
+
+
+___
+
+## TableUniquenessMonthlyMonitoringChecksSpec
+Container of table level monthly monitoring for uniqueness data quality checks
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`monthly_duplicate_record_count`](../../../checks/table/uniqueness/duplicate-record-count.md)</span>|Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.|*[TableDuplicateRecordCountCheckSpec](../../../checks/table/uniqueness/duplicate-record-count.md)*| | | |
+|<span class="no-wrap-code ">[`monthly_duplicate_record_percent`](../../../checks/table/uniqueness/duplicate-record-percent.md)</span>|Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.|*[TableDuplicateRecordPercentCheckSpec](../../../checks/table/uniqueness/duplicate-record-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 

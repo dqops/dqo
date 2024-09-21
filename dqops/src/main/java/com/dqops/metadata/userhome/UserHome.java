@@ -19,8 +19,8 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.basespecs.Flushable;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
@@ -150,13 +150,13 @@ public interface UserHome extends Flushable, HierarchyNode {
      * Returns a collection of named patterns with the default configuration of table-level checks.
      * @return Collection of table-level default checks patterns.
      */
-    TableDefaultChecksPatternList getTableDefaultChecksPatterns();
+    TableQualityPolicyList getTableQualityPolicies();
 
     /**
      * Returns a collection of named patterns with the default configuration of column-level checks.
      * @return Collection of column-level default checks patterns.
      */
-    ColumnDefaultChecksPatternList getColumnDefaultChecksPatterns();
+    ColumnQualityPolicyList getColumnQualityPolicies();
 
     /**
      * Returns a default notification addresses.

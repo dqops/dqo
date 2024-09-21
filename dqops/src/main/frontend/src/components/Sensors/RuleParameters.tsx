@@ -67,6 +67,7 @@ const RuleParameters = ({
                   </td>
                   <td className="px-4 py-2  align-top w-20">
                     <IconButton
+                      ripple={false}
                       color="teal"
                       size="sm"
                       onClick={() => onDelete(key)}
@@ -96,6 +97,7 @@ const RuleParameters = ({
             </td>
             <td className="px-4 py-2  align-top w-20">
               <IconButton
+                ripple={false}
                 color="teal"
                 size="sm"
                 onClick={onAdd}

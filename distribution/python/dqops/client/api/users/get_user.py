@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.dqo_cloud_user_model import DqoCloudUserModel
+from ...models.dqo_user_roles_model import DqoUserRolesModel
 from ...types import Response
 
 
@@ -25,9 +25,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[DqoCloudUserModel]:
+) -> Optional[DqoUserRolesModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = DqoCloudUserModel.from_dict(response.json())
+        response_200 = DqoUserRolesModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -38,7 +38,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[DqoCloudUserModel]:
+) -> Response[DqoUserRolesModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -51,7 +51,7 @@ def sync_detailed(
     email: str,
     *,
     client: AuthenticatedClient,
-) -> Response[DqoCloudUserModel]:
+) -> Response[DqoUserRolesModel]:
     """getUser
 
      Returns the user model that describes the role of a user identified by an email
@@ -64,7 +64,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[DqoCloudUserModel]
+        Response[DqoUserRolesModel]
     """
 
     kwargs = _get_kwargs(
@@ -82,7 +82,7 @@ def sync(
     email: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[DqoCloudUserModel]:
+) -> Optional[DqoUserRolesModel]:
     """getUser
 
      Returns the user model that describes the role of a user identified by an email
@@ -95,7 +95,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        DqoCloudUserModel
+        DqoUserRolesModel
     """
 
     return sync_detailed(
@@ -108,7 +108,7 @@ async def asyncio_detailed(
     email: str,
     *,
     client: AuthenticatedClient,
-) -> Response[DqoCloudUserModel]:
+) -> Response[DqoUserRolesModel]:
     """getUser
 
      Returns the user model that describes the role of a user identified by an email
@@ -121,7 +121,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[DqoCloudUserModel]
+        Response[DqoUserRolesModel]
     """
 
     kwargs = _get_kwargs(
@@ -137,7 +137,7 @@ async def asyncio(
     email: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[DqoCloudUserModel]:
+) -> Optional[DqoUserRolesModel]:
     """getUser
 
      Returns the user model that describes the role of a user identified by an email
@@ -150,7 +150,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        DqoCloudUserModel
+        DqoUserRolesModel
     """
 
     return (

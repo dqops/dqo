@@ -18,16 +18,19 @@ package com.dqops.rest.server.authentication;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
-import com.dqops.core.principal.UserDomainIdentityFactory;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -85,6 +88,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
     private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private final LocalDataDomainRegistry localDataDomainRegistry;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
@@ -93,7 +97,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                                              DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
                                              DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                              DqoUserPrincipalProvider dqoUserPrincipalProvider,
-                                             DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+                                             DqoUserConfigurationProperties dqoUserConfigurationProperties,
+                                             LocalDataDomainRegistry localDataDomainRegistry) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
@@ -101,6 +106,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
         this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.localDataDomainRegistry = localDataDomainRegistry;
     }
 
     /**
@@ -143,17 +149,22 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         ServerHttpRequest request = exchange.getRequest();
         String requestPath = request.getPath().value();
         String activeDataDomainCloudName = this.dqoUserConfigurationProperties.getDefaultDataDomain();
-        HttpCookie selectedDataDomain = exchange.getRequest().getCookies().getFirst(DATA_DOMAIN_COOKIE);
-        if (selectedDataDomain != null) {
-            activeDataDomainCloudName = selectedDataDomain.getValue();
+        HttpCookie selectedDataDomainCookie = exchange.getRequest().getCookies().getFirst(DATA_DOMAIN_COOKIE);
+        if (selectedDataDomainCookie != null) {
+            activeDataDomainCloudName = selectedDataDomainCookie.getValue();
+            if (Strings.isNullOrEmpty(activeDataDomainCloudName) || Objects.equals(activeDataDomainCloudName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME)) {
+                activeDataDomainCloudName = UserDomainIdentity.ROOT_DATA_DOMAIN; // switching to the default (root) domain
+            }
         }
 
         String authorizationToken = extractAuthenticationBearerToken(request);
         if (authorizationToken != null) {
-            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal();
             DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getDataDomainIdentity());  // NOTE: this operation will support only the api key of the primary data domain
             if (apiKey != null && Objects.equals(authorizationToken, apiKey.getApiKeyToken())) {
-                Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
+                String apiKeyDataDomain = apiKey.getApiKeyPayload().getDefaultDomain() != null ? apiKey.getApiKeyPayload().getDefaultDomain() :
+                        this.dqoUserConfigurationProperties.getDefaultDataDomain();
+                Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey(apiKeyDataDomain);
 
                 if (log.isDebugEnabled()) {
                     log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with an API Key for the user " + singleUserAuthenticationToken.getName());
@@ -196,7 +207,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         }
 
         if (!this.dqoCloudConfigurationProperties.isAuthenticateWithDqoCloud()) {
-            Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
+            Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey(activeDataDomainCloudName);
 
             if (log.isDebugEnabled()) {
                 log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with the DQOps Cloud Pairing Api Key for the user " +
@@ -241,9 +252,57 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
 
             ResponseCookie dqoAccessTokenCookie = ResponseCookie.from(AUTHENTICATION_TOKEN_COOKIE, signedAuthenticationToken.getSignedHex())
                     .maxAge(Duration.ofMinutes(this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes()))
+                    .path("/")
                     .domain(hostHeader)
                     .build();
             exchange.getResponse().getCookies().add(AUTHENTICATION_TOKEN_COOKIE, dqoAccessTokenCookie);
+
+            String defaultDataDomainFromLogin = signedAuthenticationToken.getTarget().getActiveDataDomain();
+            if (defaultDataDomainFromLogin != null || selectedDataDomainCookie != null) {
+                String effectiveDataDomain = defaultDataDomainFromLogin;
+                if (effectiveDataDomain == null && signedAuthenticationToken.getTarget().getDomainRoles() != null) {
+                    effectiveDataDomain = signedAuthenticationToken.getTarget().getDomainRoles()
+                            .entrySet()
+                            .stream()
+                            .filter(kv -> kv.getValue() != null && kv.getValue() != DqoUserRole.NONE)
+                            .map(kv -> kv.getKey())
+                            .findFirst()
+                            .orElse(null);
+                }
+
+                if (effectiveDataDomain == null && signedAuthenticationToken.getTarget().getAccountRole() != null &&
+                        signedAuthenticationToken.getTarget().getAccountRole() != DqoUserRole.NONE) {
+                    effectiveDataDomain = this.dqoUserConfigurationProperties.getDefaultDataDomain();
+                }
+
+                if (selectedDataDomainCookie != null) {
+                    if (Objects.equals(activeDataDomainCloudName, this.dqoUserConfigurationProperties.getDefaultDataDomain()) ||
+                        this.localDataDomainRegistry.getNestedDomain(activeDataDomainCloudName) != null) {
+                        if (signedAuthenticationToken.getTarget().getAccountRole() != null && signedAuthenticationToken.getTarget().getAccountRole() != DqoUserRole.NONE ||
+                            signedAuthenticationToken.getTarget().getDomainRoles() != null && signedAuthenticationToken.getTarget().getDomainRoles().get(activeDataDomainCloudName) != null &&
+                            signedAuthenticationToken.getTarget().getDomainRoles().get(activeDataDomainCloudName) != DqoUserRole.NONE) {
+                            effectiveDataDomain = activeDataDomainCloudName;
+                        }
+                    }
+                }
+
+                if (effectiveDataDomain == null) {
+                    log.warn("The user " + signedAuthenticationToken.getTarget().getUser() + " does not have access to any data domain on this instance");
+                    exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
+                    return exchange.getResponse().writeAndFlushWith(Mono.empty());
+                }
+
+                if (Objects.equals(effectiveDataDomain, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
+                    effectiveDataDomain = UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME;
+                }
+
+                ResponseCookie activeDataDomainTokenCookie = ResponseCookie.from(DATA_DOMAIN_COOKIE, effectiveDataDomain)
+                        .maxAge(Duration.ofMinutes(this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes()))
+                        .domain(hostHeader)
+                        .path("/")
+                        .build();
+                exchange.getResponse().getCookies().add(DATA_DOMAIN_COOKIE, activeDataDomainTokenCookie);
+            }
             exchange.getResponse().getHeaders().add("Location", returnUrl);
 
             if (log.isDebugEnabled()) {
@@ -296,7 +355,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 }
             }
 
-            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal();
             if (this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getDataDomainIdentity()) == null) {
                 log.warn("DQOps Cloud pairing API Key missing, cannot use federated authentication");
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));

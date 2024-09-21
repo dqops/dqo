@@ -36,7 +36,7 @@ public class SmtpServerConfigurationSpec extends AbstractSpec implements Invalid
     private String port;
 
     @JsonPropertyDescription("SMTP server use SSL option")
-    private Boolean useSSL;
+    private Boolean useSsl;
 
     @JsonPropertyDescription("SMTP server username")
     private String username;
@@ -85,17 +85,17 @@ public class SmtpServerConfigurationSpec extends AbstractSpec implements Invalid
      * Returns whether the SMTP server uses SSL.
      * @return whether the SMTP server uses SSL.
      */
-    public Boolean getUseSSL() {
-        return useSSL;
+    public Boolean getUseSsl() {
+        return useSsl;
     }
 
     /**
      * Sets an SMTP server to use SSL.
-     * @param useSSL SMTP server to use SSL.
+     * @param useSsl SMTP server to use SSL.
      */
-    public void setUseSSL(Boolean useSSL) {
-        setDirtyIf(!Objects.equals(this.useSSL, useSSL));
-        this.useSSL = useSSL;
+    public void setUseSsl(Boolean useSsl) {
+        setDirtyIf(!Objects.equals(this.useSsl, useSsl));
+        this.useSsl = useSsl;
     }
 
     /**

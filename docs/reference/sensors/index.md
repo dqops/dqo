@@ -67,6 +67,16 @@ title: Sensors
 
 
 
+### **uniqueness**
+
+| Sensor name | Description |
+|-------------|-------------|
+|[*duplicate_record_count*](./table/uniqueness-table-sensors.md#duplicate-record-count)|Table sensor that executes a duplicate record count query.|
+|[*duplicate_record_percent*](./table/uniqueness-table-sensors.md#duplicate-record-percent)|Table sensor that executes a duplicate record percent query.|
+
+
+
+
 ### **volume**
 
 | Sensor name | Description |
@@ -133,6 +143,9 @@ title: Sensors
 
 
 ## Column sensors
+
+
+
 
 
 

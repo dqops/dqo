@@ -59,7 +59,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     private final DqoJobIdGenerator dqoJobIdGenerator;
     private DqoQueueConfigurationProperties queueConfigurationProperties;
     private Sinks.Many<DqoChangeNotificationEntry> jobUpdateSink;
-    private Map<Long, CompletableFuture<Long>> waitingClients = new ConcurrentHashMap<>();
+    private Map<String, Map<Long, CompletableFuture<Long>>> waitingClientsPerDomain = new ConcurrentHashMap<>();
     private volatile CloudSynchronizationFoldersStatusModel currentSynchronizationStatus = new CloudSynchronizationFoldersStatusModel(); // defaults
     private long currentSynchronizationStatusChangeId = 0;
 
@@ -102,15 +102,23 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * Releases any awaiting clients.
      */
     protected void releaseAwaitingClients() {
-        List<CompletableFuture<Long>> awaitingClients;
+        List<Map<Long, CompletableFuture<Long>>> awaitingDomainClients;
 
         synchronized (this.lock) {
-            awaitingClients = this.waitingClients.values().stream().collect(Collectors.toList());
-            this.waitingClients.clear();
+            awaitingDomainClients = this.waitingClientsPerDomain.values().stream().collect(Collectors.toList());
         }
 
-        for (CompletableFuture<Long> awaitingClientFuture :  awaitingClients) {
-            awaitingClientFuture.completeExceptionally(new DqoQueueJobExecutionException("DQOps job queue was stopped"));
+        for (Map<Long, CompletableFuture<Long>> awaitingClientsInDomain :  awaitingDomainClients) {
+            List<CompletableFuture<Long>> awaitingClientFutures;
+
+            synchronized (this.lock) {
+                awaitingClientFutures = awaitingClientsInDomain.values().stream().collect(Collectors.toList());
+                awaitingClientsInDomain.clear();
+            }
+
+            for (CompletableFuture<Long> clientNotificationFuture : awaitingClientFutures) {
+                clientNotificationFuture.completeExceptionally(new DqoQueueJobExecutionException("DQOps job queue was stopped"));
+            }
         }
     }
 
@@ -140,7 +148,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobAddedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobHistoryEntryModel dqoJobHistoryEntryModel = new DqoJobHistoryEntryModel(jobQueueEntry);
-            DqoJobChange dqoJobChange = new DqoJobChange(dqoJobHistoryEntryModel.getStatus(), dqoJobHistoryEntryModel);
+            DqoJobChange dqoJobChange = new DqoJobChange(dqoJobHistoryEntryModel.getStatus(), dqoJobHistoryEntryModel, jobQueueEntry.getDomainName());
 
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
@@ -158,7 +166,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobRunningEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.running, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.running, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType(), jobQueueEntry.getDomainName());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -175,7 +183,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobParkedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.waiting, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.waiting, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType(), jobQueueEntry.getDomainName());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -206,10 +214,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 newJobHistoryModel.setStatus(DqoJobStatus.finished);
                 newJobHistoryModel.setStatusChangedAt(Instant.now());
                 newJobHistoryModel.setParameters(mostRecentJobParameters);
-                dqoJobChange = new DqoJobChange(DqoJobStatus.finished, newJobHistoryModel);
+                dqoJobChange = new DqoJobChange(DqoJobStatus.finished, newJobHistoryModel, jobQueueEntry.getDomainName());
             }
             else {
-                dqoJobChange = new DqoJobChange(DqoJobStatus.finished, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
+                dqoJobChange = new DqoJobChange(DqoJobStatus.finished, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType(), jobQueueEntry.getDomainName());
             }
 
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
@@ -229,7 +237,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobFailedEvent(DqoJobQueueEntry jobQueueEntry, String errorMessage) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage, jobQueueEntry.getJob().getJobType());
+            DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage, jobQueueEntry.getJob().getJobType(), jobQueueEntry.getDomainName());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -247,7 +255,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobCancellationRequestedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancel_requested, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancel_requested, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType(), jobQueueEntry.getDomainName());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -265,7 +273,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobFullyCancelledEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancelled, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancelled, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType(), jobQueueEntry.getDomainName());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -278,10 +286,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     /**
      * Publishes the current folder synchronization status.
      *
+     * @param dataDomainName Data domain name.
      * @param synchronizationStatus Folder synchronization status.
      */
     @Override
-    public void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus) {
+    public void publishFolderSynchronizationStatus(String dataDomainName, CloudSynchronizationFoldersStatusModel synchronizationStatus) {
         synchronized (this.lock) {
             this.currentSynchronizationStatus = synchronizationStatus;
             this.currentSynchronizationStatusChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
@@ -293,7 +302,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
-            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(synchronizationStatus), emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dataDomainName, synchronizationStatus), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishFolderSynchronizationStatus failed, error: " + ex.getMessage(), ex);
@@ -303,17 +312,20 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     /**
      * Creates an initial job list model that is retrieved by the UI when UI start up and the notification panel
      * must be filled with a list of jobs that are on the queue or jobs that have already finished.
+     * @param dataDomain Data domain name.
      * @return Initial job queue snapshot.
      */
     @Override
-    public Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList() {
+    public Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList(String dataDomain) {
         Mono<DqoJobQueueInitialSnapshotModel> jobsMono = Mono.defer(() -> {
             long changeSequence;
             List<DqoJobHistoryEntryModel> jobs;
 
             synchronized (this.lock) {
                 changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
-                jobs = new ArrayList<>(this.allJobs.values());
+                jobs = this.allJobs.values().stream()
+                        .filter(dqoJobHistoryEntryModel -> Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain))
+                        .collect(Collectors.toList());
             }
 
             return Mono.just(new DqoJobQueueInitialSnapshotModel(jobs, this.currentSynchronizationStatus, changeSequence));
@@ -327,10 +339,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * @param lastChangeId Last change id to get changes after.
      * @param timeout Timeout to wait.
      * @param timeUnit Timeout unit.
+     * @param domainName Data domain name.
      * @return Mono with a list of changes and the next sequence id.
      */
     @Override
-    public Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit) {
+    public Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit, String domainName) {
         List<DqoJobChangeModel> changesList;
         long changeSequence;
         CompletableFuture<DqoJobQueueIncrementalSnapshotModel> waitForChangeFuture = null;
@@ -339,15 +352,26 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
-                    .values());
+                    .values())
+                    .stream()
+                    .filter(dqoJobChangeModel -> Objects.equals(dqoJobChangeModel.getDomainName(), domainName))
+                    .collect(Collectors.toList());
 
             if (this.started && changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
-                this.waitingClients.put(changeSequence, completableFuture);
+
+                Map<Long, CompletableFuture<Long>> domainAwaitersMap = this.waitingClientsPerDomain.get(domainName);
+                if (domainAwaitersMap == null) {
+                    domainAwaitersMap = new ConcurrentHashMap<>();
+                    this.waitingClientsPerDomain.put(domainName, domainAwaitersMap);
+                }
+
+                domainAwaitersMap.put(changeSequence, completableFuture);
+                final Map<Long, CompletableFuture<Long>> domainAwaitingClientsFinal = domainAwaitersMap;
                 waitForChangeFuture = completableFuture.handleAsync((result, ex) -> {
                     synchronized (this.lock) {
-                        this.waitingClients.remove(changeSequence);
+                        domainAwaitingClientsFinal.remove(changeSequence);
                     }
                     if (result == null) {
                         return new DqoJobQueueIncrementalSnapshotModel(null, this.currentSynchronizationStatus, changeSequence);
@@ -357,7 +381,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                             long nextChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
                             List<DqoJobChangeModel> newChangesList = new ArrayList<>(this.jobChanges
                                     .tailMap(lastChangeId, false)
-                                    .values());
+                                    .values())
+                                    .stream()
+                                    .filter(dqoJobChangeModel -> Objects.equals(dqoJobChangeModel.getDomainName(), domainName))
+                                    .collect(Collectors.toList());
 
                             return new DqoJobQueueIncrementalSnapshotModel(newChangesList, this.currentSynchronizationStatus, nextChangeId);
                         }
@@ -443,15 +470,18 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 removeOldFinishedJobs();
                 removeOldJobChanges();
 
-                if (this.waitingClients.size() > 0) {
-                    awaitersToNotify = new ArrayList<>(this.waitingClients.values());
-                    this.waitingClients.clear();
+                if (this.waitingClientsPerDomain.size() > 0) {
+                    Map<Long, CompletableFuture<Long>> domainAwaitingClients = this.waitingClientsPerDomain.get(changeNotificationEntry.getDataDomainName());
+                    if (domainAwaitingClients != null) {
+                        awaitersToNotify = new ArrayList<>(domainAwaitingClients.values());
+                        domainAwaitingClients.clear();
+                    }
                 }
             }
 
             if (awaitersToNotify != null) {
-                for (CompletableFuture<Long> awaitingClientFuture : awaitersToNotify) {
-                    awaitingClientFuture.complete(changeSequence);
+                for (CompletableFuture<Long> awaitingClient : awaitersToNotify) {
+                    awaitingClient.complete(changeSequence);
                 }
             }
         }
@@ -552,12 +582,16 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * Finds the job identified by a job id.
      *
      * @param jobId Job id to find.
+     * @param dataDomain Data domain name.
      * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
      */
     @Override
-    public DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId) {
+    public DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId, String dataDomain) {
         synchronized (this.lock) {
             DqoJobHistoryEntryModel dqoJobHistoryEntryModel = this.allJobs.get(jobId);
+            if (dqoJobHistoryEntryModel != null && !Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain)) {
+                return null;
+            }
             return dqoJobHistoryEntryModel;
         }
     }
@@ -567,16 +601,25 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * If there is a known (tracked) job with that business key, this method will return the job id. Otherwise, when not found, returns null.
      *
      * @param jobBusinessKey Job business key to look up.
+     * @param dataDomain Data domain name.
      * @return Job id or null when not found.
      */
     @Override
-    public DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey) {
+    public DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey, String dataDomain) {
         if (Strings.isNullOrEmpty(jobBusinessKey)) {
             return null;
         }
 
         synchronized (this.lock) {
-            return this.businessKeyToJobIdMap.get(jobBusinessKey);
+            DqoQueueJobId dqoQueueJobId = this.businessKeyToJobIdMap.get(jobBusinessKey);
+            if (dqoQueueJobId != null) {
+                DqoJobHistoryEntryModel dqoJobHistoryEntryModel = this.allJobs.get(dqoQueueJobId);
+                if (dqoJobHistoryEntryModel != null && !Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain)) {
+                    return null;
+                }
+            }
+
+            return dqoQueueJobId;
         }
     }
 }

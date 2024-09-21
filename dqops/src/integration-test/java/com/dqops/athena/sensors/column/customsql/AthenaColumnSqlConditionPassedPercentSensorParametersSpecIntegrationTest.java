@@ -45,6 +45,7 @@ import tech.tablesaw.api.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class AthenaColumnSqlConditionPassedPercentSensorParametersSpecIntegrationTest extends BaseAthenaIntegrationTest {
@@ -171,7 +172,7 @@ public class AthenaColumnSqlConditionPassedPercentSensorParametersSpecIntegratio
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(11, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
@@ -194,7 +195,7 @@ public class AthenaColumnSqlConditionPassedPercentSensorParametersSpecIntegratio
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(11, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -230,7 +231,7 @@ public class AthenaColumnSqlConditionPassedPercentSensorParametersSpecIntegratio
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(11, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -243,8 +244,8 @@ public class AthenaColumnSqlConditionPassedPercentSensorParametersSpecIntegratio
         Assertions.assertTrue(sampleValues.contains("  name"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(2, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(1));

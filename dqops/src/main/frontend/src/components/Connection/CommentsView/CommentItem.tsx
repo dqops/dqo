@@ -48,6 +48,7 @@ const CommentItem = ({
       <div className="px-8 min-w-34 max-w-34 py-2">
         <div className="flex space-x-2 items-center justify-end">
           <IconButton
+            ripple={false}
             size="sm"
             onClick={isEditing ? onSave : onEdit}
             color="teal"
@@ -56,6 +57,7 @@ const CommentItem = ({
             <SvgIcon name={isEditing ? 'save' : 'edit'} className="w-4" />
           </IconButton>
           <IconButton
+            ripple={false}
             size="sm"
             onClick={() => onRemove(idx)}
             color="teal"

@@ -20,8 +20,8 @@ import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
@@ -311,7 +311,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+    public TreeNodeTraversalResult accept(TableQualityPolicyList tableDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 
@@ -323,7 +323,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+    public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

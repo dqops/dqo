@@ -147,13 +147,17 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkContainerModel.setCanEdit(canManageChecks);
         checkContainerModel.setCanRunChecks(canManageChecks);
         checkContainerModel.setCanDeleteData(canManageChecks);
+        CheckSearchFilters runChecksFilters = null;
 
         if (runChecksTemplate != null) {
-            checkContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
+            runChecksFilters = runChecksTemplate.clone();
+            runChecksFilters.setCheckTarget(checkCategoriesSpec.getCheckTarget());
+
+            checkContainerModel.setRunChecksJobTemplate(runChecksFilters);
 
             checkContainerModel.setDataCleanJobTemplate(
                     DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                            checkContainerModel.getRunChecksJobTemplate(), false));
+                            checkContainerModel.getRunChecksJobTemplate(), false, false));
         }
 
         if (tableSpec != null) {
@@ -161,11 +165,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         }
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        Optional<String> categoryNameFilter = runChecksTemplate != null ? Optional.ofNullable(runChecksTemplate.getCheckCategory()) : Optional.empty();
+        Optional<String> categoryNameFilter = runChecksFilters != null ? Optional.ofNullable(runChecksFilters.getCheckCategory()) : Optional.empty();
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
         CheckType checkType = checkCategoriesSpec.getCheckType();
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
-        boolean includeAlsoEmptyCategories = runChecksTemplate == null || runChecksTemplate.getCheckConfigured() == null || !runChecksTemplate.getCheckConfigured();
+        boolean includeAlsoEmptyCategories = runChecksFilters == null || runChecksFilters.getCheckConfigured() == null || !runChecksFilters.getCheckConfigured();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
@@ -210,7 +214,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                         QualityCategoryModel comparisonCategoryModel = createCategoryModel(categoryFieldInfo,
                                 configuredComparisonChecksCategory,
                                 checkCategoriesSpec.getSchedulingGroup(),
-                                runChecksTemplate,
+                                runChecksFilters,
                                 tableSpec,
                                 executionContext,
                                 providerType,
@@ -237,7 +241,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     QualityCategoryModel comparisonCategoryModel = createCategoryModel(categoryFieldInfo,
                             configuredComparisonChecks,
                             checkCategoriesSpec.getSchedulingGroup(),
-                            runChecksTemplate,
+                            runChecksFilters,
                             tableSpec,
                             executionContext,
                             providerType,
@@ -256,7 +260,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             QualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
                     categoryFieldValue,
                     checkCategoriesSpec.getSchedulingGroup(),
-                    runChecksTemplate,
+                    runChecksFilters,
                     tableSpec,
                     executionContext,
                     providerType,
@@ -441,7 +445,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
         categoryModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                        runChecksCategoryTemplate, false)
+                        runChecksCategoryTemplate, false, false)
         );
 
         if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
@@ -697,7 +701,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             runOneCheckTemplate.setCheckName(checkName);
             checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
 
-            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate, false);
+            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate, false, false);
             dataCleanJobTemplate.setDataGroupTag(checkSpec.getDataGrouping());
             checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
         }

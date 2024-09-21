@@ -22,6 +22,9 @@ class CollectStatisticsQueueJobParameters:
     Attributes:
         statistics_collector_search_filters (Union[Unset, StatisticsCollectorSearchFilters]):
         data_scope (Union[Unset, StatisticsDataScope]):
+        configure_table (Union[Unset, bool]): Turns on a special mode of collecting statistics that will configure the
+            timestamp and ID columns. It should be used only during the first statistics collection.
+        samples_limit (Union[Unset, int]): The default limit of column samples that are collected.
         dummy_sensor_execution (Union[Unset, bool]): Boolean flag that enables a dummy statistics collection (sensors
             are executed, but the statistics results are not written to the parquet files).
         collect_statistics_result (Union[Unset, CollectStatisticsResult]): Returns the result with the summary of the
@@ -32,6 +35,8 @@ class CollectStatisticsQueueJobParameters:
         Unset, "StatisticsCollectorSearchFilters"
     ] = UNSET
     data_scope: Union[Unset, StatisticsDataScope] = UNSET
+    configure_table: Union[Unset, bool] = UNSET
+    samples_limit: Union[Unset, int] = UNSET
     dummy_sensor_execution: Union[Unset, bool] = UNSET
     collect_statistics_result: Union[Unset, "CollectStatisticsResult"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -47,6 +52,8 @@ class CollectStatisticsQueueJobParameters:
         if not isinstance(self.data_scope, Unset):
             data_scope = self.data_scope.value
 
+        configure_table = self.configure_table
+        samples_limit = self.samples_limit
         dummy_sensor_execution = self.dummy_sensor_execution
         collect_statistics_result: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.collect_statistics_result, Unset):
@@ -61,6 +68,10 @@ class CollectStatisticsQueueJobParameters:
             )
         if data_scope is not UNSET:
             field_dict["data_scope"] = data_scope
+        if configure_table is not UNSET:
+            field_dict["configure_table"] = configure_table
+        if samples_limit is not UNSET:
+            field_dict["samples_limit"] = samples_limit
         if dummy_sensor_execution is not UNSET:
             field_dict["dummy_sensor_execution"] = dummy_sensor_execution
         if collect_statistics_result is not UNSET:
@@ -98,6 +109,10 @@ class CollectStatisticsQueueJobParameters:
         else:
             data_scope = StatisticsDataScope(_data_scope)
 
+        configure_table = d.pop("configure_table", UNSET)
+
+        samples_limit = d.pop("samples_limit", UNSET)
+
         dummy_sensor_execution = d.pop("dummy_sensor_execution", UNSET)
 
         _collect_statistics_result = d.pop("collect_statistics_result", UNSET)
@@ -112,6 +127,8 @@ class CollectStatisticsQueueJobParameters:
         collect_statistics_queue_job_parameters = cls(
             statistics_collector_search_filters=statistics_collector_search_filters,
             data_scope=data_scope,
+            configure_table=configure_table,
+            samples_limit=samples_limit,
             dummy_sensor_execution=dummy_sensor_execution,
             collect_statistics_result=collect_statistics_result,
         )

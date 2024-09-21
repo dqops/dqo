@@ -68,7 +68,7 @@ const Select = ({
   }, [options, value]);
 
   const handleClick = (option: Option) => {
-    if (onChange) {
+    if (onChange && isOpen) {
       onChange(option.value);
     }
     closeMenu();
@@ -122,6 +122,7 @@ const Select = ({
           >
             <div
               className={clsx(
+                disabled && '!text-gray-500',
                 truncateText ? 'truncate max-w-full' : '', // Apply truncation classes
                 'flex items-center gap-2'
               )}
@@ -154,7 +155,7 @@ const Select = ({
               'absolute top-9 bg-gray-50 left-0 min-w-full z-10 shadow-lg border border-gray-300 text-left rounded transition-all duration-150 ease-in text-sm',
               isOpen
                 ? 'max-h-80 overflow-auto py-3'
-                : 'opacity-0 max-h-0 overflow-hidden py-0',
+                : 'opacity-0 max-h-0 overflow-hidden py-0 hidden',
               menuClassName
             )}
           >

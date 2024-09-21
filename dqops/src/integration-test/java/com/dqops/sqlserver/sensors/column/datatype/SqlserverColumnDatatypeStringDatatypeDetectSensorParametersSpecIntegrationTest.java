@@ -42,7 +42,9 @@ import tech.tablesaw.api.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @SpringBootTest
@@ -217,7 +219,7 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(11, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
@@ -245,7 +247,7 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(11, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals(2, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -265,7 +267,7 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(3465));
+        Assertions.assertTrue(rowId1Values.contains(3));
     }
 
     @Test
@@ -285,7 +287,7 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(11, resultTable.rowCount());
+        Assertions.assertEquals(12, resultTable.rowCount());
         Assertions.assertEquals(4, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -304,16 +306,16 @@ public class SqlserverColumnDatatypeStringDatatypeDetectSensorParametersSpecInte
         Assertions.assertTrue(sampleValues.contains("2020-01-31T03:51:22Z"));
         Assertions.assertTrue(sampleValues.contains("abc-001"));
 
-        List<Integer> groupingLevel1Values = new ArrayList<>(
-                List.of(resultTable.column("grouping_level_1").asObjectArray())
-                        .stream().map(val -> ValueConverter.toInteger(val))
+        List<String> groupingLevel1Values = new ArrayList<>(
+                Stream.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .map(Objects::toString)
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(8, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(3465));
+        Assertions.assertEquals(9, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains("3465"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(3465));
+        Assertions.assertTrue(rowId1Values.contains(3));
     }
 }

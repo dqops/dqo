@@ -27,7 +27,8 @@ public interface TriggerFactory {
      * Creates a Quartz trigger for a given schedule.
      * @param scheduleSpec Schedule specification.
      * @param jobKey Job key to identify a predefined job.
+     * @param dataDomainName Data domain name.
      * @return Trigger.
      */
-    Trigger createTrigger(MonitoringScheduleSpec scheduleSpec, JobKey jobKey);
+    Trigger createTrigger(MonitoringScheduleSpec scheduleSpec, JobKey jobKey, String dataDomainName);
 }

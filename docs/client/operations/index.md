@@ -45,6 +45,32 @@ Data quality check definition management operations for adding/removing/changing
 |<span class="no-wrap-code">[`update_check`</span>](./checks.md#update_check)|PUT|Updates an existing check, making a custom check definition if it is not present|
 
 
+## column_quality_policies
+Operations for managing the configuration of data quality policies at a column level. Policies are the default configuration of data quality checks for columns matching a pattern.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`copy_from_column_quality_policy`</span>](./column_quality_policies.md#copy_from_column_quality_policy)|POST|Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.|
+|<span class="no-wrap-code">[`create_column_quality_policy`</span>](./column_quality_policies.md#create_column_quality_policy)|POST|Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.|
+|<span class="no-wrap-code">[`create_column_quality_policy_target`</span>](./column_quality_policies.md#create_column_quality_policy_target)|POST|Creates (adds) a new default column-level checks pattern configuration.|
+|<span class="no-wrap-code">[`delete_column_quality_policy`</span>](./column_quality_policies.md#delete_column_quality_policy)|DELETE|Deletes a default column-level checks pattern|
+|<span class="no-wrap-code">[`get_column_quality_policies`</span>](./column_quality_policies.md#get_column_quality_policies)|GET|Returns a flat list of all column-level default check patterns configured for this instance. Default checks are applied on columns dynamically.|
+|<span class="no-wrap-code">[`get_column_quality_policy`</span>](./column_quality_policies.md#get_column_quality_policy)|GET|Returns a default checks pattern definition as a full specification object|
+|<span class="no-wrap-code">[`get_column_quality_policy_target`</span>](./column_quality_policies.md#get_column_quality_policy_target)|GET|Returns a default checks pattern definition|
+|<span class="no-wrap-code">[`get_monitoring_daily_column_quality_policy`</span>](./column_quality_policies.md#get_monitoring_daily_column_quality_policy)|GET|Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a column level.|
+|<span class="no-wrap-code">[`get_monitoring_monthly_column_quality_policy`</span>](./column_quality_policies.md#get_monitoring_monthly_column_quality_policy)|GET|Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a column level.|
+|<span class="no-wrap-code">[`get_partitioned_daily_column_quality_policy`</span>](./column_quality_policies.md#get_partitioned_daily_column_quality_policy)|GET|Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a column level.|
+|<span class="no-wrap-code">[`get_partitioned_monthly_column_quality_policy`</span>](./column_quality_policies.md#get_partitioned_monthly_column_quality_policy)|GET|Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a column level.|
+|<span class="no-wrap-code">[`get_profiling_column_quality_policy`</span>](./column_quality_policies.md#get_profiling_column_quality_policy)|GET|Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a column level.|
+|<span class="no-wrap-code">[`update_column_quality_policy`</span>](./column_quality_policies.md#update_column_quality_policy)|PUT|Updates an default column-level checks pattern by saving a full specification object|
+|<span class="no-wrap-code">[`update_column_quality_policy_target`</span>](./column_quality_policies.md#update_column_quality_policy_target)|PUT|Updates an default column-level checks pattern, changing only the target object|
+|<span class="no-wrap-code">[`update_monitoring_daily_column_quality_policy`</span>](./column_quality_policies.md#update_monitoring_daily_column_quality_policy)|PUT|New configuration of the default daily monitoring checks on a column level. These checks will be applied to columns.|
+|<span class="no-wrap-code">[`update_monitoring_monthly_column_quality_policy`</span>](./column_quality_policies.md#update_monitoring_monthly_column_quality_policy)|PUT|New configuration of the default monthly monitoring checks on a column level. These checks will be applied to columns.|
+|<span class="no-wrap-code">[`update_partitioned_daily_column_quality_policy`</span>](./column_quality_policies.md#update_partitioned_daily_column_quality_policy)|PUT|New configuration of the default daily partitioned checks on a column level. These checks will be applied to columns.|
+|<span class="no-wrap-code">[`update_partitioned_monthly_column_quality_policy`</span>](./column_quality_policies.md#update_partitioned_monthly_column_quality_policy)|PUT|New configuration of the default monthly partitioned checks on a column level. These checks will be applied to columns.|
+|<span class="no-wrap-code">[`update_profiling_column_quality_policy`</span>](./column_quality_policies.md#update_profiling_column_quality_policy)|PUT|New configuration of the default profiling checks on a column level. These checks will be applied to columns.|
+
+
 ## columns
 Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.
 
@@ -128,6 +154,18 @@ Operations for retrieving the list of data quality dashboards supported by DQOps
 |<span class="no-wrap-code">[`get_dashboard_level_5`</span>](./dashboards.md#get_dashboard_level_5)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
 
 
+## data_domains
+Data domain management API to create different data domains.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`create_data_domain`</span>](./data_domains.md#create_data_domain)|POST|Creates a new data domain given a data domain display name.|
+|<span class="no-wrap-code">[`delete_data_domain`</span>](./data_domains.md#delete_data_domain)|DELETE|Deletes a data domain. The domain is deleted in the DQOps SaaS cloud and locally.|
+|<span class="no-wrap-code">[`get_local_data_domains`</span>](./data_domains.md#get_local_data_domains)|GET|Returns a list of local data domains that this instance is maintaining. Data domains are supported only in an ENTERPRISE versions of DQOps.|
+|<span class="no-wrap-code">[`switch_to_data_domain`</span>](./data_domains.md#switch_to_data_domain)|GET|Switches to a different data domain. This operation sends a special cookie and redirects the user to the home screen.|
+|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.|
+
+
 ## data_grouping_configurations
 Operations for managing the configuration of data groupings on a table level in DQOps.
 
@@ -141,6 +179,18 @@ Operations for managing the configuration of data groupings on a table level in 
 |<span class="no-wrap-code">[`update_table_grouping_configuration`</span>](./data_grouping_configurations.md#update_table_grouping_configuration)|PUT|Updates a data grouping configuration according to the provided model|
 
 
+## data_lineage
+Operations related to managing and inspecting table and column lineage.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`create_table_source_table`</span>](./data_lineage.md#create_table_source_table)|POST|Creates a new source table of the table&#x27;s data lineage.|
+|<span class="no-wrap-code">[`delete_table_source_table`</span>](./data_lineage.md#delete_table_source_table)|DELETE|Deletes a specific data lineage source table of the given table.|
+|<span class="no-wrap-code">[`get_table_source_table`</span>](./data_lineage.md#get_table_source_table)|GET|Reads a specific data lineage source table defined on a target tale.|
+|<span class="no-wrap-code">[`get_table_source_tables`</span>](./data_lineage.md#get_table_source_tables)|GET|Returns a list of source tables on the data lineage that are sources of the given table.|
+|<span class="no-wrap-code">[`update_table_source_table`</span>](./data_lineage.md#update_table_source_table)|PUT|Update a specific data lineage source table using a new model.|
+
+
 ## data_sources
 Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).
 
@@ -149,58 +199,6 @@ Rest API controller that operates on data sources that are not yet imported, tes
 |<span class="no-wrap-code">[`get_remote_data_source_schemas`</span>](./data_sources.md#get_remote_data_source_schemas)|GET|Introspects a list of schemas inside a remote data source, identified by an already imported connection.|
 |<span class="no-wrap-code">[`get_remote_data_source_tables`</span>](./data_sources.md#get_remote_data_source_tables)|GET|Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.|
 |<span class="no-wrap-code">[`test_connection`</span>](./data_sources.md#test_connection)|POST|Checks if the given remote connection can be opened and if the credentials are valid|
-
-
-## default_column_check_patterns
-Operations for managing the configuration of the default column-level checks for columns matching a pattern.
-
-|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
-|----------------|------|---------------------------------|
-|<span class="no-wrap-code">[`copy_from_default_column_checks_pattern`</span>](./default_column_check_patterns.md#copy_from_default_column_checks_pattern)|POST|Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.|
-|<span class="no-wrap-code">[`create_default_column_checks_pattern`</span>](./default_column_check_patterns.md#create_default_column_checks_pattern)|POST|Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.|
-|<span class="no-wrap-code">[`create_default_column_checks_pattern_target`</span>](./default_column_check_patterns.md#create_default_column_checks_pattern_target)|POST|Creates (adds) a new default column-level checks pattern configuration.|
-|<span class="no-wrap-code">[`delete_default_column_checks_pattern`</span>](./default_column_check_patterns.md#delete_default_column_checks_pattern)|DELETE|Deletes a default column-level checks pattern|
-|<span class="no-wrap-code">[`get_all_default_column_checks_patterns`</span>](./default_column_check_patterns.md#get_all_default_column_checks_patterns)|GET|Returns a flat list of all column-level default check patterns configured for this instance. Default checks are applied on columns dynamically.|
-|<span class="no-wrap-code">[`get_default_column_checks_pattern`</span>](./default_column_check_patterns.md#get_default_column_checks_pattern)|GET|Returns a default checks pattern definition as a full specification object|
-|<span class="no-wrap-code">[`get_default_column_checks_pattern_target`</span>](./default_column_check_patterns.md#get_default_column_checks_pattern_target)|GET|Returns a default checks pattern definition|
-|<span class="no-wrap-code">[`get_default_monitoring_daily_column_checks_pattern`</span>](./default_column_check_patterns.md#get_default_monitoring_daily_column_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a column level.|
-|<span class="no-wrap-code">[`get_default_monitoring_monthly_column_checks_pattern`</span>](./default_column_check_patterns.md#get_default_monitoring_monthly_column_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a column level.|
-|<span class="no-wrap-code">[`get_default_partitioned_daily_column_checks_pattern`</span>](./default_column_check_patterns.md#get_default_partitioned_daily_column_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a column level.|
-|<span class="no-wrap-code">[`get_default_partitioned_monthly_column_checks_pattern`</span>](./default_column_check_patterns.md#get_default_partitioned_monthly_column_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a column level.|
-|<span class="no-wrap-code">[`get_default_profiling_column_checks_pattern`</span>](./default_column_check_patterns.md#get_default_profiling_column_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a column level.|
-|<span class="no-wrap-code">[`update_default_column_checks_pattern`</span>](./default_column_check_patterns.md#update_default_column_checks_pattern)|PUT|Updates an default column-level checks pattern by saving a full specification object|
-|<span class="no-wrap-code">[`update_default_column_checks_pattern_target`</span>](./default_column_check_patterns.md#update_default_column_checks_pattern_target)|PUT|Updates an default column-level checks pattern, changing only the target object|
-|<span class="no-wrap-code">[`update_default_monitoring_daily_column_checks_pattern`</span>](./default_column_check_patterns.md#update_default_monitoring_daily_column_checks_pattern)|PUT|New configuration of the default daily monitoring checks on a column level. These checks will be applied to columns.|
-|<span class="no-wrap-code">[`update_default_monitoring_monthly_column_checks_pattern`</span>](./default_column_check_patterns.md#update_default_monitoring_monthly_column_checks_pattern)|PUT|New configuration of the default monthly monitoring checks on a column level. These checks will be applied to columns.|
-|<span class="no-wrap-code">[`update_default_partitioned_daily_column_checks_pattern`</span>](./default_column_check_patterns.md#update_default_partitioned_daily_column_checks_pattern)|PUT|New configuration of the default daily partitioned checks on a column level. These checks will be applied to columns.|
-|<span class="no-wrap-code">[`update_default_partitioned_monthly_column_checks_pattern`</span>](./default_column_check_patterns.md#update_default_partitioned_monthly_column_checks_pattern)|PUT|New configuration of the default monthly partitioned checks on a column level. These checks will be applied to columns.|
-|<span class="no-wrap-code">[`update_default_profiling_column_checks_pattern`</span>](./default_column_check_patterns.md#update_default_profiling_column_checks_pattern)|PUT|New configuration of the default profiling checks on a column level. These checks will be applied to columns.|
-
-
-## default_table_check_patterns
-Operations for managing the configuration of the default table-level checks for tables matching a pattern.
-
-|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
-|----------------|------|---------------------------------|
-|<span class="no-wrap-code">[`copy_from_default_table_checks_pattern`</span>](./default_table_check_patterns.md#copy_from_default_table_checks_pattern)|POST|Creates (adds) a copy of an existing default table-level checks pattern configuration, under a new name.|
-|<span class="no-wrap-code">[`create_default_table_checks_pattern`</span>](./default_table_check_patterns.md#create_default_table_checks_pattern)|POST|Creates (adds) a new default table-level checks pattern configuration by saving a full specification object.|
-|<span class="no-wrap-code">[`create_default_table_checks_pattern_target`</span>](./default_table_check_patterns.md#create_default_table_checks_pattern_target)|POST|Creates (adds) a new default table-level checks pattern configuration.|
-|<span class="no-wrap-code">[`delete_default_table_checks_pattern`</span>](./default_table_check_patterns.md#delete_default_table_checks_pattern)|DELETE|Deletes a default table-level checks pattern|
-|<span class="no-wrap-code">[`get_all_default_table_checks_patterns`</span>](./default_table_check_patterns.md#get_all_default_table_checks_patterns)|GET|Returns a flat list of all table-level default check patterns configured for this instance. Default checks are applied on tables dynamically.|
-|<span class="no-wrap-code">[`get_default_monitoring_daily_table_checks_pattern`</span>](./default_table_check_patterns.md#get_default_monitoring_daily_table_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a table level.|
-|<span class="no-wrap-code">[`get_default_monitoring_monthly_table_checks_pattern`</span>](./default_table_check_patterns.md#get_default_monitoring_monthly_table_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a table level.|
-|<span class="no-wrap-code">[`get_default_partitioned_daily_table_checks_pattern`</span>](./default_table_check_patterns.md#get_default_partitioned_daily_table_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a table level.|
-|<span class="no-wrap-code">[`get_default_partitioned_monthly_table_checks_pattern`</span>](./default_table_check_patterns.md#get_default_partitioned_monthly_table_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a table level.|
-|<span class="no-wrap-code">[`get_default_profiling_table_checks_pattern`</span>](./default_table_check_patterns.md#get_default_profiling_table_checks_pattern)|GET|Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a table level.|
-|<span class="no-wrap-code">[`get_default_table_checks_pattern`</span>](./default_table_check_patterns.md#get_default_table_checks_pattern)|GET|Returns a default checks pattern definition as a full specification object|
-|<span class="no-wrap-code">[`get_default_table_checks_pattern_target`</span>](./default_table_check_patterns.md#get_default_table_checks_pattern_target)|GET|Returns a default checks pattern definition|
-|<span class="no-wrap-code">[`update_default_monitoring_daily_table_checks_pattern`</span>](./default_table_check_patterns.md#update_default_monitoring_daily_table_checks_pattern)|PUT|New configuration of the default daily monitoring checks on a table level. These checks will be applied to tables.|
-|<span class="no-wrap-code">[`update_default_monitoring_monthly_table_checks_pattern`</span>](./default_table_check_patterns.md#update_default_monitoring_monthly_table_checks_pattern)|PUT|New configuration of the default monthly monitoring checks on a table level. These checks will be applied to tables.|
-|<span class="no-wrap-code">[`update_default_partitioned_daily_table_checks_pattern`</span>](./default_table_check_patterns.md#update_default_partitioned_daily_table_checks_pattern)|PUT|New configuration of the default daily partitioned checks on a table level. These checks will be applied to tables.|
-|<span class="no-wrap-code">[`update_default_partitioned_monthly_table_checks_pattern`</span>](./default_table_check_patterns.md#update_default_partitioned_monthly_table_checks_pattern)|PUT|New configuration of the default monthly partitioned checks on a table level. These checks will be applied to tables.|
-|<span class="no-wrap-code">[`update_default_profiling_table_checks_pattern`</span>](./default_table_check_patterns.md#update_default_profiling_table_checks_pattern)|PUT|New configuration of the default profiling checks on a table level. These checks will be applied to tables.|
-|<span class="no-wrap-code">[`update_default_table_checks_pattern`</span>](./default_table_check_patterns.md#update_default_table_checks_pattern)|PUT|Updates an default table-level checks pattern by saving a full specification object|
-|<span class="no-wrap-code">[`update_default_table_checks_pattern_target`</span>](./default_table_check_patterns.md#update_default_table_checks_pattern_target)|PUT|Updates an default table-level checks pattern, changing only the target object|
 
 
 ## defaults
@@ -480,6 +478,32 @@ Operations for managing the configurations of table comparisons between tables o
 |<span class="no-wrap-code">[`update_table_comparison_partitioned_daily`</span>](./table_comparisons.md#update_table_comparison_partitioned_daily)|PUT|Updates a table comparison checks partitioned daily (comparing day to day)|
 |<span class="no-wrap-code">[`update_table_comparison_partitioned_monthly`</span>](./table_comparisons.md#update_table_comparison_partitioned_monthly)|PUT|Updates a table comparison checks partitioned monthly (comparing month to month)|
 |<span class="no-wrap-code">[`update_table_comparison_profiling`</span>](./table_comparisons.md#update_table_comparison_profiling)|PUT|Updates a table comparison profiling checks|
+
+
+## table_quality_policies
+Operations for managing the configuration of data quality policies at a table level. Policies are the default configuration of data quality checks for tables matching a pattern.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`copy_from_table_quality_policy`</span>](./table_quality_policies.md#copy_from_table_quality_policy)|POST|Creates (adds) a copy of an existing default table-level checks pattern configuration (data quality policy) under a new name.|
+|<span class="no-wrap-code">[`create_table_quality_policy_pattern`</span>](./table_quality_policies.md#create_table_quality_policy_pattern)|POST|Creates (adds) a new default table-level checks pattern (data quality policy) configuration by saving a full specification object.|
+|<span class="no-wrap-code">[`create_table_quality_policy_target`</span>](./table_quality_policies.md#create_table_quality_policy_target)|POST|Creates (adds) a new default table-level checks pattern configuration (a table-level data quality policy).|
+|<span class="no-wrap-code">[`delete_table_quality_policy`</span>](./table_quality_policies.md#delete_table_quality_policy)|DELETE|Deletes a default table-level checks pattern (a data quality policy at a column level).|
+|<span class="no-wrap-code">[`get_monitoring_daily_table_quality_policy`</span>](./table_quality_policies.md#get_monitoring_daily_table_quality_policy)|GET|Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a table level.|
+|<span class="no-wrap-code">[`get_monitoring_monthly_table_quality_policy`</span>](./table_quality_policies.md#get_monitoring_monthly_table_quality_policy)|GET|Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a table level.|
+|<span class="no-wrap-code">[`get_partitioned_daily_table_quality_policy`</span>](./table_quality_policies.md#get_partitioned_daily_table_quality_policy)|GET|Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a table level.|
+|<span class="no-wrap-code">[`get_partitioned_monthly_table_quality_policy`</span>](./table_quality_policies.md#get_partitioned_monthly_table_quality_policy)|GET|Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a table level.|
+|<span class="no-wrap-code">[`get_profiling_table_quality_policy`</span>](./table_quality_policies.md#get_profiling_table_quality_policy)|GET|Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a table level.|
+|<span class="no-wrap-code">[`get_table_quality_policies`</span>](./table_quality_policies.md#get_table_quality_policies)|GET|Returns a flat list of all table-level default check patterns (data quality policies) configured for this instance. Default checks are applied on tables dynamically.|
+|<span class="no-wrap-code">[`get_table_quality_policy`</span>](./table_quality_policies.md#get_table_quality_policy)|GET|Returns a default table-level checks pattern (data quality policy) definition as a full specification object|
+|<span class="no-wrap-code">[`get_table_quality_policy_target`</span>](./table_quality_policies.md#get_table_quality_policy_target)|GET|Returns a default checks pattern definition (a data quality policy)|
+|<span class="no-wrap-code">[`update_monitoring_daily_table_quality_policy`</span>](./table_quality_policies.md#update_monitoring_daily_table_quality_policy)|PUT|New configuration of the default daily monitoring checks on a table level. These checks will be applied to tables.|
+|<span class="no-wrap-code">[`update_monitoring_monthly_table_quality_policy`</span>](./table_quality_policies.md#update_monitoring_monthly_table_quality_policy)|PUT|New configuration of the default monthly monitoring checks on a table level. These checks will be applied to tables.|
+|<span class="no-wrap-code">[`update_partitioned_daily_table_quality_policy`</span>](./table_quality_policies.md#update_partitioned_daily_table_quality_policy)|PUT|New configuration of the default daily partitioned checks on a table level. These checks will be applied to tables.|
+|<span class="no-wrap-code">[`update_partitioned_monthly_table_quality_policy`</span>](./table_quality_policies.md#update_partitioned_monthly_table_quality_policy)|PUT|New configuration of the default monthly partitioned checks on a table level. These checks will be applied to tables.|
+|<span class="no-wrap-code">[`update_profiling_table_quality_policy`</span>](./table_quality_policies.md#update_profiling_table_quality_policy)|PUT|New configuration of the default profiling checks on a table level. These checks will be applied to tables.|
+|<span class="no-wrap-code">[`update_table_quality_policy`</span>](./table_quality_policies.md#update_table_quality_policy)|PUT|Updates an default table-level checks pattern (data quality policy) by saving a full specification object|
+|<span class="no-wrap-code">[`update_table_quality_policy_target`</span>](./table_quality_policies.md#update_table_quality_policy_target)|PUT|Updates an default table-level checks pattern (data quality policy), changing only the target object|
 
 
 ## tables

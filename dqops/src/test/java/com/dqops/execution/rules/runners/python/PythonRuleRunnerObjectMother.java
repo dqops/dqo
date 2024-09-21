@@ -56,7 +56,7 @@ public class PythonRuleRunnerObjectMother {
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.day);
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
-                ruleParameters, today, null, new RuleTimeWindowSettingsSpec());
+                ruleParameters, today, null, new RuleTimeWindowSettingsSpec(), ruleParameters.getRuleParametersTemplate());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
@@ -93,7 +93,7 @@ public class PythonRuleRunnerObjectMother {
         PythonRuleRunner ruleRunner = getDefault();
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
-                ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec);
+                ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec, ruleParameters.getRuleParametersTemplate());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);

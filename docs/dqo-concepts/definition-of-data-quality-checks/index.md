@@ -210,6 +210,7 @@ stored in the [*$DQO_USER_HOME/checks/\*\*/\*.dqocheck.yaml*](../../reference/ya
 - Learn how to [configure data sources](../configuring-data-sources.md)
 - Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md)
 - Learn how to [run data quality checks](../running-data-quality-checks.md)
+- Data quality checks do not need to be configured manually. Learn how the [data quality rule mining](../data-quality-rule-mining.md) engine can automatically propose and configure data quality checks to detect the most common data quality issues.
 - [Learn more about profiling checks](data-profiling-checks.md)
 - [Learn more about monitoring checks](data-observability-monitoring-checks.md)
 - [Learn more about partition checks](partition-checks.md)

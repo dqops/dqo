@@ -16,7 +16,7 @@
 package com.dqops.metadata.storage.localfiles.columndefaultpatterns;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -36,7 +36,7 @@ public class ColumnDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
     private SpecificationKind kind = SpecificationKind.default_column_checks;
 
     @JsonPropertyDescription("The specification (configuration) of default data quality checks (data observability checks) that are applied on columns matching a pattern")
-    private ColumnDefaultChecksPatternSpec spec = new ColumnDefaultChecksPatternSpec();
+    private ColumnQualityPolicySpec spec = new ColumnQualityPolicySpec();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -44,7 +44,7 @@ public class ColumnDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
     public ColumnDefaultChecksPatternYaml() {
     }
 
-    public ColumnDefaultChecksPatternYaml(ColumnDefaultChecksPatternSpec spec) {
+    public ColumnDefaultChecksPatternYaml(ColumnQualityPolicySpec spec) {
         this.spec = spec;
     }
 
@@ -84,7 +84,7 @@ public class ColumnDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
      * Returns a configuration of default data observability checks for tables matching a pattern.
      * @return Default checks for tables.
      */
-    public ColumnDefaultChecksPatternSpec getSpec() {
+    public ColumnQualityPolicySpec getSpec() {
         return spec;
     }
 
@@ -92,7 +92,7 @@ public class ColumnDefaultChecksPatternYaml implements InvalidYamlStatusHolder {
      * Sets a configuration of default table-level checks applied for tables matching a pattern.
      * @param spec Default checks for tables.
      */
-    public void setSpec(ColumnDefaultChecksPatternSpec spec) {
+    public void setSpec(ColumnQualityPolicySpec spec) {
         this.spec = spec;
     }
 

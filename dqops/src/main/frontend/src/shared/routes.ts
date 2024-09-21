@@ -282,8 +282,8 @@ export const ROUTES = {
   DATA_DICTIONARY_LIST_DETAIL: () => '/definitions/data-dictionaries',
   DATA_DICTIONARY_DETAIL: (dictionary: string) =>
     `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
-  DEFAULT_CHECKS_PATTERNS: (pattern: string) =>
-    `/definitions/default-check-patterns/${urlencodeDecoder(pattern)}`,
+  DEFAULT_CHECKS_PATTERNS: (type: string) =>
+    `/definitions/default-check-patterns/${urlencodeDecoder(type)}`,
   DEFAULT_CHECK_PATTERN_DETAIL: (type: string, pattern: string) =>
     `/definitions/default-check/${urlencodeDecoder(type)}/${urlencodeDecoder(
       pattern
@@ -441,8 +441,7 @@ export const ROUTES = {
   DATA_DICTIONARY_LIST_VALUE: () => '/definitions/data-dictionaries',
   DATA_DICTIONARY_VALUE: (dictionary: string) =>
     `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
-  DEFAULT_CHECKS_PATTERNS_VALUE: (pattern: string) =>
-    `/definitions/default-check-patterns/${urlencodeDecoder(pattern)}`,
+  DEFAULT_CHECKS_PATTERNS_VALUE: () => `/definitions/default-check-patterns`,
   DEFAULT_CHECK_PATTERN_VALUE: (type: string, pattern: string) =>
     `/definitions/default-check/${urlencodeDecoder(type)}/${urlencodeDecoder(
       pattern
@@ -494,6 +493,7 @@ export const ROUTES = {
       '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/:column/partitioned/:timePartitioned/:category/:checkName',
     QUALITY_CHECKS: '/:checkTypes',
     HOME: '/home',
+    DATA_QUALITY_SUMMARY: '/data-quality-summary',
     TABLES: '/tables',
     COLUMNS: '/columns',
     GLOBAL_INCIDENTS: '/global-incidents',
@@ -515,7 +515,7 @@ export const ROUTES = {
     SHARED_CREDENTIALS_DETAIL: '/definitions/shared-credential/:credential',
     DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionaries',
     DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`,
-    DEFAULT_CHECKS_PATTERNS: `/definitions/default-check-patterns/:pattern`,
+    DEFAULT_CHECKS_PATTERNS: `/definitions/default-check-patterns/:type`,
     DEFAULT_CHECK_PATTERN_DETAIL: `/definitions/default-check/:type/:pattern`
   }
 };

@@ -26,7 +26,7 @@ import java.util.*;
  * Base collection that is tracking changes and indexes elements by name.
  */
 public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushable & InstanceStatusTracking & HierarchyNode>
-        extends AbstractList<V> implements HierarchyNode {
+        extends AbstractList<V> implements HierarchyNode, Cloneable {
     @JsonIgnore
     private List<V> list = new ArrayList<>();
     @JsonIgnore

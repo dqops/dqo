@@ -40,8 +40,10 @@ import { ReactComponent as CsvSvg } from './svg/csv-icon.svg';
 import { ReactComponent as DashboardsSvg } from './svg/dashboards.svg';
 import { ReactComponent as DataDictionarySvg } from './svg/data-dictionary.svg';
 import { ReactComponent as DataSourcesSvg } from './svg/data_sources.svg';
+import { ReactComponent as DataSourcesWhite } from './svg/data_sources_white.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
+import { ReactComponent as DefinitionsPoliciesSvg } from './svg/definitions-policies.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
 import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
 import { ReactComponent as DeleteSvg } from './svg/delete.svg';
@@ -253,7 +255,9 @@ const iconsMap: any = {
   'iceberg-big': IcebergBigSvg,
   deltalake: DeltaLakeSvg,
   'deltalake-big': DeltaLakeBigSvg,
-  letter: LetterSvg
+  letter: LetterSvg,
+  data_sources_white: DataSourcesWhite,
+  definitions_policies: DefinitionsPoliciesSvg
 };
 
 interface SvgIconProps {

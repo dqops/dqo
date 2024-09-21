@@ -64,10 +64,10 @@ export default function RuleMining({
   const defaultParameters: CheckMiningParametersModel = {
     severity_level: 'error',
     fail_checks_at_percent_error_rows: 2.0,
-    copy_failed_profiling_checks: false,
+    copy_failed_profiling_checks: true,
     copy_disabled_profiling_checks: false,
     copy_profiling_checks: true,
-    propose_default_checks: true,
+    reconfigure_policy_enabled_checks: true,
     propose_minimum_row_count: true,
     propose_column_count: true,
     propose_timeliness_checks: true,
@@ -83,7 +83,7 @@ export default function RuleMining({
     propose_date_checks: true,
     propose_bool_percent_checks: true,
     propose_values_in_set_checks: true,
-    propose_top_values_checks: false,  // intentional false
+    propose_top_values_checks: false, // intentional false
     propose_text_conversion_checks: true,
     propose_standard_pattern_checks: true,
     detect_regular_expressions: true,
@@ -131,7 +131,7 @@ export default function RuleMining({
     }
   };
 
-  const proposeChecks = async () => {
+  const proposeChecks = async (flash?: boolean) => {
     const addPrefix = (key: string) => {
       if (key.includes('*') || key.length === 0) {
         return key;
@@ -173,11 +173,7 @@ export default function RuleMining({
     const getShouldUserCollectStatisitcs = (
       checksUI: CheckMiningProposalModel
     ) => {
-      if (
-        checksUI &&
-        checksUI.table_checks?.categories?.length === 0 &&
-        Object.keys(checksUI?.column_checks ?? {}).length === 0
-      ) {
+      if (checksUI.missing_current_statistics) {
         if (checkTypes === CheckTypes.PROFILING) {
           dispatch(
             setJobAllert({
@@ -197,6 +193,17 @@ export default function RuleMining({
             })
           );
         }
+      } else {
+        if (flash && typeof flash === 'boolean') {
+          dispatch(
+            setJobAllert({
+              activeTab: firstLevelActiveTab,
+              action: 'table-quality-status',
+              tooltipMessage:
+                'When the "run checks" job finishes, the table quality status will show the status of all passed and failed data quality checks.'
+            })
+          );
+        }
       }
     };
 
@@ -204,7 +211,8 @@ export default function RuleMining({
       ...configuration,
       category_filter: addPrefix(configuration.category_filter ?? ''),
       column_name_filter: addPrefix(configuration.column_name_filter ?? ''),
-      check_name_filter: addPrefix(configuration.check_name_filter ?? '')
+      check_name_filter: addPrefix(configuration.check_name_filter ?? ''),
+      propose_checks_from_statistics: checkTypes === CheckTypes.PROFILING
     };
     setLoading(true);
     switch (checkTypes) {
@@ -318,6 +326,16 @@ export default function RuleMining({
             />
           </div>
         )}
+      {checkTypes !== CheckTypes.PROFILING && (
+        <div className="text-sm px-8 pt-4">
+          The number of propositions shown depends on the activated checks in
+          the Profiling section.
+          <br />
+          To increase the number of propositions, you can either activate more
+          profiling checks manually or use the data quality rule miner in the Profiling
+          section.
+        </div>
+      )}
       <div>
         <RuleMiningFilters
           configuration={configuration}
@@ -326,6 +344,11 @@ export default function RuleMining({
           applyChecks={applyChecks}
           isUpdated={isUpdated}
           isUpdatedFilters={isUpdatedFilters}
+          isApplyDisabled={
+            checksUI &&
+            checksUI.table_checks?.categories?.length === 0 &&
+            Object.keys(checksUI?.column_checks ?? {}).length === 0
+          }
         />
       </div>
       {checksUI &&
@@ -352,13 +375,13 @@ export default function RuleMining({
           proposeChecks();
           setRunChecksDialogOpened(false);
         }}
-        message="Do you want to run the checks?"
+        message="The proposed configuration has been applied. Do you want to run activated checks?"
         onConfirm={() => {
           setRunChecksDialogOpened(false);
           runPartitionedChecks({
             check_search_filters: runChecksJobTemplate
           }).then(() => {
-            proposeChecks();
+            proposeChecks(true);
           });
           toggleOpen();
         }}

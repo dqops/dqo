@@ -20,6 +20,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`custom_sql`](./table-profiling-checks.md#tablecustomsqlprofilingchecksspec)</span>|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|*[TableCustomSqlProfilingChecksSpec](./table-profiling-checks.md#tablecustomsqlprofilingchecksspec)*| | | |
 |<span class="no-wrap-code ">[`availability`](./table-profiling-checks.md#tableavailabilityprofilingchecksspec)</span>|Configuration of the table availability data quality checks on a table level.|*[TableAvailabilityProfilingChecksSpec](./table-profiling-checks.md#tableavailabilityprofilingchecksspec)*| | | |
 |<span class="no-wrap-code ">[`schema`](./table-profiling-checks.md#tableschemaprofilingchecksspec)</span>|Configuration of schema (column count and schema) data quality checks on a table level.|*[TableSchemaProfilingChecksSpec](./table-profiling-checks.md#tableschemaprofilingchecksspec)*| | | |
+|<span class="no-wrap-code ">[`uniqueness`](./table-profiling-checks.md#tableuniquenessprofilingchecksspec)</span>|Configuration of uniqueness checks on a table level.|*[TableUniquenessProfilingChecksSpec](./table-profiling-checks.md#tableuniquenessprofilingchecksspec)*| | | |
 |<span class="no-wrap-code ">[`comparisons`](./table-profiling-checks.md#tablecomparisonprofilingchecksspecmap)</span>|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|*[TableComparisonProfilingChecksSpecMap](./table-profiling-checks.md#tablecomparisonprofilingchecksspecmap)*| | | |
 |<span class="no-wrap-code ">[`custom`](./table-profiling-checks.md#customcheckspecmap)</span>|Dictionary of custom checks. The keys are check names within this category.|*[CustomCheckSpecMap](./table-profiling-checks.md#customcheckspecmap)*| | | |
 
@@ -133,6 +134,22 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`profile_column_list_changed`](../../../checks/table/schema/column-list-changed.md)</span>|Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|*[TableSchemaColumnListChangedCheckSpec](../../../checks/table/schema/column-list-changed.md)*| | | |
 |<span class="no-wrap-code ">[`profile_column_list_or_order_changed`](../../../checks/table/schema/column-list-or-order-changed.md)</span>|Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|*[TableSchemaColumnListOrOrderChangedCheckSpec](../../../checks/table/schema/column-list-or-order-changed.md)*| | | |
 |<span class="no-wrap-code ">[`profile_column_types_changed`](../../../checks/table/schema/column-types-changed.md)</span>|Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|*[TableSchemaColumnTypesChangedCheckSpec](../../../checks/table/schema/column-types-changed.md)*| | | |
+|<span class="no-wrap-code ">[`custom_checks`](./table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](./table-profiling-checks.md#customcategorycheckspecmap)*| | | |
+
+
+
+___
+
+## TableUniquenessProfilingChecksSpec
+Container of built-in preconfigured uniqueness data quality checks on a table level.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`profile_duplicate_record_count`](../../../checks/table/uniqueness/duplicate-record-count.md)</span>|Verifies that the number of duplicate record values in a table does not exceed the maximum accepted count.|*[TableDuplicateRecordCountCheckSpec](../../../checks/table/uniqueness/duplicate-record-count.md)*| | | |
+|<span class="no-wrap-code ">[`profile_duplicate_record_percent`](../../../checks/table/uniqueness/duplicate-record-percent.md)</span>|Verifies that the percentage of duplicate record values in a table does not exceed the maximum accepted percentage.|*[TableDuplicateRecordPercentCheckSpec](../../../checks/table/uniqueness/duplicate-record-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](./table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](./table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 

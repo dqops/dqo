@@ -21,12 +21,14 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -56,6 +58,14 @@ public class AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSp
      * Default constructor.
      */
     public AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec() {
+    }
+
+    /**
+     * Configures the anomaly detection rule with a parameter.
+     * @param anomalyPercent Anomaly percent.
+     */
+    public AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(Double anomalyPercent) {
+        this.anomalyPercent = anomalyPercent;
     }
 
     /**
@@ -115,5 +125,16 @@ public class AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSp
         }
 
         this.anomalyPercent = DoubleRounding.roundToKeepEffectiveDigits(this.anomalyPercent * 0.7);
+    }
+
+    /**
+     * Returns the default configuration of rule parameters (additional parameters passed to the rule) that should be published in its .dqorule.yaml configuration file.
+     *
+     * @return Additional configuration to save.
+     */
+    @Override
+    @JsonIgnore
+    public Map<String, String> getRuleParametersTemplate() {
+        return AnomalyDetectionRuleConfiguration.T_STUDENT_DISTRIBUTION_PARAMETERS;
     }
 }

@@ -7,6 +7,18 @@ Follow this guide to learn each concept of DQOps Data Quality Operations Center 
 ## List of DQOps concepts
 This article is a dictionary of DQOps terms. Click on the links to learn about every concept.
 
+### **[Data quality process](data-quality-process.md)**
+DQOps follows a two-stage data quality process. The first step is a [data quality assessment](data-quality-process.md#data-quality-assessment) using the [data profiler](definition-of-data-quality-checks/data-profiling-checks.md) . 
+This step identifies confirmed data quality issues. In the second stage,
+users configure [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and [partition checks](definition-of-data-quality-checks/partition-checks.md) that regularly verify data quality using Data Observability.
+
+
+### **[Data quality rule miner](data-quality-rule-mining.md)**
+The data quality rule miner is responsible for proposing the configuration of
+[data quality checks](definition-of-data-quality-checks/index.md) and their
+[rule thresholds](definition-of-data-quality-rules.md) to detect [the most common data quality checks](data-quality-rule-mining.md#information-used-for-proposing-checks).
+
+
 ### **[What is a data quality check](definition-of-data-quality-checks/index.md)**
 A data quality check detects data quality issues. The check in DQOps is defined as a pair
 of a [sensor](definition-of-data-quality-sensors.md) that captures metrics from the data source and a [rule](definition-of-data-quality-rules.md) that verifies the sensor's readout.
@@ -26,6 +38,11 @@ DQOps has three types of data quality checks:
 - [Partition checks](definition-of-data-quality-checks/partition-checks.md) for
   [analyzing partitioned data incrementally](incremental-data-quality-monitoring.md), or analyzing
   incrementally any table that has a date column.
+
+
+### **[User interface overview](dqops-user-interface-overview.md)**
+The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
+Configuring data quality checks on multiple tables at the same time is supported in separate tabs.
 
 
 ### **[Configuring data sources](configuring-data-sources.md)**
@@ -65,6 +82,11 @@ are shown by Visual Studio Code and many other editors when editing DQOps YAML f
 ### **[Running data quality checks](running-data-quality-checks.md)**
 Data quality checks configured for each table and column are executed by targeting the data source, table, column,
 check name, check type, check category or even labels assigned to tables or columns.
+
+
+### **[Data quality rule mining](data-quality-rule-mining.md)**
+DQOps supports data quality rule mining, a feature that uses statistics and sample data to automatically configure data quality checks,
+which will detect the most common data quality issues without manual configuration.
 
 
 ### **[Data observability](data-observability.md)**
@@ -165,11 +187,6 @@ A column that identifies a country must be present in the table and data groupin
 
 Data grouping allows detecting data quality issues for groups of rows loaded by different data streams,
 different data pipelines, or received from different vendors or departments.
-
-
-### **[User interface overview](dqops-user-interface-overview.md)**
-The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
-Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
 
 
 ### **[Command-line interface](command-line-interface.md)**

@@ -264,6 +264,10 @@ public class ColumnDateValuesInFuturePercentCheckSpec
                         columnDataAssetProfilingResults.getSampleValues().stream().allMatch(sample -> sample.getInstantValue() != null));
 
         if (sourceProfilingCheck.getActualValue() == null) {
+            if (!isDateType) {
+                return false;
+            }
+
             if (miningParameters.getFailChecksAtPercentErrorRows() == 0.0) {
                 // no errors expected, so we will find the newest date from the stats and configure the lead time
 
@@ -291,12 +295,7 @@ public class ColumnDateValuesInFuturePercentCheckSpec
                     return false;
                 }
             } else {
-                if (isDateType) {
-                    sourceProfilingCheck.setActualValue(0.0); // just fake number like there were no dates, to enable a check, even if it fails
-                    sourceProfilingCheck.setExecutedAt(Instant.now());
-                } else {
-                    return false; // not a date column, skipping
-                }
+                return false; // not a date column, skipping
             }
         }
 

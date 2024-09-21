@@ -93,7 +93,7 @@ To display non-standard checks, such as *contains_usa_zipcode_percent* select th
 The following example shows the result of detecting phone numbers, emails, and zip codes in the **complaint_description** column.
 DQOps did not detect sensitive data inside any value stored in the column.
 
-![Data quality check editor with PII checks enabled and valid results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-data-quality-checks-valid-results-min2.png){ loading=lazy; width="1200px" }
+![Data quality check editor with PII checks enabled and correct results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-data-quality-checks-valid-results-min2.png){ loading=lazy; width="1200px" }
 
 The next example shows the result of running the same checks on the **incident_address** column.
 We can see that this public dataset contains a few phone numbers and emails.
@@ -104,7 +104,7 @@ We can see that this public dataset contains a few phone numbers and emails.
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for PII check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section. 
+**Error sampling** tab in the results section. 
 
 ![Data quality checks editor with PII checks that found sensitive data - error sampling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/pii-check-detecting-emails-and-phones-found-error-sampling.png){ loading=lazy; width="1200px" }
 

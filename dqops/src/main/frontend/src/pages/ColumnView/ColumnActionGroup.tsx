@@ -59,7 +59,7 @@ const ColumnActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {shouldDelete && (
         <Button
-          className="!h-10"
+          className="!h-[37px]"
           color={
             !(userProfile.can_manage_data_sources !== true)
               ? 'primary'
@@ -83,9 +83,7 @@ const ColumnActionGroup = ({
             label={
               collectStatisticsSpinner ? 'Collecting...' : 'Collect statistics'
             }
-            className={clsx(
-              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
-            )}
+            className={clsx('!h-[37px] whitespace-nowrap gap-x-2 ')}
             leftIcon={
               collectStatisticsSpinner ? (
                 <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
@@ -105,7 +103,7 @@ const ColumnActionGroup = ({
           color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
-          className="w-40 !h-10"
+          className="w-40 !h-[37px]"
           onClick={onUpdate}
           loading={isUpdating}
           disabled={isDisabled || userProfile.can_manage_data_sources !== true}

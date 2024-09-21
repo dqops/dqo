@@ -15,8 +15,8 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.labels.LabelSetSpec;
@@ -276,12 +276,6 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             if (columnSpec.getHierarchyId() != null) {
                 statisticsCollector.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "statistics_collector"));
             }
-
-            if (this.filters.getSamplesLimit() != null) {
-                ColumnSamplingColumnSamplesSensorParametersSpec columnSamplingColumnSamplesSensorParametersSpec =
-                        statisticsCollector.getSampling().getColumnSamples().getParameters();
-                columnSamplingColumnSamplesSensorParametersSpec.setLimit(this.filters.getSamplesLimit());
-            }
         }
 
         return TreeNodeTraversalResult.traverseSelectedChildNodes(statisticsCollector);
@@ -429,7 +423,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableQualityPolicyList tableDefaultChecksPatternWrappers, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 
@@ -441,7 +435,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

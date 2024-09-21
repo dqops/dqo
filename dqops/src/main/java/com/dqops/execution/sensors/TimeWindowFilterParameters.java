@@ -141,6 +141,22 @@ public class TimeWindowFilterParameters implements Cloneable {
     private OffsetDateTime toDateTimeOffset;
 
     /**
+     * An additional filter which must be a valid SQL predicate (an SQL expression that returns 'true' or 'false') that is added to the WHERE clause
+     * of the SQL query that DQOps will run on the data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch of records
+     * is loaded, and the data quality checks are evaluated as a data contract. All the records in that batch must tagged with the same value, and the passed predicate to find
+     * records from that batch would use the filter in the form: \"{alias}.batch_id = 1\". The filter can use replacement tokens {alias} to reference the analyzed table.
+     */
+    @CommandLine.Option(names = {"--where-filter"}, description = "An additional filter which must be a valid SQL predicate (an SQL expression that returns 'true' or 'false') that is added to the WHERE clause " +
+            "of the SQL query that DQOps will run on the data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch of records " +
+            "is loaded, and the data quality checks are evaluated as a data contract. All the records in that batch must tagged with the same value, and the passed predicate to find " +
+            "records from that batch would use the filter in the form: \"{alias}.batch_id = 1\". The filter can use replacement tokens {alias} to reference the analyzed table.")
+    @JsonPropertyDescription("An additional filter which must be a valid SQL predicate (an SQL expression that returns 'true' or 'false') that is added to the WHERE clause " +
+            "of the SQL query that DQOps will run on the data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch of records " +
+            "is loaded, and the data quality checks are evaluated as a data contract. All the records in that batch must tagged with the same value, and the passed predicate to find " +
+            "records from that batch would use the filter in the form: \"{alias}.batch_id = 1\". The filter can use replacement tokens {alias} to reference the analyzed table.")
+    private String whereFilter;
+
+    /**
      * Creates a copy of the configuration, copying (importing) also filters provided by a user.
      * @param userFilterParameters User filter parameters.
      * @param partitionedChecksTimeScale Time series gradient for daily/monthly partitioned data. Should be null for non partitioned checks.
@@ -153,6 +169,7 @@ public class TimeWindowFilterParameters implements Cloneable {
         }
 
         TimeWindowFilterParameters cloned = this.clone();
+        cloned.setWhereFilter(userFilterParameters.getWhereFilter());
 
         if (userFilterParameters.fromDate != null || userFilterParameters.fromDateTime != null || userFilterParameters.fromDateTimeOffset != null) {
             cloned.fromDate = userFilterParameters.fromDate;
@@ -196,7 +213,7 @@ public class TimeWindowFilterParameters implements Cloneable {
      * If DQOps receives an empty time window, the default time window configured on the table is used.
      * @return True when any filters are applied, false when it is an empty (dummy) filter, to be ignored.
      */
-    public boolean hasAnyParametersApplied() {
+    public boolean hasAnyTimePeriodParametersApplied() {
         return dailyPartitioningRecentDays != null ||
                 dailyPartitioningIncludeToday != null ||
                 monthlyPartitioningRecentMonths != null ||
@@ -206,7 +223,7 @@ public class TimeWindowFilterParameters implements Cloneable {
                 fromDateTimeOffset != null ||
                 toDate != null ||
                 toDateTime != null ||
-                toDateTimeOffset != null;
+                toDateTimeOffset != null; // the WHERE filter is not included, because these are only time specific parameters
     }
 
     /**

@@ -89,7 +89,7 @@ The **Refresh** button located at the top right of the screen, allows you to ref
 
 At the top of The Incidents summary screen, there are two sections displaying the summaries of **Open** and **Acknowledged** incidents.
 Each section is divided into three blocks based on severity level: Warnings, Errors and Fatal errors. In each block,
-there is a summary of new incidents from the last 2 months along with detailed data showing the number of incidents detected in the last 24h, last 7 days,
+there is a summary of new incidents from the last 2 months, along with detailed data showing the number of incidents detected in the last 24h, last 7 days,
 current month and previous month.
 
 Below the **Open** and **Acknowledged** incidents summaries, there is a table that list incidents grouped by the selected check category or the quality dimension, depending on your grouping selection.
@@ -248,10 +248,13 @@ In the **Data Source** section, you can access:
 - **Schedule:** Allows you to [configure of the check execution schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) at the connection level.
 - **Comments:** Allows adding comments to your connection.
 - **Labels:** Allows adding labels to your connection.
-- **Tables:** Displays a summary of the data quality status for tables in this connection. 
-- **Columns:** Displays a summary of the data quality status for columns in this connection. 
+- **Schemas:** Allow importing schemas and tables.
+- **Data quality summary:** Displays summaries of the data quality status. You have the option to choose one of two subtabs:
+    - **Tables:** This subtab provides a summary of the data quality status for tables in this connection.
+    - **Columns:** This subtab provides a summary of the data quality status for columns in this connection.
 - **Default grouping template:** Allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
-- **Incidents and notifications:** Allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../integrations/webhooks/index.md) whenever a new incident is created or modified.
+- **Incident grouping**: Allows configuring incidents grouping level. [Learn more about incidents](../dqo-concepts/grouping-data-quality-issues-to-incidents.md) that let you keep track of the issues that arise during data quality monitoring.
+- **Notifications:** Allows configuring incidents and Webhooks for notifications. [Learn how to configure notifications](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#configure-notification-for-an-incident) whenever a new incident is created or modified.
 
 ![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling2.png){ loading=lazy; width="1200px" }
 
@@ -316,7 +319,7 @@ If you select the "Multiple levels" option, you will switch to the Advanced chec
 
 In the advanced mode, you can configure different thresholds for warning, error, and fatal error severity levels.
 
-To access the Advanced mode, select the "Multiple levels" option from the Issue severity level dropdown menu in 
+To access the Advanced mode, select the **Multiple levels** option from the Issue severity level dropdown menu in 
 the simplified data check editor, as shown above. Once you have made this selection, you will receive a prompt 
 informing you that the editor will switch to an advanced mode.
 
@@ -362,7 +365,7 @@ The buttons and icons located on the left side of each check name allow you to p
 
 - **Check Information:** View tooltip with detailed information about the specific check. 
 - **Check results colored square:** Indicates the result of the last check run:
-    - Green for a valid result
+    - Green for a correct result
     - Yellow for a warning
     - Orange for an error
     - Red for a fatal error
@@ -388,7 +391,7 @@ dimension, depending on the selected option. The first row displays the results 
 on the table, while the following rows show the column names and the results from the executed column-level checks. 
 The color indicate the current or the highest severity status:
 
-- Green for a valid result
+- Green for a correct result
 - Yellow for a warning
 - Orange for an error
 - Red for a fatal error
@@ -423,7 +426,7 @@ If the job is queued or running you can cancel or stop it by clicking the X butt
 ### **Run checks summary**
 
 You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
-severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
+severity status of the results (green for a correct result, yellow for a warning, orange for an error and red for a fatal error).
 
 ![DQOps job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 

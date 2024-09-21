@@ -45,7 +45,7 @@ export const RuleActionGroup = ({
           color="primary"
           variant="outlined"
           label="Delete rule"
-          className="w-40 !h-10"
+          className="w-40 !h-[37px]"
           disabled={userProfile.can_manage_definitions !== true}
           onClick={onDelete}
         />
@@ -54,19 +54,16 @@ export const RuleActionGroup = ({
         color="primary"
         variant="outlined"
         label="Copy"
-        className="w-40 !h-10"
+        className="w-40 !h-[37px]"
         disabled={userProfile.can_manage_definitions !== true}
         onClick={onCopy}
       />
       <Button
-        color="primary"
+        color={isUpdatedRuleDetail ? 'primary' : 'secondary'}
         variant="contained"
         label="Save"
-        className="w-40 !h-10"
-        disabled={
-          (!isUpdatedRuleDetail && !copied) ||
-          userProfile.can_manage_definitions !== true
-        }
+        className="w-40 !h-[37px]"
+        disabled={userProfile.can_manage_definitions !== true}
         onClick={handleSave}
         loading={isUpdating}
       />

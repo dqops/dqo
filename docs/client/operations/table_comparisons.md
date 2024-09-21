@@ -285,7 +285,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -325,10 +325,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -350,7 +347,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -407,10 +405,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -432,7 +427,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -492,10 +488,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -517,7 +510,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -577,10 +571,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -602,7 +593,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -672,7 +664,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -712,10 +704,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -737,7 +726,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -794,10 +784,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -819,7 +806,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -879,10 +867,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -904,7 +889,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -964,10 +950,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -989,7 +972,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1059,7 +1043,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -1099,10 +1083,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1124,7 +1105,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1181,10 +1163,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1206,7 +1185,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1266,10 +1246,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1291,7 +1268,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1351,10 +1329,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1376,7 +1351,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1446,7 +1422,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -1486,10 +1462,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1511,7 +1484,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1568,10 +1542,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1593,7 +1564,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1653,10 +1625,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1678,7 +1647,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1738,10 +1708,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1763,7 +1730,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1833,7 +1801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -1873,10 +1841,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1898,7 +1863,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -1955,10 +1921,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -1980,7 +1943,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -2040,10 +2004,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -2065,7 +2026,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -2125,10 +2087,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -2150,7 +2109,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -3074,7 +3034,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  },
 		  "grouping_columns" : [ ],
 		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
 		    "error_difference_percent" : 1.0
 		  },
 		  "supports_compare_column_count" : true,
@@ -3096,7 +3055,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true,
+		    "deleteIncidents" : false,
+		    "deleteChecksConfiguration" : false,
 		    "checkCategory" : "comparisons",
 		    "tableComparisonName" : "sample_table_comparison",
 		    "checkType" : "monitoring",
@@ -3152,10 +3112,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3177,7 +3134,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3234,10 +3192,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3259,7 +3214,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3319,10 +3275,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3344,7 +3297,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3404,10 +3358,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3429,7 +3380,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3512,7 +3464,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  },
 		  "grouping_columns" : [ ],
 		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
 		    "error_difference_percent" : 1.0
 		  },
 		  "supports_compare_column_count" : true,
@@ -3534,7 +3485,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true,
+		    "deleteIncidents" : false,
+		    "deleteChecksConfiguration" : false,
 		    "checkCategory" : "comparisons",
 		    "tableComparisonName" : "sample_table_comparison",
 		    "checkType" : "monitoring",
@@ -3590,10 +3542,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3615,7 +3564,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3672,10 +3622,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3697,7 +3644,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3757,10 +3705,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3782,7 +3727,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3842,10 +3788,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -3867,7 +3810,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -3950,7 +3894,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  },
 		  "grouping_columns" : [ ],
 		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
 		    "error_difference_percent" : 1.0
 		  },
 		  "supports_compare_column_count" : true,
@@ -3972,7 +3915,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true,
+		    "deleteIncidents" : false,
+		    "deleteChecksConfiguration" : false,
 		    "checkCategory" : "comparisons",
 		    "tableComparisonName" : "sample_table_comparison",
 		    "checkType" : "monitoring",
@@ -4028,10 +3972,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4053,7 +3994,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4110,10 +4052,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4135,7 +4074,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4195,10 +4135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4220,7 +4157,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4280,10 +4218,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4305,7 +4240,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4388,7 +4324,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  },
 		  "grouping_columns" : [ ],
 		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
 		    "error_difference_percent" : 1.0
 		  },
 		  "supports_compare_column_count" : true,
@@ -4410,7 +4345,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true,
+		    "deleteIncidents" : false,
+		    "deleteChecksConfiguration" : false,
 		    "checkCategory" : "comparisons",
 		    "tableComparisonName" : "sample_table_comparison",
 		    "checkType" : "monitoring",
@@ -4466,10 +4402,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4491,7 +4424,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4548,10 +4482,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4573,7 +4504,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4633,10 +4565,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4658,7 +4587,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4718,10 +4648,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4743,7 +4670,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4826,7 +4754,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  },
 		  "grouping_columns" : [ ],
 		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
 		    "error_difference_percent" : 1.0
 		  },
 		  "supports_compare_column_count" : true,
@@ -4848,7 +4775,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "deleteCheckResults" : true,
 		    "deleteSensorReadouts" : true,
 		    "deleteErrorSamples" : true,
-		    "deleteIncidents" : true,
+		    "deleteIncidents" : false,
+		    "deleteChecksConfiguration" : false,
 		    "checkCategory" : "comparisons",
 		    "tableComparisonName" : "sample_table_comparison",
 		    "checkType" : "monitoring",
@@ -4904,10 +4832,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -4929,7 +4854,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -4986,10 +4912,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -5011,7 +4934,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -5071,10 +4995,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -5096,7 +5017,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -5156,10 +5078,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			grouping_columns=[
 			
 			],
-			default_compare_thresholds=CompareThresholdsModel(
-				warning_difference_percent=0.0,
-				error_difference_percent=1.0
-			),
+			default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 			supports_compare_column_count=True,
 			columns=[
 			
@@ -5181,7 +5100,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				delete_check_results=True,
 				delete_sensor_readouts=True,
 				delete_error_samples=True,
-				delete_incidents=True,
+				delete_incidents=False,
+				delete_checks_configuration=False,
 				check_category='comparisons',
 				table_comparison_name='sample_table_comparison',
 				check_type='monitoring',
@@ -5484,7 +5404,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -5524,10 +5444,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -5549,7 +5466,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -5607,10 +5525,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -5632,7 +5547,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -5693,10 +5609,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -5718,7 +5631,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -5779,10 +5693,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -5804,7 +5715,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -5876,7 +5788,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -5916,10 +5828,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -5941,7 +5850,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -5999,10 +5909,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6024,7 +5931,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6085,10 +5993,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6110,7 +6015,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6171,10 +6077,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6196,7 +6099,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6268,7 +6172,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -6308,10 +6212,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6333,7 +6234,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6391,10 +6293,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6416,7 +6315,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6477,10 +6377,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6502,7 +6399,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6563,10 +6461,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6588,7 +6483,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6660,7 +6556,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -6700,10 +6596,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6725,7 +6618,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6783,10 +6677,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6808,7 +6699,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6869,10 +6761,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6894,7 +6783,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -6955,10 +6845,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -6980,7 +6867,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -7052,7 +6940,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":false,\"deleteChecksConfiguration\":false,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -7092,10 +6980,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -7117,7 +7002,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -7175,10 +7061,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -7200,7 +7083,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -7261,10 +7145,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -7286,7 +7167,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',
@@ -7347,10 +7229,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		grouping_columns=[
 		
 		],
-		default_compare_thresholds=CompareThresholdsModel(
-			warning_difference_percent=0.0,
-			error_difference_percent=1.0
-		),
+		default_compare_thresholds=CompareThresholdsModel(error_difference_percent=1.0),
 		supports_compare_column_count=True,
 		columns=[
 		
@@ -7372,7 +7251,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			delete_error_samples=True,
-			delete_incidents=True,
+			delete_incidents=False,
+			delete_checks_configuration=False,
 			check_category='comparisons',
 			table_comparison_name='sample_table_comparison',
 			check_type='monitoring',

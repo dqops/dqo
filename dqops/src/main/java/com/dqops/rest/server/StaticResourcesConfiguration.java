@@ -16,13 +16,18 @@
 package com.dqops.rest.server;
 
 import com.dqops.core.configuration.DqoWebServerConfigurationProperties;
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.google.api.gax.rpc.InvalidArgumentException;
+import org.apache.parquet.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.web.reactive.config.ResourceHandlerRegistration;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Objects;
 
@@ -36,14 +41,24 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
      */
     public static final String BASE_URL = "";
 
+    /**
+     * The name of the logo file in the "settings" folder.
+     */
+    public static final String LOGO_ICON_FILE_NAME = "logo.png";
+
     private final DqoWebServerConfigurationProperties webServerConfigurationProperties;
+    private final HomeLocationFindService homeLocationFindService;
 
     /**
      * Dependency injection constructor.
      * @param webServerConfigurationProperties Web sever specific configuration.
+     * @param homeLocationFindService User home finder.
      */
-    public StaticResourcesConfiguration(DqoWebServerConfigurationProperties webServerConfigurationProperties) {
+    @Autowired
+    public StaticResourcesConfiguration(DqoWebServerConfigurationProperties webServerConfigurationProperties,
+                                        HomeLocationFindService homeLocationFindService) {
         this.webServerConfigurationProperties = webServerConfigurationProperties;
+        this.homeLocationFindService = homeLocationFindService;
     }
 
     /**
@@ -52,6 +67,20 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String userHomePathString = this.homeLocationFindService.getUserHomePath();
+        if (!Strings.isNullOrEmpty(userHomePathString)) {
+            Path pathToLogoFile = Path.of(userHomePathString).resolve(BuiltInFolderNames.SETTINGS).resolve(LOGO_ICON_FILE_NAME);
+            if (pathToLogoFile.toFile().exists()) {
+                String logoAbsolutePathString = pathToLogoFile.toAbsolutePath().toString();
+                ResourceHandlerRegistration logoResourceLocation = registry.addResourceHandler(BASE_URL + "/" + LOGO_ICON_FILE_NAME)
+                        .addResourceLocations("file:" + (logoAbsolutePathString.startsWith("/") ? logoAbsolutePathString : "/" + logoAbsolutePathString))
+                        .setUseLastModified(true)
+                        .setOptimizeLocations(true);
+                configureCacheControl(logoResourceLocation,
+                        this.webServerConfigurationProperties.getDynamicFilesCacheControlMaxAge(), false);
+            }
+        }
+
         ResourceHandlerRegistration filesInRootFolderRegistration = registry.addResourceHandler(BASE_URL + "/*")
                 .addResourceLocations("classpath:/static/")
                 .setUseLastModified(true)

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel,
   TargetColumnPatternSpec,
   TargetColumnPatternSpecDataTypeCategoryEnum,
   TargetTablePatternSpec
@@ -13,8 +13,8 @@ import Select from '../../components/Select';
 import TextArea from '../../components/TextArea';
 
 type TTarget =
-  | DefaultColumnChecksPatternListModel
-  | DefaultTableChecksPatternListModel;
+  | ColumnQualityPolicyListModel
+  | TableQualityPolicyListModel;
 
 type TDefaultCheckTargetConfigurationProps = {
   type: 'table' | 'column';
@@ -39,14 +39,14 @@ export default function DefaultCheckTargetConfiguration({
     <div>
       <div className="flex justify-between text-black text-sm">
         <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
-          <span className="w-30">Pattern name</span>
+          <span className="w-30">Quality policy name</span>
           {create === true ? (
             <Input
-              value={target?.pattern_name}
-              onChange={(e) => onChangeTarget({ pattern_name: e.target.value })}
+              value={target?.policy_name}
+              onChange={(e) => onChangeTarget({ policy_name: e.target.value })}
             />
           ) : (
-            <span className="font-bold">{target?.pattern_name}</span>
+            <span className="font-bold">{target?.policy_name}</span>
           )}
         </div>
         <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">

@@ -47,6 +47,19 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
     private StatisticsDataScope dataScope = StatisticsDataScope.table;
 
     /**
+     * Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonPropertyDescription("Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection.")
+    private boolean configureTable;
+
+    /**
+     * The default limit of column samples that are collected.
+     */
+    @JsonPropertyDescription("The default limit of column samples that are collected.")
+    private Integer samplesLimit;
+
+    /**
      * Progress listener that will receive events during the statistics collection.
      */
     @JsonIgnore
@@ -73,15 +86,21 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
      * @param statisticsCollectorSearchFilters Statistics collector search filters.
      * @param progressListener Progress listener to receive events during the statistics collector execution.
      * @param dataScope Statistics data scope to analyze - the whole table or each data stream separately.
+     * @param samplesLimit Column samples limit.
+     * @param configureTable Configure the table.
      * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
     public CollectStatisticsQueueJobParameters(StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                StatisticsCollectorExecutionProgressListener progressListener,
                                                StatisticsDataScope dataScope,
+                                               Integer samplesLimit,
+                                               boolean configureTable,
                                                boolean dummySensorExecution) {
         this.statisticsCollectorSearchFilters = statisticsCollectorSearchFilters;
         this.progressListener = progressListener;
         this.dataScope = dataScope;
+        this.samplesLimit = samplesLimit;
+        this.configureTable = configureTable;
         this.dummySensorExecution = dummySensorExecution;
     }
 
@@ -107,6 +126,22 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
      */
     public StatisticsDataScope getDataScope() {
         return dataScope;
+    }
+
+    /**
+     * Returns the limit of the column samples that are collected.
+     * @return The limit of column samples to capture.
+     */
+    public Integer getSamplesLimit() {
+        return samplesLimit;
+    }
+
+    /**
+     * Returns true when the statistics should be collected.
+     * @return True when the statistics should be collected.
+     */
+    public boolean isConfigureTable() {
+        return configureTable;
     }
 
     /**

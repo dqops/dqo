@@ -16,23 +16,26 @@ A notification contains the most important information about an incident you may
 
 ## Configure notifications
 
-You can use Webhooks to receive notifications for new data quality incidents or changes in the incident status.
+You can receive a notification with use of **webhooks** to receive notifications for new data quality incidents or changes in the incident status.
 
-To configure Webhooks, follow these steps:
+To configure a webhook notification, follow these steps:
 
-1. Go to the **Data Sources** section.
-2. Select the relevant data source.
-3. Select the **Incidents And Notifications** tab.
-4. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
+1. Go to the **Configuration** section.
+2. Open the **Global incident notifications** in tree and select the **default**.  
 
-![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-webhooks.png)
+    ![Connection notifications configuration](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications.png){ loading=lazy; width="1200px" }
+
+3. Enter the Webhooks URL in the specified input fields and save your changes using the **Save** button.
+
+    ![Global incident notifications default](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notification-default.png){ loading=lazy; width="1200px" }
+
 
 ## Types of webhooks configuration
 
 Configuration of webhooks in DQOps platform can be done in two different ways.
 
-First, is the default webhooks configuration available under Configuration menu.
-Second, is to configure webhooks on a connection level under the Notifications and Incidents tab. 
+First, is to configure webhooks on a connection level under the Notifications and Incidents tab. 
+Second, is the default webhooks configuration available under Configuration menu.
 
 DQOps uses both of them when preparing notifications.
 When the connection does not set the webhook link on it's level,
@@ -65,6 +68,7 @@ The fields of a JSON payload include the following:
 | **failed_checks_count** | The total number of failed data quality checks that were seen when the incident was raised for the first time.                                                                                                                                                                                              | String   |
 | **issue_url**           | The link (URL) to a ticket in an external system that is tracking this incident.                                                                                                                                                                                                                            | String   |
 | **status**              | Possible values for incident status include open, acknowledged, resolved and muted.                                                                                                                                                                                                                         | String   |
+| **message**             | Additional message of the notification message configured by user from the filtered notifications. Default notificaitons does not contain such field.                                                                                                                                                       | String   |
 | **text**                | Notification text in Markdown format that contains the most important fields from the payload.                                                                                                                                                                                                              | String   |
 
 
@@ -85,6 +89,7 @@ The json object presents as below:
     "highest_severity": 3,
     "failed_checks_count": 10,
     "status": "acknowledged",
+    "message": "An informative message about the incident",
     "text": "> *The incident in <http://localhost:8888/sources/connection/first-connection/schema/maven_restaurant_ratings/table/consumers/detail|maven_restaurant_ratings.consumers> table has been acknowledged.* \n>  \n> *First seen*: 2023-09-04 12:13:19 (GTM+2) \n> *Last seen*: 2023-09-04 14:35:51 (GTM+2) \n> *Quality dimension*: Reasonableness \n> *Check category*: volume \n> *Highest severity*: fatal \n> *Total data quality issues*: 10 \n>  \n> <http://localhost:8888/incidents/first-connection/2023/9/588af5cf-8ab9-a296-0af4-126772dbb2c7| *View in DQOps*> \n"
 }
 ```
@@ -96,7 +101,7 @@ Notification message can have the following status:
 - **Open**: This is the initial status of a new incident, which is automatically assigned by DQOps. The remaining statuses of the incidents (Acknowledged, Resolved, and Muted) have to be set manually. An open incident indicates that a data quality team together with the data owner or someone else responsible for identifying issues should take action to address the data quality issue. You can change an incident's status back to Open at any time.
 - **Acknowledged**: This status indicates that the incident has been acknowledged, and someone has begun to investigate the data quality issue. The Acknowledged status has to be manually marked in the Incident section. Usually, the data quality issues present at the data source level can be fixed by the data producer. Issues caused by a bug in the data pipeline or an ETL process should be fixed by the Data Engineering Team.
 - **Resolved**: This status indicates that the root cause of the issue has been identified and fixed. The resolved status has to be set manually in the Incident section.
-- **Muted**: This status hides the incident from your list. By default, any data quality issues associated with the incident will be muted for 60 days. If an incident is muted, DQO will not create a new one for 60 days. You can change the duration for muted incidents, by simply clicking the **Configure button** and changing the **Incidents and Notifications** settings. Muting the incident might be useful, when, for example, vendor’s data has been intentionally changed in comparison to the previous version.
+- **Muted**: This status hides the incident from your list. By default, any data quality issues associated with the incident will be muted for 60 days. If an incident is muted, DQOps will not create a new one for 60 days. You can change the duration for muted incidents, by simply clicking the **Configure button** and changing the **Incidents and Notifications** settings. Muting the incident might be useful, when, for example, vendor’s data has been intentionally changed in comparison to the previous version.
 
 
 ## Text field content and format
@@ -109,6 +114,7 @@ Payload's text field is built with the use of the following data:
 - **Data quality dimension**: Name of the dimension. [Read more](../../dqo-concepts/data-quality-dimensions.md)
 - **Highest severity level**: A severity level from the data quality rule. [Read more](../../dqo-concepts/definition-of-data-quality-checks/index.md)
 - **Total data quality issues**: A value from failedChecksCount JSON field.
+- **Message**: Additional message of the notification message configured by user from the filtered notifications. Default notifications does not contain such field.
 - **Links**: Quick access links.
  
 **Links**
@@ -154,6 +160,8 @@ Adding an Issue URL to an incident provides easy access to the issue in the tick
 
 ## Next steps
 
+- Read about [detailed notifications configuration](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md)
 - Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
 - Learn how the [data quality incident workflow](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md) is managed
   by DQOps by grouping similar data quality issues into data quality incidents.
+- Learn about data quality incident management, grouping and notifications [grouping-data-quality-issues-to-incidents.md](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md)

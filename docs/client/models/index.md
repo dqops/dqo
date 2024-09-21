@@ -73,6 +73,19 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckDefinitionModel*](./checks.md#checkdefinitionmodel)|Check model that is returned by the REST API. Describes a single unique data quality check.|
 
 
+## column_quality_policies
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*DataTypeCategory*](./column_quality_policies.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
+|[*TargetColumnPatternSpec*](./column_quality_policies.md#targetcolumnpatternspec)|The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.|
+|[*ColumnQualityPolicyListModel*](./column_quality_policies.md#columnqualitypolicylistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
+|[*ColumnMonitoringCheckCategoriesSpec*](./column_quality_policies.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
+|[*ColumnPartitionedCheckCategoriesSpec*](./column_quality_policies.md#columnpartitionedcheckcategoriesspec)|Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)|
+|[*ColumnQualityPolicySpec*](./column_quality_policies.md#columnqualitypolicyspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching columns.|
+|[*ColumnQualityPolicyModel*](./column_quality_policies.md#columnqualitypolicymodel)|Default column-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on columns that match the filter.|
+
+
 ## columns
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -113,6 +126,13 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DashboardsFolderSpec*](./dashboards.md#dashboardsfolderspec)|Description of a folder with multiple dashboards or other folders.|
 
 
+## data_domains
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*LocalDataDomainModel*](./data_domains.md#localdatadomainmodel)|Model that describes a local data domain. It is also used to create new data domains.|
+
+
 ## data_grouping_configurations
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -120,6 +140,17 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DataGroupingConfigurationListModel*](./data_grouping_configurations.md#datagroupingconfigurationlistmodel)|Basic model for data grouping configuration on a table, returned by the rest api.|
 |[*DataGroupingConfigurationModel*](./data_grouping_configurations.md#datagroupingconfigurationmodel)|Model of data grouping configuration on a table returned by the rest api, including all configuration information.|
 |[*DataGroupingConfigurationTrimmedModel*](./data_grouping_configurations.md#datagroupingconfigurationtrimmedmodel)|Data grouping on a table model with trimmed access path.|
+
+
+## data_lineage
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*TableLineageSourceListModel*](./data_lineage.md#tablelineagesourcelistmodel)|Data lineage model that describes one source table of the current table.|
+|[*SourceColumnsSetSpec*](./data_lineage.md#sourcecolumnssetspec)|A collection of unique names of source columns from which the current column receives data. This information is used to track column-level data lineage.|
+|[*ColumnLineageSourceSpec*](./data_lineage.md#columnlineagesourcespec)|Describes the list of source columns for a column in the current table.|
+|[*ColumnLineageSourceSpecMap*](./data_lineage.md#columnlineagesourcespecmap)|Dictionary of mapping of source columns to the columns in the current table. The keys in this dictionary are the column names in the current table.|
+|[*TableLineageSourceSpec*](./data_lineage.md#tablelineagesourcespec)|Data lineage specification for a table to identify a source table of the current table where this object is stored.|
 
 
 ## data_sources
@@ -130,31 +161,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ConnectionTestModel*](./data_sources.md#connectiontestmodel)|Connection test status result model returned from REST API. Describes the status of testing a connection (opening a connection to verify if it usable, credentials are approved and the access was granted by the tested data source).|
 |[*RemoteTableListModel*](./data_sources.md#remotetablelistmodel)|Remote table list model that is returned when a data source is introspected to retrieve the list of tables available in a data source.|
 |[*SchemaRemoteModel*](./data_sources.md#schemaremotemodel)|Schema model returned from REST API. Describes a schema on the source database with established connection.|
-
-
-## default_column_check_patterns
-
-|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
-|------------|---------------------------------|
-|[*DataTypeCategory*](./default_column_check_patterns.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
-|[*TargetColumnPatternSpec*](./default_column_check_patterns.md#targetcolumnpatternspec)|The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.|
-|[*DefaultColumnChecksPatternListModel*](./default_column_check_patterns.md#defaultcolumncheckspatternlistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
-|[*ColumnMonitoringCheckCategoriesSpec*](./default_column_check_patterns.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
-|[*ColumnPartitionedCheckCategoriesSpec*](./default_column_check_patterns.md#columnpartitionedcheckcategoriesspec)|Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)|
-|[*ColumnDefaultChecksPatternSpec*](./default_column_check_patterns.md#columndefaultcheckspatternspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching columns.|
-|[*DefaultColumnChecksPatternModel*](./default_column_check_patterns.md#defaultcolumncheckspatternmodel)|Default column-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on columns that match the filter.|
-
-
-## default_table_check_patterns
-
-|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
-|------------|---------------------------------|
-|[*TargetTablePatternSpec*](./default_table_check_patterns.md#targettablepatternspec)|The configuration of a table pattern to match default table checks.|
-|[*DefaultTableChecksPatternListModel*](./default_table_check_patterns.md#defaulttablecheckspatternlistmodel)|The listing model of table-level default check patterns that is returned by the REST API.|
-|[*TableMonitoringCheckCategoriesSpec*](./default_table_check_patterns.md#tablemonitoringcheckcategoriesspec)|Container of table level monitoring, divided by the time window (daily, monthly, etc.)|
-|[*TablePartitionedCheckCategoriesSpec*](./default_table_check_patterns.md#tablepartitionedcheckcategoriesspec)|Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)|
-|[*TableDefaultChecksPatternSpec*](./default_table_check_patterns.md#tabledefaultcheckspatternspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.|
-|[*DefaultTableChecksPatternModel*](./default_table_check_patterns.md#defaulttablecheckspatternmodel)|Default table-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on tables that match the filter.|
 
 
 ## dictionaries
@@ -359,6 +365,18 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*TableComparisonModel*](./table_comparisons.md#tablecomparisonmodel)|Model that contains the all editable information about a table-to-table comparison defined on a compared table.|
 
 
+## table_quality_policies
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*TargetTablePatternSpec*](./table_quality_policies.md#targettablepatternspec)|The configuration of a table pattern to match default table checks.|
+|[*TableQualityPolicyListModel*](./table_quality_policies.md#tablequalitypolicylistmodel)|The listing model of table-level default check patterns that is returned by the REST API.|
+|[*TableMonitoringCheckCategoriesSpec*](./table_quality_policies.md#tablemonitoringcheckcategoriesspec)|Container of table level monitoring, divided by the time window (daily, monthly, etc.)|
+|[*TablePartitionedCheckCategoriesSpec*](./table_quality_policies.md#tablepartitionedcheckcategoriesspec)|Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)|
+|[*TableQualityPolicySpec*](./table_quality_policies.md#tablequalitypolicyspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.|
+|[*TableQualityPolicyModel*](./table_quality_policies.md#tablequalitypolicymodel)|Default table-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on tables that match the filter.|
+
+
 ## tables
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -384,6 +402,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*DqoCloudUserModel*](./users.md#dqocloudusermodel)|DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.|
+|[*DqoUserRolesModel*](./users.md#dqouserrolesmodel)|DQOps user model - identifies a user in a multi-user DQOps deployment and the user&#x27;s roles.|
 
 

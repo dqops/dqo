@@ -55,7 +55,7 @@ public class ParallelJobLimitProviderImpl implements ParallelJobLimitProvider {
      */
     @Override
     public int getMaxDegreeOfParallelism() {
-        DqoUserPrincipal userPrincipalForAdministrator = this.userPrincipalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal userPrincipalForAdministrator = this.userPrincipalProvider.createLocalInstanceAdminPrincipal();
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
         if (apiKey == null) {
             return 1;

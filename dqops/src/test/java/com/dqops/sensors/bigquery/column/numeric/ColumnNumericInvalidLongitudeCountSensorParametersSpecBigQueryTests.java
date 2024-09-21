@@ -101,8 +101,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -132,8 +132,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
@@ -161,8 +161,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -186,8 +186,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
@@ -222,8 +222,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
@@ -253,8 +253,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
@@ -284,8 +284,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
@@ -327,8 +327,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
@@ -364,8 +364,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
@@ -399,8 +399,8 @@ public class ColumnNumericInvalidLongitudeCountSensorParametersSpecBigQueryTests
             SELECT
                 SUM(
                     CASE
-                        WHEN %1$s >= -180.0 AND %1$s <= 180.0 THEN 0
-                        ELSE 1
+                        WHEN %1$s < -180.0 OR %1$s > 180.0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,

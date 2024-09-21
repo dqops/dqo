@@ -74,7 +74,7 @@ public class FolderTreeNode implements Cloneable {
      * @return Folder tree node (empty)
      */
     public static FolderTreeNode createRootFolderNode() {
-        FolderTreeNode folderTreeNode = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        FolderTreeNode folderTreeNode = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         folderTreeNode.loadOnce();
         return folderTreeNode;
     }

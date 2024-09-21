@@ -73,27 +73,34 @@ const CheckRuleItem = ({
     <div
       className={
         (isSimpleMode
-          ? 'text-left text-gray-700 h-20 flex items-center justify-center min-w-100'
+          ? 'text-left text-gray-700 h-20 flex items-center justify-center !min-w-100'
           : 'text-left text-gray-700 h-13') + backgroundClassesMap[type]
       }
     >
       <div
         className={clsx(
-          'flex justify-center items-center gap-x-2 min-w-38',
+          'flex justify-center items-center  min-w-38',
           backgroundClassesMap[type],
-          isSimpleMode && ' items-center h-20 px-2'
+          isSimpleMode && ' items-center h-20 px-2 ',
+          isSimpleMode &&
+            parameters?.rule_parameters &&
+            parameters?.rule_parameters?.length <= 1 &&
+            '!w-40',
+          parameters?.rule_parameters &&
+            parameters?.rule_parameters?.length === 2 &&
+            'gap-x-2'
         )}
       >
         {parameters?.configured === true ? (
           <div className="flex items-center ">
             {!isSimpleMode && (
               <IconButton
+                ripple={false}
                 className={clsx(
                   classesMap[type],
-                  'rounded-full w-6 h-6 my-1 !shadow-none hover:!shadow-none mr-2',
+                  'rounded-full w-6 h-6 my-1 !shadow-none hover:!shadow-none mr-1',
                   parameters.rule_parameters?.length !== 0 && 'mt-6'
                 )}
-                ripple={false}
                 onClick={() => {
                   onChange({
                     ...parameters,

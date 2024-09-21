@@ -29,7 +29,6 @@ import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.JsonSerializerObjectMother;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
-import org.junit.jupiter.api.Assertions;
 
 /**
  * User home context object mother.
@@ -43,7 +42,7 @@ public final class UserHomeContextObjectMother {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
         UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
-        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN)), adminIdentity);
+        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN)), adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer, false);
         userHomeContext.setUserHome(fileUserHomeModel);
         return userHomeContext;
@@ -58,7 +57,7 @@ public final class UserHomeContextObjectMother {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
         UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
-        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN)), adminIdentity);
+        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN)), adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer, false);
         userHomeContext.setUserHome(fileUserHomeModel);
 

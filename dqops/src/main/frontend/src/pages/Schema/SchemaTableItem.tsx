@@ -86,7 +86,7 @@ export default function SchemaTableItem({
       checkTypes ?? CheckTypes.MONITORING,
       item.connection_name ?? '',
       item.target?.schema_name ?? '',
-      'tables'
+      'data-quality-summary'
     );
     dispatch(
       addFirstLevelTab(checkTypes ?? CheckTypes.MONITORING, {

@@ -91,8 +91,10 @@ export default function TableQualityStatusCategory({
           style={{ padding: '0.5px', paddingBottom: 0, margin: '0.5px' }}
         >
           <div
-            className="h-full flex w-29 items-center justify-end "
-            onClick={() => tableStatus.status && toggleExtendedChecks(key, 'table')}
+            className="h-full flex w-29 items-center justify-end relative"
+            onClick={() =>
+              tableStatus.status && toggleExtendedChecks(key, 'table')
+            }
           >
             <div className="w-5 h-full"></div>
             {tableStatus.status && (
@@ -108,32 +110,8 @@ export default function TableQualityStatusCategory({
                     : {}
                 }
               >
-                {showTooltip && (
-                  <Tooltip
-                    content={renderTooltipContent(
-                      moment(tableCircleStatus.lastExecutedAt).format(
-                        'YYYY-MM-DD HH:mm:ss'
-                      ),
-                      tableCircleStatus.status,
-                      severityType
-                    )}
-                  >
-                    <div
-                      className={clsx(
-                        'h-4 w-4 mr-0.5 mt-2 ml-2 ',
-                        getColor(tableCircleStatus.status)
-                      )}
-                      style={{
-                        borderRadius: '6px',
-                        ...(getColor(tableCircleStatus.status) === 'bg-gray-150'
-                          ? backgroundStyle
-                          : {})
-                      }}
-                    ></div>
-                  </Tooltip>
-                )}
                 {showIcon && (
-                  <div className="flex justify-center items-center">
+                  <div className="absolute top-1 left-4.5">
                     <SvgIcon
                       name={
                         extendedChecks.some(
@@ -156,6 +134,30 @@ export default function TableQualityStatusCategory({
                       )}
                     />
                   </div>
+                )}
+                {showTooltip && (
+                  <Tooltip
+                    content={renderTooltipContent(
+                      moment(tableCircleStatus.lastExecutedAt).format(
+                        'YYYY-MM-DD HH:mm:ss'
+                      ),
+                      tableCircleStatus.status,
+                      severityType
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'h-4 w-4 ml-0.5 mt-2 mr-2 ',
+                        getColor(tableCircleStatus.status)
+                      )}
+                      style={{
+                        borderRadius: '6px',
+                        ...(getColor(tableCircleStatus.status) === 'bg-gray-150'
+                          ? backgroundStyle
+                          : {})
+                      }}
+                    ></div>
+                  </Tooltip>
                 )}
               </div>
             )}
@@ -209,7 +211,7 @@ export default function TableQualityStatusCategory({
                     )}
                     style={{
                       fontSize: '11px',
-                      ...(getColor(severity) === 'bg-gray-150'
+                      ...(getSecondColor(severity) === 'bg-gray-150'
                         ? secondBackgroundStyle
                         : {})
                     }}

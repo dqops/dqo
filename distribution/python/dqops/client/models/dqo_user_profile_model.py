@@ -56,6 +56,8 @@ class DqoUserProfileModel:
             download) already defined shared credentials.
         can_change_own_password (Union[Unset, bool]): User can change his own password in DQOps Cloud, because the DQOps
             Cloud Pairing API Key is valid and synchronization is enabled.
+        can_use_data_domains (Union[Unset, bool]): User can use data domains. Support for data domains requires an
+            ENTERPRISE license of DQOps.
     """
 
     user: Union[Unset, str] = UNSET
@@ -86,6 +88,7 @@ class DqoUserProfileModel:
     can_manage_users: Union[Unset, bool] = UNSET
     can_manage_and_view_shared_credentials: Union[Unset, bool] = UNSET
     can_change_own_password: Union[Unset, bool] = UNSET
+    can_use_data_domains: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -122,6 +125,7 @@ class DqoUserProfileModel:
             self.can_manage_and_view_shared_credentials
         )
         can_change_own_password = self.can_change_own_password
+        can_use_data_domains = self.can_use_data_domains
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -186,6 +190,8 @@ class DqoUserProfileModel:
             )
         if can_change_own_password is not UNSET:
             field_dict["can_change_own_password"] = can_change_own_password
+        if can_use_data_domains is not UNSET:
+            field_dict["can_use_data_domains"] = can_use_data_domains
 
         return field_dict
 
@@ -257,6 +263,8 @@ class DqoUserProfileModel:
 
         can_change_own_password = d.pop("can_change_own_password", UNSET)
 
+        can_use_data_domains = d.pop("can_use_data_domains", UNSET)
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -286,6 +294,7 @@ class DqoUserProfileModel:
             can_manage_users=can_manage_users,
             can_manage_and_view_shared_credentials=can_manage_and_view_shared_credentials,
             can_change_own_password=can_change_own_password,
+            can_use_data_domains=can_use_data_domains,
         )
 
         dqo_user_profile_model.additional_properties = d

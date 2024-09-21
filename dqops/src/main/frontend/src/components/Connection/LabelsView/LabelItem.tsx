@@ -41,6 +41,7 @@ const LabelItem = ({
       <div className="px-0 pr-8 max-w-34 min-w-34 py-2">
         <div className="flex justify-center">
           <IconButton
+            ripple={false}
             color="teal"
             size="sm"
             onClick={() => onRemove(idx)}

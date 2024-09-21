@@ -1,17 +1,13 @@
-import { IconButton, Tooltip } from '@material-tailwind/react';
-import clsx from 'clsx';
-import moment from 'moment';
+import { IconButton } from '@material-tailwind/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  DimensionCurrentDataQualityStatusModel,
-  DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
 import Checkbox from '../../components/Checkbox';
-import { getColor } from '../../components/Connection/TableView/TableQualityStatus/TableQualityStatusUtils';
+import QualityDimensionStatuses from '../../components/DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
@@ -91,6 +87,8 @@ export default function TableColumnsBody({
               undefined,
               false,
               undefined,
+              false,
+              undefined,
               statistics?.column_statistics?.at(index)
                 ?.collect_column_statistics_job_template
             ).then((res) => setJobId(res.data.jobId?.jobId))
@@ -134,22 +132,6 @@ export default function TableColumnsBody({
           ?.statistics_collector_search_filters?.columnNames
       : ([] as string[]);
   }, [job]);
-
-  const getBasicDimmensionsKeys = (column: MyData, type: string) => {
-    const basicDimensions = Object.keys(column.dimentions ?? {})?.find(
-      (x) => x === type
-    );
-    return basicDimensions;
-  };
-  const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-
-  const getAdditionalDimentionsKeys = (column: MyData) => {
-    return (
-      Object.keys(column.dimentions ?? {})?.filter(
-        (x) => !basicDimensionTypes.includes(x)
-      ) ?? []
-    );
-  };
 
   const getMidSectionItemsBasedOnWidth = () => {
     const width = window.innerWidth;
@@ -206,73 +188,7 @@ export default function TableColumnsBody({
             </div>
           </td>
           <td className="border-b border-gray-100 text-left px-4 py-2">
-            <div className="flex items-center gap-x-0.5">
-              {basicDimensionTypes.map((dimType) => {
-                const dimensionKey = getBasicDimmensionsKeys(column, dimType);
-                const currentSeverity =
-                  column.dimentions?.[dimensionKey as any]?.current_severity;
-                const lastCheckExecutedAt =
-                  column.dimentions?.[dimensionKey as any]
-                    ?.last_check_executed_at;
-                const severityColor = getColor(currentSeverity as any);
-                const hasNoSeverity = severityColor.length === 0;
-
-                const dimensionsClassNames = clsx(
-                  'w-3 h-3 border border-gray-150',
-                  {
-                    'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
-                    [severityColor]: !hasNoSeverity
-                  }
-                );
-                return (
-                  <Tooltip
-                    key={`Dimensionindex${dimType}`}
-                    content={renderSecondLevelTooltip(
-                      column.dimentions?.[dimensionKey as any] ?? {
-                        dimension: dimType
-                      }
-                    )}
-                  >
-                    <div
-                      className={dimensionsClassNames}
-                      style={{ borderRadius: '6px' }}
-                    />
-                  </Tooltip>
-                );
-              })}
-              {getAdditionalDimentionsKeys(column).map(
-                (dimensionKey: string, dimIndex) => {
-                  return (
-                    <Tooltip
-                      key={`DimensionTooltipindex${dimIndex}`}
-                      content={renderSecondLevelTooltip(
-                        column.dimentions?.[dimensionKey as any]
-                      )}
-                    >
-                      <div
-                        className={clsx(
-                          'w-3 h-3 border border-gray-150',
-                          getColor(
-                            column.dimentions?.[dimensionKey as any]
-                              ?.current_severity as
-                              | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
-                              | undefined
-                          ).length === 0
-                            ? 'bg-gray-150'
-                            : getColor(
-                                column.dimentions?.[dimensionKey as any]
-                                  ?.current_severity as
-                                  | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
-                                  | undefined
-                              )
-                        )}
-                        style={{ borderRadius: '6px' }}
-                      />
-                    </Tooltip>
-                  );
-                }
-              )}
-            </div>
+            <QualityDimensionStatuses dimensions={column.dimentions} />
           </td>
           <td
             className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
@@ -332,7 +248,7 @@ export default function TableColumnsBody({
           )}
           <td className="border-b border-gray-100 text-right px-4 py-2">
             <div className="flex justify-center items-center">
-              <div className="flex justify-center items-center">
+              <div className="flex items-center w-12">
                 <div>
                   {isNaN(Number(column.null_percent))
                     ? ''
@@ -384,6 +300,7 @@ export default function TableColumnsBody({
             <div className="flex" style={{ justifyContent: 'flex-end' }}>
               <div>
                 <IconButton
+                  ripple={false}
                   size="sm"
                   disabled={userProfile.can_collect_statistics !== true}
                   className={
@@ -403,6 +320,7 @@ export default function TableColumnsBody({
               </div>
               <div>
                 <IconButton
+                  ripple={false}
                   size="sm"
                   className="group bg-teal-500 ml-3 !shadow-none hover:!shadow-none hover:bg-[#028770]"
                   disabled={userProfile.can_manage_data_sources !== true}
@@ -424,69 +342,3 @@ export default function TableColumnsBody({
     </tbody>
   );
 }
-
-const renderSecondLevelTooltip = (
-  data: DimensionCurrentDataQualityStatusModel | undefined
-) => {
-  if (data && data.last_check_executed_at) {
-    return (
-      <div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Last executed at:</div>
-          <div>
-            {moment(data?.last_check_executed_at).format('YYYY-MM-DD HH:mm:ss')}
-          </div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Current severity level:</div>
-          <div>{data?.current_severity}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Highest historical severity level:</div>
-          <div>{data?.highest_historical_severity}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Quality Dimension:</div>
-          <div>{data?.dimension}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Executed checks:</div>
-          <div>{data?.executed_checks}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Valid results:</div>
-          <div>{data?.valid_results}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Warnings:</div>
-          <div>{data?.warnings}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Errors:</div>
-          <div>{data?.errors}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Fatals:</div>
-          <div>{data?.fatals}</div>
-        </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Data quality KPI:</div>
-          <div>
-            {data.data_quality_kpi !== undefined
-              ? Number(data.data_quality_kpi).toFixed(2) + ' %'
-              : '-'}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <div className="flex gap-x-2">
-        <div className="w-42">Quality Dimension:</div>
-        <div>{data?.dimension}</div>
-      </div>
-      <div className="w-full">No data quality checks configured</div>
-    </div>
-  );
-};

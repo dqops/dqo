@@ -143,6 +143,10 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Incident configuration',
       value: 'incident_configuration'
+    },
+    {
+      label: 'Source tables',
+      value: 'source_tables'
     }
   ],
   [CheckTypes.PROFILING]: [
@@ -167,7 +171,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-comparisons'
     },
     {
-      label: 'Rule mining',
+      label: 'Data quality rule mining',
       value: 'rule-mining'
     }
   ],
@@ -185,7 +189,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-comparisons'
     },
     {
-      label: 'Rule mining',
+      label: 'Copy verified profiling checks',
       value: 'rule-mining'
     }
   ],
@@ -203,7 +207,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-comparisons'
     },
     {
-      label: 'Rule mining',
+      label: 'Copy verified profiling checks',
       value: 'rule-mining'
     }
   ]

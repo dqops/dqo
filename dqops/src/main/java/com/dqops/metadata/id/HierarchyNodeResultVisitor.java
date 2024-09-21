@@ -34,13 +34,15 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
+import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
+import com.dqops.metadata.policies.table.TableQualityPolicyList;
+import com.dqops.metadata.policies.table.TableQualityPolicySpec;
+import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
+import com.dqops.metadata.policies.table.TargetTablePatternSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapperImpl;
@@ -62,6 +64,7 @@ import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
+import com.dqops.metadata.lineage.*;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
@@ -830,29 +833,29 @@ public interface HierarchyNodeResultVisitor<P, R> {
     /**
      * Accepts a default configuration of column observability checks specification.
      *
-     * @param columnDefaultChecksPatternSpec Column observability default checks specification.
+     * @param columnQualityPolicySpec Column observability default checks specification.
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(ColumnDefaultChecksPatternSpec columnDefaultChecksPatternSpec, P parameter);
+    R accept(ColumnQualityPolicySpec columnQualityPolicySpec, P parameter);
 
     /**
      * Accepts a default configuration of table observability checks specification.
      *
-     * @param tableDefaultChecksPatternSpec Table observability default checks specification.
+     * @param tableQualityPolicySpec Table observability default checks specification.
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(TableDefaultChecksPatternSpec tableDefaultChecksPatternSpec, P parameter);
+    R accept(TableQualityPolicySpec tableQualityPolicySpec, P parameter);
 
     /**
      * Accepts a default configuration of table observability checks wrapper.
      *
-     * @param tableDefaultChecksPatternWrapper Table observability default checks specification.
+     * @param tableQualityPolicyWrapper Table observability default checks specification.
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper, P parameter);
+    R accept(TableQualityPolicyWrapper tableQualityPolicyWrapper, P parameter);
 
     /**
      * Accepts a list of default configuration of table observability checks wrappers.
@@ -861,16 +864,16 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, P parameter);
+    R accept(TableQualityPolicyList tableDefaultChecksPatternWrappers, P parameter);
 
     /**
      * Accepts a default configuration of column observability checks wrapper.
      *
-     * @param columnDefaultChecksPatternWrapper Column observability default checks specification.
+     * @param columnQualityPolicyWrapper Column observability default checks specification.
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper, P parameter);
+    R accept(ColumnQualityPolicyWrapper columnQualityPolicyWrapper, P parameter);
 
     /**
      * Accepts a default configuration of column observability checks wrapper.
@@ -879,7 +882,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, P parameter);
+    R accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, P parameter);
 
     /**
      * Accept a table filter for a default check pattern.
@@ -930,4 +933,59 @@ public interface HierarchyNodeResultVisitor<P, R> {
      */
     R accept(IncidentNotificationTargetSpec incidentNotificationTargetSpec, P parameter);
 
+    /**
+     * Accept a source table data lineage specification.
+     * @param tableLineageSourceSpec Source table on the data lineage.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TableLineageSourceSpec tableLineageSourceSpec, P parameter);
+
+    /**
+     * Accept a list of source table data lineage specifications.
+     * @param tableLineageSourceSpecs List of source table on the data lineages.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TableLineageSourceSpecList tableLineageSourceSpecs, P parameter);
+
+    /**
+     * Accept a source columns data lineage specification.
+     * @param columnLineageSourceSpec Source columns on the data lineage.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnLineageSourceSpec columnLineageSourceSpec, P parameter);
+
+    /**
+     * Accept a dictionary of source columns data lineage specification.
+     * @param columnLineageSourceSpecMap Dictionary of source columns on the data lineage.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnLineageSourceSpecMap columnLineageSourceSpecMap, P parameter);
+
+    /**
+     * Accept a list of source column names in the data lineage.
+     * @param sourceColumnsSetSpec Source column names for a single target column.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(SourceColumnsSetSpec sourceColumnsSetSpec, P parameter);
+
+    /**
+     * Accepts the configuration object of a local data domain.
+     * @param localDataDomainSpec Local data domain specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(LocalDataDomainSpec localDataDomainSpec, P parameter);
+
+    /**
+     * Accepts the map (dictionary) object containing the configuration of local data domain.
+     * @param localDataDomainSpecMap Local data domain map.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(LocalDataDomainSpecMap localDataDomainSpecMap, P parameter);
 }

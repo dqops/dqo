@@ -37,7 +37,10 @@ class DeleteStoredDataQueueJobParameters:
             parameter must be set to *true* to delete the error samples.
         delete_incidents (Union[Unset, bool]): Delete the data from the
             [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this
-            parameter must be set to *true* to delete the error samples.
+            parameter must be set to *true* to delete the incidents.
+        delete_checks_configuration (Union[Unset, bool]): Delete the data quality configured checks from the table. They
+            are detached from the configuration.Because the default value is *false*, this parameter must be set to *true*
+            to delete the checks configuration.
         column_names (Union[Unset, List[str]]): The list of column names to delete the data for column level results or
             errors only for selected columns.
         check_category (Union[Unset, str]): The check category name, for example *volume* or *anomaly*.
@@ -76,6 +79,7 @@ class DeleteStoredDataQueueJobParameters:
     delete_sensor_readouts: Union[Unset, bool] = UNSET
     delete_error_samples: Union[Unset, bool] = UNSET
     delete_incidents: Union[Unset, bool] = UNSET
+    delete_checks_configuration: Union[Unset, bool] = UNSET
     column_names: Union[Unset, List[str]] = UNSET
     check_category: Union[Unset, str] = UNSET
     table_comparison_name: Union[Unset, str] = UNSET
@@ -108,6 +112,7 @@ class DeleteStoredDataQueueJobParameters:
         delete_sensor_readouts = self.delete_sensor_readouts
         delete_error_samples = self.delete_error_samples
         delete_incidents = self.delete_incidents
+        delete_checks_configuration = self.delete_checks_configuration
         column_names: Union[Unset, List[str]] = UNSET
         if not isinstance(self.column_names, Unset):
             column_names = self.column_names
@@ -148,6 +153,8 @@ class DeleteStoredDataQueueJobParameters:
             field_dict["deleteErrorSamples"] = delete_error_samples
         if delete_incidents is not UNSET:
             field_dict["deleteIncidents"] = delete_incidents
+        if delete_checks_configuration is not UNSET:
+            field_dict["deleteChecksConfiguration"] = delete_checks_configuration
         if column_names is not UNSET:
             field_dict["columnNames"] = column_names
         if check_category is not UNSET:
@@ -210,6 +217,8 @@ class DeleteStoredDataQueueJobParameters:
 
         delete_incidents = d.pop("deleteIncidents", UNSET)
 
+        delete_checks_configuration = d.pop("deleteChecksConfiguration", UNSET)
+
         column_names = cast(List[str], d.pop("columnNames", UNSET))
 
         check_category = d.pop("checkCategory", UNSET)
@@ -247,6 +256,7 @@ class DeleteStoredDataQueueJobParameters:
             delete_sensor_readouts=delete_sensor_readouts,
             delete_error_samples=delete_error_samples,
             delete_incidents=delete_incidents,
+            delete_checks_configuration=delete_checks_configuration,
             column_names=column_names,
             check_category=check_category,
             table_comparison_name=table_comparison_name,

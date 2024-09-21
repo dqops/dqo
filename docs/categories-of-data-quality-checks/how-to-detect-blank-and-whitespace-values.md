@@ -185,7 +185,7 @@ The results in DQOps show that 75% of non-null values (three out of four) contai
 
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 You can view representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Detect texts surrounded by whitespace characters using DQOps data quality check - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-text-surrounded-with-whitespace-data-quality-check-in-dqops-min-error-samples.png){ loading=lazy; width="1200px" }
 

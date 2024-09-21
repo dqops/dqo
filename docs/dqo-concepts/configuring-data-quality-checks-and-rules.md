@@ -420,6 +420,10 @@ adding also standalone values included in the list.
 The definition of custom data dictionaries is described in the [data dictionaries](dqops-user-home-folder.md#data-dictionaries)
 section of the *DQOps user home* folder concept.
 
+You can define dictionaries in the **Configuration** section of the user interface. 
+
+![Defining dictionaries in the user interface](https://dqops.com/docs/images/concepts/configuring-data-quality-checks-and-rules/defining-dictionaries-in-the-user-interface1.png){ loading=lazy; width="1200px" }
+
 ## Configuring column-level checks
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.
 The [configuration of the column metadata](configuring-table-metadata.md#configuring-columns) is described 
@@ -817,6 +821,7 @@ To learn more about [configuring multiple data quality checks](../working-with-d
 
 ## What's next
 
+- Data quality checks do not need to be configured manually. Learn how the [data quality rule mining](data-quality-rule-mining.md) engine can automatically propose and configure data quality checks to detect the most common data quality issues.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
 - DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](types-of-data-quality-dashboards.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).

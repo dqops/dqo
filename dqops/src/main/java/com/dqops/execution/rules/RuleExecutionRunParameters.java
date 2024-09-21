@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Rule execution parameters. This object is passed as an argument to the python rule.
@@ -37,6 +38,7 @@ public class RuleExecutionRunParameters {
     private LocalDateTime timePeriodLocal;
     private HistoricDataPoint[] previousReadouts;
     private RuleTimeWindowSettingsSpec timeWindow;
+    private Map<String, String> configurationParameters;
 
     /**
      * Default empty constructor.
@@ -52,19 +54,22 @@ public class RuleExecutionRunParameters {
      * @param timePeriodLocal Time period of the readouts as a local date time.
      * @param previousReadouts Array of previous sensor readouts (may have a null value).
      * @param timeWindow Rule threshold time window configuration.
+     * @param configurationParameters Optional configuration parameters that are configured in the rule configuration.
      */
     public RuleExecutionRunParameters(Double actualValue,
                                       Double expectedValue,
 									  AbstractRuleParametersSpec parameters,
 									  LocalDateTime timePeriodLocal,
 									  HistoricDataPoint[] previousReadouts,
-									  RuleTimeWindowSettingsSpec timeWindow) {
+									  RuleTimeWindowSettingsSpec timeWindow,
+                                      Map<String, String> configurationParameters) {
         this.actualValue = actualValue;
         this.expectedValue = expectedValue;
         this.parameters = parameters;
         this.timePeriodLocal = timePeriodLocal;
         this.previousReadouts = previousReadouts;
         this.timeWindow = timeWindow;
+        this.configurationParameters = configurationParameters;
     }
 
     /**
@@ -161,5 +166,21 @@ public class RuleExecutionRunParameters {
      */
     public void setTimeWindow(RuleTimeWindowSettingsSpec timeWindow) {
         this.timeWindow = timeWindow;
+    }
+
+    /**
+     * Returns the additional rule configuration parameters.
+     * @return Rule configuration parameters.
+     */
+    public Map<String, String> getConfigurationParameters() {
+        return configurationParameters;
+    }
+
+    /**
+     * Sets the additional rule configuration parameters.
+     * @param configurationParameters Additional rule configuration parameters.
+     */
+    public void setConfigurationParameters(Map<String, String> configurationParameters) {
+        this.configurationParameters = configurationParameters;
     }
 }

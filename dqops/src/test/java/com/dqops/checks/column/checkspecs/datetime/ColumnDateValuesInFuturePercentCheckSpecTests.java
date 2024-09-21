@@ -84,7 +84,7 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInFuturePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoMaxValueFound_thenProposesCheckWithZero() {
+    void proposeCheckConfiguration_whenDatesInFuturePercentWithNoProfilingCheckResultAndRequiresZeroErrorsAndNoMaxValueFound_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -96,10 +96,10 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.datetime_date, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(0.0, this.sut.getParameters().getMaxFutureDays());
-        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(0.0, this.sut.getParameters().getMaxFutureDays());
+//        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenDatesInFuturePercentFromMaxInStatisticsButNoProfilingCheckAndZeroErrorsAcceptedFutureDateFarInTheFuture_thenProposesCheckUsingHardcodedMaxDays() {
+    void proposeCheckConfiguration_whenDatesInFuturePercentFromMaxInStatisticsButNoProfilingCheckAndZeroErrorsAcceptedFutureDateFarInTheFuture_thenNotProposesCheck() {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.columnSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
@@ -162,10 +162,10 @@ public class ColumnDateValuesInFuturePercentCheckSpecTests extends BaseTest {
                 tableSpec, this.columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false),
                 myCheckModel, this.checkMiningParametersModel, DataTypeCategory.text, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault(), this.ruleMiningRuleRegistry);
 
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(30, this.sut.getParameters().getMaxFutureDays());
-        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
+        Assertions.assertFalse(proposed);
+//        Assertions.assertNotNull(this.sut.getError());
+//        Assertions.assertEquals(30, this.sut.getParameters().getMaxFutureDays());
+//        Assertions.assertEquals(0.0, this.sut.getError().getMaxPercent());
     }
 
     @Test

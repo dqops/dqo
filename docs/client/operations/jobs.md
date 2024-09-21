@@ -445,6 +445,8 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`samples_limit`</span>|The limit of column samples to collect.|*long*| |
+|<span class="no-wrap-code">`configure_table`</span>|Configures timestamp and ID column on the table based on the results identified in statistics.|*boolean*| |
 |<span class="no-wrap-code">`wait`</span>|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
 |<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
@@ -744,6 +746,8 @@ http://localhost:8888/api/jobs/collectstatistics/table
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`configure_table`</span>|Configures timestamp and ID column on the table based on the results identified in statistics.|*boolean*| |
+|<span class="no-wrap-code">`samples_limit`</span>|The limit of column samples to collect.|*long*| |
 |<span class="no-wrap-code">`wait`</span>|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
 |<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
@@ -1069,7 +1073,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"columnNames\":[\"sample_column\"]}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"deleteIncidents\":true,\"deleteChecksConfiguration\":false,\"columnNames\":[\"sample_column\"]}"
 	
     ```
 
@@ -1106,11 +1110,12 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -1156,11 +1161,12 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -1209,11 +1215,12 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -1262,11 +1269,12 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=False,
+		delete_statistics=True,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		delete_error_samples=True,
 		delete_incidents=True,
+		delete_checks_configuration=False,
 		column_names=[
 			'sample_column'
 		]
@@ -2207,7 +2215,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),
@@ -2287,7 +2298,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),
@@ -2370,7 +2384,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),
@@ -2453,7 +2470,10 @@ http://localhost:8888/api/jobs/importtables
 						),
 						monitoring_checks=TableMonitoringCheckCategoriesSpec(),
 						partitioned_checks=TablePartitionedCheckCategoriesSpec(),
-						columns=ColumnSpecMap()
+						columns=ColumnSpecMap(),
+						advanced_properties={
+						
+						}
 					)
 				]
 			),

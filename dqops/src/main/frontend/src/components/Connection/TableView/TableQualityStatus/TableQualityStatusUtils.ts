@@ -18,13 +18,13 @@ export const getColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
       return 'bg-gray-150';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
-      return 'bg-red-300';
+      return 'bg-[#EF8079]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
-      return 'bg-orange-300';
+      return 'bg-[#EFB87E]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
-      return 'bg-yellow-300';
+      return 'bg-[#EFEC82]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
-      return 'bg-green-300';
+      return 'bg-[#5CBCAB]';
     default:
       return '';
   }
@@ -38,8 +38,6 @@ export const getSecondColor = (
 ) => {
   // console.log(status)
   switch (status) {
-    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
-      return 'bg-gray-150';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
       return 'bg-[#FEEDEC]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
@@ -48,6 +46,29 @@ export const getSecondColor = (
       return 'bg-[#FDFDED]';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
       return 'bg-[#DDF2EF]';
+    default:
+      return 'bg-gray-150';
+  }
+};
+export const getDimensionColor = (
+  status:
+    | CheckCurrentDataQualityStatusModelCurrentSeverityEnum
+    | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+    | null
+    | undefined
+) => {
+  // console.log(status)
+  switch (status) {
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
+      return 'bg-gray-150';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
+      return 'bg-[#E3170A]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
+      return 'bg-[#FF9900]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
+      return 'bg-[#EBE51E]';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
+      return 'bg-[#029A80]';
     default:
       return '';
   }

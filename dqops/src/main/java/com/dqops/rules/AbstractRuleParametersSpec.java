@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Map;
+
 /**
  * Base class for a quality rule.
  */
@@ -85,4 +87,13 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec implements
      * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
      */
     public abstract void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck);
+
+    /**
+     * Returns the default configuration of rule parameters (additional parameters passed to the rule) that should be published in its .dqorule.yaml configuration file.
+     * @return Additional configuration to save.
+     */
+    @JsonIgnore
+    public Map<String, String> getRuleParametersTemplate() {
+        return null;
+    }
 }

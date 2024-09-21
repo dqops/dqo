@@ -16,20 +16,20 @@ We want to verify the percent of valid UUID on `uuid` column does not fall below
 
 **SOLUTION**
 
-We will verify the data using monitoring [valid_uuid_format_percent](../../checks/column/patterns/valid-uuid-format-percent.md) column check.
-Our goal is to verify that the percent of valid UUID values in a `uuid` column does not fall below the set threshold.
+We will verify the data using monitoring [invalid_uuid_format_percent](../../checks/column/patterns/invalid-uuid-format-percent.md) column check.
+Our goal is to verify that the percent of invalid UUID values in a `uuid` column does not exceed the set threshold.
 
 In this example, we will set three minimum percent thresholds levels for the check:
 
-- warning: 99
-- error: 98
-- fatal: 95
+- warning: 1%
+- error: 2%
+- fatal: 5%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of valid UUID values fall below 99%, a warning alert will be triggered.
+If the percentage of invalid UUID values exceeds 1%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -143,11 +143,11 @@ This dashboard allows filtering data by:
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three minimum percent thresholds levels for the check:
+In this example, we have set three maximum percent thresholds levels for the check:
 
-- warning: 99
-- error: 98
-- fatal: 95
+- warning: 1
+- error: 2
+- fatal: 5
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_valid_uuid_format_percent` check is configured.
 
@@ -168,13 +168,13 @@ spec:
       monitoring_checks:
         daily:
           patterns:
-            daily_valid_uuid_format_percent:
+            daily_invalid_uuid_format_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                maz_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
     result:
       type_snapshot:
         column_type: INT64
@@ -192,7 +192,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The percent of valid UUID values in the `uuid` column is below 95 and the check raised fatal error.
+The percent of valid UUID values in the `uuid` column is above 5% and the check raised fatal error.
 
 ```
 Check evaluation summary per table:
@@ -218,14 +218,14 @@ Executing SQL on connection valid_uuid_percent (bigquery)
 SQL to be executed on the connection:
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN 100.0
+        WHEN COUNT(analyzed_table.`uuid`) = 0 THEN 100.0
         ELSE 100.0 * SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`uuid` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN NOT REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`uuid` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 1
                 ELSE 0
             END
-        ) / COUNT(*)
+        ) / COUNT(analyzed_table.`uuid`)
     END AS actual_value,
     CURRENT_TIMESTAMP() AS time_period,
     TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
@@ -235,30 +235,30 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 75%, which is below the minimum 
-threshold level set in the warning (99%).
+You can also see the results returned by the sensor. The actual value in this example is 25%, which is above the maximum 
+threshold level set in the warning (1%).
 
 ```
 **************************************************
-Finished executing a sensor for a check valid_uuid_format_percent on the table dqo_ai_test_data.uuid_test_7014625119307825231 using a sensor definition column/patterns/valid_uuid_format_percent, sensor result count: 1
+Finished executing a sensor for a check invalid_uuid_format_percent on the table dqo_ai_test_data.uuid_test_7014625119307825231 using a sensor definition column/patterns/invalid_uuid_format_percent, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
 |actual_value|time_period             |time_period_utc         |
 +------------+------------------------+------------------------+
-|75.0        |2023-05-22T12:08:24.199Z|2023-05-22T12:08:24.199Z|
+|25.0        |2023-05-22T12:08:24.199Z|2023-05-22T12:08:24.199Z|
 +------------+------------------------+------------------------+
 **************************************************
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
-By using the [valid_uuid_format_percent](../../checks/column/patterns/valid-uuid-format-percent.md) column check, we can monitor that
-the percentage of valid UUID values in a column does not fall below the minimum accepted percentage. If it does, you will get a warning, error or fatal results.
+By using the [invalid_uuid_format_percent](../../checks/column/patterns/invalid-uuid-format-percent.md) column check, we can monitor that
+the percentage of valid UUID values in a column does exceed the maximum accepted percentage. If it does, you will get a warning, error or fatal results.
 
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
-- For details on the [valid_uuid_format_percent check used in this example, go to the check details section](../../checks/column/patterns/valid-uuid-format-percent.md).
+- For details on the [valid_uuid_format_percent check used in this example, go to the check details section](../../checks/column/patterns/invalid-uuid-format-percent.md).
 - You might be interested in another validity check that [evaluates that ensures that the percentage of rows containing valid currency codes does not exceed set thresholds](./percentage-of-values-that-contains-usa-zipcode.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

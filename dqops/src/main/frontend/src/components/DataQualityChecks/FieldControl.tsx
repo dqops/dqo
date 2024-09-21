@@ -6,6 +6,7 @@ import {
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
 import CheckboxColumn from '../Checkbox/CheckBoxColumn';
+import ColumnsRecordDialog from '../ColumnsRecordDialog/ColumnsRecordDialog';
 import ExtendedTextAre from '../ExtendedTextArea';
 import FieldDatePicker from '../FieldDatePicker';
 import FloatingPointInput from '../FloatingPointInput';
@@ -188,40 +189,55 @@ const FieldControl = ({
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.enum && (
-        <Select
-          label={label}
-          value={value}
-          options={
-            field.definition?.allowed_values?.map((item) => ({
-              label: item,
-              value: item
-            })) || []
-          }
-          tooltipText={tooltip}
-          triggerClassName={clsx(
-            '!h-8 !text-xs !min-w-30 !max-w-30 !bg-white',
-            className ? className : '!min-w-30 !max-w-30'
-          )}
-          menuClassName="!top-13"
-          className="text-sm"
-          onChange={(value) => handleChange({ enum_value: value })}
-          disabled={disabled}
-          error={isInvalid}
-        />
+        <div>
+          <Select
+            label={label}
+            value={value}
+            options={
+              field.definition?.allowed_values?.map((item) => ({
+                label: item,
+                value: item
+              })) || []
+            }
+            tooltipText={tooltip}
+            triggerClassName={clsx(
+              '!h-8 !text-xs !min-w-30 !max-w-30 !bg-white !ml-2',
+              className ? className : '!min-w-30 !max-w-30'
+            )}
+            menuClassName="!top-13"
+            className="text-sm"
+            onChange={(value) => handleChange({ enum_value: value })}
+            disabled={disabled}
+            error={isInvalid}
+          />
+        </div>
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.string_list && (
         <div className="mt-4">
-          <StringListField
-            value={value}
-            label={label}
-            tooltipText={tooltip}
-            onChange={(value: string[]) =>
-              handleChange({ string_list_value: value })
-            }
-            onSave={onSave}
-            disabled={disabled}
-          />
+          {field.definition?.display_hint === 'column_names' ? (
+            <ColumnsRecordDialog
+              value={value}
+              label={label}
+              tooltipText={tooltip}
+              onChange={(value: string[]) =>
+                handleChange({ string_list_value: value })
+              }
+              onSave={onSave}
+              disabled={disabled}
+            />
+          ) : (
+            <StringListField
+              value={value}
+              label={label}
+              tooltipText={tooltip}
+              onChange={(value: string[]) =>
+                handleChange({ string_list_value: value })
+              }
+              onSave={onSave}
+              disabled={disabled}
+            />
+          )}
         </div>
       )}
       {field?.definition?.data_type ===

@@ -47,6 +47,11 @@ public class ColumnNullsNullsCountStatisticsCollectorSpec extends AbstractStatis
      */
     public static final String SENSOR_NAME = ColumnNullsNullsCountSensorParametersSpec.SENSOR_NAME;
 
+    /**
+     * The name of this collector.
+     */
+    public static final String COLLECTOR_NAME = "nulls_count";
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

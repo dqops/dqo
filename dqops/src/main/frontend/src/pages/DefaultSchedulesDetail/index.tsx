@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { MonitoringScheduleSpec } from '../../api';
 import Button from '../../components/Button';
 import ScheduleView from '../../components/ScheduleView';
-import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
+import { IRootState } from '../../redux/reducers';
 import { SettingsApi } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import { useDecodedParams } from '../../utils';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 
 const tabs = [
   {
@@ -96,36 +95,34 @@ const DefaultSchedulesDetail = () => {
 
   return (
     <>
-      <div className="px-4">
-        <div className="flex justify-between px-4 py-3 border-b border-gray-300 mb-2 h-14">
-          <div className="flex items-center space-x-2 max-w-full">
-            <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-            <div className="text-lg font-semibold truncate">
-              Default schedule editor
-            </div>
+      <div className="flex justify-between px-4 py-3 border-b border-gray-300 mb-2 h-14">
+        <div className="flex items-center space-x-2 max-w-full">
+          <div className="text-lg font-semibold truncate">
+            Default schedule editor
           </div>
-          <Button
-            label="Save"
-            color="primary"
-            className="w-45"
-            onClick={updateDefaultSchedules}
-            disabled={!isDefaultUpdated}
-          />
         </div>
-        <div className="border-b border-gray-300">
-          <Tabs
-            tabs={
-              userProfile &&
-              userProfile.license_type &&
-              userProfile.license_type?.toLowerCase() !== 'free' &&
-              !userProfile.trial_period_expires_at
-                ? tabs
-                : freeTrialTabs
-            }
-            activeTab={activeTab}
-            onChange={onChangeTab}
-          />
-        </div>
+        <Button
+          label="Save"
+          color={isDefaultUpdated ? 'primary' : 'secondary'}
+          className="w-45 !h-[37px]"
+          onClick={updateDefaultSchedules}
+        />
+      </div>
+      <div className="border-b border-gray-300">
+        <Tabs
+          tabs={
+            userProfile &&
+            userProfile.license_type &&
+            userProfile.license_type?.toLowerCase() !== 'free' &&
+            !userProfile.trial_period_expires_at
+              ? tabs
+              : freeTrialTabs
+          }
+          activeTab={activeTab}
+          onChange={onChangeTab}
+        />
+      </div>
+      <div className="px-4">
         <ScheduleView
           handleChange={handleChange}
           schedule={updatedSchedule}

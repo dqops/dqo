@@ -136,4 +136,17 @@ public class GenericSensorResultsFactory {
 
         return dummyResultTable;
     }
+
+    /**
+     * Creates an empty result table, used when a sensor should not return any results.
+     * @return Empty result table.
+     */
+    public static Table createEmptyResultTable() {
+        Table emptyResultTable = Table.create("empty_results",
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
+
+        return emptyResultTable;
+    }
 }

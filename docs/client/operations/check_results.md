@@ -6303,7 +6303,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "dimensions" : { }
 		    }
 		  },
-		  "dimensions" : { }
+		  "dimensions" : { },
+		  "table_exist" : true
 		}
         ```
     
@@ -6500,7 +6501,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			},
 			dimensions={
 			
-			}
+			},
+			table_exist=True
 		)
         ```
     
@@ -6698,7 +6700,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			},
 			dimensions={
 			
-			}
+			},
+			table_exist=True
 		)
         ```
     
@@ -6899,7 +6902,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			},
 			dimensions={
 			
-			}
+			},
+			table_exist=True
 		)
         ```
     
@@ -7100,7 +7104,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			},
 			dimensions={
 			
-			}
+			},
+			table_exist=True
 		)
         ```
     

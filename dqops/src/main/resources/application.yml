@@ -197,6 +197,10 @@ dqo:
   cli:
     terminal:
       width: 150
+  ui:
+    application-name: "DQOps Data Quality Operations Center"
+    home-page:
+      show-links: true
   docker:
     user-home:
       allow-unmounted: false

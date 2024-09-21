@@ -134,17 +134,14 @@ export default function TableQualityStatusColumnCategory({
       const showTooltip = columnCircleStatus.lastExecutedAt !== null;
       const showIcon = columnStatus.status !== null;
 
-      const isExtended = extendedChecks.some(
-        (x) =>
-          x.checkType === customKey &&
-          x.categoryDimension === firstLevelChecksKey
-      );
-
       return (
         <td
           key={`cell_column_${customKey}_${firstLevelChecksKey}`}
           className="h-full"
-          onClick={() => columnStatus.status && toggleExtendedChecks(customKey, firstLevelChecksKey)}
+          onClick={() =>
+            columnStatus.status &&
+            toggleExtendedChecks(customKey, firstLevelChecksKey)
+          }
           style={{ padding: 0, margin: 0 }}
         >
           {columnStatus.status && (
@@ -157,7 +154,7 @@ export default function TableQualityStatusColumnCategory({
               <div className="w-5 h-full"></div>
               <div
                 className={clsx(
-                  'h-8 w-32 flex justify-end  cursor-pointer',
+                  'h-8 w-32 flex justify-end  cursor-pointer relative',
                   getColor(columnStatus.status),
                   severityType === 'current' ? '' : 'justify-end'
                   // isExtended && 'w-50'
@@ -168,33 +165,8 @@ export default function TableQualityStatusColumnCategory({
                     : {}
                 }
               >
-                {showTooltip && (
-                  <Tooltip
-                    content={renderTooltipContent(
-                      moment(columnCircleStatus.lastExecutedAt).format(
-                        'YYYY-MM-DD HH:mm:ss'
-                      ),
-                      columnCircleStatus.status,
-                      severityType
-                    )}
-                  >
-                    <div
-                      className={clsx(
-                        'h-4 w-4 ml-2 mt-2 mr-0.5',
-                        getColor(columnCircleStatus.status)
-                      )}
-                      style={{
-                        borderRadius: '6px',
-                        ...(getColor(columnCircleStatus.status) ===
-                        'bg-gray-150'
-                          ? backgroundStyle
-                          : {})
-                      }}
-                    ></div>
-                  </Tooltip>
-                )}
                 {showIcon && (
-                  <div className="flex items-center justify-center">
+                  <div className="absolute top-1 left-1">
                     <SvgIcon
                       name={
                         extendedChecks.some(
@@ -217,6 +189,31 @@ export default function TableQualityStatusColumnCategory({
                       )}
                     />
                   </div>
+                )}
+                {showTooltip && (
+                  <Tooltip
+                    content={renderTooltipContent(
+                      moment(columnCircleStatus.lastExecutedAt).format(
+                        'YYYY-MM-DD HH:mm:ss'
+                      ),
+                      columnCircleStatus.status,
+                      severityType
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'h-4 w-4 mr-2 mt-2 ml-0.5',
+                        getColor(columnCircleStatus.status)
+                      )}
+                      style={{
+                        borderRadius: '6px',
+                        ...(getColor(columnCircleStatus.status) ===
+                        'bg-gray-150'
+                          ? backgroundStyle
+                          : {})
+                      }}
+                    ></div>
+                  </Tooltip>
                 )}
               </div>
             </div>
@@ -262,7 +259,7 @@ export default function TableQualityStatusColumnCategory({
                 >
                   <div
                     className={clsx(
-                      'cursor-auto h-5 px-1 ml-[16.7px] truncate',
+                      'cursor-auto h-5 px-1 ml-[15.5px] truncate',
                       getSecondColor(
                         severity ??
                           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -271,7 +268,7 @@ export default function TableQualityStatusColumnCategory({
                     style={{
                       fontSize: '11px',
                       whiteSpace: 'normal',
-                      ...(getColor(severity) === 'bg-gray-150'
+                      ...(getSecondColor(severity) === 'bg-gray-150'
                         ? secondBackgroundStyle
                         : {})
                     }}

@@ -80,7 +80,7 @@ const SchemasView = () => {
     <div className="py-4 px-8 text-sm">
       {isSourceScreen && <ConnectionActionGroup />}
       <table className="w-full">
-        <thead>
+        <thead className="border-b border-gray-300">
           <tr>
             <th className="py-2 pl-2 text-left">Schema name</th>
             <th />
@@ -97,11 +97,13 @@ const SchemasView = () => {
                   label={item.schema_name}
                   variant="text"
                   className="underline px-2 text-sm"
-                  onClick={() => goToTable(item.schema_name ?? '', 'tables')}
+                  onClick={() =>
+                    goToTable(item.schema_name ?? '', 'data-quality-summary')
+                  }
                 />
               </td>
               {isSourceScreen ? (
-                <td className="left-80 absolute py-1 px-4 text-left">
+                <td className="left-80 absolute px-4 text-left">
                   <Button
                     className="!py-2 !rounded-md text-sm"
                     textSize="sm"
@@ -115,7 +117,7 @@ const SchemasView = () => {
                 <div className="left-80 absolute">
                   <Button
                     className="text-sm"
-                    label="Manage checks"
+                    label="Edit multiple data quality checks"
                     color="primary"
                     variant="text"
                     onClick={() =>

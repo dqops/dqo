@@ -178,19 +178,19 @@ const ColumnStatisticsView = ({
             }
           } else {
             table_statistics_array.push({
-              type: 'Detected data type:',
+              type: 'Detected data type',
               result: getDetectedDatatype(item.result)
             });
           }
         }
       );
       table_statistics_array.push({
-        type: 'Data type:',
+        type: 'Data type',
         result: String(fetchedColumnsStatistics.type_snapshot?.column_type)
       });
 
       table_statistics_array.push({
-        type: 'Collected at:',
+        type: 'Collected at',
         result: moment(
           fetchedColumnsStatistics.statistics?.at(0)?.collectedAt
         ).format('YYYY-MM-DD HH:mm:ss')

@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import moment from 'moment/moment';
 import React, { useMemo } from 'react';
 import { ErrorSamplesListModel } from '../../../api';
@@ -76,7 +76,7 @@ const ErrorSamplesTab = ({
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
 
@@ -124,31 +124,38 @@ const ErrorSamplesTab = ({
           />
         </div>
         <IconButton
+          ripple={false}
           size="sm"
+          disabled={errorSamples.length === 0 ? true : false}
           className={
             'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
           }
         >
-          <a
-            href={downloadLink}
-            rel="noreferrer"
-            target="_blank"
-            className="text-teal-500"
+          <Tooltip
+            content="Download error samples as a CSV file"
+            className="max-w-60 py-2 px-2 bg-gray-800"
           >
-            <SvgIcon
-              name="download"
-              className={'w-4 h-4 cursor-pointer font-bold text-teal-500'}
-            />
-          </a>
+            <a
+              href={downloadLink}
+              rel="noreferrer"
+              target="_blank"
+              className="text-teal-500"
+            >
+              <SvgIcon
+                name="download"
+                className={'w-4 h-4 cursor-pointer font-bold text-teal-500'}
+              />
+            </a>
+          </Tooltip>
         </IconButton>
       </div>
       {errorSamples.length === 0 && (
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
       {errorSamples.map((result, index) => (
-        <div key={index} className="mb-2">
+        <div key={index}>
           <Table
-            className="mt-4 w-full"
+            className="mt-1 w-full"
             columns={columns}
             data={(result.errorSamplesEntries || []).map((item) => ({
               ...item,
@@ -157,7 +164,7 @@ const ErrorSamplesTab = ({
                 getLocalDateInUserTimeZone(new Date(String(item.collectedAt)))
               ).format('YYYY-MM-DD HH:mm:ss')
             }))}
-            emptyMessage="No Data"
+            emptyMessage="No data"
           />
         </div>
       ))}

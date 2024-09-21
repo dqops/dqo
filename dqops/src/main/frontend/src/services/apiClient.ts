@@ -25,9 +25,10 @@ import {
   ConnectionsApiFactory,
   DashboardsApiFactory,
   DataGroupingConfigurationsApiFactory,
+  DataLineageApiFactory,
   DataSourcesApiFactory,
-  DefaultColumnCheckPatternsApiFactory,
-  DefaultTableCheckPatternsApiFactory,
+  TableQualityPoliciesApiFactory,
+  ColumnQualityPoliciesApiFactory,
   DefaultsApiFactory,
   DictionariesApiFactory,
   EnvironmentApiFactory,
@@ -159,11 +160,11 @@ export const DataDictionaryApiClient = DictionariesApiFactory(
   axios
 );
 
-export const DefaultTableCheckPatternsApiClient =
-  DefaultTableCheckPatternsApiFactory(new Configuration(), '', axios);
+export const TableQualityPoliciesApiClient =
+  TableQualityPoliciesApiFactory(new Configuration(), '', axios);
 
-export const DefaultColumnCheckPatternsApiClient =
-  DefaultColumnCheckPatternsApiFactory(new Configuration(), '', axios);
+export const ColumnQualityPoliciesApiClient =
+  ColumnQualityPoliciesApiFactory(new Configuration(), '', axios);
 
 export const SearchApiClient = SearchApiFactory(new Configuration(), '', axios);
 
@@ -183,3 +184,9 @@ export const RuleMiningApiClient = RuleMiningApiFactory(
 
 export const FilteredNotificationsConfigurationsClient =
   FilteredNotificationsConfigurationsApiFactory(new Configuration(), '', axios);
+
+export const DataLineageApiClient = DataLineageApiFactory(
+  new Configuration(),
+  '',
+  axios
+);

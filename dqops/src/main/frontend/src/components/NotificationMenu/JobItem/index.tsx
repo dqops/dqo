@@ -126,17 +126,21 @@ const JobItem = ({
             {job?.parameters?.runChecksParameters?.check_search_filters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.check_search_filters
-              ).map(([key, value], index) => (
-                <tr key={index} className="flex justify-between w-108">
-                  <td>
-                    {key
-                      .replace(/([a-z])([A-Z])/g, '$1 $2')
-                      .toLowerCase()
-                      .replace(/^\w/, (c) => c.toUpperCase())}
-                  </td>
-                  <td>{renderValue(value)}</td>
-                </tr>
-              ))}
+              ).map(([key, value], index) => {
+                return (
+                  key !== 'checkHierarchyIdsModels' && (
+                    <tr key={index} className="flex justify-between w-108">
+                      <td>
+                        {key
+                          .replace(/([a-z])([A-Z])/g, '$1 $2')
+                          .toLowerCase()
+                          .replace(/^\w/, (c) => c.toUpperCase())}
+                      </td>
+                      <td>{renderValue(value)}</td>
+                    </tr>
+                  )
+                );
+              })}
             {job?.parameters?.importSchemaParameters && (
               <>
                 <tr className="flex justify-between w-108">

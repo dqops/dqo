@@ -26,7 +26,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Comparator;
@@ -56,7 +55,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
 
     @Test
     void listFiles_whenRootFolder_thenReturnsJustGitIgnore() {
-        List<HomeFilePath> files = this.sut.listFiles(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), false);
+        List<HomeFilePath> files = this.sut.listFiles(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), false);
         Assertions.assertEquals(3, files.size());
         files.sort(Comparator.comparing(HomeFilePath::getFileName));
         Assertions.assertEquals(".DQO_USER_HOME", files.get(0).getFileName());
@@ -66,7 +65,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
 
     @Test
     void listFolders_whenRootFolder_thenReturnsStandardFolders() {
-        List<HomeFolderPath> folders = this.sut.listFolders(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), false);
+        List<HomeFolderPath> folders = this.sut.listFolders(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), false);
         Assertions.assertEquals(11, folders.size());
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sources")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("rules")));
@@ -84,7 +83,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     void saveFile_whenFileInRootFolderWritten_thenFileCanBeRead() {
         final String textContent = "file content\n";
         FileContent fileContent = new FileContent(textContent);
-        HomeFilePath filePath = new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "file.txt");
+        HomeFilePath filePath = new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "file.txt");
 		this.sut.saveFile(filePath, fileContent, false);
         FileContent restoredFile = this.sut.readFile(filePath, false);
         Assertions.assertNotNull(restoredFile);
@@ -96,7 +95,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
         final String textContent = "file content2\n";
         FileContent fileContent = new FileContent(textContent);
         FolderName[] folderNames = {FolderName.fromObjectName("conn1")};
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, folderNames);
         HomeFilePath filePath = new HomeFilePath(folderPath, "file.txt");
 		this.sut.saveFile(filePath, fileContent, false);
 
@@ -110,7 +109,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
         final String textContent = "file content2\n";
         FileContent fileContent = new FileContent(textContent);
         FolderName[] folderNames = {FolderName.fromObjectName("conn2")};
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, folderNames);
         HomeFilePath filePath = new HomeFilePath(folderPath, "file.txt");
 		this.sut.saveFile(filePath, fileContent, false);
 
@@ -121,28 +120,28 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
 
     @Test
     void readTextFile_whenFileMissingInRootFolder_thenReturnsNull() {
-        FileContent restoredFile = this.sut.readFile(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "missing.txt"), false);
+        FileContent restoredFile = this.sut.readFile(new HomeFilePath(new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN), "missing.txt"), false);
         Assertions.assertNull(restoredFile);
     }
 
     @Test
     void readTextFile_whenFileMissingInMissingSubfolder_thenReturnsNull() {
         FileContent restoredFile = this.sut.readFile(new HomeFilePath(
-                new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("nosuchfolder")), "missing.txt"), false);
+                new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, FolderName.fromObjectName("nosuchfolder")), "missing.txt"), false);
         Assertions.assertNull(restoredFile);
     }
 
     @Test
     void fileExists_whenFileMissing_thenReturnsFalse() {
         HomeFilePath filePath = new HomeFilePath(new HomeFolderPath(
-                UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("conn4")), "missing.txt");
+                UserDomainIdentity.ROOT_DATA_DOMAIN, FolderName.fromObjectName("conn4")), "missing.txt");
         Assertions.assertFalse(this.sut.fileExists(filePath, false));
     }
 
     @Test
     void fileExists_whenFilePresent_thenReturnsTrue() {
         FolderName[] folderNames = {FolderName.fromObjectName("conn5")};
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, folderNames);
         HomeFilePath filePath = new HomeFilePath(folderPath, "exist.txt");
 		this.sut.saveFile(filePath, new FileContent("content"), false);
 
@@ -153,7 +152,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void deleteFile_whenFilePresent_thenFileIsDeleted() {
         FolderName[] folderNames = {FolderName.fromObjectName("conn6")};
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, folderNames);
         HomeFilePath filePath = new HomeFilePath(folderPath, "exist.txt");
 		this.sut.saveFile(filePath, new FileContent("content"), false);
         Assertions.assertTrue(this.sut.fileExists(filePath, false));
@@ -168,7 +167,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void tryDeleteFolder_whenFolderExists_thenDeleteFolder() {
         FolderName[] folderNames = {FolderName.fromObjectName("conn5")};
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, folderNames);
         HomeFilePath filePath = new HomeFilePath(folderPath, "exist.txt");
 		this.sut.saveFile(filePath, new FileContent("content"), false);
 		this.sut.deleteFile(filePath, false); // a folder that had a file
@@ -182,7 +181,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void tryDeleteFolder_whenFolderExistsAndHasFiles_thenReturnsFalseAndPreservesFolder() {
         FolderName[] folderNames = {FolderName.fromObjectName("conn5")};
-        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN, folderNames);
         HomeFilePath filePath = new HomeFilePath(folderPath, "exist.txt");
 		this.sut.saveFile(filePath, new FileContent("content"), false);
         Assertions.assertTrue(this.sut.folderExists(folderPath, false));

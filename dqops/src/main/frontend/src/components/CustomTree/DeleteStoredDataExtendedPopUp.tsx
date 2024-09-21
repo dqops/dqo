@@ -70,7 +70,7 @@ const DeleteStoredDataExtendedPopUp = ({
 
   const [allChecks, setAllChecks] = useState<CheckDefinitionFolderModel>();
   const [basicStatisticsFiltersOpen, setBasicStatisticsFiltersOpen] =
-    useState(true);
+    useState(false);
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
@@ -170,7 +170,7 @@ const DeleteStoredDataExtendedPopUp = ({
   return (
     <Dialog open={open} handler={onClose} className="min-w-300 p-4 pb-0">
       <DialogHeader className="font-bold text-center justify-center !py-0.5">
-        Delete data quality results
+        Delete data
       </DialogHeader>
       <DialogBody className="text-sm">
         <div className="flex flex-col">
@@ -438,7 +438,7 @@ const DeleteStoredDataExtendedPopUp = ({
               }
             />
           </div>
-          <div className="flex flex-col space-y-5 w-1/4 items-start">
+          <div className="flex flex-col space-y-5 w-1/4 items-start mb-16">
             <Checkbox
               checked={params.deleteIncidents}
               onChange={(deleteIncidents) =>
@@ -480,6 +480,14 @@ const DeleteStoredDataExtendedPopUp = ({
                 onChangeParams({ deleteErrorSamples })
               }
               label="Error samples"
+              checkClassName="bg-teal-500"
+            />
+            <Checkbox
+              checked={params.deleteChecksConfiguration}
+              onChange={(deleteChecksConfiguration) =>
+                onChangeParams({ deleteChecksConfiguration })
+              }
+              label="Data quality checks configuration"
               checkClassName="bg-teal-500"
             />
           </div>

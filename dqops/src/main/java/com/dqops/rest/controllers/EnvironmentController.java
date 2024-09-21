@@ -15,6 +15,7 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
@@ -60,20 +61,24 @@ public class EnvironmentController {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private Environment springEnvironment;
     private InstanceCloudLoginService instanceCloudLoginService;
+    private LocalDataDomainRegistry dataDomainRegistry;
 
     /**
      * Dependency injection constructor of the environment controller.
      * @param dqoCloudApiKeyProvider DQOps API key provider.
      * @param springEnvironment Spring Boot environment.
      * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
+     * @param dataDomainRegistry Data domain registry - to detect if there are any data domains, so data domains are supported.
      */
     @Autowired
     public EnvironmentController(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                  Environment springEnvironment,
-                                 InstanceCloudLoginService instanceCloudLoginService) {
+                                 InstanceCloudLoginService instanceCloudLoginService,
+                                 LocalDataDomainRegistry dataDomainRegistry) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.springEnvironment = springEnvironment;
         this.instanceCloudLoginService = instanceCloudLoginService;
+        this.dataDomainRegistry = dataDomainRegistry;
     }
 
     /**
@@ -152,8 +157,12 @@ public class EnvironmentController {
             }
 
             DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
+            if (this.dataDomainRegistry.getNestedDataDomains() == null) {
+                dqoUserProfileModel.setCanUseDataDomains(false);
+            }
+
             return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
-            }));
+        }));
     }
 
     /**

@@ -17,8 +17,8 @@ package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
+import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -138,7 +138,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+    public TreeNodeTraversalResult accept(TableQualityPolicyList tableDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 
@@ -150,7 +150,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+    public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

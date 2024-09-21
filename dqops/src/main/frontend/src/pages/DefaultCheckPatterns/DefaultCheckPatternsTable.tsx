@@ -1,20 +1,24 @@
+import { IconButton } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel
+  ColumnQualityPolicyListModel,
+  TableQualityPolicyListModel
 } from '../../api';
-import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import ClientSidePagination from '../../components/Pagination/ClientSidePagination'; // Import pagination component
 import SvgIcon from '../../components/SvgIcon';
+import Switch from '../../components/Switch';
 import { useDefinition } from '../../contexts/definitionContext';
 import { getFirstLevelSensorState } from '../../redux/selectors';
+import {
+  ColumnQualityPoliciesApiClient,
+  TableQualityPoliciesApiClient
+} from '../../services/apiClient';
 import { sortPatterns } from '../../utils';
 
-type TPattern =
-  | DefaultTableChecksPatternListModel
-  | DefaultColumnChecksPatternListModel;
+type TPattern = TableQualityPolicyListModel | ColumnQualityPolicyListModel;
 
 type TDefaultCheckPatternsTableProps = {
   patterns: TPattern[];
@@ -25,31 +29,34 @@ type TDefaultCheckPatternsTableProps = {
 type THeaderElement = {
   label: string;
   key:
-    | 'pattern_name'
+    | 'policy_name'
     | 'priority'
     | 'can_edit'
     | 'yaml_parsing_error'
     | 'connection'
     | 'schema'
     | 'table'
-    | 'column';
+    | 'column'
+    | 'action';
 };
 
 const headerElementTablePatterns: THeaderElement[] = [
-  { label: 'Pattern name', key: 'pattern_name' },
-  { label: 'Priority', key: 'priority' },
-  { label: 'Connection', key: 'connection' },
-  { label: 'Schema', key: 'schema' },
-  { label: 'Table', key: 'table' }
-];
-
-const headerElementColumnPatterns: THeaderElement[] = [
-  { label: 'Pattern name', key: 'pattern_name' },
+  { label: 'Quality policy name', key: 'policy_name' },
   { label: 'Priority', key: 'priority' },
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
   { label: 'Table', key: 'table' },
-  { label: 'Column', key: 'column' }
+  { label: 'Action', key: 'action' }
+];
+
+const headerElementColumnPatterns: THeaderElement[] = [
+  { label: 'Quality policy name', key: 'policy_name' },
+  { label: 'Priority', key: 'priority' },
+  { label: 'Connection', key: 'connection' },
+  { label: 'Schema', key: 'schema' },
+  { label: 'Table', key: 'table' },
+  { label: 'Column', key: 'column' },
+  { label: 'Action', key: 'action' }
 ];
 
 export default function DefaultCheckPatternsTable({
@@ -67,120 +74,164 @@ export default function DefaultCheckPatternsTable({
   const [dir, setDir] = useState<'asc' | 'desc'>('desc');
   const [patternDelete, setPatternDelete] = useState('');
   const [indexSortingElement, setIndexSortingElement] = useState(1);
-  const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
+  const [displayedPatterns, setDisplayedPatterns] = useState<any[]>([]); // State for displayed patterns
+
   const headerElement =
     type === 'column'
       ? headerElementColumnPatterns
       : headerElementTablePatterns;
-
-  const getPreparedPatterns = () => {
-    const arr: any[] = [];
-
-    patterns.forEach((x) => {
-      const targetSpec: any = x[targetSpecKey as keyof TPattern];
-      if (
-        targetSpec &&
-        typeof targetSpec === 'object' &&
-        Object.keys(targetSpec).length !== 0
-      ) {
-        arr.push({ ...x, ...targetSpec });
-      } else {
-        arr.push(x);
-      }
-    });
-
-    return arr;
-  };
 
   const sortPreparedPattern = (
     elem: THeaderElement,
     index: number,
     dir: 'asc' | 'desc'
   ) => {
-    onChange(
-      sortPatterns(getPreparedPatterns(), elem.key as keyof TPattern, dir)
-    ),
+    onChange(sortPatterns(patterns, elem.key as keyof TPattern, dir)),
       setDir(dir === 'asc' ? 'desc' : 'asc'),
       setIndexSortingElement(index);
   };
 
+  const handleDisablePattern = (pattern: TPattern) => {
+    const newPatterns = patterns.map((x) => {
+      if (x.policy_name === pattern.policy_name) {
+        x.disabled = !x.disabled;
+      }
+      return x;
+    });
+    if (type === 'table') {
+      TableQualityPoliciesApiClient.getTableQualityPolicyTarget(
+        pattern.policy_name ?? ''
+      ).then((res) => {
+        TableQualityPoliciesApiClient.updateTableQualityPolicyTarget(
+          res.data.policy_name ?? '',
+          {
+            ...res.data,
+            disabled: !res.data.disabled
+          }
+        );
+      });
+    } else {
+      ColumnQualityPoliciesApiClient.getColumnQualityPolicyTarget(
+        pattern.policy_name ?? ''
+      ).then((res) => {
+        ColumnQualityPoliciesApiClient.updateColumnQualityPolicyTarget(
+          res.data.policy_name ?? '',
+          {
+            ...res.data,
+            disabled: !res.data.disabled
+          }
+        );
+      });
+    }
+    onChange(newPatterns);
+  };
+
   return (
-    <table>
-      <thead>
-        <tr>
-          {headerElement.map((elem, index) => (
-            <th className="px-4" key={elem.label}>
-              <div className="flex gap-x-1 items-center cursor-default">
-                <div>{elem.label}</div>
-                <div>
-                  {!(indexSortingElement === index && dir === 'asc') ? (
-                    <SvgIcon
-                      name="chevron-up"
-                      className="w-2 h-2 text-black"
-                      onClick={() => sortPreparedPattern(elem, index, 'desc')}
-                    />
-                  ) : (
-                    <div className="w-2 h-2" />
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            {headerElement.map((elem, index) => (
+              <th className="px-4" key={elem.label}>
+                <div
+                  className={clsx(
+                    'flex gap-x-1 items-center cursor-default text-sm',
+                    elem.key === 'action' && 'ml-4'
                   )}
-                  {!(indexSortingElement === index && dir === 'desc') ? (
-                    <SvgIcon
-                      name="chevron-down"
-                      className="w-2 h-2 text-black"
-                      onClick={() => sortPreparedPattern(elem, index, 'asc')}
-                    />
-                  ) : (
-                    <div className="w-2 h-2" />
+                >
+                  <div>{elem.label}</div>
+                  {elem.key !== 'action' && (
+                    <div>
+                      {!(indexSortingElement === index && dir === 'asc') ? (
+                        <SvgIcon
+                          name="chevron-up"
+                          className="w-2 h-2 text-black"
+                          onClick={() =>
+                            sortPreparedPattern(elem, index, 'desc')
+                          }
+                        />
+                      ) : (
+                        <div className="w-2 h-2" />
+                      )}
+                      {!(indexSortingElement === index && dir === 'desc') ? (
+                        <SvgIcon
+                          name="chevron-down"
+                          className="w-2 h-2 text-black"
+                          onClick={() =>
+                            sortPreparedPattern(elem, index, 'asc')
+                          }
+                        />
+                      ) : (
+                        <div className="w-2 h-2" />
+                      )}
+                    </div>
                   )}
                 </div>
-              </div>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className=" border-t border-gray-100">
-        {getPreparedPatterns().map((pattern, index) => (
-          <tr key={index} className="text-sm">
-            <td
-              className={clsx(
-                'px-4 underline cursor-pointer',
-                pattern.disabled && 'text-gray-200'
-              )}
-              onClick={() => editPattern(type, pattern.pattern_name ?? '')}
-            >
-              {pattern.pattern_name}
-            </td>
-            <td className="px-4">{pattern.priority}</td>
-            <td className="px-4">{pattern?.connection}</td>
-            <td className="px-4">{pattern?.schema}</td>
-            <td className="px-4">{pattern?.table}</td>
-            {type === 'column' && <td className="px-4">{pattern?.column}</td>}
-            <td className="px-4">
-              <Button
-                variant="text"
-                label="Edit"
-                color="primary"
-                onClick={() => editPattern(type, pattern.pattern_name ?? '')}
-              />
-            </td>
-            <td className="px-4">
-              <Button
-                variant="text"
-                label="Delete"
-                color="primary"
-                onClick={() => setPatternDelete(pattern.pattern_name ?? '')}
-              />
-            </td>
+              </th>
+            ))}
           </tr>
-        ))}
-        <ConfirmDialog
-          open={patternDelete.length > 0}
-          onConfirm={async () => {
-            deletePattern(patternDelete ?? ''), setPatternDelete('');
-          }}
-          onClose={() => setPatternDelete('')}
-          message={`Are you sure you want to delete the ${patternDelete} pattern ?`}
-        />
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="border-t border-gray-100">
+          {displayedPatterns.map((pattern, index) => (
+            <tr key={index} className="text-sm">
+              <td>
+                <Switch
+                  checked={!pattern.disabled}
+                  onChange={() => handleDisablePattern(pattern)}
+                />
+              </td>
+              <td
+                className={clsx(
+                  'px-4 underline cursor-pointer',
+                  pattern.disabled && 'text-gray-200'
+                )}
+                onClick={() => editPattern(type, pattern.policy_name ?? '')}
+              >
+                {pattern.policy_name}
+              </td>
+              <td className="px-4">{pattern.priority}</td>
+              <td className="px-4">{pattern?.connection}</td>
+              <td className="px-4">{pattern?.schema}</td>
+              <td className="px-4">{pattern?.table}</td>
+              {type === 'column' && <td className="px-4">{pattern?.column}</td>}
+              <td className="px-4">
+                <div className="flex items-center gap-x-4">
+                  <IconButton
+                    size="sm"
+                    onClick={() => editPattern(type, pattern.policy_name ?? '')}
+                    ripple={false}
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="edit" className="w-4" />
+                  </IconButton>
+                  <IconButton
+                    size="sm"
+                    onClick={() => setPatternDelete(pattern.policy_name ?? '')}
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ClientSidePagination
+        items={patterns}
+        onChangeItems={setDisplayedPatterns}
+      />
+      <ConfirmDialog
+        open={patternDelete.length > 0}
+        onConfirm={async () => {
+          deletePattern(patternDelete ?? ''), setPatternDelete('');
+        }}
+        onClose={() => setPatternDelete('')}
+        message={`Are you sure you want to delete the ${patternDelete} pattern?`}
+      />
+    </div>
   );
 }

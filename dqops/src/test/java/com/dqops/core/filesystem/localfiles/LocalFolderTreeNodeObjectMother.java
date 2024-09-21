@@ -32,7 +32,7 @@ public final class LocalFolderTreeNodeObjectMother {
         LocalFileStorageServiceImpl localHomeStorageService =
                 LocalHomeStorageServiceObjectMother.createLocalUserHomeStorageServiceForTestableHome(recreateHomeDirectory);
 
-        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         return homeFolder;
     }
 
@@ -45,7 +45,7 @@ public final class LocalFolderTreeNodeObjectMother {
         LocalFileStorageServiceImpl localHomeStorageService =
                 LocalHomeStorageServiceObjectMother.createDefaultHomeStorageService(recreateHomeDirectory);
 
-        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
+        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath(UserDomainIdentity.ROOT_DATA_DOMAIN));
         return homeFolder;
     }
 }

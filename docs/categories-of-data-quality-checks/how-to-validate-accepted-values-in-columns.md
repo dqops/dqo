@@ -78,7 +78,7 @@ spec:
 To assist with identifying the root cause of errors and cleaning up the data, DQOps offers error sampling for this check.
 Let's remove the CALDWELL value from the **expected_values** and run the check again. Now the check failed and you can view 
 representative examples of data that do not meet the specified data quality criteria by clicking on the
-**Error Sample** tab in the results section.
+**Error sampling** tab in the results section.
 
 ![Text found in set percent - error samples](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-found-in-set-percent-error-samples.png){ loading=lazy; width="1200px" }
 

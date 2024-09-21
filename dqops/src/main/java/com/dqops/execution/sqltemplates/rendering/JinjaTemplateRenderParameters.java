@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Context object whose properties will be available as variables in the Jinja2 SQL template.
@@ -55,7 +56,7 @@ public class JinjaTemplateRenderParameters {
     private ProviderDialectSettings dialectSettings;
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
-    private List<String> additionalFilters;
+    private Set<String> additionalFilters;
     private String tableFromFiles;
     private ErrorSamplingRenderParameters errorSampling;
 
@@ -95,7 +96,7 @@ public class JinjaTemplateRenderParameters {
 										 ProviderDialectSettings dialectSettings,
                                          String actualValueAlias,
                                          String expectedValueAlias,
-                                         List<String> additionalFilters,
+                                         Set<String> additionalFilters,
                                          String tableFromFiles) {
         this.connection = connection;
         this.table = table;
@@ -343,7 +344,7 @@ public class JinjaTemplateRenderParameters {
      * Returns a list of additional filters.
      * @return List of additional filters.
      */
-    public List<String> getAdditionalFilters() {
+    public Set<String> getAdditionalFilters() {
         return additionalFilters;
     }
 
@@ -351,7 +352,7 @@ public class JinjaTemplateRenderParameters {
      * Sets a reference to a list of additional filters.
      * @param additionalFilters A list of additional filters.
      */
-    public void setAdditionalFilters(List<String> additionalFilters) {
+    public void setAdditionalFilters(Set<String> additionalFilters) {
         this.additionalFilters = additionalFilters;
     }
 

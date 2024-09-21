@@ -67,7 +67,7 @@ public class AugmentingConsoleAppender extends ConsoleAppender<ILoggingEvent> {
         keyValuePairs.add(new KeyValuePair("stream", Objects.equals(this.getTarget(), ConsoleTarget.SystemErr.getName()) ? "stderr" : "stdout"));
 
         if (apiKeyPayload != null) {
-            keyValuePairs.add(new KeyValuePair("tenantId", apiKeyPayload.getTenantId()));
+            keyValuePairs.add(new KeyValuePair("tenantId", apiKeyPayload.getTenantId() + "/" + apiKeyPayload.getTenantGroup()));
             if (apiKeyPayload.getAccountName() !=  null) {
                 keyValuePairs.add(new KeyValuePair("account", apiKeyPayload.getAccountName()));
             }

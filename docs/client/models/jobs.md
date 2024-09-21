@@ -22,6 +22,7 @@ The references of all objects used by [jobs](../operations/jobs.md) REST API ope
 |<span class="no-wrap-code">`from_date_time`</span>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|*datetime*|
 |<span class="no-wrap-code">`to_date`</span>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|*date*|
 |<span class="no-wrap-code">`to_date_time`</span>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|*datetime*|
+|<span class="no-wrap-code">`where_filter`</span>|An additional filter which must be a valid SQL predicate (an SQL expression that returns 'true' or 'false') that is added to the WHERE clause of the SQL query that DQOps will run on the data source. The purpose of a custom filter is to analyze only a subset of data, for example, when a new batch of records is loaded, and the data quality checks are evaluated as a data contract. All the records in that batch must tagged with the same value, and the passed predicate to find records from that batch would use the filter in the form: "{alias}.batch_id = 1". The filter can use replacement tokens {alias} to reference the analyzed table.|*string*|
 
 
 ___
@@ -156,7 +157,8 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |<span class="no-wrap-code">`delete_check_results`</span>|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|*boolean*|
 |<span class="no-wrap-code">`delete_sensor_readouts`</span>|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|*boolean*|
 |<span class="no-wrap-code">`delete_error_samples`</span>|Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
-|<span class="no-wrap-code">`delete_incidents`</span>|Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
+|<span class="no-wrap-code">`delete_incidents`</span>|Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the incidents.|*boolean*|
+|<span class="no-wrap-code">`delete_checks_configuration`</span>|Delete the data quality configured checks from the table. They are detached from the configuration.Because the default value is *false*, this parameter must be set to *true* to delete the checks configuration.|*boolean*|
 |<span class="no-wrap-code">`column_names`</span>|The list of column names to delete the data for column level results or errors only for selected columns.|*List[string]*|
 |<span class="no-wrap-code">`check_category`</span>|The check category name, for example *volume* or *anomaly*.|*string*|
 |<span class="no-wrap-code">`table_comparison_name`</span>|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|*string*|
@@ -424,7 +426,6 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`collector_category`</span>|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|*string*|
 |<span class="no-wrap-code">[`target`](#statisticscollectortarget)</span>|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|*[StatisticsCollectorTarget](#statisticscollectortarget)*|
-|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
 |<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
 |<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|
@@ -457,6 +458,8 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">[`data_scope`](#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](#statisticsdatascope)*|
+|<span class="no-wrap-code">`configure_table`</span>|Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection.|*boolean*|
+|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -477,6 +480,8 @@ ___
 |<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
 |<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
+|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
+|<span class="no-wrap-code">`configure_table`</span>|Turns on a special mode of collecting statistics that will configure the timestamp and ID columns. It should be used only during the first statistics collection.|*boolean*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -596,6 +601,7 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 |<span class="no-wrap-code">[`parameters`](#dqojobentryparametersmodel)</span>||*[DqoJobEntryParametersModel](#dqojobentryparametersmodel)*|
 |<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>||*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 |<span class="no-wrap-code">`error_message`</span>||*string*|
+|<span class="no-wrap-code">`data_domain`</span>||*string*|
 
 
 ___
@@ -613,6 +619,7 @@ Describes a change to the job status or the job queue (such as a new job was add
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>||*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
 |<span class="no-wrap-code">`change_sequence`</span>||*long*|
 |<span class="no-wrap-code">[`updated_model`](./jobs.md#dqojobhistoryentrymodel)</span>||*[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)*|
+|<span class="no-wrap-code">`domain_name`</span>||*string*|
 
 
 ___

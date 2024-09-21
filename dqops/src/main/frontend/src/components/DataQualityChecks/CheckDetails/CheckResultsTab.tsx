@@ -74,23 +74,23 @@ const CheckResultsTab = ({
         checkTypes === 'profiling'
           ? 'Profile date (local time)'
           : checkTypes === 'partitioned'
-          ? 'Partition Date'
+          ? 'Partition date'
           : 'Checkpoint date',
       value: 'timePeriod',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Time Scale',
+      label: 'Time scale',
       value: 'timeGradient',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Executed At',
+      label: 'Executed at',
       value: 'executedAt',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Actual Value',
+      label: 'Actual value',
       value: 'actualValue',
       className:
         'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
@@ -99,7 +99,7 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Expected Value',
+      label: 'Expected value',
       value: 'expectedValue',
       className:
         'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
@@ -112,7 +112,7 @@ const CheckResultsTab = ({
         <span>
           Issue
           <br />
-          Severity Level
+          severity level
         </span>
       ),
       value: 'severity',
@@ -144,7 +144,7 @@ const CheckResultsTab = ({
         <span>
           Warning
           <br />
-          Lower Threshold
+          lower threshold
         </span>
       ),
       value: 'warningLowerBound',
@@ -159,7 +159,7 @@ const CheckResultsTab = ({
         <span>
           Warning
           <br />
-          Upper Threshold
+          upper threshold
         </span>
       ),
       value: 'warningUpperBound',
@@ -174,7 +174,7 @@ const CheckResultsTab = ({
         <span>
           Error
           <br />
-          Lower Threshold
+          lower threshold
         </span>
       ),
       value: 'errorLowerBound',
@@ -189,7 +189,7 @@ const CheckResultsTab = ({
         <span>
           Error
           <br />
-          Upper Threshold
+          upper threshold
         </span>
       ),
       value: 'errorUpperBound',
@@ -204,7 +204,7 @@ const CheckResultsTab = ({
         <span>
           Fatal
           <br />
-          Lower Threshold
+          lower threshold
         </span>
       ),
       value: 'fatalLowerBound',
@@ -219,7 +219,7 @@ const CheckResultsTab = ({
         <span>
           Fatal
           <br />
-          Upper Threshold
+          upper threshold
         </span>
       ),
       value: 'fatalUpperBound',
@@ -230,19 +230,19 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Duration Ms',
+      label: 'Duration ms',
       value: 'durationMs',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
     },
     {
-      label: 'Data Group',
+      label: 'Data group',
       value: 'dataGroup',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     },
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
 
@@ -303,7 +303,7 @@ const CheckResultsTab = ({
 
   return (
     <div
-      className="py-3 overflow-auto"
+      className="pt-3 overflow-auto"
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
     >
       <div className="flex space-x-8 items-center">
@@ -318,6 +318,7 @@ const CheckResultsTab = ({
               })) || []
             }
             onChange={onChangeDataGroup}
+            disabled={(results[0]?.dataGroups ?? []).length === 0}
           />
         </div>
         <div className="flex space-x-4 items-center">
@@ -330,6 +331,7 @@ const CheckResultsTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <IconButton
+            ripple={false}
             size="sm"
             className={
               mode === 'chart'
@@ -357,9 +359,10 @@ const CheckResultsTab = ({
           </IconButton>
           <IconButton
             size="sm"
+            ripple={false}
             className={
               mode === 'table'
-                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF]'
+                ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
                 : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
             }
             onClick={() => {
@@ -386,12 +389,11 @@ const CheckResultsTab = ({
       {results.length === 0 && (
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
-
-      {mode === 'table' && (
+      {mode === 'table' && results.length !== 0 && (
         <>
           {results[0] && (
             <Table
-              className="mt-4 w-full"
+              className="mt-1 w-full"
               columns={columns}
               data={(results[0].checkResultEntries || []).map((item) => ({
                 ...item,
@@ -401,13 +403,13 @@ const CheckResultsTab = ({
                 ).format('YYYY-MM-DD HH:mm:ss'),
                 timePeriod: item.timePeriod?.replace(/T/g, ' ')
               }))}
-              emptyMessage="No Data"
+              emptyMessage="No data"
               getRowClass={getSeverityClass}
             />
           )}
         </>
       )}
-      {mode === 'chart' && (
+      {mode === 'chart' && results.length !== 0 && (
         <>
           <ChartView data={allResults} />
         </>

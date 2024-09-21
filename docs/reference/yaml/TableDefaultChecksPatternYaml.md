@@ -15,13 +15,13 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
 |<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|default_table_checks| |
-|<span class="no-wrap-code ">[`spec`](./TableDefaultChecksPatternYaml.md#tabledefaultcheckspatternspec)</span>|The specification (configuration) of default data quality checks (data observability checks) that are applied on tables matching a pattern|*[TableDefaultChecksPatternSpec](./TableDefaultChecksPatternYaml.md#tabledefaultcheckspatternspec)*| | | |
+|<span class="no-wrap-code ">[`spec`](./TableDefaultChecksPatternYaml.md#tablequalitypolicyspec)</span>|The specification (configuration) of default data quality checks (data observability checks) that are applied on tables matching a pattern|*[TableQualityPolicySpec](./TableDefaultChecksPatternYaml.md#tablequalitypolicyspec)*| | | |
 
 
 
 ___
 
-## TableDefaultChecksPatternSpec
+## TableQualityPolicySpec
 The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.
  This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.
 

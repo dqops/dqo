@@ -5,9 +5,9 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE CAST(SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.make_text_constant(parameters.regex) }})
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                    THEN 1
+                ELSE 0
             END
         ) AS DOUBLE)
     END AS actual_value

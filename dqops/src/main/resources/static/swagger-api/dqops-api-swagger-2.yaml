@@ -23,6 +23,10 @@ tags:
 - name: "Checks"
   description: "Data quality check definition management operations for adding/removing/changing\
     \ custom data quality checks."
+- name: "ColumnQualityPolicies"
+  description: "Operations for managing the configuration of data quality policies\
+    \ at a column level. Policies are the default configuration of data quality checks\
+    \ for columns matching a pattern."
 - name: "Columns"
   description: "Operations related to manage the metadata of columns, and managing\
     \ the configuration of column-level data quality checks."
@@ -32,21 +36,19 @@ tags:
 - name: "Dashboards"
   description: "Operations for retrieving the list of data quality dashboards supported\
     \ by DQOps and issuing short-term access keys to open a dashboard."
+- name: "DataDomains"
+  description: "Data domain management API to create different data domains."
 - name: "DataGroupingConfigurations"
   description: "Operations for managing the configuration of data groupings on a table\
     \ level in DQOps."
+- name: "DataLineage"
+  description: "Operations related to managing and inspecting table and column lineage."
 - name: "DataSources"
   description: "Rest API controller that operates on data sources that are not yet\
     \ imported, testing connections or retrieving the metadata (schemas and tables)."
-- name: "DefaultColumnCheckPatterns"
-  description: "Operations for managing the configuration of the default column-level\
-    \ checks for columns matching a pattern."
 - name: "Defaults"
   description: "Default settings management for configuring the default data quality\
     \ checks that are configured for all imported tables and columns."
-- name: "DefaultTableCheckPatterns"
-  description: "Operations for managing the configuration of the default table-level\
-    \ checks for tables matching a pattern."
 - name: "Dictionaries"
   description: "Operations for managing data dictionary CSV files in DQOps. Data dictionaries\
     \ can be used in *accepted_values* data quality checks."
@@ -109,6 +111,10 @@ tags:
 - name: "TableComparisons"
   description: "Operations for managing the configurations of table comparisons between\
     \ tables on the same or different data sources"
+- name: "TableQualityPolicies"
+  description: "Operations for managing the configuration of data quality policies\
+    \ at a table level. Policies are the default configuration of data quality checks\
+    \ for tables matching a pattern."
 - name: "Tables"
   description: "Operations related to manage the metadata of imported tables, and\
     \ managing the configuration of table-level data quality checks."
@@ -6502,6 +6508,300 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage:
+    get:
+      tags:
+      - "DataLineage"
+      summary: "getTableSourceTables"
+      description: "Returns a list of source tables on the data lineage that are sources\
+        \ of the given table."
+      operationId: "getTableSourceTables"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "checkType"
+        in: "query"
+        description: "Optional parameter for the check type, when provided, returns\
+          \ the results for data quality dimensions for the data quality checks of\
+          \ that type"
+        required: false
+        type: "string"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TableLineageSourceListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+  : get:
+      tags:
+      - "DataLineage"
+      summary: "getTableSourceTable"
+      description: "Reads a specific data lineage source table defined on a target\
+        \ tale."
+      operationId: "getTableSourceTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Table basic information returned"
+          schema:
+            $ref: "#/definitions/TableLineageSourceSpec"
+        404:
+          description: "Connection, table or table lineage not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DataLineage"
+      summary: "createTableSourceTable"
+      description: "Creates a new source table of the table's data lineage."
+      operationId: "createTableSourceTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Table lineage source list model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableLineageSourceSpec"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Table's new source table successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Table's source table with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DataLineage"
+      summary: "updateTableSourceTable"
+      description: "Update a specific data lineage source table using a new model."
+      operationId: "updateTableSourceTable"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Table lineage source list model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableLineageSourceSpec"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Table's source table successfully updated"
+        404:
+          description: "Connection or table's source table not found"
+        406:
+          description: "Incorrect request"
+        409:
+          description: "Table's source table with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "DataLineage"
+      summary: "deleteTableSourceTable"
+      description: "Deletes a specific data lineage source table of the given table."
+      operationId: "deleteTableSourceTable"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "sourceConnection"
+        in: "path"
+        description: "Source connection name"
+        required: true
+        type: "string"
+      - name: "sourceSchema"
+        in: "path"
+        description: "Source schema name"
+        required: true
+        type: "string"
+      - name: "sourceTable"
+        in: "path"
+        description: "Source table name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Table's source table removed"
+        404:
+          description: "Connection or table's source table not found"
+        406:
+          description: "Invalid request"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/daily:
     get:
       tags:
@@ -11554,1376 +11854,6 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/default/checks/column:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getAllDefaultColumnChecksPatterns"
-      description: "Returns a flat list of all column-level default check patterns\
-        \ configured for this instance. Default checks are applied on columns dynamically."
-      operationId: "getAllDefaultColumnChecksPatterns"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/DefaultColumnChecksPatternListModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultColumnChecksPattern"
-      description: "Returns a default checks pattern definition as a full specification\
-        \ object"
-      operationId: "getDefaultColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Column pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/DefaultColumnChecksPatternModel"
-        404:
-          description: "Pattern name not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    post:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "createDefaultColumnChecksPattern"
-      description: "Creates (adds) a new default column-level checks pattern configuration\
-        \ by saving a full specification object."
-      operationId: "createDefaultColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultColumnChecksPatternModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        201:
-          description: "New checks pattern successfully created"
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        409:
-          description: "Check pattern with the same name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultColumnChecksPattern"
-      description: "Updates an default column-level checks pattern by saving a full\
-        \ specification object"
-      operationId: "updateDefaultColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultColumnChecksPatternModel"
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "Default column-level checks pattern successfully updated"
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    delete:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "deleteDefaultColumnChecksPattern"
-      description: "Deletes a default column-level checks pattern"
-      operationId: "deleteDefaultColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "Default column-level checks pattern successfully deleted"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}/monitoring/daily:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultMonitoringDailyColumnChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily monitoring checks that are configured for a check pattern on a\
-        \ column level."
-      operationId: "getDefaultMonitoringDailyColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultMonitoringDailyColumnChecksPattern"
-      description: "New configuration of the default daily monitoring checks on a\
-        \ column level. These checks will be applied to columns."
-      operationId: "updateDefaultMonitoringDailyColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality daily\
-          \ monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of daily monitoring checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}/monitoring/monthly:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultMonitoringMonthlyColumnChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly monitoring checks that are configured for a check pattern on\
-        \ a column level."
-      operationId: "getDefaultMonitoringMonthlyColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultMonitoringMonthlyColumnChecksPattern"
-      description: "New configuration of the default monthly monitoring checks on\
-        \ a column level. These checks will be applied to columns."
-      operationId: "updateDefaultMonitoringMonthlyColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality monthly\
-          \ monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of monthly monitoring checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}/partitioned/daily:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultPartitionedDailyColumnChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily partitioned checks that are configured for a check pattern on\
-        \ a column level."
-      operationId: "getDefaultPartitionedDailyColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultPartitionedDailyColumnChecksPattern"
-      description: "New configuration of the default daily partitioned checks on a\
-        \ column level. These checks will be applied to columns."
-      operationId: "updateDefaultPartitionedDailyColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality daily\
-          \ partitioned checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of daily partitioned checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}/partitioned/monthly:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultPartitionedMonthlyColumnChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly partitioned checks that are configured for a check pattern on\
-        \ a column level."
-      operationId: "getDefaultPartitionedMonthlyColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultPartitionedMonthlyColumnChecksPattern"
-      description: "New configuration of the default monthly partitioned checks on\
-        \ a column level. These checks will be applied to columns."
-      operationId: "updateDefaultPartitionedMonthlyColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality monthly\
-          \ partitioned checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of monthly partitioned checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}/profiling:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultProfilingColumnChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the profiling checks that are configured for a check pattern on a column\
-        \ level."
-      operationId: "getDefaultProfilingColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultProfilingColumnChecksPattern"
-      description: "New configuration of the default profiling checks on a column\
-        \ level. These checks will be applied to columns."
-      operationId: "updateDefaultProfilingColumnChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality profiling\
-          \ checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of profiling checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{patternName}/target:
-    get:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "getDefaultColumnChecksPatternTarget"
-      description: "Returns a default checks pattern definition"
-      operationId: "getDefaultColumnChecksPatternTarget"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Column pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/DefaultColumnChecksPatternListModel"
-        404:
-          description: "Pattern name not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    post:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "createDefaultColumnChecksPatternTarget"
-      description: "Creates (adds) a new default column-level checks pattern configuration."
-      operationId: "createDefaultColumnChecksPatternTarget"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model with only the target filters"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultColumnChecksPatternListModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        201:
-          description: "New checks pattern successfully created"
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        409:
-          description: "Check pattern with the same name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "updateDefaultColumnChecksPatternTarget"
-      description: "Updates an default column-level checks pattern, changing only\
-        \ the target object"
-      operationId: "updateDefaultColumnChecksPatternTarget"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultColumnChecksPatternListModel"
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "Default column-level checks pattern successfully updated"
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}:
-    post:
-      tags:
-      - "DefaultColumnCheckPatterns"
-      summary: "copyFromDefaultColumnChecksPattern"
-      description: "Creates (adds) a copy of an existing default column-level checks\
-        \ pattern configuration, under a new name."
-      operationId: "copyFromDefaultColumnChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "targetPatternName"
-        in: "path"
-        description: "Target pattern name"
-        required: true
-        type: "string"
-      - name: "sourcePatternName"
-        in: "path"
-        description: "Source pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        201:
-          description: "Checks pattern successfully copied"
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Source check pattern not found"
-        406:
-          description: "Rejected, missing required fields"
-        409:
-          description: "Checks pattern with the target name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getAllDefaultTableChecksPatterns"
-      description: "Returns a flat list of all table-level default check patterns\
-        \ configured for this instance. Default checks are applied on tables dynamically."
-      operationId: "getAllDefaultTableChecksPatterns"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/DefaultTableChecksPatternListModel"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultTableChecksPattern"
-      description: "Returns a default checks pattern definition as a full specification\
-        \ object"
-      operationId: "getDefaultTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Table pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/DefaultTableChecksPatternModel"
-        404:
-          description: "Pattern name not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    post:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "createDefaultTableChecksPattern"
-      description: "Creates (adds) a new default table-level checks pattern configuration\
-        \ by saving a full specification object."
-      operationId: "createDefaultTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultTableChecksPatternModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        201:
-          description: "New checks pattern successfully created"
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        409:
-          description: "Check pattern with the same name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultTableChecksPattern"
-      description: "Updates an default table-level checks pattern by saving a full\
-        \ specification object"
-      operationId: "updateDefaultTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultTableChecksPatternModel"
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "Default table-level checks pattern successfully updated"
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    delete:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "deleteDefaultTableChecksPattern"
-      description: "Deletes a default table-level checks pattern"
-      operationId: "deleteDefaultTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "Default table-level checks pattern successfully deleted"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}/monitoring/daily:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultMonitoringDailyTableChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily monitoring checks that are configured for a check pattern on a\
-        \ table level."
-      operationId: "getDefaultMonitoringDailyTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultMonitoringDailyTableChecksPattern"
-      description: "New configuration of the default daily monitoring checks on a\
-        \ table level. These checks will be applied to tables."
-      operationId: "updateDefaultMonitoringDailyTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality daily\
-          \ monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of daily monitoring checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}/monitoring/monthly:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultMonitoringMonthlyTableChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly monitoring checks that are configured for a check pattern on\
-        \ a table level."
-      operationId: "getDefaultMonitoringMonthlyTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultMonitoringMonthlyTableChecksPattern"
-      description: "New configuration of the default monthly monitoring checks on\
-        \ a table level. These checks will be applied to tables."
-      operationId: "updateDefaultMonitoringMonthlyTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality monthly\
-          \ monitoring checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of monthly monitoring checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}/partitioned/daily:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultPartitionedDailyTableChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the daily partitioned checks that are configured for a check pattern on\
-        \ a table level."
-      operationId: "getDefaultPartitionedDailyTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultPartitionedDailyTableChecksPattern"
-      description: "New configuration of the default daily partitioned checks on a\
-        \ table level. These checks will be applied to tables."
-      operationId: "updateDefaultPartitionedDailyTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality daily\
-          \ partitioned checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of daily partitioned checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}/partitioned/monthly:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultPartitionedMonthlyTableChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the monthly partitioned checks that are configured for a check pattern on\
-        \ a table level."
-      operationId: "getDefaultPartitionedMonthlyTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultPartitionedMonthlyTableChecksPattern"
-      description: "New configuration of the default monthly partitioned checks on\
-        \ a table level. These checks will be applied to tables."
-      operationId: "updateDefaultPartitionedMonthlyTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality monthly\
-          \ partitioned checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of monthly partitioned checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}/profiling:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultProfilingTableChecksPattern"
-      description: "Returns UI model to show and edit the default configuration of\
-        \ the profiling checks that are configured for a check pattern on a table\
-        \ level."
-      operationId: "getDefaultProfilingTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CheckContainerModel"
-        404:
-          description: "Default checks pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultProfilingTableChecksPattern"
-      description: "New configuration of the default profiling checks on a table level.\
-        \ These checks will be applied to tables."
-      operationId: "updateDefaultProfilingTableChecksPattern"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Model with the changes to be applied to the data quality profiling\
-          \ checks configuration"
-        required: false
-        schema:
-          $ref: "#/definitions/CheckContainerModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "The default configuration of profiling checks successfully\
-            \ updated."
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Default check pattern configuration not found"
-        406:
-          description: "Rejected, missing required fields"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{patternName}/target:
-    get:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "getDefaultTableChecksPatternTarget"
-      description: "Returns a default checks pattern definition"
-      operationId: "getDefaultTableChecksPatternTarget"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Table pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/DefaultTableChecksPatternListModel"
-        404:
-          description: "Pattern name not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    post:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "createDefaultTableChecksPatternTarget"
-      description: "Creates (adds) a new default table-level checks pattern configuration."
-      operationId: "createDefaultTableChecksPatternTarget"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model with only the target filters"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultTableChecksPatternListModel"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        201:
-          description: "New checks pattern successfully created"
-        400:
-          description: "Bad request, adjust before retrying"
-        406:
-          description: "Rejected, missing required fields"
-        409:
-          description: "Check pattern with the same name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-    put:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "updateDefaultTableChecksPatternTarget"
-      description: "Updates an default table-level checks pattern, changing only the\
-        \ target object"
-      operationId: "updateDefaultTableChecksPatternTarget"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Default checks pattern model"
-        required: false
-        schema:
-          $ref: "#/definitions/DefaultTableChecksPatternListModel"
-      - name: "patternName"
-        in: "path"
-        description: "Pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        204:
-          description: "Default table-level checks pattern successfully updated"
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Pattern not found"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
-  /api/default/checks/table/{targetPatternName}/copyfrom/{sourcePatternName}:
-    post:
-      tags:
-      - "DefaultTableCheckPatterns"
-      summary: "copyFromDefaultTableChecksPattern"
-      description: "Creates (adds) a copy of an existing default table-level checks\
-        \ pattern configuration, under a new name."
-      operationId: "copyFromDefaultTableChecksPattern"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "targetPatternName"
-        in: "path"
-        description: "Target pattern name"
-        required: true
-        type: "string"
-      - name: "sourcePatternName"
-        in: "path"
-        description: "Source pattern name"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/MonoResponseEntityMonoVoid"
-        201:
-          description: "Checks pattern successfully copied"
-        400:
-          description: "Bad request, adjust before retrying"
-        404:
-          description: "Source check pattern not found"
-        406:
-          description: "Rejected, missing required fields"
-        409:
-          description: "Checks pattern with the target name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
   /api/default/filterednotifications:
     get:
       tags:
@@ -13474,6 +12404,149 @@ paths:
               format: "byte"
         404:
           description: "Data dictionary not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/:
+    get:
+      tags:
+      - "DataDomains"
+      summary: "getLocalDataDomains"
+      description: "Returns a list of local data domains that this instance is maintaining.\
+        \ Data domains are supported only in an ENTERPRISE versions of DQOps."
+      operationId: "getLocalDataDomains"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LocalDataDomainModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DataDomains"
+      summary: "createDataDomain"
+      description: "Creates a new data domain given a data domain display name."
+      operationId: "createDataDomain"
+      consumes:
+      - "text/plain"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data domain display name"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LocalDataDomainModel"
+        201:
+          description: "New data domain successfully created"
+          schema:
+            $ref: "#/definitions/LocalDataDomainModel"
+        400:
+          description: "Bad request, adjust before retrying"
+        409:
+          description: "Data domain with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    patch:
+      tags:
+      - "DataDomains"
+      summary: "synchronizeDataDomains"
+      description: "Synchronizes the domains in the SaaS cloud to this instance. All\
+        \ data domains will be created locally."
+      operationId: "synchronizeDataDomains"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data domain successfully synchronized"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/{dataDomainName}:
+    delete:
+      tags:
+      - "DataDomains"
+      summary: "deleteDataDomain"
+      description: "Deletes a data domain. The domain is deleted in the DQOps SaaS\
+        \ cloud and locally."
+      operationId: "deleteDataDomain"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataDomainName"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data domain successfully deleted"
+        404:
+          description: "Data domain not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/{dataDomainName}/switch:
+    get:
+      tags:
+      - "DataDomains"
+      summary: "switchToDataDomain"
+      description: "Switches to a different data domain. This operation sends a special\
+        \ cookie and redirects the user to the home screen."
+      operationId: "switchToDataDomain"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataDomainName"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        303:
+          description: "Redirect to a valid screen sent"
         500:
           description: "Internal Server Error"
           schema:
@@ -14296,6 +13369,18 @@ paths:
           \ identifier, instead of the DQOps assigned job identifier."
         required: false
         type: "string"
+      - name: "configureTable"
+        in: "query"
+        description: "Configures timestamp and ID column on the table based on the\
+          \ results identified in statistics."
+        required: false
+        type: "boolean"
+      - name: "samplesLimit"
+        in: "query"
+        description: "The limit of column samples to collect."
+        required: false
+        type: "integer"
+        format: "int32"
       - name: "wait"
         in: "query"
         description: "Wait until the statistic collection job finishes to run, the\
@@ -14356,6 +13441,18 @@ paths:
           \ identifier, instead of the DQOps assigned job identifier."
         required: false
         type: "string"
+      - name: "samplesLimit"
+        in: "query"
+        description: "The limit of column samples to collect."
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "configureTable"
+        in: "query"
+        description: "Configures timestamp and ID column on the table based on the\
+          \ results identified in statistics."
+        required: false
+        type: "boolean"
       - name: "wait"
         in: "query"
         description: "Wait until the statistic collection job finishes to run, the\
@@ -14608,6 +13705,8 @@ paths:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Job was cancelled"
+        404:
+          description: "Job not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -15206,6 +14305,1379 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/policies/checks/column:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getColumnQualityPolicies"
+      description: "Returns a flat list of all column-level default check patterns\
+        \ configured for this instance. Default checks are applied on columns dynamically."
+      operationId: "getColumnQualityPolicies"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ColumnQualityPolicyListModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getColumnQualityPolicy"
+      description: "Returns a default checks pattern definition as a full specification\
+        \ object"
+      operationId: "getColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Column pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ColumnQualityPolicyModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "createColumnQualityPolicy"
+      description: "Creates (adds) a new default column-level checks pattern configuration\
+        \ by saving a full specification object."
+      operationId: "createColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/ColumnQualityPolicyModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updateColumnQualityPolicy"
+      description: "Updates an default column-level checks pattern by saving a full\
+        \ specification object"
+      operationId: "updateColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/ColumnQualityPolicyModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Default column-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "deleteColumnQualityPolicy"
+      description: "Deletes a default column-level checks pattern"
+      operationId: "deleteColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Default column-level checks pattern successfully deleted"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}/monitoring/daily:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getMonitoringDailyColumnQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily monitoring checks that are configured for a check pattern on a\
+        \ column level."
+      operationId: "getMonitoringDailyColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updateMonitoringDailyColumnQualityPolicy"
+      description: "New configuration of the default daily monitoring checks on a\
+        \ column level. These checks will be applied to columns."
+      operationId: "updateMonitoringDailyColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ monitoring checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of daily monitoring checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}/monitoring/monthly:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getMonitoringMonthlyColumnQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the monthly monitoring checks that are configured for a check pattern on\
+        \ a column level."
+      operationId: "getMonitoringMonthlyColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updateMonitoringMonthlyColumnQualityPolicy"
+      description: "New configuration of the default monthly monitoring checks on\
+        \ a column level. These checks will be applied to columns."
+      operationId: "updateMonitoringMonthlyColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ monitoring checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of monthly monitoring checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}/partitioned/daily:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getPartitionedDailyColumnQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily partitioned checks that are configured for a check pattern on\
+        \ a column level."
+      operationId: "getPartitionedDailyColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updatePartitionedDailyColumnQualityPolicy"
+      description: "New configuration of the default daily partitioned checks on a\
+        \ column level. These checks will be applied to columns."
+      operationId: "updatePartitionedDailyColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ partitioned checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of daily partitioned checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}/partitioned/monthly:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getPartitionedMonthlyColumnQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the monthly partitioned checks that are configured for a check pattern on\
+        \ a column level."
+      operationId: "getPartitionedMonthlyColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updatePartitionedMonthlyColumnQualityPolicy"
+      description: "New configuration of the default monthly partitioned checks on\
+        \ a column level. These checks will be applied to columns."
+      operationId: "updatePartitionedMonthlyColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ partitioned checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of monthly partitioned checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}/profiling:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getProfilingColumnQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the profiling checks that are configured for a check pattern on a column\
+        \ level."
+      operationId: "getProfilingColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updateProfilingColumnQualityPolicy"
+      description: "New configuration of the default profiling checks on a column\
+        \ level. These checks will be applied to columns."
+      operationId: "updateProfilingColumnQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality profiling\
+          \ checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of profiling checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{patternName}/target:
+    get:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "getColumnQualityPolicyTarget"
+      description: "Returns a default checks pattern definition"
+      operationId: "getColumnQualityPolicyTarget"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Column pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ColumnQualityPolicyListModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "createColumnQualityPolicyTarget"
+      description: "Creates (adds) a new default column-level checks pattern configuration."
+      operationId: "createColumnQualityPolicyTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model with only the target filters"
+        required: false
+        schema:
+          $ref: "#/definitions/ColumnQualityPolicyListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "updateColumnQualityPolicyTarget"
+      description: "Updates an default column-level checks pattern, changing only\
+        \ the target object"
+      operationId: "updateColumnQualityPolicyTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/ColumnQualityPolicyListModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Default column-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}:
+    post:
+      tags:
+      - "ColumnQualityPolicies"
+      summary: "copyFromColumnQualityPolicy"
+      description: "Creates (adds) a copy of an existing default column-level checks\
+        \ pattern configuration, under a new name."
+      operationId: "copyFromColumnQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "targetPatternName"
+        in: "path"
+        description: "Target pattern name"
+        required: true
+        type: "string"
+      - name: "sourcePatternName"
+        in: "path"
+        description: "Source pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Checks pattern successfully copied"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Source check pattern not found"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Checks pattern with the target name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getTableQualityPolicies"
+      description: "Returns a flat list of all table-level default check patterns\
+        \ (data quality policies) configured for this instance. Default checks are\
+        \ applied on tables dynamically."
+      operationId: "getTableQualityPolicies"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TableQualityPolicyListModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getTableQualityPolicy"
+      description: "Returns a default table-level checks pattern (data quality policy)\
+        \ definition as a full specification object"
+      operationId: "getTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Table pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/TableQualityPolicyModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "TableQualityPolicies"
+      summary: "createTableQualityPolicyPattern"
+      description: "Creates (adds) a new default table-level checks pattern (data\
+        \ quality policy) configuration by saving a full specification object."
+      operationId: "createTableQualityPolicyPattern"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableQualityPolicyModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updateTableQualityPolicy"
+      description: "Updates an default table-level checks pattern (data quality policy)\
+        \ by saving a full specification object"
+      operationId: "updateTableQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableQualityPolicyModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "TableQualityPolicies"
+      summary: "deleteTableQualityPolicy"
+      description: "Deletes a default table-level checks pattern (a data quality policy\
+        \ at a column level)."
+      operationId: "deleteTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully deleted"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}/monitoring/daily:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getMonitoringDailyTableQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily monitoring checks that are configured for a check pattern on a\
+        \ table level."
+      operationId: "getMonitoringDailyTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updateMonitoringDailyTableQualityPolicy"
+      description: "New configuration of the default daily monitoring checks on a\
+        \ table level. These checks will be applied to tables."
+      operationId: "updateMonitoringDailyTableQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ monitoring checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of daily monitoring checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}/monitoring/monthly:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getMonitoringMonthlyTableQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the monthly monitoring checks that are configured for a check pattern on\
+        \ a table level."
+      operationId: "getMonitoringMonthlyTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updateMonitoringMonthlyTableQualityPolicy"
+      description: "New configuration of the default monthly monitoring checks on\
+        \ a table level. These checks will be applied to tables."
+      operationId: "updateMonitoringMonthlyTableQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ monitoring checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of monthly monitoring checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}/partitioned/daily:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getPartitionedDailyTableQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the daily partitioned checks that are configured for a check pattern on\
+        \ a table level."
+      operationId: "getPartitionedDailyTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updatePartitionedDailyTableQualityPolicy"
+      description: "New configuration of the default daily partitioned checks on a\
+        \ table level. These checks will be applied to tables."
+      operationId: "updatePartitionedDailyTableQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality daily\
+          \ partitioned checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of daily partitioned checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}/partitioned/monthly:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getPartitionedMonthlyTableQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the monthly partitioned checks that are configured for a check pattern on\
+        \ a table level."
+      operationId: "getPartitionedMonthlyTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updatePartitionedMonthlyTableQualityPolicy"
+      description: "New configuration of the default monthly partitioned checks on\
+        \ a table level. These checks will be applied to tables."
+      operationId: "updatePartitionedMonthlyTableQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality monthly\
+          \ partitioned checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of monthly partitioned checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}/profiling:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getProfilingTableQualityPolicy"
+      description: "Returns UI model to show and edit the default configuration of\
+        \ the profiling checks that are configured for a check pattern on a table\
+        \ level."
+      operationId: "getProfilingTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Default checks pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updateProfilingTableQualityPolicy"
+      description: "New configuration of the default profiling checks on a table level.\
+        \ These checks will be applied to tables."
+      operationId: "updateProfilingTableQualityPolicy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Model with the changes to be applied to the data quality profiling\
+          \ checks configuration"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckContainerModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "The default configuration of profiling checks successfully\
+            \ updated."
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Default check pattern configuration not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{patternName}/target:
+    get:
+      tags:
+      - "TableQualityPolicies"
+      summary: "getTableQualityPolicyTarget"
+      description: "Returns a default checks pattern definition (a data quality policy)"
+      operationId: "getTableQualityPolicyTarget"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Table pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/TableQualityPolicyListModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "TableQualityPolicies"
+      summary: "createTableQualityPolicyTarget"
+      description: "Creates (adds) a new default table-level checks pattern configuration\
+        \ (a table-level data quality policy)."
+      operationId: "createTableQualityPolicyTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model with only the target filters"
+        required: false
+        schema:
+          $ref: "#/definitions/TableQualityPolicyListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "TableQualityPolicies"
+      summary: "updateTableQualityPolicyTarget"
+      description: "Updates an default table-level checks pattern (data quality policy),\
+        \ changing only the target object"
+      operationId: "updateTableQualityPolicyTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/TableQualityPolicyListModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/policies/checks/table/{targetPatternName}/copyfrom/{sourcePatternName}:
+    post:
+      tags:
+      - "TableQualityPolicies"
+      summary: "copyFromTableQualityPolicy"
+      description: "Creates (adds) a copy of an existing default table-level checks\
+        \ pattern configuration (data quality policy) under a new name."
+      operationId: "copyFromTableQualityPolicy"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "targetPatternName"
+        in: "path"
+        description: "Target pattern name"
+        required: true
+        type: "string"
+      - name: "sourcePatternName"
+        in: "path"
+        description: "Source pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Checks pattern successfully copied"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Source check pattern not found"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Checks pattern with the target name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/rules:
     get:
       tags:
@@ -15782,7 +16254,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/DqoCloudUserModel"
+              $ref: "#/definitions/DqoUserRolesModel"
         403:
           description: "DQOps instance is not authenticated to DQOps Cloud"
         500:
@@ -15807,7 +16279,7 @@ paths:
         description: "User model"
         required: false
         schema:
-          $ref: "#/definitions/DqoCloudUserModel"
+          $ref: "#/definitions/DqoUserRolesModel"
       responses:
         200:
           description: "successful operation"
@@ -15847,7 +16319,7 @@ paths:
         200:
           description: "OK"
           schema:
-            $ref: "#/definitions/DqoCloudUserModel"
+            $ref: "#/definitions/DqoUserRolesModel"
         403:
           description: "DQOps instance is not authenticated to DQOps Cloud"
         404:
@@ -15880,7 +16352,7 @@ paths:
         description: "User model"
         required: false
         schema:
-          $ref: "#/definitions/DqoCloudUserModel"
+          $ref: "#/definitions/DqoUserRolesModel"
       responses:
         200:
           description: "successful operation"
@@ -16727,11 +17199,14 @@ definitions:
       copy_profiling_checks:
         type: "boolean"
         description: "Copy the configuration of valid profiling checks."
-      propose_default_checks:
+      reconfigure_policy_enabled_checks:
         type: "boolean"
         description: "Propose the rules for default checks that were activated using\
           \ data quality check patterns (policies). The default value of this parameter\
           \ is 'true'."
+      propose_checks_from_statistics:
+        type: "boolean"
+        description: "Propose the configuration of data quality checks from statistics."
       propose_minimum_row_count:
         type: "boolean"
         description: "Propose the default configuration of the minimum row count for\
@@ -16848,11 +17323,10 @@ definitions:
           \ value of this parameter is 'true'."
       apply_pii_checks:
         type: "boolean"
-        description: "Apply the rules to the Personal Identifiable Information checks\
-          \ (sensitive data), but only when the checks were run as profiling checks\
-          \ activated manually, or by activating a data quality check pattern that\
-          \ scans all columns for PII data. The default value of this parameter is\
-          \ 'true'."
+        description: "Applies rules to Personal Identifiable Information checks (sensitive\
+          \ data), but only when the checks were activated manually as profiling checks,\
+          \ or through a data quality check pattern that scans all columns for PII\
+          \ data. The default value of this parameter is 'true'."
       propose_custom_checks:
         type: "boolean"
         description: "Propose the default configuration for custom checks that use\
@@ -17666,6 +18140,15 @@ definitions:
         enum:
         - "table"
         - "data_group"
+      samples_limit:
+        type: "integer"
+        format: "int32"
+        description: "The default limit of column samples that are collected."
+      configure_table:
+        type: "boolean"
+        description: "Turns on a special mode of collecting statistics that will configure\
+          \ the timestamp and ID columns. It should be used only during the first\
+          \ statistics collection."
       dummy_sensor_execution:
         type: "boolean"
         description: "Boolean flag that enables a dummy statistics collection (sensors\
@@ -17690,6 +18173,15 @@ definitions:
         enum:
         - "table"
         - "data_group"
+      configure_table:
+        type: "boolean"
+        description: "Turns on a special mode of collecting statistics that will configure\
+          \ the timestamp and ID columns. It should be used only during the first\
+          \ statistics collection."
+      samples_limit:
+        type: "integer"
+        format: "int32"
+        description: "The default limit of column samples that are collected."
       dummy_sensor_execution:
         type: "boolean"
         description: "Boolean flag that enables a dummy statistics collection (sensors\
@@ -20879,43 +21371,6 @@ definitions:
           \ date strings and raises a data quality issue when too many invalid date\
           \ strings are found."
         $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
-  ColumnDefaultChecksPatternSpec:
-    type: "object"
-    properties:
-      priority:
-        type: "integer"
-        format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
-      disabled:
-        type: "boolean"
-        description: "Disables this data quality check configuration. The checks will\
-          \ not be activated."
-      description:
-        type: "string"
-        description: "The description (documentation) of this data quality check configuration."
-      target:
-        description: "The target column filter that are filtering the column, table\
-          \ and connection on which the default checks are applied."
-        $ref: "#/definitions/TargetColumnPatternSpec"
-      profiling_checks:
-        description: "Configuration of data quality profiling checks that are enabled.\
-          \ Pick a check from a category, apply the parameters and rules to enable\
-          \ it."
-        $ref: "#/definitions/ColumnProfilingCheckCategoriesSpec"
-      monitoring_checks:
-        description: "Configuration of table level monitoring checks. Monitoring checks\
-          \ are data quality checks that are evaluated for each period of time (daily,\
-          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
-          \ data quality check result for each period of time."
-        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
-      partitioned_checks:
-        description: "Configuration of table level date/time partitioned checks. Partitioned\
-          \ data quality checks are evaluated for each partition separately, raising\
-          \ separate alerts at a partition level. The table does not need to be physically\
-          \ partitioned by date, it is possible to run data quality checks for each\
-          \ day or month of data separately."
-        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
   ColumnDetectedDatatypeInTextCheckSpec:
     type: "object"
     properties:
@@ -23494,6 +23949,22 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxPercentRule5ParametersSpec"
+  ColumnLineageSourceSpec:
+    type: "object"
+    properties:
+      source_columns:
+        type: "array"
+        description: "A list of source columns from the source table name from which\
+          \ this column receives data."
+        items:
+          type: "string"
+      properties:
+        type: "object"
+        description: "A dictionary of mapping properties stored as a key/value dictionary.\
+          \ Data lineage synchronization tools that are importing data lineage mappings\
+          \ from external data lineage sources can use it to store mapping information."
+        additionalProperties:
+          type: "string"
   ColumnListModel:
     type: "object"
     properties:
@@ -23581,6 +24052,12 @@ definitions:
           \ being supplied with a time range should be pushed to the job queue in\
           \ order to remove stored results connected with this column."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -29245,6 +29722,95 @@ definitions:
           \ the name of a data comparison that is configured on the parent table."
         additionalProperties:
           $ref: "#/definitions/ColumnComparisonProfilingChecksSpec"
+  ColumnQualityPolicyListModel:
+    type: "object"
+    properties:
+      policy_name:
+        type: "string"
+        description: "Quality policy name."
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the policy. Policies with lower values are applied\
+          \ before policies with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
+      target_column:
+        description: "The filters for the target column."
+        $ref: "#/definitions/TargetColumnPatternSpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default column-level checks pattern (data quality policy) list model"
+  ColumnQualityPolicyModel:
+    type: "object"
+    properties:
+      policy_name:
+        type: "string"
+        description: "Quality policy name"
+      policy_spec:
+        description: "The quality policy specification."
+        $ref: "#/definitions/ColumnQualityPolicySpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default column-level checks pattern (data quality policy) model"
+  ColumnQualityPolicySpec:
+    type: "object"
+    properties:
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
+      target:
+        description: "The target column filter that are filtering the column, table\
+          \ and connection on which the default checks are applied."
+        $ref: "#/definitions/TargetColumnPatternSpec"
+      profiling_checks:
+        description: "Configuration of data quality profiling checks that are enabled.\
+          \ Pick a check from a category, apply the parameters and rules to enable\
+          \ it."
+        $ref: "#/definitions/ColumnProfilingCheckCategoriesSpec"
+      monitoring_checks:
+        description: "Configuration of table level monitoring checks. Monitoring checks\
+          \ are data quality checks that are evaluated for each period of time (daily,\
+          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
+          \ data quality check result for each period of time."
+        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
+      partitioned_checks:
+        description: "Configuration of table level date/time partitioned checks. Partitioned\
+          \ data quality checks are evaluated for each partition separately, raising\
+          \ separate alerts at a partition level. The table does not need to be physically\
+          \ partitioned by date, it is possible to run data quality checks for each\
+          \ day or month of data separately."
+        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
   ColumnRangeMaxValueSensorParametersSpec:
     type: "object"
     properties:
@@ -29756,6 +30322,12 @@ definitions:
           \ the tool (serialization and deserialization will remove non tracked comments)."
         items:
           $ref: "#/definitions/CommentSpec"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   ColumnSqlAggregateExpressionCheckSpec:
     type: "object"
     properties:
@@ -34548,6 +35120,12 @@ definitions:
           \ being supplied with a time range should be pushed to the job queue in\
           \ order to remove stored results connected with this connection."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -34568,8 +35146,8 @@ definitions:
           \ file. This field is null when the YAML file is valid. If an error was\
           \ captured, this field returns the file parsing error message and the file\
           \ location."
-    description: "Connection model for with a subset of parameters, excluding all\
-      \ nested objects."
+    description: "Connection model with a subset of parameters, excluding all nested\
+      \ objects."
   ConnectionSpec:
     type: "object"
     properties:
@@ -34676,6 +35254,12 @@ definitions:
         description: "Custom labels that were assigned to the connection. Labels are\
           \ used for searching for tables when filtered data quality checks are executed."
         items:
+          type: "string"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
           type: "string"
   ConnectionSpecificationModel:
     type: "object"
@@ -35182,58 +35766,6 @@ definitions:
           type: "string"
       database:
         type: "string"
-  DefaultColumnChecksPatternListModel:
-    type: "object"
-    properties:
-      pattern_name:
-        type: "string"
-        description: "Pattern name."
-      priority:
-        type: "integer"
-        format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
-      disabled:
-        type: "boolean"
-        description: "Disables this data quality check configuration. The checks will\
-          \ not be activated."
-      description:
-        type: "string"
-        description: "The description (documentation) of this data quality check configuration."
-      target_column:
-        description: "The filters for the target column."
-        $ref: "#/definitions/TargetColumnPatternSpec"
-      can_edit:
-        type: "boolean"
-        description: "Boolean flag that decides if the current user can update or\
-          \ delete this object."
-      yaml_parsing_error:
-        type: "string"
-        description: "Optional parsing error that was captured when parsing the YAML\
-          \ file. This field is null when the YAML file is valid. If an error was\
-          \ captured, this field returns the file parsing error message and the file\
-          \ location."
-    description: "Default column-level checks pattern list model"
-  DefaultColumnChecksPatternModel:
-    type: "object"
-    properties:
-      pattern_name:
-        type: "string"
-        description: "Pattern name"
-      pattern_spec:
-        description: "The default checks specification."
-        $ref: "#/definitions/ColumnDefaultChecksPatternSpec"
-      can_edit:
-        type: "boolean"
-        description: "Boolean flag that decides if the current user can update or\
-          \ delete this object."
-      yaml_parsing_error:
-        type: "string"
-        description: "Optional parsing error that was captured when parsing the YAML\
-          \ file. This field is null when the YAML file is valid. If an error was\
-          \ captured, this field returns the file parsing error message and the file\
-          \ location."
-    description: "Default column-level checks pattern model"
   DefaultSchedulesSpec:
     type: "object"
     properties:
@@ -35252,58 +35784,6 @@ definitions:
       partitioned_monthly:
         description: "Schedule for running monthly partitioned checks."
         $ref: "#/definitions/MonitoringScheduleSpec"
-  DefaultTableChecksPatternListModel:
-    type: "object"
-    properties:
-      pattern_name:
-        type: "string"
-        description: "Pattern name."
-      priority:
-        type: "integer"
-        format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
-      disabled:
-        type: "boolean"
-        description: "Disables this data quality check configuration. The checks will\
-          \ not be activated."
-      description:
-        type: "string"
-        description: "The description (documentation) of this data quality check configuration."
-      target_table:
-        description: "The filters for the target table."
-        $ref: "#/definitions/TargetTablePatternSpec"
-      can_edit:
-        type: "boolean"
-        description: "Boolean flag that decides if the current user can update or\
-          \ delete this object."
-      yaml_parsing_error:
-        type: "string"
-        description: "Optional parsing error that was captured when parsing the YAML\
-          \ file. This field is null when the YAML file is valid. If an error was\
-          \ captured, this field returns the file parsing error message and the file\
-          \ location."
-    description: "Default table-level checks pattern list model"
-  DefaultTableChecksPatternModel:
-    type: "object"
-    properties:
-      pattern_name:
-        type: "string"
-        description: "Pattern name"
-      pattern_spec:
-        description: "The default checks specification."
-        $ref: "#/definitions/TableDefaultChecksPatternSpec"
-      can_edit:
-        type: "boolean"
-        description: "Boolean flag that decides if the current user can update or\
-          \ delete this object."
-      yaml_parsing_error:
-        type: "string"
-        description: "Optional parsing error that was captured when parsing the YAML\
-          \ file. This field is null when the YAML file is valid. If an error was\
-          \ captured, this field returns the file parsing error message and the file\
-          \ location."
-    description: "Default table-level checks pattern model"
   DeleteStoredDataQueueJobParameters:
     type: "object"
     properties:
@@ -35353,7 +35833,12 @@ definitions:
         type: "boolean"
         description: "Delete the data from the [incidents](../../reference/parquetfiles/incidents.md)\
           \ table. Because the default value is *false*, this parameter must be set\
-          \ to *true* to delete the error samples."
+          \ to *true* to delete the incidents."
+      deleteChecksConfiguration:
+        type: "boolean"
+        description: "Delete the data quality configured checks from the table. They\
+          \ are detached from the configuration.Because the default value is *false*,\
+          \ this parameter must be set to *true* to delete the checks configuration."
       columnNames:
         type: "array"
         description: "The list of column names to delete the data for column level\
@@ -35549,23 +36034,6 @@ definitions:
           \ KPI score is a value in the range 0..100."
     description: "The summary of the current data quality status for one data quality\
       \ dimension"
-  DqoCloudUserModel:
-    type: "object"
-    properties:
-      email:
-        type: "string"
-        description: "User's email that identifies the user."
-      accountRole:
-        type: "string"
-        description: "Account role."
-        enum:
-        - "admin"
-        - "editor"
-        - "operator"
-        - "viewer"
-        - "none"
-    description: "DQOps Cloud user model - identifies a user in a multi-user DQOps\
-      \ deployment."
   DqoJobChangeModel:
     type: "object"
     properties:
@@ -35589,6 +36057,8 @@ definitions:
       statusChangedAt:
         type: "integer"
         format: "int64"
+      domainName:
+        type: "string"
   DqoJobEntryParametersModel:
     type: "object"
     properties:
@@ -35674,6 +36144,8 @@ definitions:
       statusChangedAt:
         type: "integer"
         format: "int64"
+      dataDomain:
+        type: "string"
   DqoJobQueueIncrementalSnapshotModel:
     type: "object"
     properties:
@@ -35846,7 +36318,42 @@ definitions:
         type: "boolean"
         description: "User can change his own password in DQOps Cloud, because the\
           \ DQOps Cloud Pairing API Key is valid and synchronization is enabled."
+      can_use_data_domains:
+        type: "boolean"
+        description: "User can use data domains. Support for data domains requires\
+          \ an ENTERPRISE license of DQOps."
     description: "The model that describes the current user and his access rights."
+  DqoUserRolesModel:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "User's email that identifies the user."
+      accountRole:
+        type: "string"
+        description: "User role at the whole account level. This role is applicable\
+          \ to all data domains."
+        enum:
+        - "admin"
+        - "editor"
+        - "operator"
+        - "viewer"
+        - "none"
+      dataDomainRoles:
+        type: "object"
+        description: "User roles within each data domain. Data domains are supported\
+          \ in an ENTERPRISE version of DQOps and they are managed by the SaaS components\
+          \ of DQOps Cloud."
+        additionalProperties:
+          type: "string"
+          enum:
+          - "admin"
+          - "editor"
+          - "operator"
+          - "viewer"
+          - "none"
+    description: "DQOps user model - identifies a user in a multi-user DQOps deployment\
+      \ and the user's roles."
   DuckdbParametersSpec:
     type: "object"
     properties:
@@ -36917,6 +37424,24 @@ definitions:
     description: "Label model that is returned by the REST API. A label is a tag that\
       \ was assigned to a data source, table, column or a single check. Labels play\
       \ the role of a business glossary."
+  LocalDataDomainModel:
+    type: "object"
+    properties:
+      domain_name:
+        type: "string"
+        description: "Data domain name."
+      display_name:
+        type: "string"
+        description: "Data domain display name (user-friendly name)."
+      created_at:
+        type: "string"
+        format: "date-time"
+        description: "Data domain creation time."
+      enable_scheduler:
+        type: "boolean"
+        description: "Enables the job scheduler for this domain."
+    description: "Model that describes a local data domain. It is also used to create\
+      \ new data domains."
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -37200,6 +37725,10 @@ definitions:
         type: "string"
         description: "The target type of checks to run. Supported values are *profiling*,\
           \ *monitoring* and *partitioned*."
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
       checkName:
         type: "string"
         description: "The target check name to run only this named check. Uses the\
@@ -37300,6 +37829,7 @@ definitions:
         description: "UI control display hint."
         enum:
         - "textarea"
+        - "column_names"
       required:
         type: "boolean"
         description: "True when the value for the parameter must be provided."
@@ -38622,10 +39152,6 @@ definitions:
         enum:
         - "table"
         - "column"
-      samplesLimit:
-        type: "integer"
-        format: "int32"
-        description: "The default limit of column samples that are collected."
       collectorsHierarchyIdsModels:
         type: "array"
         items:
@@ -39742,6 +40268,10 @@ definitions:
           \ quality dimension."
         additionalProperties:
           $ref: "#/definitions/DimensionCurrentDataQualityStatusModel"
+      table_exist:
+        type: "boolean"
+        description: "The flag informing whether the table exist. The table might\
+          \ not exist for the imported data lineage source tables."
     description: "The table's most recent data quality status. It is a summary of\
       \ the results of the most recently executed data quality checks on the table.\
       \ Verify the value of the highest_severity_level to see if there are any data\
@@ -39944,6 +40474,9 @@ definitions:
       schema:
         description: "Daily monitoring table schema checks"
         $ref: "#/definitions/TableSchemaDailyMonitoringChecksSpec"
+      uniqueness:
+        description: "Daily monitoring uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessDailyMonitoringChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -39971,6 +40504,9 @@ definitions:
         description: "Custom SQL daily partitioned data quality checks that verify\
           \ the quality of every day of data separately"
         $ref: "#/definitions/TableCustomSqlDailyPartitionedChecksSpec"
+      uniqueness:
+        description: "Daily partitioned uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessDailyPartitionChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40246,43 +40782,164 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxDaysRule7ParametersSpec"
-  TableDefaultChecksPatternSpec:
+  TableDuplicateRecordCountCheckSpec:
     type: "object"
     properties:
-      priority:
-        type: "integer"
-        format: "int32"
-        description: "The priority of the pattern. Patterns with lower values are\
-          \ applied before patterns with higher priority values."
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
       disabled:
         type: "boolean"
-        description: "Disables this data quality check configuration. The checks will\
-          \ not be activated."
-      description:
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
         type: "string"
-        description: "The description (documentation) of this data quality check configuration."
-      target:
-        description: "The target table filter that are filtering the table and connection\
-          \ on which the default checks are applied."
-        $ref: "#/definitions/TargetTablePatternSpec"
-      profiling_checks:
-        description: "Configuration of data quality profiling checks that are enabled.\
-          \ Pick a check from a category, apply the parameters and rules to enable\
-          \ it."
-        $ref: "#/definitions/TableProfilingCheckCategoriesSpec"
-      monitoring_checks:
-        description: "Configuration of table level monitoring checks. Monitoring checks\
-          \ are data quality checks that are evaluated for each period of time (daily,\
-          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
-          \ data quality check result for each period of time."
-        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
-      partitioned_checks:
-        description: "Configuration of table level date/time partitioned checks. Partitioned\
-          \ data quality checks are evaluated for each partition separately, raising\
-          \ separate alerts at a partition level. The table does not need to be physically\
-          \ partitioned by date, it is possible to run data quality checks for each\
-          \ day or month of data separately."
-        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/TableDuplicateRecordCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ nulls in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  TableDuplicateRecordCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      columns:
+        type: "array"
+        description: "A list of columns used for uniqueness record duplicate verification."
+        items:
+          type: "string"
+  TableDuplicateRecordPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      always_collect_error_samples:
+        type: "boolean"
+        description: "Forces collecting error samples for this check whenever it fails,\
+          \ even if it is a monitoring check that is run by a scheduler, and running\
+          \ an additional query to collect error samples will impose additional load\
+          \ on the data source."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/TableDuplicateRecordPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ nulls in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
+  TableDuplicateRecordPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      columns:
+        type: "array"
+        description: "A list of columns used for uniqueness record duplicate verification."
+        items:
+          type: "string"
   TableIncidentGroupingSpec:
     type: "object"
     properties:
@@ -40317,6 +40974,90 @@ definitions:
         type: "boolean"
         description: "Disables data quality incident creation for failed data quality\
           \ checks on the table."
+  TableLineageSourceListModel:
+    type: "object"
+    properties:
+      target_connection:
+        type: "string"
+        description: "The connection name where the target table is defined."
+      target_schema:
+        type: "string"
+        description: "The schema name in the target connection where the target table\
+          \ is defined."
+      target_table:
+        type: "string"
+        description: "The name of the target table inside the target schema."
+      source_connection:
+        type: "string"
+        description: "The name of a source connection that is defined in DQOps and\
+          \ contains a source table from which the current table receives data."
+      source_schema:
+        type: "string"
+        description: "The name of a source schema within the source connection that\
+          \ contains a source table from which the current table receives data."
+      source_table:
+        type: "string"
+        description: "The name of a source schema within the source connection that\
+          \ contains a source table from which the current table receives data."
+      data_lineage_source_tool:
+        type: "string"
+        description: "The name of a source tool from which this data lineage information\
+          \ was copied. This field should be filled when the data lineage was imported\
+          \ from another data catalog or a data lineage tracking platform."
+      properties:
+        type: "object"
+        description: "A dictionary of mapping properties stored as a key/value dictionary.\
+          \ Data lineage synchronization tools that are importing data lineage mappings\
+          \ from external data lineage sources can use it to store mapping information."
+        additionalProperties:
+          type: "string"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      source_table_data_quality_status:
+        description: "The current data quality status for the table, grouped by data\
+          \ quality dimensions. DQOps may return a null value when the results were\
+          \ not yet loaded into the cache. In that case, the client should wait a\
+          \ few seconds and retry a call to get the most recent data quality status\
+          \ of the table."
+        $ref: "#/definitions/TableCurrentDataQualityStatusModel"
+    description: "Data lineage model that describes one source table of the current\
+      \ table."
+  TableLineageSourceSpec:
+    type: "object"
+    properties:
+      source_connection:
+        type: "string"
+        description: "The name of a source connection that is defined in DQOps and\
+          \ contains a source table from which the current table receives data."
+      source_schema:
+        type: "string"
+        description: "The name of a source schema within the source connection that\
+          \ contains a source table from which the current table receives data."
+      source_table:
+        type: "string"
+        description: "The name of a source table in the source schema from which the\
+          \ current table receives data."
+      data_lineage_source_tool:
+        type: "string"
+        description: "The name of a source tool from which this data lineage information\
+          \ was copied. This field should be filled when the data lineage was imported\
+          \ from another data catalog or a data lineage tracking platform."
+      properties:
+        type: "object"
+        description: "A dictionary of mapping properties stored as a key/value dictionary.\
+          \ Data lineage synchronization tools that are importing data lineage mappings\
+          \ from external data lineage sources can use it to store mapping information."
+        additionalProperties:
+          type: "string"
+      columns:
+        type: "object"
+        description: "Configuration of source columns for each column in the current\
+          \ table. The keys in this dictionary are column names in the current table.\
+          \ The object stored in the dictionary contain a list of source columns."
+        additionalProperties:
+          $ref: "#/definitions/ColumnLineageSourceSpec"
   TableListModel:
     type: "object"
     properties:
@@ -40439,6 +41180,12 @@ definitions:
           \ being supplied with a time range should be pushed to the job queue in\
           \ order to remove stored results connected with this table."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -40522,6 +41269,9 @@ definitions:
       schema:
         description: "Monthly monitoring table schema checks"
         $ref: "#/definitions/TableSchemaMonthlyMonitoringChecksSpec"
+      uniqueness:
+        description: "Monthly monitoring uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessMonthlyMonitoringChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40549,6 +41299,9 @@ definitions:
         description: "Custom SQL monthly partitioned data quality checks that verify\
           \ the quality of every month of data separately"
         $ref: "#/definitions/TableCustomSqlMonthlyPartitionedChecksSpec"
+      uniqueness:
+        description: "Monthly partitioned uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessMonthlyPartitionChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40715,6 +41468,9 @@ definitions:
         description: "Configuration of schema (column count and schema) data quality\
           \ checks on a table level."
         $ref: "#/definitions/TableSchemaProfilingChecksSpec"
+      uniqueness:
+        description: "Configuration of uniqueness checks on a table level."
+        $ref: "#/definitions/TableUniquenessProfilingChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -40769,6 +41525,95 @@ definitions:
     description: "Table status model that identifies which type of information is\
       \ already collected, such as data quality checks are configured, or statistics\
       \ collected."
+  TableQualityPolicyListModel:
+    type: "object"
+    properties:
+      policy_name:
+        type: "string"
+        description: "Quality policy name."
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the policy. Policies with lower values are applied\
+          \ before policies with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
+      target_table:
+        description: "The filters for the target table."
+        $ref: "#/definitions/TargetTablePatternSpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default table-level checks pattern (data quality policy) list model"
+  TableQualityPolicyModel:
+    type: "object"
+    properties:
+      policy_name:
+        type: "string"
+        description: "Quality policy name"
+      policy_spec:
+        description: "The quality policy specification."
+        $ref: "#/definitions/TableQualityPolicySpec"
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Default table-level checks pattern (data quality policy) model"
+  TableQualityPolicySpec:
+    type: "object"
+    properties:
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the pattern. Patterns with lower values are\
+          \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
+      target:
+        description: "The target table filter that are filtering the table and connection\
+          \ on which the default checks are applied."
+        $ref: "#/definitions/TargetTablePatternSpec"
+      profiling_checks:
+        description: "Configuration of data quality profiling checks that are enabled.\
+          \ Pick a check from a category, apply the parameters and rules to enable\
+          \ it."
+        $ref: "#/definitions/TableProfilingCheckCategoriesSpec"
+      monitoring_checks:
+        description: "Configuration of table level monitoring checks. Monitoring checks\
+          \ are data quality checks that are evaluated for each period of time (daily,\
+          \ weekly, monthly, etc.). A monitoring check stores only the most recent\
+          \ data quality check result for each period of time."
+        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
+      partitioned_checks:
+        description: "Configuration of table level date/time partitioned checks. Partitioned\
+          \ data quality checks are evaluated for each partition separately, raising\
+          \ separate alerts at a partition level. The table does not need to be physically\
+          \ partitioned by date, it is possible to run data quality checks for each\
+          \ day or month of data separately."
+        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
   TableRowCountAnomalyDifferencingCheckSpec:
     type: "object"
     properties:
@@ -41871,6 +42716,18 @@ definitions:
         description: "File format with the specification used as a source data. It\
           \ overrides the connection spec's file format when it is set"
         $ref: "#/definitions/FileFormatSpec"
+      advanced_properties:
+        type: "object"
+        description: "A dictionary of advanced properties that can be used for e.g.\
+          \ to support mapping data to data catalogs, a key/value dictionary."
+        additionalProperties:
+          type: "string"
+      source_tables:
+        type: "array"
+        description: "A list of source tables. This information is used to define\
+          \ the data lineage report for the table."
+        items:
+          $ref: "#/definitions/TableLineageSourceSpec"
   TableSqlAggregateExpressionCheckSpec:
     type: "object"
     properties:
@@ -42398,6 +43255,101 @@ definitions:
         description: "Calculates the time difference in days between the most recent\
           \ event timestamp and the most recent ingestion timestamp"
         $ref: "#/definitions/TableDataIngestionDelayCheckSpec"
+  TableUniquenessDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      daily_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessDailyPartitionChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      daily_partition_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      monthly_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessMonthlyPartitionChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      monthly_partition_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
+  TableUniquenessProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_duplicate_record_count:
+        description: "Verifies that the number of duplicate record values in a table\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/TableDuplicateRecordCountCheckSpec"
+      profile_duplicate_record_percent:
+        description: "Verifies that the percentage of duplicate record values in a\
+          \ table does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/TableDuplicateRecordPercentCheckSpec"
   TableVolumeDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -42770,6 +43722,17 @@ definitions:
           \ configured, it is the column that is used for filtering the date and time\
           \ ranges. Setting the end date and time overrides the parameters to disable\
           \ analyzing today or the current month."
+      where_filter:
+        type: "string"
+        description: "An additional filter which must be a valid SQL predicate (an\
+          \ SQL expression that returns 'true' or 'false') that is added to the WHERE\
+          \ clause of the SQL query that DQOps will run on the data source. The purpose\
+          \ of a custom filter is to analyze only a subset of data, for example, when\
+          \ a new batch of records is loaded, and the data quality checks are evaluated\
+          \ as a data contract. All the records in that batch must tagged with the\
+          \ same value, and the passed predicate to find records from that batch would\
+          \ use the filter in the form: \"{alias}.batch_id = 1\". The filter can use\
+          \ replacement tokens {alias} to reference the analyzed table."
     description: "Time window configuration for partitioned checks (the number of\
       \ recent days or months to analyze in an incremental mode) or an absolute time\
       \ range to analyze."

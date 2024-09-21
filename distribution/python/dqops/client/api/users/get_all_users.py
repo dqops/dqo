@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.dqo_cloud_user_model import DqoCloudUserModel
+from ...models.dqo_user_roles_model import DqoUserRolesModel
 from ...types import Response
 
 
@@ -21,12 +21,12 @@ def _get_kwargs() -> Dict[str, Any]:
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[List["DqoCloudUserModel"]]:
+) -> Optional[List["DqoUserRolesModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = DqoCloudUserModel.from_dict(response_200_item_data)
+            response_200_item = DqoUserRolesModel.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -39,7 +39,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[List["DqoCloudUserModel"]]:
+) -> Response[List["DqoUserRolesModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -51,7 +51,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[List["DqoCloudUserModel"]]:
+) -> Response[List["DqoUserRolesModel"]]:
     """getAllUsers
 
      Returns a list of all users.
@@ -61,7 +61,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['DqoCloudUserModel']]
+        Response[List['DqoUserRolesModel']]
     """
 
     kwargs = _get_kwargs()
@@ -76,7 +76,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[List["DqoCloudUserModel"]]:
+) -> Optional[List["DqoUserRolesModel"]]:
     """getAllUsers
 
      Returns a list of all users.
@@ -86,7 +86,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['DqoCloudUserModel']
+        List['DqoUserRolesModel']
     """
 
     return sync_detailed(
@@ -97,7 +97,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[List["DqoCloudUserModel"]]:
+) -> Response[List["DqoUserRolesModel"]]:
     """getAllUsers
 
      Returns a list of all users.
@@ -107,7 +107,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['DqoCloudUserModel']]
+        Response[List['DqoUserRolesModel']]
     """
 
     kwargs = _get_kwargs()
@@ -120,7 +120,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[List["DqoCloudUserModel"]]:
+) -> Optional[List["DqoUserRolesModel"]]:
     """getAllUsers
 
      Returns a list of all users.
@@ -130,7 +130,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['DqoCloudUserModel']
+        List['DqoUserRolesModel']
     """
 
     return (
