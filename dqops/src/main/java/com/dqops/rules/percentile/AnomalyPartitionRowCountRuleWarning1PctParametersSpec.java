@@ -46,7 +46,7 @@ public class AnomalyPartitionRowCountRuleWarning1PctParametersSpec extends Abstr
     };
 
 
-    @JsonPropertyDescription("The probability (in percent) that the current daily row cont is an anomaly, because the value is outside" +
+    @JsonPropertyDescription("The probability (in percent) that the current daily row count is an anomaly because the value is outside" +
             " the regular range of previous partition volume measures." +
             " The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist" +
             " to run the calculation.")

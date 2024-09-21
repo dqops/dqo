@@ -32,22 +32,22 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Data quality rule that detects anomalies on the row count of daily partitions.
+ * Data quality rule that detects anomalies in data timeliness.
  * The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
  * The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class AnomalyPartitionRowCountRuleFatal01PctParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<AnomalyPartitionRowCountRuleFatal01PctParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class AnomalyTimelinessDelayRuleFatal01PctParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<AnomalyTimelinessDelayRuleFatal01PctParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
 
-    @JsonPropertyDescription("The probability (in percent) that the current daily row count is an anomaly because the value is outside" +
-            " the regular range of previous partition volume measures." +
+    @JsonPropertyDescription("The probability (in percent) that the current data delay is an anomaly because the value is outside" +
+            " the regular range of previous delays." +
             " The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist" +
             " to run the calculation.")
     @RequiredField
@@ -56,7 +56,7 @@ public class AnomalyPartitionRowCountRuleFatal01PctParametersSpec extends Abstra
     /**
      * Default constructor.
      */
-    public AnomalyPartitionRowCountRuleFatal01PctParametersSpec() {
+    public AnomalyTimelinessDelayRuleFatal01PctParametersSpec() {
     }
 
     /**
@@ -95,7 +95,7 @@ public class AnomalyPartitionRowCountRuleFatal01PctParametersSpec extends Abstra
      */
     @Override
     public String getRuleDefinitionName() {
-        return "percentile/anomaly_partition_row_count";
+        return "percentile/anomaly_timeliness_delay";
     }
 
     /**

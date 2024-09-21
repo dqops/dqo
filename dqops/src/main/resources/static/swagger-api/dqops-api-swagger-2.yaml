@@ -16514,8 +16514,8 @@ definitions:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "The probability (in percent) that the current daily row cont\
-          \ is an anomaly, because the value is outside the regular range of previous\
+        description: "The probability (in percent) that the current daily row count\
+          \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
   AnomalyPartitionRowCountRuleFatal01PctParametersSpec:
@@ -16524,8 +16524,8 @@ definitions:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "The probability (in percent) that the current daily row cont\
-          \ is an anomaly, because the value is outside the regular range of previous\
+        description: "The probability (in percent) that the current daily row count\
+          \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
   AnomalyPartitionRowCountRuleWarning1PctParametersSpec:
@@ -16534,8 +16534,8 @@ definitions:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "The probability (in percent) that the current daily row cont\
-          \ is an anomaly, because the value is outside the regular range of previous\
+        description: "The probability (in percent) that the current daily row count\
+          \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
   AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
@@ -16568,6 +16568,36 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyTimelinessDelayRuleError05PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the current data delay is\
+          \ an anomaly because the value is outside the regular range of previous\
+          \ delays. The default time window of 90 time periods (days, etc.) is used,\
+          \ but at least 30 readouts must exist to run the calculation."
+  AnomalyTimelinessDelayRuleFatal01PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the current data delay is\
+          \ an anomaly because the value is outside the regular range of previous\
+          \ delays. The default time window of 90 time periods (days, etc.) is used,\
+          \ but at least 30 readouts must exist to run the calculation."
+  AnomalyTimelinessDelayRuleWarning1PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the current data delay is\
+          \ an anomaly because the value is outside the regular range of previous\
+          \ delays. The default time window of 90 time periods (days, etc.) is used,\
+          \ but at least 30 readouts must exist to run the calculation."
   AuthenticatedDashboardModel:
     type: "object"
     properties:
@@ -40602,15 +40632,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        $ref: "#/definitions/AnomalyTimelinessDelayRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for max days since most recent event\
           \ that raises a data quality error (alert)"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        $ref: "#/definitions/AnomalyTimelinessDelayRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+        $ref: "#/definitions/AnomalyTimelinessDelayRuleFatal01PctParametersSpec"
   TableDataFreshnessCheckSpec:
     type: "object"
     properties:

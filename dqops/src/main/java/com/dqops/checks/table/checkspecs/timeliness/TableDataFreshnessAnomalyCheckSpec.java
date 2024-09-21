@@ -21,9 +21,7 @@ import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.TargetRuleSeverityLevel;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec;
+import com.dqops.rules.percentile.*;
 import com.dqops.sensors.table.timeliness.TableTimelinessDataFreshnessSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,7 +43,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableTimelinessDataFreshnessSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec> {
+public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableTimelinessDataFreshnessSensorParametersSpec,
+        AnomalyTimelinessDelayRuleWarning1PctParametersSpec, AnomalyTimelinessDelayRuleError05PctParametersSpec, AnomalyTimelinessDelayRuleFatal01PctParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableDataFreshnessAnomalyCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -59,17 +58,17 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec warning;
+    private AnomalyTimelinessDelayRuleWarning1PctParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for max days since most recent event that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec error;
+    private AnomalyTimelinessDelayRuleError05PctParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec fatal;
+    private AnomalyTimelinessDelayRuleFatal01PctParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -96,7 +95,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
      * @return Warning severity rule parameters.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec getWarning() {
+    public AnomalyTimelinessDelayRuleWarning1PctParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -104,7 +103,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec warning) {
+    public void setWarning(AnomalyTimelinessDelayRuleWarning1PctParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -116,7 +115,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec getError() {
+    public AnomalyTimelinessDelayRuleError05PctParametersSpec getError() {
         return this.error;
     }
 
@@ -124,7 +123,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec error) {
+    public void setError(AnomalyTimelinessDelayRuleError05PctParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -136,7 +135,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
      * @return Fatal severity rule parameters.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec getFatal() {
+    public AnomalyTimelinessDelayRuleFatal01PctParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -144,7 +143,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec fatal) {
+    public void setFatal(AnomalyTimelinessDelayRuleFatal01PctParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
