@@ -148,7 +148,7 @@ const TableActionGroup = ({
         >
           <div>
             <Button
-              className="flex items-center gap-x-2 justify-center !h-[37px]"
+              className="flex items-center gap-x-2 justify-center !h-[37px] mt-[1px]"
               label={
                 collectStatisticsSpinner
                   ? 'Collecting...'
