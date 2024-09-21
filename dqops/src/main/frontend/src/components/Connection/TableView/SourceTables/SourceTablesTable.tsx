@@ -195,7 +195,7 @@ export default function SourceTablesTable({
 
   return (
     <>
-      <table className="text-sm w-full">
+      <table className="text-sm">
         {showHeader && (
           <thead>
             <tr>
@@ -270,7 +270,7 @@ export default function SourceTablesTable({
                     )}
                   </td>
                   <td>
-                    <div className="flex items-center gap-x-2 !w-25 !max-w-25">
+                    <div className="flex items-center gap-x-2 min-w-20 !max-w-40">
                       {table.source_table_data_quality_status ? (
                         <QualityDimensionStatuses
                           dimensions={
@@ -297,17 +297,17 @@ export default function SourceTablesTable({
                     </div>
                   </td>
                   <td className="px-4">
-                    <div className="!w-40 !max-w-40 truncate">
+                    <div className="min-w-20 !max-w-100 truncate">
                       {table.source_connection}
                     </div>
                   </td>
                   <td className="px-4">
-                    <div className="!w-40 !max-w-40 truncate">
+                    <div className="min-w-20 !max-w-100 truncate">
                       {table.source_schema}
                     </div>
                   </td>
                   <td className="px-4">
-                    <div className="!w-40 !max-w-40 truncate">
+                    <div className="min-w-20 !max-w-100 truncate">
                       {table.source_table}
                     </div>
                   </td>
