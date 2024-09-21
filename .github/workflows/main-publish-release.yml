@@ -54,6 +54,28 @@ jobs:
         with:
           credentials_json: ${{ secrets.RELEASES_SERVICE_ACCOUNT_JSON }}
 
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: v${{ steps.read_version.outputs.content }}
+          tag_name: v${{ steps.read_version.outputs.content }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload distribution binary file
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip
+          asset_name: dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip
+          asset_content_type: application/zip
+
       - id: 'upload-release-asia'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
@@ -169,28 +191,6 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Create GitHub release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          release_name: v${{ steps.read_version.outputs.content }}
-          tag_name: v${{ steps.read_version.outputs.content }}
-          body_path: CHANGELOG.md
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Upload distribution binary file
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip
-          asset_name: dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip
-          asset_content_type: application/zip
 
       - name: Install python dependencies
         run: |
