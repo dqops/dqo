@@ -249,7 +249,7 @@ export default function SourceTablesTable({
           {(tables.length > 25 ? displayedTables : tables).map(
             (table, index) => (
               <React.Fragment key={index}>
-                <tr className="h-10">
+                <tr className="!h-6">
                   <td
                     onClick={() => onChangeExpandedLineage(table)}
                     className="cursor-pointer"
@@ -376,7 +376,7 @@ export default function SourceTablesTable({
                     table.source_table_data_quality_status?.table_exist
                 ) && (
                   <tr>
-                    <td colSpan={5} className="pl-4 pt-4">
+                    <td colSpan={5} className="pl-4 py-1">
                       <SourceTablesTable
                         connection={table.source_connection}
                         schema={table.source_schema}
