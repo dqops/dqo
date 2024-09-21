@@ -1,9 +1,3 @@
-# 1.8.0
+# 1.8.1
 
-* Small layout fixes in the UI, mostly related to the colors of issue severity colors
-* Documentation for the data quality process and rule mining
-* Duplicate record detection check
-* Some column-level checks fixed to skip NULL values, instead of treating them as invalid (not passing checks)
-* Store data lineage definition (links to source tables)
-* Default observability check patterns renamed to data quality policies
-* Default quality policy named "default" deleted, and replaced with multiple smaller policies to allow more control 
+* Improvements to the anomaly rules
