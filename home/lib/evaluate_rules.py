@@ -107,7 +107,7 @@ class RuleRunner:
             rule_result = rule_function(rule_parameters)
             return PythonRuleCallOutput(rule_result, rule_parameters, None)
         except Exception as ex:
-            return PythonRuleCallOutput(None, rule_parameters, traceback.format_exception(ex))
+            return PythonRuleCallOutput(None, rule_parameters, str(traceback.format_exception(ex)))
 
 
 def main():
@@ -120,7 +120,7 @@ def main():
             sys.stdout.flush()
     except Exception as ex:
         print('Error processing a rule: ' + traceback.format_exception(ex), file=sys.stderr)
-        sys.stdout.write(json.dumps(PythonRuleCallOutput(None, None, traceback.format_exception(ex)), cls=streaming.ObjectEncoder))
+        sys.stdout.write(json.dumps(PythonRuleCallOutput(None, None, str(traceback.format_exception(ex))), cls=streaming.ObjectEncoder))
         sys.stdout.write("\n")
         sys.stdout.flush()
 

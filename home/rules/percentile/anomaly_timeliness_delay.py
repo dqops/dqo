@@ -96,7 +96,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     if float(filtered_std) == 0:
         return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
-                                   filtered_median_float, filtered_median_float, filtered_median_float)
+                                   filtered_median_float, 0.0, filtered_median_float)
 
     degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     tail = rule_parameters.parameters.anomaly_percent / 100.0

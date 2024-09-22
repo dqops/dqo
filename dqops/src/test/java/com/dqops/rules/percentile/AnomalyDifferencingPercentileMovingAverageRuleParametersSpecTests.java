@@ -59,7 +59,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
     }
 
     @Test
-    void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormal_thenReturnsPassed() {
+    void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormalFrom0_thenReturnsPassed() {
         this.sut.setAnomalyPercent(20.0);
         Random random = new Random(0);
         Double increment = 5.0;
@@ -80,13 +80,40 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(478.58, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(474.32, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(482.83, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(478.45, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(475.28, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(482.37, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
-    void executeRule_whenActualValueIsAboveMaxValueAndPastValuesAreNormal_thenReturnsNotPassed() {
+    void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormalFrom1_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+        Random random = new Random(0);
+        Double increment = 5.0;
+
+        this.sensorReadouts[0] = 1.0;
+        for (int i = 1; i < this.sensorReadouts.length; i++) {
+            // Increment with some noise.
+            this.sensorReadouts[i] = Math.max(
+                    this.sensorReadouts[i - 1],
+                    this.sensorReadouts[i - 1] + random.nextGaussian() * 3 + increment);
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        Double actualValue = 480.0;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(479.45, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(476.28, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(483.37, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsAboveMaxValueAndPastValuesAreNormalFrom0_thenReturnsNotPassed() {
         this.sut.setAnomalyPercent(20.0);
         Random random = new Random(0);
         Double increment = 5.0;
@@ -107,13 +134,63 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(478.58, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(474.32, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(482.83, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(478.45, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(475.28, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(482.37, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteady_thenReturnsPassed() {
+    void executeRule_whenActualValueIsAboveMaxValueAndPastValuesAreNormalFrom1_thenReturnsNotPassed() {
+        this.sut.setAnomalyPercent(20.0);
+        Random random = new Random(0);
+        Double increment = 5.0;
+
+        this.sensorReadouts[0] = 1.0;
+        for (int i = 1; i < this.sensorReadouts.length; i++) {
+            // Increment with some noise.
+            this.sensorReadouts[i] = Math.max(
+                    this.sensorReadouts[i - 1],
+                    this.sensorReadouts[i - 1] + random.nextGaussian() * 3 + increment);
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        Double actualValue = 485.0;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(479.45, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(476.28, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(483.37, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteadyFrom1_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        Double increment = 7.0;
+        this.sensorReadouts[0] = 1.0;
+        for (int i = 1; i < this.sensorReadouts.length; ++i) {
+            this.sensorReadouts[i] = this.sensorReadouts[i - 1] + increment;
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        Double actualValue = this.sensorReadouts[0] + this.sensorReadouts.length * increment;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(actualValue, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(actualValue, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(actualValue, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteadyFrom0_thenReturnsPassed() {
         this.sut.setAnomalyPercent(20.0);
 
         Double increment = 7.0;

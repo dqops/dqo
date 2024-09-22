@@ -43,8 +43,11 @@ class AnomalyConfigurationParameters:
     degrees_of_freedom: float
 
 
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
+    """
+    Rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+    """
+
     actual_value: float
     parameters: AnomalyStationaryPercentileMovingAverageRuleParametersSpec
     time_period_local: datetime
@@ -116,7 +119,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
             threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
             threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
 
-        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout < filtered_median_float if readout != 0]
+        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout <= filtered_median_float if readout != 0]
         lower_multiples = np.array(lower_median_multiples_array, dtype=float)
         lower_multiples_median = np.median(lower_multiples)
         lower_multiples_std = scipy.stats.tstd(lower_multiples)
@@ -138,7 +141,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     else:
         # using unrestricted method
-        upper_half_filtered = [readout for readout in extracted if readout > filtered_median_float]
+        upper_half_filtered = [readout for readout in extracted if readout >= filtered_median_float]
         upper_half = np.array(upper_half_filtered, dtype=float)
         upper_half_median = np.median(upper_half)
         upper_half_std = scipy.stats.tstd(upper_half)
