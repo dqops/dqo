@@ -198,6 +198,7 @@ const CheckCategoriesView = ({
               showAdvanced ||
               tuple[0].standard ||
               tuple[0].configured ||
+              tuple[0].default_check ||
               isAlreadyDeleted ||
               isFiltered
           )

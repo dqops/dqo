@@ -24,7 +24,6 @@ import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.rules.percentile.*;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
@@ -50,7 +49,7 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
         extends AbstractCheckSpec<ColumnUniquenessDistinctCountSensorParametersSpec,
-        AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec, AnomalyPartitionDistinctCountRuleError05PctParametersSpec, AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec> {
+        AnomalyStationaryCountValuesRuleWarning1PctParametersSpec, AnomalyStationaryCountValuesRuleError05PctParametersSpec, AnomalyStationaryCountValuesRuleFatal01PctParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctCountAnomalyStationaryPartitionCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -64,17 +63,17 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec warning;
+    private AnomalyStationaryCountValuesRuleWarning1PctParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyPartitionDistinctCountRuleError05PctParametersSpec error;
+    private AnomalyStationaryCountValuesRuleError05PctParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec fatal;
+    private AnomalyStationaryCountValuesRuleFatal01PctParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -103,7 +102,7 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec getWarning() {
+    public AnomalyStationaryCountValuesRuleWarning1PctParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -112,7 +111,7 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec warning) {
+    public void setWarning(AnomalyStationaryCountValuesRuleWarning1PctParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -124,7 +123,7 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public AnomalyPartitionDistinctCountRuleError05PctParametersSpec getError() {
+    public AnomalyStationaryCountValuesRuleError05PctParametersSpec getError() {
         return this.error;
     }
 
@@ -133,7 +132,7 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(AnomalyPartitionDistinctCountRuleError05PctParametersSpec error) {
+    public void setError(AnomalyStationaryCountValuesRuleError05PctParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -145,7 +144,7 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec getFatal() {
+    public AnomalyStationaryCountValuesRuleFatal01PctParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -154,7 +153,7 @@ public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec fatal) {
+    public void setFatal(AnomalyStationaryCountValuesRuleFatal01PctParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -24,10 +24,7 @@ import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.rules.TargetRuleSeverityLevel;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec;
+import com.dqops.rules.percentile.*;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.*;
@@ -51,7 +48,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnDistinctPercentAnomalyStationaryCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec,
+        AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec, AnomalyStationaryPercentValuesRuleError05PctParametersSpec, AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctPercentAnomalyStationaryCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -65,17 +63,17 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec warning;
+    private AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec error;
+    private AnomalyStationaryPercentValuesRuleError05PctParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec fatal;
+    private AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -104,7 +102,7 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec getWarning() {
+    public AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -113,7 +111,7 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec warning) {
+    public void setWarning(AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -125,7 +123,7 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec getError() {
+    public AnomalyStationaryPercentValuesRuleError05PctParametersSpec getError() {
         return this.error;
     }
 
@@ -134,7 +132,7 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec error) {
+    public void setError(AnomalyStationaryPercentValuesRuleError05PctParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -146,7 +144,7 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec getFatal() {
+    public AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -155,7 +153,7 @@ public class ColumnDistinctPercentAnomalyStationaryCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec fatal) {
+    public void setFatal(AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -16508,36 +16508,6 @@ definitions:
           \ (measure) is an anomaly, because the value is outside the regular range\
           \ of previous readouts. The default time window of 90 time periods (days,\
           \ etc.) is used, but at least 30 readouts must exist to run the calculation."
-  AnomalyPartitionDistinctCountRuleError05PctParametersSpec:
-    type: "object"
-    properties:
-      anomaly_percent:
-        type: "number"
-        format: "double"
-        description: "The probability (in percent) that the distinct count in the\
-          \ current partition is an anomaly because the value is outside the regular\
-          \ range of distinct counts. The default time window of 90 time periods (days,\
-          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
-  AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec:
-    type: "object"
-    properties:
-      anomaly_percent:
-        type: "number"
-        format: "double"
-        description: "The probability (in percent) that the distinct count in the\
-          \ current partition is an anomaly because the value is outside the regular\
-          \ range of distinct counts. The default time window of 90 time periods (days,\
-          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
-  AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec:
-    type: "object"
-    properties:
-      anomaly_percent:
-        type: "number"
-        format: "double"
-        description: "The probability (in percent) that the distinct count in the\
-          \ current partition is an anomaly because the value is outside the regular\
-          \ range of distinct counts. The default time window of 90 time periods (days,\
-          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
   AnomalyPartitionRowCountRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -16568,6 +16538,66 @@ definitions:
           \ is an anomaly because the value is outside the regular range of previous\
           \ partition volume measures. The default time window of 90 time periods\
           \ (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryCountValuesRuleError05PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the count of values (records)\
+          \ is an anomaly because the value is outside the regular range of counts.\
+          \ The default time window of 90 time periods (days, etc.) is used, but at\
+          \ least 30 readouts must exist to run the calculation."
+  AnomalyStationaryCountValuesRuleFatal01PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the count of values (records)\
+          \ is an anomaly because the value is outside the regular range of counts.\
+          \ The default time window of 90 time periods (days, etc.) is used, but at\
+          \ least 30 readouts must exist to run the calculation."
+  AnomalyStationaryCountValuesRuleWarning1PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the count of values (records)\
+          \ is an anomaly because the value is outside the regular range of counts.\
+          \ The default time window of 90 time periods (days, etc.) is used, but at\
+          \ least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentValuesRuleError05PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the current percentage value\
+          \ is an anomaly because the value is outside the regular range of captured\
+          \ percentage measures. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the current percentage value\
+          \ is an anomaly because the value is outside the regular range of captured\
+          \ percentage measures. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec:
+    type: "object"
+    properties:
+      anomaly_percent:
+        type: "number"
+        format: "double"
+        description: "The probability (in percent) that the current percentage value\
+          \ is an anomaly because the value is outside the regular range of captured\
+          \ percentage measures. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
   AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
@@ -21659,15 +21689,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryCountValuesRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyPartitionDistinctCountRuleError05PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryCountValuesRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyPartitionDistinctCountRuleFatal01PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryCountValuesRuleFatal01PctParametersSpec"
   ColumnDistinctCountChange1DayCheckSpec:
     type: "object"
     properties:
@@ -22061,15 +22091,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentValuesRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec"
   ColumnDistinctPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -25996,15 +26026,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentValuesRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec"
   ColumnNullPercentChange1DayCheckSpec:
     type: "object"
     properties:

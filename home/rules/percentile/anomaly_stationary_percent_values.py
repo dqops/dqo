@@ -22,7 +22,7 @@ import scipy.stats
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class AnomalyPartitionDistinctCountRuleParametersSpec:
+class AnomalyPercentageValueRuleParametersSpec:
     anomaly_percent: float
 
 
@@ -46,7 +46,7 @@ class AnomalyConfigurationParameters:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: AnomalyPartitionDistinctCountRuleParametersSpec
+    parameters: AnomalyPercentageValueRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -85,7 +85,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     all_extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
                      rule_parameters.previous_readouts if readouts is not None]
-    extracted = [readout for readout in all_extracted if readout > 0]
+    extracted = [readout for readout in all_extracted if 0.0 < readout < 100.0]
 
     if len(extracted) < 30:
         return RuleExecutionResult()
@@ -96,13 +96,18 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = scipy.stats.tstd(filtered)
 
     if float(filtered_std) == 0:
-        return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
-                                   filtered_median_float, filtered_median_float, filtered_median_float)
+        return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float or
+                                   (rule_parameters.actual_value == 0 and 0 in all_extracted) or
+                                   (rule_parameters.actual_value == 100 and 100 in all_extracted),
+                                   filtered_median_float,
+                                   filtered_median_float if 0 not in all_extracted else 0,
+                                   filtered_median_float if 100 not in all_extracted else 100)
 
     degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
+    upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted
+                                    if readout >= filtered_median_float]
     upper_multiples = np.array(upper_median_multiples_array, dtype=float)
     upper_multiples_median = np.median(upper_multiples)
     upper_multiples_std = scipy.stats.tstd(upper_multiples)
@@ -113,9 +118,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         # Assumption: the historical data follows t-student distribution
         upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
         threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
-        threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
+        threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
 
-    lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout <= filtered_median_float if readout != 0]
+    lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
+                                    if readout <= filtered_median_float]
     lower_multiples = np.array(lower_median_multiples_array, dtype=float)
     lower_multiples_median = np.median(lower_multiples)
     lower_multiples_std = scipy.stats.tstd(lower_multiples)

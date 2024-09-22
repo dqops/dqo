@@ -32,31 +32,31 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Data quality rule that detects anomalies in the distinct count of values in partitions.
+ * Data quality rule that detects anomalies in a stationary time series of percentage values (in the range 0..100).
  * The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
  * The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class AnomalyPartitionDistinctCountRuleError05PctParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<AnomalyPartitionDistinctCountRuleError05PctParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
 
-    @JsonPropertyDescription("The probability (in percent) that the distinct count in the current partition is an anomaly because the value is outside" +
-            " the regular range of distinct counts." +
+    @JsonPropertyDescription("The probability (in percent) that the current percentage value is an anomaly because the value is outside" +
+            " the regular range of captured percentage measures." +
             " The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist" +
             " to run the calculation.")
     @RequiredField
-    private Double anomalyPercent = 0.5;
+    private Double anomalyPercent = 0.1;
 
     /**
      * Default constructor.
      */
-    public AnomalyPartitionDistinctCountRuleError05PctParametersSpec() {
+    public AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec() {
     }
 
     /**
@@ -95,7 +95,7 @@ public class AnomalyPartitionDistinctCountRuleError05PctParametersSpec extends A
      */
     @Override
     public String getRuleDefinitionName() {
-        return "percentile/anomaly_partition_distinct_count";
+        return "percentile/anomaly_stationary_percent_values";
     }
 
     /**
@@ -111,7 +111,7 @@ public class AnomalyPartitionDistinctCountRuleError05PctParametersSpec extends A
         }
 
         if (this.anomalyPercent == 0.0) {
-            this.anomalyPercent = 0.5;
+            this.anomalyPercent = 0.1;
             return;
         }
 

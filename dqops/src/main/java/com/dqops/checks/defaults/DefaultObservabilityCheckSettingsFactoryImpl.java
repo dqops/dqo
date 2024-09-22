@@ -356,7 +356,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyMonitoringChecksSpec() {{
                         setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -365,7 +365,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyPartitionedCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyPartitionedChecksSpec() {{
                         setDailyPartitionNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -411,7 +411,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyPartitionedCheckCategoriesSpec() {{
                     setUniqueness(new ColumnUniquenessDailyPartitionedChecksSpec() {{
                         setDailyPartitionDistinctCountAnomaly(new ColumnDistinctCountAnomalyStationaryPartitionCheckSpec() {{
-                            setWarning(new AnomalyPartitionDistinctCountRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryCountValuesRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
