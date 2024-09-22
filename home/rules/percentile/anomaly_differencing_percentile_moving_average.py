@@ -73,7 +73,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in
+                 rule_parameters.previous_readouts if readouts is not None]
 
     if len(extracted) == 0:
         return RuleExecutionResult()
