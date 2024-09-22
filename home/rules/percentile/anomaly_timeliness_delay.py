@@ -114,18 +114,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
         threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
 
-    lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout < filtered_median_float if readout != 0]
-    lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-    lower_multiples_median = np.median(lower_multiples)
-    lower_multiples_std = scipy.stats.tstd(lower_multiples)
-
-    if float(lower_multiples_std) == 0:
-        threshold_lower = filtered_median_float
-    else:
-        # Assumption: the historical data follows t-student distribution
-        lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-        threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-        threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+    threshold_lower = 0.0  # always, our target is to have a delay of 0.0 days
 
     passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
 
