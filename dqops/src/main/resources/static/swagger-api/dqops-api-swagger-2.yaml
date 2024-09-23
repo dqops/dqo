@@ -12516,6 +12516,8 @@ paths:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data domain successfully deleted"
+        400:
+          description: "Data domain cannot be deleted"
         404:
           description: "Data domain not found"
         500:

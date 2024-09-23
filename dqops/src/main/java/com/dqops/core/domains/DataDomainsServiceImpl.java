@@ -252,7 +252,7 @@ public class DataDomainsServiceImpl implements DataDomainsService {
             dataDomainClient.deleteDataDomain(dataDomainName, userDomainIdentity.getTenantOwner(), tenantIdFull);
         }
         catch (Exception ex) {
-            throw new DqoDataDomainException("Cannot delete a data domain. Your DQOps Cloud API Key is invalid, or you don't have an ENTERPRISE license of DQOps.", ex);
+            throw new DqoDataDomainException("Cannot delete a data domain. Your DQOps Cloud API Key is invalid, or you don't have an ENTERPRISE license of DQOps. Error: " + ex.getMessage(), ex);
         }
     }
 }

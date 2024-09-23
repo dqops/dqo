@@ -196,6 +196,7 @@ public class DataDomainsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data domain successfully deleted", response = Void.class),
+            @ApiResponse(code = 400, message = "Data domain cannot be deleted"),
             @ApiResponse(code = 404, message = "Data domain not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -217,9 +218,14 @@ public class DataDomainsController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            this.dataDomainsService.deleteDataDomain(dataDomainName);
+            try {
+                this.dataDomainsService.deleteDataDomain(dataDomainName);
 
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            }
+            catch (DqoDataDomainException ddex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+            }
         }));
     }
 
