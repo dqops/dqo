@@ -50,6 +50,7 @@ import { ReactComponent as DeleteSvg } from './svg/delete.svg';
 import { ReactComponent as DeltaLakeBigSvg } from './svg/delta-lake-logo-big.svg';
 import { ReactComponent as DeltaLakeSvg } from './svg/delta-lake-logo.svg';
 import { ReactComponent as DisableSvg } from './svg/disable.svg';
+import { ReactComponent as DomainSvg } from './svg/domain.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
 import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg';
@@ -84,6 +85,7 @@ import { ReactComponent as OptionsSvg } from './svg/options.svg';
 import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 import { ReactComponent as ParquetSvg } from './svg/parquet-icon.svg';
 import { ReactComponent as PartitionedChecksSvg } from './svg/partition-checks.svg';
+import { ReactComponent as PasswordChange } from './svg/password-change.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
 import { ReactComponent as PerconaServerSvg } from './svg/percona-server.svg';
 import { ReactComponent as PlaySvg } from './svg/play.svg';
@@ -125,7 +127,6 @@ import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
 import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
-import { ReactComponent as PasswordChange } from './svg/password-change.svg'
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -259,6 +260,7 @@ const iconsMap: any = {
   letter: LetterSvg,
   data_sources_white: DataSourcesWhite,
   definitions_policies: DefinitionsPoliciesSvg,
+  domain: DomainSvg,
   password_change: PasswordChange
 };
 

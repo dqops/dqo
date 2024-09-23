@@ -20,15 +20,15 @@ import {
   CheckResultsApiFactory,
   CheckResultsOverviewApiFactory,
   ChecksApiFactory,
+  ColumnQualityPoliciesApiFactory,
   ColumnsApiFactory,
   Configuration,
   ConnectionsApiFactory,
   DashboardsApiFactory,
+  DataDomainsApiFactory,
   DataGroupingConfigurationsApiFactory,
   DataLineageApiFactory,
   DataSourcesApiFactory,
-  TableQualityPoliciesApiFactory,
-  ColumnQualityPoliciesApiFactory,
   DefaultsApiFactory,
   DictionariesApiFactory,
   EnvironmentApiFactory,
@@ -48,6 +48,7 @@ import {
   SharedCredentialsApiFactory,
   TableComparisonResultsApiFactory,
   TableComparisonsApiFactory,
+  TableQualityPoliciesApiFactory,
   TablesApiFactory,
   TimezonesApiFactory,
   UsersApiFactory
@@ -160,11 +161,17 @@ export const DataDictionaryApiClient = DictionariesApiFactory(
   axios
 );
 
-export const TableQualityPoliciesApiClient =
-  TableQualityPoliciesApiFactory(new Configuration(), '', axios);
+export const TableQualityPoliciesApiClient = TableQualityPoliciesApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
 
-export const ColumnQualityPoliciesApiClient =
-  ColumnQualityPoliciesApiFactory(new Configuration(), '', axios);
+export const ColumnQualityPoliciesApiClient = ColumnQualityPoliciesApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
 
 export const SearchApiClient = SearchApiFactory(new Configuration(), '', axios);
 
@@ -186,6 +193,12 @@ export const FilteredNotificationsConfigurationsClient =
   FilteredNotificationsConfigurationsApiFactory(new Configuration(), '', axios);
 
 export const DataLineageApiClient = DataLineageApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const DataDomainApiClient = DataDomainsApiFactory(
   new Configuration(),
   '',
   axios
