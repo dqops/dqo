@@ -180,6 +180,16 @@ function DefinitionProvider(props: any) {
     );
   };
 
+  const openDataDomainsFirstLevelTab = () => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.DATA_DOMAINS(),
+        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(),
+        label: 'Data domains'
+      })
+    );
+  };
+
   const toggleFolderRecursively = (
     elements: string[],
     index = 0,
@@ -265,6 +275,11 @@ function DefinitionProvider(props: any) {
       onClick: openAllUsersFirstLevelTab,
       icon: 'userprofile',
       text: 'Manage users'
+    },
+    {
+      onClick: openDataDomainsFirstLevelTab,
+      icon: 'check',
+      text: 'Data domains'
     },
     {
       onClick: openDefaultSchedulesFirstLevelTab,

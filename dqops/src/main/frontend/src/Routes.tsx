@@ -158,6 +158,18 @@ const Routes = () => {
           />
         )}
       />
+      <Route
+        exact
+        path={ROUTES.PATTERNS.DATA_DOMAINS}
+        render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DOMAINS} />}
+      />
+      <Route
+        exact
+        path={ROUTES.PATTERNS.DATA_DOMAIN_DETAIL}
+        render={() => (
+          <DefinitionLayout route={ROUTES.PATTERNS.DATA_DOMAIN_DETAIL} />
+        )}
+      />
 
       {/* Create Connection (packed with MainLayout) */}
       <Route

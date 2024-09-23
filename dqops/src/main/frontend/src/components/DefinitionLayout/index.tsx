@@ -5,6 +5,8 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDefinition } from '../../contexts/definitionContext';
 import CheckDetail from '../../pages/CheckDetail';
 import DataDictionary from '../../pages/DataDictionaryConfiguration';
+import DataDomainDetail from '../../pages/DataDomainDetail/DataDomainDetail';
+import DataDomains from '../../pages/DataDomains/DataDomains';
 import DefaultCheckPatternConfiguration from '../../pages/DefaultCheckPatternConfiguration';
 import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail';
@@ -101,6 +103,10 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <DefaultCheckPatterns />;
       case ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL:
         return <DefaultCheckPatternConfiguration />;
+      case ROUTES.PATTERNS.DATA_DOMAINS:
+        return <DataDomains />;
+      case ROUTES.PATTERNS.DATA_DOMAIN_DETAIL:
+        return <DataDomainDetail />;
       default:
         return null;
     }

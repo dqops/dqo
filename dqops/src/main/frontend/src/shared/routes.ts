@@ -446,6 +446,9 @@ export const ROUTES = {
     `/definitions/default-check/${urlencodeDecoder(type)}/${urlencodeDecoder(
       pattern
     )}`,
+  DATA_DOMAINS: () => '/data-domains',
+  DATA_DOMAIN_DETAIL: (domain: string) =>
+    `/data-domain/${urlencodeDecoder(domain)}`,
 
   PATTERNS: {
     INDEX: '/',
@@ -516,6 +519,8 @@ export const ROUTES = {
     DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionaries',
     DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`,
     DEFAULT_CHECKS_PATTERNS: `/definitions/default-check-patterns/:type`,
-    DEFAULT_CHECK_PATTERN_DETAIL: `/definitions/default-check/:type/:pattern`
+    DEFAULT_CHECK_PATTERN_DETAIL: `/definitions/default-check/:type/:pattern`,
+    DATA_DOMAINS: '/data-domains',
+    DATA_DOMAIN_DETAIL: '/data-domain/:domain'
   }
 };
