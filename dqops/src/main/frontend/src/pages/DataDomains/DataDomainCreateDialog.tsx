@@ -73,7 +73,7 @@ export default function DataDomainCreateDialog({
           color="primary"
           className="px-8"
           onClick={handleSubmit}
-          label={'Save'}
+          label={'Create'}
         />
         {showSpinner && (
           <div className="w-6 h-6 mb-2">
