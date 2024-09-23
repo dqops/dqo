@@ -22,8 +22,9 @@ export default function DataDomainCreateDialog({
       .then(() => {
         onClose();
       })
-      .catch(() => {
+      .catch((err) => {
         setError(true);
+        console.error(err);
       })
       .finally(() => {
         setShowSpinner(false);
