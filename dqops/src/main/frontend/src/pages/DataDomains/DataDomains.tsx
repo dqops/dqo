@@ -23,15 +23,19 @@ export default function DataDomains() {
     React.useState<string>('');
   const [openCreateDialog, setOpenCreateDialog] =
     React.useState<boolean>(false);
-
-  const dispatch = useActionDispatch();
-  useEffect(() => {
+  const getLocalDataDomains = async () => {
     setLoading(false);
     DataDomainApiClient.getLocalDataDomains()
       .then((res) => {
         setDataDomains(res.data);
       })
       .finally(() => setLoading(false));
+  };
+
+  const dispatch = useActionDispatch();
+
+  useEffect(() => {
+    getLocalDataDomains();
   }, []);
 
   const deleteDataDomain = async (domain: string) => {
@@ -130,13 +134,16 @@ export default function DataDomains() {
       </table>
       <DataDomainCreateDialog
         open={openCreateDialog}
-        onClose={() => setOpenCreateDialog(false)}
+        onClose={() => {
+          getLocalDataDomains();
+          setOpenCreateDialog(false);
+        }}
       />
       <ConfirmDialog
         open={selectedDataDomainToDelete?.length !== 0}
         onClose={() => setSelectedDataDomainToDelete('')}
         onConfirm={() => deleteDataDomain(selectedDataDomainToDelete)}
-        message={`Are you sure you want to delete ${selectedDataDomainToDelete} credential?`}
+        message={`Are you sure you want to delete ${selectedDataDomainToDelete} data domain?`}
       />
     </div>
   );
