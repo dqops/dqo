@@ -41783,6 +41783,11 @@
           "type" : "string",
           "description" : "The table name."
         },
+        "total_row_count" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Most recent row count. Returned only when the status of the monitoring or profiling checks was requested."
+        },
         "current_severity" : {
           "type" : "string",
           "description" : "The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",

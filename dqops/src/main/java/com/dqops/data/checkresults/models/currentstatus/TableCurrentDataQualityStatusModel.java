@@ -68,6 +68,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private String tableName;
 
     /**
+     * Most recent row count. Returned only when the status of the monitoring or profiling checks was requested.
+     */
+    @JsonPropertyDescription("Most recent row count. Returned only when the status of the monitoring or profiling checks was requested.")
+    private Long totalRowCount;
+
+    /**
      * The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
      * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */

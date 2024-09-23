@@ -40294,6 +40294,11 @@ definitions:
       table_name:
         type: "string"
         description: "The table name."
+      total_row_count:
+        type: "integer"
+        format: "int64"
+        description: "Most recent row count. Returned only when the status of the\
+          \ monitoring or profiling checks was requested."
       current_severity:
         type: "string"
         description: "The most recent data quality issue severity for this table.\

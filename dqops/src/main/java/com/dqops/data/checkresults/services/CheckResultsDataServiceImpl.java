@@ -794,6 +794,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
+                if (statusModel.getTotalRowCount() == null) {
+                    statusModel.setTotalRowCount(extractMostRecentRowCount(filteredTable));
+                }
             }
         }
 
@@ -828,12 +831,60 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     }
 
     /**
+     * Finds the most recent row count in the table.
+     * @param checkResultsTable Check results table.
+     * @return Most recent row count returned from any check containing the total row count.
+     */
+    private Long extractMostRecentRowCount(Table checkResultsTable) {
+        InstantColumn executedAtColumn = checkResultsTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        TextColumn checkNameColumn = checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        DoubleColumn actualValueColumn = checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        String[] rowCountCheckNames = new String[] { "daily_row_count", "daily_row_count_anomaly", "profile_row_count", "profile_row_count_anomaly" };
+        Instant mostRecentExecutedAt = null;
+        Long totalRowCount = null;
+
+        for (String checkName : rowCountCheckNames) {
+            Selection checkResultColumn = checkNameColumn.isEqualTo(checkName);
+            int[] checkResultsRowIndexes = checkResultColumn.toArray();
+
+            for (int i = checkResultsRowIndexes.length - 1; i >= 0 ; i--) {
+                int rowIndex = checkResultsRowIndexes[i];
+                if (actualValueColumn.isMissing(rowIndex)) {
+                    continue;
+                }
+
+                Instant executedAt = executedAtColumn.get(rowIndex);
+                long actualValue = (long)actualValueColumn.getDouble(rowIndex);
+
+                if (mostRecentExecutedAt == null || mostRecentExecutedAt.equals(executedAt)) {
+                    if (totalRowCount == null) {
+                        totalRowCount = actualValue;
+                    } else {
+                        totalRowCount = totalRowCount + actualValue; // add up all values in case that the table is analyzed by data groups and we have to sum values up
+                    }
+
+                    mostRecentExecutedAt = executedAt;
+                }
+                else {
+                    break; // older results
+                }
+            }
+
+            if (totalRowCount != null) {
+                break;
+            }
+        }
+
+        return totalRowCount;
+    }
+
+    /**
      * Calculates status for the table. Completes the TableDataQualityStatusModel with total severity data.
      * @param sourceTable Source table to be filtered.
      * @param tableStatusModel Target current table status model to update and fill with the status.
      * @return Complete TableDataQualityStatusModel
      */
-    protected TableCurrentDataQualityStatusModel calculateStatus(Table sourceTable, TableCurrentDataQualityStatusModel tableStatusModel){
+    protected TableCurrentDataQualityStatusModel calculateStatus(Table sourceTable, TableCurrentDataQualityStatusModel tableStatusModel) {
         InstantColumn executedAtColumn = sourceTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = (IntColumn)TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // when there is no severity column, it is the "errors" table and the severity is 4 as an execution error
         TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
