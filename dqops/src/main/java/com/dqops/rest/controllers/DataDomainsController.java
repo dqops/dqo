@@ -143,7 +143,7 @@ public class DataDomainsController {
      * @param dataDomainDisplayName Data domain display name.
      * @return Empty response.
      */
-    @PostMapping(value = "/", consumes = "text/plain", produces = "application/json")
+    @PostMapping(value = "/{dataDomainDisplayName}", produces = "application/json")
     @ApiOperation(value = "createDataDomain", notes = "Creates a new data domain given a data domain display name.", response = LocalDataDomainModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -158,7 +158,7 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
     public Mono<ResponseEntity<Mono<LocalDataDomainModel>>> createDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Data domain display name") @RequestBody String dataDomainDisplayName) {
+            @ApiParam("Data domain display name") @PathVariable String dataDomainDisplayName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(dataDomainDisplayName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -196,6 +196,7 @@ public class DataDomainsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data domain successfully deleted", response = Void.class),
+            @ApiResponse(code = 400, message = "Data domain cannot be deleted"),
             @ApiResponse(code = 404, message = "Data domain not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -217,9 +218,14 @@ public class DataDomainsController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            this.dataDomainsService.deleteDataDomain(dataDomainName);
+            try {
+                this.dataDomainsService.deleteDataDomain(dataDomainName);
 
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            }
+            catch (DqoDataDomainException ddex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+            }
         }));
     }
 

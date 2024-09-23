@@ -12434,42 +12434,6 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-    post:
-      tags:
-      - "DataDomains"
-      summary: "createDataDomain"
-      description: "Creates a new data domain given a data domain display name."
-      operationId: "createDataDomain"
-      consumes:
-      - "text/plain"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Data domain display name"
-        required: false
-        schema:
-          type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/LocalDataDomainModel"
-        201:
-          description: "New data domain successfully created"
-          schema:
-            $ref: "#/definitions/LocalDataDomainModel"
-        400:
-          description: "Bad request, adjust before retrying"
-        409:
-          description: "Data domain with the same name already exists"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/SpringErrorPayload"
-      security:
-      - authorization_bearer_api_key: []
     patch:
       tags:
       - "DataDomains"
@@ -12487,6 +12451,40 @@ paths:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data domain successfully synchronized"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/domains/{dataDomainDisplayName}:
+    post:
+      tags:
+      - "DataDomains"
+      summary: "createDataDomain"
+      description: "Creates a new data domain given a data domain display name."
+      operationId: "createDataDomain"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataDomainDisplayName"
+        in: "path"
+        description: "Data domain display name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/LocalDataDomainModel"
+        201:
+          description: "New data domain successfully created"
+          schema:
+            $ref: "#/definitions/LocalDataDomainModel"
+        400:
+          description: "Bad request, adjust before retrying"
+        409:
+          description: "Data domain with the same name already exists"
         500:
           description: "Internal Server Error"
           schema:
@@ -12516,6 +12514,8 @@ paths:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data domain successfully deleted"
+        400:
+          description: "Data domain cannot be deleted"
         404:
           description: "Data domain not found"
         500:
