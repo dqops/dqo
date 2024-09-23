@@ -24,10 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 
 
 /**
@@ -54,7 +51,7 @@ public class LocalDataDomainModel {
      * Data domain creation time.
      */
     @JsonPropertyDescription("Data domain creation time.")
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     /**
      * Enables the job scheduler for this domain.
@@ -89,7 +86,7 @@ public class LocalDataDomainModel {
         LocalDataDomainSpec localDataDomainSpec = new LocalDataDomainSpec() {{
             setDataDomainName(this.getDataDomainName());
             setDisplayName(this.getDisplayName());
-            setCreatedAt(this.getCreatedAt() != null ? this.getCreatedAt() : OffsetDateTime.now()); // we are using the current time otherwise
+            setCreatedAt(this.getCreatedAt() != null ? this.getCreatedAt() : Instant.now()); // we are using the current time otherwise
             setEnableScheduler(this.isEnableScheduler());
         }};
 
@@ -105,7 +102,7 @@ public class LocalDataDomainModel {
             return new LocalDataDomainModel() {{
                 setDomainName("sales");
                 setDisplayName("Sales data domain");
-                setCreatedAt(OffsetDateTime.of(LocalDateTime.of(2024, Month.SEPTEMBER, 14, 18, 33), ZoneOffset.UTC));
+                setCreatedAt(OffsetDateTime.of(LocalDateTime.of(2024, Month.SEPTEMBER, 14, 18, 33), ZoneOffset.UTC).toInstant());
             }};
         }
     }

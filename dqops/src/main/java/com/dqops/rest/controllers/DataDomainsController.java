@@ -234,7 +234,7 @@ public class DataDomainsController {
      * @return Empty response.
      */
     @PatchMapping(value = "/", produces = "application/json")
-    @ApiOperation(value = "synchronizeDataDomains", notes = "Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.", response = Void.class,
+    @ApiOperation(value = "synchronizeDataDomains", notes = "Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })

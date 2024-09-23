@@ -14860,7 +14860,7 @@
       "patch" : {
         "tags" : [ "DataDomains" ],
         "summary" : "synchronizeDataDomains",
-        "description" : "Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.",
+        "description" : "Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.",
         "operationId" : "synchronizeDataDomains",
         "produces" : [ "application/json" ],
         "responses" : {
@@ -39066,8 +39066,8 @@
           "description" : "Data domain display name (user-friendly name)."
         },
         "created_at" : {
-          "type" : "string",
-          "format" : "date-time",
+          "type" : "integer",
+          "format" : "int64",
           "description" : "Data domain creation time."
         },
         "enable_scheduler" : {

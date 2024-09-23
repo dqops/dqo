@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -51,7 +52,7 @@ public class LocalDataDomainSpec extends AbstractSpec {
     private String displayName;
 
     @JsonPropertyDescription("Data domain creation time")
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     @JsonPropertyDescription("Enables the job scheduler for this domain.")
     private boolean enableScheduler = true;
@@ -65,7 +66,7 @@ public class LocalDataDomainSpec extends AbstractSpec {
         LocalDataDomainSpec localDataDomainSpec = new LocalDataDomainSpec() {{
             setDataDomainName(cloudDataDomainModel.getDataDomainName());
             setDisplayName(cloudDataDomainModel.getDisplayName());
-            setCreatedAt(cloudDataDomainModel.getCreatedAt());
+            setCreatedAt(cloudDataDomainModel.getCreatedAt() != null ? cloudDataDomainModel.getCreatedAt().toInstant() : null);
         }};
 
         return localDataDomainSpec;
@@ -109,7 +110,7 @@ public class LocalDataDomainSpec extends AbstractSpec {
      * Returns the timestamp when the data domain was created.
      * @return The domain's creation time.
      */
-    public OffsetDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
@@ -117,7 +118,7 @@ public class LocalDataDomainSpec extends AbstractSpec {
      * Sets the data domain creation time.
      * @param createdAt Data domain creation time.
      */
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.setDirtyIf(!Objects.equals(this.createdAt, createdAt));
         this.createdAt = createdAt;
     }

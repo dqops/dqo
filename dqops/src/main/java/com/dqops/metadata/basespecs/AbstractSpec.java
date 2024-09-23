@@ -28,6 +28,7 @@ import com.rits.cloning.Cloner;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -443,6 +444,9 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
                 else if (currentValue instanceof Map){
                     Map<?,?> clonedChild = cloneMap((Map<?,?>) currentValue);
                     fieldInfo.setRawFieldValue(clonedChild, cloned);
+                }
+                else if (currentValue instanceof Instant) {
+                    // do nothing, copy by value
                 }
                 else {
                     throw new UnsupportedOperationException("Cannot clone object of type " + currentValue.getClass().getCanonicalName() +
