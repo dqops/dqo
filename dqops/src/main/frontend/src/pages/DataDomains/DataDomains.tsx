@@ -77,7 +77,9 @@ export default function DataDomains() {
         <thead className="border-b w-full relative border-b-gray-400 text-sm">
           <th className="px-6 py-4 text-left w-70">Domain ID</th>
           <th className="px-6 py-4 text-left w-70">Data domain name</th>
-          <th className="px-2 py-4 text-left ">Action</th>
+          <th className="px-2 py-4 text-left ">
+            <div className="ml-1.5">Action</div>
+          </th>
           <Button
             label="Add data domain"
             color="primary"
@@ -89,10 +91,7 @@ export default function DataDomains() {
         </thead>
         <tbody>
           {dataDomains.map((domain) => (
-            <tr
-              key={domain.domain_name}
-              className="border-b border-gray-200 text-sm"
-            >
+            <tr key={domain.domain_name} className=" text-sm">
               <td className="px-6 py-4 text-left">{domain.domain_name}</td>
               <td className="px-6 py-4 text-left">{domain.display_name}</td>
               <td className="py-4 text-left">
