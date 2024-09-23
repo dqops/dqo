@@ -666,6 +666,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Selection notProfilingSelection = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
 
             InstantColumn executedAtColumn = checkResultsNormalizedResult.getExecutedAtColumn();
+            DateTimeColumn timePeriodColumn = checkResultsNormalizedResult.getTimePeriodColumn();
 
             Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
                     PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
@@ -692,8 +693,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 }
 
                 Integer severity = severityColumn.get(rowIndex);
-                Instant executedAt = executedAtColumn.get(rowIndex);
-                LocalDate executedAtDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
+                LocalDateTime timePeriod = timePeriodColumn.get(rowIndex);
+                LocalDate timePeriodDate = timePeriod.toLocalDate();
                 String columnName = columnNameColumn.get(rowIndex);
                 String checkName = checkNameColumn.get(rowIndex);
                 String checkTypeString = checkTypeColumn.get(rowIndex);
@@ -704,12 +705,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     columnName = CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER;
                 }
 
-                boolean dateMatch = filterParameters.getDate() == null || Objects.equals(filterParameters.getDate(), executedAtDate);
+                boolean dateMatch = filterParameters.getDate() == null || Objects.equals(filterParameters.getDate(), timePeriodDate);
                 boolean columnMatch = Strings.isNullOrEmpty(filterParameters.getColumn()) || Objects.equals(filterParameters.getColumn(), columnName);
                 boolean checkMatch = Strings.isNullOrEmpty(filterParameters.getCheck()) || Objects.equals(filterParameters.getCheck(), checkName);
 
                 if (columnMatch && checkMatch) {
-                    histogramModel.incrementSeverityForDay(executedAtDate, severity);
+                    histogramModel.incrementSeverityForDay(timePeriodDate, severity);
                 }
 
                 if (dateMatch && checkMatch) {
