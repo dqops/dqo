@@ -143,7 +143,7 @@ public class DataDomainsController {
      * @param dataDomainDisplayName Data domain display name.
      * @return Empty response.
      */
-    @PostMapping(value = "/", consumes = "text/plain", produces = "application/json")
+    @PostMapping(value = "/{dataDomainDisplayName}", consumes = "text/plain", produces = "application/json")
     @ApiOperation(value = "createDataDomain", notes = "Creates a new data domain given a data domain display name.", response = LocalDataDomainModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -158,7 +158,7 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
     public Mono<ResponseEntity<Mono<LocalDataDomainModel>>> createDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Data domain display name") @RequestBody String dataDomainDisplayName) {
+            @ApiParam("Data domain display name") @PathVariable String dataDomainDisplayName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(dataDomainDisplayName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);

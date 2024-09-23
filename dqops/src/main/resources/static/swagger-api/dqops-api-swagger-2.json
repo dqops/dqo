@@ -14857,6 +14857,35 @@
           "authorization_bearer_api_key" : [ ]
         } ]
       },
+      "patch" : {
+        "tags" : [ "DataDomains" ],
+        "summary" : "synchronizeDataDomains",
+        "description" : "Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.",
+        "operationId" : "synchronizeDataDomains",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoResponseEntityMonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Data domain successfully synchronized"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/domains/{dataDomainDisplayName}" : {
       "post" : {
         "tags" : [ "DataDomains" ],
         "summary" : "createDataDomain",
@@ -14865,13 +14894,11 @@
         "consumes" : [ "text/plain" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
+          "name" : "dataDomainDisplayName",
+          "in" : "path",
           "description" : "Data domain display name",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
+          "required" : true,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -14891,33 +14918,6 @@
           },
           "409" : {
             "description" : "Data domain with the same name already exists"
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "schema" : {
-              "$ref" : "#/definitions/SpringErrorPayload"
-            }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ]
-      },
-      "patch" : {
-        "tags" : [ "DataDomains" ],
-        "summary" : "synchronizeDataDomains",
-        "description" : "Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.",
-        "operationId" : "synchronizeDataDomains",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "$ref" : "#/definitions/MonoResponseEntityMonoVoid"
-            }
-          },
-          "204" : {
-            "description" : "Data domain successfully synchronized"
           },
           "500" : {
             "description" : "Internal Server Error",
