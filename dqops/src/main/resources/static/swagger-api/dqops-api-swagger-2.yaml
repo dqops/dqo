@@ -12474,10 +12474,6 @@ paths:
         type: "string"
       responses:
         200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/LocalDataDomainModel"
-        201:
           description: "New data domain successfully created"
           schema:
             $ref: "#/definitions/LocalDataDomainModel"

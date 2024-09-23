@@ -148,9 +148,9 @@ public class DataDomainsController {
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New data domain successfully created", response = LocalDataDomainModel.class),
+            @ApiResponse(code = 200, message = "New data domain successfully created", response = LocalDataDomainModel.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 409, message = "Data domain with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -175,7 +175,7 @@ public class DataDomainsController {
 
             try {
                 LocalDataDomainModel localDataDomainModel = this.dataDomainsService.createDataDomain(dataDomainDisplayName);
-                return new ResponseEntity<>(Mono.justOrEmpty(localDataDomainModel), HttpStatus.CREATED);
+                return new ResponseEntity<>(Mono.justOrEmpty(localDataDomainModel), HttpStatus.OK);
             }
             catch (DqoDataDomainException ddex) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
