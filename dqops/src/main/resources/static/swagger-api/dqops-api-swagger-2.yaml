@@ -12464,8 +12464,6 @@ paths:
       summary: "createDataDomain"
       description: "Creates a new data domain given a data domain display name."
       operationId: "createDataDomain"
-      consumes:
-      - "text/plain"
       produces:
       - "application/json"
       parameters:

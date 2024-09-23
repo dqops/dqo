@@ -143,7 +143,7 @@ public class DataDomainsController {
      * @param dataDomainDisplayName Data domain display name.
      * @return Empty response.
      */
-    @PostMapping(value = "/{dataDomainDisplayName}", consumes = "text/plain", produces = "application/json")
+    @PostMapping(value = "/{dataDomainDisplayName}", produces = "application/json")
     @ApiOperation(value = "createDataDomain", notes = "Creates a new data domain given a data domain display name.", response = LocalDataDomainModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
