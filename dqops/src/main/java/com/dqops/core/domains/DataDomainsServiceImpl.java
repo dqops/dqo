@@ -227,8 +227,11 @@ public class DataDomainsServiceImpl implements DataDomainsService {
             LocalDataDomainModel localDataDomainModel = LocalDataDomainModel.createFromSpec(localDataDomainSpec);
             return localDataDomainModel;
         }
+        catch (DqoDataDomainException dqoDataDomainException) {
+            throw dqoDataDomainException;
+        }
         catch (Exception ex) {
-            throw new DqoDataDomainException("Cannot create a new data domain. Your DQOps Cloud API Key is invalid, or you don't have an ENTERPRISE license of DQOps.", ex);
+            throw new DqoDataDomainException("Cannot create a new data domain. Your DQOps Cloud API Key is invalid, or you don't have an ENTERPRISE license of DQOps. Error: " + ex.getMessage(), ex);
         }
     }
 
