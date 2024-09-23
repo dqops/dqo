@@ -74,7 +74,6 @@ export default function UserDetail() {
   useEffect(() => {
     if (dataDomainRoles) setUserDataDomainRoles(dataDomainRoles);
   }, [dataDomainRoles]);
-  console.log(dataDomainRoles, userDataDomainRoles);
 
   return (
     <div className="text-sm">
