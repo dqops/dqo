@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.domains.DataDomainsService;
+import com.dqops.core.domains.DqoDataDomainException;
 import com.dqops.core.domains.LocalDataDomainModel;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.login.DqoUserRole;
@@ -172,9 +173,13 @@ public class DataDomainsController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
             }
 
-            LocalDataDomainModel localDataDomainModel = this.dataDomainsService.createDataDomain(dataDomainDisplayName);
-
-            return new ResponseEntity<>(Mono.justOrEmpty(localDataDomainModel), HttpStatus.CREATED);
+            try {
+                LocalDataDomainModel localDataDomainModel = this.dataDomainsService.createDataDomain(dataDomainDisplayName);
+                return new ResponseEntity<>(Mono.justOrEmpty(localDataDomainModel), HttpStatus.CREATED);
+            }
+            catch (DqoDataDomainException ddex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+            }
         }));
     }
 
