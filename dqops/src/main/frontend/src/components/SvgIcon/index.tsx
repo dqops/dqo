@@ -50,6 +50,7 @@ import { ReactComponent as DeleteSvg } from './svg/delete.svg';
 import { ReactComponent as DeltaLakeBigSvg } from './svg/delta-lake-logo-big.svg';
 import { ReactComponent as DeltaLakeSvg } from './svg/delta-lake-logo.svg';
 import { ReactComponent as DisableSvg } from './svg/disable.svg';
+import { ReactComponent as DomainSvg } from './svg/domain.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
 import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg';
@@ -257,7 +258,8 @@ const iconsMap: any = {
   'deltalake-big': DeltaLakeBigSvg,
   letter: LetterSvg,
   data_sources_white: DataSourcesWhite,
-  definitions_policies: DefinitionsPoliciesSvg
+  definitions_policies: DefinitionsPoliciesSvg,
+  domain: DomainSvg
 };
 
 interface SvgIconProps {

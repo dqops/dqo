@@ -73,8 +73,8 @@ export default function DataDomains() {
       )}
       <table className="w-full ">
         <thead className="border-b w-full border-b-gray-400 relative flex items-center text-sm">
-          <th className="px-6 py-4 text-left block w-100">Domain ID</th>
-          <th className="px-6 py-4 text-left block w-100">Data domain name</th>
+          <th className="px-6 py-4 text-left block w-70">Domain ID</th>
+          <th className="px-6 py-4 text-left block w-70">Data domain name</th>
           <th className="px-2 py-4 text-left block ml-11">Action</th>
           <Button
             label="Add data domain"

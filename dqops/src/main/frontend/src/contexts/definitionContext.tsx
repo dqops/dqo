@@ -278,7 +278,7 @@ function DefinitionProvider(props: any) {
     },
     {
       onClick: openDataDomainsFirstLevelTab,
-      icon: 'check',
+      icon: 'domain',
       text: 'Data domains'
     },
     {
