@@ -95,44 +95,52 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_median_float = float(filtered_median)
     filtered_std = scipy.stats.tstd(filtered)
 
-    if float(filtered_std) == 0:
+    if float(filtered_std) == 0.0:
         return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float or
-                                   (rule_parameters.actual_value == 0 and 0 in all_extracted) or
-                                   (rule_parameters.actual_value == 100 and 100 in all_extracted),
+                                   (rule_parameters.actual_value == 0.0 and 0.0 in all_extracted) or
+                                   (rule_parameters.actual_value == 100.0 and 100.0 in all_extracted),
                                    filtered_median_float,
-                                   filtered_median_float if 0 not in all_extracted else 0,
-                                   filtered_median_float if 100 not in all_extracted else 100)
+                                   filtered_median_float if 0.0 not in all_extracted else 0.0,
+                                   filtered_median_float if 100.0 not in all_extracted else 100.0)
 
     degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted
-                                    if readout >= filtered_median_float]
-    upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-    upper_multiples_median = np.median(upper_multiples)
-    upper_multiples_std = scipy.stats.tstd(upper_multiples)
-
-    if float(upper_multiples_std) == 0:
-        threshold_upper = filtered_median_float
+    if 100.0 in all_extracted:
+        threshold_upper = 100.0
     else:
-        # Assumption: the historical data follows t-student distribution
-        upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-        threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
-        threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
+        upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted
+                                        if readout >= filtered_median_float]
+        upper_multiples = np.array(upper_median_multiples_array, dtype=float)
+        upper_multiples_median = np.median(upper_multiples)
+        upper_multiples_std = scipy.stats.tstd(upper_multiples)
 
-    lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
-                                    if readout <= filtered_median_float]
-    lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-    lower_multiples_median = np.median(lower_multiples)
-    lower_multiples_std = scipy.stats.tstd(lower_multiples)
+        if float(upper_multiples_std) == 0.0:
+            threshold_upper = filtered_median_float
+        else:
+            # Assumption: the historical data follows t-student distribution
+            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median,
+                                                       scale=upper_multiples_std)
+            threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
 
-    if float(lower_multiples_std) == 0:
-        threshold_lower = filtered_median_float
+    if 0.0 in all_extracted:
+        threshold_lower = 0.0
     else:
-        # Assumption: the historical data follows t-student distribution
-        lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-        threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-        threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
+                                        if readout <= filtered_median_float]
+        lower_multiples = np.array(lower_median_multiples_array, dtype=float)
+        lower_multiples_median = np.median(lower_multiples)
+        lower_multiples_std = scipy.stats.tstd(lower_multiples)
+
+        if float(lower_multiples_std) == 0.0:
+            threshold_lower = filtered_median_float
+        else:
+            # Assumption: the historical data follows t-student distribution
+            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median,
+                                                       scale=lower_multiples_std)
+            threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
+            threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
 
     passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
 
