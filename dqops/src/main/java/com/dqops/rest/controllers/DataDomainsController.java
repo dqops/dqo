@@ -21,6 +21,7 @@ import com.dqops.core.domains.DataDomainsService;
 import com.dqops.core.domains.LocalDataDomainModel;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.login.DqoUserRole;
+import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -109,7 +110,12 @@ public class DataDomainsController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             List<LocalDataDomainModel> allDataDomains = this.dataDomainsService.getAllDataDomains();
-            LinkedHashMap<String, DqoUserRole> allowedUserRoles = principal.getUserTokenPayload().getDomainRoles();
+            DqoUserTokenPayload userTokenPayload = principal.getUserTokenPayload();
+            if (userTokenPayload == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.OK);
+            }
+
+            LinkedHashMap<String, DqoUserRole> allowedUserRoles = userTokenPayload.getDomainRoles();
 
             if (principal.getAccountRole() == DqoUserRole.NONE) {
                 allDataDomains.removeIf(model -> {
