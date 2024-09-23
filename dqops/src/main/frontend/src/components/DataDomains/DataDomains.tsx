@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DataDomainItem from './DataDomainItem';
 
 interface IDataDomainRoles {
@@ -31,7 +31,9 @@ function convertArrayToObject(array: { [key: string]: string }[]): {
 
 const DataDomains = ({ dataDomainRoles = {}, onChange }: IDataDomainsProps) => {
   const [arr, setArr] = useState(convertObjectToArray(dataDomainRoles ?? {}));
-
+  useEffect(() => {
+    setArr(convertObjectToArray(dataDomainRoles ?? {}));
+  }, [dataDomainRoles]);
   const onChangeArr = (array: { [key: string]: string }[]) => {
     setArr(array);
     onChange(convertArrayToObject(array));

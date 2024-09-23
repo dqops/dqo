@@ -70,6 +70,10 @@ export default function UserDetail() {
       }
     }
   }, [userEmail]);
+
+  useEffect(() => {
+    if (dataDomainRoles) setUserDataDomainRoles(dataDomainRoles);
+  }, [dataDomainRoles]);
   console.log(dataDomainRoles, userDataDomainRoles);
 
   return (
