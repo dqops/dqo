@@ -173,7 +173,7 @@ export default function UserListDetail() {
                     color="teal"
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
-                    <SvgIcon name="lock" className="w-4" />
+                    <SvgIcon name="password_change" className="w-4" />
                   </IconButton>
                 </div>
               </td>

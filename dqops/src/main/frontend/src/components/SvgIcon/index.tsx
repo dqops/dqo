@@ -125,6 +125,7 @@ import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
 import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
+import { ReactComponent as PasswordChange } from './svg/password-change.svg'
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -257,7 +258,8 @@ const iconsMap: any = {
   'deltalake-big': DeltaLakeBigSvg,
   letter: LetterSvg,
   data_sources_white: DataSourcesWhite,
-  definitions_policies: DefinitionsPoliciesSvg
+  definitions_policies: DefinitionsPoliciesSvg,
+  password_change: PasswordChange
 };
 
 interface SvgIconProps {
