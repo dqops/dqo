@@ -46,75 +46,84 @@ export default function DataDomains() {
       })
       .catch((err) => console.error(err));
   };
-  const editDataDomain = (domain: string) => {
+  const editDataDomain = (domain: string, display_name: string) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.DATA_DOMAIN_DETAIL(domain),
         value: ROUTES.DATA_DOMAIN_DETAIL(domain),
         label: domain,
-        state: { data_domain: domain }
+        state: { data_domain: domain, data_domain_name: display_name }
       })
     );
   };
 
-  const addDataDomain = () => {};
+  const addDataDomain = () => {
+    setOpenCreateDialog(true);
+  };
 
   if (loading) {
     return <Loader className="w-6 h-6" isFull={false} />;
   }
 
   return (
-    <div>
+    <div className="text-sm">
       {!userProfile.can_use_data_domains && (
         <div>
           Data domains require an active DQOps Cloud ENTERPRISE license. Please
           contact DQOps sales to activate data domains.
         </div>
       )}
-      <table className="w-full ">
-        <thead className="border-b w-full border-b-gray-400 relative flex items-center text-sm">
-          <th className="px-6 py-4 text-left block w-70">Domain ID</th>
-          <th className="px-6 py-4 text-left block w-70">Data domain name</th>
-          <th className="px-2 py-4 text-left block ml-11">Action</th>
+      <table className="w-full">
+        <thead className="border-b w-full relative border-b-gray-400 text-sm">
+          <th className="px-6 py-4 text-left w-70">Domain ID</th>
+          <th className="px-6 py-4 text-left w-70">Data domain name</th>
+          <th className="px-2 py-4 text-left ">Action</th>
           <Button
             label="Add data domain"
             color="primary"
             variant="contained"
             className="absolute right-2 top-2 w-40"
             onClick={addDataDomain}
+            disabled={!userProfile.can_use_data_domains}
           />
         </thead>
         <tbody>
           {dataDomains.map((domain) => (
-            <tr key={domain.domain_name} className="border-b border-gray-200">
-              <td className="px-6 py-4 text-left block w-100">
-                {domain.domain_name}
-              </td>
-              <td className="px-6 py-4 text-left block w-100">
-                {domain.display_name}
-              </td>
-              <td className="px-2 py-4 text-left block ml-11">
-                <IconButton
-                  size="sm"
-                  onClick={() => editDataDomain(domain.domain_name ?? '')}
-                  ripple={false}
-                  color="teal"
-                  className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                  disabled={userProfile.can_manage_definitions !== true}
-                >
-                  <SvgIcon name="edit" className="w-4" />
-                </IconButton>
-                <div className="flex gap-x-2">
-                  <IconButton
-                    size="sm"
-                    onClick={() => deleteDataDomain(domain.domain_name ?? '')}
-                    disabled={userProfile.can_manage_definitions !== true}
-                    color="teal"
-                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                  >
-                    <SvgIcon name="delete" className="w-4" />
-                  </IconButton>
-                </div>
+            <tr
+              key={domain.domain_name}
+              className="border-b border-gray-200 text-sm"
+            >
+              <td className="px-6 py-4 text-left">{domain.domain_name}</td>
+              <td className="px-6 py-4 text-left">{domain.display_name}</td>
+              <td className="py-4 text-left">
+                {domain.domain_name !== '(default)' && (
+                  <div className="flex gap-x-2">
+                    <IconButton
+                      size="sm"
+                      onClick={() =>
+                        editDataDomain(
+                          domain.domain_name ?? '',
+                          domain.display_name ?? ''
+                        )
+                      }
+                      ripple={false}
+                      color="teal"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                      disabled={!userProfile.can_use_data_domains}
+                    >
+                      <SvgIcon name="edit" className="w-4" />
+                    </IconButton>
+                    <IconButton
+                      size="sm"
+                      onClick={() => deleteDataDomain(domain.domain_name ?? '')}
+                      disabled={!userProfile.can_use_data_domains}
+                      color="teal"
+                      className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                    >
+                      <SvgIcon name="delete" className="w-4" />
+                    </IconButton>
+                  </div>
+                )}
               </td>
             </tr>
           ))}

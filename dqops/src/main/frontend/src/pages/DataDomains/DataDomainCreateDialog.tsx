@@ -20,31 +20,41 @@ export default function DataDomainCreateDialog({
     setShowSpinner(true);
     DataDomainApiClient.createDataDomain(dataDomainName)
       .then(() => {
-        setShowSpinner(false);
         onClose();
       })
       .catch(() => {
         setError(true);
+      })
+      .finally(() => {
+        setShowSpinner(false);
       });
+  };
+
+  const handleClose = () => {
+    onClose();
+    setDataDomainName('');
+    setError(false);
+    setShowSpinner(false);
   };
 
   return (
     <Dialog open={open} handler={onClose}>
-      <DialogBody className="pt-10 pb-2 px-8">
+      <DialogBody className="pt-4 pb-2 px-8">
         <div className="text-2xl text-gray-700 text-center whitespace-normal break-words">
           Create a new data domain
         </div>
-        <div className="mt-4">
+        <div className="mt-4 text-sm">
           <Input
             type="text"
             className="w-full border border-gray-300 rounded-md px-4 py-2"
             placeholder="Enter data domain name"
             value={dataDomainName}
             onChange={(e) => setDataDomainName(e.target.value)}
+            label="Data domain name"
           />
         </div>
         {error && (
-          <div className="text-red-500 text-center mt-4">
+          <div className="text-red-500 mt-4 text-sm">
             Invalid data domain name{' '}
           </div>
         )}
@@ -54,7 +64,7 @@ export default function DataDomainCreateDialog({
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={handleClose}
           label={'Cancel'}
         />
 
@@ -65,7 +75,7 @@ export default function DataDomainCreateDialog({
           label={'Save'}
         />
         {showSpinner && (
-          <div className="w-6 h-6">
+          <div className="w-6 h-6 mb-2">
             <Loader isFull={false} className="w-8 h-8 fill-green-700" />
           </div>
         )}
