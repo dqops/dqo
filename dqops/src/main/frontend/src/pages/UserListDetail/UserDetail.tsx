@@ -13,21 +13,32 @@ import { UsersApi } from '../../services/apiClient';
 import { urlencodeDecoder } from '../../utils';
 
 export default function UserDetail() {
-  const { create, email, role } = useSelector(getFirstLevelSensorState);
+  const { create, email, role, dataDomainRoles } = useSelector(
+    getFirstLevelSensorState
+  );
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const [userEmail, setUserEmail] = useState<string>(email);
   const [userRole, setUserRole] =
     useState<DqoUserRolesModelAccountRoleEnum>(role);
-  const [dataDomainRoles, setDataDomainRoles] = useState<{
+  const [userDataDomainRoles, setUserDataDomainRoles] = useState<{
     [key: string]: string;
-  }>({});
+  }>(dataDomainRoles);
   const [isUpdated, setIsUpdated] = useState(false);
   const [message, setMessage] = useState<string>();
-
+  const onCHangeDataDomainRoles = (dataDomainRoles: {
+    [key: string]: string;
+  }) => {
+    setUserDataDomainRoles(dataDomainRoles);
+    setIsUpdated(true);
+  };
   const dispatch = useActionDispatch();
 
   const addDqoCloudUser = async () => {
-    await UsersApi.createUser({ email: userEmail, accountRole: userRole })
+    await UsersApi.createUser({
+      email: userEmail,
+      accountRole: userRole,
+      dataDomainRoles: userDataDomainRoles
+    })
       .catch((err) => console.error(err))
       .then(() => dispatch(closeFirstLevelTab('/definitions/user/new')));
   };
@@ -35,7 +46,8 @@ export default function UserDetail() {
   const editDqoCloudUser = async () => {
     await UsersApi.updateUser(String(email), {
       accountRole: userRole,
-      email: String(email)
+      email: String(email),
+      dataDomainRoles: userDataDomainRoles
     })
       .catch((err) => console.error(err))
       .then(() =>
@@ -58,13 +70,14 @@ export default function UserDetail() {
       }
     }
   }, [userEmail]);
+  console.log(dataDomainRoles, userDataDomainRoles);
 
   return (
-    <>
+    <div className="text-sm">
       <div className="w-full border-b border-b-gray-400 flex justify-end ">
         <Button
           label={'Save'}
-          color="primary"
+          color={isUpdated ? 'primary' : 'secondary'}
           variant="contained"
           className=" w-40 mr-10 my-3"
           onClick={
@@ -72,7 +85,7 @@ export default function UserDetail() {
               ? addDqoCloudUser
               : editDqoCloudUser
           }
-          disabled={!(isUpdated && userRole && userEmail && !message)}
+          disabled={!(userRole && userEmail && !message)}
         />
       </div>
       <div className="w-100 px-5 mt-5">
@@ -98,9 +111,12 @@ export default function UserDetail() {
           className="my-5 "
         />
       </div>
-      {userProfile.license_type?.toLowerCase() !== 'free' && (
-        <DataDomains dataDomainRoles={dataDomainRoles} />
+      {userProfile.can_use_data_domains && (
+        <DataDomains
+          dataDomainRoles={userDataDomainRoles}
+          onChange={onCHangeDataDomainRoles}
+        />
       )}
-    </>
+    </div>
   );
 }
