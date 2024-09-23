@@ -37,14 +37,15 @@ export default function UserListDetail() {
 
   const editDqoCloudUser = (
     email: string,
-    role?: DqoUserRolesModelAccountRoleEnum
+    role?: DqoUserRolesModelAccountRoleEnum,
+    dataDomainRoles?: { [key: string]: string }
   ) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.USER_DETAIL(email),
         value: ROUTES.USER_DETAIL_VALUE(email),
         label: `Edit user ${email}`,
-        state: { create: false, email, role: role }
+        state: { create: false, email, role: role, dataDomainRoles }
       })
     );
   };
@@ -131,7 +132,11 @@ export default function UserListDetail() {
                       size="sm"
                       onClick={() =>
                         user.email
-                          ? editDqoCloudUser(user.email, user.accountRole)
+                          ? editDqoCloudUser(
+                              user.email,
+                              user.accountRole,
+                              user.dataDomainRoles
+                            )
                           : null
                       }
                       ripple={false}
@@ -173,7 +178,7 @@ export default function UserListDetail() {
                     color="teal"
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
-                    <SvgIcon name="lock" className="w-4" />
+                    <SvgIcon name="password_change" className="w-4" />
                   </IconButton>
                 </div>
               </td>

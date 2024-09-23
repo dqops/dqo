@@ -17,6 +17,7 @@
 package com.dqops.core.principal;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import com.dqops.core.dqocloud.login.DqoUserAuthenticationTokenDisposition;
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +25,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
 /**
  * DQOps user principal that identifies the user.
@@ -87,6 +89,17 @@ public class DqoUserPrincipal {
                 apiKeyPayload != null ? apiKeyPayload.getTenantId() : null,
                 apiKeyPayload != null ? apiKeyPayload.getTenantGroup() : null);
         this.apiKeyPayload = apiKeyPayload;
+
+        if (apiKeyPayload != null) {
+            this.userTokenPayload = new DqoUserTokenPayload() {{
+                setUser(name);
+                setDisposition(DqoUserAuthenticationTokenDisposition.API_KEY);
+                setAccountRole(accountRole);
+                setTenantId(apiKeyPayload.getTenantId());
+                setTenantGroup(apiKeyPayload.getTenantGroup());
+                setDomainRoles(new LinkedHashMap<>());
+            }};
+        }
     }
 
     /**

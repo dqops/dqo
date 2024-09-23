@@ -85,6 +85,7 @@ import { ReactComponent as OptionsSvg } from './svg/options.svg';
 import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 import { ReactComponent as ParquetSvg } from './svg/parquet-icon.svg';
 import { ReactComponent as PartitionedChecksSvg } from './svg/partition-checks.svg';
+import { ReactComponent as PasswordChange } from './svg/password-change.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
 import { ReactComponent as PerconaServerSvg } from './svg/percona-server.svg';
 import { ReactComponent as PlaySvg } from './svg/play.svg';
@@ -259,7 +260,8 @@ const iconsMap: any = {
   letter: LetterSvg,
   data_sources_white: DataSourcesWhite,
   definitions_policies: DefinitionsPoliciesSvg,
-  domain: DomainSvg
+  domain: DomainSvg,
+  password_change: PasswordChange
 };
 
 interface SvgIconProps {
