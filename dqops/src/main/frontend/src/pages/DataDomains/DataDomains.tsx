@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { LocalDataDomainModel } from '../../api';
 import Button from '../../components/Button';
-import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Loader from '../../components/Loader';
 import SvgIcon from '../../components/SvgIcon';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -12,6 +11,7 @@ import { IRootState } from '../../redux/reducers';
 import { DataDomainApiClient } from '../../services/apiClient';
 import { ROUTES } from '../../shared/routes';
 import DataDomainCreateDialog from './DataDomainCreateDialog';
+import DataDomainDeleteDialog from './DataDomainDeleteDialog';
 
 export default function DataDomains() {
   const { userProfile } = useSelector((state: IRootState) => state.job);
@@ -139,11 +139,11 @@ export default function DataDomains() {
           setOpenCreateDialog(false);
         }}
       />
-      <ConfirmDialog
+      <DataDomainDeleteDialog
         open={selectedDataDomainToDelete?.length !== 0}
         onClose={() => setSelectedDataDomainToDelete('')}
         onConfirm={() => deleteDataDomain(selectedDataDomainToDelete)}
-        message={`Are you sure you want to delete ${selectedDataDomainToDelete} data domain?`}
+        yesNo
       />
     </div>
   );
