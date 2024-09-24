@@ -102,7 +102,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new TableQualityPolicySpec() {{
             setPolicyName("Detect data freshness anomalies daily");
-            setDescription("Monitors data freshness anomalies daily");
+            setDescription("Monitors data freshness anomalies daily.");
             setMonitoringChecks(new TableMonitoringCheckCategoriesSpec() {{
                 setDaily(new TableDailyMonitoringCheckCategoriesSpec() {{
                     setTimeliness(new TableTimelinessDailyMonitoringChecksSpec() {{
@@ -116,7 +116,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new TableQualityPolicySpec() {{
             setPolicyName("Detect table availability issues daily");
-            setDescription("Monitors table availability issues daily");
+            setDescription("Monitors table availability issues daily.");
             setMonitoringChecks(new TableMonitoringCheckCategoriesSpec() {{
                 setDaily(new TableDailyMonitoringCheckCategoriesSpec() {{
                     setAvailability(new TableAvailabilityDailyMonitoringChecksSpec() {{
@@ -215,7 +215,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect empty columns");
-            setDescription("Detects empty columns using both monitoring checks an daily partitioned checks");
+            setDescription("Detects empty columns using both monitoring checks an daily partitioned checks.");
             setDisabled(true);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
@@ -240,7 +240,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect columns containing any null values");
-            setDescription("Detects columns containing any null values using both monitoring checks an daily partitioned checks");
+            setDescription("Detects columns containing any null values using both monitoring checks and daily partitioned checks.");
             setDisabled(true);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
@@ -288,7 +288,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Profile text columns to detect PII values (sensitive data)");
-            setDescription("Activates data profiling checks on all text columns to detect if they contain sensitive data (emails, phone numbers). This policy should be enabled to allow the data quality rule miner to configure PII checks when a few sensitive values were detected.");
+            setDescription("Activates data profiling checks on all text columns to detect if they contain sensitive data (emails, phone numbers). Enabling this policy allows the data quality rule miner to set up PII checks when sensitive values are identified.");
             setDisabled(false);
             setProfilingChecks(new ColumnProfilingCheckCategoriesSpec() {{
                 setPii(new ColumnPiiProfilingChecksSpec() {{
@@ -374,7 +374,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect significant changes in the percentage of null values");
-            setDescription("Monitors the percentage of null values in columns and raises an issue when the day-to-day change above a threshold.");
+            setDescription("Monitors the percentage of null values in columns and raises an issue when the day-to-day change is above a threshold.");
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyMonitoringChecksSpec() {{
