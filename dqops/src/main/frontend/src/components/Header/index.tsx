@@ -21,6 +21,7 @@ import {
   getFirstLevelTableTab,
   useDecodedParams
 } from '../../utils';
+import DomainSwitch from '../DomainSwitch/DomainSwitch';
 import HelpMenu from '../HelpMenu';
 import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
@@ -367,6 +368,7 @@ const Header = () => {
         </div>
       </div>
       <div className="flex">
+        <DomainSwitch />
         <HelpMenu />
         <SynchronizeButton />
         <NotificationMenu />
