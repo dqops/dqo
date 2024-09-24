@@ -316,10 +316,11 @@ The full documentation of the `incident_grouping` element is provided in the
 [ConnectionIncidentGroupingSpec](../reference/yaml/ConnectionYaml.md#connectionincidentgroupingspec) object reference.
 
 
-### **Incident notification webhooks**
-The urls of [webhooks](../integrations/webhooks/index.md) that DQOps should call
-when new [data quality incidents](grouping-data-quality-issues-to-incidents.md) are identified, or the status
-of an incident was changed.
+### **Incident notification**
+When a new [data quality incidents](grouping-data-quality-issues-to-incidents.md) is detected, or a user changes the status of an incident, DQOps can send notifications.
+The notifications are sent by email or by calling a [webhooks](../integrations/webhooks/index.md) and sending a JSON
+[IncidentNotificationMessage](../reference/yaml/IncidentNotificationMessage.md) using a HTTP POST method.
+Multiple addresses can be provided, which must be separated by a comma. 
 
 This configuration overrides the default settings stored in the [*settings/defaultnotifications.dqonotifications.yaml*](../reference/yaml/DefaultNotificationsYaml.md) file
 with data source specific configuration, allowing to send the notification to the data source owner or the right data engineering team.
@@ -335,22 +336,22 @@ spec:
     minimum_severity: warning
     max_incident_length_days: 60
     mute_for_days: 60 
-    webhooks: # (1)!
-      incident_opened_webhook_url: https://my.ticketingsystem.com/on_new_incident_detected # (2)!
-      incident_acknowledged_webhook_url: https://my.ticketingsystem.com/on_incident_confirmed_by_ops_team # (3)!
-      incident_resolved_webhook_url: https://my.ticketingsystem.com/on_incident_resolved # (4)!
-      incident_muted_webhook_url: https://my.ticketingsystem.com/on_incident_muted # (5)!
+    incident_notification: # (1)!
+      incident_opened_addresses: jsmith@company.com,https://my.ticketingsystem.com/on_new_incident_detected # (2)!
+      incident_acknowledged_addresses: https://my.ticketingsystem.com/on_incident_confirmed_by_ops_team # (3)!
+      incident_resolved_addresses: https://my.ticketingsystem.com/on_incident_resolved # (4)!
+      incident_muted_addresses: https://my.ticketingsystem.com/on_incident_muted # (5)!
 ```
 
-1.  The webhook configuration node.
-2.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of new data quality incidents that were just detected.
-3.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were reviewed and assigned for resolution.
-4.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were resolved and the data quality checks can be run again to validate the fix.
-5.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were muted because the incident was identified as a low priority or out-of-scope.
+1.  The incident notification settings node.
+2.  The email address or a webhook url where DQOps sends [notifications](../reference/yaml/IncidentNotificationMessage.md) of new data quality incidents that were just detected. Supports both emails and webhook urls. Multiple target addresses should be separated by a comma.
+3.  The email address or a webhook url where DQOps sends [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were reviewed and assigned for resolution. Supports both emails and webhook urls. Multiple target addresses should be separated by a comma.
+4.  The email address or a webhook url where DQOps sends [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were resolved and the data quality checks can be run again to validate the fix. Supports both emails and webhook urls. Multiple target addresses should be separated by a comma.
+5.  The email address or a webhook url where DQOps sends [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were muted because the incident was identified as a low priority or out-of-scope. Supports both emails and webhook urls. Multiple target addresses should be separated by a comma.
 
 
-The full documentation of the `incident_grouping.webhooks` element is provided in the
-[IncidentWebhookNotificationsSpec](../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec) object reference.
+The full documentation of the `incident_grouping.incident_notification` element is provided in the
+[IncidentNotificationSpec](../reference/yaml/ConnectionYaml.md#incidentnotificationspec) object reference.
 
 
 ## What's next
