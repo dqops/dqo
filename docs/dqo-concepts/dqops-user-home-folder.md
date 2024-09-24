@@ -467,14 +467,14 @@ The data quality policy files are stored in the *patterns* folder, as shown in t
 $DQO_USER_HOME
 ├───...
 ├───patterns
-│   ├───default.dqocolumnpattern.yaml(1)
-│   ├───default.dqotablepattern.yaml(2)
-│   └───custom_table_pattern_name.dqocolumnpattern.yaml(3)
+│   ├───Detect column schema changes.dqocolumnpattern.yaml(1)
+│   ├───Detect empty tables daily.dqotablepattern.yaml(2)
+│   └───custom_column_policy_name.dqocolumnpattern.yaml(3)
 └───...   
 ```
 
-1.  The default configuration of column-level checks applied on all columns.
-2.  The default configuration of table-level checks applied on all tables.
+1.  Column-level data quality policy with configuration of data quality checks applied on columns.
+2.  Table-level data quality policy with configuration of data quality checks applied on tables.
 3.  An example of another check pattern file containing a custom configuration of additional column-level checks.
 
 You can create additional table-level or column-level data quality policies to activate
