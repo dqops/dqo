@@ -93,12 +93,12 @@ export default function DataDomains() {
             disabled={!userProfile.can_use_data_domains}
           />
         </thead>
-        <tbody>
+        <tbody className="pt-1">
           {dataDomains.map((domain) => (
-            <tr key={domain.domain_name} className=" text-sm">
-              <td className="px-6 py-4 text-left">{domain.domain_name}</td>
-              <td className="px-6 py-4 text-left">{domain.display_name}</td>
-              <td className="py-4 text-left">
+            <tr key={domain.domain_name} className=" text-sm h-10">
+              <td className="px-6 py-1 text-left">{domain.domain_name}</td>
+              <td className="px-6 py-1 text-left">{domain.display_name}</td>
+              <td className="py-1 text-left">
                 {domain.domain_name !== '(default)' && (
                   <div className="flex gap-x-2">
                     <IconButton
@@ -118,7 +118,9 @@ export default function DataDomains() {
                     </IconButton>
                     <IconButton
                       size="sm"
-                      onClick={() => deleteDataDomain(domain.domain_name ?? '')}
+                      onClick={() =>
+                        setSelectedDataDomainToDelete(domain.domain_name ?? '')
+                      }
                       disabled={!userProfile.can_use_data_domains}
                       color="teal"
                       className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
