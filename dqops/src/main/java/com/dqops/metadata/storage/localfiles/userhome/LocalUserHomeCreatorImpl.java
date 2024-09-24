@@ -44,14 +44,14 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
-import com.dqops.metadata.storage.localfiles.columndefaultpatterns.ColumnDefaultChecksPatternYaml;
+import com.dqops.metadata.storage.localfiles.columndefaultpatterns.ColumnLevelDataQualityPolicyYaml;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
 import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
-import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableDefaultChecksPatternYaml;
+import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableLevelDataQualityPolicyYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
 import lombok.extern.slf4j.Slf4j;
@@ -305,7 +305,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                     .resolve(policyFileName);
 
                 if (!Files.exists(tablePolicyFilePath)) {
-                    TableDefaultChecksPatternYaml qualityPolicyYaml = new TableDefaultChecksPatternYaml();
+                    TableLevelDataQualityPolicyYaml qualityPolicyYaml = new TableLevelDataQualityPolicyYaml();
                     qualityPolicyYaml.setSpec(tableQualityPolicySpec);
                     String serializedQualityPolicy = this.yamlSerializer.serialize(qualityPolicyYaml);
                     Files.writeString(tablePolicyFilePath, serializedQualityPolicy);
@@ -319,7 +319,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                         .resolve(policyFileName);
 
                 if (!Files.exists(columnPolicyFilePath)) {
-                    ColumnDefaultChecksPatternYaml qualityPolicyYaml = new ColumnDefaultChecksPatternYaml();
+                    ColumnLevelDataQualityPolicyYaml qualityPolicyYaml = new ColumnLevelDataQualityPolicyYaml();
                     qualityPolicyYaml.setSpec(columnQualityPolicySpec);
                     String serializedQualityPolicy = this.yamlSerializer.serialize(qualityPolicyYaml);
                     Files.writeString(columnPolicyFilePath, serializedQualityPolicy);

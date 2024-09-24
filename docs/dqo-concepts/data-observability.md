@@ -79,10 +79,10 @@ $DQO_USER_HOME
 
 The default pattern files are described below.
 
-- The [*default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md) file 
+- The [*default.dqocolumnpattern.yaml*](../reference/yaml/ColumnLevelDataQualityPolicyYaml.md) file 
   contains the default configuration of column-level data quality checks activated on all columns.
 
-- The [*default.dqotablespattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md) file
+- The [*default.dqotablespattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md) file
   contains the default configuration of table-level data quality checks activated on all tables.
 
 ### Pattern file format 
@@ -91,7 +91,7 @@ the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) YAML files.
 The definition of the default table-level checks also has the *profiling_checks*, *monitoring_checks*, 
 and *partitioned_checks* nodes.
 
-The structure of the table-level [*&lt;pattern_name&gt;.dqotablespattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md) file is shown below.
+The structure of the table-level [*&lt;pattern_name&gt;.dqotablespattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md) file is shown below.
 
 ``` { .yaml linenums="1" .annotate }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
@@ -125,7 +125,7 @@ spec:
 5.  The configuration of [partition checks](definition-of-data-quality-checks/partition-checks.md).
 
 
-The structure of the column-level [*&lt;pattern_name&gt;.dqocolumnspattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+The structure of the column-level [*&lt;pattern_name&gt;.dqocolumnspattern.yaml*](../reference/yaml/ColumnLevelDataQualityPolicyYaml.md)
 file is very similar. The main differences are highlighted.
 
 ``` { .yaml linenums="1" .annotate hl_lines="1 3" }
@@ -172,12 +172,12 @@ The filters support simple prefix and suffix filters, such as `*`, `*_id`, `fact
 
 !!! note "Default data quality check patterns"
 
-    The default pattern files [*default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)  and [*default.dqotablespattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+    The default pattern files [*default.dqocolumnpattern.yaml*](../reference/yaml/ColumnLevelDataQualityPolicyYaml.md)  and [*default.dqotablespattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md)
     do not have the configuration of the target table and column. They are applied to all tables and columns.
 
 
 ### Target table
-All supported filters for [table-level check patterns](../reference/yaml/TableDefaultChecksPatternYaml.md) are shown below.
+All supported filters for [table-level check patterns](../reference/yaml/TableLevelDataQualityPolicyYaml.md) are shown below.
 When a filter parameter is not configured, or the value is `*`, DQOps skips the filter parameter.
 
 ``` { .yaml linenums="1" .annotate hl_lines="7-12" }
@@ -341,11 +341,11 @@ The default configuration of table-level checks that DQOps activates on
 all tables is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
 
 The configuration can be changed by editing 
-the [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+the [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md)
 file directly or using a check pattern editor screen in the Configuration section of 
 the [DQOps user interface](dqops-user-interface-overview.md#configuration-tree-view).
 
-The content of the default [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+The content of the default [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md)
 file is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
 
 ### Default profiling checks
@@ -487,11 +487,11 @@ The default configuration of column-level checks that DQOps activates on
 all column is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
 
 The configuration can be changed by editing
-the [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+the [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnLevelDataQualityPolicyYaml.md)
 file directly or using a check pattern editor screen in the Configuration section of
 the [DQOps user interface](dqops-user-interface-overview.md#configuration-tree-view).
 
-The content of the default [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+The content of the default [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnLevelDataQualityPolicyYaml.md)
 file is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
 
 

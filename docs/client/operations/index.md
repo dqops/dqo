@@ -163,7 +163,7 @@ Data domain management API to create different data domains.
 |<span class="no-wrap-code">[`delete_data_domain`</span>](./data_domains.md#delete_data_domain)|DELETE|Deletes a data domain. The domain is deleted in the DQOps SaaS cloud and locally.|
 |<span class="no-wrap-code">[`get_local_data_domains`</span>](./data_domains.md#get_local_data_domains)|GET|Returns a list of local data domains that this instance is maintaining. Data domains are supported only in an ENTERPRISE versions of DQOps.|
 |<span class="no-wrap-code">[`switch_to_data_domain`</span>](./data_domains.md#switch_to_data_domain)|GET|Switches to a different data domain. This operation sends a special cookie and redirects the user to the home screen.|
-|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.|
+|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.|
 
 
 ## data_grouping_configurations

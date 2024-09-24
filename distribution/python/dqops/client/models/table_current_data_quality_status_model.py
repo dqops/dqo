@@ -32,6 +32,8 @@ class TableCurrentDataQualityStatusModel:
             connection_name (Union[Unset, str]): The connection name in DQOps.
             schema_name (Union[Unset, str]): The schema name.
             table_name (Union[Unset, str]): The table name.
+            total_row_count (Union[Unset, int]): Most recent row count. Returned only when the status of the monitoring or
+                profiling checks was requested.
             current_severity (Union[Unset, RuleSeverityLevel]):
             highest_historical_severity (Union[Unset, RuleSeverityLevel]):
             last_check_executed_at (Union[Unset, int]): The UTC timestamp when the most recent data quality check was
@@ -67,6 +69,7 @@ class TableCurrentDataQualityStatusModel:
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
+    total_row_count: Union[Unset, int] = UNSET
     current_severity: Union[Unset, RuleSeverityLevel] = UNSET
     highest_historical_severity: Union[Unset, RuleSeverityLevel] = UNSET
     last_check_executed_at: Union[Unset, int] = UNSET
@@ -87,6 +90,7 @@ class TableCurrentDataQualityStatusModel:
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
+        total_row_count = self.total_row_count
         current_severity: Union[Unset, str] = UNSET
         if not isinstance(self.current_severity, Unset):
             current_severity = self.current_severity.value
@@ -126,6 +130,8 @@ class TableCurrentDataQualityStatusModel:
             field_dict["schema_name"] = schema_name
         if table_name is not UNSET:
             field_dict["table_name"] = table_name
+        if total_row_count is not UNSET:
+            field_dict["total_row_count"] = total_row_count
         if current_severity is not UNSET:
             field_dict["current_severity"] = current_severity
         if highest_historical_severity is not UNSET:
@@ -175,6 +181,8 @@ class TableCurrentDataQualityStatusModel:
         schema_name = d.pop("schema_name", UNSET)
 
         table_name = d.pop("table_name", UNSET)
+
+        total_row_count = d.pop("total_row_count", UNSET)
 
         _current_severity = d.pop("current_severity", UNSET)
         current_severity: Union[Unset, RuleSeverityLevel]
@@ -237,6 +245,7 @@ class TableCurrentDataQualityStatusModel:
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,
+            total_row_count=total_row_count,
             current_severity=current_severity,
             highest_historical_severity=highest_historical_severity,
             last_check_executed_at=last_check_executed_at,

@@ -6,14 +6,14 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
+    from ..models.anomaly_stationary_percent_values_rule_error_05_pct_parameters_spec import (
+        AnomalyStationaryPercentValuesRuleError05PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
+    from ..models.anomaly_stationary_percent_values_rule_fatal_01_pct_parameters_spec import (
+        AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
+    from ..models.anomaly_stationary_percent_values_rule_warning_1_pct_parameters_spec import (
+        AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec,
     )
     from ..models.column_nulls_nulls_percent_sensor_parameters_spec import (
         ColumnNullsNullsPercentSensorParametersSpec,
@@ -54,9 +54,9 @@ class ColumnNullPercentAnomalyStationaryCheckSpec:
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
         parameters (Union[Unset, ColumnNullsNullsPercentSensorParametersSpec]):
-        warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec]):
-        error (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec]):
-        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec]):
+        warning (Union[Unset, AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec]):
+        error (Union[Unset, AnomalyStationaryPercentValuesRuleError05PctParametersSpec]):
+        fatal (Union[Unset, AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -70,13 +70,13 @@ class ColumnNullPercentAnomalyStationaryCheckSpec:
     always_collect_error_samples: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "ColumnNullsNullsPercentSensorParametersSpec"] = UNSET
     warning: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        Unset, "AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec"
     ] = UNSET
     error: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        Unset, "AnomalyStationaryPercentValuesRuleError05PctParametersSpec"
     ] = UNSET
     fatal: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+        Unset, "AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -150,14 +150,14 @@ class ColumnNullPercentAnomalyStationaryCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
+        from ..models.anomaly_stationary_percent_values_rule_error_05_pct_parameters_spec import (
+            AnomalyStationaryPercentValuesRuleError05PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
+        from ..models.anomaly_stationary_percent_values_rule_fatal_01_pct_parameters_spec import (
+            AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
+        from ..models.anomaly_stationary_percent_values_rule_warning_1_pct_parameters_spec import (
+            AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec,
         )
         from ..models.column_nulls_nulls_percent_sensor_parameters_spec import (
             ColumnNullsNullsPercentSensorParametersSpec,
@@ -205,35 +205,37 @@ class ColumnNullPercentAnomalyStationaryCheckSpec:
 
         _warning = d.pop("warning", UNSET)
         warning: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec
+            Unset, AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec
         ]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec.from_dict(
-                _warning
+            warning = (
+                AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec.from_dict(
+                    _warning
+                )
             )
 
         _error = d.pop("error", UNSET)
-        error: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec
-        ]
+        error: Union[Unset, AnomalyStationaryPercentValuesRuleError05PctParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec.from_dict(
-                _error
+            error = (
+                AnomalyStationaryPercentValuesRuleError05PctParametersSpec.from_dict(
+                    _error
+                )
             )
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec
-        ]
+        fatal: Union[Unset, AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec.from_dict(
-                _fatal
+            fatal = (
+                AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec.from_dict(
+                    _fatal
+                )
             )
 
         column_null_percent_anomaly_stationary_check_spec = cls(

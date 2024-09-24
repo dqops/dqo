@@ -97,9 +97,9 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../../sensors/column/uniqueness-column-sensors.md#distinct-count)</span>|Data quality check parameters|*[ColumnUniquenessDistinctCountSensorParametersSpec](../../sensors/column/uniqueness-column-sensors.md#distinct-count)*| | | |
-|<span class="no-wrap-code ">[`warning`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
-|<span class="no-wrap-code ">[`error`](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)</span>|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|*[AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)*| | | |
-|<span class="no-wrap-code ">[`fatal`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`warning`](./column-daily-partitioned-checks.md#anomalystationarycountvaluesrulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryCountValuesRuleWarning1PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarycountvaluesrulewarning1pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`error`](../../rules/Percentile.md#anomaly-stationary-count-values)</span>|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|*[AnomalyStationaryCountValuesRuleError05PctParametersSpec](../../rules/Percentile.md#anomaly-stationary-count-values)*| | | |
+|<span class="no-wrap-code ">[`fatal`](./column-daily-partitioned-checks.md#anomalystationarycountvaluesrulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryCountValuesRuleFatal01PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarycountvaluesrulefatal01pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`schedule_override`](../profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
 |<span class="no-wrap-code ">[`comments`](../profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](../profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|*boolean*| | | |
@@ -109,6 +109,38 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`display_name`</span>|Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|*string*| | | |
 |<span class="no-wrap-code ">`data_grouping`</span>|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|*string*| | | |
 |<span class="no-wrap-code ">`always_collect_error_samples`</span>|Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.|*boolean*| | | |
+
+
+
+___
+
+## AnomalyStationaryCountValuesRuleWarning1PctParametersSpec
+Data quality rule that detects anomalies in a stationary time series of counts of values.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
+
+
+
+___
+
+## AnomalyStationaryCountValuesRuleFatal01PctParametersSpec
+Data quality rule that detects anomalies in a stationary time series of counts of values.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the count of values (records) is an anomaly because the value is outside the regular range of counts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
 
 
 
@@ -331,9 +363,9 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../../sensors/column/numeric-column-sensors.md#sum)</span>|Data quality check parameters|*[ColumnNumericSumSensorParametersSpec](../../sensors/column/numeric-column-sensors.md#sum)*| | | |
-|<span class="no-wrap-code ">[`warning`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`warning`](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`error`](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)</span>|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|*[AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)*| | | |
-|<span class="no-wrap-code ">[`fatal`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`fatal`](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`schedule_override`](../profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
 |<span class="no-wrap-code ">[`comments`](../profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](../profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|*boolean*| | | |
@@ -343,6 +375,40 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`display_name`</span>|Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|*string*| | | |
 |<span class="no-wrap-code ">`data_grouping`</span>|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|*string*| | | |
 |<span class="no-wrap-code ">`always_collect_error_samples`</span>|Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.|*boolean*| | | |
+
+
+
+___
+
+## AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec
+Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
+ Stationary measures stay within a well-known range of values.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
+
+
+
+___
+
+## AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec
+Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
+ Stationary measures stay within a well-known range of values.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*| | | |
 
 
 
@@ -360,9 +426,9 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../../sensors/column/range-column-sensors.md#min-value)</span>|Data quality check parameters|*[ColumnNumericMinSensorParametersSpec](../../sensors/column/range-column-sensors.md#min-value)*| | | |
-|<span class="no-wrap-code ">[`warning`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`warning`](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`error`](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)</span>|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|*[AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)*| | | |
-|<span class="no-wrap-code ">[`fatal`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`fatal`](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`schedule_override`](../profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
 |<span class="no-wrap-code ">[`comments`](../profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](../profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|*boolean*| | | |
@@ -389,9 +455,9 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../../sensors/column/range-column-sensors.md#max-value)</span>|Data quality check parameters|*[ColumnNumericMaxSensorParametersSpec](../../sensors/column/range-column-sensors.md#max-value)*| | | |
-|<span class="no-wrap-code ">[`warning`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`warning`](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulewarning1pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`error`](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)</span>|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|*[AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec](../../rules/Percentile.md#anomaly-stationary-percentile-moving-average)*| | | |
-|<span class="no-wrap-code ">[`fatal`](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./table-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
+|<span class="no-wrap-code ">[`fatal`](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec](./column-daily-partitioned-checks.md#anomalystationarypercentilemovingaveragerulefatal01pctparametersspec)*| | | |
 |<span class="no-wrap-code ">[`schedule_override`](../profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
 |<span class="no-wrap-code ">[`comments`](../profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](../profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|*boolean*| | | |

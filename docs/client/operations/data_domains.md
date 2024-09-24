@@ -14,7 +14,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **POST**
 ```
-http://localhost:8888/api/domains/
+http://localhost:8888/api/domains/{dataDomainDisplayName}
 ```
 
 **Return value**
@@ -26,13 +26,13 @@ http://localhost:8888/api/domains/
 
 
 
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`data_domain_display_name`</span>|Data domain display name|*string*|:material-check-bold:|
 
 
-**Request body**
-
-|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------------------------|-----------|-----------------|
-|Data domain display name|*string*| |
 
 
 
@@ -44,11 +44,8 @@ http://localhost:8888/api/domains/
     **Execution**
 
     ```bash
-    curl -X POST http://localhost:8888/api/domains/^
-		-H "Accept: application/json"^
-		-H "Content-Type: application/json"^
-		-d^
-		"\"sample_string_value\""
+    curl -X POST http://localhost:8888/api/domains/Sales^
+		-H "Accept: application/json"
 	
     ```
 
@@ -79,11 +76,9 @@ http://localhost:8888/api/domains/
 	    'http://localhost:8888/'
 	)
 	
-	request_body = 'sample_string_value'
-	
 	call_result = create_data_domain.sync(
-	    client=dqops_client,
-	    json_body=request_body
+	    'Sales',
+	    client=dqops_client
 	)
 	
     ```
@@ -95,12 +90,7 @@ http://localhost:8888/api/domains/
         LocalDataDomainModel(
 			domain_name='sales',
 			display_name='Sales data domain',
-			created_at=OffsetDateTime(
-				offset=ZoneOffset(
-					total_seconds=0,
-					id='Z'
-				)
-			),
+			created_at='2024-09-14T18:33:00Z',
 			enable_scheduler=True
 		)
         ```
@@ -120,11 +110,9 @@ http://localhost:8888/api/domains/
 	    'http://localhost:8888/'
 	)
 	
-	request_body = 'sample_string_value'
-	
 	call_result = await create_data_domain.asyncio(
-	    client=dqops_client,
-	    json_body=request_body
+	    'Sales',
+	    client=dqops_client
 	)
 	
     ```
@@ -136,12 +124,7 @@ http://localhost:8888/api/domains/
         LocalDataDomainModel(
 			domain_name='sales',
 			display_name='Sales data domain',
-			created_at=OffsetDateTime(
-				offset=ZoneOffset(
-					total_seconds=0,
-					id='Z'
-				)
-			),
+			created_at='2024-09-14T18:33:00Z',
 			enable_scheduler=True
 		)
         ```
@@ -164,11 +147,9 @@ http://localhost:8888/api/domains/
 	    token=token
 	)
 	
-	request_body = 'sample_string_value'
-	
 	call_result = create_data_domain.sync(
-	    client=dqops_client,
-	    json_body=request_body
+	    'Sales',
+	    client=dqops_client
 	)
 	
     ```
@@ -180,12 +161,7 @@ http://localhost:8888/api/domains/
         LocalDataDomainModel(
 			domain_name='sales',
 			display_name='Sales data domain',
-			created_at=OffsetDateTime(
-				offset=ZoneOffset(
-					total_seconds=0,
-					id='Z'
-				)
-			),
+			created_at='2024-09-14T18:33:00Z',
 			enable_scheduler=True
 		)
         ```
@@ -208,11 +184,9 @@ http://localhost:8888/api/domains/
 	    token=token
 	)
 	
-	request_body = 'sample_string_value'
-	
 	call_result = await create_data_domain.asyncio(
-	    client=dqops_client,
-	    json_body=request_body
+	    'Sales',
+	    client=dqops_client
 	)
 	
     ```
@@ -224,12 +198,7 @@ http://localhost:8888/api/domains/
         LocalDataDomainModel(
 			domain_name='sales',
 			display_name='Sales data domain',
-			created_at=OffsetDateTime(
-				offset=ZoneOffset(
-					total_seconds=0,
-					id='Z'
-				)
-			),
+			created_at='2024-09-14T18:33:00Z',
 			enable_scheduler=True
 		)
         ```
@@ -459,34 +428,19 @@ http://localhost:8888/api/domains/
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			)
 		]
@@ -522,34 +476,19 @@ http://localhost:8888/api/domains/
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			)
 		]
@@ -588,34 +527,19 @@ http://localhost:8888/api/domains/
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			)
 		]
@@ -654,34 +578,19 @@ http://localhost:8888/api/domains/
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			),
 			LocalDataDomainModel(
 				domain_name='sales',
 				display_name='Sales data domain',
-				created_at=OffsetDateTime(
-					offset=ZoneOffset(
-						total_seconds=0,
-						id='Z'
-					)
-				),
+				created_at='2024-09-14T18:33:00Z',
 				enable_scheduler=True
 			)
 		]
@@ -829,7 +738,7 @@ http://localhost:8888/api/domains/{dataDomainName}/switch
 
 ___
 ## synchronize_data_domains
-Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.
+Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.
 
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_domains/synchronize_data_domains.py) to see the source code on GitHub.
 

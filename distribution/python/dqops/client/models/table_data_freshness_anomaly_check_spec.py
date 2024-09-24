@@ -6,14 +6,14 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
+    from ..models.anomaly_timeliness_delay_rule_error_05_pct_parameters_spec import (
+        AnomalyTimelinessDelayRuleError05PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
+    from ..models.anomaly_timeliness_delay_rule_fatal_01_pct_parameters_spec import (
+        AnomalyTimelinessDelayRuleFatal01PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
+    from ..models.anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
+        AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
@@ -54,9 +54,9 @@ class TableDataFreshnessAnomalyCheckSpec:
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
         parameters (Union[Unset, TableTimelinessDataFreshnessSensorParametersSpec]):
-        warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec]):
-        error (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec]):
-        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec]):
+        warning (Union[Unset, AnomalyTimelinessDelayRuleWarning1PctParametersSpec]):
+        error (Union[Unset, AnomalyTimelinessDelayRuleError05PctParametersSpec]):
+        fatal (Union[Unset, AnomalyTimelinessDelayRuleFatal01PctParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -69,15 +69,9 @@ class TableDataFreshnessAnomalyCheckSpec:
     data_grouping: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "TableTimelinessDataFreshnessSensorParametersSpec"] = UNSET
-    warning: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
-    ] = UNSET
-    error: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
-    ] = UNSET
-    fatal: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
-    ] = UNSET
+    warning: Union[Unset, "AnomalyTimelinessDelayRuleWarning1PctParametersSpec"] = UNSET
+    error: Union[Unset, "AnomalyTimelinessDelayRuleError05PctParametersSpec"] = UNSET
+    fatal: Union[Unset, "AnomalyTimelinessDelayRuleFatal01PctParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -150,14 +144,14 @@ class TableDataFreshnessAnomalyCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
+        from ..models.anomaly_timeliness_delay_rule_error_05_pct_parameters_spec import (
+            AnomalyTimelinessDelayRuleError05PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
+        from ..models.anomaly_timeliness_delay_rule_fatal_01_pct_parameters_spec import (
+            AnomalyTimelinessDelayRuleFatal01PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
+        from ..models.anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
+            AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
@@ -204,37 +198,27 @@ class TableDataFreshnessAnomalyCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec
-        ]
+        warning: Union[Unset, AnomalyTimelinessDelayRuleWarning1PctParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec.from_dict(
+            warning = AnomalyTimelinessDelayRuleWarning1PctParametersSpec.from_dict(
                 _warning
             )
 
         _error = d.pop("error", UNSET)
-        error: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec
-        ]
+        error: Union[Unset, AnomalyTimelinessDelayRuleError05PctParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec.from_dict(
-                _error
-            )
+            error = AnomalyTimelinessDelayRuleError05PctParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec
-        ]
+        fatal: Union[Unset, AnomalyTimelinessDelayRuleFatal01PctParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec.from_dict(
-                _fatal
-            )
+            fatal = AnomalyTimelinessDelayRuleFatal01PctParametersSpec.from_dict(_fatal)
 
         table_data_freshness_anomaly_check_spec = cls(
             schedule_override=schedule_override,
