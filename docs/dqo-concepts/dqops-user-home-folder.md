@@ -459,7 +459,7 @@ The initial content of the DQOps user home folder contains two YAML configuratio
 
 - [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md)
   file containing the default configuration of 
-  [data observability checks](data-observability.md) activated for all columns.
+  [data observability checks](data-observability.md) activated for all tables.
 
 The data quality policy files are stored in the *patterns* folder, as shown in the following example of the folder structure.
 
