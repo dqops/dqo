@@ -97,6 +97,12 @@ public class DqoUserProfileModel {
     private Integer jobsLimit;
 
     /**
+     * Limit of the number of supported data domains in an ENTERPRISE version of DQOps.
+     */
+    @JsonPropertyDescription("Limit of the number of supported data domains in an ENTERPRISE version of DQOps.")
+    private Integer dataDomainsLimit;
+
+    /**
      * User role that limits possible operations that the current user can perform.
      */
     @JsonPropertyDescription("User role that limits possible operations that the current user can perform.")
@@ -248,6 +254,7 @@ public class DqoUserProfileModel {
             model.setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
             model.setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
             model.setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+            model.setDataDomainsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.DATA_DOMAINS_LIMIT));
             model.setDataQualityDataWarehouseEnabled(dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == null ||
                     dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == true);
             model.setCanChangeOwnPassword(true);

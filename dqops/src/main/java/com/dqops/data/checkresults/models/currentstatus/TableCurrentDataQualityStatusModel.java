@@ -175,6 +175,9 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      * Analyzes all table level checks and column level checks to calculate the highest severity level at a table level.
      */
     public void calculateHighestCurrentAndHistoricSeverity() {
+        this.currentSeverity = null;
+        this.highestHistoricalSeverity = null;
+
         for (ColumnCurrentDataQualityStatusModel columnModel : this.columns.values()) {
             columnModel.calculateHighestCurrentAndHistoricSeverity();
 
@@ -273,6 +276,8 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      * Calculates the status for each data quality dimension, aggregates statuses of data quality checks for each data quality dimension.
      */
     public void calculateStatusesForDataQualityDimensions() {
+        this.dimensions.clear();
+
         for (ColumnCurrentDataQualityStatusModel columnModel : this.columns.values()) {
             columnModel.calculateStatusesForDimensions();
 
@@ -375,6 +380,45 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         tableStatusClone.checks = null; // detaching checks
         tableStatusClone.columns = null; // detaching columns
         return tableStatusClone;
+    }
+
+    /**
+     * Appends results from another table to find the highest severity issues. When this table and the appended tables have the same
+     * columns or checks, picks the highest severity of both.
+     * This operation is used to calculate a cumulative data quality status that includes the statuses of source tables along the upstream data lineage.
+     * @param upstreamTableResults Data quality status from another table.
+     */
+    public void appendResultsFromUpstreamTable(TableCurrentDataQualityStatusModel upstreamTableResults) {
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> otherCheckEntry : upstreamTableResults.getChecks().entrySet()) {
+            CheckCurrentDataQualityStatusModel currentCheckStatus = this.checks.get(otherCheckEntry.getKey());
+            if (currentCheckStatus == null) {
+                this.checks.put(otherCheckEntry.getKey(), otherCheckEntry.getValue());
+            } else {
+                currentCheckStatus.appendCheckFromUpstreamTable(otherCheckEntry.getValue());
+            }
+        }
+
+        for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> otherColumn : upstreamTableResults.getColumns().entrySet()) {
+            ColumnCurrentDataQualityStatusModel myTableColumn = this.columns.get(otherColumn.getKey());
+            if (myTableColumn == null) {
+                this.columns.put(otherColumn.getKey(), otherColumn.getValue());
+                continue;
+            }
+
+            for (Map.Entry<String, CheckCurrentDataQualityStatusModel> otherCheckEntry : otherColumn.getValue().getChecks().entrySet()) {
+                CheckCurrentDataQualityStatusModel currentCheckStatus = myTableColumn.getChecks().get(otherCheckEntry.getKey());
+
+                if (currentCheckStatus == null) {
+                    myTableColumn.getChecks().put(otherCheckEntry.getKey(), otherCheckEntry.getValue());
+                } else {
+                    currentCheckStatus.appendCheckFromUpstreamTable(otherCheckEntry.getValue());
+                }
+            }
+        }
+
+        countIssuesFromCheckResults();
+        calculateHighestCurrentAndHistoricSeverity();
+        calculateStatusesForDataQualityDimensions();
     }
 
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {

@@ -17,12 +17,20 @@
 package com.dqops.metadata.lineage.lineagecache;
 
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
  * A key object that identifies a source table in a data lineage. These keys are used in a data lineage cache to store
  * information about downstream tables.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ApiModel(value = "TableLineageCacheKey", description = "The table lineage key that identifies a table..")
 @Data
 @lombok.EqualsAndHashCode
 @lombok.ToString
@@ -30,16 +38,19 @@ public final class TableLineageCacheKey {
     /**
      * Data domain name.
      */
+    @JsonPropertyDescription("Data domain name.")
     private final String dataDomain;
 
     /**
      * Connection name.
      */
+    @JsonPropertyDescription("Connection name.")
     private final String connectionName;
 
     /**
      * Physical table name.
      */
+    @JsonPropertyDescription("Full table name, including the schema and the table names.")
     private final PhysicalTableName physicalTableName;
 
     /**
@@ -52,5 +63,14 @@ public final class TableLineageCacheKey {
         this.dataDomain = dataDomain;
         this.connectionName = connectionName;
         this.physicalTableName = physicalTableName;
+    }
+
+    /**
+     * Returns a table key within the data domain that identifies the table. It is based on the connection, schema and table names.
+     * @return The table key a a single string.
+     */
+    @JsonPropertyDescription("A string key that identifies the table within the data domain. It is based on the connection, schema and table names.")
+    public String getTableDomainKey() {
+        return this.connectionName + "." + this.physicalTableName.getSchemaName() + "." + this.physicalTableName.getTableName();
     }
 }

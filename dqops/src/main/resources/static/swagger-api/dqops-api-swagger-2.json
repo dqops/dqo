@@ -37811,6 +37811,11 @@
           "format" : "int32",
           "description" : "Limit of the number of supported concurrent jobs that DQOps can run in parallel on this instance."
         },
+        "data_domains_limit" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Limit of the number of supported data domains in an ENTERPRISE version of DQOps."
+        },
         "account_role" : {
           "type" : "string",
           "description" : "User role that limits possible operations that the current user can perform.",

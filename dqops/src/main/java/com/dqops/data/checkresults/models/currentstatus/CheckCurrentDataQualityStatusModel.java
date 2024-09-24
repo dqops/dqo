@@ -166,6 +166,22 @@ public class CheckCurrentDataQualityStatusModel{
         }
     }
 
+    /**
+     * Appends the results from another instance of this check that was performed on an upstream table (on the data lineage).
+     * Generates an overall data quality status from this table and the upstream table, using the highest severity levels of both tables.
+     * @param upstreamCheckStatus The result of the same check on an upstream table.
+     */
+    public void appendCheckFromUpstreamTable(CheckCurrentDataQualityStatusModel upstreamCheckStatus) {
+        this.currentSeverity = CheckResultStatus.max(this.currentSeverity, upstreamCheckStatus.currentSeverity);
+        this.highestHistoricalSeverity = RuleSeverityLevel.max(this.highestHistoricalSeverity, upstreamCheckStatus.highestHistoricalSeverity);
+        this.executedChecks += upstreamCheckStatus.executedChecks;
+        this.validResults += upstreamCheckStatus.validResults;
+        this.warnings += upstreamCheckStatus.warnings;
+        this.errors += upstreamCheckStatus.errors;
+        this.fatals += upstreamCheckStatus.fatals;
+        this.executionErrors += upstreamCheckStatus.executionErrors;
+    }
+
     public static class CheckCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<CheckCurrentDataQualityStatusModel> {
         @Override
         public CheckCurrentDataQualityStatusModel createSample() {
