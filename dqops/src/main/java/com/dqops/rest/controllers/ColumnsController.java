@@ -33,7 +33,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.currentstatus.ColumnCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
-import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
@@ -180,7 +180,7 @@ public class ColumnsController {
 
             if (dataQualityStatus.isEmpty() || dataQualityStatus.get()) {
                 columnModelsList.forEach(listModel -> {
-                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                    DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                             listModel.getConnectionName(), listModel.getTable());
                     TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                     if (currentTableStatus != null) {
@@ -197,7 +197,7 @@ public class ColumnsController {
                             .thenMany(Flux.fromIterable(columnModelsList)
                                     .map(columnListModel -> {
                                         if (columnListModel.getDataQualityStatus() == null) {
-                                            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                            DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                     columnListModel.getConnectionName(), columnListModel.getTable());
                                             TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                             if (currentTableStatus != null) {

@@ -329,6 +329,30 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     }
 
     /**
+     * Creates a deep clone of the object.
+     * @return Deep cloned object.
+     */
+    public TableCurrentDataQualityStatusModel deepClone() {
+        TableCurrentDataQualityStatusModel cloned = this.clone();
+        cloned.checks = new LinkedHashMap<>();
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> checkEntry : this.checks.entrySet()) {
+            cloned.checks.put(checkEntry.getKey(), checkEntry.getValue().clone());
+        }
+
+        cloned.columns = new LinkedHashMap<>();
+        for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> columnEntry : this.columns.entrySet()) {
+            cloned.columns.put(columnEntry.getKey(), columnEntry.getValue().deepClone());
+        }
+
+        cloned.dimensions = new LinkedHashMap<>();
+        for (Map.Entry<String, DimensionCurrentDataQualityStatusModel> dimensionEntry : this.dimensions.entrySet()) {
+            cloned.dimensions.put(dimensionEntry.getKey(), dimensionEntry.getValue().clone());
+        }
+
+        return cloned;
+    }
+
+    /**
      * Creates a deep clone of the table status model, preserving only the checks for an expected check type.
      * All scores and the data quality KPI is recalculated for the checks that left.
      * @param checkFilter Check filter that filters the checks that should be preserved.
@@ -419,6 +443,8 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         countIssuesFromCheckResults();
         calculateHighestCurrentAndHistoricSeverity();
         calculateStatusesForDataQualityDimensions();
+
+        this.tableExist = this.tableExist && upstreamTableResults.tableExist;
     }
 
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {

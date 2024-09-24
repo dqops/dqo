@@ -66,7 +66,7 @@ public class DataLineageControllerUTTests extends BaseTest {
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new DataLineageController(this.userHomeContextFactory, new RestApiLockServiceImpl(), new TableStatusCacheStub());
+        this.sut = new DataLineageController(this.userHomeContextFactory, new RestApiLockServiceImpl(), new TableStatusCacheStub(), null);
         this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity, false);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(

@@ -22,6 +22,7 @@ import com.dqops.data.checkresults.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -44,7 +45,7 @@ import java.time.ZoneId;
           "If data grouping is enabled, the *current_severity* will be the highest data quality issue status from all data quality results for all data groups. " +
           "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
 @Data
-public class CheckCurrentDataQualityStatusModel{
+public class CheckCurrentDataQualityStatusModel implements Cloneable {
     /**
      * The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check,
      * sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor's template or a Python rule.
@@ -180,6 +181,19 @@ public class CheckCurrentDataQualityStatusModel{
         this.errors += upstreamCheckStatus.errors;
         this.fatals += upstreamCheckStatus.fatals;
         this.executionErrors += upstreamCheckStatus.executionErrors;
+    }
+
+    /**
+     * Makes a shallow clone of the object.
+     * @return Shallow clone of the object.
+     */
+    public CheckCurrentDataQualityStatusModel clone() {
+        try {
+            return (CheckCurrentDataQualityStatusModel)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 
     public static class CheckCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<CheckCurrentDataQualityStatusModel> {

@@ -34,7 +34,7 @@ public class TableStatusCacheStub implements TableStatusCache {
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatus(DomainConnectionTableKey tableStatusKey, CheckType checkType) {
         TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
         return statusModel;
     }
@@ -46,7 +46,7 @@ public class TableStatusCacheStub implements TableStatusCache {
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(DomainConnectionTableKey tableStatusKey) {
         TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
         return statusModel;
     }
@@ -59,7 +59,7 @@ public class TableStatusCacheStub implements TableStatusCache {
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     @Override
-    public void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile) {
+    public void invalidateTableStatus(DomainConnectionTableKey tableStatusKey, boolean replacingCachedFile) {
 
     }
 

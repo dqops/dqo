@@ -23,7 +23,7 @@ import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityS
  * or a load was queued.
  */
 public class CurrentTableStatusCacheEntry {
-    private CurrentTableStatusKey key;
+    private DomainConnectionTableKey key;
     private final Object lock = new Object();
     private CurrentTableStatusEntryStatus status;
     private TableCurrentDataQualityStatusModel allCheckTypesWithColumns;
@@ -37,7 +37,7 @@ public class CurrentTableStatusCacheEntry {
      * @param key Key that identifies the table.
      * @param status Current status.
      */
-    public CurrentTableStatusCacheEntry(CurrentTableStatusKey key, CurrentTableStatusEntryStatus status) {
+    public CurrentTableStatusCacheEntry(DomainConnectionTableKey key, CurrentTableStatusEntryStatus status) {
         this.key = key;
         this.status = status;
     }
@@ -46,7 +46,7 @@ public class CurrentTableStatusCacheEntry {
      * Returns the key that identifies the table.
      * @return Key.
      */
-    public CurrentTableStatusKey getKey() {
+    public DomainConnectionTableKey getKey() {
         return key;
     }
 
@@ -75,7 +75,9 @@ public class CurrentTableStatusCacheEntry {
      * @return Current table status for all check types.
      */
     public TableCurrentDataQualityStatusModel getAllCheckTypesWithColumns() {
-        return allCheckTypesWithColumns;
+        synchronized (this.lock) {
+            return allCheckTypesWithColumns;
+        }
     }
 
     /**
@@ -83,7 +85,9 @@ public class CurrentTableStatusCacheEntry {
      * @return The quality status for monitoring and partitioned checks only.
      */
     public TableCurrentDataQualityStatusModel getMonitoringAndPartitionedTableOnly() {
-        return monitoringAndPartitionedTableOnly;
+        synchronized (this.lock) {
+            return monitoringAndPartitionedTableOnly;
+        }
     }
 
     /**
@@ -91,7 +95,9 @@ public class CurrentTableStatusCacheEntry {
      * @return The status of the table, for profiling checks only.
      */
     public TableCurrentDataQualityStatusModel getProfilingTableOnly() {
-        return profilingTableOnly;
+        synchronized (this.lock) {
+            return profilingTableOnly;
+        }
     }
 
     /**
@@ -99,7 +105,9 @@ public class CurrentTableStatusCacheEntry {
      * @return The status of the table, for monitoring checks only.
      */
     public TableCurrentDataQualityStatusModel getMonitoringTableOnly() {
-        return monitoringTableOnly;
+        synchronized (this.lock) {
+            return monitoringTableOnly;
+        }
     }
 
     /**
@@ -107,7 +115,9 @@ public class CurrentTableStatusCacheEntry {
      * @return The status of the table, for partitioned checks only.
      */
     public TableCurrentDataQualityStatusModel getPartitionedTableOnly() {
-        return partitionedTableOnly;
+        synchronized (this.lock) {
+            return partitionedTableOnly;
+        }
     }
 
     /**

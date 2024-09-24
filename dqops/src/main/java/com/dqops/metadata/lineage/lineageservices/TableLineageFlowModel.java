@@ -18,7 +18,7 @@ package com.dqops.metadata.lineage.lineageservices;
 
 
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
-import com.dqops.metadata.lineage.lineagecache.TableLineageCacheKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,13 +38,13 @@ public class TableLineageFlowModel {
      * The source table.
      */
     @JsonPropertyDescription("The source table.")
-    private TableLineageCacheKey sourceTable;
+    private DomainConnectionTableKey sourceTable;
 
     /**
      * The target table.
      */
     @JsonPropertyDescription("The target table.")
-    private TableLineageCacheKey targetTable;
+    private DomainConnectionTableKey targetTable;
 
     /**
      * The current data quality status of the source table.
@@ -57,4 +57,24 @@ public class TableLineageFlowModel {
      */
     @JsonPropertyDescription("The data quality status identified from the data quality status of all upstream tables.")
     private TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus;
+
+    public TableLineageFlowModel() {
+    }
+
+    /**
+     * Create a new flow from a source table to a target table.
+     * @param sourceTable Source table (upstream).
+     * @param targetTable Target table (downstream).
+     * @param sourceTableQualityStatus The current table data quality status of the source table (if present).
+     * @param upstreamCombinedQualityStatus The combined data quality status of the target table, including the worst status of the upstream tables.
+     */
+    public TableLineageFlowModel(DomainConnectionTableKey sourceTable,
+                                 DomainConnectionTableKey targetTable,
+                                 TableCurrentDataQualityStatusModel sourceTableQualityStatus,
+                                 TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus) {
+        this.sourceTable = sourceTable;
+        this.targetTable = targetTable;
+        this.sourceTableQualityStatus = sourceTableQualityStatus;
+        this.upstreamCombinedQualityStatus = upstreamCombinedQualityStatus;
+    }
 }

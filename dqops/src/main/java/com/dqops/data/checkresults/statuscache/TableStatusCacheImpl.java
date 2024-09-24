@@ -53,13 +53,13 @@ import java.util.concurrent.TimeUnit;
 public class TableStatusCacheImpl implements TableStatusCache {
     public static int SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE = 1000000; // the number of awaiting operations in the backpressure buffer (queue)
 
-    private final Cache<CurrentTableStatusKey, CurrentTableStatusCacheEntry> tableStatusCache;
+    private final Cache<DomainConnectionTableKey, CurrentTableStatusCacheEntry> tableStatusCache;
     private final DqoCacheConfigurationProperties dqoCacheConfigurationProperties;
     private final DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
     private final CheckResultsDataService checkResultsDataService;
     private final UserDomainIdentityFactory userDomainIdentityFactory;
     private boolean started;
-    private Sinks.Many<CurrentTableStatusKey> loadTableStatusRequestSink;
+    private Sinks.Many<DomainConnectionTableKey> loadTableStatusRequestSink;
     private Disposable subscription;
     private int queuedOperationsCount;
     private final Object lock = new Object();
@@ -103,7 +103,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
      * @param tableStatusKey Table status key.
      * @return Table status cache entry.
      */
-    protected CurrentTableStatusCacheEntry loadEntryCore(CurrentTableStatusKey tableStatusKey) {
+    protected CurrentTableStatusCacheEntry loadEntryCore(DomainConnectionTableKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = new CurrentTableStatusCacheEntry(tableStatusKey, CurrentTableStatusEntryStatus.LOADING_QUEUED);
         if (this.loadTableStatusRequestSink != null) {
             this.loadTableStatusRequestSink.emitNext(tableStatusKey, createFailureHandler());
@@ -119,7 +119,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(DomainConnectionTableKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
         return currentTableStatusCacheEntry.getAllCheckTypesWithColumns();
     }
@@ -132,7 +132,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatus(DomainConnectionTableKey tableStatusKey, CheckType checkType) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
         if (checkType == null) {
             return currentTableStatusCacheEntry.getMonitoringAndPartitionedTableOnly();
@@ -157,7 +157,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     @Override
-    public void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile) {
+    public void invalidateTableStatus(DomainConnectionTableKey tableStatusKey, boolean replacingCachedFile) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
         CurrentTableStatusEntryStatus currentEntryStatus = currentTableStatusCacheEntry.getStatus();
 
@@ -224,7 +224,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
      * Loads a table status or refreshes a table status.
      * @param tableStatusKey Table status key.
      */
-    public void onRequestLoadTableStatus(CurrentTableStatusKey tableStatusKey) {
+    public void onRequestLoadTableStatus(DomainConnectionTableKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
 
         try {
@@ -281,7 +281,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.queueEmptyFuture.complete(0);
 
         this.loadTableStatusRequestSink = Sinks.many().multicast().onBackpressureBuffer();
-        Flux<List<CurrentTableStatusKey>> requestLoadFlux = this.loadTableStatusRequestSink.asFlux()
+        Flux<List<DomainConnectionTableKey>> requestLoadFlux = this.loadTableStatusRequestSink.asFlux()
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
                 .buffer(Duration.ofMillis(TableStatusCache.BATCH_COLLECTION_TIMEOUT_MS));  // wait 50 millis, maybe multiple file system updates are made, like changing multiple parquet files... we want to merge all file changes
         int concurrency = Runtime.getRuntime().availableProcessors();

@@ -16,7 +16,7 @@
 
 package com.dqops.metadata.lineage.lineageservices;
 
-import com.dqops.metadata.lineage.lineagecache.TableLineageCacheKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -39,7 +39,7 @@ public class TableLineageModel {
      * The table for which the data lineage is generated.
      */
     @JsonPropertyDescription("The table for which the data lineage is generated.")
-    private TableLineageCacheKey relativeTable;
+    private DomainConnectionTableKey relativeTable;
 
     /**
      * A list of data flows from source tables to direct target tables. Describes the data quality status of the source table.

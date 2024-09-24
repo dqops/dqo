@@ -209,6 +209,26 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     }
 
     /**
+     * Makes a deep clone of the object.
+     * @return Deep clone of the object.
+     */
+    public ColumnCurrentDataQualityStatusModel deepClone() {
+        ColumnCurrentDataQualityStatusModel cloned = this.clone();
+
+        cloned.checks = new LinkedHashMap<>();
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> checkEntry : this.checks.entrySet()) {
+            cloned.checks.put(checkEntry.getKey(), checkEntry.getValue().clone());
+        }
+
+        cloned.dimensions = new LinkedHashMap<>();
+        for (Map.Entry<String, DimensionCurrentDataQualityStatusModel> dimensionEntry : this.dimensions.entrySet()) {
+            cloned.dimensions.put(dimensionEntry.getKey(), dimensionEntry.getValue().clone());
+        }
+
+        return cloned;
+    }
+
+    /**
      * Creates a shallow clone of the object, without the dictionary of check results.
      * @return Shallow clone, without the check results.
      */

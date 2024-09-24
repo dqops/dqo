@@ -22,7 +22,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.currentstatus.ColumnCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
-import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.search.ColumnSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -183,7 +183,7 @@ public class SearchController {
                     .collect(Collectors.toList());
 
             tableModelsList.forEach(listModel -> {
-                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getConnectionName(), listModel.getTarget());
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                 listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
@@ -197,7 +197,7 @@ public class SearchController {
                         .thenMany(Flux.fromIterable(tableModelsList)
                                 .map(tableListModel -> {
                                     if (tableListModel.getDataQualityStatus() == null) {
-                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                        DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                 tableListModel.getConnectionName(), tableListModel.getTarget());
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                         tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
@@ -317,7 +317,7 @@ public class SearchController {
                     .collect(Collectors.toList());
 
             columnModelsList.forEach(listModel -> {
-                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getConnectionName(), listModel.getTable());
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                 if (currentTableStatus != null) {
@@ -335,7 +335,7 @@ public class SearchController {
                         .thenMany(Flux.fromIterable(columnModelsList)
                                 .map(listModel -> {
                                     if (listModel.getDataQualityStatus() == null) {
-                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                        DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                 listModel.getConnectionName(), listModel.getTable());
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                         if (currentTableStatus != null) {

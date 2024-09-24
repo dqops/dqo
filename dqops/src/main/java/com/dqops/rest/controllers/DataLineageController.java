@@ -21,11 +21,13 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
-import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.lineage.TableLineageSource;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
 import com.dqops.metadata.lineage.TableLineageSourceSpecList;
+import com.dqops.metadata.lineage.lineageservices.TableLineageModel;
+import com.dqops.metadata.lineage.lineageservices.TableLineageService;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -62,7 +64,8 @@ import java.util.stream.Collectors;
 public class DataLineageController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final RestApiLockService lockService;
-    private TableStatusCache tableStatusCache;
+    private final TableStatusCache tableStatusCache;
+    private final TableLineageService tableLineageService;
 
     /**
      * Default dependency injection constructor.
@@ -70,15 +73,73 @@ public class DataLineageController {
      * @param userHomeContextFactory DQOps user home factory.
      * @param lockService            REST API lock service to avoid updating the same table yaml in two threads.
      * @param tableStatusCache       The cache of last known data quality status for a table.
+     * @param tableLineageService    Table lineage service to return the current table lineage.
      */
     @Autowired
     public DataLineageController(
             UserHomeContextFactory userHomeContextFactory,
             RestApiLockService lockService,
-            TableStatusCache tableStatusCache) {
+            TableStatusCache tableStatusCache,
+            TableLineageService tableLineageService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.lockService = lockService;
         this.tableStatusCache = tableStatusCache;
+        this.tableLineageService = tableLineageService;
+    }
+
+    /**
+     * Returns a data lineage around the given table.
+     * @param principal      User principal.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name
+     * @param upstream       Collect upstream tables.
+     * @param downstream     Collect downstream tables.
+     * @return Returns a data lineage around the given table, including the table quality statues.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/tree", produces = "application/json")
+    @ApiOperation(value = "getTableDataLineageGraph", notes = "Returns a data lineage graph around the given table.", response = TableLineageModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = TableLineageModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Mono<TableLineageModel>>> getTableDataLineageGraph(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "upstream", value = "Optional parameter to request upstream tables. By default, upstream tables are collected unless it is disabled by passing 'false'.", required = false)
+            @RequestParam(required = false) Optional<Boolean> upstream,
+            @ApiParam(name = "downstream", value = "Optional parameter to request downstream tables. By default, downstream tables are collected unless it is disabled by passing 'false'.", required = false)
+            @RequestParam(required = false) Optional<Boolean> downstream) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            DomainConnectionTableKey targetTableKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(), connectionName, physicalTableName);
+            TableLineageModel tableLineageModel = this.tableLineageService.buildDataLineageModel(targetTableKey, upstream.orElse(true), downstream.orElse(true));
+
+            return new ResponseEntity<>(Mono.justOrEmpty(tableLineageModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -88,7 +149,7 @@ public class DataLineageController {
      * @param tableName      Table name
      * @return List of source tables on the data lineage that are sources of the given table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources", produces = "application/json")
     @ApiOperation(value = "getTableSourceTables", notes = "Returns a list of source tables on the data lineage that are sources of the given table.", response = TableLineageSourceListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -155,7 +216,7 @@ public class DataLineageController {
                     return;
                 }
 
-                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getSourceConnection(), new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()));
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                 listModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
@@ -169,7 +230,7 @@ public class DataLineageController {
                         .thenMany(Flux.fromIterable(sourceTables)
                                 .map(tableListModel -> {
                                     if (tableListModel.getSourceTableDataQualityStatus() == null) {
-                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                        DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                 tableListModel.getSourceConnection(), new PhysicalTableName(tableListModel.getSourceSchema(), tableListModel.getSourceTable()));
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                         tableListModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
@@ -194,7 +255,7 @@ public class DataLineageController {
      * @param sourceTable                   Source table name.
      * @return Source table specification.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", produces = "application/json")
     @ApiOperation(value = "getTableSourceTable", notes = "Reads a specific data lineage source table defined on a target tale.", response = TableLineageSourceSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -255,7 +316,7 @@ public class DataLineageController {
      * @param updatedSourceTableLineage   The model object.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}",
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}",
             consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateTableSourceTable", notes = "Update a specific data lineage source table using a new model.", response = Void.class,
             authorizations = {
@@ -335,7 +396,7 @@ public class DataLineageController {
      * @param newSourceTableLineage   The model object.
      * @return Empty response.
      */
-    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}",
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}",
             consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createTableSourceTable", notes = "Creates a new source table of the table's data lineage.", response = Void.class,
             authorizations = {
@@ -411,7 +472,7 @@ public class DataLineageController {
      * @param sourceTable                   Source table name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", produces = "application/json")
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}", produces = "application/json")
     @ApiOperation(value = "deleteTableSourceTable", notes = "Deletes a specific data lineage source table of the given table.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

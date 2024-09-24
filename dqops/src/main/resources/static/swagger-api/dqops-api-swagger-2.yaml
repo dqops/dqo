@@ -6508,7 +6508,7 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage:
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources:
     get:
       tags:
       - "DataLineage"
@@ -6560,7 +6560,7 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
-  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
   : get:
       tags:
       - "DataLineage"
@@ -6796,6 +6796,56 @@ paths:
           description: "Connection or table's source table not found"
         406:
           description: "Invalid request"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/tree:
+    get:
+      tags:
+      - "DataLineage"
+      summary: "getTableDataLineageGraph"
+      description: "Returns a data lineage graph around the given table."
+      operationId: "getTableDataLineageGraph"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "upstream"
+        in: "query"
+        description: "Optional parameter to request upstream tables. By default, upstream\
+          \ tables are collected unless it is disabled by passing 'false'."
+        required: false
+        type: "boolean"
+      - name: "downstream"
+        in: "query"
+        description: "Optional parameter to request downstream tables. By default,\
+          \ downstream tables are collected unless it is disabled by passing 'false'."
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/TableLineageModel"
+        404:
+          description: "Connection or table not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -36150,6 +36200,24 @@ definitions:
           \ KPI score is a value in the range 0..100."
     description: "The summary of the current data quality status for one data quality\
       \ dimension"
+  DomainConnectionTableKey:
+    type: "object"
+    properties:
+      data_domain:
+        type: "string"
+        description: "Data domain name."
+      connection_name:
+        type: "string"
+        description: "Connection name."
+      physical_table_name:
+        description: "Full table name, including the schema and the table names."
+        $ref: "#/definitions/PhysicalTableName"
+      compact_key:
+        type: "string"
+        description: "A string key that identifies the table within the data domain.\
+          \ It is based on the connection, schema and table names."
+    description: "Table key that identifies a table in the data quality cache or a\
+      \ data lineage cache."
   DqoJobChangeModel:
     type: "object"
     properties:
@@ -41100,6 +41168,38 @@ definitions:
         type: "boolean"
         description: "Disables data quality incident creation for failed data quality\
           \ checks on the table."
+  TableLineageFlowModel:
+    type: "object"
+    properties:
+      source_table:
+        description: "The source table."
+        $ref: "#/definitions/DomainConnectionTableKey"
+      target_table:
+        description: "The target table."
+        $ref: "#/definitions/DomainConnectionTableKey"
+      source_table_quality_status:
+        description: "The current data quality status of the source table."
+        $ref: "#/definitions/TableCurrentDataQualityStatusModel"
+      upstream_combined_quality_status:
+        description: "The data quality status identified from the data quality status\
+          \ of all upstream tables."
+        $ref: "#/definitions/TableCurrentDataQualityStatusModel"
+    description: "Table lineage flow model that describes the data flow from one table\
+      \ to another table, and the data quality status of the source table."
+  TableLineageModel:
+    type: "object"
+    properties:
+      relative_table:
+        description: "The table for which the data lineage is generated."
+        $ref: "#/definitions/DomainConnectionTableKey"
+      flows:
+        type: "array"
+        description: "A list of data flows from source tables to direct target tables.\
+          \ Describes the data quality status of the source table."
+        items:
+          $ref: "#/definitions/TableLineageFlowModel"
+    description: "The table lineage model that returns all upstream tables, downstream\
+      \ tables, or both."
   TableLineageSourceListModel:
     type: "object"
     properties:

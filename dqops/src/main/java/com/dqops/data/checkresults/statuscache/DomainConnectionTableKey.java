@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.metadata.lineage.lineagecache;
+package com.dqops.data.checkresults.statuscache;
 
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,16 +25,16 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * A key object that identifies a source table in a data lineage. These keys are used in a data lineage cache to store
- * information about downstream tables.
+ * A key object that identifies every table. These keys are used in a cache to store the most recent
+ * table quality status for each table or a data lineage cache.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableLineageCacheKey", description = "The table lineage key that identifies a table..")
+@ApiModel(value = "DomainConnectionTableKey", description = "Table key that identifies a table in the data quality cache or a data lineage cache.")
 @Data
 @lombok.EqualsAndHashCode
 @lombok.ToString
-public final class TableLineageCacheKey {
+public final class DomainConnectionTableKey {
     /**
      * Data domain name.
      */
@@ -54,12 +54,12 @@ public final class TableLineageCacheKey {
     private final PhysicalTableName physicalTableName;
 
     /**
-     * Creates a source table lineage key.
+     * Creates a table status key.
      * @param dataDomain Data domain name.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
      */
-    public TableLineageCacheKey(String dataDomain, String connectionName, PhysicalTableName physicalTableName) {
+    public DomainConnectionTableKey(String dataDomain, String connectionName, PhysicalTableName physicalTableName) {
         this.dataDomain = dataDomain;
         this.connectionName = connectionName;
         this.physicalTableName = physicalTableName;
@@ -67,10 +67,10 @@ public final class TableLineageCacheKey {
 
     /**
      * Returns a table key within the data domain that identifies the table. It is based on the connection, schema and table names.
-     * @return The table key a a single string.
+     * @return The table key a single string.
      */
     @JsonPropertyDescription("A string key that identifies the table within the data domain. It is based on the connection, schema and table names.")
-    public String getTableDomainKey() {
+    public String getCompactKey() {
         return this.connectionName + "." + this.physicalTableName.getSchemaName() + "." + this.physicalTableName.getTableName();
     }
 }
