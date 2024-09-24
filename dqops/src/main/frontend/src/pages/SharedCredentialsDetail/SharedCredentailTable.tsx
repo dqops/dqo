@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SharedCredentialListModel } from '../../api';
@@ -62,7 +62,11 @@ export default function SharedCredentialTable({
                   className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   disabled={userProfile.can_manage_definitions !== true}
                 >
-                  <SvgIcon name="edit" className="w-4" />
+                  <Tooltip content="Modify">
+                    <div>
+                      <SvgIcon name="edit" className="w-4" />
+                    </div>
+                  </Tooltip>
                 </IconButton>
               </td>
               <td className="px-2 py-2 text-left block max-w-100">
@@ -79,7 +83,11 @@ export default function SharedCredentialTable({
                     ripple={false}
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
-                    <SvgIcon name="download" className="w-4" />
+                    <Tooltip content="Download">
+                      <div>
+                        <SvgIcon name="download" className="w-4" />
+                      </div>
+                    </Tooltip>
                   </IconButton>
                 </a>
               </td>
@@ -95,7 +103,11 @@ export default function SharedCredentialTable({
                   color="teal"
                   className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                 >
-                  <SvgIcon name="delete" className="w-4" />
+                  <Tooltip content="Delete">
+                    <div>
+                      <SvgIcon name="delete" className="w-4" />
+                    </div>
+                  </Tooltip>
                 </IconButton>
               </td>
             </tr>

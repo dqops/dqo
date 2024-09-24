@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DqoUserRolesModel, DqoUserRolesModelAccountRoleEnum } from '../../api';
@@ -126,7 +126,7 @@ export default function UserListDetail() {
                 {user.accountRole}
               </td>
               <td className="px-6 py-2 text-left block max-w-100">
-                <div className="flex items-center gap-x-4">
+                <div className="flex items-center gap-x-4 relative">
                   {userProfile.license_type?.toLowerCase() !== 'free' ? (
                     <IconButton
                       size="sm"
@@ -144,12 +144,34 @@ export default function UserListDetail() {
                       className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       disabled={!canUserPerformActions}
                     >
-                      <SvgIcon name="edit" className="w-4" />
+                      <Tooltip content="Modify">
+                        <div>
+                          <SvgIcon name="edit" className="w-4" />
+                        </div>
+                      </Tooltip>
                     </IconButton>
                   ) : (
                     <div className="w-24"></div>
                   )}
 
+                  <IconButton
+                    size="sm"
+                    onClick={() =>
+                      setSelectedEmailToChangePassword(user.email ?? '')
+                    }
+                    disabled={
+                      userProfile.account_role !== 'admin' &&
+                      !canUserPerformActions
+                    }
+                    color="teal"
+                    className="!shadow-none hover:!shadow-none hover:bg-[#028770] relative"
+                  >
+                    <Tooltip content="Change password" className="">
+                      <div>
+                        <SvgIcon name="password_change" className="w-4" />
+                      </div>
+                    </Tooltip>
+                  </IconButton>
                   <IconButton
                     size="sm"
                     onClick={() => setSelectedEmailToDelete(user.email ?? '')}
@@ -163,22 +185,11 @@ export default function UserListDetail() {
                     color="teal"
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   >
-                    <SvgIcon name="delete" className="w-4" />
-                  </IconButton>
-
-                  <IconButton
-                    size="sm"
-                    onClick={() =>
-                      setSelectedEmailToChangePassword(user.email ?? '')
-                    }
-                    disabled={
-                      userProfile.account_role !== 'admin' &&
-                      !canUserPerformActions
-                    }
-                    color="teal"
-                    className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                  >
-                    <SvgIcon name="password_change" className="w-4" />
+                    <Tooltip content="Delete">
+                      <div>
+                        <SvgIcon name="delete" className="w-4" />
+                      </div>
+                    </Tooltip>
                   </IconButton>
                 </div>
               </td>
