@@ -86,9 +86,9 @@ const transformIncidentsState = (state: IIncidentsState): IIncidentsState => {
 };
 
 const getCookie = (cookieName: string): string | undefined => {
-  const cookiePrefix = cookieName + "=";
+  const cookiePrefix = cookieName + '=';
   const cookies = document.cookie.split(';');
-  for(let i = 0; i < cookies.length; i++) {
+  for (let i = 0; i < cookies.length; i++) {
     let cookie = cookies[i];
     while (cookie.charAt(0) == ' ') {
       cookie = cookie.substring(1);
@@ -99,16 +99,30 @@ const getCookie = (cookieName: string): string | undefined => {
   }
 
   return undefined;
-}
+};
 
-export const getTreeLocalStorageKey = () : string => {
+export const getTreeLocalStorageKey = (): string => {
   const currentDataDomain = getCookie('DQODataDomain');
 
-  if (currentDataDomain && currentDataDomain !== '' && currentDataDomain !== '(default)') {
+  if (
+    currentDataDomain &&
+    currentDataDomain !== '' &&
+    currentDataDomain !== '(default)'
+  ) {
     return 'root-' + currentDataDomain;
   }
 
   return 'root';
+};
+
+export const getCurrentDataDomainName = (): string => {
+  const currentDataDomain = getCookie('DQODataDomain');
+
+  if (currentDataDomain && currentDataDomain !== '') {
+    return currentDataDomain;
+  }
+
+  return '(default)';
 };
 
 export const loadState = () => {
