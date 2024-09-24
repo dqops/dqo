@@ -20,6 +20,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -91,6 +92,9 @@ public class DqoUserTokenPayload implements Cloneable {
     @JsonProperty("dd")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String activeDataDomain;
+
+    public DqoUserTokenPayload() {
+    }
 
     /**
      * Creates and returns a copy of this object.

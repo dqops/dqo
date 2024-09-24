@@ -111,26 +111,20 @@ public class DataDomainsController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             List<LocalDataDomainModel> allDataDomains = this.dataDomainsService.getAllDataDomains();
-            DqoUserTokenPayload userTokenPayload = principal.getUserTokenPayload();
-            if (userTokenPayload == null) {
+            LinkedHashMap<String, DqoUserRole> domainRoles = principal.getDomainRoles();
+            if (domainRoles == null) {
                 return new ResponseEntity<>(Flux.empty(), HttpStatus.OK);
             }
 
-            LinkedHashMap<String, DqoUserRole> allowedUserRoles = userTokenPayload.getDomainRoles();
-
             if (principal.getAccountRole() == DqoUserRole.NONE) {
                 allDataDomains.removeIf(model -> {
-                    if (allowedUserRoles == null) {
-                        return true;
-                    }
-
                     String domainName = model.getDomainName();
                     if (Objects.equals(domainName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME)) {
                         domainName = UserDomainIdentity.ROOT_DATA_DOMAIN;
                     }
 
-                    return !allowedUserRoles.containsKey(domainName) ||
-                            allowedUserRoles.get(domainName) == DqoUserRole.NONE;
+                    return !domainRoles.containsKey(domainName) ||
+                            domainRoles.get(domainName) == DqoUserRole.NONE;
                 });
             }
 

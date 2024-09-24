@@ -50,13 +50,6 @@ public class HivePartitionPathUtility {
         // TODO: HivePartitionPaths should be refactored from the ground-up, to make easily serializable and deserializable.
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (!Strings.isNullOrEmpty(partitionId.getDataDomain())) {
-            stringBuilder.append(BuiltInFolderNames.DATA_DOMAINS);
-            stringBuilder.append('/');
-            stringBuilder.append(FileNameSanitizer.encodeForFileSystem(partitionId.getDataDomain()).replace(' ', '+'));
-            stringBuilder.append('/');
-        }
-
         String connectionName = partitionId.getConnectionName();
         if (connectionName == null) {
             return stringBuilder.toString();

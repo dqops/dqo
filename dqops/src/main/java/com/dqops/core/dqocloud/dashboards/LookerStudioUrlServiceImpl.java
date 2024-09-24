@@ -25,6 +25,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.dashboards.DashboardSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Service that creates authenticated URLS for Looker studio dashboards.
@@ -47,10 +50,10 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private final Object lock = new Object();
-    private String lookerStudioApiKey = null;
-    private Instant lookerStudioApiKeyValidUntil = null;
-    private TenantQueryAccessTokenModel queryAccessTokenModel = null;
-    private Instant accessTokenValidUntil = null;
+    private final Map<String, String> lookerStudioApiKeyPerDomain = new LinkedHashMap<>();
+    private final Map<String, Instant> lookerStudioApiKeyValidUntilPerDomain = new LinkedHashMap<>();
+    private final Map<String, TenantQueryAccessTokenModel> queryAccessTokenModelPerDomain = new LinkedHashMap<>();
+    private final Map<String, Instant> accessTokenValidUntilPerDomain = new LinkedHashMap<>();
 
     /**
      * Dependency injection constructor that receives all required dependencies.
@@ -75,9 +78,13 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     @Override
     public String getLookerStudioQueryApiKey(DqoUserPrincipal userPrincipal) {
         try {
+            String dataDomainCloud = userPrincipal.getDataDomainIdentity().getDataDomainCloud();
+
             synchronized (this.lock) {
-                if (this.lookerStudioApiKeyValidUntil != null && this.lookerStudioApiKeyValidUntil.isAfter(Instant.now())) {
-                    return this.lookerStudioApiKey;
+                Instant lookerStudioApiKeyValidUntil = this.lookerStudioApiKeyValidUntilPerDomain.get(dataDomainCloud);
+
+                if (lookerStudioApiKeyValidUntil != null && lookerStudioApiKeyValidUntil.isAfter(Instant.now())) {
+                    return this.lookerStudioApiKeyPerDomain.get(dataDomainCloud);
                 }
             }
 
@@ -87,13 +94,13 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             }
 
             LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
-            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(userPrincipal.getDataDomainIdentity().getDataDomainCloud(),
+            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(dataDomainCloud,
                     userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             synchronized (this.lock) {
                 DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);
-                this.lookerStudioApiKeyValidUntil = decodedApiKey.getApiKeyPayload().getExpiresAt().minus(10, ChronoUnit.MINUTES);
-                this.lookerStudioApiKey = queryApiKey;
+                this.lookerStudioApiKeyValidUntilPerDomain.put(dataDomainCloud, decodedApiKey.getApiKeyPayload().getExpiresAt().minus(10, ChronoUnit.MINUTES));
+                this.lookerStudioApiKeyPerDomain.put(dataDomainCloud,  queryApiKey);
             }
 
             return queryApiKey;
@@ -116,9 +123,13 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
         String lookerStudioQueryApiKey = getLookerStudioQueryApiKey(userPrincipal);
 
         try {
+            String dataDomainCloud = userPrincipal.getDataDomainIdentity().getDataDomainCloud();
+
             synchronized (this.lock) {
-                if (this.accessTokenValidUntil != null && this.accessTokenValidUntil.isAfter(Instant.now())) {
-                    return this.queryAccessTokenModel;
+                Instant accessTokenValidUntil = this.accessTokenValidUntilPerDomain.get(dataDomainCloud);
+
+                if (accessTokenValidUntil != null && accessTokenValidUntil.isAfter(Instant.now())) {
+                    return this.queryAccessTokenModelPerDomain.get(dataDomainCloud);
                 }
             }
 
@@ -128,6 +139,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             apiClient.getAuthentication("api_key");
             AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(apiClient);
             TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken(
+                    Objects.equals(UserDomainIdentity.ROOT_DATA_DOMAIN, dataDomainCloud) ? null : dataDomainCloud,
                     userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             Instant expiresAt = Instant.now().plus(1, ChronoUnit.HOURS);
@@ -138,8 +150,8 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             }
 
             synchronized (this.lock) {
-                this.accessTokenValidUntil = expiresAt.minus(30, ChronoUnit.MINUTES);
-                this.queryAccessTokenModel = tenantQueryAccessTokenModel;
+                this.accessTokenValidUntilPerDomain.put(dataDomainCloud, expiresAt.minus(30, ChronoUnit.MINUTES));
+                this.queryAccessTokenModelPerDomain.put(dataDomainCloud, tenantQueryAccessTokenModel);
             }
 
             return tenantQueryAccessTokenModel;
@@ -164,11 +176,12 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec, String dqoWindowLocationOrigin, DqoUserPrincipal userPrincipal) {
         String refreshToken = this.getLookerStudioQueryApiKey(userPrincipal);
         TenantQueryAccessTokenModel lookerStudioAccessToken = this.getLookerStudioAccessToken(userPrincipal);
+        String dataDomainCloud = userPrincipal.getDataDomainIdentity().getDataDomainCloud();
         String token = refreshToken +
                 ",t=" + lookerStudioAccessToken.getAccessToken() +
                 ",p=" + lookerStudioAccessToken.getBillingProjectId() +
                 ",d=" + lookerStudioAccessToken.getDataSetName() +
-                ",e=" + this.accessTokenValidUntil.toEpochMilli();
+                ",e=" + this.accessTokenValidUntilPerDomain.get(dataDomainCloud).toEpochMilli();
 
         StringBuilder stringBuilder = new StringBuilder();
         String jsonParameters = formatDashboardParameters(dashboardSpec.getParameters(), token, dqoWindowLocationOrigin);

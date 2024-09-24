@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,7 +81,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
             DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
-                    UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
+                    UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null, null);
             return dqoUserPrincipalLocal;
         }
 
@@ -88,7 +89,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
         List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(apiKeyPayload.getAccountRole());
         String defaultDataDomainCloud = this.dqoUserConfigurationProperties.getDefaultDataDomain();
         DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
-                grantedPrivileges, apiKeyPayload, UserDomainIdentity.ROOT_DATA_DOMAIN, defaultDataDomainCloud);
+                grantedPrivileges, apiKeyPayload, UserDomainIdentity.ROOT_DATA_DOMAIN, defaultDataDomainCloud, null);
 
         return dqoUserPrincipal;
     }
@@ -110,14 +111,17 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
             DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
-                    domainMountName, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
+                    domainMountName, this.dqoUserConfigurationProperties.getDefaultDataDomain(),
+                    null, null, null, null);
             return dqoUserPrincipalLocal;
         }
 
         DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
         List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(apiKeyPayload.getAccountRole());
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
-                grantedPrivileges, apiKeyPayload, domainMountName, dataDomainName);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(
+                apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
+                grantedPrivileges, apiKeyPayload,
+                domainMountName, dataDomainName, null);
 
         return dqoUserPrincipal;
     }
@@ -134,7 +138,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
             DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
-                    UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null);
+                    UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain(), null, null, null, null);
             return dqoUserPrincipalLocal;
         }
 
@@ -143,7 +147,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
         String currentDataDomainCloudName = this.cliCurrentDataDomainService.getCurrentDataDomain();
         String currentDataDomainFolderName = this.userDomainIdentityFactory.mapDataDomainCloudNameToFolder(currentDataDomainCloudName);
         DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
-                grantedPrivileges, apiKeyPayload, currentDataDomainFolderName, currentDataDomainCloudName);
+                grantedPrivileges, apiKeyPayload, currentDataDomainFolderName, currentDataDomainCloudName, null);
 
         return dqoUserPrincipal;
     }

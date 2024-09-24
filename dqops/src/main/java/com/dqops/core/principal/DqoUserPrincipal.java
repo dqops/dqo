@@ -41,6 +41,7 @@ public class DqoUserPrincipal {
     private DqoCloudApiKeyPayload apiKeyPayload;
     private DqoUserTokenPayload userTokenPayload;
     private Collection<GrantedAuthority> privileges;
+    private LinkedHashMap<String, DqoUserRole> domainRoles;
 
 
     public DqoUserPrincipal(String dataDomainFolder, String dataDomainCloud) {
@@ -59,6 +60,7 @@ public class DqoUserPrincipal {
      * @param tenantOwner Tenant owner's email.
      * @param tenantId Tenant id.
      * @param tenantGroupId Tenant group id.
+     * @param domainRoles Roles in other data domains.
      */
     public DqoUserPrincipal(String name,
                             DqoUserRole accountRole,
@@ -67,9 +69,11 @@ public class DqoUserPrincipal {
                             String dataDomainCloud,
                             String tenantOwner,
                             String tenantId,
-                            Integer tenantGroupId) {
+                            Integer tenantGroupId,
+                            LinkedHashMap<String, DqoUserRole> domainRoles) {
         this.accountRole = accountRole;
         this.privileges = privileges;
+        this.domainRoles = domainRoles;
         this.dataDomainIdentity = new UserDomainIdentity(name, accountRole, dataDomainFolder, dataDomainCloud, tenantOwner, tenantId, tenantGroupId);
     }
 
@@ -81,25 +85,21 @@ public class DqoUserPrincipal {
      * @param apiKeyPayload Source DQOps Cloud Api key payload.
      * @param dataDomainFolder The data domain folder name.
      * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
+     * @param domainRoles Roles in other data domains.
      */
-    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges,
-                            DqoCloudApiKeyPayload apiKeyPayload, String dataDomainFolder, String dataDomainCloud) {
+    public DqoUserPrincipal(String name,
+                            DqoUserRole accountRole,
+                            Collection<GrantedAuthority> privileges,
+                            DqoCloudApiKeyPayload apiKeyPayload,
+                            String dataDomainFolder,
+                            String dataDomainCloud,
+                            LinkedHashMap<String, DqoUserRole> domainRoles) {
         this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud,
                 apiKeyPayload != null ? apiKeyPayload.getSubject() : null,
                 apiKeyPayload != null ? apiKeyPayload.getTenantId() : null,
-                apiKeyPayload != null ? apiKeyPayload.getTenantGroup() : null);
+                apiKeyPayload != null ? apiKeyPayload.getTenantGroup() : null,
+                domainRoles);
         this.apiKeyPayload = apiKeyPayload;
-
-        if (apiKeyPayload != null) {
-            this.userTokenPayload = new DqoUserTokenPayload() {{
-                setUser(name);
-                setDisposition(DqoUserAuthenticationTokenDisposition.API_KEY);
-                setAccountRole(accountRole);
-                setTenantId(apiKeyPayload.getTenantId());
-                setTenantGroup(apiKeyPayload.getTenantGroup());
-                setDomainRoles(new LinkedHashMap<>());
-            }};
-        }
     }
 
     /**
@@ -112,10 +112,18 @@ public class DqoUserPrincipal {
      * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      * @param tenantId Tenant id.
      * @param tenantGroupId Tenant group id.
+     * @param domainRoles Roles in other data domains.
      */
-    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoUserTokenPayload userTokenPayload,
-                            String dataDomainFolder, String dataDomainCloud, String tenantId, Integer tenantGroupId) {
-        this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud, name, tenantId, tenantGroupId);
+    public DqoUserPrincipal(String name,
+                            DqoUserRole accountRole,
+                            Collection<GrantedAuthority> privileges,
+                            DqoUserTokenPayload userTokenPayload,
+                            String dataDomainFolder,
+                            String dataDomainCloud,
+                            String tenantId,
+                            Integer tenantGroupId,
+                            LinkedHashMap<String, DqoUserRole> domainRoles) {
+        this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud, name, tenantId, tenantGroupId, domainRoles);
         this.userTokenPayload = userTokenPayload;
     }
 
@@ -149,6 +157,14 @@ public class DqoUserPrincipal {
      */
     public DqoUserTokenPayload getUserTokenPayload() {
         return userTokenPayload;
+    }
+
+    /**
+     * Returns a dictionary of roles for different data domains.
+     * @return List of roles in all data domains.
+     */
+    public LinkedHashMap<String, DqoUserRole> getDomainRoles() {
+        return domainRoles;
     }
 
     /**
