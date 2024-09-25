@@ -71,6 +71,7 @@ export default function ColumnListView() {
       searchFilters.columnType?.length
         ? addPrefix(searchFilters.columnType ?? '')
         : undefined,
+      undefined,
       labels,
       filters.page,
       filters.pageSize,

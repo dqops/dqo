@@ -17,6 +17,7 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.checks.CheckType;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -248,6 +249,8 @@ public class SearchController {
             @RequestParam(required = false) Optional<String> column,
             @ApiParam(name = "columnType", value = "Optional physical column's data type filter", required = false)
             @RequestParam(required = false) Optional<String> columnType,
+            @ApiParam(name = "columnCategory", value = "Optional data type category filter", required = false)
+            @RequestParam(required = false) Optional<DataTypeCategory> columnCategory,
             @ApiParam(name = "label", value = "Optional labels to filter the columns", required = false)
             @RequestParam(required = false) Optional<List<String>> label,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
@@ -280,6 +283,7 @@ public class SearchController {
 
             columnSearchFilters.setColumnName(column.orElse(null));
             columnSearchFilters.setColumnDataType(columnType.orElse(null));
+            columnSearchFilters.setDataTypeCategory(columnCategory.orElse(null));
 
             Integer resultsLimit = DEFAULT_SEARCH_LIMIT;
             Integer skip = null;

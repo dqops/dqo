@@ -18928,6 +18928,13 @@
           "required" : false,
           "type" : "string"
         }, {
+          "name" : "columnCategory",
+          "in" : "query",
+          "description" : "Optional data type category filter",
+          "required" : false,
+          "type" : "string",
+          "enum" : [ "numeric_integer", "numeric_decimal", "numeric_float", "datetime_timestamp", "datetime_datetime", "datetime_date", "datetime_time", "text", "clob", "json", "bool", "binary", "array", "other" ]
+        }, {
           "name" : "label",
           "in" : "query",
           "description" : "Optional labels to filter the columns",
