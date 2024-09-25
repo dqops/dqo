@@ -50,8 +50,13 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
+  const {
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+  } = useDecodedParams();
   const { objectNotFound, setObjectNotFound, setActiveTab } = useTree();
+  const [isTabChanged, setIsTabChanged] = React.useState(false);
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
@@ -81,6 +86,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
       setActiveTab(undefined);
       history.push(`/${checkTypes}`);
     }
+    setIsTabChanged(true);
     dispatch(closeFirstLevelTab(checkTypes, value));
   };
 
@@ -153,17 +159,20 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
       getChecksConfigurated(activeUrl ?? activeTab);
-      if (activeUrl && activeUrl !== location.pathname) {
+
+      if (activeUrl && activeUrl !== location.pathname && isTabChanged) {
+        setIsTabChanged(false);
         history.push(activeUrl);
+        return;
       }
     }
 
     const foundRoute = Object.values(ROUTES.PATTERNS).find(
       (value) => value === match.path
     );
-    if (pageTabs.length === 0 && foundRoute) {
-      const params = match.params as any;
 
+    if (foundRoute) {
+      const params = match.params as any;
       if (params?.tab) {
         let newRoute = foundRoute;
         let routeWithoutTab = foundRoute;
@@ -171,6 +180,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
         if (segments[segments.length - 1] === ':tab') {
           routeWithoutTab = segments.slice(0, -1).join('/');
         }
+
         Object.entries(params).forEach(([key, value]) => {
           newRoute = newRoute.replace(`:${key}`, String(value));
           routeWithoutTab = routeWithoutTab.replace(`:${key}`, String(value));
@@ -186,7 +196,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
         setActiveTab(newRoute);
       }
     }
-  }, [pageTabs, activeTab, location.pathname]);
+  }, [location.pathname, isTabChanged]);
 
   // TODO Aleksy: fix checkIfTabCouldExist function with opening tabs with url.
 
