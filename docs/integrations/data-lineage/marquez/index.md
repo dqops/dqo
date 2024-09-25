@@ -56,7 +56,7 @@ By expanding the source tables, it is present that the observed issue comes from
 DQOps supports both, table and column level data lineage.
 
 
-!!! note ""
+!!! note "How to activate data lineage synchronization"
 
-    Please contact DQOps to learn more with the use of the link [Concact DQOps](https://dqops.com/contact-us) for scheduling a demo.
+    Data lineage synchronization is a paid feature of DQOps. Please [contact DQOps sales](https://dqops.com/contact-us) and schedule a call.
 
