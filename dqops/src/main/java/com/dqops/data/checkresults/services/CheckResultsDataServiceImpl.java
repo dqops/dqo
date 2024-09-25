@@ -300,87 +300,189 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     public CheckResultsListModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                              CheckResultsDetailedFilterParameters loadParameters,
                                                              UserDomainIdentity userDomainIdentity) {
-        Map<Long, CheckResultsListModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table ruleResultsTable = loadRecentRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
-        if (ruleResultsTable == null || ruleResultsTable.isEmpty()) {
-            return new CheckResultsListModel[0]; // empty array
+        List<Table> loadedPartitionTables = loadRecentRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
+
+        if (loadParameters.getLoadMode() == CheckResultsDetailedLoadMode.most_recent_per_group) {
+            return extractMostRecentCheckResultsForEachDataGroup(rootChecksContainerSpec, loadParameters, loadedPartitionTables);
         }
 
-        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, ruleResultsTable, loadParameters);
-        if (filteredTable.isEmpty()) {
-            return new CheckResultsListModel[0]; // empty array
-        }
-        Table filteredTableByDataGroup = filteredTable;
-        if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
-        }
+        // default mode - results for one data group only
+        return extractCheckResultsFromTheMostRecentDataGroup(rootChecksContainerSpec, loadParameters, loadedPartitionTables);
+    }
 
-        if (filteredTableByDataGroup.isEmpty()) {
-            return new CheckResultsListModel[0]; // empty array
-        }
-
-        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
-                SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
-                CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
-        CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
-
-        LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-
-        int rowCount = sortedTable.rowCount();
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            Long checkHash = checkHashColumn.get(rowIndex);
-            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
-            CheckResultsListModel checkResultsListModel = resultMap.get(checkHash);
-
-            CheckResultEntryModel singleModel = null;
-
-            if (checkResultsListModel != null) {
-                if (checkResultsListModel.getCheckResultEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
-                    continue; // enough results loaded
-                }
-
-                if (!Objects.equals(dataGroupNameForCheck, checkResultsListModel.getDataGroup())) {
-                    continue; // we are not mixing groups, results for a different group were already loaded
-                }
-            } else {
-                singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
-                checkResultsListModel = new CheckResultsListModel();
-                checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
-                checkResultsListModel.setCheckName(singleModel.getCheckName());
-                checkResultsListModel.setCheckHash(singleModel.getCheckHash());
-                checkResultsListModel.setCheckType(singleModel.getCheckType());
-                checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
-                checkResultsListModel.setDataGroup(dataGroupNameForCheck);
-
-                Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
-                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
-
-                if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
-                    dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-                    dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-                }
-
-                checkResultsListModel.setDataGroups(dataGroupsForCheck);
-                resultMap.put(singleModel.getCheckHash(), checkResultsListModel);
+    /**
+     * Extract check results for each matching check, collecting results only from the first data group that had the most recent values.
+     * Results from other groups for the same checks are ignored. This method returns data that is shown in the check results panels
+     * on the check result's user interface.
+     * @param rootChecksContainerSpec Root check container to identify the type of checks.
+     * @param loadParameters Filters.
+     * @param loadedPartitionTables A list of partitions loaded for that time period, from the newest to the oldest partition.
+     * @return An array of check results to be returned to the user.
+     */
+    protected CheckResultsListModel[] extractCheckResultsFromTheMostRecentDataGroup(
+            AbstractRootChecksContainerSpec rootChecksContainerSpec,
+            CheckResultsDetailedFilterParameters loadParameters,
+            List<Table> loadedPartitionTables) {
+        Map<Long, CheckResultsListModel> resultMap = new LinkedHashMap<>();
+        for (Table checkResultsTable : loadedPartitionTables) {
+            if (checkResultsTable == null || checkResultsTable.isEmpty()) {
+                continue;
             }
 
-            if (singleModel == null) {
-                singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+            Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, checkResultsTable, loadParameters);
+            if (filteredTable.isEmpty()) {
+                continue;
+            }
+            Table filteredTableByDataGroup = filteredTable;
+            if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
-            checkResultsListModel.getCheckResultEntries().add(singleModel);
+            if (filteredTableByDataGroup.isEmpty()) {
+                continue;
+            }
+
+            Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
+                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+                    SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
+                    CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
+            CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
+
+            LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+            LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+            TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+            int rowCount = sortedTable.rowCount();
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                Long checkHash = checkHashColumn.get(rowIndex);
+                String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
+                CheckResultsListModel checkResultsListModel = resultMap.get(checkHash);
+
+                CheckResultEntryModel singleModel = null;
+
+                if (checkResultsListModel != null) {
+                    if (checkResultsListModel.getCheckResultEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
+                        continue; // enough results loaded
+                    }
+
+                    if (!Objects.equals(dataGroupNameForCheck, checkResultsListModel.getDataGroup())) {
+                        continue; // we are not mixing groups, results for a different group were already loaded
+                    }
+                } else {
+                    singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+                    checkResultsListModel = new CheckResultsListModel();
+                    checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
+                    checkResultsListModel.setCheckName(singleModel.getCheckName());
+                    checkResultsListModel.setCheckHash(singleModel.getCheckHash());
+                    checkResultsListModel.setCheckType(singleModel.getCheckType());
+                    checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
+                    checkResultsListModel.setDataGroup(dataGroupNameForCheck);
+
+                    Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
+                    List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
+
+                    if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+                        dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                        dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                    }
+
+                    checkResultsListModel.setDataGroups(dataGroupsForCheck);
+                    resultMap.put(singleModel.getCheckHash(), checkResultsListModel);
+                }
+
+                if (singleModel == null) {
+                    singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+                }
+
+                checkResultsListModel.getCheckResultEntries().add(singleModel);
+            }
         }
 
         return resultMap.values().toArray(CheckResultsListModel[]::new);
+    }
+
+    /**
+     * Extract check results, returning results from all data groups for matching check, but only the most recent result for
+     * each data group is returned.
+     * @param rootChecksContainerSpec Root check container to identify the type of checks.
+     * @param loadParameters Filters.
+     * @param loadedPartitionTables A list of partitions loaded for that time period, from the newest to the oldest partition.
+     * @return An array of check results to be returned to the user.
+     */
+    protected CheckResultsListModel[] extractMostRecentCheckResultsForEachDataGroup(
+            AbstractRootChecksContainerSpec rootChecksContainerSpec,
+            CheckResultsDetailedFilterParameters loadParameters,
+            List<Table> loadedPartitionTables) {
+        Map<Long, Map<String, CheckResultsListModel>> resultMap = new LinkedHashMap<>();
+        for (Table checkResultsTable : loadedPartitionTables) {
+            if (checkResultsTable == null || checkResultsTable.isEmpty()) {
+                continue;
+            }
+
+            Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, checkResultsTable, loadParameters);
+            if (filteredTable.isEmpty()) {
+                continue;
+            }
+            Table filteredTableByDataGroup = filteredTable;
+            if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            }
+
+            if (filteredTableByDataGroup.isEmpty()) {
+                continue;
+            }
+
+            Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
+                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+                    SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
+                    CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
+            CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
+
+            LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+            TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+            int rowCount = sortedTable.rowCount();
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                Long checkHash = checkHashColumn.get(rowIndex);
+                String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
+                Map<String, CheckResultsListModel> checkResultsPerDataGroup = resultMap.get(checkHash);
+                if (checkResultsPerDataGroup == null) {
+                    checkResultsPerDataGroup = new LinkedHashMap<>();
+                    resultMap.put(checkHash, checkResultsPerDataGroup);
+                } else {
+                    if (checkResultsPerDataGroup.size() >= loadParameters.getMaxResultsPerCheck()) {
+                        continue; // enough results loaded
+                    }
+                }
+
+                CheckResultsListModel checkResultsListModel = checkResultsPerDataGroup.get(dataGroupNameForCheck);
+
+                if (checkResultsListModel == null) {
+                    CheckResultEntryModel singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+                    checkResultsListModel = new CheckResultsListModel();
+                    checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
+                    checkResultsListModel.setCheckName(singleModel.getCheckName());
+                    checkResultsListModel.setCheckHash(singleModel.getCheckHash());
+                    checkResultsListModel.setCheckType(singleModel.getCheckType());
+                    checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
+                    checkResultsListModel.setDataGroup(dataGroupNameForCheck);
+                    checkResultsListModel.getCheckResultEntries().add(singleModel);
+                    checkResultsPerDataGroup.put(dataGroupNameForCheck, checkResultsListModel);
+                }
+            }
+        }
+
+        return resultMap.values()
+                        .stream()
+                        .flatMap(groups -> groups.values().stream())
+                        .toArray(CheckResultsListModel[]::new);
     }
 
     /**
@@ -1292,7 +1394,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param userDomainIdentity User identity with the data domain.
      * @return Table with rule results for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters,
+    protected List<Table> loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters,
                                           String connectionName,
                                           PhysicalTableName physicalTableName,
                                           UserDomainIdentity userDomainIdentity) {
@@ -1310,8 +1412,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         checkResultsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), maxMonthsToLoad);
-        Table ruleResultsData = checkResultsSnapshot.getAllData();
-        return ruleResultsData;
+        List<Table> loadedTables = checkResultsSnapshot.getLoadedMonthlyPartitions().values()
+                .stream()
+                .filter(p -> p != null && p.getData() != null)
+                .map(p -> p.getData())
+                .collect(Collectors.toList());
+
+        return loadedTables;
     }
 
     /**

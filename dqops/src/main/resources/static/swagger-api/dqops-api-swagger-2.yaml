@@ -4025,6 +4025,14 @@ paths:
         description: "Table comparison name"
         required: false
         type: "string"
+      - name: "loadMode"
+        in: "query"
+        description: "Results load mode"
+        required: false
+        type: "string"
+        enum:
+        - "first_data_group"
+        - "most_recent_per_group"
       - name: "maxResultsPerCheck"
         in: "query"
         description: "Maximum number of results per check, the default is 100"
@@ -5001,6 +5009,14 @@ paths:
         description: "Table comparison name"
         required: false
         type: "string"
+      - name: "loadMode"
+        in: "query"
+        description: "Results load mode"
+        required: false
+        type: "string"
+        enum:
+        - "first_data_group"
+        - "most_recent_per_group"
       - name: "maxResultsPerCheck"
         in: "query"
         description: "Maximum number of results per check, the default is 100"
@@ -5790,6 +5806,14 @@ paths:
         description: "Table comparison name"
         required: false
         type: "string"
+      - name: "loadMode"
+        in: "query"
+        description: "Results load mode"
+        required: false
+        type: "string"
+        enum:
+        - "first_data_group"
+        - "most_recent_per_group"
       - name: "maxResultsPerCheck"
         in: "query"
         description: "Maximum number of results per check, the default is 100"
@@ -7906,6 +7930,14 @@ paths:
         description: "Table comparison name"
         required: false
         type: "string"
+      - name: "loadMode"
+        in: "query"
+        description: "Results load mode"
+        required: false
+        type: "string"
+        enum:
+        - "first_data_group"
+        - "most_recent_per_group"
       - name: "maxResultsPerCheck"
         in: "query"
         description: "Maximum number of results per check, the default is 100"
@@ -8983,6 +9015,14 @@ paths:
         description: "Table comparison name"
         required: false
         type: "string"
+      - name: "loadMode"
+        in: "query"
+        description: "Results load mode"
+        required: false
+        type: "string"
+        enum:
+        - "first_data_group"
+        - "most_recent_per_group"
       - name: "maxResultsPerCheck"
         in: "query"
         description: "Maximum number of results per check, the default is 100"
@@ -9949,6 +9989,14 @@ paths:
         description: "Table comparison name"
         required: false
         type: "string"
+      - name: "loadMode"
+        in: "query"
+        description: "Results load mode"
+        required: false
+        type: "string"
+        enum:
+        - "first_data_group"
+        - "most_recent_per_group"
       - name: "maxResultsPerCheck"
         in: "query"
         description: "Maximum number of results per check, the default is 100"
