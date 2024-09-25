@@ -41,7 +41,9 @@ const KeyValueProperties = ({
   sharedCredentials,
   refetchDirectoriesIndicator
 }: IKeyValueProperties) => {
-  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
+  const [arr, setArr] = useState(
+    convertObjectToArray(properties ?? { ['']: '' })
+  );
 
   const onChangeArr = (
     array: {
@@ -54,7 +56,7 @@ const KeyValueProperties = ({
 
   useEffect(() => {
     if (properties) {
-      setArr(convertObjectToArray(properties ?? {}));
+      setArr(convertObjectToArray(properties ?? { ['']: '' }));
     }
   }, [refetchDirectoriesIndicator]);
 
