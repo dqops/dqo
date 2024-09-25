@@ -1,39 +1,18 @@
-import React, { useEffect } from 'react';
-import { TableLineageModel } from '../../../../api';
-import { DataLineageApiClient } from '../../../../services/apiClient';
-import { useDecodedParams } from '../../../../utils';
+import React from 'react';
 import Button from '../../../Button';
+import DataLineageGraph from '../../../DataLineageGraph/DataLineageGraph';
 import SvgIcon from '../../../SvgIcon';
 import TableActionGroup from '../TableActionGroup';
 import SourceTableDetail from './SourceTableDetail';
 import SourceTablesTable from './SourceTablesTable';
 
 export default function SourceTables() {
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useDecodedParams();
   const [addSourceTable, setAddSourceTable] = React.useState(false);
   const [sourceTableEdit, setSourceTableEdit] = React.useState<{
     connection: string;
     schema: string;
     table: string;
   } | null>(null);
-
-  const [tableDataLineageGraph, setTableDataLineageGraph] =
-    React.useState<TableLineageModel>({});
-
-  useEffect(() => {
-    DataLineageApiClient.getTableDataLineageGraph(
-      connection,
-      schema,
-      table
-    ).then((response) => {
-      setTableDataLineageGraph(response.data);
-    });
-  }, []);
-  console.log(tableDataLineageGraph);
 
   const onBack = () => {
     setAddSourceTable(false);
@@ -73,6 +52,7 @@ export default function SourceTables() {
             className="!w-50 !my-5 ml-4"
             onClick={() => setAddSourceTable(true)}
           />
+          <DataLineageGraph />
         </>
       )}
     </div>
