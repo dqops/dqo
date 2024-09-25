@@ -22,6 +22,7 @@ import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckDbTypesMappings;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.hana.HanaConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
@@ -94,6 +95,9 @@ public class SampleTableMetadataObjectMother {
 
             case databricks:
                 return DatabricksConnectionSpecObjectMother.create();
+
+            case hana:
+                return HanaConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -146,6 +150,9 @@ public class SampleTableMetadataObjectMother {
 
             case databricks:
                 return DatabricksConnectionSpecObjectMother.getSchemaName();
+
+            case hana:
+                return HanaConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

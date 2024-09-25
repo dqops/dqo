@@ -58,6 +58,9 @@ public enum ProviderType {
     @JsonProperty("trino")
     trino,
 
+    @JsonProperty("hana")
+    hana,
+
     // TODO: add more connectors
 
     ;
@@ -87,6 +90,8 @@ public enum ProviderType {
                 return "SQL Server";
             case trino:
                 return "Trino";
+            case hana:
+                return "HANA";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }
