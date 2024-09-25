@@ -19,7 +19,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     the data quality status of any table, before the table is used as a data source.
 
     The DQOps REST API is executed with use of Web activity a pipeline before or after a data loading job. 
-    Calling the DQOps REST APIcan perform a circuit breaking to stop the pipeline, and prevent loading invalid data
+    Calling the DQOps REST API can perform a circuit breaking to stop the pipeline, and prevent loading invalid data
     downstream when fatal severity issues are detected.
 
 
@@ -39,6 +39,15 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     in the user's private [Data Quality Data Warehouse](../dqo-concepts/architecture/dqops-architecture.md).
     When using DQOps connector, it is possible to customize built-in data quality dashboards or
     design custom dashboards that are better suited for the monitored data environment.
+
+
+- **[Marquez](./data-lineage/marquez/index.md)**
+
+    DQOps integrates with Marquez, an open source data lineage metadata service based on OpenLineage, which allowing users to trace the flow of data across their systems. 
+
+    By combining DQOps' data quality checks with Marquez's detailed lineage tracking, organizations can better understand data dependencies, 
+    quickly identify the root causes of issues, and enhance trust in their data pipelines. 
+    This helps improve overall data governance and transparency.
 
 
 - **[Slack](./slack/configuring-slack-notifications.md)**
