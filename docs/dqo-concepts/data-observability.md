@@ -45,11 +45,11 @@ Deactivating a check on the table or column is also possible to prevent it from 
 
 ### Data quality policies
 The data quality policies, also called patterns, are configurations of data quality checks. These policies are configured in YAML files
-in the [*patterns* folder](dqops-user-home-folder.md#default-check-patterns). 
+in the [*patterns* folder](dqops-user-home-folder.md#data-quality-policies). 
 Every configuration is identified by a policy name and has a set of filters for target tables
 and columns on which DQOps applies these checks.
 
-The default content of the [*patterns* folder](dqops-user-home-folder.md#default-check-patterns) is shown below.
+The default content of the [*patterns* folder](dqops-user-home-folder.md#data-quality-policies) is shown below.
 
 ``` { .asc hl_lines="4-23" }
 $DQO_USER_HOME
