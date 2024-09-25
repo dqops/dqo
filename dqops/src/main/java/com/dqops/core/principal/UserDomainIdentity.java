@@ -41,6 +41,11 @@ public class UserDomainIdentity {
     public static final String ROOT_DOMAIN_ALTERNATE_NAME = "(default)";
 
     /**
+     * The display name shown for the root data domain.
+     */
+    public static final String ROOT_DOMAIN_DISPLAY_NAME = "Root data domain";
+
+    /**
      * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
      */
     public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER_NAME, DqoUserRole.ADMIN, ROOT_DATA_DOMAIN,

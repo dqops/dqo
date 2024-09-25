@@ -17,6 +17,7 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.domains.DataDomainsService;
 import com.dqops.core.domains.DqoDataDomainException;
 import com.dqops.core.domains.LocalDataDomainModel;
@@ -49,6 +50,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -66,6 +68,7 @@ public class DataDomainsController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final LocalDataDomainRegistry localDataDomainRegistry;
     private final DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
+    private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
 
 
@@ -76,6 +79,7 @@ public class DataDomainsController {
      * @param userHomeContextFactory User home context factory.
      * @param localDataDomainRegistry Local data domain registry.
      * @param dqoInstanceConfigurationProperties DQOps instance configuration - the cookie expiration time.
+     * @param dqoUserConfigurationProperties DQO User Home configuration - to identify the default data domain.
      * @param instanceCloudLoginService Cloud login controller.
      */
     @Autowired
@@ -83,11 +87,13 @@ public class DataDomainsController {
                                  UserHomeContextFactory userHomeContextFactory,
                                  LocalDataDomainRegistry localDataDomainRegistry,
                                  DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
+                                 DqoUserConfigurationProperties dqoUserConfigurationProperties,
                                  InstanceCloudLoginService instanceCloudLoginService) {
         this.dataDomainsService = dataDomainsService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.localDataDomainRegistry = localDataDomainRegistry;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
     }
 
@@ -113,7 +119,13 @@ public class DataDomainsController {
             List<LocalDataDomainModel> allDataDomains = this.dataDomainsService.getAllDataDomains();
             LinkedHashMap<String, DqoUserRole> domainRoles = principal.getDomainRoles();
             if (domainRoles == null) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.OK);
+                ArrayList<LocalDataDomainModel> rootDomainList = new ArrayList<>();
+                boolean isRootDomain = Objects.equals(dqoUserConfigurationProperties.getDefaultDataDomain(), UserDomainIdentity.ROOT_DATA_DOMAIN);
+                rootDomainList.add(new LocalDataDomainModel() {{
+                    setDomainName(isRootDomain ? UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME : dqoUserConfigurationProperties.getDefaultDataDomain());
+                    setDisplayName(isRootDomain ? UserDomainIdentity.ROOT_DOMAIN_DISPLAY_NAME : dqoUserConfigurationProperties.getDefaultDataDomain());
+                }});
+                return new ResponseEntity<>(Flux.fromStream(rootDomainList.stream()), HttpStatus.OK);
             }
 
             if (principal.getAccountRole() == DqoUserRole.NONE) {
