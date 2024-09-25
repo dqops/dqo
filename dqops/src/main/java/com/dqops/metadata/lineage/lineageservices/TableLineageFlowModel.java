@@ -53,10 +53,22 @@ public class TableLineageFlowModel {
     private TableCurrentDataQualityStatusModel sourceTableQualityStatus;
 
     /**
-     * The data quality status identified from the data quality status of all upstream tables.
+     * The current data quality status of the target table.
      */
-    @JsonPropertyDescription("The data quality status identified from the data quality status of all upstream tables.")
+    @JsonPropertyDescription("The current data quality status of the target table.")
+    private TableCurrentDataQualityStatusModel targetTableQualityStatus;
+
+    /**
+     * The data quality status identified from the data quality status of all upstream tables and the target table.
+     */
+    @JsonPropertyDescription("The data quality status identified from the data quality status of all upstream tables and the target table.")
     private TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus;
+
+    /**
+     * Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1.
+     */
+    @JsonPropertyDescription("Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1.")
+    private int weight;
 
     public TableLineageFlowModel() {
     }
@@ -66,15 +78,25 @@ public class TableLineageFlowModel {
      * @param sourceTable Source table (upstream).
      * @param targetTable Target table (downstream).
      * @param sourceTableQualityStatus The current table data quality status of the source table (if present).
+     * @param targetTableQualityStatus The current table data quality status of the target table (if present).
      * @param upstreamCombinedQualityStatus The combined data quality status of the target table, including the worst status of the upstream tables.
      */
     public TableLineageFlowModel(DomainConnectionTableKey sourceTable,
                                  DomainConnectionTableKey targetTable,
                                  TableCurrentDataQualityStatusModel sourceTableQualityStatus,
+                                 TableCurrentDataQualityStatusModel targetTableQualityStatus,
                                  TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus) {
         this.sourceTable = sourceTable;
         this.targetTable = targetTable;
         this.sourceTableQualityStatus = sourceTableQualityStatus;
+        this.targetTableQualityStatus = targetTableQualityStatus;
         this.upstreamCombinedQualityStatus = upstreamCombinedQualityStatus;
+
+        if (sourceTableQualityStatus != null && sourceTableQualityStatus.getTotalRowCount() != null &&
+                sourceTableQualityStatus.getTotalRowCount() > 0L) {
+            this.weight = (int)Math.log(sourceTableQualityStatus.getTotalRowCount().doubleValue());
+        } else {
+            this.weight = 1;
+        }
     }
 }

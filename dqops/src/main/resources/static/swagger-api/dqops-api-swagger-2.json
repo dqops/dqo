@@ -42605,9 +42605,18 @@
           "description" : "The current data quality status of the source table.",
           "$ref" : "#/definitions/TableCurrentDataQualityStatusModel"
         },
-        "upstream_combined_quality_status" : {
-          "description" : "The data quality status identified from the data quality status of all upstream tables.",
+        "target_table_quality_status" : {
+          "description" : "The current data quality status of the target table.",
           "$ref" : "#/definitions/TableCurrentDataQualityStatusModel"
+        },
+        "upstream_combined_quality_status" : {
+          "description" : "The data quality status identified from the data quality status of all upstream tables and the target table.",
+          "$ref" : "#/definitions/TableCurrentDataQualityStatusModel"
+        },
+        "weight" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1."
         }
       },
       "description" : "Table lineage flow model that describes the data flow from one table to another table, and the data quality status of the source table."

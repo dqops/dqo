@@ -81,6 +81,15 @@ public class TableLineageServiceImpl implements TableLineageService {
             collectDownstreamLineage(upstreamCombinedQualityStatus, referenceTable, tableLineageModel, visitedTables, upstreamOnStackTables);
         }
 
+        for (TableLineageFlowModel flowModel : tableLineageModel.getFlows()) {
+            flowModel.setSourceTableQualityStatus(flowModel.getSourceTableQualityStatus() != null ?
+                    flowModel.getSourceTableQualityStatus().shallowCloneWithoutCheckResultsAndColumns() : null);
+            flowModel.setTargetTableQualityStatus(flowModel.getTargetTableQualityStatus() != null ?
+                    flowModel.getTargetTableQualityStatus().shallowCloneWithoutCheckResultsAndColumns() : null);
+            flowModel.setUpstreamCombinedQualityStatus(flowModel.getUpstreamCombinedQualityStatus() != null ?
+                    flowModel.getUpstreamCombinedQualityStatus().shallowCloneWithoutCheckResultsAndColumns() : null);
+        }
+
         return tableLineageModel;
     }
 
@@ -99,16 +108,13 @@ public class TableLineageServiceImpl implements TableLineageService {
             Map<DomainConnectionTableKey, TableCurrentDataQualityStatusModel> visitedUpstreamTableStatuses,
             LinkedHashSet<DomainConnectionTableKey> visitedTables, 
             LinkedHashSet<DomainConnectionTableKey> onStackTables) {
-        TableCurrentDataQualityStatusModel resultStatus = this.tableStatusCache.getCurrentTableStatus(
+        TableCurrentDataQualityStatusModel targetTableQualityStatus = this.tableStatusCache.getCurrentTableStatus(
                 targetTable, null);
 
-        if (resultStatus == null) {
-            resultStatus = new TableCurrentDataQualityStatusModel() {{
-                setTableExist(false);
-            }};
-        } else {
-            resultStatus = resultStatus.deepClone();
-        }
+        TableCurrentDataQualityStatusModel resultStatus = targetTableQualityStatus == null ?
+                new TableCurrentDataQualityStatusModel() {{
+                    setTableExist(false);
+                }} : targetTableQualityStatus.deepClone();
 
         visitedTables.add(targetTable);
         onStackTables.add(targetTable);
@@ -127,7 +133,7 @@ public class TableLineageServiceImpl implements TableLineageService {
                     if (!onStackTables.contains(upstreamTableKey)) {
                         TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus = visitedUpstreamTableStatuses.get(upstreamTableKey);
                         TableLineageFlowModel flowFromVisitedTable = new TableLineageFlowModel(upstreamTableKey, targetTable,
-                                upstreamOnlyQualityStatus, upstreamCombinedQualityStatus);
+                                upstreamOnlyQualityStatus, targetTableQualityStatus, upstreamCombinedQualityStatus);
                         tableLineageModel.getFlows().add(flowFromVisitedTable);
 
                         resultStatus.appendResultsFromUpstreamTable(upstreamCombinedQualityStatus);
@@ -138,7 +144,7 @@ public class TableLineageServiceImpl implements TableLineageService {
                     TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus = collectUpstreamLineage(
                             upstreamTableKey, tableLineageModel, visitedUpstreamTableStatuses, visitedTables, onStackTables);
                     TableLineageFlowModel flowFromVisitedTable = new TableLineageFlowModel(upstreamTableKey, targetTable,
-                            upstreamOnlyQualityStatus, upstreamCombinedQualityStatus);
+                            upstreamOnlyQualityStatus, targetTableQualityStatus, upstreamCombinedQualityStatus);
                     tableLineageModel.getFlows().add(flowFromVisitedTable);
                     resultStatus.appendResultsFromUpstreamTable(upstreamCombinedQualityStatus);
                 }
@@ -168,6 +174,7 @@ public class TableLineageServiceImpl implements TableLineageService {
         visitedTables.add(sourceTable);
         onStackTables.add(sourceTable);
 
+        TableCurrentDataQualityStatusModel sourceTableQualityStatus = this.tableStatusCache.getCurrentTableStatus(sourceTable, null);
         TableLineageCacheEntry tableLineageEntry = this.tableLineageCache.getTableLineageEntry(sourceTable);
 
         if (tableLineageEntry != null) {
@@ -188,7 +195,7 @@ public class TableLineageServiceImpl implements TableLineageService {
                         // TODO: we could rewrite the combined statues of all downstream tables... but that would be a little complex
 
                         TableLineageFlowModel flowToVisitedDownstreamTable = new TableLineageFlowModel(sourceTable, downstreamTableKey,
-                                downstreamOnlyQualityStatus, downstreamCombinedQualityStatus);
+                                sourceTableQualityStatus, downstreamOnlyQualityStatus, downstreamCombinedQualityStatus);
                         tableLineageModel.getFlows().add(flowToVisitedDownstreamTable);
 
                     } else {
@@ -196,10 +203,10 @@ public class TableLineageServiceImpl implements TableLineageService {
                     }
                 } else {
                     TableLineageFlowModel flowToDownstreamTable = new TableLineageFlowModel(sourceTable, downstreamTableKey,
-                            downstreamOnlyQualityStatus, downstreamCombinedQualityStatus);
+                            sourceTableQualityStatus, downstreamOnlyQualityStatus, downstreamCombinedQualityStatus);
                     tableLineageModel.getFlows().add(flowToDownstreamTable);
 
-                    collectDownstreamLineage(downstreamCombinedQualityStatus, sourceTable, tableLineageModel, visitedTables, onStackTables);
+                    collectDownstreamLineage(downstreamCombinedQualityStatus, downstreamTableKey, tableLineageModel, visitedTables, onStackTables);
                 }
             }
         } else {

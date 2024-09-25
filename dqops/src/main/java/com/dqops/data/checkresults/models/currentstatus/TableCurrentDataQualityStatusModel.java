@@ -50,6 +50,11 @@ import java.util.stream.Stream;
 @Data
 public class TableCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder, Cloneable {
     /**
+     * A fake column name that collects values from all upstream columns.
+     */
+    public static final String UPSTREAM_FAKE_COLUMN_NAME = "__upstream_columns_combined_status";
+
+    /**
      * The connection name in DQOps.
      */
     @JsonPropertyDescription("The connection name in DQOps.")
@@ -422,20 +427,22 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             }
         }
 
-        for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> otherColumn : upstreamTableResults.getColumns().entrySet()) {
-            ColumnCurrentDataQualityStatusModel myTableColumn = this.columns.get(otherColumn.getKey());
-            if (myTableColumn == null) {
-                this.columns.put(otherColumn.getKey(), otherColumn.getValue());
-                continue;
+        if (!upstreamTableResults.getColumns().isEmpty()) {
+            ColumnCurrentDataQualityStatusModel upstreamAggregateColumn = this.columns.get(UPSTREAM_FAKE_COLUMN_NAME);
+            if (upstreamAggregateColumn == null) {
+                upstreamAggregateColumn = new ColumnCurrentDataQualityStatusModel();
             }
+            this.columns.put(UPSTREAM_FAKE_COLUMN_NAME, upstreamAggregateColumn);
 
-            for (Map.Entry<String, CheckCurrentDataQualityStatusModel> otherCheckEntry : otherColumn.getValue().getChecks().entrySet()) {
-                CheckCurrentDataQualityStatusModel currentCheckStatus = myTableColumn.getChecks().get(otherCheckEntry.getKey());
+            for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> otherColumn : upstreamTableResults.getColumns().entrySet()) {
+                for (Map.Entry<String, CheckCurrentDataQualityStatusModel> otherCheckEntry : otherColumn.getValue().getChecks().entrySet()) {
+                    CheckCurrentDataQualityStatusModel currentCheckStatus = upstreamAggregateColumn.getChecks().get(otherCheckEntry.getKey());
 
-                if (currentCheckStatus == null) {
-                    myTableColumn.getChecks().put(otherCheckEntry.getKey(), otherCheckEntry.getValue());
-                } else {
-                    currentCheckStatus.appendCheckFromUpstreamTable(otherCheckEntry.getValue());
+                    if (currentCheckStatus == null) {
+                        upstreamAggregateColumn.getChecks().put(otherCheckEntry.getKey(), otherCheckEntry.getValue());
+                    } else {
+                        currentCheckStatus.appendCheckFromUpstreamTable(otherCheckEntry.getValue());
+                    }
                 }
             }
         }
@@ -507,6 +514,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                 setDataQualityKpi(dataQualityKpi);
                 setFatals(0);
                 setExecutionErrors(0);
+                setTotalRowCount(122000L);
             }};
             result.calculateHighestCurrentAndHistoricSeverity();
             return result;
