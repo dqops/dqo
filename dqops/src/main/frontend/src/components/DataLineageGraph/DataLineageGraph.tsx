@@ -3,15 +3,17 @@ import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import { TableLineageFlowModel, TableLineageModel } from '../../api';
 import { DataLineageApiClient } from '../../services/apiClient';
-import { useDecodedParams } from '../../utils';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 
-export default function DataLineageGraph() {
-  const {
-    connection,
-    schema,
-    table
-  }: { connection: string; schema: string; table: string } = useDecodedParams();
+export default function DataLineageGraph({
+  connection,
+  schema,
+  table
+}: {
+  connection: string;
+  schema: string;
+  table: string;
+}) {
   const [tableDataLineageGraph, setTableDataLineageGraph] =
     React.useState<TableLineageModel>({});
   const [graphArray, setGraphArray] = React.useState<
@@ -64,6 +66,10 @@ export default function DataLineageGraph() {
   const options = {
     tooltip: { isHtml: true } // Enable HTML tooltips
   };
+
+  if (!graphArray.length) {
+    return;
+  }
 
   return (
     <div>

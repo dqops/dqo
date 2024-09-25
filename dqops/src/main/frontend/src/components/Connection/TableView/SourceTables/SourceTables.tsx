@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '../../../Button';
-import DataLineageGraph from '../../../DataLineageGraph/DataLineageGraph';
 import SvgIcon from '../../../SvgIcon';
 import TableActionGroup from '../TableActionGroup';
 import SourceTableDetail from './SourceTableDetail';
@@ -52,7 +51,6 @@ export default function SourceTables() {
             className="!w-50 !my-5 ml-4"
             onClick={() => setAddSourceTable(true)}
           />
-          <DataLineageGraph />
         </>
       )}
     </div>
