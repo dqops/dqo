@@ -1,9 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
-import { TableLineageFlowModel, TableLineageModel } from '../../api';
+import {
+  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
+  DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
+  TableLineageFlowModel
+} from '../../api';
 import { DataLineageApiClient } from '../../services/apiClient';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
+import Loader from '../Loader';
 
 export default function DataLineageGraph({
   connection,
@@ -14,13 +19,15 @@ export default function DataLineageGraph({
   schema: string;
   table: string;
 }) {
-  const [tableDataLineageGraph, setTableDataLineageGraph] =
-    React.useState<TableLineageModel>({});
-  const [graphArray, setGraphArray] = React.useState<
+  const [graphArray, setGraphArray] = useState<
     (string | number | undefined)[][]
   >([]);
-
+  const [loading, setLoading] = useState(false);
+  const [severityColors, setSeverityColors] = useState<string[]>([]);
+  const [fillColor, setFillColor] = useState<string>('');
+  // add loading spinner
   const fetchTableDataLineageGraph = async () => {
+    setLoading(true);
     try {
       const response = await DataLineageApiClient.getTableDataLineageGraph(
         connection,
@@ -28,7 +35,6 @@ export default function DataLineageGraph({
         table
       );
       const data = response.data;
-      setTableDataLineageGraph(data);
 
       const incompleteData = data.flows?.some((flow) => {
         return (
@@ -42,20 +48,28 @@ export default function DataLineageGraph({
         setTimeout(() => fetchTableDataLineageGraph(), 5000);
         return;
       }
-
+      const colors: string[] = [];
       const graph = data.flows?.map((flow) => {
         const fromTable = data.relative_table?.compact_key;
         const toTable = flow.source_table?.compact_key;
         const weight = flow.weight;
 
         const tooltip = ReactDOMServer.renderToString(renderTooltip(flow));
-
+        const color = getColor(
+          flow.upstream_combined_quality_status?.current_severity
+        );
+        colors.push(color);
         return [toTable, fromTable, weight, tooltip];
       });
-
+      setFillColor(
+        getColor(data.flows?.[0]?.target_table_quality_status?.current_severity)
+      );
+      setSeverityColors(colors);
       setGraphArray(graph ?? []);
     } catch (error) {
       console.error('Error fetching data lineage graph:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,8 +78,22 @@ export default function DataLineageGraph({
   }, [connection, schema, table]);
 
   const options = {
-    tooltip: { isHtml: true } // Enable HTML tooltips
+    tooltip: { isHtml: true }, // Enable HTML tooltips
+    sankey: {
+      link: { color: { fill: fillColor } },
+      node: {
+        colors: [...severityColors]
+      }
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   if (!graphArray.length) {
     return;
@@ -90,8 +118,24 @@ export default function DataLineageGraph({
 // Tooltip rendering component
 const renderTooltip = (flow: TableLineageFlowModel) => {
   return (
-    <div className="w-85 p-2 text-sm">
-      <div className="flex items-center justify-between py-1">
+    <div className="w-100 p-2 text-sm">
+      <div className="flex items-center py-1">
+        <div className="w-60">Connection name</div>
+        <div className="truncate">{flow.source_table?.connection_name}</div>
+      </div>{' '}
+      <div className="flex items-center  py-1">
+        <div className="w-60">Schema name</div>
+        <div className="truncate">
+          {flow.source_table?.physical_table_name?.schema_name}
+        </div>
+      </div>{' '}
+      <div className="flex items-center py-1">
+        <div className="w-60">Table name</div>
+        <div className="truncate">
+          {flow.source_table?.physical_table_name?.table_name}
+        </div>
+      </div>
+      <div className="flex items-center py-1">
         <div className="w-60">Upstream combined quality status</div>
         <div>
           <QualityDimensionStatuses
@@ -99,16 +143,16 @@ const renderTooltip = (flow: TableLineageFlowModel) => {
           />
         </div>
       </div>
-      <div className="flex items-center justify-between py-1">
-        <div>Source table quality status</div>
+      <div className="flex items-center py-1">
+        <div className="w-60">Source table quality status</div>
         <div>
           <QualityDimensionStatuses
             dimensions={flow.source_table_quality_status?.dimensions}
           />
         </div>
       </div>
-      <div className="flex items-center justify-between py-1">
-        <div>Target table quality status</div>
+      <div className="flex items-center py-1">
+        <div className="w-60">Target table quality status</div>
         <div>
           <QualityDimensionStatuses
             dimensions={flow.target_table_quality_status?.dimensions}
@@ -117,4 +161,27 @@ const renderTooltip = (flow: TableLineageFlowModel) => {
       </div>
     </div>
   );
+};
+const getColor = (
+  status:
+    | CheckCurrentDataQualityStatusModelCurrentSeverityEnum
+    | DimensionCurrentDataQualityStatusModelCurrentSeverityEnum
+    | null
+    | undefined
+) => {
+  // console.log(status)
+  switch (status) {
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
+      return 'gray';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
+      return '#E3170A';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
+      return '#FF9900';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
+      return '#EBE51E';
+    case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
+      return '#029A80';
+    default:
+      return '';
+  }
 };

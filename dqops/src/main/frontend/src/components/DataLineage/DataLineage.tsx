@@ -4,7 +4,7 @@ import SourceTables from '../Connection/TableView/SourceTables/SourceTables';
 import DataLineageGraph from '../DataLineageGraph/DataLineageGraph';
 import Tabs from '../Tabs';
 const tabs = [
-  { label: 'Data Lineage', value: 'data-lineage' },
+  { label: 'Data lineage table', value: 'data-lineage' },
   { label: 'Data lineage graph', value: 'data-lineage-graph' }
 ];
 export default function DataLineage() {
@@ -21,7 +21,7 @@ export default function DataLineage() {
       </div>
       {activeTab === 'data-lineage' && <SourceTables />}
       {activeTab === 'data-lineage-graph' && (
-        <div className="mt-2">
+        <div className="p-4">
           <DataLineageGraph
             connection={connection}
             schema={schema}
