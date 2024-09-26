@@ -152,10 +152,10 @@ public class HanaConnectionProvider extends AbstractSqlConnectionProvider {
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
 
-//        if (constant instanceof Boolean) {
-//            Boolean asBoolean = (Boolean)constant;
-//            return asBoolean ? "true" : "false";
-//        }
+        if (constant instanceof Boolean) {
+            Boolean asBoolean = (Boolean)constant;
+            return asBoolean ? "true" : "false";
+        }
 //
 //        if (constant instanceof LocalDate) {
 //            LocalDate asLocalDate = (LocalDate)constant;
@@ -205,7 +205,7 @@ public class HanaConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("VARCHAR(256)");
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("STRING");
+            return new ColumnTypeSnapshotSpec("DOUBLE");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
             return new ColumnTypeSnapshotSpec("DATE");

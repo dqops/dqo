@@ -292,6 +292,50 @@
     {%- endif -%}
 {% endmacro %}
 
+
+{% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+    {%- if (target_column_data_type == 'STRING') -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- elif (target_column_data_type == 'BIGNUMERIC') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'DECIMAL') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'BIGDECIMAL') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'FLOAT64') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'INT64') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'NUMERIC') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'INT') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'SMALLINT') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'INTEGER') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'BIGINT') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'TINYINT') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'BYTEINT') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'DATE') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'DATETIME') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'TIME') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'TIMESTAMP') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- elif (target_column_data_type == 'BOOLEAN') -%}
+        TO_VARCHAR({{ render_target_column(analyzed_table_to_render) }})
+    {%- else -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- endif -%}
+{% endmacro -%}
+
+
 {% macro render_where_clause(extra_filter = none, table_alias_prefix = 'analyzed_table', indentation = '') %}
     {%- with filters = ([table.filter|default(none, true), parameters.filter|default(none, true), extra_filter|default(none, true)] | reject('none') | list) + (additional_filters | list) -%}
         {%- if (filters | length) > 0 %}
@@ -364,15 +408,15 @@
 
 {% macro render_date_format_regex(date_format) %}
     {%- if date_format == 'DD/MM/YYYY'-%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$'
     {%- elif date_format == 'DD-MM-YYYY' -%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$'
     {%- elif date_format == 'DD.MM.YYYY' -%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$'
     {%- elif date_format == 'YYYY-MM-DD' -%}
-        "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+        '^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
     {%- elif date_format == 'MM/DD/YYYY'-%}
-            "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
+        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$'
     {%- endif -%}
 {% endmacro -%}
 
