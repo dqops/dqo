@@ -32,6 +32,8 @@ import com.dqops.metadata.incidents.NotificationCommonModel;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
+import com.dqops.utils.http.OutboundHttpCallQueue;
+import com.dqops.utils.http.OutboundHttpMessage;
 import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;
 import io.netty.buffer.Unpooled;
@@ -63,7 +65,7 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class IncidentNotificationServiceImpl implements IncidentNotificationService {
-    private final SharedHttpClientProvider sharedHttpClientProvider;
+    private final OutboundHttpCallQueue outboundHttpCallQueue;
     private final JsonSerializer jsonSerializer;
     private final ExecutionContextFactory executionContextFactory;
     private final EmailSenderProvider emailSenderProvider;
@@ -75,7 +77,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     /**
      * Creates an incident notification service.
      *
-     * @param sharedHttpClientProvider                     Shared http client provider that manages the HTTP connection pooling.
+     * @param outboundHttpCallQueue                        REST API call queue to schedule webhook calls.
      * @param jsonSerializer                               Json serializer.
      * @param executionContextFactory                      Execution context factory.
      * @param incidentNotificationMessageMarkdownFormatter Incident notification message formatter that creates a markdown formatted message.
@@ -84,7 +86,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param incidentNotificationsConfigurationLoader     Incident configuration configuration loader.
      */
     @Autowired
-    public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
+    public IncidentNotificationServiceImpl(OutboundHttpCallQueue outboundHttpCallQueue,
                                            JsonSerializer jsonSerializer,
                                            ExecutionContextFactory executionContextFactory,
                                            EmailSenderProvider emailSenderProvider,
@@ -92,7 +94,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                                            IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter,
                                            SmtpServerConfigurationProperties smtpServerConfigurationProperties,
                                            IncidentNotificationsConfigurationLoader incidentNotificationsConfigurationLoader) {
-        this.sharedHttpClientProvider = sharedHttpClientProvider;
+        this.outboundHttpCallQueue = outboundHttpCallQueue;
         this.jsonSerializer = jsonSerializer;
         this.executionContextFactory = executionContextFactory;
         this.emailSenderProvider = emailSenderProvider;
@@ -129,12 +131,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .map(message -> filterNotifications(message, incidentNotificationConfigurations))
                 .flatMap(Flux::fromIterable)
-                .filter(incidentNotificationMessageAddressPair -> !Strings.isNullOrEmpty(
-                        incidentNotificationConfigurations.getConnectionNotifications().getNotificationAddressForStatus(incidentNotificationMessageAddressPair.getIncidentNotificationMessage().getStatus())))
                 .filter(incidentNotificationMessageAddressPair -> !Strings.isNullOrEmpty(incidentNotificationMessageAddressPair.getNotificationAddress()))
                 .flatMap(incidentNotificationMessageAddressPair -> {
+                    String notificationAddress = incidentNotificationMessageAddressPair.getNotificationAddress();
 
-                    if(incidentNotificationMessageAddressPair.getNotificationAddress().contains("@")){
+                    if (!notificationAddress.startsWith("http://") && !notificationAddress.startsWith("https://") &&
+                            notificationAddress.contains("@")) {
                         String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(incidentNotificationMessageAddressPair.getIncidentNotificationMessage());
                         incidentNotificationMessageAddressPair.getIncidentNotificationMessage().setText(incidentText);
 
@@ -227,23 +229,15 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param incidentNotificationMessageAddressPair Incident notification payload and webhook url pair.
      * @return Mono that returns the target webhook url.
      */
-    protected Mono<IncidentNotificationMessageAddressPair> sendWebhookNotification(IncidentNotificationMessageAddressPair incidentNotificationMessageAddressPair) {
-        HttpClient httpClient = this.sharedHttpClientProvider.getHttp11SharedClient();
+    protected Mono<IncidentNotificationMessageAddressPair> sendWebhookNotification(
+            IncidentNotificationMessageAddressPair incidentNotificationMessageAddressPair) {
         String serializedJsonMessage = this.jsonSerializer.serialize(incidentNotificationMessageAddressPair.getIncidentNotificationMessage());
-        byte[] messageBytes = serializedJsonMessage.getBytes(StandardCharsets.UTF_8);
 
-        Mono<Void> responseSent = httpClient
-                .headers(httpHeaders -> {
-                    httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE + "; charset=utf-8");
-                    httpHeaders.add(HttpHeaders.CONTENT_LENGTH, messageBytes.length);
-                })
-                .post()
-                .uri(incidentNotificationMessageAddressPair.getNotificationAddress())
-                .send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)))
-                .response()
-                .then();
+        OutboundHttpMessage outboundHttpMessage = new OutboundHttpMessage(
+                incidentNotificationMessageAddressPair.getNotificationAddress(), serializedJsonMessage);
+        this.outboundHttpCallQueue.sendMessage(outboundHttpMessage);
 
-        return responseSent.retry(3).thenReturn(incidentNotificationMessageAddressPair);
+        return Mono.just(incidentNotificationMessageAddressPair);
     }
 
     /**
@@ -280,7 +274,8 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     }
                 }
         ).then();
-        return responseSent.retry(3).thenReturn(incidentNotificationMessageAddressPair);
+        return responseSent.retry(3).onErrorComplete()
+                .thenReturn(incidentNotificationMessageAddressPair);
     }
 
     /**

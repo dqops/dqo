@@ -32,8 +32,8 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "DomainConnectionTableKey", description = "Table key that identifies a table in the data quality cache or a data lineage cache.")
 @Data
-@lombok.EqualsAndHashCode
-@lombok.ToString
+@lombok.EqualsAndHashCode(callSuper = false)
+@lombok.ToString()
 public final class DomainConnectionTableKey {
     /**
      * Data domain name.
