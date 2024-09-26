@@ -179,7 +179,6 @@ public class HanaTableUniquenessDuplicateRecordCountSensorParametersSpecIntegrat
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
     }
 
-
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsErrorSamples() {
         this.sut.setColumns(List.of("length_string", "strings_with_numbers"));
