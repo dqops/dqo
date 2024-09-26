@@ -2,31 +2,27 @@
 
 {% macro render_current_event_diff() -%}
     {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-    CAST(DATE_DIFF(
-        'MILLISECOND',
+    NANO100_BETWEEN(
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         CURRENT_TIMESTAMP
-    ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
+    ) / 24.0 / 3600.0 / 1000.0 / 10000
     {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-    CAST(DATE_DIFF(
-        'DAY',
+    DAYS_BETWEEN(
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         CURRENT_DATE
-    ) AS DOUBLE)
+    )
     {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-    CAST(DATE_DIFF(
-        'MILLISECOND',
+    NANO100_BETWEEN(
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         CURRENT_TIMESTAMP
-    ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
+    ) / 24.0 / 3600.0 / 1000.0 / 10000
     {%- else -%}
-    CAST(DATE_DIFF(
-        'MILLISECOND',
+    NANO100_BETWEEN(
         MAX(
             TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ),
         CURRENT_TIMESTAMP
-    ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
+    ) / 24.0 / 3600.0 / 1000.0 / 10000
     {%- endif -%}
 {%- endmacro -%}
 

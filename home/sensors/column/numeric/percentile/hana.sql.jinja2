@@ -1,50 +1,17 @@
 {% import '/dialects/hana.sql.jinja2' as lib with context -%}
 
-{%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
-    {%- if lib.time_series is not none -%}
-        {{- lib.eol() -}}
-        {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
-        {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
-        {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
-    {%- endif -%}
-{%- endmacro -%}
-
-{%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
-    {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
-        {%- for attribute in lib.data_groupings -%}
-            {%- with data_grouping_level = lib.data_groupings[attribute] -%}
-                {%- if data_grouping_level.source == 'tag' -%}
-                    {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
-                {%- elif data_grouping_level.source == 'column_value' -%}
-                    {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
-                {%- endif -%}
-                {{ "," if not loop.last }}
-            {%- endwith %}
-        {%- endfor -%}
-    {%- endif -%}
-{%- endmacro -%}
-
 SELECT
-    MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
-    {% if lib.time_series is not none %}
-    nested_table."time_period" AS time_period,
-    nested_table."time_period_utc" AS time_period_utc
-    {%- endif -%}
-    {{- lib.render_data_grouping_projections('analyzed_table') }}
+    PERCENTILE_CONT({{ parameters.percentile_value }})
+    WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM(
     SELECT
-        PERCENTILE_CONT(
-            CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-            {{ parameters.percentile_value }})
-        OVER (PARTITION BY
-            {%- if lib.data_groupings is none and lib.time_series is none %}
-            NULL
-            {%- endif -%}
-            {{render_local_time_dimension_projection('analyzed_table') -}}
-            {{render_local_data_grouping_projections('analyzed_table') }}
-        ) AS actual_value
-        {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        original_table.*
+        {{- lib.render_data_grouping_projections('original_table') }}
+        {{- lib.render_time_dimension_projection('original_table') }}
+    FROM {{ lib.render_target_table() }} original_table
+    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+) analyzed_table
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}

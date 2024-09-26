@@ -6,7 +6,7 @@ SELECT
         ELSE SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NULL
+                        AND {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{lib.render_date_format(parameters.date_format)}}
                     THEN 1
                 ELSE 0
             END

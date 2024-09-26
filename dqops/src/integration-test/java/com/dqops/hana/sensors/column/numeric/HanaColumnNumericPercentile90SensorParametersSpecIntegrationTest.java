@@ -22,6 +22,7 @@ import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.hana.BaseHanaIntegrationTest;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -29,7 +30,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.numeric.ColumnNumericPercentile90SensorParametersSpec;
-import com.dqops.hana.BaseHanaIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ public class HanaColumnNumericPercentile90SensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(18.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -79,7 +80,7 @@ public class HanaColumnNumericPercentile90SensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(18.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class HanaColumnNumericPercentile90SensorParametersSpecIntegrationTest ex
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(19.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(18.1, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

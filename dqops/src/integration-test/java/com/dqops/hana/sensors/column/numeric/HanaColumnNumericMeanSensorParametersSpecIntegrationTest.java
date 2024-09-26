@@ -87,7 +87,7 @@ public class HanaColumnNumericMeanSensorParametersSpecIntegrationTest extends Ba
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class HanaColumnNumericMeanSensorParametersSpecIntegrationTest extends Ba
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class HanaColumnNumericMeanSensorParametersSpecIntegrationTest extends Ba
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class HanaColumnNumericMeanSensorParametersSpecIntegrationTest extends Ba
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(3.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class HanaColumnNumericMeanSensorParametersSpecIntegrationTest extends Ba
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

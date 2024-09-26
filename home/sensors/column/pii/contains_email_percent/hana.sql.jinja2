@@ -2,14 +2,14 @@
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-        ELSE CAST(100.0 * SUM(
+        ELSE 100.0 * SUM(
             CASE
                 WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) LIKE_REGEXPR
                      '(^|[ \t.,:;"''`|\n\r])[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}([ \t.,:;"''`|\n\r]|$)'
                     THEN 1
                 ELSE 0
             END
-        ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END
     AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
