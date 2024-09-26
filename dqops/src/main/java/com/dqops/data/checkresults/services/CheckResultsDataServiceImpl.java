@@ -849,6 +849,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         PhysicalTableName physicalTableName = tableCurrentDataQualityStatusFilterParameters.getPhysicalTableName();
 
         TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
+        statusModel.setDataDomain(userDomainIdentity.getDataDomainCloud());
         statusModel.setConnectionName(connectionName);
         statusModel.setSchemaName(physicalTableName.getSchemaName());
         statusModel.setTableName(physicalTableName.getTableName());

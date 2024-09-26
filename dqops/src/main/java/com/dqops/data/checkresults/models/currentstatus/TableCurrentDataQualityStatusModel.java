@@ -55,6 +55,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     public static final String UPSTREAM_FAKE_COLUMN_NAME = "__upstream_columns_combined_status";
 
     /**
+     * Data domain name.
+     */
+    @JsonPropertyDescription("Data domain name.")
+    private String dataDomain;
+
+    /**
      * The connection name in DQOps.
      */
     @JsonPropertyDescription("The connection name in DQOps.")
@@ -499,6 +505,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                     (validResultsAggregate + warningResults) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
 
             TableCurrentDataQualityStatusModel result = new TableCurrentDataQualityStatusModel() {{
+                setDataDomain("");
                 setConnectionName(SampleStringsRegistry.getConnectionName());
                 setSchemaName(SampleStringsRegistry.getSchemaName());
                 setTableName(SampleStringsRegistry.getTableName());

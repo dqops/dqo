@@ -328,6 +328,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the password of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerPassword;
 
+    @CommandLine.Option(names = {"--dqo.integrations.table-health-webhook-urls"},
+            description = "A comma separated list of webhook URLs where DQOps sends updates of the table data quality status changes.", defaultValue = "")
+    private Integer dqoIntegrationsTableHealthWebhookUrls;
+
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
             description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). " +
                     "The maximum number of threads is also limited by the DQOps license.")

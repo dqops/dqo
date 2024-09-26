@@ -64,6 +64,17 @@ public class TableStatusCacheStub implements TableStatusCache {
     }
 
     /**
+     * Retrieves the current table status for a requested table and sends the combined monitoring + partition check status
+     * to the data catalog.
+     *
+     * @param tableStatusKey Table status key.
+     */
+    @Override
+    public void sendCurrentTableStatusToDataCatalog(DomainConnectionTableKey tableStatusKey) {
+
+    }
+
+    /**
      * Returns a future that is completed when there are no queued table status reload operations.
      *
      * @return Future that is completed when the status of all requested tables was loaded.

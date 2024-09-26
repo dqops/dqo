@@ -24,6 +24,7 @@ import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityS
  */
 public class CurrentTableStatusCacheEntry {
     private DomainConnectionTableKey key;
+    private boolean sendDataQualityStatusToDataCatalog;
     private final Object lock = new Object();
     private CurrentTableStatusEntryStatus status;
     private TableCurrentDataQualityStatusModel allCheckTypesWithColumns;
@@ -36,10 +37,14 @@ public class CurrentTableStatusCacheEntry {
      * Creates a new entry.
      * @param key Key that identifies the table.
      * @param status Current status.
+     * @param sendDataQualityStatusToDataCatalog When this entry is loaded, send it to a data catalog service.
      */
-    public CurrentTableStatusCacheEntry(DomainConnectionTableKey key, CurrentTableStatusEntryStatus status) {
+    public CurrentTableStatusCacheEntry(DomainConnectionTableKey key,
+                                        CurrentTableStatusEntryStatus status,
+                                        boolean sendDataQualityStatusToDataCatalog) {
         this.key = key;
         this.status = status;
+        this.sendDataQualityStatusToDataCatalog = sendDataQualityStatusToDataCatalog;
     }
 
     /**
@@ -48,6 +53,22 @@ public class CurrentTableStatusCacheEntry {
      */
     public DomainConnectionTableKey getKey() {
         return key;
+    }
+
+    /**
+     * Returns a flag that this data quality status entry should be sent to a data catalog after it was loaded.
+     * @return True when the entry should be sent to a data catalog.
+     */
+    public boolean isSendDataQualityStatusToDataCatalog() {
+        return sendDataQualityStatusToDataCatalog;
+    }
+
+    /**
+     * Set the field that the data should be sent to a data quality catalog.
+     * @param sendDataQualityStatusToDataCatalog True when the status should be sent to a data quality catalog or it was already sent.
+     */
+    public void setSendDataQualityStatusToDataCatalog(boolean sendDataQualityStatusToDataCatalog) {
+        this.sendDataQualityStatusToDataCatalog = sendDataQualityStatusToDataCatalog;
     }
 
     /**

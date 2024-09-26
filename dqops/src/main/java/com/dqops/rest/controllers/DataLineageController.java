@@ -199,6 +199,7 @@ public class DataLineageController {
 
             sourceTables.forEach(listModel -> {
                 TableCurrentDataQualityStatusModel notFoundTableStatus = new TableCurrentDataQualityStatusModel(){{
+                    setDataDomain(principal.getDataDomainIdentity().getDataDomainCloud());
                     setConnectionName(listModel.getSourceConnection());
                     setSchemaName(listModel.getSourceSchema());
                     setTableName(listModel.getSourceTable());

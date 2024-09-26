@@ -15,6 +15,8 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.catalogsync.DataCatalogHealthSendService;
+import com.dqops.core.configuration.DqoIntegrationsConfigurationProperties;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -62,6 +64,8 @@ public class EnvironmentController {
     private Environment springEnvironment;
     private InstanceCloudLoginService instanceCloudLoginService;
     private LocalDataDomainRegistry dataDomainRegistry;
+    private DataCatalogHealthSendService dataCatalogHealthSendService;
+
 
     /**
      * Dependency injection constructor of the environment controller.
@@ -69,16 +73,20 @@ public class EnvironmentController {
      * @param springEnvironment Spring Boot environment.
      * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
      * @param dataDomainRegistry Data domain registry - to detect if there are any data domains, so data domains are supported.
+     * @param dataCatalogHealthSendService Data catalog notification send service - to see if data catalog synchronization is possible.
      */
     @Autowired
     public EnvironmentController(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                  Environment springEnvironment,
                                  InstanceCloudLoginService instanceCloudLoginService,
-                                 LocalDataDomainRegistry dataDomainRegistry) {
+                                 LocalDataDomainRegistry dataDomainRegistry,
+                                 DataCatalogHealthSendService dataCatalogHealthSendService) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.springEnvironment = springEnvironment;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dataDomainRegistry = dataDomainRegistry;
+
+        this.dataCatalogHealthSendService = dataCatalogHealthSendService;
     }
 
     /**
@@ -156,7 +164,8 @@ public class EnvironmentController {
                 return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
             }
 
-            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
+            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(
+                    apiKey, principal, this.dataCatalogHealthSendService.isSynchronizationSupported());
             if (this.dataDomainRegistry.getNestedDataDomains() == null) {
                 dqoUserProfileModel.setCanUseDataDomains(false);
             }

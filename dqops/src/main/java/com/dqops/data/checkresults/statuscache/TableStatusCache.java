@@ -55,6 +55,13 @@ public interface TableStatusCache {
     TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(DomainConnectionTableKey tableStatusKey);
 
     /**
+     * Retrieves the current table status for a requested table and sends the combined monitoring + partition check status
+     * to the data catalog.
+     * @param tableStatusKey Table status key.
+     */
+     void sendCurrentTableStatusToDataCatalog(DomainConnectionTableKey tableStatusKey);
+
+    /**
      * Notifies the table status cache that the table result were updated and should be invalidated.
      *
      * @param tableStatusKey Table status key.

@@ -38023,6 +38023,10 @@
         "can_use_data_domains" : {
           "type" : "boolean",
           "description" : "User can use data domains. Support for data domains requires an ENTERPRISE license of DQOps."
+        },
+        "can_synchronize_to_data_catalog" : {
+          "type" : "boolean",
+          "description" : "User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role."
         }
       },
       "description" : "The model that describes the current user and his access rights."
@@ -41907,6 +41911,10 @@
     "TableCurrentDataQualityStatusModel" : {
       "type" : "object",
       "properties" : {
+        "data_domain" : {
+          "type" : "string",
+          "description" : "Data domain name."
+        },
         "connection_name" : {
           "type" : "string",
           "description" : "The connection name in DQOps."

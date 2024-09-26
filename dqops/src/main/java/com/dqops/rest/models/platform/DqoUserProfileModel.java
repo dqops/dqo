@@ -217,11 +217,21 @@ public class DqoUserProfileModel {
     private boolean canUseDataDomains;
 
     /**
+     * User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role."
+     */
+    @JsonPropertyDescription("User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role.")
+    private boolean canSynchronizeToDataCatalog;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQOps Cloud api key.
+     * @param principal Calling user principal.
+     * @param syncToDataCatalogPossible True when it is possible to synchronize to a data catalog.
      * @return User profile.
      */
-    public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey, DqoUserPrincipal principal) {
+    public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey,
+                                                             DqoUserPrincipal principal,
+                                                             boolean syncToDataCatalogPossible) {
         DqoUserProfileModel model = new DqoUserProfileModel() {{
             setUser(principal.getDataDomainIdentity().getUserName());
             setAccountRole(principal.getAccountRole());
@@ -240,6 +250,7 @@ public class DqoUserProfileModel {
             setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageUsers(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
             setCanManageAndViewSharedCredentials(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setCanSynchronizeToDataCatalog(syncToDataCatalogPossible && principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         if (dqoCloudApiKey != null) {

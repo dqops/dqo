@@ -17,6 +17,7 @@
 package com.dqops.data.checkresults.statuscache;
 
 import com.dqops.checks.CheckType;
+import com.dqops.core.catalogsync.DataCatalogHealthSendService;
 import com.dqops.core.configuration.DqoCacheConfigurationProperties;
 import com.dqops.core.configuration.DqoQueueConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
@@ -58,6 +59,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
     private final DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
     private final CheckResultsDataService checkResultsDataService;
     private final UserDomainIdentityFactory userDomainIdentityFactory;
+    private final DataCatalogHealthSendService dataCatalogHealthSendService;
     private boolean started;
     private Sinks.Many<DomainConnectionTableKey> loadTableStatusRequestSink;
     private Disposable subscription;
@@ -71,12 +73,14 @@ public class TableStatusCacheImpl implements TableStatusCache {
      * @param dqoQueueConfigurationProperties Queue configuration parameters - to configure backpressure.
      * @param checkResultsDataService Data quality check data service to load the current status.
      * @param userDomainIdentityFactory User domain identity for the admin user that identifies the correct data domain.
+     * @param dataCatalogHealthSendService Data catalog health status synchronization service. Used to send updated health statuses.
      */
     @Autowired
     public TableStatusCacheImpl(DqoCacheConfigurationProperties dqoCacheConfigurationProperties,
                                 DqoQueueConfigurationProperties dqoQueueConfigurationProperties,
                                 CheckResultsDataService checkResultsDataService,
-                                UserDomainIdentityFactory userDomainIdentityFactory) {
+                                UserDomainIdentityFactory userDomainIdentityFactory,
+                                DataCatalogHealthSendService dataCatalogHealthSendService) {
         this.tableStatusCache = Caffeine.newBuilder()
                 .maximumSize(dqoCacheConfigurationProperties.getYamlFilesLimit()) // TODO: Separate a different parameter
                 .expireAfterWrite(dqoCacheConfigurationProperties.getExpireAfterSeconds(), TimeUnit.SECONDS) // TODO: Separate a different parameter
@@ -85,6 +89,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.dqoQueueConfigurationProperties = dqoQueueConfigurationProperties;
         this.checkResultsDataService = checkResultsDataService;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
+        this.dataCatalogHealthSendService = dataCatalogHealthSendService;
         this.queueEmptyFuture = new CompletableFuture<>();
         this.queueEmptyFuture.complete(0);
     }
@@ -101,10 +106,14 @@ public class TableStatusCacheImpl implements TableStatusCache {
     /**
      * The operation that is called to create a new table entry for the cache and queue a table load operation.
      * @param tableStatusKey Table status key.
+     * @param sendDataQualityStatusToDataCatalog Configure the entry to mark it that when it is loaded, we should send a data quality status update to a data catalog.
      * @return Table status cache entry.
      */
-    protected CurrentTableStatusCacheEntry loadEntryCore(DomainConnectionTableKey tableStatusKey) {
-        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = new CurrentTableStatusCacheEntry(tableStatusKey, CurrentTableStatusEntryStatus.LOADING_QUEUED);
+    protected CurrentTableStatusCacheEntry loadEntryCore(
+            DomainConnectionTableKey tableStatusKey,
+            boolean sendDataQualityStatusToDataCatalog) {
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = new CurrentTableStatusCacheEntry(
+                tableStatusKey, CurrentTableStatusEntryStatus.LOADING_QUEUED, sendDataQualityStatusToDataCatalog);
         if (this.loadTableStatusRequestSink != null) {
             this.loadTableStatusRequestSink.emitNext(tableStatusKey, createFailureHandler());
             incrementAwaitingOperationsCount();
@@ -120,7 +129,8 @@ public class TableStatusCacheImpl implements TableStatusCache {
      */
     @Override
     public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(DomainConnectionTableKey tableStatusKey) {
-        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey,
+                (key) -> this.loadEntryCore(key, false));
         return currentTableStatusCacheEntry.getAllCheckTypesWithColumns();
     }
 
@@ -133,7 +143,8 @@ public class TableStatusCacheImpl implements TableStatusCache {
      */
     @Override
     public TableCurrentDataQualityStatusModel getCurrentTableStatus(DomainConnectionTableKey tableStatusKey, CheckType checkType) {
-        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey,
+                (key) -> this.loadEntryCore(key, false));
         if (checkType == null) {
             return currentTableStatusCacheEntry.getMonitoringAndPartitionedTableOnly();
         }
@@ -151,6 +162,24 @@ public class TableStatusCacheImpl implements TableStatusCache {
     }
 
     /**
+     * Retrieves the current table status for a requested table and sends the combined monitoring + partition check status
+     * to the data catalog.
+     * @param tableStatusKey Table status key.
+     */
+    @Override
+    public void sendCurrentTableStatusToDataCatalog(DomainConnectionTableKey tableStatusKey) {
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey,
+                (key) -> this.loadEntryCore(key, true));
+
+        TableCurrentDataQualityStatusModel monitoringAndPartitionedTableOnly = currentTableStatusCacheEntry.getMonitoringAndPartitionedTableOnly();
+        if (monitoringAndPartitionedTableOnly != null) {
+            this.dataCatalogHealthSendService.sendTableQualityStatusToCatalog(tableStatusKey, monitoringAndPartitionedTableOnly);
+        } else {
+            currentTableStatusCacheEntry.setSendDataQualityStatusToDataCatalog(true);
+        }
+    }
+
+    /**
      * Notifies the table status cache that the table result were updated and should be invalidated.
      * @param tableStatusKey Table status key.
      * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
@@ -158,7 +187,13 @@ public class TableStatusCacheImpl implements TableStatusCache {
      */
     @Override
     public void invalidateTableStatus(DomainConnectionTableKey tableStatusKey, boolean replacingCachedFile) {
-        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey,
+                (key) -> this.loadEntryCore(key, replacingCachedFile));
+
+        if (replacingCachedFile) {
+            currentTableStatusCacheEntry.setSendDataQualityStatusToDataCatalog(true); // in case that the table status is in the cache, but we want to update it and resent the status change to the data catalog
+        }
+
         CurrentTableStatusEntryStatus currentEntryStatus = currentTableStatusCacheEntry.getStatus();
 
         if (currentEntryStatus == CurrentTableStatusEntryStatus.LOADING_QUEUED || currentEntryStatus == CurrentTableStatusEntryStatus.REFRESH_QUEUED) {
@@ -225,7 +260,8 @@ public class TableStatusCacheImpl implements TableStatusCache {
      * @param tableStatusKey Table status key.
      */
     public void onRequestLoadTableStatus(DomainConnectionTableKey tableStatusKey) {
-        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey, this::loadEntryCore);
+        CurrentTableStatusCacheEntry currentTableStatusCacheEntry = this.tableStatusCache.get(tableStatusKey,
+                (key) -> this.loadEntryCore(key, false));
 
         try {
             currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADING);
@@ -256,6 +292,11 @@ public class TableStatusCacheImpl implements TableStatusCache {
 
             currentTableStatusCacheEntry.setStatusModels(fullStatusModel, monitoringAndPartitionedStatus,
                     profilingStatus, monitoringStatus, partitionedStatus); // also sets the status
+
+            if (currentTableStatusCacheEntry.isSendDataQualityStatusToDataCatalog()) {
+                currentTableStatusCacheEntry.setSendDataQualityStatusToDataCatalog(false);
+                this.dataCatalogHealthSendService.sendTableQualityStatusToCatalog(tableStatusKey, monitoringAndPartitionedStatus);
+            }
         }
         catch (Exception ex) {
             currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADED);
