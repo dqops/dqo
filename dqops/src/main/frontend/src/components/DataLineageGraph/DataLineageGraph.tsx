@@ -24,63 +24,58 @@ export default function DataLineageGraph({
   >([]);
   const [loading, setLoading] = useState(false);
   const [severityColors, setSeverityColors] = useState<string[]>([]);
-  const [fillColor, setFillColor] = useState<string>('');
-  // add loading spinner
-  const fetchTableDataLineageGraph = async () => {
-    setLoading(true);
-    try {
-      const response = await DataLineageApiClient.getTableDataLineageGraph(
-        connection,
-        schema,
-        table
-      );
-      const data = response.data;
-
-      const incompleteData = data.flows?.some((flow) => {
-        return (
-          !flow.source_table_quality_status?.table_exist ||
-          !flow.target_table_quality_status?.table_exist ||
-          !flow.upstream_combined_quality_status?.table_exist
-        );
-      });
-
-      if (incompleteData) {
-        setTimeout(() => fetchTableDataLineageGraph(), 5000);
-        return;
-      }
-      const colors: string[] = [];
-      const graph = data.flows?.map((flow) => {
-        const fromTable = data.relative_table?.compact_key;
-        const toTable = flow.source_table?.compact_key;
-        const weight = flow.weight;
-
-        const tooltip = ReactDOMServer.renderToString(renderTooltip(flow));
-        const color = getColor(
-          flow.upstream_combined_quality_status?.current_severity
-        );
-        colors.push(color);
-        return [toTable, fromTable, weight, tooltip];
-      });
-      setFillColor(
-        getColor(data.flows?.[0]?.target_table_quality_status?.current_severity)
-      );
-      setSeverityColors(colors);
-      setGraphArray(graph ?? []);
-    } catch (error) {
-      console.error('Error fetching data lineage graph:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
+    const fetchTableDataLineageGraph = async () => {
+      setLoading(true);
+      try {
+        const response = await DataLineageApiClient.getTableDataLineageGraph(
+          connection,
+          schema,
+          table
+        );
+        const data = response.data;
+
+        const incompleteData = data.flows?.some((flow) => {
+          return (
+            !flow.source_table_quality_status?.table_exist ||
+            !flow.target_table_quality_status?.table_exist ||
+            !flow.upstream_combined_quality_status?.table_exist
+          );
+        });
+
+        if (incompleteData) {
+          setTimeout(() => fetchTableDataLineageGraph(), 5000);
+          return;
+        }
+        const colors: string[] = [];
+        const graph = data.flows?.map((flow) => {
+          const fromTable = data.relative_table?.compact_key;
+          const toTable = flow.source_table?.compact_key;
+          const weight = flow.weight;
+
+          const tooltip = ReactDOMServer.renderToString(renderTooltip(flow));
+          const color = getColor(
+            flow.upstream_combined_quality_status?.current_severity
+          );
+          colors.push(color);
+          return [toTable, fromTable, weight, tooltip];
+        });
+        setSeverityColors(colors);
+        setGraphArray(graph ?? []);
+      } catch (error) {
+        console.error('Error fetching data lineage graph:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchTableDataLineageGraph();
   }, [connection, schema, table]);
 
   const options = {
-    tooltip: { isHtml: true }, // Enable HTML tooltips
+    tooltip: { isHtml: true },
     sankey: {
-      link: { color: { fill: fillColor } },
+      link: { colors: [...severityColors], colorMode: 'source' },
       node: {
         colors: [...severityColors]
       }
@@ -103,8 +98,8 @@ export default function DataLineageGraph({
     <div>
       <Chart
         chartType="Sankey"
-        width="60%"
-        height="300px"
+        width="100%"
+        height="100%"
         data={[
           ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
           ...graphArray
@@ -174,13 +169,13 @@ const getColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
       return 'gray';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal:
-      return '#E3170A';
+      return '#F9C1BE';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error:
-      return '#FF9900';
+      return '#FAD8A4';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning:
-      return '#EBE51E';
+      return '#F8F8BF';
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
-      return '#029A80';
+      return '#B9E4DE';
     default:
       return '';
   }
