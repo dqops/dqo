@@ -3,12 +3,12 @@
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-        ELSE CAST(100.0 * SUM(
+        ELSE 100.0 * SUM(
             CASE
                 WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                 ELSE 0
             END
-        ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

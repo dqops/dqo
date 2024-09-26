@@ -1,6 +1,6 @@
 {% import '/dialects/hana.sql.jinja2' as lib with context -%}
 SELECT
-    CAST(SUM(
+    SUM(
         CASE
             WHEN
                 CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) NOT LIKE_REGEXPR
@@ -8,7 +8,7 @@ SELECT
             THEN 1
             ELSE 0
         END
-    ) AS DOUBLE) AS actual_value
+    ) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM (

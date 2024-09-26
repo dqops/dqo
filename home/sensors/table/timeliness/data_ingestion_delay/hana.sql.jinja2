@@ -26,10 +26,10 @@
     CAST(DATE_DIFF(
         'MILLISECOND',
         MAX(
-            TRY_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         ),
         MAX(
-            TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )
     ) AS DOUBLE) / 24.0 / 3600.0 / 1000.0
     {%- endif -%}

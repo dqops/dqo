@@ -33,7 +33,7 @@ SELECT
     {{- lib.render_data_grouping_projections('analyzed_table') }}
 FROM(
     SELECT
-        APPROX_PERCENTILE(
+        PERCENTILE_CONT(
             CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
             {{ parameters.percentile_value }})
         OVER (PARTITION BY
