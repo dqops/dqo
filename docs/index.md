@@ -173,8 +173,8 @@ title: What is DQOps Data Quality Operations Center
 &nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](data-sources/parquet.md)
 
 ### Table formats
-[![Delta Lake](https://dqops.com/docs/images/connections/delta-lake2.png){ class=glightbox-ignored-image }](data-sources/deltalake.md)
-&nbsp; &nbsp; &nbsp; [![Iceberg](https://dqops.com/docs/images/connections/iceberg2.png){ class=glightbox-ignored-image }](data-sources/iceberg.md)
+[![Delta Lake](https://dqops.com/docs/images/connections/delta-lake3.png){ class=glightbox-ignored-image }](data-sources/deltalake.md)
+&nbsp; &nbsp; &nbsp; [![Iceberg](https://dqops.com/docs/images/connections/iceberg3.png){ class=glightbox-ignored-image }](data-sources/iceberg.md)
 
 
 ## Getting started
@@ -186,7 +186,7 @@ title: What is DQOps Data Quality Operations Center
     
         ---
     
-        Follow the DQOps tutorial to set up the platform, or simply see the whole data quality process with DQOps on examples.
+        Follow the DQOps guide to set up the platform, add a data source, analyze it, and review the data quality results.
 
         [:octicons-arrow-right-24: Getting started guide](getting-started/index.md)
 
@@ -195,7 +195,7 @@ title: What is DQOps Data Quality Operations Center
     
         ---
     
-        Find out what types of most common data quality issues DQOps can detect. The manual for each category shows how to activate the check.
+        Explore the wide range of data quality issues tha DQOps can detect. The manual for each category shows how to activate the check.
     
         [:octicons-arrow-right-24: Review the categories of data quality issues](categories-of-data-quality-checks/index.md)
 
@@ -216,26 +216,25 @@ title: What is DQOps Data Quality Operations Center
 ### Data quality checks
 DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/index.md) to capture metrics from data sources and detect data quality issues.
 
-!!! success "Data profiling"
+!!! success "Data quality assessment"
 
     <div class="grid" markdown>
 
-    ![DQOps data profiling interface](https://dqops.com/docs/images/dqops-profiling.png "DQOps captures statistics about data sources (click to enlarge)"){ loading=lazy }
+    ![DQOps data profiling interface](https://dqops.com/docs/images/working-with-dqo/statistics/statistics-results3.png "DQOps captures statistics about data sources (click to enlarge)"){ loading=lazy }
     <div>
 
-    **Profile data**
+    **Assess data**
 
-    DQOps has two methods of data profiling. The first step is capturing [basic data statistics](working-with-dqo/collecting-basic-data-statistics.md).
+    DQOps has two methods of data quality assessment. The first step is capturing [basic data statistics](working-with-dqo/collecting-basic-data-statistics.md).
     
-    When you know how the table is structured, you can experiment with [profiling data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
-    and verify the [initial data quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score) on 
-    [data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md).
+    When you know how the table is structured, you can use [rule mining engine](dqo-concepts/data-quality-rule-mining.md) to automatically propose the configuration of [profiling data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
+    to detect the most common data quality issues.
 
     [:octicons-arrow-right-24: Review data statistics](working-with-dqo/collecting-basic-data-statistics.md)
 
-    [:octicons-arrow-right-24: Use data profiling checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
+    [:octicons-arrow-right-24: Use rule mining engine](dqo-concepts/data-quality-rule-mining.md)
 
-    [:octicons-arrow-right-24: Review the initial data quality KPI score on dashboards](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
+    [:octicons-arrow-right-24: Review the initial data quality KPI score on the Table quality status](dqo-concepts/dqops-user-interface-overview.md#table-quality-status)
 
     </div>
     </div>
@@ -244,22 +243,21 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
     <div class="grid" markdown>
 
-    ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy }
+    ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-simplified-check-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy }
     <div>
 
-    **Run scheduled data quality checks**
+    **Activate continuous data quality monitoring**
 
-    [DQOps user interface](dqo-concepts/dqops-user-interface-overview.md) is designed to resemble popular database management tools. The data sources, tables and columns are on the left.
-    The workspace in the center shows tables and columns in tabs, which allows you to open multiple objects and edit many tables at once. 
+    DQOps simplifies data quality management with [data polcies that automatically activates checks](dqo-concepts/data-observability.md) on all imported tables and columns. 
+    You have full control to enable, disable, or modify existing policies, and even create new ones.
 
-    The [data quality check editor](dqo-concepts/dqops-user-interface-overview.md#check-editor) shows both the built-in data quality checks and custom data quality checks
-    that you can define in DQOps.
-    
     There are other methods to activate data quality checks. You can:
 
-    [:octicons-arrow-right-24: Configure data quality checks in YAML](dqo-concepts/configuring-data-quality-checks-and-rules.md)
+    [:octicons-arrow-right-24: Copy the checks activated by rule mining engine](dqo-concepts/data-quality-rule-mining.md)
 
-    [:octicons-arrow-right-24: Activate multiple checks at once](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-at-once)
+    [:octicons-arrow-right-24: Manually activate checks using the check editor](working-with-dqo/run-data-quality-checks.md)
+
+    [:octicons-arrow-right-24: Configure data quality checks in YAML](dqo-concepts/configuring-data-quality-checks-and-rules.md)
     
     [:octicons-arrow-right-24: Use DQOps shell](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-with-the-dqops-shell)
 
@@ -270,7 +268,7 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
     <div class="grid" markdown>
 
-    ![DQOps detect anomalies in numeric values and data volume](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min.png "DQOps detects anomalies in numeric values and data volume"){ loading=lazy }
+    ![DQOps detect anomalies in numeric values and data volume](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min2.png "DQOps detects anomalies in numeric values and data volume"){ loading=lazy }
     <div>
 
     **Detect data anomalies**
@@ -353,18 +351,17 @@ React to data quality incidents and assign them to the right teams who can fix t
 
     <div class="grid" markdown>
 
-    ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring (click to enlarge)"){ loading=lazy }
+    ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management2.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring (click to enlarge)"){ loading=lazy }
     <div>
 
     **Data quality incident workflows**
 
     Organizations have separated operations team that react to data quality incidents first, and engineering teams
-    that can fix the problems. The data engineering teams should not be engaged before the data quality issue is confirmed.
+    that can fix the problems.
 
-    DQOps reduces the effort of monitoring data quality by grouping similar data quality issues into **data quality incidents**.
-    DQOps uses a [data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-workflow) to
-    create new incidents as `OPEN` when a new incident is detected. This allows the data quality operations team to review the problem
-    and assign `ACKNOWLEDGED` incidents to data engineering.
+    DQOps reduces the alert fatigue by grouping similar data quality issues into **data quality incidents**.
+    You can receive incident notifications via email or webhook, and [create multiple notification filters](dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-notifications)
+    to customize alerts for specific scenarios.
     
     [:octicons-arrow-right-24: Data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md)
         

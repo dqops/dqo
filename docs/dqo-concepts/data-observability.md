@@ -24,11 +24,11 @@ DQOps enables data observability by automatically activating selected data quali
 DQOps applies data observability by automatically activating data quality checks on monitored data sources. 
 
 Upon installation, DQOps creates **Data quality policy** configuration files. These policies automatically 
-activate checks on all tables and columns imported into DQOps.
+activate checks on all tables and columns in DQOps.
 
 You can enable, disable or customize the existing policies, and also add a new policies.
-This customization is done through the DQOps table configuration files [*.dqotable.yaml*](../reference/yaml/TableYaml.md) 
-as described in the guide for [configuring data quality checks](configuring-data-quality-checks-and-rules.md).
+This customization can be done using the user interface or through the policies YAML files located 
+in the [*patterns* folder](dqops-user-home-folder.md#data-quality-policies).
 
 ### Automatic activation of checks
 DQOps makes it easy to distinguish between automatically activated and manually activated data quality checks within the 
