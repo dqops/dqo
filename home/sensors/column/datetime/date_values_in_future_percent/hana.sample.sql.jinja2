@@ -7,6 +7,6 @@
     {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         {{ lib.render_target_column('analyzed_table') }} > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER))
     {% else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER))
+        TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER))
     {% endif -%}
 {%- endcall -%}
