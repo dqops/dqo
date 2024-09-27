@@ -68,7 +68,9 @@ jobs:
             dqops/src/main/frontend/node_modules
           key: 'npm'
 
-      - uses: docker-practice/actions-setup-docker@master
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/setup-buildx-action@v3
 
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build and Push Docker Image
