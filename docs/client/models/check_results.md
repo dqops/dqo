@@ -5,6 +5,19 @@ title: DQOps REST API check_results models reference
 The references of all objects used by [check_results](../operations/check_results.md) REST API operations are listed below.
 
 
+## CheckResultsDetailedLoadMode
+The mode of loading a list of detailed check results: the most recent values for each data group, or all results of the first group.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|first_data_group<br/>most_recent_per_group<br/>|
+
+___
+
 ## CheckResultsListModel
 Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.
 
@@ -35,6 +48,7 @@ The table validity status. It is a summary of the results of the most recently e
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`data_domain`</span>|Data domain name.|*string*|
 |<span class="no-wrap-code">`connection_name`</span>|The connection name in DQOps.|*string*|
 |<span class="no-wrap-code">`schema_name`</span>|The schema name.|*string*|
 |<span class="no-wrap-code">`table_name`</span>|The table name.|*string*|

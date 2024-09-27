@@ -35,6 +35,7 @@ http://localhost:8888/api/search/columns
 |<span class="no-wrap-code">`table`</span>|Optional table name filter|*string*| |
 |<span class="no-wrap-code">`column`</span>|Optional column name filter|*string*| |
 |<span class="no-wrap-code">`column_type`</span>|Optional physical column&#x27;s data type filter|*string*| |
+|<span class="no-wrap-code">[`column_category`](../models/search.md#datatypecategory)</span>|Optional data type category filter|*[DataTypeCategory](../models/search.md#datatypecategory)*| |
 |<span class="no-wrap-code">`label`</span>|Optional labels to filter the columns|*List[string]*| |
 |<span class="no-wrap-code">`page`</span>|Page number, the first page is 1|*long*| |
 |<span class="no-wrap-code">`limit`</span>|Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided|*long*| |
@@ -131,7 +132,8 @@ http://localhost:8888/api/search/columns
     ```python
     from dqops import client
 	from dqops.client.api.search import find_columns
-	from dqops.client.models import CheckType
+	from dqops.client.models import CheckType, \
+	                                DataTypeCategory
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -240,7 +242,8 @@ http://localhost:8888/api/search/columns
     ```python
     from dqops import client
 	from dqops.client.api.search import find_columns
-	from dqops.client.models import CheckType
+	from dqops.client.models import CheckType, \
+	                                DataTypeCategory
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -349,7 +352,8 @@ http://localhost:8888/api/search/columns
     ```python
     from dqops import client
 	from dqops.client.api.search import find_columns
-	from dqops.client.models import CheckType
+	from dqops.client.models import CheckType, \
+	                                DataTypeCategory
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -461,7 +465,8 @@ http://localhost:8888/api/search/columns
     ```python
     from dqops import client
 	from dqops.client.api.search import find_columns
-	from dqops.client.models import CheckType
+	from dqops.client.models import CheckType, \
+	                                DataTypeCategory
 	
 	token = 's4mp13_4u7h_70k3n'
 	

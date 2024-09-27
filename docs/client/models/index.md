@@ -52,6 +52,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
+|[*CheckResultsDetailedLoadMode*](./check_results.md#checkresultsdetailedloadmode)|The mode of loading a list of detailed check results: the most recent values for each data group, or all results of the first group.|
 |[*CheckResultsListModel*](./check_results.md#checkresultslistmodel)|Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.|
 |[*TableCurrentDataQualityStatusModel*](./check_results.md#tablecurrentdataqualitystatusmodel)|The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.|
 
@@ -77,7 +78,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*DataTypeCategory*](./column_quality_policies.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
 |[*TargetColumnPatternSpec*](./column_quality_policies.md#targetcolumnpatternspec)|The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.|
 |[*ColumnQualityPolicyListModel*](./column_quality_policies.md#columnqualitypolicylistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
 |[*ColumnMonitoringCheckCategoriesSpec*](./column_quality_policies.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
@@ -146,6 +146,9 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
+|[*DomainConnectionTableKey*](./data_lineage.md#domainconnectiontablekey)|A key object that identifies every table. These keys are used in a cache to store the most recent table quality status for each table or a data lineage cache.|
+|[*TableLineageFlowModel*](./data_lineage.md#tablelineageflowmodel)|Table lineage flow model that describes the data flow from one table to another table, and the data quality status of the source table.|
+|[*TableLineageModel*](./data_lineage.md#tablelineagemodel)|The table lineage model that returns all upstream tables, downstream tables, or both.|
 |[*TableLineageSourceListModel*](./data_lineage.md#tablelineagesourcelistmodel)|Data lineage model that describes one source table of the current table.|
 |[*SourceColumnsSetSpec*](./data_lineage.md#sourcecolumnssetspec)|A collection of unique names of source columns from which the current column receives data. This information is used to track column-level data lineage.|
 |[*ColumnLineageSourceSpec*](./data_lineage.md#columnlineagesourcespec)|Describes the list of source columns for a column in the current table.|
@@ -315,6 +318,13 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |------------|---------------------------------|
 |[*CheckTarget*](./schemas.md#checktarget)|Enumeration of targets where the check is applied. It is one of &quot;table&quot; or &quot;column&quot;.|
 |[*SchemaModel*](./schemas.md#schemamodel)|Schema model that is returned by the REST API. Describes a single unique schema name.|
+
+
+## search
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*DataTypeCategory*](./search.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
 
 
 ## sensor_readouts

@@ -51,6 +51,7 @@ The model that describes the current user and his access rights.
 |<span class="no-wrap-code">`connection_tables_limit`</span>|Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
 |<span class="no-wrap-code">`tables_limit`</span>|Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
 |<span class="no-wrap-code">`jobs_limit`</span>|Limit of the number of supported concurrent jobs that DQOps can run in parallel on this instance.|*integer*|
+|<span class="no-wrap-code">`data_domains_limit`</span>|Limit of the number of supported data domains in an ENTERPRISE version of DQOps.|*integer*|
 |<span class="no-wrap-code">[`account_role`](#dqouserrole)</span>|User role that limits possible operations that the current user can perform.|*[DqoUserRole](#dqouserrole)*|
 |<span class="no-wrap-code">`data_quality_data_warehouse_enabled`</span>|True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.|*boolean*|
 |<span class="no-wrap-code">`can_manage_account`</span>|User is the administrator of the account and can perform security related actions, such as managing users.|*boolean*|
@@ -70,6 +71,7 @@ The model that describes the current user and his access rights.
 |<span class="no-wrap-code">`can_manage_and_view_shared_credentials`</span>|User can manage shared credentials and view (or download) already defined shared credentials.|*boolean*|
 |<span class="no-wrap-code">`can_change_own_password`</span>|User can change his own password in DQOps Cloud, because the DQOps Cloud Pairing API Key is valid and synchronization is enabled.|*boolean*|
 |<span class="no-wrap-code">`can_use_data_domains`</span>|User can use data domains. Support for data domains requires an ENTERPRISE license of DQOps.|*boolean*|
+|<span class="no-wrap-code">`can_synchronize_to_data_catalog`</span>|User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role.|*boolean*|
 
 
 ___

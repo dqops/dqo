@@ -223,6 +223,7 @@ nav:
       - rule_mining: 'client/models/rule_mining.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
+      - search: 'client/models/search.md'
       - sensor_readouts: 'client/models/sensor_readouts.md'
       - sensors: 'client/models/sensors.md'
       - shared_credentials: 'client/models/shared_credentials.md'

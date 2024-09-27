@@ -30,6 +30,8 @@ class DqoUserProfileModel:
             Cloud data quality warehouse.
         jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQOps can run in parallel
             on this instance.
+        data_domains_limit (Union[Unset, int]): Limit of the number of supported data domains in an ENTERPRISE version
+            of DQOps.
         account_role (Union[Unset, DqoUserRole]):
         data_quality_data_warehouse_enabled (Union[Unset, bool]): True when the account has access to the DQOps Cloud's
             data quality data lake and data warehouse, allowing to synchronize files and use the data quality data
@@ -58,6 +60,8 @@ class DqoUserProfileModel:
             Cloud Pairing API Key is valid and synchronization is enabled.
         can_use_data_domains (Union[Unset, bool]): User can use data domains. Support for data domains requires an
             ENTERPRISE license of DQOps.
+        can_synchronize_to_data_catalog (Union[Unset, bool]): User can synchronize data to a data catalog. The instance
+            must be configured correctly and the user must have at least an EDITOR role.
     """
 
     user: Union[Unset, str] = UNSET
@@ -70,6 +74,7 @@ class DqoUserProfileModel:
     connection_tables_limit: Union[Unset, int] = UNSET
     tables_limit: Union[Unset, int] = UNSET
     jobs_limit: Union[Unset, int] = UNSET
+    data_domains_limit: Union[Unset, int] = UNSET
     account_role: Union[Unset, DqoUserRole] = UNSET
     data_quality_data_warehouse_enabled: Union[Unset, bool] = UNSET
     can_manage_account: Union[Unset, bool] = UNSET
@@ -89,6 +94,7 @@ class DqoUserProfileModel:
     can_manage_and_view_shared_credentials: Union[Unset, bool] = UNSET
     can_change_own_password: Union[Unset, bool] = UNSET
     can_use_data_domains: Union[Unset, bool] = UNSET
+    can_synchronize_to_data_catalog: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -102,6 +108,7 @@ class DqoUserProfileModel:
         connection_tables_limit = self.connection_tables_limit
         tables_limit = self.tables_limit
         jobs_limit = self.jobs_limit
+        data_domains_limit = self.data_domains_limit
         account_role: Union[Unset, str] = UNSET
         if not isinstance(self.account_role, Unset):
             account_role = self.account_role.value
@@ -126,6 +133,7 @@ class DqoUserProfileModel:
         )
         can_change_own_password = self.can_change_own_password
         can_use_data_domains = self.can_use_data_domains
+        can_synchronize_to_data_catalog = self.can_synchronize_to_data_catalog
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -150,6 +158,8 @@ class DqoUserProfileModel:
             field_dict["tables_limit"] = tables_limit
         if jobs_limit is not UNSET:
             field_dict["jobs_limit"] = jobs_limit
+        if data_domains_limit is not UNSET:
+            field_dict["data_domains_limit"] = data_domains_limit
         if account_role is not UNSET:
             field_dict["account_role"] = account_role
         if data_quality_data_warehouse_enabled is not UNSET:
@@ -192,6 +202,10 @@ class DqoUserProfileModel:
             field_dict["can_change_own_password"] = can_change_own_password
         if can_use_data_domains is not UNSET:
             field_dict["can_use_data_domains"] = can_use_data_domains
+        if can_synchronize_to_data_catalog is not UNSET:
+            field_dict["can_synchronize_to_data_catalog"] = (
+                can_synchronize_to_data_catalog
+            )
 
         return field_dict
 
@@ -217,6 +231,8 @@ class DqoUserProfileModel:
         tables_limit = d.pop("tables_limit", UNSET)
 
         jobs_limit = d.pop("jobs_limit", UNSET)
+
+        data_domains_limit = d.pop("data_domains_limit", UNSET)
 
         _account_role = d.pop("account_role", UNSET)
         account_role: Union[Unset, DqoUserRole]
@@ -265,6 +281,10 @@ class DqoUserProfileModel:
 
         can_use_data_domains = d.pop("can_use_data_domains", UNSET)
 
+        can_synchronize_to_data_catalog = d.pop(
+            "can_synchronize_to_data_catalog", UNSET
+        )
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -276,6 +296,7 @@ class DqoUserProfileModel:
             connection_tables_limit=connection_tables_limit,
             tables_limit=tables_limit,
             jobs_limit=jobs_limit,
+            data_domains_limit=data_domains_limit,
             account_role=account_role,
             data_quality_data_warehouse_enabled=data_quality_data_warehouse_enabled,
             can_manage_account=can_manage_account,
@@ -295,6 +316,7 @@ class DqoUserProfileModel:
             can_manage_and_view_shared_credentials=can_manage_and_view_shared_credentials,
             can_change_own_password=can_change_own_password,
             can_use_data_domains=can_use_data_domains,
+            can_synchronize_to_data_catalog=can_synchronize_to_data_catalog,
         )
 
         dqo_user_profile_model.additional_properties = d

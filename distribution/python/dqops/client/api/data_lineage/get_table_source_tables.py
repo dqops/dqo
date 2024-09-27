@@ -31,7 +31,7 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage".format(
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources".format(
             connectionName=connection_name,
             schemaName=schema_name,
             tableName=table_name,

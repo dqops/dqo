@@ -5,20 +5,6 @@ title: DQOps REST API column_quality_policies models reference
 The references of all objects used by [column_quality_policies](../operations/column_quality_policies.md) REST API operations are listed below.
 
 
-## DataTypeCategory
-Enumeration of common data type categories of data types. The providers will use this information to answer
- which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|numeric_integer<br/>numeric_decimal<br/>numeric_float<br/>datetime_timestamp<br/>datetime_datetime<br/>datetime_date<br/>datetime_time<br/>text<br/>clob<br/>json<br/>bool<br/>binary<br/>array<br/>other<br/>|
-
-___
-
 ## TargetColumnPatternSpec
 The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.
 
@@ -30,7 +16,7 @@ The configuration of a column pattern to match default column checks. Includes a
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`column`</span>|The target column name filter. Accepts wildcards in the format: *id, *, c_*.|*string*|
 |<span class="no-wrap-code">`data_type`</span>|The target column data type filter. Filters by a physical (database specific) data type name imported from the data source. Accepts wildcards in the format: *int, *, big*.|*string*|
-|<span class="no-wrap-code">[`data_type_category`](#datatypecategory)</span>|The filter for a target data type category.|*[DataTypeCategory](#datatypecategory)*|
+|<span class="no-wrap-code">[`data_type_category`](./search.md#datatypecategory)</span>|The filter for a target data type category.|*[DataTypeCategory](./search.md#datatypecategory)*|
 |<span class="no-wrap-code">`connection`</span>|The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*.|*string*|
 |<span class="no-wrap-code">`schema`</span>|The schema name filter. Accepts wildcards in the format: *_prod, *, pub*.|*string*|
 |<span class="no-wrap-code">`table`</span>|The table name filter. Accepts wildcards in the format: *_customers, *, fact_*.|*string*|

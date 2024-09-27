@@ -120,6 +120,7 @@ from .check_model import CheckModel
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
 from .check_result_status import CheckResultStatus
+from .check_results_detailed_load_mode import CheckResultsDetailedLoadMode
 from .check_results_list_model import CheckResultsListModel
 from .check_results_overview_data_model import CheckResultsOverviewDataModel
 from .check_run_schedule_group import CheckRunScheduleGroup
@@ -1463,6 +1464,7 @@ from .dimension_current_data_quality_status_model import (
     DimensionCurrentDataQualityStatusModel,
 )
 from .display_hint import DisplayHint
+from .domain_connection_table_key import DomainConnectionTableKey
 from .dqo_job_change_model import DqoJobChangeModel
 from .dqo_job_entry_parameters_model import DqoJobEntryParametersModel
 from .dqo_job_history_entry_model import DqoJobHistoryEntryModel
@@ -1858,6 +1860,8 @@ from .table_duplicate_record_percent_sensor_parameters_spec import (
     TableDuplicateRecordPercentSensorParametersSpec,
 )
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
+from .table_lineage_flow_model import TableLineageFlowModel
+from .table_lineage_model import TableLineageModel
 from .table_lineage_source_list_model import TableLineageSourceListModel
 from .table_lineage_source_list_model_properties import (
     TableLineageSourceListModelProperties,
@@ -2157,6 +2161,7 @@ __all__ = (
     "CheckMiningProposalModelColumnChecks",
     "CheckModel",
     "CheckResultEntryModel",
+    "CheckResultsDetailedLoadMode",
     "CheckResultsListModel",
     "CheckResultSortOrder",
     "CheckResultsOverviewDataModel",
@@ -2704,6 +2709,7 @@ __all__ = (
     "DetectedDatatypeEqualsRuleParametersSpec",
     "DimensionCurrentDataQualityStatusModel",
     "DisplayHint",
+    "DomainConnectionTableKey",
     "DqoJobChangeModel",
     "DqoJobEntryParametersModel",
     "DqoJobHistoryEntryModel",
@@ -2961,6 +2967,8 @@ __all__ = (
     "TableDuplicateRecordPercentCheckSpec",
     "TableDuplicateRecordPercentSensorParametersSpec",
     "TableIncidentGroupingSpec",
+    "TableLineageFlowModel",
+    "TableLineageModel",
     "TableLineageSourceListModel",
     "TableLineageSourceListModelProperties",
     "TableLineageSourceSpec",

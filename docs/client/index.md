@@ -464,11 +464,13 @@ By running this operation you should get a response that resembles the one below
 
 ```python
 TableCurrentDataQualityStatusModel(
+	data_domain='',
 	connection_name='sample_connection',
 	schema_name='sample_schema',
 	table_name='sample_table',
+	total_row_count=122000,
 	current_severity=RuleSeverityLevel.WARNING,
-	highest_historical_severity=RuleSeverityLevel.FATAL,
+	highest_historical_severity=RuleSeverityLevel.ERROR,
 	last_check_executed_at='2007-10-14T16:42:42Z',
 	executed_checks=8,
 	valid_results=3,

@@ -14,7 +14,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **POST**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
 ```
 
 
@@ -49,7 +49,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     **Execution**
 
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/from/sample_connection/schemas/sample_schema/tables/sample_table^
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/sources/sample_connection/schemas/sample_schema/tables/sample_table^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
@@ -220,7 +220,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **DELETE**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
 ```
 
 
@@ -248,7 +248,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     **Execution**
 
     ```bash
-    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/from/sample_connection/schemas/sample_schema/tables/sample_table^
+    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/sources/sample_connection/schemas/sample_schema/tables/sample_table^
 		-H "Accept: application/json"
 	
     ```
@@ -368,6 +368,218 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 ___
+## get_table_data_lineage_graph
+Returns a data lineage graph around the given table.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_lineage/get_table_data_lineage_graph.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/tree
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`table_lineage_model`](../models/data_lineage.md#tablelineagemodel)</span>||*[TableLineageModel](../models/data_lineage.md#tablelineagemodel)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`upstream`</span>|Optional parameter to request upstream tables. By default, upstream tables are collected unless it is disabled by passing &#x27;false&#x27;.|*boolean*| |
+|<span class="no-wrap-code">`downstream`</span>|Optional parameter to request downstream tables. By default, downstream tables are collected unless it is disabled by passing &#x27;false&#x27;.|*boolean*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/tree^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "flows" : [ ]
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_data_lineage_graph
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_data_lineage_graph.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableLineageModel(
+			flows=[
+			
+			]
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_data_lineage_graph
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_data_lineage_graph.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableLineageModel(
+			flows=[
+			
+			]
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_data_lineage_graph
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_data_lineage_graph.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableLineageModel(
+			flows=[
+			
+			]
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_data_lineage_graph
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_data_lineage_graph.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TableLineageModel(
+			flows=[
+			
+			]
+		)
+        ```
+    
+    
+    
+
+
+
+___
 ## get_table_source_table
 Reads a specific data lineage source table defined on a target tale.
 
@@ -376,7 +588,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
 ```
 
 **Return value**
@@ -411,7 +623,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     **Execution**
 
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/from/sample_connection/schemas/sample_schema/tables/sample_table^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/sources/sample_connection/schemas/sample_schema/tables/sample_table^
 		-H "Accept: application/json"
 	
     ```
@@ -607,7 +819,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources
 ```
 
 **Return value**
@@ -640,7 +852,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     **Execution**
 
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/sources^
 		-H "Accept: application/json"
 	
     ```
@@ -940,7 +1152,7 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}
 ```
 
 
@@ -975,7 +1187,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     **Execution**
 
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/from/sample_connection/schemas/sample_schema/tables/sample_table^
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/sources/sample_connection/schemas/sample_schema/tables/sample_table^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
