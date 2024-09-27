@@ -9,6 +9,11 @@ import {
 import { DataLineageApiClient } from '../../services/apiClient';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import Loader from '../Loader';
+declare global {
+  interface Window {
+    showDataLineage: ((index: number) => void) | null;
+  }
+}
 
 export default function DataLineageGraph({
   connection,
@@ -49,12 +54,14 @@ export default function DataLineageGraph({
           return;
         }
         const colors: string[] = [];
-        const graph = data.flows?.map((flow) => {
+        const graph = data.flows?.map((flow, index) => {
           const fromTable = data.relative_table?.compact_key;
           const toTable = flow.source_table?.compact_key;
           const weight = flow.weight;
 
-          const tooltip = ReactDOMServer.renderToString(renderTooltip(flow));
+          const tooltip = ReactDOMServer.renderToString(
+            renderTooltip(flow, index)
+          );
           const color = getColor(
             flow.upstream_combined_quality_status?.current_severity
           );
@@ -69,7 +76,16 @@ export default function DataLineageGraph({
         setLoading(false);
       }
     };
+
+    window.showDataLineage = function (index: number) {
+      console.log('Clicked on flow with index:', index);
+    };
+
     fetchTableDataLineageGraph();
+
+    return () => {
+      window.showDataLineage = null;
+    };
   }, [connection, schema, table]);
 
   const options = {
@@ -93,7 +109,7 @@ export default function DataLineageGraph({
   if (!graphArray.length) {
     return;
   }
-
+  // console.log(window.showDataLineage && window.showDataLineage(1));
   return (
     <div>
       <Chart
@@ -111,7 +127,7 @@ export default function DataLineageGraph({
 }
 
 // Tooltip rendering component
-const renderTooltip = (flow: TableLineageFlowModel) => {
+const renderTooltip = (flow: TableLineageFlowModel, index: number) => {
   return (
     <div className="w-100 p-2 text-sm">
       <div className="flex items-center py-1">
@@ -154,9 +170,15 @@ const renderTooltip = (flow: TableLineageFlowModel) => {
           />
         </div>
       </div>
+      <div className="flex items-center py-1">
+        <a href={`javascript:window.showDataLineage(${index})`}>
+          Show Data Lineage Details
+        </a>
+      </div>
     </div>
   );
 };
+
 const getColor = (
   status:
     | CheckCurrentDataQualityStatusModelCurrentSeverityEnum
@@ -164,7 +186,6 @@ const getColor = (
     | null
     | undefined
 ) => {
-  // console.log(status)
   switch (status) {
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error:
       return 'gray';
