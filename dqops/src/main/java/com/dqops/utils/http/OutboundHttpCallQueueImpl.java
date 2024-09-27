@@ -144,7 +144,7 @@ public class OutboundHttpCallQueueImpl implements OutboundHttpCallQueue, Initial
                     return outbound.send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)));
                 })
                 .response()
-                .onErrorContinue((error, response) -> {
+                .onErrorComplete(error -> {
                     log.warn("Failed to send a notification message to url " + outboundHttpMessage.getUrl() + ", error: " + error.getMessage(), error);
 
                     if (outboundHttpMessage.getRemainingRetries() != null && outboundHttpMessage.getRemainingRetries() > 0) {
@@ -154,6 +154,8 @@ public class OutboundHttpCallQueueImpl implements OutboundHttpCallQueue, Initial
                             this.messagesToRetryNextTurn.add(outboundHttpMessage);
                         }
                     }
+
+                    return true;
                 })
                 .then();
 

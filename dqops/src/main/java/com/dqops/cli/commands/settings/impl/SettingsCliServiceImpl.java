@@ -16,6 +16,7 @@
 package com.dqops.cli.commands.settings.impl;
 
 import com.dqops.cli.commands.CliOperationStatus;
+import com.dqops.core.catalogsync.DataCatalogHealthSendService;
 import com.dqops.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
@@ -24,6 +25,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudLimit;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.basespecs.InstanceStatus;
+import com.dqops.metadata.settings.DataCatalogUrlsSetSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
@@ -48,20 +50,28 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 	private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
 	private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 	private final DqoUserPrincipalProvider principalProvider;
+	private final DataCatalogHealthSendService dataCatalogHealthSendService;
 
 	@Autowired
 	public SettingsCliServiceImpl(UserHomeContextFactory userHomeContextFactory,
 								  DefaultTimeZoneProvider defaultTimeZoneProvider,
 								  DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
 								  DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
-								  DqoUserPrincipalProvider principalProvider) {
+								  DqoUserPrincipalProvider principalProvider,
+								  DataCatalogHealthSendService dataCatalogHealthSendService) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
 		this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
 		this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
 		this.principalProvider = principalProvider;
+		this.dataCatalogHealthSendService = dataCatalogHealthSendService;
 	}
 
+	/**
+	 * Creates and returns a new settings wrapper object in a given DQOps user home.
+	 * @param userHome Target user home to update.
+	 * @return Created local settings wrapper.
+	 */
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
 		LocalSettingsSpec localSettingsSpec = new LocalSettingsSpec();
 		SettingsWrapper settings = userHome.getSettings();
@@ -143,7 +153,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -286,7 +296,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -434,7 +444,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -544,7 +554,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -560,6 +570,115 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 			return cliOperationStatus;
 		}
 		cliOperationStatus.setSuccessMessage(String.format("The default time zone is: %s", timeZone));
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Shows a list of data catalog urls.
+	 *
+	 * @return CLI operation status.
+	 */
+	@Override
+	public CliOperationStatus showDataCatalogUrls() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		StringBuilder stringBuilder = new StringBuilder();
+		if (settings.getDataCatalogUrls() != null) {
+			for (String dataCatalogUrl : settings.getDataCatalogUrls()) {
+				stringBuilder.append(dataCatalogUrl);
+				stringBuilder.append("\n");
+			}
+		}
+
+		cliOperationStatus.setSuccessMessage(stringBuilder.toString());
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Adds an url to a data catalog wrapper that sends the health data to the data catalog.
+	 *
+	 * @param dataCatalogUrl Url to the data catalog wrapper.
+	 * @return CLI operation status.
+	 */
+	@Override
+	public CliOperationStatus addDataCatalogUrl(String dataCatalogUrl) {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		if (Strings.isNullOrEmpty(dataCatalogUrl)) {
+			cliOperationStatus.setFailedMessage("Wrong data catalog URL");
+			return cliOperationStatus;
+		}
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		if (settings.getDataCatalogUrls() == null) {
+			settings.setDataCatalogUrls(new DataCatalogUrlsSetSpec());
+		}
+
+		settings.getDataCatalogUrls().add(dataCatalogUrl);
+		userHomeContext.flush();
+
+		this.dataCatalogHealthSendService.invalidateUrlList();
+		cliOperationStatus.setSuccessMessage("Url to a data catalog wrapper added");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Removes a url to a data catalog wrapper that stores data quality health statuses.
+	 *
+	 * @param dataCatalogUrl Data catalog url to remove.
+	 * @return CLI operation status.
+	 */
+	@Override
+	public CliOperationStatus removeDataCatalogUrl(String dataCatalogUrl) {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		if (Strings.isNullOrEmpty(dataCatalogUrl)) {
+			cliOperationStatus.setFailedMessage("Wrong data catalog URL");
+			return cliOperationStatus;
+		}
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		if (settings.getDataCatalogUrls() == null) {
+			settings.setDataCatalogUrls(new DataCatalogUrlsSetSpec());
+		}
+
+		settings.getDataCatalogUrls().remove(dataCatalogUrl);
+		userHomeContext.flush();
+
+		this.dataCatalogHealthSendService.invalidateUrlList();
+		cliOperationStatus.setSuccessMessage("Url to a data catalog wrapper removed");
+
 		return cliOperationStatus;
 	}
 }

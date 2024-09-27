@@ -120,4 +120,24 @@ public interface SettingsCliService {
 	 * @return Cli operation status.
 	 */
 	CliOperationStatus showTimeZone();
+
+	/**
+	 * Shows a list of data catalog urls.
+	 * @return CLI operation status.
+	 */
+	CliOperationStatus showDataCatalogUrls();
+
+	/**
+	 * Adds an url to a data catalog wrapper that sends the health data to the data catalog.
+	 * @param dataCatalogUrl Url to the data catalog wrapper.
+	 * @return CLI operation status.
+	 */
+	CliOperationStatus addDataCatalogUrl(String dataCatalogUrl);
+
+	/**
+	 * Removes a url to a data catalog wrapper that stores data quality health statuses.
+	 * @param dataCatalogUrl Data catalog url to remove.
+	 * @return CLI operation status.
+	 */
+	CliOperationStatus removeDataCatalogUrl(String dataCatalogUrl);
 }

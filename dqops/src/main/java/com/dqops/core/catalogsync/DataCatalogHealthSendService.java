@@ -36,4 +36,9 @@ public interface DataCatalogHealthSendService {
      * @return True when synchronization is possible.
      */
     boolean isSynchronizationSupported();
+
+    /**
+     * Notifies the send service to update its list of target urls from the instance's local settings.
+     */
+    void invalidateUrlList();
 }

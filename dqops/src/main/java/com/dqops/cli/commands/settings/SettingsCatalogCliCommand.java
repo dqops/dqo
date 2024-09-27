@@ -16,24 +16,23 @@
 package com.dqops.cli.commands.settings;
 
 import com.dqops.cli.commands.BaseCommand;
+import com.dqops.cli.commands.settings.catalog.SettingsCatalogAddCliCommand;
+import com.dqops.cli.commands.settings.catalog.SettingsCatalogListCliCommand;
+import com.dqops.cli.commands.settings.catalog.SettingsCatalogRemoveCliCommand;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "settings" 1st level cli command.
+ * Cli settings data catalog integration base command.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "settings", description = "Show or set local instance settings", subcommands = {
-		SettingsEditorCliCommand.class,
-		SettingsInitCliCommand.class,
-		SettingsRemoveCliCommand.class,
-		SettingsApiKeyCliCommand.class,
-		SettingsTimeZoneCliCommand.class,
-		SettingsSmtpCliCommand.class,
-		SettingsCatalogCliCommand.class,
+@CommandLine.Command(name = "catalog", description = "Lists, adds and removes URLs to the data catalog REST API endpoints that receive updates of data quality of tables.", subcommands = {
+		SettingsCatalogListCliCommand.class,
+		SettingsCatalogAddCliCommand.class,
+		SettingsCatalogRemoveCliCommand.class,
 })
-public class SettingsCliCommand extends BaseCommand {
+public class SettingsCatalogCliCommand extends BaseCommand {
 }
