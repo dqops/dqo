@@ -34,6 +34,7 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.settings.DataCatalogUrlsSetSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
@@ -988,4 +989,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(LocalDataDomainSpecMap localDataDomainSpecMap, P parameter);
+
+    /**
+     * Accepts the set of data catalog urls.
+     * @param urlsSetSpec Collection of data quality urls to send data quality health statuses.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DataCatalogUrlsSetSpec urlsSetSpec, P parameter);
 }

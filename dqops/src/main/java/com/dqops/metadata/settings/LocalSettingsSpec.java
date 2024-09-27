@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Local settings specification.
@@ -45,6 +46,7 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 		{
 			put("smtp_server_configuration", o -> o.smtpServerConfiguration);
 			put("data_domains", o -> o.dataDomains);
+			put("data_catalog_urls", o -> o.dataCatalogUrls);
 		}
 	};
 
@@ -71,10 +73,15 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	@JsonPropertyDescription("SMTP server configuration for incident notifications.")
 	private SmtpServerConfigurationSpec smtpServerConfiguration;
 
-	@JsonPropertyDescription("The dictionary containing the configuration of local data domains.")
+	@JsonPropertyDescription("A dictionary containing the configuration of local data domains managed by this instance.")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
 	private LocalDataDomainSpecMap dataDomains = new LocalDataDomainSpecMap();
+
+	@JsonPropertyDescription("A list of urls of special REST API services that will transform DQOps data quality health models to a format supported by a target data catalog platform. These services are called to push the health status of tables.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+	private DataCatalogUrlsSetSpec dataCatalogUrls = new DataCatalogUrlsSetSpec();
 
 	@JsonIgnore
 	private String yamlParsingError;
@@ -248,6 +255,24 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 		setDirtyIf(!Objects.equals(this.dataDomains, dataDomains));
 		this.dataDomains = dataDomains;
 		propagateHierarchyIdToField(dataDomains, "data_domains");
+	}
+
+	/**
+	 * Returns a list of data catalog URLs of rest api services that are pushing data quality health statuses.
+	 * @return List of data quality urls.
+	 */
+	public DataCatalogUrlsSetSpec getDataCatalogUrls() {
+		return dataCatalogUrls;
+	}
+
+	/**
+	 * Changes the collection of data quality urls.
+	 * @param dataCatalogUrls New list of data quality urls.
+	 */
+	public void setDataCatalogUrls(DataCatalogUrlsSetSpec dataCatalogUrls) {
+		setDirtyIf(!Objects.equals(this.dataCatalogUrls, dataCatalogUrls));
+		this.dataCatalogUrls = dataCatalogUrls;
+		propagateHierarchyIdToField(dataCatalogUrls, "data_catalog_urls");
 	}
 
 	/**

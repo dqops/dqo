@@ -34,6 +34,7 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.settings.DataCatalogUrlsSetSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
@@ -1314,6 +1315,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(LocalDataDomainSpecMap localDataDomainSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts the set of data catalog urls.
+     *
+     * @param urlsSetSpec Collection of data quality urls to send data quality health statuses.
+     * @param parameter   Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DataCatalogUrlsSetSpec urlsSetSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

@@ -329,7 +329,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoSmtpServerPassword;
 
     @CommandLine.Option(names = {"--dqo.integrations.table-health-webhook-urls"},
-            description = "A comma separated list of webhook URLs where DQOps sends updates of the table data quality status changes.", defaultValue = "")
+            description = "A comma separated list of webhook URLs where DQOps sends updates of the table data quality status changes.")
     private Integer dqoIntegrationsTableHealthWebhookUrls;
 
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
