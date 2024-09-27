@@ -143,7 +143,20 @@ public class OutboundHttpCallQueueImpl implements OutboundHttpCallQueue, Initial
                     request.responseTimeout(Duration.ofSeconds(this.dqoNotificationsRestConfigurationProperties.getResponseTimeoutSeconds()));
                     return outbound.send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)));
                 })
-                .response()
+                .responseSingle((httpClientResponse, byteBufMono) -> {
+                    if (httpClientResponse.status().code() >= 400) {
+                        log.warn("REST API call to url " + outboundHttpMessage.getUrl() + ", HTTP status code: " + httpClientResponse.status().code());
+
+                        if (outboundHttpMessage.getRemainingRetries() != null && outboundHttpMessage.getRemainingRetries() > 0) {
+                            outboundHttpMessage.setRemainingRetries(outboundHttpMessage.getRemainingRetries() - 1);
+
+                            synchronized (this.lock) {
+                                this.messagesToRetryNextTurn.add(outboundHttpMessage);
+                            }
+                        }
+                    }
+                    return byteBufMono; // read all content and discard it
+                })
                 .onErrorComplete(error -> {
                     log.warn("Failed to send a notification message to url " + outboundHttpMessage.getUrl() + ", error: " + error.getMessage(), error);
 
