@@ -185,6 +185,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
           newRoute = newRoute.replace(`:${key}`, String(value));
           routeWithoutTab = routeWithoutTab.replace(`:${key}`, String(value));
         });
+
         dispatch(
           addFirstLevelTab(checkTypes, {
             url: newRoute,
@@ -193,7 +194,6 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
               routeWithoutTab.split('/')[routeWithoutTab.split('/').length - 1]
           })
         );
-        setActiveTab(newRoute);
       }
     }
   }, [location.pathname, isTabChanged]);
