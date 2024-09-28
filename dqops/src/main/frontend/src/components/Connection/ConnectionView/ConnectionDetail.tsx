@@ -199,6 +199,25 @@ const ConnectionDetail = () => {
               </div>
             </td>
           </tr>
+          <tr>
+            <td className="px-4 py-2">
+              <div>Schedule only on DQOps instance</div>
+            </td>
+            <td className="px-4 py-2">
+              <div>
+                <Input
+                  value={connectionBasic?.schedule_on_instance}
+                  placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
+                  onChange={(e) => {
+                    onChange({
+                      ...connectionBasic,
+                      schedule_on_instance: String(e.target.value)
+                    });
+                  }}
+                />
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
       <AdvancedProperties

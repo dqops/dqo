@@ -36063,6 +36063,13 @@ definitions:
         format: "int32"
         description: "The concurrency limit for the maximum number of parallel SQL\
           \ queries executed on this connection."
+      schedule_on_instance:
+        type: "string"
+        description: "Limits running scheduled checks (started by a CRON job scheduler)\
+          \ to run only on a named DQOps instance. When this field is empty, data\
+          \ quality checks are run on all DQOps instances. Set a DQOps instance name\
+          \ to run checks on a named instance only. The default name of the DQOps\
+          \ Cloud SaaS instance is \"cloud\"."
       provider_type:
         type: "string"
         description: "Database provider type (required). Accepts: bigquery, snowflake,\
