@@ -186,7 +186,7 @@ const Header = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 1250);
-      setIsTextWrapped(window.innerWidth < 1475);
+      setIsTextWrapped(window.innerWidth < 1610);
     };
 
     window.addEventListener('resize', handleResize);

@@ -12,6 +12,7 @@ import {
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import DataLineageGraph from '../../components/DataLineageGraph/DataLineageGraph';
 import Input from '../../components/Input';
 import { Pagination } from '../../components/Pagination';
 import Select from '../../components/Select';
@@ -655,6 +656,15 @@ export const IncidentDetail = () => {
             </div>
           </SectionWrapper>
         </div>
+        {incidentDetail?.connection &&
+          incidentDetail?.schema &&
+          incidentDetail?.table && (
+            <DataLineageGraph
+              connection={incidentDetail?.connection}
+              schema={incidentDetail?.schema}
+              table={incidentDetail?.table}
+            />
+          )}
         {issues?.length === 0 &&
         Object.keys(histograms?.checks ?? {}).length === 0 &&
         Object.keys(histograms?.columns ?? {}).length === 0 ? (
