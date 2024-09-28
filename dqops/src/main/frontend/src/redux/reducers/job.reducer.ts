@@ -57,6 +57,7 @@ export interface IJobsState {
   notificationCount: number;
   newNotification: boolean;
   job_allert: IJobAllert;
+  isTabChanged: boolean;
 }
 
 const initialState: IJobsState = {
@@ -80,7 +81,8 @@ const initialState: IJobsState = {
   isErrorModalOpen: false,
   notificationCount: 0,
   newNotification: false,
-  job_allert: {}
+  job_allert: {},
+  isTabChanged: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -355,6 +357,12 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         job_allert: action.job_allert
+      };
+    }
+    case JOB_ACTION.SET_IS_TAB_CHANGED: {
+      return {
+        ...state,
+        isTabChanged: action.isTabChanged
       };
     }
     default:

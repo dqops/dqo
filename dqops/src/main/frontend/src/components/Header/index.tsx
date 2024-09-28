@@ -8,6 +8,7 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   setAdvisorJobId,
   setAdvisorObject,
+  setIsTabChanged,
   setJobAllert,
   toggleAdvisor
 } from '../../redux/actions/job.actions';
@@ -67,6 +68,7 @@ const Header = () => {
   const { isAdvisorOpen, job_dictionary_state, advisorJobId, job_allert } =
     useSelector((state: IRootState) => state.job);
   const onClick = (newCheckTypes: CheckTypes) => () => {
+    dispatch(setIsTabChanged(true));
     dispatch(setJobAllert({}));
     let url = '';
     let value = '';
@@ -140,6 +142,7 @@ const Header = () => {
         column
       );
     }
+    console.log('url', url);
     if (!url) {
       url = `/` + newCheckTypes;
       history.push(url);
