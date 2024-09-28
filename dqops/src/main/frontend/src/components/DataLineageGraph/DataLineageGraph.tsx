@@ -4,11 +4,14 @@ import Chart from 'react-google-charts';
 import {
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
   DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
-  TableLineageFlowModel
+  TableLineageFlowModel,
+  TableLineageModel
 } from '../../api';
 import { DataLineageApiClient } from '../../services/apiClient';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import Loader from '../Loader';
+import DataLineageDetailsDialog from './DataLineageDetailsDialog';
+import './DataLineageGraphStyle.css';
 declare global {
   interface Window {
     showDataLineage: ((index: number) => void) | null;
@@ -29,6 +32,11 @@ export default function DataLineageGraph({
   >([]);
   const [loading, setLoading] = useState(false);
   const [severityColors, setSeverityColors] = useState<string[]>([]);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [tableDataLineage, setTableDataLineage] = useState<TableLineageModel>(
+    {}
+  );
+  const [flow, setFlow] = useState<TableLineageFlowModel>({});
 
   useEffect(() => {
     const fetchTableDataLineageGraph = async () => {
@@ -40,7 +48,7 @@ export default function DataLineageGraph({
           table
         );
         const data = response.data;
-
+        setTableDataLineage(data);
         const incompleteData = data.flows?.some((flow) => {
           return (
             !flow.source_table_quality_status?.table_exist ||
@@ -79,6 +87,8 @@ export default function DataLineageGraph({
 
     window.showDataLineage = function (index: number) {
       console.log('Clicked on flow with index:', index);
+      setFlow(tableDataLineage.flows?.[index] ?? {});
+      setDetailsDialogOpen(true);
     };
 
     fetchTableDataLineageGraph();
@@ -121,6 +131,11 @@ export default function DataLineageGraph({
           ...graphArray
         ]}
         options={options}
+      />
+      <DataLineageDetailsDialog
+        isOpen={detailsDialogOpen}
+        onClose={() => setDetailsDialogOpen(false)}
+        flow={flow}
       />
     </div>
   );
