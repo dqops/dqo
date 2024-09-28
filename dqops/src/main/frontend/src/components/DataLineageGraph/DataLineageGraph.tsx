@@ -74,8 +74,8 @@ export default function DataLineageGraph({
 
         const colors: string[] = [];
         const graph = data.flows?.map((flow, index) => {
-          const fromTable = data.relative_table?.compact_key;
-          const toTable = flow.source_table?.compact_key;
+          const fromTable = flow.source_table?.compact_key;
+          const toTable = flow.target_table?.compact_key;
           const weight = flow.weight;
 
           const tooltip = ReactDOMServer.renderToString(
@@ -85,7 +85,7 @@ export default function DataLineageGraph({
             flow.upstream_combined_quality_status?.current_severity
           );
           colors.push(color);
-          return [toTable, fromTable, weight, tooltip];
+          return [fromTable, toTable, weight, tooltip];
         });
         setSeverityColors(colors);
         setGraphArray(graph ?? []);
