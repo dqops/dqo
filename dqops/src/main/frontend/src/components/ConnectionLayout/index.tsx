@@ -37,7 +37,7 @@ import TableMonthlyPartitionedChecksView from '../../pages/TableMonthlyPartition
 import TablePartitionedChecksUIFilterView from '../../pages/TablePartitionedChecksUIFilterView';
 import TableProfilingChecksUIFilterView from '../../pages/TableProfilingChecksUIFilterView';
 import TableProfilingChecksView from '../../pages/TableProfilingChecksView';
-import { setJobAllert } from '../../redux/actions/job.actions';
+import { setIsTabChanged, setJobAllert } from '../../redux/actions/job.actions';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
@@ -56,10 +56,10 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
     checkTypes: CheckTypes;
   } = useDecodedParams();
   const { objectNotFound, setObjectNotFound, setActiveTab } = useTree();
-  const [isTabChanged, setIsTabChanged] = React.useState(false);
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
+  const { isTabChanged } = useSelector((state: IRootState) => state.job);
   const {
     dailyMonitoring,
     monthlyMonitoring,
@@ -86,7 +86,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
       setActiveTab(undefined);
       history.push(`/${checkTypes}`);
     }
-    setIsTabChanged(true);
+    dispatch(setIsTabChanged(true));
     dispatch(closeFirstLevelTab(checkTypes, value));
   };
 
@@ -185,6 +185,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
           newRoute = newRoute.replace(`:${key}`, String(value));
           routeWithoutTab = routeWithoutTab.replace(`:${key}`, String(value));
         });
+
         dispatch(
           addFirstLevelTab(checkTypes, {
             url: newRoute,
@@ -193,7 +194,6 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
               routeWithoutTab.split('/')[routeWithoutTab.split('/').length - 1]
           })
         );
-        setActiveTab(newRoute);
       }
     }
   }, [location.pathname, isTabChanged]);
