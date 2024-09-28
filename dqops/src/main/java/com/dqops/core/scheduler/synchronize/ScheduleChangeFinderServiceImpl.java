@@ -23,6 +23,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.MonitoringScheduleSearchFilters;
+import com.dqops.metadata.settings.instancename.InstanceNameProvider;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -42,18 +43,21 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
     private HierarchyNodeTreeSearcher nodeTreeSearcher;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
-    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
+    private DqoUserPrincipalProvider dqoUserPrincipalProvider;
+    private InstanceNameProvider instanceNameProvider;
 
     @Autowired
     public ScheduleChangeFinderServiceImpl(
             HierarchyNodeTreeSearcher nodeTreeSearcher,
             UserHomeContextFactory userHomeContextFactory,
             SecretValueProvider secretValueProvider,
-            DqoUserPrincipalProvider dqoUserPrincipalProvider) {
+            DqoUserPrincipalProvider dqoUserPrincipalProvider,
+            InstanceNameProvider instanceNameProvider) {
         this.nodeTreeSearcher = nodeTreeSearcher;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
+        this.instanceNameProvider = instanceNameProvider;
     }
 
     /**
@@ -69,6 +73,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
 
         MonitoringScheduleSearchFilters monitoringScheduleSearchFilters = new MonitoringScheduleSearchFilters();
         monitoringScheduleSearchFilters.setScheduleEnabled(true);
+        monitoringScheduleSearchFilters.setLocalInstanceName(this.instanceNameProvider.getInstanceName());
         // NOTE 1: we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
         // NOTE 2: this code will not detect that a default observability check has a custom schedule, because the default checks are not applied
         Collection<MonitoringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, monitoringScheduleSearchFilters);

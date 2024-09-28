@@ -36,6 +36,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -66,6 +67,12 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
         DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
         assert this.filters.getSchedule() != null;
         assert this.filters.getSchedule() != null;
+
+        if (!Strings.isNullOrEmpty(connectionSpec.getScheduleOnInstance())) {
+            if (!Objects.equals(connectionSpec.getScheduleOnInstance(), this.filters.getLocalInstanceName())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
 
         if (schedules != null) {
             ScheduleRootResult scheduleRootResult = new ScheduleRootResult(connectionWrapper);

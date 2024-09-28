@@ -308,6 +308,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "When not configured, DQOps will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
     private String dqoInstanceSignatureKey;
 
+    @CommandLine.Option(names = {"--dqo.instance.name"},
+            description = "DQOps instance name. DQOps uses this instance name when finding which data quality checks should be run on this DQOps instance. " +
+                    "When a connection is limited to run scheduled data quality checks only on a named instance, the instance name must math. " +
+                    "This parameter can be overwritten in the instance's local settings file.")
+    private String dqoInstanceName;
+
     @CommandLine.Option(names = {"--dqo.smtp-server.host"},
             description = "Sets the  host name of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerHost;

@@ -72,6 +72,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
+import com.dqops.metadata.settings.instancename.InstanceNameProviderStub;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalker;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
@@ -157,7 +158,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance());
 
         ScheduledTargetChecksFindService scheduledTargetChecksFindService = new ScheduledTargetChecksFindServiceImpl(
-                hierarchyNodeTreeSearcher, defaultObservabilityConfigurationService);
+                hierarchyNodeTreeSearcher, defaultObservabilityConfigurationService, new InstanceNameProviderStub());
 
         DqoQueueJobFactoryImpl dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
 

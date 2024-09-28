@@ -26,6 +26,9 @@ public class ScheduleRootsSearchFilters {
     @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled scheduling root objects - objects that have their own CRON schedule defined. The default value is *true*.")
     private Boolean enabled = true;
 
+    @JsonPropertyDescription("The instance name of the local DQOps instance. It is used to return schedules only from connections that can run on any instance, or are limited to run on this instance.")
+    private String localInstanceName;
+
     private MonitoringScheduleSpec schedule;
 
     public ScheduleRootsSearchFilters() {
@@ -60,6 +63,22 @@ public class ScheduleRootsSearchFilters {
      */
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    /**
+     * Returns the name of the current DQOps instance.
+     * @return Current DQOps instance name.
+     */
+    public String getLocalInstanceName() {
+        return localInstanceName;
+    }
+
+    /**
+     * Sets the name of the local DQOps instance.
+     * @param localInstanceName Local DQOps instance name.
+     */
+    public void setLocalInstanceName(String localInstanceName) {
+        this.localInstanceName = localInstanceName;
     }
 
     /**

@@ -51,12 +51,15 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	};
 
 	@JsonPropertyDescription("Editor name spec (VSC, Eclipse, Intellij)")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String editorName;
 
 	@JsonPropertyDescription("Editor path on user's computer")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String editorPath;
 
-	@JsonPropertyDescription("DQOps CLoud API key")
+	@JsonPropertyDescription("DQOps Cloud API Key")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String apiKey;
 
 	@JsonPropertyDescription("Disable synchronization with DQOps Cloud")
@@ -64,11 +67,17 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	private boolean disableCloudSync;
 
 	@JsonPropertyDescription("DQOps instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String instanceSignatureKey;
 
 	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned " +
 			"from databases to a uniform local date and time. The default value is the local time zone of the DQOps server instance.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String timeZone;
+
+	@JsonPropertyDescription("DQOps instance name assigned to this server instance. DQOps supports scheduling data quality checks only on selected instances. If this parameter is not set, DQOps will use a name passed as a parameter or environment variable. The fallback value is the host name.")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private String instanceName;
 
 	@JsonPropertyDescription("SMTP server configuration for incident notifications.")
 	private SmtpServerConfigurationSpec smtpServerConfiguration;
@@ -222,6 +231,23 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	}
 
 	/**
+	 * Returns an instance name assigned to this DQOps instance.
+	 * @return Instance name.
+	 */
+	public String getInstanceName() {
+		return instanceName;
+	}
+
+	/**
+	 * Sets an instance name to identify this DQOps instance.
+	 * @param instanceName Instance name.
+	 */
+	public void setInstanceName(String instanceName) {
+		setDirtyIf(!Objects.equals(this.instanceName, instanceName));
+		this.instanceName = instanceName;
+	}
+
+	/**
 	 * Returns the SMTP server configuration for the incident notifications.
 	 * @return The SMTP server configuration for the incident notifications.
 	 */
@@ -306,6 +332,7 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 		cloned.editorPath = secretValueProvider.expandValue(this.editorPath, lookupContext);
 		cloned.editorName = secretValueProvider.expandValue(this.editorName, lookupContext);
 		cloned.timeZone = secretValueProvider.expandValue(this.timeZone, lookupContext);
+		cloned.instanceName = secretValueProvider.expandValue(this.instanceName, lookupContext);
 		if (this.smtpServerConfiguration != null) {
 			cloned.smtpServerConfiguration = this.smtpServerConfiguration.expandAndTrim(secretValueProvider, lookupContext);
 		}

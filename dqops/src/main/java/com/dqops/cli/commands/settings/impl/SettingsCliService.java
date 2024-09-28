@@ -140,4 +140,23 @@ public interface SettingsCliService {
 	 * @return CLI operation status.
 	 */
 	CliOperationStatus removeDataCatalogUrl(String dataCatalogUrl);
+
+	/**
+	 * Sets a new DQOps instance name
+	 * @param instanceName New instance name
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus setInstanceName(String instanceName);
+
+	/**
+	 * Removes an instance name.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus removeInstanceName();
+
+	/**
+	 * Shows the instance name.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus showInstanceName();
 }

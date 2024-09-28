@@ -24,6 +24,9 @@ public class MonitoringScheduleSearchFilters {
     @JsonPropertyDescription("Boolean flag to search only for enabled schedules or only disabled schedules. The default value is *true*, which prevents searching for all schedules despite their enabled status.")
     private Boolean scheduleEnabled = true;
 
+    @JsonPropertyDescription("The instance name of the local DQOps instance. It is used to return schedules only from connections that can run on any instance, or are limited to run on this instance.")
+    private String localInstanceName;
+
     /**
      * Returns the filter for enabled only schedules.
      * @return Filter for the enabled or disabled status.
@@ -38,6 +41,22 @@ public class MonitoringScheduleSearchFilters {
      */
     public void setScheduleEnabled(Boolean scheduleEnabled) {
         this.scheduleEnabled = scheduleEnabled;
+    }
+
+    /**
+     * Returns the name of the current DQOps instance.
+     * @return Current DQOps instance name.
+     */
+    public String getLocalInstanceName() {
+        return localInstanceName;
+    }
+
+    /**
+     * Sets the name of the local DQOps instance.
+     * @param localInstanceName Local DQOps instance name.
+     */
+    public void setLocalInstanceName(String localInstanceName) {
+        this.localInstanceName = localInstanceName;
     }
 
     /**

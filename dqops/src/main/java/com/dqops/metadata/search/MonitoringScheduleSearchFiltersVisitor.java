@@ -29,7 +29,12 @@ import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotifica
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
+import org.apache.parquet.Strings;
+
+import java.util.Objects;
 
 /**
  * Metadata node search visitor that is searching for all unique monitoring schedules.
@@ -43,6 +48,27 @@ public class MonitoringScheduleSearchFiltersVisitor extends AbstractSearchVisito
      */
     public MonitoringScheduleSearchFiltersVisitor(MonitoringScheduleSearchFilters filters) {
         this.filters = filters;
+    }
+
+
+    /**
+     * Accepts a connection wrapper (lazy loader).
+     *
+     * @param connectionWrapper Connection wrapper.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+
+        if (connectionSpec != null && !Strings.isNullOrEmpty(connectionSpec.getScheduleOnInstance())) {
+            if (!Objects.equals(connectionSpec.getScheduleOnInstance(), this.filters.getLocalInstanceName())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**

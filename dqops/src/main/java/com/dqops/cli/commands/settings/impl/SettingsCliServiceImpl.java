@@ -29,6 +29,7 @@ import com.dqops.metadata.settings.DataCatalogUrlsSetSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
+import com.dqops.metadata.settings.instancename.InstanceNameProvider;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -51,6 +52,7 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 	private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 	private final DqoUserPrincipalProvider principalProvider;
 	private final DataCatalogHealthSendService dataCatalogHealthSendService;
+	private final InstanceNameProvider instanceNameProvider;
 
 	@Autowired
 	public SettingsCliServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -58,13 +60,15 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 								  DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
 								  DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
 								  DqoUserPrincipalProvider principalProvider,
-								  DataCatalogHealthSendService dataCatalogHealthSendService) {
+								  DataCatalogHealthSendService dataCatalogHealthSendService,
+								  InstanceNameProvider instanceNameProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
 		this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
 		this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
 		this.principalProvider = principalProvider;
 		this.dataCatalogHealthSendService = dataCatalogHealthSendService;
+		this.instanceNameProvider = instanceNameProvider;
 	}
 
 	/**
@@ -355,6 +359,101 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		return cliOperationStatus;
 	}
 
+	/**
+	 * Sets a new DQOps instance name
+	 *
+	 * @param instanceName New instance name
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus setInstanceName(String instanceName) {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		settings.setInstanceName(instanceName);
+		userHomeContext.flush();
+		this.instanceNameProvider.invalidate();
+		cliOperationStatus.setSuccessMessage("Successfully set the DQOps instance name");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Removes an instance name.
+	 *
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus removeInstanceName() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		String key = settings.getApiKey();
+		if (Strings.isNullOrEmpty(key)) {
+			cliOperationStatus.setFailedMessage(String.format("DQOps instance name is not set"));
+			return cliOperationStatus;
+		}
+
+		settings.setInstanceName(null);
+		userHomeContext.flush();
+		this.instanceNameProvider.invalidate();
+		cliOperationStatus.setSuccessMessage("Successfully removed DQOps instance name");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Shows the instance name.
+	 *
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus showInstanceName() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		String instanceNameString = settings.getInstanceName();
+		if (Strings.isNullOrEmpty(instanceNameString)) {
+			cliOperationStatus.setFailedMessage(String.format("DQOps instance name is not set"));
+			return cliOperationStatus;
+		}
+
+		StringBuilder textBuilder = new StringBuilder();
+		textBuilder.append(String.format("DQOps instance name is: %s\n", instanceNameString));
+
+		cliOperationStatus.setSuccessMessage(textBuilder.toString());
+		return cliOperationStatus;
+	}
 
 	/**
 	 * Sets a new SMTP server configuration.

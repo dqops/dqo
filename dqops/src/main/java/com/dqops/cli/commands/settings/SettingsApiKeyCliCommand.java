@@ -29,7 +29,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "apikey", description = "Set or show api key", subcommands = {
+@CommandLine.Command(name = "apikey", description = "Set or show the DQOps Cloud (SaaS) API Key", subcommands = {
 		SettingsApiKeySetCliCommand.class,
 		SettingsApiKeyRemoveCliCommand.class,
 		SettingsApiKeyShowCliCommand.class,

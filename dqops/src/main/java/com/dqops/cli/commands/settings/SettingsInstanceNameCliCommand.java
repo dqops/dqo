@@ -16,25 +16,23 @@
 package com.dqops.cli.commands.settings;
 
 import com.dqops.cli.commands.BaseCommand;
+import com.dqops.cli.commands.settings.instancename.SettingsInstanceNameRemoveCliCommand;
+import com.dqops.cli.commands.settings.instancename.SettingsInstanceNameSetCliCommand;
+import com.dqops.cli.commands.settings.instancename.SettingsInstanceNameShowCliCommand;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "settings" 1st level cli command.
+ * Cli settings instance name base command.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "settings", description = "Show or set local instance settings", subcommands = {
-		SettingsEditorCliCommand.class,
-		SettingsInitCliCommand.class,
-		SettingsRemoveCliCommand.class,
-		SettingsApiKeyCliCommand.class,
-		SettingsTimeZoneCliCommand.class,
-		SettingsSmtpCliCommand.class,
-		SettingsCatalogCliCommand.class,
-		SettingsInstanceNameCliCommand.class,
+@CommandLine.Command(name = "instancename", description = "Set or show the DQOps instance name", subcommands = {
+		SettingsInstanceNameSetCliCommand.class,
+		SettingsInstanceNameRemoveCliCommand.class,
+		SettingsInstanceNameShowCliCommand.class,
 })
-public class SettingsCliCommand extends BaseCommand {
+public class SettingsInstanceNameCliCommand extends BaseCommand {
 }

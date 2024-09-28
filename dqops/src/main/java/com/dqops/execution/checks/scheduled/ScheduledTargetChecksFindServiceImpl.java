@@ -23,6 +23,7 @@ import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.*;
+import com.dqops.metadata.settings.instancename.InstanceNameProvider;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
@@ -45,18 +46,22 @@ import java.util.Set;
 public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChecksFindService {
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
     private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private InstanceNameProvider instanceNameProvider;
 
     /**
      * Creates an instance.
      * @param hierarchyNodeTreeSearcher Hierarchy node searcher used to find target checks.
      * @param defaultObservabilityConfigurationService Service that activates default checks configured as check patterns.
+     * @param instanceNameProvider DQOps instance name provider.
      */
     @Autowired
     public ScheduledTargetChecksFindServiceImpl(
             HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
-            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+            InstanceNameProvider instanceNameProvider) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.instanceNameProvider = instanceNameProvider;
     }
 
     /**
@@ -73,6 +78,8 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
         ScheduleRootsSearchFilters scheduleRootsSearchFilters = new ScheduleRootsSearchFilters();
         scheduleRootsSearchFilters.setEnabled(true);
         scheduleRootsSearchFilters.setSchedule(schedule);
+        scheduleRootsSearchFilters.setLocalInstanceName(this.instanceNameProvider.getInstanceName());
+
         FoundResultsCollector<ScheduleRootResult> scheduleRoots = this.hierarchyNodeTreeSearcher.findScheduleRoots(
                 userHome.getConnections(), scheduleRootsSearchFilters);
 

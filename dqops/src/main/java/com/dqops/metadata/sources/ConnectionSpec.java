@@ -180,6 +180,10 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DefaultSchedulesSpec schedules;
 
+    @JsonPropertyDescription("Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is \"cloud\".")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String scheduleOnInstance;
+
     @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -487,6 +491,23 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         setDirtyIf(!Objects.equals(this.schedules, schedules));
         this.schedules = schedules;
         propagateHierarchyIdToField(schedules, "schedules");
+    }
+
+    /**
+     * Returns the name of a named DQOps instance where checks from this connection are triggered by a CRON scheduler.
+     * @return Instance name which schedules checks in this connection.
+     */
+    public String getScheduleOnInstance() {
+        return scheduleOnInstance;
+    }
+
+    /**
+     * Sets the name of a DQOps instance that will schedule checks.
+     * @param scheduleOnInstance Instance name to schedule or null to run on any instance.
+     */
+    public void setScheduleOnInstance(String scheduleOnInstance) {
+        setDirtyIf(!Objects.equals(this.scheduleOnInstance, scheduleOnInstance));
+        this.scheduleOnInstance = scheduleOnInstance;
     }
 
     /**
