@@ -24,6 +24,7 @@ import com.dqops.metadata.labels.labelcontainers.LabelCounter;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.rest.models.metadata.LabelModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class LabelsController {
             @RequestParam(required = false) Optional<String> prefix,
             @ApiParam(name = "filter", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> filter) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             Integer resultsLimit = MAX_RESULTS;
             Integer skip = null;
             if (page.isPresent() || limit.isPresent()) {
@@ -169,7 +170,7 @@ public class LabelsController {
             @RequestParam(required = false) Optional<String> prefix,
             @ApiParam(name = "filter", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> filter) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             Integer resultsLimit = MAX_RESULTS;
             Integer skip = null;
             if (page.isPresent() || limit.isPresent()) {
@@ -248,7 +249,7 @@ public class LabelsController {
             @RequestParam(required = false) Optional<String> prefix,
             @ApiParam(name = "filter", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> filter) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             Integer resultsLimit = MAX_RESULTS;
             Integer skip = null;
             if (page.isPresent() || limit.isPresent()) {

@@ -11,6 +11,7 @@ import com.azure.storage.blob.models.ListBlobsOptions;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.fileslisting.RemoteTablesLister;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -93,7 +94,7 @@ public class AzureTablesLister extends RemoteTablesLister {
         List<String> paths = new ArrayList<>();
         try {
             ListBlobsOptions listBlobsOptions = new ListBlobsOptions().setPrefix(pathComponents.getPrefix());
-            List<BlobItem> blobs = CompletableFuture.supplyAsync(() -> blobContainerClient
+            List<BlobItem> blobs = CompletableFutureRunner.supplyAsync(() -> blobContainerClient
                     .listBlobsByHierarchy("/", listBlobsOptions, null)
                     .stream()
                     .collect(Collectors.toList())).get();

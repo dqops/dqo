@@ -30,6 +30,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,7 +84,7 @@ public class DefaultsController {
     public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getDefaultSchedule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -133,7 +134,7 @@ public class DefaultsController {
             @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
             @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -179,7 +180,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<IncidentNotificationSpec>>> getDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -223,7 +224,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default notification addresses changes to be applied to the default configuration")
             @RequestBody Optional<IncidentNotificationSpec> newIncidentNotificationsSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();

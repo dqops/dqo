@@ -32,6 +32,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.dashboards.AuthenticatedDashboardModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.metadata.DashboardsProvider;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ public class DashboardsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<DashboardsFolderSpec>>> getAllDashboards(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
             DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList;
 
@@ -171,7 +172,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder);
             if (dashboard == null) {
                 DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
@@ -225,7 +226,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2);
             if (dashboard == null) {
                 DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
@@ -282,7 +283,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3);
             if (dashboard == null) {
                 DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
@@ -341,7 +342,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3, folder4);
             if (dashboard == null) {
                 DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
@@ -402,7 +403,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQOps instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             DashboardSpec dashboard = this.findUserCustomDashboard(principal, dashboardName, folder1, folder2, folder3, folder4, folder5);
             if (dashboard == null) {
                 DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();

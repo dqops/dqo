@@ -33,6 +33,7 @@ import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mining.CheckMiningParametersModel;
 import com.dqops.services.check.mining.CheckMiningProposalModel;
 import com.dqops.services.check.mining.CheckMiningService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,7 @@ public class RuleMiningController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data quality check mining parameters which configure which rules are analyzed and proposed")
             @RequestBody CheckMiningParametersModel checkMiningParameters) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             ExecutionContext executionContext = this.executionContextFactory.create(principal.getDataDomainIdentity(), true);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
             UserHome userHome = userHomeContext.getUserHome();
@@ -174,7 +175,7 @@ public class RuleMiningController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Proposed configuration of data quality checks to be applied on the table and its columns.")
             @RequestBody CheckMiningProposalModel checkMiningProposalModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName)) {
@@ -260,7 +261,7 @@ public class RuleMiningController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Data quality check mining parameters which configure which rules are analyzed and proposed")
             @RequestBody CheckMiningParametersModel checkMiningParameters) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             ExecutionContext executionContext = this.executionContextFactory.create(principal.getDataDomainIdentity(), true);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
             UserHome userHome = userHomeContext.getUserHome();
@@ -328,7 +329,7 @@ public class RuleMiningController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Proposed configuration of data quality checks to be applied on the table and its columns.")
             @RequestBody CheckMiningProposalModel checkMiningProposalModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName)) {
@@ -414,7 +415,7 @@ public class RuleMiningController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Data quality check mining parameters which configure which rules are analyzed and proposed")
             @RequestBody CheckMiningParametersModel checkMiningParameters) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             ExecutionContext executionContext = this.executionContextFactory.create(principal.getDataDomainIdentity(), true);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
             UserHome userHome = userHomeContext.getUserHome();
@@ -482,7 +483,7 @@ public class RuleMiningController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Proposed configuration of data quality checks to be applied on the table and its columns.")
             @RequestBody CheckMiningProposalModel checkMiningProposalModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName)) {

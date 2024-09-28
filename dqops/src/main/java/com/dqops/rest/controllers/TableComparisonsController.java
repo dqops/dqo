@@ -32,6 +32,7 @@ import com.dqops.rest.models.comparison.TableComparisonConfigurationModel;
 import com.dqops.rest.models.comparison.TableComparisonModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
@@ -103,7 +104,7 @@ public class TableComparisonsController {
             @RequestParam(required = false) Optional<CheckType> checkType,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
             if (tableComparisonConfigurationSpecMap == null) {
@@ -158,7 +159,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
             if (tableComparisonConfigurationSpecMap == null) {
@@ -209,7 +210,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison model with the configuration of the tables to compare")
                 @RequestBody TableComparisonConfigurationModel tableComparisonConfigurationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(schemaName)     ||
                     Strings.isNullOrEmpty(tableName)      ||
@@ -283,7 +284,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model") @RequestBody TableComparisonConfigurationModel tableComparisonConfigurationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(schemaName)     ||
                     Strings.isNullOrEmpty(tableName)      ||
@@ -341,7 +342,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(schemaName)     ||
                     Strings.isNullOrEmpty(tableName)      ||
@@ -403,7 +404,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
             if (tableSpec == null) {
@@ -454,7 +455,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
             if (tableSpec == null) {
@@ -505,7 +506,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
             if (tableSpec == null) {
@@ -556,7 +557,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
             if (tableSpec == null) {
@@ -607,7 +608,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
             if (tableSpec == null) {
@@ -712,7 +713,7 @@ public class TableComparisonsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel, CheckType.profiling, null);
         }));
     }
@@ -745,7 +746,7 @@ public class TableComparisonsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
                     CheckType.monitoring, CheckTimeScale.daily);
         }));
@@ -779,7 +780,7 @@ public class TableComparisonsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
                     CheckType.monitoring, CheckTimeScale.monthly);
         }));
@@ -813,7 +814,7 @@ public class TableComparisonsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
                     CheckType.partitioned, CheckTimeScale.daily);
         }));
@@ -847,7 +848,7 @@ public class TableComparisonsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
                     CheckType.partitioned, CheckTimeScale.monthly);
         }));
@@ -937,7 +938,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                     tableComparisonModel, CheckType.profiling, null);
         }));
@@ -973,7 +974,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                     tableComparisonModel, CheckType.monitoring, CheckTimeScale.daily);
         }));
@@ -1009,7 +1010,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                     tableComparisonModel, CheckType.monitoring, CheckTimeScale.monthly);
         }));
@@ -1045,7 +1046,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                     tableComparisonModel, CheckType.partitioned, CheckTimeScale.daily);
         }));
@@ -1081,7 +1082,7 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
                     tableComparisonModel, CheckType.partitioned, CheckTimeScale.monthly);
         }));

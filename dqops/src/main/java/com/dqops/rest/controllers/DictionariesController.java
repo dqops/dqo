@@ -29,6 +29,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.dictionaries.DataDictionaryListModel;
 import com.dqops.rest.models.dictionaries.DataDictionaryModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
@@ -85,7 +86,7 @@ public class DictionariesController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<DataDictionaryListModel>>> getAllDictionaries(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -125,7 +126,7 @@ public class DictionariesController {
     public Mono<ResponseEntity<Mono<DataDictionaryModel>>> getDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary CSV file name") @PathVariable String dictionaryName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dictionaryName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -168,7 +169,7 @@ public class DictionariesController {
     public Mono<ResponseEntity<Mono<byte[]>>> downloadDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary CSV file name") @PathVariable String dictionaryName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dictionaryName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -216,7 +217,7 @@ public class DictionariesController {
     public Mono<ResponseEntity<Mono<Void>>> createDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary model") @RequestBody DataDictionaryModel dataDictionaryModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(dataDictionaryModel.getDictionaryName())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -266,7 +267,7 @@ public class DictionariesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary model") @RequestBody DataDictionaryModel dataDictionaryModel,
             @ApiParam("Data dictionary file name that will be updated") @PathVariable String dictionaryName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dictionaryName) || dataDictionaryModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -317,7 +318,7 @@ public class DictionariesController {
     public Mono<ResponseEntity<Mono<Void>>> deleteDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary name") @PathVariable String dictionaryName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dictionaryName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);

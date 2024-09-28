@@ -18,6 +18,7 @@ package com.dqops.utils.python;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -370,8 +371,8 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
             }
             processBuilder.command(commandLine);
             Process pipProcess = processBuilder.start();
-            CompletableFuture<String> readOutputFuture = CompletableFuture.supplyAsync(() -> readAllContent(pipProcess.getInputStream()));
-            CompletableFuture<String> readErrorFuture = CompletableFuture.supplyAsync(() -> readAllContent(pipProcess.getErrorStream()));
+            CompletableFuture<String> readOutputFuture = CompletableFutureRunner.supplyAsync(() -> readAllContent(pipProcess.getInputStream()));
+            CompletableFuture<String> readErrorFuture = CompletableFutureRunner.supplyAsync(() -> readAllContent(pipProcess.getErrorStream()));
 
             boolean isSuccess = pipProcess.waitFor(this.pythonConfigurationProperties.getPipTimeoutSeconds(), TimeUnit.SECONDS);
             if (!isSuccess || pipProcess.exitValue() != 0) {

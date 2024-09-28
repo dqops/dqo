@@ -15,6 +15,8 @@
  */
 package com.dqops.cli.terminal;
 
+import com.dqops.utils.threading.CompletableFutureRunner;
+
 import java.io.Console;
 import java.io.IOException;
 import java.io.PushbackInputStream;
@@ -75,7 +77,7 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
      */
     @Override
     public Character tryReadChar(long timeoutMillis, boolean peekOnly) {
-        CompletableFuture<Character> waitForInput = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Character> waitForInput = CompletableFutureRunner.supplyAsync(() -> {
             try {
                 PushbackInputStream pushbackInputStream = (PushbackInputStream) System.in;
                 int readResult = pushbackInputStream.read();

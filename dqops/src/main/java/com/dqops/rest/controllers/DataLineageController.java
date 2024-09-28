@@ -35,6 +35,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.TableLineageSourceListModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
@@ -118,7 +119,7 @@ public class DataLineageController {
             @RequestParam(required = false) Optional<Boolean> upstream,
             @ApiParam(name = "downstream", value = "Optional parameter to request downstream tables. By default, downstream tables are collected unless it is disabled by passing 'false'.", required = false)
             @RequestParam(required = false) Optional<Boolean> downstream) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -168,7 +169,7 @@ public class DataLineageController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -276,7 +277,7 @@ public class DataLineageController {
             @ApiParam("Source connection name") @PathVariable String sourceConnection,
             @ApiParam("Source schema name") @PathVariable String sourceSchema,
             @ApiParam("Source table name") @PathVariable String sourceTable) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -341,7 +342,7 @@ public class DataLineageController {
             @ApiParam("Source schema name") @PathVariable String sourceSchema,
             @ApiParam("Source table name") @PathVariable String sourceTable,
             @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceSpec updatedSourceTableLineage) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -421,7 +422,7 @@ public class DataLineageController {
             @ApiParam("Source schema name") @PathVariable String sourceSchema,
             @ApiParam("Source table name") @PathVariable String sourceTable,
             @ApiParam("Table lineage source list model") @RequestBody TableLineageSourceSpec newSourceTableLineage) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -494,7 +495,7 @@ public class DataLineageController {
             @ApiParam("Source connection name") @PathVariable String sourceConnection,
             @ApiParam("Source schema name") @PathVariable String sourceSchema,
             @ApiParam("Source table name") @PathVariable String sourceTable) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||

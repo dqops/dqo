@@ -36,6 +36,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.server.LocalUrlAddressesProvider;
 import com.dqops.rest.server.authentication.AuthenticateWithDqoCloudWebFilter;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<LocalDataDomainModel>>> getLocalDataDomains(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             List<LocalDataDomainModel> allDataDomains = this.dataDomainsService.getAllDataDomains();
             LinkedHashMap<String, DqoUserRole> domainRoles = principal.getDomainRoles();
             if (domainRoles == null) {
@@ -165,7 +166,7 @@ public class DataDomainsController {
     public Mono<ResponseEntity<Mono<LocalDataDomainModel>>> createDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data domain display name") @PathVariable String dataDomainDisplayName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(dataDomainDisplayName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -210,7 +211,7 @@ public class DataDomainsController {
     public Mono<ResponseEntity<Mono<Void>>> deleteDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data domain name") @PathVariable String dataDomainName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dataDomainName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -252,7 +253,7 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
     public Mono<ResponseEntity<Mono<Void>>> synchronizeDataDomains(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             this.dataDomainsService.synchronizeDataDomainList(false);
 
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -281,7 +282,7 @@ public class DataDomainsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             ServerHttpRequest httpRequest,
             @ApiParam("Data domain name") @PathVariable String dataDomainName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dataDomainName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);

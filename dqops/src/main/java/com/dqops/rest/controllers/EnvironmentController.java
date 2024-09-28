@@ -28,6 +28,7 @@ import com.dqops.core.secrets.signature.SignedObject;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,7 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<DqoSettingsModel>>> getDqoSettings(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             final DqoSettingsModel dqoSettingsModel = new DqoSettingsModel();
             final MutablePropertySources sources = ((AbstractEnvironment) this.springEnvironment).getPropertySources();
 
@@ -157,20 +158,20 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<DqoUserProfileModel>>> getUserProfile(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-            return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
-            if (apiKey == null) {
-                DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+            return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+                DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
+                if (apiKey == null) {
+                    DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+                    return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+                }
+
+                DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(
+                        apiKey, principal, this.dataCatalogHealthSendService.isSynchronizationSupported());
+                if (this.dataDomainRegistry.getNestedDataDomains() == null) {
+                    dqoUserProfileModel.setCanUseDataDomains(false);
+                }
+
                 return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
-            }
-
-            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(
-                    apiKey, principal, this.dataCatalogHealthSendService.isSynchronizationSupported());
-            if (this.dataDomainRegistry.getNestedDataDomains() == null) {
-                dqoUserProfileModel.setCanUseDataDomains(false);
-            }
-
-            return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
         }));
     }
 
@@ -193,10 +194,10 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<String>>> issueApiKey(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-                return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
+                return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+                    SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
 
-            return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
-        }));
+                    return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
+                }));
     }
 }
