@@ -5,13 +5,13 @@ import MonitoringView from '../../components/Connection/TableView/MonitoringView
 import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
 import ProfilingView from '../../components/Connection/TableView/ProfilingView';
 import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
-import SourceTables from '../../components/Connection/TableView/SourceTables/SourceTables';
 import TableCommentView from '../../components/Connection/TableView/TableCommentView';
 import TableDataGroupingConfiguration from '../../components/Connection/TableView/TableDataGroupingConfigurations';
 import TableDetails from '../../components/Connection/TableView/TableDetails';
 import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
 import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
+import DataLineage from '../../components/DataLineage/DataLineage';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -271,7 +271,7 @@ const TablePage = () => {
                 <TableIncidentsNotificationsView />
               )}
             </div>
-            <div>{activeTab === 'source_tables' && <SourceTables />}</div>
+            <div>{activeTab === 'source_tables' && <DataLineage />}</div>
           </>
         )}
       </div>
