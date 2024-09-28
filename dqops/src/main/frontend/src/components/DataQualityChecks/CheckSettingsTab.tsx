@@ -202,6 +202,19 @@ const CheckSettingsTab = ({
               </td>
             </tr>
             <tr>
+              <td className="px-4 py-2">Do not schedule</td>
+              <td className="px-4 py-2">
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.do_not_schedule}
+                    onChange={(value) =>
+                      onChange({ ...check, do_not_schedule: value })
+                    }
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
               <td className="px-4 py-2">Data Quality Dimension</td>
               <td className="px-4 py-2">
                 <div className="flex">

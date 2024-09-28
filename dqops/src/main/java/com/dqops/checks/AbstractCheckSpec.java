@@ -111,6 +111,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean alwaysCollectErrorSamples;
 
+    @JsonPropertyDescription("Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean doNotSchedule;
+
     /**
      * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
      */
@@ -270,6 +274,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public void setAlwaysCollectErrorSamples(boolean alwaysCollectErrorSamples) {
         this.setDirtyIf(this.alwaysCollectErrorSamples != alwaysCollectErrorSamples);
         this.alwaysCollectErrorSamples = alwaysCollectErrorSamples;
+    }
+
+    /**
+     * Returns true if this check is excluded from running by a job scheduler.
+     * @return True when this job should not be run by a job scheduler.
+     */
+    public boolean isDoNotSchedule() {
+        return doNotSchedule;
+    }
+
+    /**
+     * Sets a flag to disable running this check by a job scheduler.
+     * @param doNotSchedule True when excluded from the CRON scheduler.
+     */
+    public void setDoNotSchedule(boolean doNotSchedule) {
+        this.setDirtyIf(this.doNotSchedule != doNotSchedule);
+        this.doNotSchedule = doNotSchedule;
     }
 
     /**

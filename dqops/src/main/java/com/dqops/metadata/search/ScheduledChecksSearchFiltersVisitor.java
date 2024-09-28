@@ -107,6 +107,10 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> foundNodes) {
+        if (abstractCheckSpec.isDoNotSchedule()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
         Boolean enabledFilter = this.filters.getEnabled();
 
         if (enabledFilter != null) {

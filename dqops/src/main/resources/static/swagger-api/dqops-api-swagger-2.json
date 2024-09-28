@@ -20853,6 +20853,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "check_target" : {
           "type" : "string",
           "description" : "Type of the check's target (column, table).",
@@ -21922,6 +21926,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
           "$ref" : "#/definitions/ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec"
@@ -21998,6 +22006,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
@@ -22076,6 +22088,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
           "$ref" : "#/definitions/ColumnAccuracyTotalMinMatchPercentSensorParametersSpec"
@@ -22153,6 +22169,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
           "$ref" : "#/definitions/ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec"
@@ -22229,6 +22249,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.",
@@ -22763,6 +22787,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sum sensor parameters.",
           "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -22823,6 +22851,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sum sensor parameters.",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -22882,6 +22914,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sum sensor parameters.",
@@ -23061,6 +23097,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sum sensor parameters.",
           "$ref" : "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -23120,6 +23160,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sum sensor parameters.",
@@ -23220,6 +23264,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sum sensor parameters.",
@@ -23837,6 +23885,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
@@ -23966,6 +24018,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnDateInRangePercentSensorParametersSpec"
@@ -24044,6 +24100,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24239,6 +24299,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "The sensor parameters for a sensor that returns a value that identifies the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed data types.",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
@@ -24298,6 +24362,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24359,6 +24427,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -24418,6 +24490,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24479,6 +24555,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -24538,6 +24618,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24599,6 +24683,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
@@ -24658,6 +24746,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24719,6 +24811,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -24778,6 +24874,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24839,6 +24939,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -24898,6 +25002,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -24959,6 +25067,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
@@ -25018,6 +25130,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25079,6 +25195,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnUniquenessDuplicateCountSensorParametersSpec"
@@ -25138,6 +25258,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25199,6 +25323,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -25258,6 +25386,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected numeric values that must be present in the column.",
@@ -25319,6 +25451,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected text values that must be present in the column.",
           "$ref" : "#/definitions/ColumnStringsExpectedTextValuesInUseCountSensorParametersSpec"
@@ -25378,6 +25514,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected most popular text values that should be found in the column. The second parameter is 'top', which is the limit of the most popular column values to find in the tested column.",
@@ -25439,6 +25579,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnBoolFalsePercentSensorParametersSpec"
@@ -25498,6 +25642,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25599,6 +25747,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec"
@@ -25692,6 +25844,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query",
@@ -25813,6 +25969,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidEmailFormatCountSensorParametersSpec"
@@ -25872,6 +26032,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -25933,6 +26097,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec"
@@ -25992,6 +26160,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26053,6 +26225,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericInvalidLatitudeCountSensorParametersSpec"
@@ -26112,6 +26288,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26173,6 +26353,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidUsaPhoneFormatFoundSensorParametersSpec"
@@ -26232,6 +26416,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
@@ -26293,6 +26481,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidUsaZipcodeFormatFoundSensorParametersSpec"
@@ -26352,6 +26544,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
@@ -26413,6 +26609,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsInvalidUuidFormatCountSensorParametersSpec"
@@ -26472,6 +26672,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26665,6 +26869,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -26724,6 +26932,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26785,6 +26997,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
@@ -26844,6 +27060,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -26905,6 +27125,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -26964,6 +27188,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27025,6 +27253,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -27084,6 +27316,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27145,6 +27381,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMeanSensorParametersSpec"
@@ -27204,6 +27444,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27265,6 +27509,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -27324,6 +27572,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27385,6 +27637,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -27444,6 +27700,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27505,6 +27765,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMedianSensorParametersSpec"
@@ -27564,6 +27828,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27625,6 +27893,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericMinSensorParametersSpec"
@@ -27684,6 +27956,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -27951,6 +28227,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNegativeCountSensorParametersSpec"
@@ -28010,6 +28290,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28071,6 +28355,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNonNegativeCountSensorParametersSpec"
@@ -28130,6 +28418,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28191,6 +28483,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
@@ -28250,6 +28546,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28311,6 +28611,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -28370,6 +28674,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28431,6 +28739,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -28490,6 +28802,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28551,6 +28867,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -28610,6 +28930,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -28927,6 +29251,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNullsNullsPercentSensorParametersSpec"
@@ -29060,6 +29388,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNumberAboveMaxValueCountSensorParametersSpec"
@@ -29119,6 +29451,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -29180,6 +29516,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericNumberBelowMinValueCountSensorParametersSpec"
@@ -29239,6 +29579,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -29300,6 +29644,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected values that are compared to the values in the tested numeric column.",
           "$ref" : "#/definitions/ColumnNumericNumberFoundInSetPercentSensorParametersSpec"
@@ -29359,6 +29707,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -30922,6 +31274,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPercentile10SensorParametersSpec"
@@ -30981,6 +31337,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31042,6 +31402,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPercentile75SensorParametersSpec"
@@ -31101,6 +31465,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31162,6 +31530,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPercentileSensorParametersSpec"
@@ -31221,6 +31593,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31291,6 +31667,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentSensorParametersSpec"
@@ -31359,6 +31739,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -31429,6 +31813,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentSensorParametersSpec"
@@ -31497,6 +31885,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Numerical value in range percent sensor parameters",
@@ -31727,6 +32119,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericPopulationStddevSensorParametersSpec"
@@ -31786,6 +32182,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -32133,6 +32533,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSampleStddevSensorParametersSpec"
@@ -32192,6 +32596,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -32288,6 +32696,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters for a column exists sensor",
@@ -32409,6 +32821,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Column data type hash sensor parameters",
           "$ref" : "#/definitions/ColumnColumnTypeHashSensorParametersSpec"
@@ -32527,6 +32943,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL aggregate expression that is evaluated on a column",
           "$ref" : "#/definitions/ColumnSqlAggregatedExpressionSensorParametersSpec"
@@ -32599,6 +33019,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row, using a {column} placeholder to reference the current column.",
@@ -32673,6 +33097,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row for the given column, using a {column} placeholder to reference the current column.",
           "$ref" : "#/definitions/ColumnSqlConditionPassedPercentSensorParametersSpec"
@@ -32745,6 +33173,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL SELECT statement that queries a log table to get a result of a custom query that retrieves results from other data quality libraries.",
@@ -32934,6 +33366,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -32993,6 +33429,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33054,6 +33494,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -33113,6 +33557,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33174,6 +33622,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -33234,6 +33686,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericSumSensorParametersSpec"
@@ -33293,6 +33749,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33458,6 +33918,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters that specify a list of expected values that are compared to the values in the tested text column.",
           "$ref" : "#/definitions/ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec"
@@ -33517,6 +33981,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33578,6 +34046,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec"
@@ -33637,6 +34109,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33698,6 +34174,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec"
@@ -33758,6 +34238,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextLengthInRangePercentSensorParametersSpec"
@@ -33817,6 +34301,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -33892,6 +34380,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextMaxLengthSensorParametersSpec"
@@ -33951,6 +34443,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -34034,6 +34530,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextMeanLengthSensorParametersSpec"
@@ -34094,6 +34594,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextMinLengthSensorParametersSpec"
@@ -34153,6 +34657,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -34340,6 +34848,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec"
@@ -34399,6 +34911,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -34460,6 +34976,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsTextNotMatchingNamePatternPercentSensorParametersSpec"
@@ -34519,6 +35039,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -34580,6 +35104,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextParsableToBooleanPercentSensorParametersSpec"
@@ -34639,6 +35167,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -34700,6 +35232,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextParsableToFloatPercentSensorParametersSpec"
@@ -34759,6 +35295,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -35109,6 +35649,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnTextTextValidCountryCodePercentSensorParametersSpec"
@@ -35168,6 +35712,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -35229,6 +35777,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnPatternsTextsNotMatchingRegexPercentSensorParametersSpec"
@@ -35288,6 +35840,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -35766,6 +36322,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnNumericValidLatitudePercentSensorParametersSpec"
@@ -35825,6 +36385,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -36001,6 +36565,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
@@ -36060,6 +36628,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -36218,6 +36790,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
@@ -36277,6 +36853,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -36391,6 +36971,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
@@ -36450,6 +37034,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -36529,6 +37117,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
@@ -36588,6 +37180,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -37153,6 +37749,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "sensor_name" : {
           "type" : "string",
@@ -41282,6 +41882,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters. Fill the parameters to provide the name of the referenced table.",
           "$ref" : "#/definitions/TableAccuracyTotalRowCountMatchPercentSensorParametersSpec"
@@ -41354,6 +41958,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Table availability sensor parameters",
@@ -41536,6 +42144,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Column count data quality sensor.",
@@ -41942,6 +42554,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Row count data quality sensor.",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -42326,6 +42942,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Max days since most recent event sensor parameters",
           "$ref" : "#/definitions/TableTimelinessDataFreshnessSensorParametersSpec"
@@ -42385,6 +43005,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Max days since most recent event sensor parameters",
@@ -42446,6 +43070,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Max number of days between event and ingestion sensor parameters",
           "$ref" : "#/definitions/TableTimelinessDataIngestionDelaySensorParametersSpec"
@@ -42506,6 +43134,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Min number of days between event and ingestion sensor parameters",
           "$ref" : "#/definitions/TableTimelinessDataStalenessSensorParametersSpec"
@@ -42565,6 +43197,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -42641,6 +43277,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -43147,6 +43787,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Partition reload lag sensor parameters",
           "$ref" : "#/definitions/TableTimelinessPartitionReloadLagSensorParametersSpec"
@@ -43428,6 +44072,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -43487,6 +44135,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -43548,6 +44200,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -43607,6 +44263,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -43668,6 +44328,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Data quality check parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -43727,6 +44391,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Data quality check parameters",
@@ -43788,6 +44456,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Row count sensor parameters",
           "$ref" : "#/definitions/TableVolumeRowCountSensorParametersSpec"
@@ -43848,6 +44520,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Column count sensor parameters",
           "$ref" : "#/definitions/TableColumnCountSensorParametersSpec"
@@ -43907,6 +44583,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Column count sensor parameters",
@@ -43981,6 +44661,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Column list hash sensor parameters",
           "$ref" : "#/definitions/TableColumnListUnorderedHashSensorParametersSpec"
@@ -44041,6 +44725,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Column list and order sensor parameters",
           "$ref" : "#/definitions/TableColumnListOrderedHashSensorParametersSpec"
@@ -44100,6 +44788,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Column list and types sensor parameters",
@@ -44389,6 +45081,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL aggregate expression that is evaluated on a table. Use an {alias} token to reference the tested table.",
           "$ref" : "#/definitions/TableSqlAggregatedExpressionSensorParametersSpec"
@@ -44461,6 +45157,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row.",
@@ -44535,6 +45235,10 @@
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
         },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
+        },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row",
           "$ref" : "#/definitions/TableSqlConditionPassedPercentSensorParametersSpec"
@@ -44607,6 +45311,10 @@
         "always_collect_error_samples" : {
           "type" : "boolean",
           "description" : "Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source."
+        },
+        "do_not_schedule" : {
+          "type" : "boolean",
+          "description" : "Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job."
         },
         "parameters" : {
           "description" : "Sensor parameters with the custom SQL SELECT statement that queries a log table to get a result of a custom query that retrieves results from other data quality libraries.",

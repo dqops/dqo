@@ -241,6 +241,13 @@ public class CheckModel implements Cloneable {
     private boolean alwaysCollectErrorSamples;
 
     /**
+     * Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
+     */
+    @JsonPropertyDescription("Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean doNotSchedule;
+
+    /**
      * Type of the check's target (column, table).
      */
     @JsonPropertyDescription("Type of the check's target (column, table).")

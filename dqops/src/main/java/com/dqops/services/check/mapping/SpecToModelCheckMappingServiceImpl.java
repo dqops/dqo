@@ -731,6 +731,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataGroupingConfiguration(checkSpec.getDataGrouping());
         checkModel.setAlwaysCollectErrorSamples(checkSpec.isAlwaysCollectErrorSamples());
+        checkModel.setDoNotSchedule(checkSpec.isDoNotSchedule());
         checkModel.setCheckSpec(checkSpec);
         checkModel.setCheckTarget(CheckTargetModel.fromCheckTarget(checkTarget));
 
