@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import {
@@ -38,6 +38,15 @@ export default function DataLineageGraph({
   );
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
 
+  const showDataLineage = useCallback(
+    (index: number) => {
+      const selectedFlow = tableDataLineage.flows?.[index] ?? {};
+      setFlow(selectedFlow);
+      setDetailsDialogOpen(true);
+    },
+    [tableDataLineage]
+  );
+
   useEffect(() => {
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
@@ -49,6 +58,7 @@ export default function DataLineageGraph({
         );
         const data = response.data;
         setTableDataLineage(data);
+
         const incompleteData = data.flows?.some((flow) => {
           return (
             !flow.source_table_quality_status?.table_exist ||
@@ -61,6 +71,7 @@ export default function DataLineageGraph({
           setTimeout(() => fetchTableDataLineageGraph(), 5000);
           return;
         }
+
         const colors: string[] = [];
         const graph = data.flows?.map((flow, index) => {
           const fromTable = data.relative_table?.compact_key;
@@ -85,18 +96,16 @@ export default function DataLineageGraph({
       }
     };
 
-    window.showDataLineage = function (index: number) {
-      console.log('Clicked on flow with index:', index);
-      setFlow(tableDataLineage.flows?.[index] ?? {});
-      setDetailsDialogOpen(true);
-    };
-
     fetchTableDataLineageGraph();
 
     return () => {
       window.showDataLineage = null;
     };
   }, [connection, schema, table]);
+
+  useEffect(() => {
+    window.showDataLineage = showDataLineage;
+  }, [showDataLineage]);
 
   const options = {
     tooltip: { isHtml: true },
@@ -119,7 +128,7 @@ export default function DataLineageGraph({
   if (!graphArray.length) {
     return;
   }
-  // console.log(window.showDataLineage && window.showDataLineage(1));
+
   return (
     <div>
       <Chart
@@ -141,7 +150,6 @@ export default function DataLineageGraph({
   );
 }
 
-// Tooltip rendering component
 const renderTooltip = (flow: TableLineageFlowModel, index: number) => {
   return (
     <div className="w-100 p-2 text-sm">

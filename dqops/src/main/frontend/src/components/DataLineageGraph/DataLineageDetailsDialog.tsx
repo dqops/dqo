@@ -15,12 +15,11 @@ export default function DataLineageDetailsDialog({
   onClose: () => void;
   flow: TableLineageFlowModel;
 }) {
-  console.log(flow.source_table_quality_status?.dimensions);
   return (
-    <Dialog open={isOpen} handler={() => onClose()} className="!z-[99999]">
+    <Dialog open={isOpen} handler={() => onClose()} className="!z-[99999] mb-2">
       <DialogBody>
         <div
-          className="p-2 text-sm text-black flex flex-col gap-4"
+          className="p-2 text-sm text-black flex gap-4 "
           style={{
             maxHeight: '70vh',
             maxWidth: '90vw',
@@ -29,9 +28,9 @@ export default function DataLineageDetailsDialog({
           }}
         >
           {/* Upstream Combined Quality Status */}
-          <div className="min-w-[300px]">
-            <div className="flex items-center py-1">
-              <div className="w-60">Upstream combined quality status</div>
+          <div className="min-w-[400px]">
+            <div className="flex items-center justify-between py-1">
+              <div>Upstream combined quality status</div>
             </div>
             {flow.upstream_combined_quality_status?.dimensions && (
               <div>
@@ -43,9 +42,9 @@ export default function DataLineageDetailsDialog({
           </div>
 
           {/* Source Table Quality Status */}
-          <div className="min-w-[300px]">
+          <div className="min-w-[400px]">
             <div className="flex items-center py-1">
-              <div className="w-60">Source table quality status</div>
+              <div>Source table quality status</div>
             </div>
             {flow.source_table_quality_status?.dimensions && (
               <div>
@@ -55,9 +54,9 @@ export default function DataLineageDetailsDialog({
           </div>
 
           {/* Target Table Quality Status */}
-          <div className="min-w-[300px]">
+          <div className="min-w-[400px]">
             <div className="flex items-center py-1">
-              <div className="w-60">Target table quality status</div>
+              <div>Target table quality status</div>
             </div>
             {flow.target_table_quality_status?.dimensions && (
               <div>
