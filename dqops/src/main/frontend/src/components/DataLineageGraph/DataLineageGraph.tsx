@@ -126,7 +126,9 @@ export default function DataLineageGraph({
   }
 
   if (!graphArray.length) {
-    return;
+    return (
+      <></>
+    );
   }
 
   return (
