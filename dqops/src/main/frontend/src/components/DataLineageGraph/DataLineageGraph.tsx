@@ -185,7 +185,7 @@ const renderTooltip = (flow: TableLineageFlowModel, index: number) => {
           />
         </div>
       </div>
-      <div className="flex items-center py-1">
+      <div className="flex items-center py-1 underline ">
         <a href={`javascript:window.showDataLineage(${index})`}>
           Show Data Lineage Details
         </a>
