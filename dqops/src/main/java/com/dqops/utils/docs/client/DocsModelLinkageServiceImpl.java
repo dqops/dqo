@@ -24,7 +24,7 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapperImpl;
@@ -221,7 +221,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
 
         connectionYaml.put(ConnectionYaml.class.getSimpleName(), ConnectionYaml.class);
         connectionYaml.put(ConnectionSpec.class.getSimpleName(), ConnectionSpec.class);
-        connectionYaml.put(DefaultSchedulesSpec.class.getSimpleName(), DefaultSchedulesSpec.class);
+        connectionYaml.put(CronSchedulesSpec.class.getSimpleName(), CronSchedulesSpec.class);
 
         LinkedHashMap<String, Class<? extends BaseProviderParametersSpec>> allConnectorParameters =
                 TargetClassSearchUtility.findClasses(

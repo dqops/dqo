@@ -16,7 +16,7 @@
 package com.dqops.core.scheduler.quartz;
 
 import com.dqops.core.scheduler.JobSchedulerException;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.cronutils.mapper.CronMapper;
 import com.cronutils.model.Cron;
@@ -82,7 +82,7 @@ public class TriggerFactoryImpl implements TriggerFactory {
      * @return Trigger.
      */
     @Override
-    public Trigger createTrigger(MonitoringScheduleSpec schedule, JobKey jobKey, String dataDomainName) {
+    public Trigger createTrigger(CronScheduleSpec schedule, JobKey jobKey, String dataDomainName) {
         JobDataMap triggerJobData = new JobDataMap();
         jobDataMapAdapter.setSchedule(triggerJobData, schedule);
         jobDataMapAdapter.setDataDomain(triggerJobData, dataDomainName);

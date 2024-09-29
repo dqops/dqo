@@ -28,8 +28,8 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -64,7 +64,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, FoundResultsCollector<ScheduleRootResult> foundNodes) {
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
+        CronSchedulesSpec schedules = connectionSpec.getSchedules();
         assert this.filters.getSchedule() != null;
         assert this.filters.getSchedule() != null;
 
@@ -122,7 +122,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
             }
         }
 
-        DefaultSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        CronSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null) {
@@ -165,7 +165,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, FoundResultsCollector<ScheduleRootResult> foundNodes) {
-        MonitoringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
+        CronScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule() != null;
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {

@@ -19,6 +19,7 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJob;
+import com.dqops.core.scheduler.collectstatistics.CollectScheduledStatisticsDqoJob;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
@@ -71,11 +72,21 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     /**
      * Creates a job that collects statistics.
      *
-     * @return New colect statistics job.
+     * @return New collect statistics job.
      */
     @Override
     public CollectStatisticsQueueJob createCollectStatisticsJob() {
         return this.beanFactory.getBean(CollectStatisticsQueueJob.class);
+    }
+
+    /**
+     * Creates a job that runs the data profiler and collects statistics for a given schedule.
+     *
+     * @return Job that collects statistics when triggered by a scheduler.
+     */
+    @Override
+    public CollectScheduledStatisticsDqoJob collectScheduledStatisticsJob() {
+        return this.beanFactory.getBean(CollectScheduledStatisticsDqoJob.class);
     }
 
     /**

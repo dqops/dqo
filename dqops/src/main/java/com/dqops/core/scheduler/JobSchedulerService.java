@@ -20,6 +20,7 @@ import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
+import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 
@@ -38,6 +39,12 @@ public interface JobSchedulerService {
      * @return Reporting mode during the check execution.
      */
     CheckRunReportingMode getCheckRunReportingMode();
+
+    /**
+     * Returns the reporting mode for running the checks by the scheduler.
+     * @return Reporting mode used when running the checks.
+     */
+    StatisticsCollectorExecutionReportingMode getCollectStatisticsReportingMode();
 
     /**
      * Checks if the job scheduler is started.

@@ -66,8 +66,8 @@ import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.lineage.*;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
@@ -412,11 +412,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a monitoring schedule specification, it is the cron expression how to schedule the job.
-     * @param monitoringScheduleSpec Monitoring schedule.
+     * @param cronScheduleSpec Monitoring schedule.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(MonitoringScheduleSpec monitoringScheduleSpec, P parameter);
+    R accept(CronScheduleSpec cronScheduleSpec, P parameter);
 
     /**
      * Accepts a parameter definition specification, it describes a single parameter for custom sensors and rules.
@@ -589,11 +589,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of schedules, divided by the time range.
-     * @param defaultSchedulesSpec Container of schedule categories.
+     * @param cronSchedulesSpec Container of schedule categories.
      * @param parameter              Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DefaultSchedulesSpec defaultSchedulesSpec, P parameter);
+    R accept(CronSchedulesSpec cronSchedulesSpec, P parameter);
 
     /**
      * Accepts a configuration of incremental partition checks.

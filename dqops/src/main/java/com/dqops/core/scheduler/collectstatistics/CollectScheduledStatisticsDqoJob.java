@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.core.scheduler.runcheck;
+package com.dqops.core.scheduler.collectstatistics;
 
 import com.dqops.core.jobqueue.DqoJobExecutionContext;
 import com.dqops.core.jobqueue.DqoJobType;
@@ -23,47 +23,49 @@ import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.scheduler.JobSchedulerService;
+import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.execution.checks.CheckExecutionService;
-import com.dqops.execution.checks.CheckExecutionSummary;
-import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
-import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
-import com.dqops.execution.checks.progress.CheckRunReportingMode;
+import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
+import com.dqops.execution.statistics.StatisticsCollectorsExecutionService;
+import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
+import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
+import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
 import com.dqops.metadata.scheduling.CronScheduleSpec;
+import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * DQOps job that runs all scheduled checks for one CRON schedule within the job scheduler (quartz).
+ * DQOps job that collects scheduled statistics for one CRON schedule within the job scheduler (quartz).
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSummary> {
+public class CollectScheduledStatisticsDqoJob extends ParentDqoQueueJob<StatisticsCollectionExecutionSummary> {
     private JobSchedulerService jobSchedulerService;
-    private CheckExecutionService checkExecutionService;
+    private StatisticsCollectorsExecutionService statisticsCollectorsExecutionService;
     private ExecutionContextFactory executionContextFactory;
-    private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
+    private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private CronScheduleSpec cronSchedule;
 
     /**
      * Creates a dqo job that runs checks scheduled for one cron expression.
      * @param jobSchedulerService Job scheduler service - used to ask for the reporting mode.
-     * @param checkExecutionService Check execution service that runs the data quality checks.
+     * @param statisticsCollectorsExecutionService Statistics collection service that performs statistics collection (profiling).
      * @param executionContextFactory Check execution context that will create a context - opening the local user home.
-     * @param checkExecutionProgressListenerProvider Check execution progress listener used to get the correct logger.
+     * @param statisticsCollectorExecutionProgressListenerProvider Statistics job execution listener provider to create a job listener.
      */
     @Autowired
-    public RunScheduledChecksDqoJob(JobSchedulerService jobSchedulerService,
-                                    CheckExecutionService checkExecutionService,
-                                    ExecutionContextFactory executionContextFactory,
-                                    CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider) {
+    public CollectScheduledStatisticsDqoJob(JobSchedulerService jobSchedulerService,
+                                            StatisticsCollectorsExecutionService statisticsCollectorsExecutionService,
+                                            ExecutionContextFactory executionContextFactory,
+                                            StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider) {
         this.jobSchedulerService = jobSchedulerService;
-        this.checkExecutionService = checkExecutionService;
+        this.statisticsCollectorsExecutionService = statisticsCollectorsExecutionService;
         this.executionContextFactory = executionContextFactory;
-        this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
+        this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
     }
 
     /**
@@ -89,22 +91,35 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+    public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
+        StatisticsCollectorExecutionReportingMode reportingMode = this.jobSchedulerService.getCollectStatisticsReportingMode();
 
         UserDomainIdentity userDomainIdentity = this.getPrincipal().getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
 
-        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
-                checkRunReportingMode, checkRunReportingMode != CheckRunReportingMode.silent);
-        CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
-                executionContext, this.cronSchedule, progressListener, jobExecutionContext.getJobId(),
+        StatisticsCollectorSearchFilters statisticsCollectorSearchFilters = new StatisticsCollectorSearchFilters();
+        statisticsCollectorSearchFilters.setEnabledCronScheduleExpression(this.cronSchedule.getCronExpression());
+
+        StatisticsCollectorExecutionProgressListener progressListener =
+                this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(reportingMode,
+                        reportingMode != StatisticsCollectorExecutionReportingMode.silent);
+
+        StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectors(
+                executionContext,
+                statisticsCollectorSearchFilters,
+                progressListener,
+                StatisticsDataScope.table,
+                null,
+                false,
+                false,
+                true,
+                jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken(),
                 this.getPrincipal());
 
-        return checkExecutionSummary;
+        return statisticsCollectionExecutionSummary;
     }
 
     /**
@@ -114,7 +129,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.run_scheduled_checks_cron;
+        return DqoJobType.collect_scheduled_statistics;
     }
 
     /**
@@ -137,7 +152,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
     @Override
     public DqoJobEntryParametersModel createParametersModel() {
         return new DqoJobEntryParametersModel() {{
-           setRunScheduledChecksParameters(cronSchedule);
+           setCollectScheduledStatisticsParameters(cronSchedule);
         }};
     }
 }

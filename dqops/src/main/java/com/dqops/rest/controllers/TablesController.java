@@ -46,8 +46,8 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
@@ -540,18 +540,18 @@ public class TablesController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", produces = "application/json")
     @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table",
-            response = MonitoringScheduleSpec.class,
+            response = CronScheduleSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = MonitoringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = CronScheduleSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getTableSchedulingGroupOverride(
+    public Mono<ResponseEntity<Mono<CronScheduleSpec>>> getTableSchedulingGroupOverride(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -574,12 +574,12 @@ public class TablesController {
             }
 
             TableSpec tableSpec = tableWrapper.getSpec();
-            DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+            CronSchedulesSpec schedules = tableSpec.getSchedulesOverride();
             if (schedules == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
             }
 
-            MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+            CronScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
             return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
         }));
@@ -2395,7 +2395,7 @@ public class TablesController {
      * @param connectionName              Connection name.
      * @param schemaName                  Schema name.
      * @param tableName                   Table name.
-     * @param monitoringScheduleSpec       New monitoring schedule configuration or an emtpy optional to clear the schedule configuration.
+     * @param cronScheduleSpec       New monitoring schedule configuration or an emtpy optional to clear the schedule configuration.
      * @return Empty response.
      */
     @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", consumes = "application/json", produces = "application/json")
@@ -2420,7 +2420,7 @@ public class TablesController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
-                @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
+                @RequestBody CronScheduleSpec cronScheduleSpec) {
         return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
@@ -2446,12 +2446,12 @@ public class TablesController {
                         }
 
                         TableSpec tableSpec = tableWrapper.getSpec();
-                        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+                        CronSchedulesSpec schedules = tableSpec.getSchedulesOverride();
                         if (schedules == null) {
-                            schedules = new DefaultSchedulesSpec();
+                            schedules = new CronSchedulesSpec();
                             tableSpec.setSchedulesOverride(schedules);
                         }
-                        schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
+                        schedules.setScheduleForCheckSchedulingGroup(cronScheduleSpec, schedulingGroup);
 
                         boolean scheduleUpdated = tableSpec.isDirty();
                         userHomeContext.flush();

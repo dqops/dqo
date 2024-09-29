@@ -23,8 +23,8 @@ import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * REST Api controller that manages the default settings.
@@ -71,17 +70,17 @@ public class DefaultsController {
      */
     @GetMapping(value = "/defaultschedule/{schedulingGroup}", produces = "application/json")
     @ApiOperation(value = "getDefaultSchedules", notes = "Returns spec to show and edit the default configuration of schedules.",
-            response = MonitoringScheduleSpec.class,
+            response = CronScheduleSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = MonitoringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "OK", response = CronScheduleSpec.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getDefaultSchedule(
+    public Mono<ResponseEntity<Mono<CronScheduleSpec>>> getDefaultSchedule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
@@ -90,23 +89,23 @@ public class DefaultsController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            MonitoringScheduleSpec defaultMonitoringScheduleSpec = null;
+            CronScheduleSpec defaultCronScheduleSpec = null;
 
             if (userHome == null
                     || userHome.getDefaultSchedules() == null
                     || userHome.getDefaultSchedules().getSpec() == null
             ) {
-                defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+                defaultCronScheduleSpec = new CronScheduleSpec();
             } else {
-                defaultMonitoringScheduleSpec = userHome.getDefaultSchedules().getSpec()
+                defaultCronScheduleSpec = userHome.getDefaultSchedules().getSpec()
                         .getScheduleForCheckSchedulingGroup(schedulingGroup);
             }
 
-            if (defaultMonitoringScheduleSpec == null) {
-                defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+            if (defaultCronScheduleSpec == null) {
+                defaultCronScheduleSpec = new CronScheduleSpec();
             }
 
-            return new ResponseEntity<>(Mono.just(defaultMonitoringScheduleSpec), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(defaultCronScheduleSpec), HttpStatus.OK);
         }));
     }
 
@@ -132,7 +131,7 @@ public class DefaultsController {
     public Mono<ResponseEntity<Mono<Void>>> updateDefaultSchedules(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
-            @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
+            @RequestBody Optional<CronScheduleSpec> newMonitoringScheduleSpec,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
         return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -141,19 +140,19 @@ public class DefaultsController {
 
             UserHome userHome = userHomeContext.getUserHome();
 
-            DefaultSchedulesSpec defaultSchedulesSpec = null;
+            CronSchedulesSpec cronSchedulesSpec = null;
 
             if (userHome == null
                     || userHome.getDefaultSchedules() == null
                     || userHome.getDefaultSchedules().getSpec() == null
             ) {
-                defaultSchedulesSpec = new DefaultSchedulesSpec();
+                cronSchedulesSpec = new CronSchedulesSpec();
             } else {
-                defaultSchedulesSpec = userHome.getDefaultSchedules().getSpec();
+                cronSchedulesSpec = userHome.getDefaultSchedules().getSpec();
             }
 
             if (newMonitoringScheduleSpec.isPresent()) {
-                defaultSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+                cronSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
             }
 
             userHomeContext.flush();

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { MonitoringScheduleSpec } from '../../api';
+import { CronScheduleSpec } from '../../api';
 import Button from '../../components/Button';
 import ScheduleView from '../../components/ScheduleView';
 import Tabs from '../../components/Tabs';
@@ -53,7 +53,7 @@ const DefaultSchedulesDetail = () => {
 
   const { tab }: { tab: CheckRunMonitoringScheduleGroup } = useDecodedParams();
   const [updatedSchedule, setUpdatedSchedule] = useState<
-    MonitoringScheduleSpec | undefined
+    CronScheduleSpec | undefined
   >();
   const [isDefaultUpdated, setIsDefaultUpdated] = useState(false);
   const location = useLocation() as any;
@@ -84,7 +84,7 @@ const DefaultSchedulesDetail = () => {
       .catch((err) => console.error(err));
   };
 
-  const handleChange = (obj: MonitoringScheduleSpec) => {
+  const handleChange = (obj: CronScheduleSpec) => {
     setUpdatedSchedule((prevState) => ({
       ...prevState,
       cron_expression: obj.cron_expression,

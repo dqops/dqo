@@ -1180,7 +1180,7 @@ paths:
         200:
           description: "Connection's schedule returned"
           schema:
-            $ref: "#/definitions/MonitoringScheduleSpec"
+            $ref: "#/definitions/CronScheduleSpec"
         404:
           description: "Connection not found"
         500:
@@ -1222,7 +1222,7 @@ paths:
         description: "Monitoring schedule definition to store"
         required: false
         schema:
-          $ref: "#/definitions/MonitoringScheduleSpec"
+          $ref: "#/definitions/CronScheduleSpec"
       responses:
         200:
           description: "successful operation"
@@ -10156,7 +10156,7 @@ paths:
         200:
           description: "Overridden schedule configuration for a table returned"
           schema:
-            $ref: "#/definitions/MonitoringScheduleSpec"
+            $ref: "#/definitions/CronScheduleSpec"
         404:
           description: "Connection or table not found"
         500:
@@ -10210,7 +10210,7 @@ paths:
           \ object to clear the schedule configuration on a table"
         required: false
         schema:
-          $ref: "#/definitions/MonitoringScheduleSpec"
+          $ref: "#/definitions/CronScheduleSpec"
       responses:
         200:
           description: "successful operation"
@@ -12244,7 +12244,7 @@ paths:
         200:
           description: "OK"
           schema:
-            $ref: "#/definitions/MonitoringScheduleSpec"
+            $ref: "#/definitions/CronScheduleSpec"
         500:
           description: "Internal Server Error"
           schema:
@@ -12268,7 +12268,7 @@ paths:
           \ configuration."
         required: false
         schema:
-          $ref: "#/definitions/MonitoringScheduleSpec"
+          $ref: "#/definitions/CronScheduleSpec"
       - name: "schedulingGroup"
         in: "path"
         description: "Check scheduling group (named schedule)"
@@ -17788,7 +17788,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       effective_schedule:
         description: "Model of configured schedule enabled on the check level."
         $ref: "#/definitions/EffectiveScheduleModel"
@@ -18987,7 +18987,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -19080,7 +19080,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -19173,7 +19173,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -19266,7 +19266,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -19359,7 +19359,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -19954,7 +19954,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -20035,7 +20035,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -20116,7 +20116,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -20361,7 +20361,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -20442,7 +20442,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -20574,7 +20574,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -21291,7 +21291,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -21460,7 +21460,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -21548,7 +21548,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -21788,7 +21788,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -21866,7 +21866,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -21938,7 +21938,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22010,7 +22010,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22082,7 +22082,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22154,7 +22154,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22226,7 +22226,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22298,7 +22298,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22370,7 +22370,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22442,7 +22442,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22514,7 +22514,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22586,7 +22586,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22658,7 +22658,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22730,7 +22730,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22802,7 +22802,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22874,7 +22874,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -22946,7 +22946,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23018,7 +23018,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23091,7 +23091,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23164,7 +23164,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23242,7 +23242,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23314,7 +23314,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23430,7 +23430,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23539,7 +23539,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23678,7 +23678,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23750,7 +23750,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23822,7 +23822,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23894,7 +23894,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -23966,7 +23966,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24038,7 +24038,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24110,7 +24110,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24183,7 +24183,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24256,7 +24256,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24329,7 +24329,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24402,7 +24402,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24474,7 +24474,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24671,7 +24671,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24743,7 +24743,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24815,7 +24815,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24887,7 +24887,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -24959,7 +24959,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25031,7 +25031,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25103,7 +25103,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25175,7 +25175,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25247,7 +25247,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25319,7 +25319,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25391,7 +25391,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25463,7 +25463,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25535,7 +25535,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25607,7 +25607,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25679,7 +25679,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25751,7 +25751,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25823,7 +25823,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -25895,7 +25895,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26133,7 +26133,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26205,7 +26205,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26277,7 +26277,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26349,7 +26349,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26421,7 +26421,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26493,7 +26493,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26565,7 +26565,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26637,7 +26637,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26709,7 +26709,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26781,7 +26781,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26853,7 +26853,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -26925,7 +26925,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27278,7 +27278,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27425,7 +27425,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27498,7 +27498,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27571,7 +27571,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27644,7 +27644,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27717,7 +27717,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -27796,7 +27796,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29389,7 +29389,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29461,7 +29461,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29533,7 +29533,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29605,7 +29605,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29677,7 +29677,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29749,7 +29749,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29829,7 +29829,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29909,7 +29909,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -29989,7 +29989,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -30069,7 +30069,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -30349,7 +30349,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -30421,7 +30421,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -30740,7 +30740,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -30812,7 +30812,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -30913,7 +30913,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31048,7 +31048,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31190,7 +31190,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31277,7 +31277,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31368,7 +31368,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31459,7 +31459,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31649,7 +31649,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31721,7 +31721,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31793,7 +31793,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31865,7 +31865,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -31937,7 +31937,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32009,7 +32009,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32081,7 +32081,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32290,7 +32290,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32369,7 +32369,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32442,7 +32442,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32515,7 +32515,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32588,7 +32588,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32661,7 +32661,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32734,7 +32734,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32823,7 +32823,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32895,7 +32895,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -32984,7 +32984,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33056,7 +33056,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33128,7 +33128,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33354,7 +33354,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33426,7 +33426,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33499,7 +33499,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33572,7 +33572,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33644,7 +33644,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33717,7 +33717,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33789,7 +33789,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -33862,7 +33862,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -34183,7 +34183,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -34256,7 +34256,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -34329,7 +34329,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -34401,7 +34401,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -34873,7 +34873,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -34945,7 +34945,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35165,7 +35165,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35237,7 +35237,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35443,7 +35443,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35516,7 +35516,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35653,7 +35653,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35726,7 +35726,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35813,7 +35813,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -35885,7 +35885,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -36325,7 +36325,7 @@ definitions:
         description: "Configuration of the job scheduler that runs data quality checks.\
           \ The scheduler configuration is divided into types of checks that have\
           \ different schedules."
-        $ref: "#/definitions/DefaultSchedulesSpec"
+        $ref: "#/definitions/CronSchedulesSpec"
       schedule_on_instance:
         type: "string"
         description: "Limits running scheduled checks (started by a CRON job scheduler)\
@@ -36409,6 +36409,37 @@ definitions:
         format: "int64"
         description: "Maximum accepted count (inclusive), leave empty when the limit\
           \ is not assigned."
+  CronScheduleSpec:
+    type: "object"
+    properties:
+      cron_expression:
+        type: "string"
+        description: "Unix style cron expression that specifies when to execute scheduled\
+          \ operations like running data quality checks or synchronizing the configuration\
+          \ with the cloud."
+      disabled:
+        type: "boolean"
+        description: "Disables the schedule. When the value of this 'disable' field\
+          \ is false, the schedule is stored in the metadata but it is not activated\
+          \ to run data quality checks."
+  CronSchedulesSpec:
+    type: "object"
+    properties:
+      profiling:
+        description: "Schedule for running profiling data quality checks."
+        $ref: "#/definitions/CronScheduleSpec"
+      monitoring_daily:
+        description: "Schedule for running daily monitoring checks."
+        $ref: "#/definitions/CronScheduleSpec"
+      monitoring_monthly:
+        description: "Schedule for running monthly monitoring checks."
+        $ref: "#/definitions/CronScheduleSpec"
+      partitioned_daily:
+        description: "Schedule for running daily partitioned checks."
+        $ref: "#/definitions/CronScheduleSpec"
+      partitioned_monthly:
+        description: "Schedule for running monthly partitioned checks."
+        $ref: "#/definitions/CronScheduleSpec"
   CsvFileFormatSpec:
     type: "object"
     properties:
@@ -36496,7 +36527,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -36866,24 +36897,6 @@ definitions:
           type: "string"
       database:
         type: "string"
-  DefaultSchedulesSpec:
-    type: "object"
-    properties:
-      profiling:
-        description: "Schedule for running profiling data quality checks."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      monitoring_daily:
-        description: "Schedule for running daily monitoring checks."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      monitoring_monthly:
-        description: "Schedule for running monthly monitoring checks."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      partitioned_daily:
-        description: "Schedule for running daily partitioned checks."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      partitioned_monthly:
-        description: "Schedule for running monthly partitioned checks."
-        $ref: "#/definitions/MonitoringScheduleSpec"
   DeleteStoredDataQueueJobParameters:
     type: "object"
     properties:
@@ -37188,9 +37201,13 @@ definitions:
           \ queue job."
         $ref: "#/definitions/SynchronizeMultipleFoldersDqoQueueJobParameters"
       runScheduledChecksParameters:
-        description: "The job parameters for the \"run scheduled checks cron\" queue\
+        description: "The job parameters for the \"run scheduled checks\" cron queue\
           \ job."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
+      collectScheduledStatisticsParameters:
+        description: "The job parameters for the \"collect scheduled statistics\"\
+          \ cron queue job."
+        $ref: "#/definitions/CronScheduleSpec"
       runChecksParameters:
         description: "The job parameters for the \"run checks\" queue job."
         $ref: "#/definitions/RunChecksParameters"
@@ -37234,6 +37251,7 @@ definitions:
         - "run_checks"
         - "run_checks_on_table"
         - "collect_statistics"
+        - "collect_scheduled_statistics"
         - "collect_statistics_on_table"
         - "collect_error_samples"
         - "collect_error_samples_on_table"
@@ -38750,19 +38768,6 @@ definitions:
         format: "double"
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MonitoringScheduleSpec:
-    type: "object"
-    properties:
-      cron_expression:
-        type: "string"
-        description: "Unix style cron expression that specifies when to execute scheduled\
-          \ operations like running data quality checks or synchronizing the configuration\
-          \ with the cloud."
-      disabled:
-        type: "boolean"
-        description: "Disables the schedule. When the value of this 'disable' field\
-          \ is false, the schedule is stored in the metadata but it is not activated\
-          \ to run data quality checks."
   Mono:
     type: "object"
   MonoResponseEntityMonoDqoQueueJobId:
@@ -38873,14 +38878,14 @@ definitions:
         type: "boolean"
       present:
         type: "boolean"
-  OptionalIncidentNotificationSpec:
+  OptionalCronScheduleSpec:
     type: "object"
     properties:
       empty:
         type: "boolean"
       present:
         type: "boolean"
-  OptionalMonitoringScheduleSpec:
+  OptionalIncidentNotificationSpec:
     type: "object"
     properties:
       empty:
@@ -40279,6 +40284,9 @@ definitions:
         enum:
         - "table"
         - "column"
+      enabledCronScheduleExpression:
+        type: "string"
+        description: "Expected CRON profiling schedule."
       collectorsHierarchyIdsModels:
         type: "array"
         items:
@@ -40505,7 +40513,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -40593,7 +40601,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -40771,7 +40779,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -41241,7 +41249,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -41681,7 +41689,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -41753,7 +41761,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -41825,7 +41833,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -41897,7 +41905,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -41969,7 +41977,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -42053,7 +42061,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -42560,7 +42568,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -42861,7 +42869,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -42933,7 +42941,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43005,7 +43013,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43077,7 +43085,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43149,7 +43157,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43221,7 +43229,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43293,7 +43301,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43365,7 +43373,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43437,7 +43445,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43519,7 +43527,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43591,7 +43599,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43663,7 +43671,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -43993,7 +44001,7 @@ definitions:
         description: "Configuration of the job scheduler that runs data quality checks.\
           \ The scheduler configuration is divided into types of checks that have\
           \ different schedules."
-        $ref: "#/definitions/DefaultSchedulesSpec"
+        $ref: "#/definitions/CronSchedulesSpec"
       columns:
         type: "object"
         description: "Dictionary of columns, indexed by a physical column name. Column\
@@ -44035,7 +44043,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -44122,7 +44130,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -44211,7 +44219,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\
@@ -44300,7 +44308,7 @@ definitions:
       schedule_override:
         description: "Run check scheduling configuration. Specifies the schedule (a\
           \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
+        $ref: "#/definitions/CronScheduleSpec"
       comments:
         type: "array"
         description: "Comments for change tracking. Please put comments in this collection\

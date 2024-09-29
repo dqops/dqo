@@ -15,7 +15,7 @@
  */
 package com.dqops.core.scheduler.quartz;
 
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import org.quartz.JobKey;
 import org.quartz.Trigger;
 
@@ -30,5 +30,5 @@ public interface TriggerFactory {
      * @param dataDomainName Data domain name.
      * @return Trigger.
      */
-    Trigger createTrigger(MonitoringScheduleSpec scheduleSpec, JobKey jobKey, String dataDomainName);
+    Trigger createTrigger(CronScheduleSpec scheduleSpec, JobKey jobKey, String dataDomainName);
 }

@@ -31,4 +31,14 @@ public interface ScheduleChangeFinderService {
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
     JobSchedulesDelta findRunChecksSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName);
+
+    /**
+     * Loads all CRON schedules for running profiling checks and compares the list with the current running schedules.
+     * Returns two list of schedules, those new schedules to add and outdated schedules to remove.
+     *
+     * @param currentRunningSchedules Current running schedules for profiling.
+     * @param dataDomainName Data domain name.
+     * @return The delta - two lists of schedules, to add and to remove from the scheduler.
+     */
+    JobSchedulesDelta findProfilingSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName);
 }

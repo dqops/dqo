@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.search;
 
+import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
@@ -26,27 +27,29 @@ import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.sources.ColumnSpecMap;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
 /**
- * Metadata node search visitor that is searching for all unique monitoring schedules.
+ * Metadata node search visitor that is searching for all unique CRON schedules.
  */
-public class MonitoringScheduleSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
-    private MonitoringScheduleSearchFilters filters;
+public class CronScheduleSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
+    private CronScheduleSearchFilters filters;
 
     /**
      * Creates a visitor given the search filters.
      * @param filters Search filters.
      */
-    public MonitoringScheduleSearchFiltersVisitor(MonitoringScheduleSearchFilters filters) {
+    public CronScheduleSearchFiltersVisitor(CronScheduleSearchFilters filters) {
         this.filters = filters;
     }
 
@@ -72,23 +75,59 @@ public class MonitoringScheduleSearchFiltersVisitor extends AbstractSearchVisito
     }
 
     /**
+     * Accepts a column collection (map).
+     *
+     * @param columnSpecMap Column collection.
+     * @param parameter     Target object where found hierarchy nodes, dimensions and labels should be added.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
+        if (this.filters.isIgnoreChecks()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        return super.accept(columnSpecMap, parameter);
+    }
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     *
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, SearchParameterObject parameter) {
+        if (this.filters.isIgnoreChecks()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        return super.accept(checksContainerSpec, parameter);
+    }
+
+    /**
      * Accepts a monitoring schedule specification, it is the cron expression how to schedule the job.
      *
-     * @param monitoringScheduleSpec Monitoring schedule.
+     * @param cronScheduleSpec Monitoring schedule.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(MonitoringScheduleSpec monitoringScheduleSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(CronScheduleSpec cronScheduleSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getScheduleEnabled();
         if (enabledFilter != null) {
             boolean mustBeDisabled = !enabledFilter;
-            if (monitoringScheduleSpec.isDisabled() != mustBeDisabled) {
+            if (cronScheduleSpec.isDisabled() != mustBeDisabled) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // no children possible
             }
         }
 
-        parameter.getNodes().add(monitoringScheduleSpec);
+        if (this.filters.getScheduleGroup() != null && this.filters.getScheduleGroup() != cronScheduleSpec.getScheduleGroup()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN; // ignoring
+        }
+
+        parameter.getNodes().add(cronScheduleSpec);
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no children possible
     }
 

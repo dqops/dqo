@@ -27,7 +27,7 @@ import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableParamete
 import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJobParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;
@@ -51,10 +51,16 @@ public class DqoJobEntryParametersModel {
     private SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeMultipleFoldersParameters;
 
     /**
-     * The job parameters for the "run scheduled checks cron" queue job.
+     * The job parameters for the "run scheduled checks" queue job.
      */
-    @JsonPropertyDescription("The job parameters for the \"run scheduled checks cron\" queue job.")
-    private MonitoringScheduleSpec runScheduledChecksParameters;
+    @JsonPropertyDescription("The job parameters for the \"run scheduled checks\" cron queue job.")
+    private CronScheduleSpec runScheduledChecksParameters;
+
+    /**
+     * The job parameters for the "collect scheduled statistics" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect scheduled statistics\" cron queue job.")
+    private CronScheduleSpec collectScheduledStatisticsParameters;
 
     /**
      * The job parameters for the "run checks" queue job.

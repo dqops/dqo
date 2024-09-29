@@ -17,17 +17,15 @@ package com.dqops.execution.checks.scheduled;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.search.*;
 import com.dqops.metadata.settings.instancename.InstanceNameProvider;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
-import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -72,7 +69,7 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
      * @return List of target checks, grouped by a target table.
      */
     @Override
-    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, MonitoringScheduleSpec schedule) {
+    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, CronScheduleSpec schedule) {
         ScheduledChecksCollection scheduledChecksCollection = new ScheduledChecksCollection();
 
         ScheduleRootsSearchFilters scheduleRootsSearchFilters = new ScheduleRootsSearchFilters();
@@ -95,7 +92,7 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
                     this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(scheduledConnectionWrapper.getSpec(), clonedTableSpec, userHome);
 
                     Set<CheckRunScheduleGroup> schedulingGroupsForTable = scheduleRoot.getSchedulingGroups();
-                    DefaultSchedulesSpec tableSchedulesOverride = clonedTableSpec.getSchedulesOverride();
+                    CronSchedulesSpec tableSchedulesOverride = clonedTableSpec.getSchedulesOverride();
                     if (tableSchedulesOverride != null && !tableSchedulesOverride.isDefault()) {
                         schedulingGroupsForTable = new HashSet<>(schedulingGroupsForTable);
 

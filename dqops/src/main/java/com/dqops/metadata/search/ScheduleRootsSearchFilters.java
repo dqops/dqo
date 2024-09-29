@@ -15,8 +15,7 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
@@ -29,12 +28,12 @@ public class ScheduleRootsSearchFilters {
     @JsonPropertyDescription("The instance name of the local DQOps instance. It is used to return schedules only from connections that can run on any instance, or are limited to run on this instance.")
     private String localInstanceName;
 
-    private MonitoringScheduleSpec schedule;
+    private CronScheduleSpec schedule;
 
     public ScheduleRootsSearchFilters() {
     }
 
-    public ScheduleRootsSearchFilters(Boolean enabled, MonitoringScheduleSpec schedule) {
+    public ScheduleRootsSearchFilters(Boolean enabled, CronScheduleSpec schedule) {
         this.enabled = enabled;
         this.schedule = schedule;
     }
@@ -85,7 +84,7 @@ public class ScheduleRootsSearchFilters {
      * Returns a schedule settings (cron expression, etc.) that must match.
      * @return Schedule configuration with a time zone on the connection.
      */
-    public MonitoringScheduleSpec getSchedule() {
+    public CronScheduleSpec getSchedule() {
         return schedule;
     }
 
@@ -93,7 +92,7 @@ public class ScheduleRootsSearchFilters {
      * Sets a schedule (with connection's time zone) that must match.
      * @param schedule Schedule.
      */
-    public void setSchedule(MonitoringScheduleSpec schedule) {
+    public void setSchedule(CronScheduleSpec schedule) {
         this.schedule = schedule;
     }
 }

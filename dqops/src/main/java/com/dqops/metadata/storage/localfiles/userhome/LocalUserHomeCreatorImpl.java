@@ -35,7 +35,7 @@ import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
 import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
@@ -477,7 +477,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() == null) {
-            DefaultSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultSchedules();
+            CronSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultSchedules();
             userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
         }
 

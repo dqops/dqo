@@ -1,10 +1,10 @@
 import React from 'react';
-import { MonitoringScheduleSpec } from '../../api';
+import { CronScheduleSpec } from '../../api';
 import ScheduleView from "../ScheduleView";
 
 interface IScheduleTabProps {
-  schedule?: MonitoringScheduleSpec;
-  onChange: (item?: MonitoringScheduleSpec) => void;
+  schedule?: CronScheduleSpec;
+  onChange: (item?: CronScheduleSpec) => void;
 }
 
 const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {

@@ -5,7 +5,7 @@ import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.id.HierarchyId;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
@@ -41,14 +41,14 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
      * @return Loaded default schedules specification.
      */
     @Override
-    public DefaultSchedulesSpec getSpec() {
-        DefaultSchedulesSpec spec = super.getSpec();
+    public CronSchedulesSpec getSpec() {
+        CronSchedulesSpec spec = super.getSpec();
         if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                DefaultSchedulesSpec deserializedSpec = (DefaultSchedulesSpec) fileContent.getCachedObjectInstance();
+                CronSchedulesSpec deserializedSpec = (CronSchedulesSpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
                     DefaultSchedulesYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultSchedulesYaml.class, fileNode.getPhysicalAbsolutePath());
@@ -58,7 +58,7 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
-                        DefaultSchedulesSpec cachedObjectInstance = deserializedSpec.deepClone();
+                        CronSchedulesSpec cachedObjectInstance = deserializedSpec.deepClone();
                         cachedObjectInstance.makeReadOnly(true);
                         if (this.getHierarchyId() != null) {
                             cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));

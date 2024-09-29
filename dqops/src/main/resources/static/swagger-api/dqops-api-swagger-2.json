@@ -1433,7 +1433,7 @@
           "200" : {
             "description" : "Connection's schedule returned",
             "schema" : {
-              "$ref" : "#/definitions/MonitoringScheduleSpec"
+              "$ref" : "#/definitions/CronScheduleSpec"
             }
           },
           "404" : {
@@ -1476,7 +1476,7 @@
           "description" : "Monitoring schedule definition to store",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/MonitoringScheduleSpec"
+            "$ref" : "#/definitions/CronScheduleSpec"
           }
         } ],
         "responses" : {
@@ -12105,7 +12105,7 @@
           "200" : {
             "description" : "Overridden schedule configuration for a table returned",
             "schema" : {
-              "$ref" : "#/definitions/MonitoringScheduleSpec"
+              "$ref" : "#/definitions/CronScheduleSpec"
             }
           },
           "404" : {
@@ -12160,7 +12160,7 @@
           "description" : "Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/MonitoringScheduleSpec"
+            "$ref" : "#/definitions/CronScheduleSpec"
           }
         } ],
         "responses" : {
@@ -14598,7 +14598,7 @@
           "200" : {
             "description" : "OK",
             "schema" : {
-              "$ref" : "#/definitions/MonitoringScheduleSpec"
+              "$ref" : "#/definitions/CronScheduleSpec"
             }
           },
           "500" : {
@@ -14625,7 +14625,7 @@
           "description" : "Spec with default schedules changes to be applied to the default configuration.",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/MonitoringScheduleSpec"
+            "$ref" : "#/definitions/CronScheduleSpec"
           }
         }, {
           "name" : "schedulingGroup",
@@ -20860,7 +20860,7 @@
         },
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "effective_schedule" : {
           "description" : "Model of configured schedule enabled on the check level.",
@@ -21950,7 +21950,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22031,7 +22031,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22112,7 +22112,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22193,7 +22193,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22274,7 +22274,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22811,7 +22811,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22875,7 +22875,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -22939,7 +22939,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -23121,7 +23121,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -23185,7 +23185,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -23289,7 +23289,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -23909,7 +23909,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24042,7 +24042,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24125,7 +24125,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24323,7 +24323,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24387,7 +24387,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24451,7 +24451,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24515,7 +24515,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24579,7 +24579,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24643,7 +24643,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24707,7 +24707,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24771,7 +24771,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24835,7 +24835,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24899,7 +24899,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -24963,7 +24963,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25027,7 +25027,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25091,7 +25091,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25155,7 +25155,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25219,7 +25219,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25283,7 +25283,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25347,7 +25347,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25411,7 +25411,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25475,7 +25475,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25539,7 +25539,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25603,7 +25603,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25667,7 +25667,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25771,7 +25771,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25869,7 +25869,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -25993,7 +25993,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26057,7 +26057,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26121,7 +26121,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26185,7 +26185,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26249,7 +26249,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26313,7 +26313,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26377,7 +26377,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26441,7 +26441,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26505,7 +26505,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26569,7 +26569,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26633,7 +26633,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26697,7 +26697,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26893,7 +26893,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -26957,7 +26957,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27021,7 +27021,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27085,7 +27085,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27149,7 +27149,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27213,7 +27213,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27277,7 +27277,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27341,7 +27341,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27405,7 +27405,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27469,7 +27469,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27533,7 +27533,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27597,7 +27597,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27661,7 +27661,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27725,7 +27725,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27789,7 +27789,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27853,7 +27853,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27917,7 +27917,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -27981,7 +27981,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28251,7 +28251,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28315,7 +28315,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28379,7 +28379,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28443,7 +28443,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28507,7 +28507,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28571,7 +28571,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28635,7 +28635,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28699,7 +28699,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28763,7 +28763,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28827,7 +28827,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28891,7 +28891,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -28955,7 +28955,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29275,7 +29275,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29412,7 +29412,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29476,7 +29476,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29540,7 +29540,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29604,7 +29604,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29668,7 +29668,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -29732,7 +29732,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31298,7 +31298,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31362,7 +31362,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31426,7 +31426,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31490,7 +31490,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31554,7 +31554,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31618,7 +31618,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31691,7 +31691,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31764,7 +31764,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31837,7 +31837,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -31910,7 +31910,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32143,7 +32143,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32207,7 +32207,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32557,7 +32557,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32621,7 +32621,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32721,7 +32721,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32845,7 +32845,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -32967,7 +32967,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33044,7 +33044,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33121,7 +33121,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33198,7 +33198,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33390,7 +33390,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33454,7 +33454,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33518,7 +33518,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33582,7 +33582,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33646,7 +33646,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33710,7 +33710,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33774,7 +33774,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -33942,7 +33942,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34006,7 +34006,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34070,7 +34070,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34134,7 +34134,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34198,7 +34198,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34262,7 +34262,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34326,7 +34326,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34404,7 +34404,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34468,7 +34468,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34554,7 +34554,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34618,7 +34618,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34682,7 +34682,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34872,7 +34872,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -34936,7 +34936,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35000,7 +35000,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35064,7 +35064,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35128,7 +35128,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35192,7 +35192,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35256,7 +35256,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35320,7 +35320,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35673,7 +35673,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35737,7 +35737,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35801,7 +35801,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -35865,7 +35865,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36346,7 +36346,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36410,7 +36410,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36589,7 +36589,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36653,7 +36653,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36814,7 +36814,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36878,7 +36878,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -36995,7 +36995,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -37059,7 +37059,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -37141,7 +37141,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -37205,7 +37205,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -37606,7 +37606,7 @@
         },
         "schedules" : {
           "description" : "Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.",
-          "$ref" : "#/definitions/DefaultSchedulesSpec"
+          "$ref" : "#/definitions/CronSchedulesSpec"
         },
         "schedule_on_instance" : {
           "type" : "string",
@@ -37696,6 +37696,44 @@
         }
       }
     },
+    "CronScheduleSpec" : {
+      "type" : "object",
+      "properties" : {
+        "cron_expression" : {
+          "type" : "string",
+          "description" : "Unix style cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud."
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the schedule. When the value of this 'disable' field is false, the schedule is stored in the metadata but it is not activated to run data quality checks."
+        }
+      }
+    },
+    "CronSchedulesSpec" : {
+      "type" : "object",
+      "properties" : {
+        "profiling" : {
+          "description" : "Schedule for running profiling data quality checks.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        },
+        "monitoring_daily" : {
+          "description" : "Schedule for running daily monitoring checks.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        },
+        "monitoring_monthly" : {
+          "description" : "Schedule for running monthly monitoring checks.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        },
+        "partitioned_daily" : {
+          "description" : "Schedule for running daily partitioned checks.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        },
+        "partitioned_monthly" : {
+          "description" : "Schedule for running monthly partitioned checks.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        }
+      }
+    },
     "CsvFileFormatSpec" : {
       "type" : "object",
       "properties" : {
@@ -37782,7 +37820,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -38172,31 +38210,6 @@
         }
       }
     },
-    "DefaultSchedulesSpec" : {
-      "type" : "object",
-      "properties" : {
-        "profiling" : {
-          "description" : "Schedule for running profiling data quality checks.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "monitoring_daily" : {
-          "description" : "Schedule for running daily monitoring checks.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "monitoring_monthly" : {
-          "description" : "Schedule for running monthly monitoring checks.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "partitioned_daily" : {
-          "description" : "Schedule for running daily partitioned checks.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "partitioned_monthly" : {
-          "description" : "Schedule for running monthly partitioned checks.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        }
-      }
-    },
     "DeleteStoredDataQueueJobParameters" : {
       "type" : "object",
       "properties" : {
@@ -38467,8 +38480,12 @@
           "$ref" : "#/definitions/SynchronizeMultipleFoldersDqoQueueJobParameters"
         },
         "runScheduledChecksParameters" : {
-          "description" : "The job parameters for the \"run scheduled checks cron\" queue job.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "description" : "The job parameters for the \"run scheduled checks\" cron queue job.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        },
+        "collectScheduledStatisticsParameters" : {
+          "description" : "The job parameters for the \"collect scheduled statistics\" cron queue job.",
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "runChecksParameters" : {
           "description" : "The job parameters for the \"run checks\" queue job.",
@@ -38520,7 +38537,7 @@
         },
         "jobType" : {
           "type" : "string",
-          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
+          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_scheduled_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
         },
         "parameters" : {
           "$ref" : "#/definitions/DqoJobEntryParametersModel"
@@ -40161,19 +40178,6 @@
         }
       }
     },
-    "MonitoringScheduleSpec" : {
-      "type" : "object",
-      "properties" : {
-        "cron_expression" : {
-          "type" : "string",
-          "description" : "Unix style cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud."
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the schedule. When the value of this 'disable' field is false, the schedule is stored in the metadata but it is not activated to run data quality checks."
-        }
-      }
-    },
     "Mono" : {
       "type" : "object"
     },
@@ -40291,7 +40295,7 @@
         }
       }
     },
-    "OptionalIncidentNotificationSpec" : {
+    "OptionalCronScheduleSpec" : {
       "type" : "object",
       "properties" : {
         "empty" : {
@@ -40302,7 +40306,7 @@
         }
       }
     },
-    "OptionalMonitoringScheduleSpec" : {
+    "OptionalIncidentNotificationSpec" : {
       "type" : "object",
       "properties" : {
         "empty" : {
@@ -41694,6 +41698,10 @@
           "description" : "The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.",
           "enum" : [ "table", "column" ]
         },
+        "enabledCronScheduleExpression" : {
+          "type" : "string",
+          "description" : "Expected CRON profiling schedule."
+        },
         "collectorsHierarchyIdsModels" : {
           "type" : "array",
           "items" : {
@@ -41914,7 +41922,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -41991,7 +41999,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -42177,7 +42185,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -42586,7 +42594,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -42979,7 +42987,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -43043,7 +43051,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -43107,7 +43115,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -43171,7 +43179,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -43235,7 +43243,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -43315,7 +43323,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -43828,7 +43836,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44113,7 +44121,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44177,7 +44185,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44241,7 +44249,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44305,7 +44313,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44369,7 +44377,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44433,7 +44441,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44497,7 +44505,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44561,7 +44569,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44625,7 +44633,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44702,7 +44710,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44766,7 +44774,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -44830,7 +44838,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -45074,7 +45082,7 @@
         },
         "schedules_override" : {
           "description" : "Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.",
-          "$ref" : "#/definitions/DefaultSchedulesSpec"
+          "$ref" : "#/definitions/CronSchedulesSpec"
         },
         "columns" : {
           "type" : "object",
@@ -45122,7 +45130,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -45199,7 +45207,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -45276,7 +45284,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",
@@ -45353,7 +45361,7 @@
       "properties" : {
         "schedule_override" : {
           "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
+          "$ref" : "#/definitions/CronScheduleSpec"
         },
         "comments" : {
           "type" : "array",

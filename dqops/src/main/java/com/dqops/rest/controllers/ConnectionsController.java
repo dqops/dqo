@@ -28,8 +28,8 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -56,7 +56,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -211,18 +210,18 @@ public class ConnectionsController {
      * @return Connection's schedule specification.
      */
     @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = MonitoringScheduleSpec.class,
+    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = CronScheduleSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's schedule returned", response = MonitoringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Connection's schedule returned", response = CronScheduleSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getConnectionSchedulingGroup(
+    public Mono<ResponseEntity<Mono<CronScheduleSpec>>> getConnectionSchedulingGroup(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
@@ -237,12 +236,12 @@ public class ConnectionsController {
             }
             ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-            DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
+            CronSchedulesSpec schedules = connectionSpec.getSchedules();
             if (schedules == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
             }
 
-            MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+            CronScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
             return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
         }));
@@ -650,7 +649,7 @@ public class ConnectionsController {
     /**
      * Updates the configuration of a check run schedule for a scheduling group (named schedule) of an existing connection.
      * @param connectionName        Connection name.
-     * @param monitoringScheduleSpec Schedule specification.
+     * @param cronScheduleSpec Schedule specification.
      * @param schedulingGroup       Scheduling group.
      * @return Empty response.
      */
@@ -672,7 +671,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
-            @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
+            @ApiParam("Monitoring schedule definition to store") @RequestBody CronScheduleSpec cronScheduleSpec) {
         return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
@@ -687,31 +686,31 @@ public class ConnectionsController {
 
                         ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
 
-                        DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+                        CronSchedulesSpec schedules = existingConnectionSpec.getSchedules();
                         if (schedules == null) {
-                            schedules = new DefaultSchedulesSpec();
+                            schedules = new CronSchedulesSpec();
                             existingConnectionSpec.setSchedules(schedules);
                         }
 
                         switch (schedulingGroup) {
                             case profiling:
-                                schedules.setProfiling(monitoringScheduleSpec);
+                                schedules.setProfiling(cronScheduleSpec);
                                 break;
 
                             case monitoring_daily:
-                                schedules.setMonitoringDaily(monitoringScheduleSpec);
+                                schedules.setMonitoringDaily(cronScheduleSpec);
                                 break;
 
                             case monitoring_monthly:
-                                schedules.setMonitoringMonthly(monitoringScheduleSpec);
+                                schedules.setMonitoringMonthly(cronScheduleSpec);
                                 break;
 
                             case partitioned_daily:
-                                schedules.setPartitionedDaily(monitoringScheduleSpec);
+                                schedules.setPartitionedDaily(cronScheduleSpec);
                                 break;
 
                             case partitioned_monthly:
-                                schedules.setPartitionedMonthly(monitoringScheduleSpec);
+                                schedules.setPartitionedMonthly(cronScheduleSpec);
                                 break;
 
                             default:

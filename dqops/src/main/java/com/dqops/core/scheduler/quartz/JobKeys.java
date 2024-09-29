@@ -32,6 +32,11 @@ public final class JobKeys {
     public static final JobKey RUN_CHECKS = new JobKey(JobNames.RUN_CHECKS, null);
 
     /**
+     * Predefined job that runs basic profiling and collecting statistics.
+     */
+    public static final JobKey COLLECT_STATISTICS = new JobKey(JobNames.COLLECT_STATISTICS, null);
+
+    /**
      * Predefined job that does nothing.
      */
     public static final JobKey DUMMY = new JobKey(JobNames.DUMMY, null);

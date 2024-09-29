@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { MonitoringScheduleSpec } from '../../api';
+import { CronScheduleSpec } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setCronScheduler } from '../../redux/actions/job.actions';
 import { IRootState } from '../../redux/reducers';
@@ -14,7 +14,7 @@ import RadioButton from '../RadioButton';
 import Switch from '../Switch';
 
 interface IScheduleViewProps {
-  schedule?: MonitoringScheduleSpec;
+  schedule?: CronScheduleSpec;
   handleChange: (obj: any) => void;
   isDefault?: boolean;
 }

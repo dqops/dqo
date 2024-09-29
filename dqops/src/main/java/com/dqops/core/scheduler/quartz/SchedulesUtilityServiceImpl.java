@@ -17,7 +17,7 @@ package com.dqops.core.scheduler.quartz;
 
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.scheduler.JobSchedulerException;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.base.Strings;
 import org.quartz.Trigger;
@@ -49,7 +49,7 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
      * @return Date and time of the next execution. Null if <code>scheduleSpec</code> is invalid.
      */
     @Override
-    public ZonedDateTime getTimeOfNextExecution(MonitoringScheduleSpec scheduleSpec) {
+    public ZonedDateTime getTimeOfNextExecution(CronScheduleSpec scheduleSpec) {
         if (Strings.isNullOrEmpty(scheduleSpec.getCronExpression())) {
             return null;
         }

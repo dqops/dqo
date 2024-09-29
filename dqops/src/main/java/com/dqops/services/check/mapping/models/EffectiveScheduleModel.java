@@ -16,7 +16,7 @@
 package com.dqops.services.check.mapping.models;
 
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -65,10 +65,10 @@ public class EffectiveScheduleModel {
      * @return {@link EffectiveScheduleModel} instance based on the <code>scheduleSpec</code>.
      */
     public static EffectiveScheduleModel fromMonitoringScheduleSpec(
-            MonitoringScheduleSpec scheduleSpec,
+            CronScheduleSpec scheduleSpec,
             CheckRunScheduleGroup scheduleGroup,
             EffectiveScheduleLevelModel scheduleLevel,
-            Function<MonitoringScheduleSpec, ZonedDateTime> specToZonedDateTimeConverter) {
+            Function<CronScheduleSpec, ZonedDateTime> specToZonedDateTimeConverter) {
         EffectiveScheduleModel effectiveScheduleModel = new EffectiveScheduleModel();
         effectiveScheduleModel.scheduleGroup = scheduleGroup;
         effectiveScheduleModel.scheduleLevel = scheduleLevel;

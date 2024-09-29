@@ -39,7 +39,7 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.lineage.TableLineageSourceSpecList;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
@@ -194,7 +194,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultSchedulesSpec schedulesOverride;
+    private CronSchedulesSpec schedulesOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -549,7 +549,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
      * Returns the table specific configuration of schedules for each type of checks that have a separate schedule.
      * @return Configuration of schedules for each type of schedules.
      */
-    public DefaultSchedulesSpec getSchedulesOverride() {
+    public CronSchedulesSpec getSchedulesOverride() {
         return schedulesOverride;
     }
 
@@ -557,7 +557,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder, 
      * Sets the table specific configuration of schedules for running checks.
      * @param schedulesOverride Configuration of schedules for running checks.
      */
-    public void setSchedulesOverride(DefaultSchedulesSpec schedulesOverride) {
+    public void setSchedulesOverride(CronSchedulesSpec schedulesOverride) {
         setDirtyIf(!Objects.equals(this.schedulesOverride, schedulesOverride));
         this.schedulesOverride = schedulesOverride;
         propagateHierarchyIdToField(schedulesOverride, "schedules_override");

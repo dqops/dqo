@@ -34,26 +34,26 @@ import org.apache.parquet.Strings;
 import java.util.Objects;
 
 /**
- * Monitoring job schedule specification.
+ * Cron job schedule specification.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class MonitoringScheduleSpec extends AbstractSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MonitoringScheduleSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class CronScheduleSpec extends AbstractSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<CronScheduleSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
 
-    public MonitoringScheduleSpec() {
+    public CronScheduleSpec() {
     }
 
     /**
      * Creates a monitoring schedule given a unix cron expression.
      * @param cronExpression Unix style cron expression.
      */
-    public MonitoringScheduleSpec(String cronExpression) {
+    public CronScheduleSpec(String cronExpression) {
         this.cronExpression = cronExpression;
     }
 
@@ -125,8 +125,8 @@ public class MonitoringScheduleSpec extends AbstractSpec {
      * Creates and returns a copy of this object.
      */
     @Override
-    public MonitoringScheduleSpec deepClone() {
-        MonitoringScheduleSpec cloned = (MonitoringScheduleSpec) super.deepClone();
+    public CronScheduleSpec deepClone() {
+        CronScheduleSpec cloned = (CronScheduleSpec) super.deepClone();
         return cloned;
     }
 
@@ -152,16 +152,35 @@ public class MonitoringScheduleSpec extends AbstractSpec {
      * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public MonitoringScheduleSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        MonitoringScheduleSpec cloned = this.deepClone();
+    public CronScheduleSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+        CronScheduleSpec cloned = this.deepClone();
         cloned.cronExpression = secretValueProvider.expandValue(cloned.cronExpression, lookupContext);
         return cloned;
     }
 
-    public static class MonitoringScheduleSpecSampleFactory implements SampleValueFactory<MonitoringScheduleSpec> {
+    /**
+     * Retrieves the schedule group from this schedule. Returns null when it cannot be determined from the parent node (it is a schedule override on a check).
+     * @return Schedule group or null.
+     */
+    @JsonIgnore
+    public CheckRunScheduleGroup getScheduleGroup() {
+        if (this.getHierarchyId() == null) {
+            return null;
+        }
+
+        String parentName = this.getHierarchyId().getLast().toString();
+        try {
+            return CheckRunScheduleGroup.valueOf(parentName);
+        }
+        catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
+    public static class MonitoringScheduleSpecSampleFactory implements SampleValueFactory<CronScheduleSpec> {
         @Override
-        public MonitoringScheduleSpec createSample() {
-            return new MonitoringScheduleSpec() {{
+        public CronScheduleSpec createSample() {
+            return new CronScheduleSpec() {{
                 setCronExpression("0 12 1 * *");
                 setDisabled(false);
             }};

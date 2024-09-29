@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.core.scheduler.runcheck;
+package com.dqops.core.scheduler.collectstatistics;
 
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
-import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.quartz.JobDataMapAdapter;
 import com.dqops.metadata.scheduling.CronScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
@@ -29,17 +29,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Quartz job implementation that executes data quality checks for a given schedule. This is a Quartz job.
+ * Quartz job implementation that collects statistics for a given schedule. This is a Quartz job.
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
+public class CollectScheduledStatisticsSchedulerJob implements Job, InterruptableJob {
     private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
     private DqoUserPrincipalProvider principalProvider;
-    private volatile RunScheduledChecksDqoJob runScheduledChecksJob;
+    private volatile CollectScheduledStatisticsDqoJob collectScheduledStatisticsJob;
 
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
@@ -49,10 +49,10 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
      * @param principalProvider User principal provider that returns the system principal.
      */
     @Autowired
-    public RunScheduledChecksSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
-                                          DqoQueueJobFactory dqoQueueJobFactory,
-                                          ParentDqoJobQueue dqoJobQueue,
-                                          DqoUserPrincipalProvider principalProvider) {
+    public CollectScheduledStatisticsSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
+                                                  DqoQueueJobFactory dqoQueueJobFactory,
+                                                  ParentDqoJobQueue dqoJobQueue,
+                                                  DqoUserPrincipalProvider principalProvider) {
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
@@ -69,18 +69,18 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
         final CronScheduleSpec runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
 
         try {
-            this.runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
-            this.runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
+            this.collectScheduledStatisticsJob = this.dqoQueueJobFactory.collectScheduledStatisticsJob();
+            this.collectScheduledStatisticsJob.setCronSchedule(runChecksCronSchedule);
             String dataDomain = this.jobDataMapAdapter.getDataDomain(jobExecutionContext.getTrigger().getJobDataMap());
 
             DqoUserPrincipal principal = this.principalProvider.createLocalDomainAdminPrincipal(dataDomain);
-            this.dqoJobQueue.pushJob(this.runScheduledChecksJob, principal);
+            this.dqoJobQueue.pushJob(this.collectScheduledStatisticsJob, principal);
 
-            this.runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
-            this.runScheduledChecksJob = null;
+            this.collectScheduledStatisticsJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
+            this.collectScheduledStatisticsJob = null;
         }
         catch (Exception ex) {
-            log.error("Failed to execute a job that runs the data quality checks on a job scheduler, error: " + ex.getMessage(), ex);
+            log.error("Failed to execute a job that collects statistics on a job scheduler, error: " + ex.getMessage(), ex);
             throw new JobExecutionException(ex);
         }
     }
@@ -91,7 +91,7 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
      */
     @Override
     public void interrupt() throws UnableToInterruptJobException {
-        RunScheduledChecksDqoJob waitingJob = this.runScheduledChecksJob;
+        CollectScheduledStatisticsDqoJob waitingJob = this.collectScheduledStatisticsJob;
         if (waitingJob != null) {
             this.dqoJobQueue.cancelJob(waitingJob.getJobId());
         }

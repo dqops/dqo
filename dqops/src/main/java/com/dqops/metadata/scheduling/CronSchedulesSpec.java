@@ -45,8 +45,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlStatusHolder {
-    private static final ChildHierarchyNodeFieldMapImpl<DefaultSchedulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class CronSchedulesSpec extends AbstractSpec implements InvalidYamlStatusHolder {
+    private static final ChildHierarchyNodeFieldMapImpl<CronSchedulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("profiling", o -> o.profiling);
             put("monitoring_daily", o -> o.monitoringDaily);
@@ -59,27 +59,27 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
     @JsonPropertyDescription("Schedule for running profiling data quality checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringScheduleSpec profiling;
+    private CronScheduleSpec profiling;
 
     @JsonPropertyDescription("Schedule for running daily monitoring checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringScheduleSpec monitoringDaily;
+    private CronScheduleSpec monitoringDaily;
 
     @JsonPropertyDescription("Schedule for running monthly monitoring checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringScheduleSpec monitoringMonthly;
+    private CronScheduleSpec monitoringMonthly;
 
     @JsonPropertyDescription("Schedule for running daily partitioned checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringScheduleSpec partitionedDaily;
+    private CronScheduleSpec partitionedDaily;
 
     @JsonPropertyDescription("Schedule for running monthly partitioned checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringScheduleSpec partitionedMonthly;
+    private CronScheduleSpec partitionedMonthly;
 
     @JsonIgnore
     private String yamlParsingError;
@@ -108,7 +108,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Returns the schedule for running profiling data quality checks
      * @return Schedule for running profiling.
      */
-    public MonitoringScheduleSpec getProfiling() {
+    public CronScheduleSpec getProfiling() {
         return profiling;
     }
 
@@ -116,7 +116,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Sets the configuration of the schedule for running profiling.
      * @param profiling Configuration of the profiling schedule.
      */
-    public void setProfiling(MonitoringScheduleSpec profiling) {
+    public void setProfiling(CronScheduleSpec profiling) {
         this.setDirtyIf(!Objects.equals(this.profiling, profiling));
         this.profiling = profiling;
         propagateHierarchyIdToField(profiling, CheckRunScheduleGroup.profiling.name());
@@ -126,7 +126,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Returns the configuration of the schedule for running daily checks.
      * @return Configuration of daily checks.
      */
-    public MonitoringScheduleSpec getMonitoringDaily() {
+    public CronScheduleSpec getMonitoringDaily() {
         return monitoringDaily;
     }
 
@@ -134,7 +134,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Sets the schedule for running daily checks.
      * @param monitoringDaily Configuration of schedule for daily checks.
      */
-    public void setMonitoringDaily(MonitoringScheduleSpec monitoringDaily) {
+    public void setMonitoringDaily(CronScheduleSpec monitoringDaily) {
         this.setDirtyIf(!Objects.equals(this.monitoringDaily, monitoringDaily));
         this.monitoringDaily = monitoringDaily;
         propagateHierarchyIdToField(monitoringDaily, CheckRunScheduleGroup.monitoring_daily.name());
@@ -144,7 +144,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Returns the configuration of the schedule for running monthly checks.
      * @return Configuration of monthly checks.
      */
-    public MonitoringScheduleSpec getMonitoringMonthly() {
+    public CronScheduleSpec getMonitoringMonthly() {
         return monitoringMonthly;
     }
 
@@ -152,7 +152,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Sets the schedule for running monthly checks.
      * @param monitoringMonthly Configuration of schedule for monthly checks.
      */
-    public void setMonitoringMonthly(MonitoringScheduleSpec monitoringMonthly) {
+    public void setMonitoringMonthly(CronScheduleSpec monitoringMonthly) {
         this.setDirtyIf(!Objects.equals(this.monitoringMonthly, monitoringMonthly));
         this.monitoringMonthly = monitoringMonthly;
         propagateHierarchyIdToField(monitoringMonthly, CheckRunScheduleGroup.monitoring_monthly.name());
@@ -162,7 +162,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Returns the configuration of the schedule for running daily partitioned checks.
      * @return Configuration of daily partitioned checks.
      */
-    public MonitoringScheduleSpec getPartitionedDaily() {
+    public CronScheduleSpec getPartitionedDaily() {
         return partitionedDaily;
     }
 
@@ -170,7 +170,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Sets the schedule for running daily partitioned checks.
      * @param partitionedDaily Configuration of schedule for daily partitioned checks.
      */
-    public void setPartitionedDaily(MonitoringScheduleSpec partitionedDaily) {
+    public void setPartitionedDaily(CronScheduleSpec partitionedDaily) {
         this.setDirtyIf(!Objects.equals(this.partitionedDaily, partitionedDaily));
         this.partitionedDaily = partitionedDaily;
         propagateHierarchyIdToField(partitionedDaily, CheckRunScheduleGroup.partitioned_daily.name());
@@ -180,7 +180,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Returns the configuration of the schedule for running monthly partitioned checks.
      * @return Configuration of monthly partitioned checks.
      */
-    public MonitoringScheduleSpec getPartitionedMonthly() {
+    public CronScheduleSpec getPartitionedMonthly() {
         return partitionedMonthly;
     }
 
@@ -188,7 +188,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Sets the schedule for running monthly partitioned checks.
      * @param partitionedMonthly Configuration of schedule for monthly partitioned checks.
      */
-    public void setPartitionedMonthly(MonitoringScheduleSpec partitionedMonthly) {
+    public void setPartitionedMonthly(CronScheduleSpec partitionedMonthly) {
         this.setDirtyIf(!Objects.equals(this.partitionedMonthly, partitionedMonthly));
         this.partitionedMonthly = partitionedMonthly;
         propagateHierarchyIdToField(partitionedMonthly, CheckRunScheduleGroup.partitioned_monthly.name());
@@ -221,8 +221,8 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * @param checkSchedulingGroup Check run scheduling group.
      * @return Configuration of a monitoring schedule (cron expression) for the given scheduling group.
      */
-    public MonitoringScheduleSpec getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup checkSchedulingGroup) {
-        return (MonitoringScheduleSpec)this.getChild(checkSchedulingGroup.name());
+    public CronScheduleSpec getScheduleForCheckSchedulingGroup(CheckRunScheduleGroup checkSchedulingGroup) {
+        return (CronScheduleSpec)this.getChild(checkSchedulingGroup.name());
     }
 
     /**
@@ -230,7 +230,7 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * @param newScheduleSpec Schedule specification to be replaces in the MonitoringSchedulesSpec object.
      * @param schedulingGroup Check run scheduling group.
      */
-    public void setScheduleForCheckSchedulingGroup(MonitoringScheduleSpec newScheduleSpec,
+    public void setScheduleForCheckSchedulingGroup(CronScheduleSpec newScheduleSpec,
                                                    CheckRunScheduleGroup schedulingGroup) {
         switch (schedulingGroup) {
             case profiling:
@@ -262,8 +262,8 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * Creates and returns a deep clone (copy) of this object.
      */
     @Override
-    public DefaultSchedulesSpec deepClone() {
-        return (DefaultSchedulesSpec)super.deepClone();
+    public CronSchedulesSpec deepClone() {
+        return (CronSchedulesSpec)super.deepClone();
     }
 
     /**
@@ -271,8 +271,8 @@ public class DefaultSchedulesSpec extends AbstractSpec implements InvalidYamlSta
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Trimmed and expanded version of this object.
      */
-    public DefaultSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
-        DefaultSchedulesSpec cloned = (DefaultSchedulesSpec) super.deepClone();
+    public CronSchedulesSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
+        CronSchedulesSpec cloned = (CronSchedulesSpec) super.deepClone();
         if (cloned.profiling != null) {
             cloned.setProfiling(cloned.profiling.expandAndTrim(secretValueProvider, secretValueLookupContext));
         }

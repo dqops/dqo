@@ -20,8 +20,8 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
 import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 
@@ -58,12 +58,12 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        DefaultSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
+        CronSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
         if (schedulesOverride != null && !schedulesOverride.isDefault() && this.filters.getSchedulingGroups() != null) {
             for (CheckRunScheduleGroup scheduleGroup : this.filters.getSchedulingGroups()) {
-                MonitoringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(scheduleGroup);
+                CronScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(scheduleGroup);
 
                 if (scheduleForCheckSchedulingGroup == null ||
                         Objects.equals(scheduleForCheckSchedulingGroup, this.filters.getSchedule())) {
@@ -120,7 +120,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
             }
         }
 
-        MonitoringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
+        CronScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule() != null;
 
         if (checkSchedule != null && !checkSchedule.isDefault()) {
