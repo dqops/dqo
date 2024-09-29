@@ -99,7 +99,7 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
     protected void updateListOfSchedulesInQuartzScheduler(String dataDomainName) {
         if (this.jobSchedulerService.isStarted()) {
             UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS, dataDomainName);
-            JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules, dataDomainName);
+            JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findRunChecksSchedulesToAddOrRemove(activeSchedules, dataDomainName);
             this.jobSchedulerService.applyScheduleDeltaToJob(schedulesToAddOrRemove, JobKeys.RUN_CHECKS, dataDomainName);
         }
     }

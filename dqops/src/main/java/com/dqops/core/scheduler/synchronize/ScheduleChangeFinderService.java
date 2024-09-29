@@ -23,12 +23,12 @@ import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
  */
 public interface ScheduleChangeFinderService {
     /**
-     * Loads all schedules configured in the metadata and compares the list with the current running schedules.
+     * Loads all CRON schedules for running data quality checks that are configured in the metadata and compares the list with the current running schedules.
      * Returns two list of schedules, those new schedules to add and outdated schedules to remove.
      *
      * @param currentRunningSchedules Current running schedules.
      * @param dataDomainName Data domain name.
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
-    JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName);
+    JobSchedulesDelta findRunChecksSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName);
 }

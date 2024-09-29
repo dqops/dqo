@@ -105,7 +105,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
     @Override
-    public JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName) {
+    public JobSchedulesDelta findRunChecksSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName) {
         assert currentRunningSchedules != null;
 
         UniqueSchedulesCollection currentMetadataSchedules = loadCurrentSchedulesForDataQualityChecks(dataDomainName);
