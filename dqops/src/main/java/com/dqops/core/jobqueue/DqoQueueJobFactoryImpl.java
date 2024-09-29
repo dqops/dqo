@@ -20,6 +20,7 @@ import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import com.dqops.core.scheduler.collectstatistics.CollectScheduledStatisticsDqoJob;
+import com.dqops.core.scheduler.importtables.AutoImportTablesDqoJob;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
@@ -85,7 +86,7 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
      * @return Job that collects statistics when triggered by a scheduler.
      */
     @Override
-    public CollectScheduledStatisticsDqoJob collectScheduledStatisticsJob() {
+    public CollectScheduledStatisticsDqoJob createCollectScheduledStatisticsJob() {
         return this.beanFactory.getBean(CollectScheduledStatisticsDqoJob.class);
     }
 
@@ -167,6 +168,16 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     @Override
     public ImportTablesQueueJob createImportTablesJob() {
         return this.beanFactory.getBean(ImportTablesQueueJob.class);
+    }
+
+    /**
+     * Creates a job that automatically imports tables for all connections scheduled for a given schedule.
+     *
+     * @return Job that automatically imports tables when triggered by a scheduler.
+     */
+    @Override
+    public AutoImportTablesDqoJob createAutoImportTablesJob() {
+        return this.beanFactory.getBean(AutoImportTablesDqoJob.class);
     }
 
     /**

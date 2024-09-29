@@ -32,6 +32,7 @@ import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.sources.AutoImportTablesSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
@@ -331,6 +332,18 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      */
     @Override
     public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts an auto table import configuration object that is configured on a connection level.
+     *
+     * @param autoImportTablesSpec Auto import tables specification.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AutoImportTablesSpec autoImportTablesSpec, FoundResultsCollector<ScheduleRootResult> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

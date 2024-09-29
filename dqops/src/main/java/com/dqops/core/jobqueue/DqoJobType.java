@@ -34,6 +34,7 @@ public enum DqoJobType {
     run_scheduled_checks_cron,
     import_schema,
     import_tables,
+    auto_import_tables,
     delete_stored_data,
     repair_stored_data,
 }

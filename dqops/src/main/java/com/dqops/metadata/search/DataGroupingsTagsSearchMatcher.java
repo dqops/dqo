@@ -22,7 +22,7 @@ import java.util.Arrays;
 /**
  * Data grouping tags search matcher for CLI commands.
  */
-public class DataStreamsTagsSearchMatcher {
+public class DataGroupingsTagsSearchMatcher {
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param level Data stream level value.

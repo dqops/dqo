@@ -105,6 +105,10 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
             UniqueSchedulesCollection activeCollectStatisticsSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.COLLECT_STATISTICS, dataDomainName);
             JobSchedulesDelta collectStatisticsSchedulesToAddOrRemove = this.scheduleChangeFinderService.findProfilingSchedulesToAddOrRemove(activeCollectStatisticsSchedules, dataDomainName);
             this.jobSchedulerService.applyScheduleDeltaToJob(collectStatisticsSchedulesToAddOrRemove, JobKeys.COLLECT_STATISTICS, dataDomainName);
+
+            UniqueSchedulesCollection activeImportTablesSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.IMPORT_TABLES, dataDomainName);
+            JobSchedulesDelta collectImportTablesToAddOrRemove = this.scheduleChangeFinderService.findImportTablesSchedulesToAddOrRemove(activeImportTablesSchedules, dataDomainName);
+            this.jobSchedulerService.applyScheduleDeltaToJob(collectImportTablesToAddOrRemove, JobKeys.IMPORT_TABLES, dataDomainName);
         }
     }
 

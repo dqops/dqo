@@ -20002,6 +20002,23 @@
       },
       "description" : "Describes a single authenticated dashboard."
     },
+    "AutoImportTablesSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schema_filter" : {
+          "type" : "string",
+          "description" : "Source schema name filter. Accepts filters in the form of *s, s* and *s* to restrict import to selected schemas."
+        },
+        "table_name_contains" : {
+          "type" : "string",
+          "description" : "Source table name filter. It is a table name or a text that must be present inside the table name."
+        },
+        "schedule" : {
+          "description" : "Schedule for importing source tables using a CRON scheduler.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        }
+      }
+    },
     "BetweenFloatsRuleParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -37608,6 +37625,10 @@
           "description" : "Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.",
           "$ref" : "#/definitions/CronSchedulesSpec"
         },
+        "auto_import_tables" : {
+          "description" : "Configuration of CRON schedule used to automatically import new tables in regular intervals.",
+          "$ref" : "#/definitions/AutoImportTablesSpec"
+        },
         "schedule_on_instance" : {
           "type" : "string",
           "description" : "Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is \"cloud\"."
@@ -38487,6 +38508,10 @@
           "description" : "The job parameters for the \"collect scheduled statistics\" cron queue job.",
           "$ref" : "#/definitions/CronScheduleSpec"
         },
+        "autoImportTablesParameters" : {
+          "description" : "The job parameters for the \"auto import tables\" cron queue job.",
+          "$ref" : "#/definitions/CronScheduleSpec"
+        },
         "runChecksParameters" : {
           "description" : "The job parameters for the \"run checks\" queue job.",
           "$ref" : "#/definitions/RunChecksParameters"
@@ -38537,7 +38562,7 @@
         },
         "jobType" : {
           "type" : "string",
-          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_scheduled_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
+          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_scheduled_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "auto_import_tables", "delete_stored_data", "repair_stored_data" ]
         },
         "parameters" : {
           "$ref" : "#/definitions/DqoJobEntryParametersModel"

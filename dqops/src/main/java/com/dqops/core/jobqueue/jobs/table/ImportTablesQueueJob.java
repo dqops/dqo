@@ -15,10 +15,7 @@
  */
 package com.dqops.core.jobqueue.jobs.table;
 
-import com.dqops.connectors.ConnectionProvider;
-import com.dqops.connectors.ConnectionProviderRegistry;
-import com.dqops.connectors.ProviderType;
-import com.dqops.connectors.SourceConnection;
+import com.dqops.connectors.*;
 import com.dqops.core.configuration.DqoMetadataImportConfigurationProperties;
 import com.dqops.core.jobqueue.DqoJobExecutionContext;
 import com.dqops.core.jobqueue.DqoJobType;
@@ -32,10 +29,12 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -45,6 +44,7 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.api.TextColumn;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,10 +94,7 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
      */
     public Table createDatasetTableFromTableSpecs(List<TableSpec> sourceTableSpecs) {
         // TODO: move method to tablesaw utils (repeated in ImportSchemaQueueJob).
-        Table resultTable = Table.create().addColumns(
-                TextColumn.create("Schema name"),
-                TextColumn.create("Table name"),
-                IntColumn.create("Column count"));
+        Table resultTable = createEmptyOutputResult();
 
         for(TableSpec sourceTableSpec : sourceTableSpecs) {
             Row row = resultTable.appendRow();
@@ -106,6 +103,17 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
             row.setInt(2, sourceTableSpec.getColumns().size());
         }
         return resultTable;
+    }
+
+    /**
+     * Creates an empty result table
+     * @return Empty result table.
+     */
+    private Table createEmptyOutputResult() {
+        return Table.create().addColumns(
+                TextColumn.create("Schema name"),
+                TextColumn.create("Table name"),
+                IntColumn.create("Column count"));
     }
 
     /**
@@ -134,27 +142,71 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
 
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
+
+        String schemaNameFilter = Strings.isNullOrEmpty(this.importParameters.getSchemaName()) ? "*" : this.importParameters.getSchemaName();
+        SearchPattern schemaSearchPattern = SearchPattern.create(false, schemaNameFilter);
+
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
-                    this.importParameters.getSchemaName(),
-                    this.importParameters.getTableNameContains(),
-                    this.metadataImportConfigurationProperties.getTablesImportLimit(),
-                    this.importParameters.getTableNames(),
-                    connectionWrapper,
-                    secretValueLookupContext);
+            if (schemaSearchPattern.isWildcardSearchPattern()) {
+                // must iterate over schemas
+                List<SourceSchemaModel> sourceSchemaModels = sourceConnection.listSchemas();
+                jobExecutionContext.getCancellationToken().throwIfCancelled();
+                List<TableSpec> fullTableList = new ArrayList<>();
+                Table fullTableResult = createEmptyOutputResult();
 
-            List<TableSpec> importedTablesSpecs = sourceTableSpecs
-                    .stream()
-                    .map(tableSpec -> tableSpec.deepClone())
-                    .collect(Collectors.toList());
+                for (SourceSchemaModel sourceSchemaModel : sourceSchemaModels) {
+                    jobExecutionContext.getCancellationToken().throwIfCancelled();
+                    
+                    if (!schemaSearchPattern.match(sourceSchemaModel.getSchemaName())) {
+                        continue;
+                    }
 
-            TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(importedTablesSpecs, connectionSpec.getDefaultGroupingConfiguration());
-            userHomeContext.flush();
+                    List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
+                            sourceSchemaModel.getSchemaName(),
+                            this.importParameters.getTableNameContains(),
+                            this.metadataImportConfigurationProperties.getTablesImportLimit(),
+                            this.importParameters.getTableNames(),
+                            connectionWrapper,
+                            secretValueLookupContext);
 
-            Table resultTable = createDatasetTableFromTableSpecs(importedTablesSpecs);
+                    List<TableSpec> importedTablesSpecs = sourceTableSpecs
+                            .stream()
+                            .map(tableSpec -> tableSpec.deepClone())
+                            .collect(Collectors.toList());
 
-            return new ImportTablesResult(resultTable, sourceTableSpecs);
+                    TableList currentTablesColl = connectionWrapper.getTables();
+                    currentTablesColl.importTables(importedTablesSpecs, connectionSpec.getDefaultGroupingConfiguration());
+                    fullTableList.addAll(importedTablesSpecs);
+
+                    Table resultTable = createDatasetTableFromTableSpecs(importedTablesSpecs);
+                    fullTableResult.append(resultTable);
+                }
+
+                userHomeContext.flush();
+                return new ImportTablesResult(fullTableResult, fullTableList);
+            } else {
+                // only one schema
+                List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
+                        this.importParameters.getSchemaName(),
+                        this.importParameters.getTableNameContains(),
+                        this.metadataImportConfigurationProperties.getTablesImportLimit(),
+                        this.importParameters.getTableNames(),
+                        connectionWrapper,
+                        secretValueLookupContext);
+
+                List<TableSpec> importedTablesSpecs = sourceTableSpecs
+                        .stream()
+                        .map(tableSpec -> tableSpec.deepClone())
+                        .collect(Collectors.toList());
+
+                TableList currentTablesColl = connectionWrapper.getTables();
+                currentTablesColl.importTables(importedTablesSpecs, connectionSpec.getDefaultGroupingConfiguration());
+                userHomeContext.flush();
+
+                Table resultTable = createDatasetTableFromTableSpecs(importedTablesSpecs);
+
+                return new ImportTablesResult(resultTable, sourceTableSpecs);
+            }
         }
     }
 

@@ -15,13 +15,9 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
-import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.labels.LabelSetSpec;
-import com.dqops.metadata.scheduling.CronScheduleSpec;
-import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -237,7 +233,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends StatisticsCollector
             DataGroupingConfigurationSpec selectedDataGroupingConfiguration =
                     dataGroupingConfigurationSearcherObject.getDefaultGroupingConfiguration();
 
-            if (!DataStreamsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataGroupingConfiguration)) {
+            if (!DataGroupingsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataGroupingConfiguration)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }

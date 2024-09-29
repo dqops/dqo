@@ -997,4 +997,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(DataCatalogUrlsSetSpec urlsSetSpec, P parameter);
+
+    /**
+     * Accepts an auto table import configuration object that is configured on a connection level.
+     * @param autoImportTablesSpec Auto import tables specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AutoImportTablesSpec autoImportTablesSpec, P parameter);
 }

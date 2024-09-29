@@ -25,6 +25,8 @@ import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.CronScheduleSearchFilters;
 import com.dqops.metadata.settings.instancename.InstanceNameProvider;
+import com.dqops.metadata.sources.ConnectionList;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -137,6 +139,50 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
         assert currentRunningSchedules != null;
 
         UniqueSchedulesCollection currentMetadataSchedules = loadCurrentSchedules(dataDomainName, true, CheckRunScheduleGroup.profiling);
+
+        UniqueSchedulesCollection schedulesToAdd = currentMetadataSchedules.minus(currentRunningSchedules);
+        UniqueSchedulesCollection schedulesToRemove = currentRunningSchedules.minus(currentMetadataSchedules);
+
+        return new JobSchedulesDelta(schedulesToAdd, schedulesToRemove);
+    }
+
+    /**
+     * Loads all CRON schedules for importing tables (they are configured on connections) and compares the list with the current running schedules.
+     * Returns two list of schedules, those new schedules to add and outdated schedules to remove.
+     *
+     * @param currentRunningSchedules Current running schedules for profiling.
+     * @param dataDomainName          Data domain name.
+     * @return The delta - two lists of schedules, to add and to remove from the scheduler.
+     */
+    @Override
+    public JobSchedulesDelta findImportTablesSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules, String dataDomainName) {
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createLocalDomainAdminPrincipal(dataDomainName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
+        UserHome userHome = userHomeContext.getUserHome();
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+
+        UniqueSchedulesCollection currentMetadataSchedules = new UniqueSchedulesCollection();
+
+        ConnectionList connectionList = userHome.getConnections();
+        for (ConnectionWrapper connectionWrapper : connectionList) {
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            if (connectionSpec == null || connectionSpec.getAutoImportTables() == null ||
+                    connectionSpec.getAutoImportTables().getSchedule() == null ||
+                    connectionSpec.getAutoImportTables().getSchedule().isDisabled()) {
+                continue;
+            }
+
+            CronScheduleSpec schedule = connectionSpec.getAutoImportTables().getSchedule();
+            CronScheduleSpec clonedImportSchedule = schedule.expandAndTrim(
+                    this.secretValueProvider, secretValueLookupContext);
+            clonedImportSchedule.setHierarchyId(null);
+
+            if (Strings.isNullOrEmpty(clonedImportSchedule.getCronExpression())) {
+                continue;
+            }
+
+            currentMetadataSchedules.add(clonedImportSchedule);
+        }
 
         UniqueSchedulesCollection schedulesToAdd = currentMetadataSchedules.minus(currentRunningSchedules);
         UniqueSchedulesCollection schedulesToRemove = currentRunningSchedules.minus(currentMetadataSchedules);

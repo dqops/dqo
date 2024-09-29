@@ -1329,4 +1329,16 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     public TreeNodeTraversalResult accept(DataCatalogUrlsSetSpec urlsSetSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
+
+    /**
+     * Accepts an auto table import configuration object that is configured on a connection level.
+     *
+     * @param autoImportTablesSpec Auto import tables specification.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AutoImportTablesSpec autoImportTablesSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
 }

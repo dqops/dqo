@@ -63,6 +63,12 @@ public class DqoJobEntryParametersModel {
     private CronScheduleSpec collectScheduledStatisticsParameters;
 
     /**
+     * The job parameters for the "auto import tables" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"auto import tables\" cron queue job.")
+    private CronScheduleSpec autoImportTablesParameters;
+
+    /**
      * The job parameters for the "run checks" queue job.
      */
     @JsonPropertyDescription("The job parameters for the \"run checks\" queue job.")

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.core.scheduler.collectstatistics;
+package com.dqops.core.scheduler.importtables;
 
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
@@ -29,17 +29,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Quartz job implementation that collects statistics for a given schedule. This is a Quartz job.
+ * Quartz job implementation that imports tables on connections for a given schedule. This is a Quartz job.
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class CollectScheduledStatisticsSchedulerJob implements Job, InterruptableJob {
+public class AutoImportTablesSchedulerJob implements Job, InterruptableJob {
     private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
     private DqoUserPrincipalProvider principalProvider;
-    private volatile CollectScheduledStatisticsDqoJob collectScheduledStatisticsJob;
+    private volatile AutoImportTablesDqoJob autoImportTablesDqoJob;
 
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
@@ -49,10 +49,10 @@ public class CollectScheduledStatisticsSchedulerJob implements Job, Interruptabl
      * @param principalProvider User principal provider that returns the system principal.
      */
     @Autowired
-    public CollectScheduledStatisticsSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
-                                                  DqoQueueJobFactory dqoQueueJobFactory,
-                                                  ParentDqoJobQueue dqoJobQueue,
-                                                  DqoUserPrincipalProvider principalProvider) {
+    public AutoImportTablesSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
+                                        DqoQueueJobFactory dqoQueueJobFactory,
+                                        ParentDqoJobQueue dqoJobQueue,
+                                        DqoUserPrincipalProvider principalProvider) {
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
@@ -69,18 +69,18 @@ public class CollectScheduledStatisticsSchedulerJob implements Job, Interruptabl
         final CronScheduleSpec runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
 
         try {
-            this.collectScheduledStatisticsJob = this.dqoQueueJobFactory.createCollectScheduledStatisticsJob();
-            this.collectScheduledStatisticsJob.setCronSchedule(runChecksCronSchedule);
+            this.autoImportTablesDqoJob = this.dqoQueueJobFactory.createAutoImportTablesJob();
+            this.autoImportTablesDqoJob.setCronSchedule(runChecksCronSchedule);
             String dataDomain = this.jobDataMapAdapter.getDataDomain(jobExecutionContext.getTrigger().getJobDataMap());
 
             DqoUserPrincipal principal = this.principalProvider.createLocalDomainAdminPrincipal(dataDomain);
-            this.dqoJobQueue.pushJob(this.collectScheduledStatisticsJob, principal);
+            this.dqoJobQueue.pushJob(this.autoImportTablesDqoJob, principal);
 
-            this.collectScheduledStatisticsJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
-            this.collectScheduledStatisticsJob = null;
+            this.autoImportTablesDqoJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
+            this.autoImportTablesDqoJob = null;
         }
         catch (Exception ex) {
-            log.error("Failed to execute a job that collects statistics on a job scheduler, error: " + ex.getMessage(), ex);
+            log.error("Failed to execute a job that automatically imports tables on a job scheduler, error: " + ex.getMessage(), ex);
             throw new JobExecutionException(ex);
         }
     }
@@ -91,7 +91,7 @@ public class CollectScheduledStatisticsSchedulerJob implements Job, Interruptabl
      */
     @Override
     public void interrupt() throws UnableToInterruptJobException {
-        CollectScheduledStatisticsDqoJob waitingJob = this.collectScheduledStatisticsJob;
+        AutoImportTablesDqoJob waitingJob = this.autoImportTablesDqoJob;
         if (waitingJob != null) {
             this.dqoJobQueue.cancelJob(waitingJob.getJobId());
         }

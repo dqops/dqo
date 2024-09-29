@@ -83,6 +83,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("databricks", o -> o.databricks);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
+            put("auto_import_tables", o -> o.autoImportTables);
             put("incident_grouping", o -> o.incidentGrouping);
         }
     };
@@ -179,6 +180,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CronSchedulesSpec schedules;
+
+    @JsonPropertyDescription("Configuration of CRON schedule used to automatically import new tables in regular intervals.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private AutoImportTablesSpec autoImportTables;
 
     @JsonPropertyDescription("Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is \"cloud\".")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -494,6 +501,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns the configuration of automatic table import that is performed by a CRON scheduler.
+     * @return Automatic table import settings.
+     */
+    public AutoImportTablesSpec getAutoImportTables() {
+        return autoImportTables;
+    }
+
+    /**
+     * Sets the configuration of an automatic table import.
+     * @param autoImportTables Configuration of an automatic table import.
+     */
+    public void setAutoImportTables(AutoImportTablesSpec autoImportTables) {
+        setDirtyIf(!Objects.equals(this.autoImportTables, autoImportTables));
+        this.autoImportTables = autoImportTables;
+        propagateHierarchyIdToField(autoImportTables, "auto_import_tables");
+    }
+
+    /**
      * Returns the name of a named DQOps instance where checks from this connection are triggered by a CRON scheduler.
      * @return Instance name which schedules checks in this connection.
      */
@@ -699,6 +724,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             cloned.comments = null;
             cloned.schedules = null;
             cloned.advancedProperties = null;
+            cloned.autoImportTables = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -719,6 +745,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             cloned.schedules = null;
             cloned.incidentGrouping = null;
             cloned.advancedProperties = null;
+            cloned.autoImportTables = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

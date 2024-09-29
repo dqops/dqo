@@ -26,6 +26,7 @@ import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.collectstatistics.CollectScheduledStatisticsSchedulerJob;
+import com.dqops.core.scheduler.importtables.AutoImportTablesSchedulerJob;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
@@ -77,6 +78,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private JobDetail collectStatisticsJob;
+    private JobDetail importTablesJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
     private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.silent;
     private StatisticsCollectorExecutionReportingMode collectStatisticsReportingMode = StatisticsCollectorExecutionReportingMode.silent;
@@ -247,6 +249,14 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 this.scheduler.addJob(this.collectStatisticsJob, true);
             }
 
+            if (!this.scheduler.checkExists(JobKeys.IMPORT_TABLES)) {
+                this.importTablesJob = newJob(AutoImportTablesSchedulerJob.class)
+                        .withIdentity(JobKeys.IMPORT_TABLES)
+                        .storeDurably()
+                        .build();
+                this.scheduler.addJob(this.importTablesJob, true);
+            }
+
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
             DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
             DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
@@ -354,6 +364,16 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                         }
                     }
                 }
+
+                List<? extends Trigger> triggersOfImportTables = this.scheduler.getTriggersOfJob(JobKeys.IMPORT_TABLES);
+                if (triggersOfImportTables != null) {
+                    for (Trigger trigger : triggersOfImportTables) {
+                        String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(trigger.getJobDataMap());
+                        if (Objects.equals(dataDomainInJob, existingDomainName)) {
+                            this.scheduler.unscheduleJob(trigger.getKey());
+                        }
+                    }
+                }
             }
             catch (SchedulerException ex) {
                 log.error("Failed to unschedule jobs for an unloaded data domain because " + ex.getMessage(), ex);
@@ -416,6 +436,13 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 List<? extends Trigger> triggersOfCollectStatistics = this.scheduler.getTriggersOfJob(JobKeys.COLLECT_STATISTICS);
                 if (triggersOfCollectStatistics != null) {
                     for (Trigger trigger : triggersOfCollectStatistics) {
+                        this.scheduler.unscheduleJob(trigger.getKey());
+                    }
+                }
+
+                List<? extends Trigger> triggersOfImportTables = this.scheduler.getTriggersOfJob(JobKeys.IMPORT_TABLES);
+                if (triggersOfImportTables != null) {
+                    for (Trigger trigger : triggersOfImportTables) {
                         this.scheduler.unscheduleJob(trigger.getKey());
                     }
                 }

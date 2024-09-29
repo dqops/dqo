@@ -30,10 +30,7 @@ import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotifica
 import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
-import com.dqops.metadata.sources.ColumnSpecMap;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.ConnectionWrapper;
-import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import org.apache.parquet.Strings;
 
@@ -285,5 +282,17 @@ public class CronScheduleSearchFiltersVisitor extends AbstractSearchVisitor<Sear
     @Override
     public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts an auto table import configuration object that is configured on a connection level.
+     *
+     * @param autoImportTablesSpec Auto import tables specification.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AutoImportTablesSpec autoImportTablesSpec,  SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN; // even if we are searching for cron schedules, we are not searching for schedules for importing tables, but for running checks
     }
 }
