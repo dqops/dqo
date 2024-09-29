@@ -18,6 +18,7 @@ package com.dqops.metadata.lineage.lineagecache;
 
 import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -75,7 +76,7 @@ public class TableLineageCacheEntry {
      */
     public Set<DomainConnectionTableKey> getUpstreamSourceTables() {
         synchronized (this.lock) {
-            return this.upstreamSourceTables;
+            return Collections.unmodifiableSet(this.upstreamSourceTables);
         }
     }
 
@@ -111,7 +112,7 @@ public class TableLineageCacheEntry {
      */
     public Set<DomainConnectionTableKey> getDownstreamTargetTables() {
         synchronized (this.lock) {
-            return this.downstreamTargetTables;
+            return Collections.unmodifiableSet(this.downstreamTargetTables);
         }
     }
 

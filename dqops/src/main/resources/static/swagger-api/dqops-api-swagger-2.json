@@ -8204,6 +8204,67 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/targets" : {
+      "get" : {
+        "tags" : [ "DataLineage" ],
+        "summary" : "getTableTargetTables",
+        "description" : "Returns a list of target tables on the data lineage that are downstream tables of the given table.",
+        "operationId" : "getTableTargetTables",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "checkType",
+          "in" : "query",
+          "description" : "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type",
+          "required" : false,
+          "type" : "string",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TableLineageSourceListModel"
+              }
+            }
+          },
+          "203" : {
+            "description" : "The list of target tables returned, but it is probably not complete"
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/tree" : {
       "get" : {
         "tags" : [ "DataLineage" ],

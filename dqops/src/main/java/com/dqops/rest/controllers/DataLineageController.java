@@ -26,6 +26,9 @@ import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.lineage.TableLineageSource;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
 import com.dqops.metadata.lineage.TableLineageSourceSpecList;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
+import com.dqops.metadata.lineage.lineagecache.TableLineageCacheEntry;
+import com.dqops.metadata.lineage.lineagecache.TableLineageRefreshStatus;
 import com.dqops.metadata.lineage.lineageservices.TableLineageModel;
 import com.dqops.metadata.lineage.lineageservices.TableLineageService;
 import com.dqops.metadata.sources.*;
@@ -51,6 +54,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -67,6 +71,7 @@ public class DataLineageController {
     private final RestApiLockService lockService;
     private final TableStatusCache tableStatusCache;
     private final TableLineageService tableLineageService;
+    private final TableLineageCache tableLineageCache;
 
     /**
      * Default dependency injection constructor.
@@ -75,17 +80,20 @@ public class DataLineageController {
      * @param lockService            REST API lock service to avoid updating the same table yaml in two threads.
      * @param tableStatusCache       The cache of last known data quality status for a table.
      * @param tableLineageService    Table lineage service to return the current table lineage.
+     * @param tableLineageCache      Table data lineage service to find target tables.
      */
     @Autowired
     public DataLineageController(
             UserHomeContextFactory userHomeContextFactory,
             RestApiLockService lockService,
             TableStatusCache tableStatusCache,
-            TableLineageService tableLineageService) {
+            TableLineageService tableLineageService,
+            TableLineageCache tableLineageCache) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.lockService = lockService;
         this.tableStatusCache = tableStatusCache;
         this.tableLineageService = tableLineageService;
+        this.tableLineageCache = tableLineageCache;
     }
 
     /**
@@ -246,6 +254,145 @@ public class DataLineageController {
             }
 
             return new ResponseEntity<>(Flux.fromStream(sourceTables.stream()), HttpStatus.OK); // 200
+        }));
+    }
+
+    /**
+     * Returns a list of target tables on the data lineage that are targets of the given table.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name
+     * @return List of target tables on the data lineage that are downstream tables of the given table.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/targets", produces = "application/json")
+    @ApiOperation(value = "getTableTargetTables", notes = "Returns a list of target tables on the data lineage that are downstream tables of the given table.", response = TableLineageSourceListModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = TableLineageSourceListModel[].class),
+            @ApiResponse(code = 203, message = "The list of target tables returned, but it is probably not complete", response = TableLineageSourceListModel[].class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Flux<TableLineageSourceListModel>>> getTableTargetTables(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+
+            String dataDomain = principal.getDataDomainIdentity().getDataDomainCloud();
+            TableLineageCacheEntry tableLineageEntry = this.tableLineageCache.getTableLineageEntry(
+                    new DomainConnectionTableKey(dataDomain, connectionName, physicalTableName));
+
+            if (tableLineageEntry == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NON_AUTHORITATIVE_INFORMATION); // 203 - partial
+            }
+            HttpStatus returnStatus = tableLineageEntry.getStatus() != TableLineageRefreshStatus.LOADED ?
+                    HttpStatus.NON_AUTHORITATIVE_INFORMATION : HttpStatus.OK;
+
+            Set<DomainConnectionTableKey> downstreamTargetTables = tableLineageEntry.getDownstreamTargetTables();
+            List<TableLineageSourceListModel> targetTables = downstreamTargetTables
+                    .stream()
+                    .map(tableKey -> {
+                        ConnectionWrapper targetConnectionWrapper = connections.getByObjectName(tableKey.getConnectionName(), true);
+                        if (targetConnectionWrapper == null) {
+                            return null;
+                        }
+
+                        TableWrapper targetTableWrapper = targetConnectionWrapper.getTables().getByObjectName(tableKey.getPhysicalTableName(), true);
+                        if (targetTableWrapper == null || targetTableWrapper.getSpec() == null) {
+                            return null;
+                        }
+
+                        TableSpec targetTableSpec = targetTableWrapper.getSpec();
+                        if (targetTableSpec.getSourceTables() == null || targetTableSpec.getSourceTables().isEmpty()) {
+                            return null;
+                        }
+
+                        Optional<TableLineageSourceSpec> tableLineageFromSource = targetTableSpec.getSourceTables().stream()
+                                .filter(sourceSpec -> Objects.equals(connectionName, sourceSpec.getSourceConnection()) &&
+                                        Objects.equals(schemaName, sourceSpec.getSourceSchema()) &&
+                                        Objects.equals(tableName, sourceSpec.getSourceTable()))
+                                .findFirst();
+
+                        return tableLineageFromSource.orElse(null);
+                    })
+                    .filter(sourceLineage -> sourceLineage != null)
+                    .map(sourceSpec -> TableLineageSourceListModel.fromSpecification(
+                            sourceSpec, isEditor))
+                    .collect(Collectors.toList());
+
+            targetTables.forEach(listModel -> {
+                TableCurrentDataQualityStatusModel notFoundTableStatus = new TableCurrentDataQualityStatusModel(){{
+                    setDataDomain(dataDomain);
+                    setConnectionName(listModel.getSourceConnection());
+                    setSchemaName(listModel.getSourceSchema());
+                    setTableName(listModel.getSourceTable());
+                    setTableExist(false);
+                }};
+                ConnectionWrapper sourceConnectionWrapper = connections.getByObjectName(listModel.getSourceConnection(), true);
+                if (sourceConnectionWrapper == null) {
+                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    return;
+                }
+                TableWrapper sourceTableWrapper = connectionWrapper.getTables().getByObjectName(
+                        new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()), true);
+                if (sourceTableWrapper == null) {
+                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    return;
+                }
+
+                DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(dataDomain,
+                        listModel.getSourceConnection(), new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()));
+                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                listModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+            });
+
+            if (targetTables.stream().anyMatch(model -> model.getSourceTableDataQualityStatus() == null)) {
+                // the results not loaded yet, we need to wait until the queue is empty
+                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+
+                Flux<TableLineageSourceListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                        .thenMany(Flux.fromIterable(targetTables)
+                                .map(tableListModel -> {
+                                    if (tableListModel.getSourceTableDataQualityStatus() == null) {
+                                        DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(dataDomain,
+                                                tableListModel.getSourceConnection(), new PhysicalTableName(tableListModel.getSourceSchema(), tableListModel.getSourceTable()));
+                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                        tableListModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                                    }
+                                    return tableListModel;
+                                }));
+
+                HttpStatus mostRecentReturnStatus = tableLineageEntry.getStatus() != TableLineageRefreshStatus.LOADED ?
+                        HttpStatus.NON_AUTHORITATIVE_INFORMATION : HttpStatus.OK;
+                return new ResponseEntity<>(resultListFilledWithDelay, mostRecentReturnStatus); // 200 or 203
+            }
+
+            return new ResponseEntity<>(Flux.fromStream(targetTables.stream()), returnStatus); // 200 or 203
         }));
     }
 

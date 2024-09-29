@@ -197,6 +197,7 @@ Operations related to managing and inspecting table and column lineage.
 |<span class="no-wrap-code">[`get_table_data_lineage_graph`</span>](./data_lineage.md#get_table_data_lineage_graph)|GET|Returns a data lineage graph around the given table.|
 |<span class="no-wrap-code">[`get_table_source_table`</span>](./data_lineage.md#get_table_source_table)|GET|Reads a specific data lineage source table defined on a target tale.|
 |<span class="no-wrap-code">[`get_table_source_tables`</span>](./data_lineage.md#get_table_source_tables)|GET|Returns a list of source tables on the data lineage that are sources of the given table.|
+|<span class="no-wrap-code">[`get_table_target_tables`</span>](./data_lineage.md#get_table_target_tables)|GET|Returns a list of target tables on the data lineage that are downstream tables of the given table.|
 |<span class="no-wrap-code">[`update_table_source_table`</span>](./data_lineage.md#update_table_source_table)|PUT|Update a specific data lineage source table using a new model.|
 
 

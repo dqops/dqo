@@ -1149,6 +1149,339 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 ___
+## get_table_target_tables
+Returns a list of target tables on the data lineage that are downstream tables of the given table.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_lineage/get_table_target_tables.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/targets
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`table_lineage_source_list_model`</span>||*List[[TableLineageSourceListModel](../models/data_lineage.md#tablelineagesourcelistmodel)]*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`check_type`](../models/common.md#checktype)</span>|Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type|*[CheckType](../models/common.md#checktype)*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/lineage/targets^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        [ {
+		  "target_connection" : "datalake",
+		  "target_schema" : "landing_app",
+		  "target_table" : "customers_landing",
+		  "source_connection" : "sourcedb",
+		  "source_schema" : "app",
+		  "source_table" : "t_customers",
+		  "can_edit" : false
+		}, {
+		  "target_connection" : "datalake",
+		  "target_schema" : "landing_app",
+		  "target_table" : "customers_landing",
+		  "source_connection" : "sourcedb",
+		  "source_schema" : "app",
+		  "source_table" : "t_customers",
+		  "can_edit" : false
+		}, {
+		  "target_connection" : "datalake",
+		  "target_schema" : "landing_app",
+		  "target_table" : "customers_landing",
+		  "source_connection" : "sourcedb",
+		  "source_schema" : "app",
+		  "source_table" : "t_customers",
+		  "can_edit" : false
+		} ]
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_target_tables
+	from dqops.client.models import CheckType
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_target_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_target_tables
+	from dqops.client.models import CheckType
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_target_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_target_tables
+	from dqops.client.models import CheckType
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_target_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.data_lineage import get_table_target_tables
+	from dqops.client.models import CheckType
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_target_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			),
+			TableLineageSourceListModel(
+				target_connection='datalake',
+				target_schema='landing_app',
+				target_table='customers_landing',
+				source_connection='sourcedb',
+				source_schema='app',
+				source_table='t_customers',
+				can_edit=False
+			)
+		]
+        ```
+    
+    
+    
+
+
+
+___
 ## update_table_source_table
 Update a specific data lineage source table using a new model.
 

@@ -74,7 +74,7 @@ public class HivePartitionPathUtilityTests extends BaseTest {
     }
 
     @Test
-    void makeHivePartitionPath_whenSimpleFolderWithoutEncodingAndNestedDataDomain_thenReturnsFolderNameInsideDomainFolder() {
+    void makeHivePartitionPath_whenSimpleFolderWithoutEncodingAndNestedDataDomain_thenReturnsFolderNameWithoutDomain() {
         ParquetPartitionId partitionId = new ParquetPartitionId(
                 "sales",
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -83,6 +83,6 @@ public class HivePartitionPathUtilityTests extends BaseTest {
                 LocalDate.of(2022, 10, 1));
         String partitionPath = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
 
-        Assertions.assertEquals("domains/sales/c=connection/t=sch.tab/m=2022-10-01/", partitionPath);
+        Assertions.assertEquals("c=connection/t=sch.tab/m=2022-10-01/", partitionPath);
     }
 }
