@@ -98,6 +98,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			include_in_sla=False,
 			configured=False,
 			always_collect_error_samples=False,
+			do_not_schedule=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -159,6 +160,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			include_in_sla=False,
 			configured=False,
 			always_collect_error_samples=False,
+			do_not_schedule=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -223,6 +225,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			include_in_sla=False,
 			configured=False,
 			always_collect_error_samples=False,
+			do_not_schedule=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -287,6 +290,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			include_in_sla=False,
 			configured=False,
 			always_collect_error_samples=False,
+			do_not_schedule=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False

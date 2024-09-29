@@ -154,6 +154,14 @@ Operations for retrieving the list of data quality dashboards supported by DQOps
 |<span class="no-wrap-code">[`get_dashboard_level_5`</span>](./dashboards.md#get_dashboard_level_5)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
 
 
+## data_catalog_synchronization
+Operations related to synchronization of data quality health results to the a data catalog.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`push_data_quality_status_to_data_catalog`</span>](./data_catalog_synchronization.md#push_data_quality_status_to_data_catalog)|PUT|Pushes the data quality status of tables matching the search filters to the data catalog.|
+
+
 ## data_domains
 Data domain management API to create different data domains.
 

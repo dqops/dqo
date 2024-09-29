@@ -2,7 +2,7 @@
 title: dqo settings command-line command
 ---
 # dqo settings command-line command
-The reference of the **settings** command in DQOps. Show or set settings
+The reference of the **settings** command in DQOps. Show or set local instance settings
 
 
 
@@ -669,6 +669,288 @@ All parameters supported by the command are listed below.
 |<div id="settings smtp show--headless" class="no-wrap-code">`--headless`</div><div id="settings smtp show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="settings smtp show-h" class="no-wrap-code">`-h`</div><div id="settings smtp show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="settings smtp show-of" class="no-wrap-code">`-of`</div><div id="settings smtp show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings catalog list
+
+List the URLs of data catalog forwarding services
+
+
+**Description**
+
+
+Shows a list of urls of REST API endpoints that receive updates of data quality health for tables having new results.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings catalog list [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings catalog list [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings catalog list-fw" class="no-wrap-code">`-fw`</div><div id="settings catalog list--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings catalog list--headless" class="no-wrap-code">`--headless`</div><div id="settings catalog list-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings catalog list-h" class="no-wrap-code">`-h`</div><div id="settings catalog list--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings catalog list-of" class="no-wrap-code">`-of`</div><div id="settings catalog list--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings catalog add
+
+Add a url to a data catalog wrapper
+
+
+**Description**
+
+
+Adds a url to a data catalog wrapper that receives updates of the table&#x27;s health.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings catalog add [-h] [-fw] [-hl] [-of=<outputFormat>] <url>
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings catalog add [-h] [-fw] [-hl] [-of=<outputFormat>] <url>
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings catalog add-fw" class="no-wrap-code">`-fw`</div><div id="settings catalog add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings catalog add--headless" class="no-wrap-code">`--headless`</div><div id="settings catalog add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings catalog add-h" class="no-wrap-code">`-h`</div><div id="settings catalog add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings catalog add-of" class="no-wrap-code">`-of`</div><div id="settings catalog add--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings catalog remove
+
+Remove a url to a data catalog wrapper
+
+
+**Description**
+
+
+Removes a url to a data catalog wrapper that receives updates of the table&#x27;s health.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings catalog remove [-h] [-fw] [-hl] [-of=<outputFormat>] <url>
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings catalog remove [-h] [-fw] [-hl] [-of=<outputFormat>] <url>
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings catalog remove-fw" class="no-wrap-code">`-fw`</div><div id="settings catalog remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings catalog remove--headless" class="no-wrap-code">`--headless`</div><div id="settings catalog remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings catalog remove-h" class="no-wrap-code">`-h`</div><div id="settings catalog remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings catalog remove-of" class="no-wrap-code">`-of`</div><div id="settings catalog remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings instancename set
+
+Set DQOps instance name
+
+
+**Description**
+
+
+Set the DQOps instance name of this instance.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings instancename set [-h] [-fw] [-hl] [-of=<outputFormat>] <name>
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings instancename set [-h] [-fw] [-hl] [-of=<outputFormat>] <name>
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings instancename set-fw" class="no-wrap-code">`-fw`</div><div id="settings instancename set--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings instancename set--headless" class="no-wrap-code">`--headless`</div><div id="settings instancename set-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings instancename set-h" class="no-wrap-code">`-h`</div><div id="settings instancename set--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings instancename set-of" class="no-wrap-code">`-of`</div><div id="settings instancename set--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings instancename remove
+
+Remove DQOps instance name
+
+
+**Description**
+
+
+Remove the DQOps instance name of this instance.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings instancename remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings instancename remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings instancename remove-fw" class="no-wrap-code">`-fw`</div><div id="settings instancename remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings instancename remove--headless" class="no-wrap-code">`--headless`</div><div id="settings instancename remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings instancename remove-h" class="no-wrap-code">`-h`</div><div id="settings instancename remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings instancename remove-of" class="no-wrap-code">`-of`</div><div id="settings instancename remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings instancename show
+
+Show DQOps instance name
+
+
+**Description**
+
+
+Display the DQOps instance name stored the local settings of this DQOps instance.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings instancename show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings instancename show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings instancename show-fw" class="no-wrap-code">`-fw`</div><div id="settings instancename show--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings instancename show--headless" class="no-wrap-code">`--headless`</div><div id="settings instancename show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings instancename show-h" class="no-wrap-code">`-h`</div><div id="settings instancename show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings instancename show-of" class="no-wrap-code">`-of`</div><div id="settings instancename show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 

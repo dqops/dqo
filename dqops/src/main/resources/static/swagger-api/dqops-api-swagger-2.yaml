@@ -41278,6 +41278,12 @@ definitions:
         format: "int64"
         description: "Most recent row count. Returned only when the status of the\
           \ monitoring or profiling checks was requested."
+      data_freshness_delay_days:
+        type: "number"
+        format: "double"
+        description: "The last measured data freshness delay in days. Requires any\
+          \ of the data freshness checks in the monitoring section configured and\
+          \ up to date."
       current_severity:
         type: "string"
         description: "The most recent data quality issue severity for this table.\

@@ -40,8 +40,7 @@ class TableLineageFlowModel:
                 table. Verify the value of the highest_severity_level to see if there are any data quality issues on the table.
                 The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error
                 was detected, 3 - a fatal data quality issue was detected.
-            weight (Union[Unset, int]): Weight of the flow calculated from the row count of the source table. It is a
-                logarithm of the row count, but never less than 1.
+            row_count (Union[Unset, int]): The row count of the source table.
     """
 
     source_table: Union[Unset, "DomainConnectionTableKey"] = UNSET
@@ -55,7 +54,7 @@ class TableLineageFlowModel:
     upstream_combined_quality_status: Union[
         Unset, "TableCurrentDataQualityStatusModel"
     ] = UNSET
-    weight: Union[Unset, int] = UNSET
+    row_count: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,7 +80,7 @@ class TableLineageFlowModel:
                 self.upstream_combined_quality_status.to_dict()
             )
 
-        weight = self.weight
+        row_count = self.row_count
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -98,8 +97,8 @@ class TableLineageFlowModel:
             field_dict["upstream_combined_quality_status"] = (
                 upstream_combined_quality_status
             )
-        if weight is not UNSET:
-            field_dict["weight"] = weight
+        if row_count is not UNSET:
+            field_dict["row_count"] = row_count
 
         return field_dict
 
@@ -158,7 +157,7 @@ class TableLineageFlowModel:
                 )
             )
 
-        weight = d.pop("weight", UNSET)
+        row_count = d.pop("row_count", UNSET)
 
         table_lineage_flow_model = cls(
             source_table=source_table,
@@ -166,7 +165,7 @@ class TableLineageFlowModel:
             source_table_quality_status=source_table_quality_status,
             target_table_quality_status=target_table_quality_status,
             upstream_combined_quality_status=upstream_combined_quality_status,
-            weight=weight,
+            row_count=row_count,
         )
 
         table_lineage_flow_model.additional_properties = d

@@ -54,6 +54,10 @@ class ConnectionSpec:
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
         schedules (Union[Unset, DefaultSchedulesSpec]):
+        schedule_on_instance (Union[Unset, str]): Limits running scheduled checks (started by a CRON job scheduler) to
+            run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps
+            instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud
+            SaaS instance is "cloud".
         incident_grouping (Union[Unset, ConnectionIncidentGroupingSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
@@ -82,6 +86,7 @@ class ConnectionSpec:
         UNSET
     )
     schedules: Union[Unset, "DefaultSchedulesSpec"] = UNSET
+    schedule_on_instance: Union[Unset, str] = UNSET
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
@@ -152,6 +157,7 @@ class ConnectionSpec:
         if not isinstance(self.schedules, Unset):
             schedules = self.schedules.to_dict()
 
+        schedule_on_instance = self.schedule_on_instance
         incident_grouping: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.incident_grouping, Unset):
             incident_grouping = self.incident_grouping.to_dict()
@@ -209,6 +215,8 @@ class ConnectionSpec:
             )
         if schedules is not UNSET:
             field_dict["schedules"] = schedules
+        if schedule_on_instance is not UNSET:
+            field_dict["schedule_on_instance"] = schedule_on_instance
         if incident_grouping is not UNSET:
             field_dict["incident_grouping"] = incident_grouping
         if comments is not UNSET:
@@ -356,6 +364,8 @@ class ConnectionSpec:
         else:
             schedules = DefaultSchedulesSpec.from_dict(_schedules)
 
+        schedule_on_instance = d.pop("schedule_on_instance", UNSET)
+
         _incident_grouping = d.pop("incident_grouping", UNSET)
         incident_grouping: Union[Unset, ConnectionIncidentGroupingSpec]
         if isinstance(_incident_grouping, Unset):
@@ -400,6 +410,7 @@ class ConnectionSpec:
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,
+            schedule_on_instance=schedule_on_instance,
             incident_grouping=incident_grouping,
             comments=comments,
             labels=labels,

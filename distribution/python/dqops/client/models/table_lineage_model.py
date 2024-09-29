@@ -22,10 +22,14 @@ class TableLineageModel:
             cache or a data lineage cache.
         flows (Union[Unset, List['TableLineageFlowModel']]): A list of data flows from source tables to direct target
             tables. Describes the data quality status of the source table.
+        data_lineage_fully_loaded (Union[Unset, bool]): This flag tells if the data lineage was fully loaded. If any
+            data flows are missing or the data quality status of some tables is missing, this flag will return false, which
+            means that the data lineage must be loaded again.
     """
 
     relative_table: Union[Unset, "DomainConnectionTableKey"] = UNSET
     flows: Union[Unset, List["TableLineageFlowModel"]] = UNSET
+    data_lineage_fully_loaded: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -41,6 +45,8 @@ class TableLineageModel:
 
                 flows.append(flows_item)
 
+        data_lineage_fully_loaded = self.data_lineage_fully_loaded
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -48,6 +54,8 @@ class TableLineageModel:
             field_dict["relative_table"] = relative_table
         if flows is not UNSET:
             field_dict["flows"] = flows
+        if data_lineage_fully_loaded is not UNSET:
+            field_dict["data_lineage_fully_loaded"] = data_lineage_fully_loaded
 
         return field_dict
 
@@ -71,9 +79,12 @@ class TableLineageModel:
 
             flows.append(flows_item)
 
+        data_lineage_fully_loaded = d.pop("data_lineage_fully_loaded", UNSET)
+
         table_lineage_model = cls(
             relative_table=relative_table,
             flows=flows,
+            data_lineage_fully_loaded=data_lineage_fully_loaded,
         )
 
         table_lineage_model.additional_properties = d

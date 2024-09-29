@@ -421,7 +421,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         {
-		  "flows" : [ ]
+		  "flows" : [ ],
+		  "data_lineage_fully_loaded" : true
 		}
         ```
     
@@ -456,7 +457,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         TableLineageModel(
 			flows=[
 			
-			]
+			],
+			data_lineage_fully_loaded=True
 		)
         ```
     
@@ -492,7 +494,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         TableLineageModel(
 			flows=[
 			
-			]
+			],
+			data_lineage_fully_loaded=True
 		)
         ```
     
@@ -531,7 +534,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         TableLineageModel(
 			flows=[
 			
-			]
+			],
+			data_lineage_fully_loaded=True
 		)
         ```
     
@@ -570,7 +574,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
         TableLineageModel(
 			flows=[
 			
-			]
+			],
+			data_lineage_fully_loaded=True
 		)
         ```
     

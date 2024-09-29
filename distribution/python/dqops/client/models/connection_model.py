@@ -43,6 +43,10 @@ class ConnectionModel:
         connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
+        schedule_on_instance (Union[Unset, str]): Limits running scheduled checks (started by a CRON job scheduler) to
+            run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps
+            instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud
+            SaaS instance is "cloud".
         provider_type (Union[Unset, ProviderType]):
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
@@ -82,6 +86,7 @@ class ConnectionModel:
     connection_name: Union[Unset, str] = UNSET
     connection_hash: Union[Unset, int] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
+    schedule_on_instance: Union[Unset, str] = UNSET
     provider_type: Union[Unset, ProviderType] = UNSET
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
@@ -115,6 +120,7 @@ class ConnectionModel:
         connection_name = self.connection_name
         connection_hash = self.connection_hash
         parallel_jobs_limit = self.parallel_jobs_limit
+        schedule_on_instance = self.schedule_on_instance
         provider_type: Union[Unset, str] = UNSET
         if not isinstance(self.provider_type, Unset):
             provider_type = self.provider_type.value
@@ -218,6 +224,8 @@ class ConnectionModel:
             field_dict["connection_hash"] = connection_hash
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
+        if schedule_on_instance is not UNSET:
+            field_dict["schedule_on_instance"] = schedule_on_instance
         if provider_type is not UNSET:
             field_dict["provider_type"] = provider_type
         if bigquery is not UNSET:
@@ -310,6 +318,8 @@ class ConnectionModel:
         connection_hash = d.pop("connection_hash", UNSET)
 
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
+
+        schedule_on_instance = d.pop("schedule_on_instance", UNSET)
 
         _provider_type = d.pop("provider_type", UNSET)
         provider_type: Union[Unset, ProviderType]
@@ -489,6 +499,7 @@ class ConnectionModel:
             connection_name=connection_name,
             connection_hash=connection_hash,
             parallel_jobs_limit=parallel_jobs_limit,
+            schedule_on_instance=schedule_on_instance,
             provider_type=provider_type,
             bigquery=bigquery,
             snowflake=snowflake,

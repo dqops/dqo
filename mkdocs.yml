@@ -241,6 +241,7 @@ nav:
       - columns: 'client/operations/columns.md'
       - connections: 'client/operations/connections.md'
       - dashboards: 'client/operations/dashboards.md'
+      - data_catalog_synchronization: 'client/operations/data_catalog_synchronization.md'
       - data_domains: 'client/operations/data_domains.md'
       - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
       - data_lineage: 'client/operations/data_lineage.md'

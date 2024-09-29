@@ -85,6 +85,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private Long totalRowCount;
 
     /**
+     * The last measured data freshness delay in days. Requires any of the data freshness checks in the monitoring section configured and up to date.
+     */
+    @JsonPropertyDescription("The last measured data freshness delay in days. Requires any of the data freshness checks in the monitoring section configured and up to date.")
+    private Double dataFreshnessDelayDays;
+
+    /**
      * The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
      * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */
@@ -522,6 +528,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                 setFatals(0);
                 setExecutionErrors(0);
                 setTotalRowCount(122000L);
+                setDataFreshnessDelayDays(1.221);
             }};
             result.calculateHighestCurrentAndHistoricSeverity();
             return result;

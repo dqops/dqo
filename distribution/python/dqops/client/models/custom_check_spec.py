@@ -43,6 +43,8 @@ class CustomCheckSpec:
         always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
+        do_not_schedule (Union[Unset, bool]): Disables running this check by a DQOps CRON scheduler. When a check is
+            disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
         sensor_name (Union[Unset, str]): Optional custom sensor name. It is a folder name inside the user's home
             'sensors' folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name:
             table/volume/row_count. When this value is set, it overrides the default sensor definition defined for the named
@@ -66,6 +68,7 @@ class CustomCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
+    do_not_schedule: Union[Unset, bool] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     rule_name: Union[Unset, str] = UNSET
     parameters: Union[Unset, "CustomSensorParametersSpec"] = UNSET
@@ -94,6 +97,7 @@ class CustomCheckSpec:
         display_name = self.display_name
         data_grouping = self.data_grouping
         always_collect_error_samples = self.always_collect_error_samples
+        do_not_schedule = self.do_not_schedule
         sensor_name = self.sensor_name
         rule_name = self.rule_name
         parameters: Union[Unset, Dict[str, Any]] = UNSET
@@ -133,6 +137,8 @@ class CustomCheckSpec:
             field_dict["data_grouping"] = data_grouping
         if always_collect_error_samples is not UNSET:
             field_dict["always_collect_error_samples"] = always_collect_error_samples
+        if do_not_schedule is not UNSET:
+            field_dict["do_not_schedule"] = do_not_schedule
         if sensor_name is not UNSET:
             field_dict["sensor_name"] = sensor_name
         if rule_name is not UNSET:
@@ -184,6 +190,8 @@ class CustomCheckSpec:
 
         always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
 
+        do_not_schedule = d.pop("do_not_schedule", UNSET)
+
         sensor_name = d.pop("sensor_name", UNSET)
 
         rule_name = d.pop("rule_name", UNSET)
@@ -226,6 +234,7 @@ class CustomCheckSpec:
             display_name=display_name,
             data_grouping=data_grouping,
             always_collect_error_samples=always_collect_error_samples,
+            do_not_schedule=do_not_schedule,
             sensor_name=sensor_name,
             rule_name=rule_name,
             parameters=parameters,

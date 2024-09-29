@@ -81,6 +81,8 @@ class CheckModel:
         always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
+        do_not_schedule (Union[Unset, bool]): Disables running this check by a DQOps CRON scheduler. When a check is
+            disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
         check_target (Union[Unset, CheckTargetModel]):
         configuration_requirements_errors (Union[Unset, List[str]]): List of configuration errors that must be fixed
             before the data quality check can be executed.
@@ -121,6 +123,7 @@ class CheckModel:
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     data_grouping_configuration: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
+    do_not_schedule: Union[Unset, bool] = UNSET
     check_target: Union[Unset, CheckTargetModel] = UNSET
     configuration_requirements_errors: Union[Unset, List[str]] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
@@ -197,6 +200,7 @@ class CheckModel:
 
         data_grouping_configuration = self.data_grouping_configuration
         always_collect_error_samples = self.always_collect_error_samples
+        do_not_schedule = self.do_not_schedule
         check_target: Union[Unset, str] = UNSET
         if not isinstance(self.check_target, Unset):
             check_target = self.check_target.value
@@ -278,6 +282,8 @@ class CheckModel:
             field_dict["data_grouping_configuration"] = data_grouping_configuration
         if always_collect_error_samples is not UNSET:
             field_dict["always_collect_error_samples"] = always_collect_error_samples
+        if do_not_schedule is not UNSET:
+            field_dict["do_not_schedule"] = do_not_schedule
         if check_target is not UNSET:
             field_dict["check_target"] = check_target
         if configuration_requirements_errors is not UNSET:
@@ -428,6 +434,8 @@ class CheckModel:
 
         always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
 
+        do_not_schedule = d.pop("do_not_schedule", UNSET)
+
         _check_target = d.pop("check_target", UNSET)
         check_target: Union[Unset, CheckTargetModel]
         if isinstance(_check_target, Unset):
@@ -491,6 +499,7 @@ class CheckModel:
             data_clean_job_template=data_clean_job_template,
             data_grouping_configuration=data_grouping_configuration,
             always_collect_error_samples=always_collect_error_samples,
+            do_not_schedule=do_not_schedule,
             check_target=check_target,
             configuration_requirements_errors=configuration_requirements_errors,
             similar_checks=similar_checks,

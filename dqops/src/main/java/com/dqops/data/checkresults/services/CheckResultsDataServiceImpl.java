@@ -897,8 +897,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
+
                 if (statusModel.getTotalRowCount() == null) {
                     statusModel.setTotalRowCount(extractMostRecentRowCount(filteredTable));
+                }
+
+                if (statusModel.getDataFreshnessDelayDays() == null) {
+                    statusModel.setDataFreshnessDelayDays(extractMostRecentDataFreshnessDelay(filteredTable));
                 }
             }
         }
@@ -959,6 +964,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Instant executedAt = executedAtColumn.get(rowIndex);
                 long actualValue = (long)actualValueColumn.getDouble(rowIndex);
 
+                if (mostRecentExecutedAt != null && executedAt.isAfter(mostRecentExecutedAt)) {
+                    mostRecentExecutedAt = executedAt;
+                    totalRowCount = null; // the results are in mixed order, we found more recent results
+                }
+
                 if (mostRecentExecutedAt == null || mostRecentExecutedAt.equals(executedAt)) {
                     if (totalRowCount == null) {
                         totalRowCount = actualValue;
@@ -979,6 +989,56 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         return totalRowCount;
+    }
+
+    /**
+     * Finds the most recent data freshness delay in the table.
+     * @param checkResultsTable Check results table.
+     * @return Most recent data freshness returned from any check containing the total row count.
+     */
+    private Double extractMostRecentDataFreshnessDelay(Table checkResultsTable) {
+        InstantColumn executedAtColumn = checkResultsTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        TextColumn checkNameColumn = checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        DoubleColumn actualValueColumn = checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        String[] rowCountCheckNames = new String[] { "daily_data_freshness", "daily_data_freshness_anomaly", "profile_data_freshness", "profile_data_freshness_anomaly" };
+        Instant mostRecentExecutedAt = null;
+        Double mostRecentFreshnessDelay = null;
+
+        for (String checkName : rowCountCheckNames) {
+            Selection checkResultColumn = checkNameColumn.isEqualTo(checkName);
+            int[] checkResultsRowIndexes = checkResultColumn.toArray();
+
+            for (int i = checkResultsRowIndexes.length - 1; i >= 0 ; i--) {
+                int rowIndex = checkResultsRowIndexes[i];
+                if (actualValueColumn.isMissing(rowIndex)) {
+                    continue;
+                }
+
+                Instant executedAt = executedAtColumn.get(rowIndex);
+                double actualValue = actualValueColumn.getDouble(rowIndex);
+
+                if (mostRecentExecutedAt != null && executedAt.isAfter(mostRecentExecutedAt)) {
+                    mostRecentExecutedAt = executedAt;
+                }
+
+                if (mostRecentExecutedAt == null || mostRecentExecutedAt.equals(executedAt)) {
+                    if (mostRecentFreshnessDelay == null) {
+                        mostRecentFreshnessDelay = actualValue;
+                    } else {
+                        if (actualValue < mostRecentFreshnessDelay) {
+                            mostRecentFreshnessDelay = actualValue; // a different data group has most recent data
+                        }
+                    }
+
+                    mostRecentExecutedAt = executedAt;
+                }
+                else {
+                    break; // older results
+                }
+            }
+        }
+
+        return mostRecentFreshnessDelay;
     }
 
     /**

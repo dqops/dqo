@@ -36,7 +36,7 @@ Table lineage flow model that describes the data flow from one table to another 
 |<span class="no-wrap-code">[`source_table_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status of the source table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
 |<span class="no-wrap-code">[`target_table_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status of the target table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
 |<span class="no-wrap-code">[`upstream_combined_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The data quality status identified from the data quality status of all upstream tables and the target table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
-|<span class="no-wrap-code">`weight`</span>|Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1.|*integer*|
+|<span class="no-wrap-code">`row_count`</span>|The row count of the source table.|*long*|
 
 
 ___
@@ -52,6 +52,7 @@ The table lineage model that returns all upstream tables, downstream tables, or 
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`relative_table`](#domainconnectiontablekey)</span>|The table for which the data lineage is generated.|*[DomainConnectionTableKey](#domainconnectiontablekey)*|
 |<span class="no-wrap-code">`flows`</span>|A list of data flows from source tables to direct target tables. Describes the data quality status of the source table.|*List[[TableLineageFlowModel](#tablelineageflowmodel)]*|
+|<span class="no-wrap-code">`data_lineage_fully_loaded`</span>|This flag tells if the data lineage was fully loaded. If any data flows are missing or the data quality status of some tables is missing, this flag will return false, which means that the data lineage must be loaded again.|*boolean*|
 
 
 ___
