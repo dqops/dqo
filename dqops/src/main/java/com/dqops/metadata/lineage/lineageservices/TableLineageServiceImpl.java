@@ -22,6 +22,9 @@ import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
 import com.dqops.metadata.lineage.lineagecache.TableLineageCacheEntry;
 import com.dqops.metadata.lineage.lineagecache.TableLineageRefreshStatus;
+import com.dqops.metadata.sources.ConnectionWrapper;
+import com.dqops.metadata.sources.TableWrapper;
+import com.dqops.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,13 +56,15 @@ public class TableLineageServiceImpl implements TableLineageService {
     /**
      * Returns a data lineage in a form of a flattened graph, returning all data flows (from table A to table B),
      * and the data quality status.
+     * @param userHome User home to find if tables are present.
      * @param referenceTable The start table.
      * @param upstreamLineage True when the data lineage should be calculated for upstream tables.
      * @param downstreamLineage True when the data lineage (the impact radius) should be calculated for downstream tables.
      * @return Table lineage model.
      */
     @Override
-    public TableLineageModel buildDataLineageModel(DomainConnectionTableKey referenceTable,
+    public TableLineageModel buildDataLineageModel(UserHome userHome,
+                                                   DomainConnectionTableKey referenceTable,
                                                    boolean upstreamLineage,
                                                    boolean downstreamLineage) {
         TableLineageModel tableLineageModel = new TableLineageModel();
@@ -73,12 +78,12 @@ public class TableLineageServiceImpl implements TableLineageService {
 
         if (upstreamLineage) {
             upstreamCombinedQualityStatus = collectUpstreamLineage(
-                    referenceTable, tableLineageModel, upstreamTableStatuses, visitedTables, onStackTables);
+                    userHome, referenceTable, tableLineageModel, upstreamTableStatuses, visitedTables, onStackTables);
         }
 
         if (downstreamLineage) {
             LinkedHashSet<DomainConnectionTableKey> upstreamOnStackTables = new LinkedHashSet<>(visitedTables); // upstream tables that will be collected, if referenced from downstream tables, will be treated as a cycle and ignored
-            collectDownstreamLineage(upstreamCombinedQualityStatus, referenceTable, tableLineageModel, visitedTables, upstreamOnStackTables);
+            collectDownstreamLineage(userHome, upstreamCombinedQualityStatus, referenceTable, tableLineageModel, visitedTables, upstreamOnStackTables);
         }
 
         for (TableLineageFlowModel flowModel : tableLineageModel.getFlows()) {
@@ -95,6 +100,7 @@ public class TableLineageServiceImpl implements TableLineageService {
 
     /**
      * Collects upstream table lineage using a depth-first method.
+     * @param userHome User home to find the tables.
      * @param targetTable Current table to include.
      * @param tableLineageModel Target table lineage model to add data flows.
      * @param visitedUpstreamTableStatuses Dictionary of combined table quality statues of already visited tables, in case that other tables also use their statuses (dual paths).
@@ -103,6 +109,7 @@ public class TableLineageServiceImpl implements TableLineageService {
      * @return The combined data quality status of all upstream tables.
      */
     public TableCurrentDataQualityStatusModel collectUpstreamLineage(
+            UserHome userHome,
             DomainConnectionTableKey targetTable,
             TableLineageModel tableLineageModel,
             Map<DomainConnectionTableKey, TableCurrentDataQualityStatusModel> visitedUpstreamTableStatuses,
@@ -110,6 +117,10 @@ public class TableLineageServiceImpl implements TableLineageService {
             LinkedHashSet<DomainConnectionTableKey> onStackTables) {
         TableCurrentDataQualityStatusModel targetTableQualityStatus = this.tableStatusCache.getCurrentTableStatus(
                 targetTable, null);
+
+        if (targetTableQualityStatus == null || !checkIfTableExists(userHome, targetTable)) {
+            tableLineageModel.setDataLineageFullyLoaded(false);
+        }
 
         TableCurrentDataQualityStatusModel resultStatus = targetTableQualityStatus == null ?
                 new TableCurrentDataQualityStatusModel() {{
@@ -122,6 +133,7 @@ public class TableLineageServiceImpl implements TableLineageService {
         TableLineageCacheEntry tableLineageEntry = this.tableLineageCache.getTableLineageEntry(targetTable);
         if (tableLineageEntry != null) {
             if (tableLineageEntry.getStatus() != TableLineageRefreshStatus.LOADED) {
+                tableLineageModel.setDataLineageFullyLoaded(false);
                 resultStatus.setTableExist(false); // some missing information, requires reload
             }
 
@@ -142,7 +154,7 @@ public class TableLineageServiceImpl implements TableLineageService {
                     }
                 } else {
                     TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus = collectUpstreamLineage(
-                            upstreamTableKey, tableLineageModel, visitedUpstreamTableStatuses, visitedTables, onStackTables);
+                            userHome, upstreamTableKey, tableLineageModel, visitedUpstreamTableStatuses, visitedTables, onStackTables);
                     TableLineageFlowModel flowFromVisitedTable = new TableLineageFlowModel(upstreamTableKey, targetTable,
                             upstreamOnlyQualityStatus, targetTableQualityStatus, upstreamCombinedQualityStatus);
                     tableLineageModel.getFlows().add(flowFromVisitedTable);
@@ -150,6 +162,7 @@ public class TableLineageServiceImpl implements TableLineageService {
                 }
             }
         } else {
+            tableLineageModel.setDataLineageFullyLoaded(false);
             resultStatus.setTableExist(false); // some missing information, requires reload
         }
 
@@ -160,13 +173,15 @@ public class TableLineageServiceImpl implements TableLineageService {
 
     /**
      * Collects downstream table lineage.
+     * @param userHome User home to find the tables.
      * @param upstreamCombinedQualityStatus The combined data quality status of the current table, that will impact downstream tables.
      * @param sourceTable The start table to traverse.
      * @param tableLineageModel Target data lineage model to append data flows.
      * @param visitedTables Collection of already visited nodes. They will not be processed again.
      * @param onStackTables Collection of nodes that are on the stack. References to these nodes should be ignored. Initially, all upstream nodes are added.
      */
-    public void collectDownstreamLineage(TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus,
+    public void collectDownstreamLineage(UserHome userHome,
+                                         TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus,
                                          DomainConnectionTableKey sourceTable,
                                          TableLineageModel tableLineageModel,
                                          LinkedHashSet<DomainConnectionTableKey> visitedTables,
@@ -175,10 +190,15 @@ public class TableLineageServiceImpl implements TableLineageService {
         onStackTables.add(sourceTable);
 
         TableCurrentDataQualityStatusModel sourceTableQualityStatus = this.tableStatusCache.getCurrentTableStatus(sourceTable, null);
+        if (sourceTableQualityStatus == null || !checkIfTableExists(userHome, sourceTable)) {
+            tableLineageModel.setDataLineageFullyLoaded(false);
+        }
+
         TableLineageCacheEntry tableLineageEntry = this.tableLineageCache.getTableLineageEntry(sourceTable);
 
         if (tableLineageEntry != null) {
             if (tableLineageEntry.getStatus() != TableLineageRefreshStatus.LOADED) {
+                tableLineageModel.setDataLineageFullyLoaded(false);
                 upstreamCombinedQualityStatus.setTableExist(false); // some missing information, requires reload
             }
 
@@ -206,13 +226,30 @@ public class TableLineageServiceImpl implements TableLineageService {
                             sourceTableQualityStatus, downstreamOnlyQualityStatus, downstreamCombinedQualityStatus);
                     tableLineageModel.getFlows().add(flowToDownstreamTable);
 
-                    collectDownstreamLineage(downstreamCombinedQualityStatus, downstreamTableKey, tableLineageModel, visitedTables, onStackTables);
+                    collectDownstreamLineage(userHome, downstreamCombinedQualityStatus, downstreamTableKey, tableLineageModel, visitedTables, onStackTables);
                 }
             }
         } else {
+            tableLineageModel.setDataLineageFullyLoaded(false);
             upstreamCombinedQualityStatus.setTableExist(false); // some missing information, requires reload
         }
 
         onStackTables.remove(sourceTable);
+    }
+
+    /**
+     * Checks if the table exists.
+     * @param userHome User home.
+     * @param tableKey Table key. Must be in the same data domain as the user home.
+     * @return True when the table exists.
+     */
+    public boolean checkIfTableExists(UserHome userHome, DomainConnectionTableKey tableKey) {
+        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(tableKey.getConnectionName(), true);
+        if (connectionWrapper == null || connectionWrapper.getSpec() == null) {
+            return false;
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(tableKey.getPhysicalTableName(), true);
+        return tableWrapper != null && tableWrapper.getSpec() != null;
     }
 }

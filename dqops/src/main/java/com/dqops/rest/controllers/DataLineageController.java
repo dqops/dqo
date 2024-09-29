@@ -136,8 +136,10 @@ public class DataLineageController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            DomainConnectionTableKey targetTableKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(), connectionName, physicalTableName);
-            TableLineageModel tableLineageModel = this.tableLineageService.buildDataLineageModel(targetTableKey, upstream.orElse(true), downstream.orElse(true));
+            String dataDomain = principal.getDataDomainIdentity().getDataDomainCloud();
+            DomainConnectionTableKey targetTableKey = new DomainConnectionTableKey(dataDomain, connectionName, physicalTableName);
+            TableLineageModel tableLineageModel = this.tableLineageService.buildDataLineageModel(
+                    userHome, targetTableKey, upstream.orElse(true), downstream.orElse(true));
 
             return new ResponseEntity<>(Mono.justOrEmpty(tableLineageModel), HttpStatus.OK); // 200
         }));

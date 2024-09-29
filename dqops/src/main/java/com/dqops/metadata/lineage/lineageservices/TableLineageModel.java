@@ -47,4 +47,9 @@ public class TableLineageModel {
     @JsonPropertyDescription("A list of data flows from source tables to direct target tables. Describes the data quality status of the source table.")
     private List<TableLineageFlowModel> flows = new ArrayList<>();
 
+    /**
+     * This flag tells if the data lineage was fully loaded. If any data flows are missing or the data quality status of some tables is missing, this flag will return false, which means that the data lineage must be loaded again.
+     */
+    @JsonPropertyDescription("This flag tells if the data lineage was fully loaded. If any data flows are missing or the data quality status of some tables is missing, this flag will return false, which means that the data lineage must be loaded again.")
+    private boolean dataLineageFullyLoaded = true;
 }

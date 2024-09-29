@@ -43370,10 +43370,10 @@
           "description" : "The data quality status identified from the data quality status of all upstream tables and the target table.",
           "$ref" : "#/definitions/TableCurrentDataQualityStatusModel"
         },
-        "weight" : {
+        "row_count" : {
           "type" : "integer",
-          "format" : "int32",
-          "description" : "Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1."
+          "format" : "int64",
+          "description" : "The row count of the source table."
         }
       },
       "description" : "Table lineage flow model that describes the data flow from one table to another table, and the data quality status of the source table."
@@ -43391,6 +43391,10 @@
           "items" : {
             "$ref" : "#/definitions/TableLineageFlowModel"
           }
+        },
+        "data_lineage_fully_loaded" : {
+          "type" : "boolean",
+          "description" : "This flag tells if the data lineage was fully loaded. If any data flows are missing or the data quality status of some tables is missing, this flag will return false, which means that the data lineage must be loaded again."
         }
       },
       "description" : "The table lineage model that returns all upstream tables, downstream tables, or both."

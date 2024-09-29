@@ -48,6 +48,8 @@ export default function DataLineageGraph({
   );
 
   useEffect(() => {
+    window.showDataLineage = showDataLineage;
+
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
       try {
@@ -59,24 +61,16 @@ export default function DataLineageGraph({
         const data = response.data;
         setTableDataLineage(data);
 
-        const incompleteData = data.flows?.some((flow) => {
-          return (
-            !flow.source_table_quality_status?.table_exist ||
-            !flow.target_table_quality_status?.table_exist ||
-            !flow.upstream_combined_quality_status?.table_exist
-          );
-        });
-
-        if (incompleteData) {
-          setTimeout(() => fetchTableDataLineageGraph(), 5000);
-          return;
+        if (!data.data_lineage_fully_loaded) {
+          // TODO: Show a spinner over the graph, not instead of the graph (we can show partial graphs)
+          setTimeout(() => fetchTableDataLineageGraph(), 500);
         }
 
         const colors: string[] = [];
         const graph = data.flows?.map((flow, index) => {
           const fromTable = flow.source_table?.compact_key;
           const toTable = flow.target_table?.compact_key;
-          const weight = flow.weight;
+          const rowCount = flow.row_count;
 
           const tooltip = ReactDOMServer.renderToString(
             renderTooltip(flow, index)
@@ -85,7 +79,7 @@ export default function DataLineageGraph({
             flow.upstream_combined_quality_status?.current_severity
           );
           colors.push(color);
-          return [fromTable, toTable, weight, tooltip];
+          return [fromTable, toTable, rowCount, tooltip];
         });
         setSeverityColors(colors);
         setGraphArray(graph ?? []);
@@ -102,10 +96,6 @@ export default function DataLineageGraph({
       window.showDataLineage = null;
     };
   }, [connection, schema, table]);
-
-  useEffect(() => {
-    window.showDataLineage = showDataLineage;
-  }, [showDataLineage]);
 
   const options = {
     tooltip: { isHtml: true },
@@ -223,6 +213,6 @@ const getColor = (
     case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid:
       return '#B9E4DE';
     default:
-      return '';
+      return 'silver';
   }
 };

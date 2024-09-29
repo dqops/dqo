@@ -65,10 +65,10 @@ public class TableLineageFlowModel {
     private TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus;
 
     /**
-     * Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1.
+     * The row count of the source table.
      */
-    @JsonPropertyDescription("Weight of the flow calculated from the row count of the source table. It is a logarithm of the row count, but never less than 1.")
-    private int weight;
+    @JsonPropertyDescription("The row count of the source table.")
+    private long rowCount;
 
     public TableLineageFlowModel() {
     }
@@ -94,9 +94,9 @@ public class TableLineageFlowModel {
 
         if (sourceTableQualityStatus != null && sourceTableQualityStatus.getTotalRowCount() != null &&
                 sourceTableQualityStatus.getTotalRowCount() > 0L) {
-            this.weight = (int)Math.log(sourceTableQualityStatus.getTotalRowCount().doubleValue());
+            this.rowCount = sourceTableQualityStatus.getTotalRowCount();
         } else {
-            this.weight = 1;
+            this.rowCount = 1L;
         }
     }
 }
