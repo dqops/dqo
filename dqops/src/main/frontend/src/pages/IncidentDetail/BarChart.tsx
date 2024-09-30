@@ -2,19 +2,19 @@ import moment from 'moment/moment';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
-  IncidentDailyIssuesCount,
-  IncidentIssueHistogramModel
+  HistogramDailyIssuesCount,
+  IssueHistogramModel
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setIncidentsHistogram } from '../../redux/actions/incidents.actions';
 
 type BarChartProps = {
-  histograms: IncidentIssueHistogramModel;
+  histograms: IssueHistogramModel;
 };
 
 export const BarChart = ({ histograms }: BarChartProps) => {
   const [savedHistograms, setSavedHistograms] =
-    useState<IncidentIssueHistogramModel | null>(null);
+    useState<IssueHistogramModel | null>(null);
   const dispatch = useActionDispatch();
   const data = {
     labels: Object.keys(histograms?.days || {}).map((item) =>
@@ -24,7 +24,7 @@ export const BarChart = ({ histograms }: BarChartProps) => {
       {
         label: 'Warnings',
         data: Object.values(histograms?.days || {}).map(
-          (item: IncidentDailyIssuesCount) => item.warnings
+          (item: HistogramDailyIssuesCount) => item.warnings
         ),
         backgroundColor: '#EBE51E',
         barPercentage: 0.9
@@ -32,7 +32,7 @@ export const BarChart = ({ histograms }: BarChartProps) => {
       {
         label: 'Errors',
         data: Object.values(histograms?.days || {}).map(
-          (item: IncidentDailyIssuesCount) => item.errors
+          (item: HistogramDailyIssuesCount) => item.errors
         ),
         backgroundColor: '#FF9900',
         barPercentage: 0.9
@@ -40,7 +40,7 @@ export const BarChart = ({ histograms }: BarChartProps) => {
       {
         label: 'Fatals',
         data: Object.values(histograms?.days || {}).map(
-          (item: IncidentDailyIssuesCount) => item.fatals
+          (item: HistogramDailyIssuesCount) => item.fatals
         ),
         backgroundColor: '#E3170A',
         barPercentage: 0.9

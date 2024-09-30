@@ -711,14 +711,14 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @return Daily histogram of failed data quality checks.
      */
     @Override
-    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                            PhysicalTableName physicalTableName,
-                                                                            long incidentHash,
-                                                                            Instant firstSeen,
-                                                                            Instant incidentUntil,
-                                                                            int minSeverity,
-                                                                            IncidentHistogramFilterParameters filterParameters,
-                                                                            UserDomainIdentity userDomainIdentity) {
+    public IssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                    PhysicalTableName physicalTableName,
+                                                                    long incidentHash,
+                                                                    Instant firstSeen,
+                                                                    Instant incidentUntil,
+                                                                    int minSeverity,
+                                                                    IncidentHistogramFilterParameters filterParameters,
+                                                                    UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
@@ -736,7 +736,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         
         LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startDay, endMonth)) {
-            return new IncidentIssueHistogramModel();
+            return new IssueHistogramModel();
         }
 
         Instant startTimestamp = firstSeen;
@@ -750,7 +750,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
         }
 
-        IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
+        IssueHistogramModel histogramModel = new IssueHistogramModel();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {

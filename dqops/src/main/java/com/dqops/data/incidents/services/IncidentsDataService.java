@@ -20,7 +20,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
-import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
+import com.dqops.data.checkresults.models.IssueHistogramModel;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.models.*;
 
@@ -100,10 +100,10 @@ public interface IncidentsDataService {
      * @param userDomainIdentity Calling user identity with the data domain.
      * @return Daily histogram of days when a data quality issue failed.
      */
-    IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                     int year,
-                                                                     int month,
-                                                                     String incidentId,
-                                                                     IncidentHistogramFilterParameters filterParameters,
-                                                                     UserDomainIdentity userDomainIdentity);
+    IssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                             int year,
+                                                             int month,
+                                                             String incidentId,
+                                                             IncidentHistogramFilterParameters filterParameters,
+                                                             UserDomainIdentity userDomainIdentity);
 }

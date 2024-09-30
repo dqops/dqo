@@ -49,7 +49,6 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Data quality incidents REST API controller.
@@ -240,18 +239,18 @@ public class IncidentsController {
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", produces = "application/json")
     @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
-            response = IncidentIssueHistogramModel.class,
+            response = IssueHistogramModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Incidents' histograms returned", response = IncidentIssueHistogramModel.class),
+            @ApiResponse(code = 200, message = "Incidents' histograms returned", response = IssueHistogramModel.class),
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<IncidentIssueHistogramModel>>> getIncidentHistogram(
+    public Mono<ResponseEntity<Mono<IssueHistogramModel>>> getIncidentHistogram(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
@@ -285,7 +284,7 @@ public class IncidentsController {
                 filterParameters.setCheck(check.get());
             }
 
-            IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
+            IssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
                     connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
 
             if (histogramModel == null) {

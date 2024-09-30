@@ -15792,7 +15792,7 @@
           "200" : {
             "description" : "Incidents' histograms returned",
             "schema" : {
-              "$ref" : "#/definitions/IncidentIssueHistogramModel"
+              "$ref" : "#/definitions/IssueHistogramModel"
             }
           },
           "404" : {
@@ -39605,6 +39605,31 @@
         }
       }
     },
+    "HistogramDailyIssuesCount" : {
+      "type" : "object",
+      "properties" : {
+        "warnings" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The number of failed data quality checks that generated a warning severity data quality issue."
+        },
+        "errors" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The number of failed data quality checks that generated an error severity data quality issue."
+        },
+        "fatals" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The number of failed data quality checks that generated a fatal severity data quality issue."
+        },
+        "totalCount" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The total count of failed data quality checks on this day."
+        }
+      }
+    },
     "IcebergFileFormatSpec" : {
       "type" : "object",
       "properties" : {
@@ -39732,79 +39757,6 @@
           "type" : "string",
           "format" : "date",
           "description" : "The first day of the previous month date."
-        }
-      }
-    },
-    "IncidentDailyIssuesCount" : {
-      "type" : "object",
-      "properties" : {
-        "warnings" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of failed data quality checks that generated a warning severity data quality issue."
-        },
-        "errors" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of failed data quality checks that generated an error severity data quality issue."
-        },
-        "fatals" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The number of failed data quality checks that generated a fatal severity data quality issue."
-        },
-        "totalCount" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The total count of failed data quality checks on this day."
-        }
-      }
-    },
-    "IncidentIssueHistogramModel" : {
-      "type" : "object",
-      "properties" : {
-        "hasProfilingIssues" : {
-          "type" : "boolean",
-          "description" : "True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues."
-        },
-        "hasDailyMonitoringIssues" : {
-          "type" : "boolean",
-          "description" : "True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues."
-        },
-        "hasMonthlyMonitoringIssues" : {
-          "type" : "boolean",
-          "description" : "True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues."
-        },
-        "hasDailyPartitionedIssues" : {
-          "type" : "boolean",
-          "description" : "True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues."
-        },
-        "hasMonthlyPartitionedIssues" : {
-          "type" : "boolean",
-          "description" : "True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues."
-        },
-        "days" : {
-          "type" : "object",
-          "description" : "A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/IncidentDailyIssuesCount"
-          }
-        },
-        "columns" : {
-          "type" : "object",
-          "description" : "A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.",
-          "additionalProperties" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        },
-        "checks" : {
-          "type" : "object",
-          "description" : "A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.",
-          "additionalProperties" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
         }
       }
     },
@@ -39999,6 +39951,54 @@
           "type" : "integer",
           "format" : "int64",
           "description" : "The UTC timestamp when the most recent data quality incident was first seen."
+        }
+      }
+    },
+    "IssueHistogramModel" : {
+      "type" : "object",
+      "properties" : {
+        "hasProfilingIssues" : {
+          "type" : "boolean",
+          "description" : "True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues."
+        },
+        "hasDailyMonitoringIssues" : {
+          "type" : "boolean",
+          "description" : "True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues."
+        },
+        "hasMonthlyMonitoringIssues" : {
+          "type" : "boolean",
+          "description" : "True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues."
+        },
+        "hasDailyPartitionedIssues" : {
+          "type" : "boolean",
+          "description" : "True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues."
+        },
+        "hasMonthlyPartitionedIssues" : {
+          "type" : "boolean",
+          "description" : "True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues."
+        },
+        "days" : {
+          "type" : "object",
+          "description" : "A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/HistogramDailyIssuesCount"
+          }
+        },
+        "columns" : {
+          "type" : "object",
+          "description" : "A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.",
+          "additionalProperties" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "checks" : {
+          "type" : "object",
+          "description" : "A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.",
+          "additionalProperties" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
         }
       }
     },

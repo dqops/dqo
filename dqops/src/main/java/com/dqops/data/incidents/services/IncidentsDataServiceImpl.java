@@ -21,7 +21,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
-import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
+import com.dqops.data.checkresults.models.IssueHistogramModel;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
@@ -358,18 +358,18 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @return Daily histogram of days when a data quality issue failed.
      */
     @Override
-    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                            int year,
-                                                                            int month,
-                                                                            String incidentId,
-                                                                            IncidentHistogramFilterParameters filterParameters,
-                                                                            UserDomainIdentity userDomainIdentity) {
+    public IssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                    int year,
+                                                                    int month,
+                                                                    String incidentId,
+                                                                    IncidentHistogramFilterParameters filterParameters,
+                                                                    UserDomainIdentity userDomainIdentity) {
         IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId, userDomainIdentity);
         if (incidentModel == null) {
             return null;
         }
 
-        IncidentIssueHistogramModel histogramModel = this.checkResultsDataService.buildDailyIssuesHistogramForIncident(connectionName,
+        IssueHistogramModel histogramModel = this.checkResultsDataService.buildDailyIssuesHistogramForIncident(connectionName,
                 new PhysicalTableName(incidentModel.getSchema(), incidentModel.getTable()),
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),

@@ -17,7 +17,7 @@
 package com.dqops.data.checkresults.models;
 
 import com.dqops.checks.CheckType;
-import com.dqops.data.incidents.models.IncidentDailyIssuesCount;
+import com.dqops.data.incidents.models.HistogramDailyIssuesCount;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,13 +31,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Model that returns histograms of the data quality issue occurrences related to a data quality incident.
+ * Model that returns histograms of the data quality issue occurrences related to a data quality incident or a table.
  * The dates in the daily histogram are using the default timezone of the DQOps server.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class IncidentIssueHistogramModel {
+public class IssueHistogramModel {
     /**
      * True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.
      */
@@ -72,7 +72,7 @@ public class IncidentIssueHistogramModel {
      * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
      */
     @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.")
-    private Map<LocalDate, IncidentDailyIssuesCount> days = new TreeMap<>();
+    private Map<LocalDate, HistogramDailyIssuesCount> days = new TreeMap<>();
 
     /**
      * A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.
@@ -131,13 +131,13 @@ public class IncidentIssueHistogramModel {
      * @param severity Severity level of a failed data quality check.
      */
     public void incrementSeverityForDay(LocalDate date, int severity) {
-        IncidentDailyIssuesCount incidentDailyIssuesCount = this.days.get(date);
-        if (incidentDailyIssuesCount == null) {
-            incidentDailyIssuesCount = new IncidentDailyIssuesCount();
-            this.days.put(date, incidentDailyIssuesCount);
+        HistogramDailyIssuesCount histogramDailyIssuesCount = this.days.get(date);
+        if (histogramDailyIssuesCount == null) {
+            histogramDailyIssuesCount = new HistogramDailyIssuesCount();
+            this.days.put(date, histogramDailyIssuesCount);
         }
 
-        incidentDailyIssuesCount.incrementForIssueSeverity(severity);
+        histogramDailyIssuesCount.incrementForIssueSeverity(severity);
     }
 
     /**
@@ -184,8 +184,8 @@ public class IncidentIssueHistogramModel {
         LocalDate lastDate;
 
         if (this.days instanceof TreeMap) {
-            firstDate = ((TreeMap<LocalDate, IncidentDailyIssuesCount>) this.days).firstKey();
-            lastDate = ((TreeMap<LocalDate, IncidentDailyIssuesCount>) this.days).lastKey();
+            firstDate = ((TreeMap<LocalDate, HistogramDailyIssuesCount>) this.days).firstKey();
+            lastDate = ((TreeMap<LocalDate, HistogramDailyIssuesCount>) this.days).lastKey();
         } else {
             List<LocalDate> daysKeysSortedList = this.days.keySet().stream().sorted().collect(Collectors.toList());
             firstDate = daysKeysSortedList.get(0);
@@ -198,7 +198,7 @@ public class IncidentIssueHistogramModel {
                 continue;
             }
 
-            this.days.put(date, new IncidentDailyIssuesCount());
+            this.days.put(date, new HistogramDailyIssuesCount());
         }
     }
 

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IncidentIssueHistogramModel } from '../../api';
+import { IssueHistogramModel } from '../../api';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -42,7 +42,7 @@ export const HistogramChart = ({
     histograms,
     histogramFilter
   }: {
-    histograms: IncidentIssueHistogramModel;
+    histograms: IssueHistogramModel;
     histogramFilter: IncidentHistogramFilter;
   } = useSelector(getFirstLevelIncidentsState);
   const { activeTab } = useSelector((state: IRootState) => state.incidents);
