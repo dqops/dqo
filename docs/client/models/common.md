@@ -167,8 +167,8 @@ Default rule severity levels. Matches the severity level name (warning - 1, aler
 
 ___
 
-## MonitoringScheduleSpec
-Monitoring job schedule specification.
+## CronScheduleSpec
+Cron job schedule specification.
 
 
 **The structure of this object is described below**
@@ -350,7 +350,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">`default_check`</span>|This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.|*boolean*|
 |<span class="no-wrap-code">[`default_severity`](#defaultruleseveritylevel)</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*[DefaultRuleSeverityLevel](#defaultruleseveritylevel)*|
 |<span class="no-wrap-code">[`data_grouping_override`](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)</span>|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)*|
-|<span class="no-wrap-code">[`schedule_override`](./common.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`schedule_override`](./common.md#cronschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[CronScheduleSpec](./common.md#cronschedulespec)*|
 |<span class="no-wrap-code">[`effective_schedule`](#effectiveschedulemodel)</span>|Model of configured schedule enabled on the check level.|*[EffectiveScheduleModel](#effectiveschedulemodel)*|
 |<span class="no-wrap-code">[`schedule_enabled_status`](#scheduleenabledstatusmodel)</span>|State of the scheduling override for this check.|*[ScheduleEnabledStatusModel](#scheduleenabledstatusmodel)*|
 |<span class="no-wrap-code">[`comments`](#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](#commentslistspec)*|

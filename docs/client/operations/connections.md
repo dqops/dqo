@@ -2542,6 +2542,188 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 ___
+## get_connection_auto_import
+Return the configuration of the table auto import for a connection
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_auto_import.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/autoimport
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`auto_import_tables_spec`](../../reference/yaml/TableYaml.md#autoimporttablesspec)</span>||*[AutoImportTablesSpec](../../reference/yaml/TableYaml.md#autoimporttablesspec)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/autoimport^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        { }
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import get_connection_auto_import
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_connection_auto_import.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        AutoImportTablesSpec()
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import get_connection_auto_import
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_connection_auto_import.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        AutoImportTablesSpec()
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import get_connection_auto_import
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_connection_auto_import.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        AutoImportTablesSpec()
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import get_connection_auto_import
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_connection_auto_import.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        AutoImportTablesSpec()
+        ```
+    
+    
+    
+
+
+
+___
 ## get_connection_basic
 Return the basic details of a connection given the connection name
 
@@ -4122,7 +4304,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`monitoring_schedule_spec`](../models/common.md#monitoringschedulespec)</span>||*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`cron_schedule_spec`](../models/common.md#cronschedulespec)</span>||*[CronScheduleSpec](../models/common.md#cronschedulespec)*|
 
 
 
@@ -4189,7 +4371,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -4224,7 +4406,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -4262,7 +4444,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -4300,7 +4482,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -4573,6 +4755,163 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	call_result = await update_connection.asyncio(
+	    'sample_connection',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+
+
+
+___
+## update_connection_auto_import
+Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_auto_import.py) to see the source code on GitHub.
+
+
+**PUT**
+```
+http://localhost:8888/api/connections/{connectionName}/autoimport
+```
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+
+
+
+
+**Request body**
+
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|-----------------|
+|Auto import settings to store|*[AutoImportTablesSpec](../../reference/yaml/TableYaml.md#autoimporttablesspec)*| |
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/autoimport^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{}"
+	
+    ```
+
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import update_connection_auto_import
+	from dqops.client.models import AutoImportTablesSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = AutoImportTablesSpec()
+	
+	call_result = update_connection_auto_import.sync(
+	    'sample_connection',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import update_connection_auto_import
+	from dqops.client.models import AutoImportTablesSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = AutoImportTablesSpec()
+	
+	call_result = await update_connection_auto_import.asyncio(
+	    'sample_connection',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import update_connection_auto_import
+	from dqops.client.models import AutoImportTablesSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = AutoImportTablesSpec()
+	
+	call_result = update_connection_auto_import.sync(
+	    'sample_connection',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.connections import update_connection_auto_import
+	from dqops.client.models import AutoImportTablesSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = AutoImportTablesSpec()
+	
+	call_result = await update_connection_auto_import.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -5813,7 +6152,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Monitoring schedule definition to store|*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*| |
+|Monitoring schedule definition to store|*[CronScheduleSpec](../models/common.md#cronschedulespec)*| |
 
 
 
@@ -5843,13 +6182,13 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -5873,13 +6212,13 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -5903,7 +6242,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5912,7 +6251,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -5936,7 +6275,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5945,7 +6284,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)

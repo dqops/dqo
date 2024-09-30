@@ -3916,6 +3916,13 @@ paths:
         description: "Optional check name"
         required: false
         type: "string"
+      - name: "resultsCount"
+        in: "query"
+        description: "Optional number of recent results to return. The default value\
+          \ is 5."
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "An overview of the most recent monitoring executions for the\
@@ -4900,6 +4907,13 @@ paths:
         description: "Optional check name"
         required: false
         type: "string"
+      - name: "resultsCount"
+        in: "query"
+        description: "Optional number of recent results to return. The default value\
+          \ is 5."
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "An overview of the most recent partitioned check executions\
@@ -5713,6 +5727,13 @@ paths:
         description: "Optional check name"
         required: false
         type: "string"
+      - name: "resultsCount"
+        in: "query"
+        description: "Optional number of recent results to return. The default value\
+          \ is 5."
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Overview of the most recent check runs for column level data\
@@ -7829,6 +7850,13 @@ paths:
         description: "Optional check name"
         required: false
         type: "string"
+      - name: "resultsCount"
+        in: "query"
+        description: "Optional number of recent results to return. The default value\
+          \ is 5."
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "An overview of the most recent monitoring executions for the\
@@ -8914,6 +8942,13 @@ paths:
         description: "Optional check name"
         required: false
         type: "string"
+      - name: "resultsCount"
+        in: "query"
+        description: "Optional number of recent results to return. The default value\
+          \ is 5."
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "An overview of the most recent partitioned check executions\
@@ -9912,6 +9947,13 @@ paths:
         description: "Optional check name"
         required: false
         type: "string"
+      - name: "resultsCount"
+        in: "query"
+        description: "Optional number of recent results to return. The default value\
+          \ is 5."
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Overview of the most recent check runs for table level data\

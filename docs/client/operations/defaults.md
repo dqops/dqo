@@ -21,7 +21,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`monitoring_schedule_spec`](../models/common.md#monitoringschedulespec)</span>||*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`cron_schedule_spec`](../models/common.md#cronschedulespec)</span>||*[CronScheduleSpec](../models/common.md#cronschedulespec)*|
 
 
 
@@ -86,7 +86,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -120,7 +120,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -157,7 +157,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -194,7 +194,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -432,7 +432,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default schedules changes to be applied to the default configuration.|*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*| |
+|Spec with default schedules changes to be applied to the default configuration.|*[CronScheduleSpec](../models/common.md#cronschedulespec)*| |
 
 
 
@@ -462,13 +462,13 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -491,13 +491,13 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -520,7 +520,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -529,7 +529,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -552,7 +552,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -561,7 +561,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)

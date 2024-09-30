@@ -19,7 +19,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckContainerListModel*](./common.md#checkcontainerlistmodel)|Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.|
 |[*RuleThresholdsModel*](./common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
 |[*DefaultRuleSeverityLevel*](./common.md#defaultruleseveritylevel)|Default rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
-|[*MonitoringScheduleSpec*](./common.md#monitoringschedulespec)|Monitoring job schedule specification.|
+|[*CronScheduleSpec*](./common.md#cronschedulespec)|Cron job schedule specification.|
 |[*CheckRunScheduleGroup*](./common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
 |[*EffectiveScheduleLevelModel*](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule can be configured.|
 |[*EffectiveScheduleModel*](./common.md#effectiveschedulemodel)|Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.|

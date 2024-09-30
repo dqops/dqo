@@ -59,6 +59,7 @@ from .anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
     AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
 )
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
+from .auto_import_tables_spec import AutoImportTablesSpec
 from .aws_authentication_mode import AwsAuthenticationMode
 from .azure_authentication_mode import AzureAuthenticationMode
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
@@ -1425,6 +1426,8 @@ from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
 from .count_between_rule_parameters_spec import CountBetweenRuleParametersSpec
 from .credential_type import CredentialType
+from .cron_schedule_spec import CronScheduleSpec
+from .cron_schedules_spec import CronSchedulesSpec
 from .csv_file_format_spec import CsvFileFormatSpec
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
@@ -1448,7 +1451,6 @@ from .databricks_parameters_spec import DatabricksParametersSpec
 from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from .default_rule_severity_level import DefaultRuleSeverityLevel
-from .default_schedules_spec import DefaultSchedulesSpec
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
@@ -1579,7 +1581,6 @@ from .min_percent_rule_100_warning_parameters_spec import (
     MinPercentRule100WarningParametersSpec,
 )
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
-from .monitoring_schedule_spec import MonitoringScheduleSpec
 from .mono import Mono
 from .mono_response_entity_mono_dqo_queue_job_id import (
     MonoResponseEntityMonoDqoQueueJobId,
@@ -1593,8 +1594,8 @@ from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .new_line_character_type import NewLineCharacterType
 from .notification_filter_spec import NotificationFilterSpec
 from .optional import Optional
+from .optional_cron_schedule_spec import OptionalCronScheduleSpec
 from .optional_incident_notification_spec import OptionalIncidentNotificationSpec
-from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_data_type import ParameterDataType
@@ -2124,6 +2125,7 @@ __all__ = (
     "AnomalyTimelinessDelayRuleFatal01PctParametersSpec",
     "AnomalyTimelinessDelayRuleWarning1PctParametersSpec",
     "AuthenticatedDashboardModel",
+    "AutoImportTablesSpec",
     "AwsAuthenticationMode",
     "AzureAuthenticationMode",
     "BetweenFloatsRuleParametersSpec",
@@ -2678,6 +2680,8 @@ __all__ = (
     "ConnectionTestStatus",
     "CountBetweenRuleParametersSpec",
     "CredentialType",
+    "CronScheduleSpec",
+    "CronSchedulesSpec",
     "CsvFileFormatSpec",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
@@ -2699,7 +2703,6 @@ __all__ = (
     "DataTypeCategory",
     "DatetimeBuiltInDateFormats",
     "DefaultRuleSeverityLevel",
-    "DefaultSchedulesSpec",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
@@ -2806,7 +2809,6 @@ __all__ = (
     "MinPercentRule100ErrorParametersSpec",
     "MinPercentRule100WarningParametersSpec",
     "MinPercentRule95ParametersSpec",
-    "MonitoringScheduleSpec",
     "Mono",
     "MonoResponseEntityMonoDqoQueueJobId",
     "MonoResponseEntityMonoObject",
@@ -2818,8 +2820,8 @@ __all__ = (
     "NewLineCharacterType",
     "NotificationFilterSpec",
     "Optional",
+    "OptionalCronScheduleSpec",
     "OptionalIncidentNotificationSpec",
-    "OptionalMonitoringScheduleSpec",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",
     "ParameterDataType",

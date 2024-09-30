@@ -4708,6 +4708,13 @@
           "description" : "Optional check name",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resultsCount",
+          "in" : "query",
+          "description" : "Optional number of recent results to return. The default value is 5.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -5856,6 +5863,13 @@
           "description" : "Optional check name",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resultsCount",
+          "in" : "query",
+          "description" : "Optional number of recent results to return. The default value is 5.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -6824,6 +6838,13 @@
           "description" : "Optional check name",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resultsCount",
+          "in" : "query",
+          "description" : "Optional number of recent results to return. The default value is 5.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -9369,6 +9390,13 @@
           "description" : "Optional check name",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resultsCount",
+          "in" : "query",
+          "description" : "Optional number of recent results to return. The default value is 5.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -10631,6 +10659,13 @@
           "description" : "Optional check name",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resultsCount",
+          "in" : "query",
+          "description" : "Optional number of recent results to return. The default value is 5.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -11823,6 +11858,13 @@
           "description" : "Optional check name",
           "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resultsCount",
+          "in" : "query",
+          "description" : "Optional number of recent results to return. The default value is 5.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {

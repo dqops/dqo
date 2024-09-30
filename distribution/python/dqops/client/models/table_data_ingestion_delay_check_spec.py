@@ -7,10 +7,10 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.max_days_rule_1_parameters_spec import MaxDaysRule1ParametersSpec
     from ..models.max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
     from ..models.max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_timeliness_data_ingestion_delay_sensor_parameters_spec import (
         TableTimelinessDataIngestionDelaySensorParametersSpec,
     )
@@ -23,7 +23,7 @@ T = TypeVar("T", bound="TableDataIngestionDelayCheckSpec")
 class TableDataIngestionDelayCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, MonitoringScheduleSpec]):
+        schedule_override (Union[Unset, CronScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
@@ -55,7 +55,7 @@ class TableDataIngestionDelayCheckSpec:
         fatal (Union[Unset, MaxDaysRule7ParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "CronScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -147,21 +147,21 @@ class TableDataIngestionDelayCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.max_days_rule_1_parameters_spec import MaxDaysRule1ParametersSpec
         from ..models.max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
         from ..models.max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_timeliness_data_ingestion_delay_sensor_parameters_spec import (
             TableTimelinessDataIngestionDelaySensorParametersSpec,
         )
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, MonitoringScheduleSpec]
+        schedule_override: Union[Unset, CronScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = CronScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)

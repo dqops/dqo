@@ -125,6 +125,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 |<span class="no-wrap-code">[`delete_connection`</span>](./connections.md#delete_connection)|DELETE|Deletes a connection|
 |<span class="no-wrap-code">[`get_all_connections`</span>](./connections.md#get_all_connections)|GET|Returns a list of connections (data sources)|
 |<span class="no-wrap-code">[`get_connection`</span>](./connections.md#get_connection)|GET|Return the full details of a connection given the connection name|
+|<span class="no-wrap-code">[`get_connection_auto_import`</span>](./connections.md#get_connection_auto_import)|GET|Return the configuration of the table auto import for a connection|
 |<span class="no-wrap-code">[`get_connection_basic`</span>](./connections.md#get_connection_basic)|GET|Return the basic details of a connection given the connection name|
 |<span class="no-wrap-code">[`get_connection_comments`</span>](./connections.md#get_connection_comments)|GET|Return the comments for a connection|
 |<span class="no-wrap-code">[`get_connection_common_columns`</span>](./connections.md#get_connection_common_columns)|GET|Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.|
@@ -133,6 +134,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 |<span class="no-wrap-code">[`get_connection_labels`</span>](./connections.md#get_connection_labels)|GET|Return the labels for a connection|
 |<span class="no-wrap-code">[`get_connection_scheduling_group`</span>](./connections.md#get_connection_scheduling_group)|GET|Return the schedule for a connection for a scheduling group|
 |<span class="no-wrap-code">[`update_connection`</span>](./connections.md#update_connection)|PUT|Updates an existing connection|
+|<span class="no-wrap-code">[`update_connection_auto_import`</span>](./connections.md#update_connection_auto_import)|PUT|Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.|
 |<span class="no-wrap-code">[`update_connection_basic`</span>](./connections.md#update_connection_basic)|PUT|Updates the basic information of a connection|
 |<span class="no-wrap-code">[`update_connection_comments`</span>](./connections.md#update_connection_comments)|PUT|Updates (replaces) the list of comments of a connection|
 |<span class="no-wrap-code">[`update_connection_default_grouping_configuration`</span>](./connections.md#update_connection_default_grouping_configuration)|PUT|Updates the default data grouping connection of a connection|

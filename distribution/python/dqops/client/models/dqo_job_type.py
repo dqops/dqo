@@ -2,8 +2,10 @@ from enum import Enum
 
 
 class DqoJobType(str, Enum):
+    AUTO_IMPORT_TABLES = "auto_import_tables"
     COLLECT_ERROR_SAMPLES = "collect_error_samples"
     COLLECT_ERROR_SAMPLES_ON_TABLE = "collect_error_samples_on_table"
+    COLLECT_SCHEDULED_STATISTICS = "collect_scheduled_statistics"
     COLLECT_STATISTICS = "collect_statistics"
     COLLECT_STATISTICS_ON_TABLE = "collect_statistics_on_table"
     DELETE_STORED_DATA = "delete_stored_data"

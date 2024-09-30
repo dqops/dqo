@@ -7,6 +7,7 @@ from ..models.provider_type import ProviderType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.auto_import_tables_spec import AutoImportTablesSpec
     from ..models.big_query_parameters_spec import BigQueryParametersSpec
     from ..models.comment_spec import CommentSpec
     from ..models.connection_incident_grouping_spec import (
@@ -15,9 +16,9 @@ if TYPE_CHECKING:
     from ..models.connection_spec_advanced_properties import (
         ConnectionSpecAdvancedProperties,
     )
+    from ..models.cron_schedules_spec import CronSchedulesSpec
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
     from ..models.databricks_parameters_spec import DatabricksParametersSpec
-    from ..models.default_schedules_spec import DefaultSchedulesSpec
     from ..models.duckdb_parameters_spec import DuckdbParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
@@ -53,7 +54,8 @@ class ConnectionSpec:
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
-        schedules (Union[Unset, DefaultSchedulesSpec]):
+        schedules (Union[Unset, CronSchedulesSpec]):
+        auto_import_tables (Union[Unset, AutoImportTablesSpec]):
         schedule_on_instance (Union[Unset, str]): Limits running scheduled checks (started by a CRON job scheduler) to
             run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps
             instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud
@@ -85,7 +87,8 @@ class ConnectionSpec:
     default_grouping_configuration: Union[Unset, "DataGroupingConfigurationSpec"] = (
         UNSET
     )
-    schedules: Union[Unset, "DefaultSchedulesSpec"] = UNSET
+    schedules: Union[Unset, "CronSchedulesSpec"] = UNSET
+    auto_import_tables: Union[Unset, "AutoImportTablesSpec"] = UNSET
     schedule_on_instance: Union[Unset, str] = UNSET
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -157,6 +160,10 @@ class ConnectionSpec:
         if not isinstance(self.schedules, Unset):
             schedules = self.schedules.to_dict()
 
+        auto_import_tables: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.auto_import_tables, Unset):
+            auto_import_tables = self.auto_import_tables.to_dict()
+
         schedule_on_instance = self.schedule_on_instance
         incident_grouping: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.incident_grouping, Unset):
@@ -215,6 +222,8 @@ class ConnectionSpec:
             )
         if schedules is not UNSET:
             field_dict["schedules"] = schedules
+        if auto_import_tables is not UNSET:
+            field_dict["auto_import_tables"] = auto_import_tables
         if schedule_on_instance is not UNSET:
             field_dict["schedule_on_instance"] = schedule_on_instance
         if incident_grouping is not UNSET:
@@ -230,6 +239,7 @@ class ConnectionSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.auto_import_tables_spec import AutoImportTablesSpec
         from ..models.big_query_parameters_spec import BigQueryParametersSpec
         from ..models.comment_spec import CommentSpec
         from ..models.connection_incident_grouping_spec import (
@@ -238,11 +248,11 @@ class ConnectionSpec:
         from ..models.connection_spec_advanced_properties import (
             ConnectionSpecAdvancedProperties,
         )
+        from ..models.cron_schedules_spec import CronSchedulesSpec
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
         )
         from ..models.databricks_parameters_spec import DatabricksParametersSpec
-        from ..models.default_schedules_spec import DefaultSchedulesSpec
         from ..models.duckdb_parameters_spec import DuckdbParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
@@ -358,11 +368,18 @@ class ConnectionSpec:
             )
 
         _schedules = d.pop("schedules", UNSET)
-        schedules: Union[Unset, DefaultSchedulesSpec]
+        schedules: Union[Unset, CronSchedulesSpec]
         if isinstance(_schedules, Unset):
             schedules = UNSET
         else:
-            schedules = DefaultSchedulesSpec.from_dict(_schedules)
+            schedules = CronSchedulesSpec.from_dict(_schedules)
+
+        _auto_import_tables = d.pop("auto_import_tables", UNSET)
+        auto_import_tables: Union[Unset, AutoImportTablesSpec]
+        if isinstance(_auto_import_tables, Unset):
+            auto_import_tables = UNSET
+        else:
+            auto_import_tables = AutoImportTablesSpec.from_dict(_auto_import_tables)
 
         schedule_on_instance = d.pop("schedule_on_instance", UNSET)
 
@@ -410,6 +427,7 @@ class ConnectionSpec:
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,
+            auto_import_tables=auto_import_tables,
             schedule_on_instance=schedule_on_instance,
             incident_grouping=incident_grouping,
             comments=comments,

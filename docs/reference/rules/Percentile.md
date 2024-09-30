@@ -167,7 +167,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -429,7 +429,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -689,7 +689,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -909,7 +909,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         all_extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -1131,7 +1131,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         all_extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -1365,7 +1365,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -1622,7 +1622,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -1874,7 +1874,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         :return: Object with the decision to accept or reject the value.
         """
     
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
             return RuleExecutionResult()
     
         all_extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
@@ -2072,7 +2072,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if (not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'percentile_below')
+                or not hasattr(rule_parameters.parameters, 'percentile_above')):
             return RuleExecutionResult()
     
         extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
@@ -2267,7 +2268,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if (not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'percentile_below')
+                or not hasattr(rule_parameters.parameters, 'percentile_above')):
             return RuleExecutionResult()
     
         extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
@@ -2462,7 +2464,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if (not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'percentile_below')
+                or not hasattr(rule_parameters.parameters, 'percentile_above')):
             return RuleExecutionResult()
     
         extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
@@ -2656,7 +2659,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if (not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'percentile_below')
+                or not hasattr(rule_parameters.parameters, 'percentile_above')):
             return RuleExecutionResult()
     
         extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
@@ -2847,7 +2851,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if (not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'percentile_below')
+                or not hasattr(rule_parameters.parameters, 'percentile_above')):
             return RuleExecutionResult()
     
         extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
@@ -3038,7 +3043,8 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if (not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'percentile_below')
+                or not hasattr(rule_parameters.parameters, 'percentile_above')):
             return RuleExecutionResult()
     
         extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]

@@ -11,13 +11,13 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.check_search_filters import CheckSearchFilters
     from ..models.comment_spec import CommentSpec
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
     from ..models.effective_schedule_model import EffectiveScheduleModel
     from ..models.field_model import FieldModel
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.rule_thresholds_model import RuleThresholdsModel
     from ..models.similar_check_model import SimilarCheckModel
 
@@ -52,7 +52,7 @@ class CheckModel:
             default data observability check and can be run, but it is not configured in the table YAML.
         default_severity (Union[Unset, DefaultRuleSeverityLevel]):
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
-        schedule_override (Union[Unset, MonitoringScheduleSpec]):
+        schedule_override (Union[Unset, CronScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
             or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution,
             as well as the duration until this time.
@@ -110,7 +110,7 @@ class CheckModel:
     default_check: Union[Unset, bool] = UNSET
     default_severity: Union[Unset, DefaultRuleSeverityLevel] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
-    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "CronScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
     schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -309,6 +309,7 @@ class CheckModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_search_filters import CheckSearchFilters
         from ..models.comment_spec import CommentSpec
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
         )
@@ -317,7 +318,6 @@ class CheckModel:
         )
         from ..models.effective_schedule_model import EffectiveScheduleModel
         from ..models.field_model import FieldModel
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.rule_thresholds_model import RuleThresholdsModel
         from ..models.similar_check_model import SimilarCheckModel
 
@@ -373,11 +373,11 @@ class CheckModel:
             )
 
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, MonitoringScheduleSpec]
+        schedule_override: Union[Unset, CronScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = CronScheduleSpec.from_dict(_schedule_override)
 
         _effective_schedule = d.pop("effective_schedule", UNSET)
         effective_schedule: Union[Unset, EffectiveScheduleModel]

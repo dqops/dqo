@@ -10,8 +10,8 @@ if TYPE_CHECKING:
         ColumnNullsNotNullsCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
 T = TypeVar("T", bound="ColumnNotNullsCountCheckSpec")
@@ -21,7 +21,7 @@ T = TypeVar("T", bound="ColumnNotNullsCountCheckSpec")
 class ColumnNotNullsCountCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, MonitoringScheduleSpec]):
+        schedule_override (Union[Unset, CronScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
@@ -53,7 +53,7 @@ class ColumnNotNullsCountCheckSpec:
         fatal (Union[Unset, MinCountRule1ParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "CronScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -146,18 +146,18 @@ class ColumnNotNullsCountCheckSpec:
             ColumnNullsNotNullsCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.min_count_rule_1_parameters_spec import (
             MinCountRule1ParametersSpec,
         )
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, MonitoringScheduleSpec]
+        schedule_override: Union[Unset, CronScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = CronScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)

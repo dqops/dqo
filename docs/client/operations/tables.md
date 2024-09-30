@@ -9064,7 +9064,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`monitoring_schedule_spec`](../models/common.md#monitoringschedulespec)</span>||*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`cron_schedule_spec`](../models/common.md#cronschedulespec)</span>||*[CronScheduleSpec](../models/common.md#cronschedulespec)*|
 
 
 
@@ -9135,7 +9135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -9172,7 +9172,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -9212,7 +9212,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -9252,7 +9252,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -14500,7 +14500,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*| |
+|Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|*[CronScheduleSpec](../models/common.md#cronschedulespec)*| |
 
 
 
@@ -14530,13 +14530,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -14562,13 +14562,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -14594,7 +14594,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -14603,7 +14603,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -14629,7 +14629,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -14638,7 +14638,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
