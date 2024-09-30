@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { LocalDataDomainModel } from '../../api';
@@ -72,7 +72,7 @@ export default function DataDomains() {
   return (
     <div className="text-sm">
       {!userProfile.can_use_data_domains && (
-        <div>
+        <div className="p-2 text-red-500">
           Data domains require an active DQOps Cloud ENTERPRISE license. Please
           contact DQOps sales to activate data domains.
         </div>
@@ -114,7 +114,11 @@ export default function DataDomains() {
                       className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       disabled={!userProfile.can_use_data_domains}
                     >
-                      <SvgIcon name="edit" className="w-4" />
+                      <Tooltip content="Modify">
+                        <div>
+                          <SvgIcon name="edit" className="w-4" />
+                        </div>
+                      </Tooltip>
                     </IconButton>
                     <IconButton
                       size="sm"
@@ -125,7 +129,11 @@ export default function DataDomains() {
                       color="teal"
                       className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                     >
-                      <SvgIcon name="delete" className="w-4" />
+                      <Tooltip content="Delete">
+                        <div>
+                          <SvgIcon name="delete" className="w-4" />
+                        </div>
+                      </Tooltip>
                     </IconButton>
                   </div>
                 )}
