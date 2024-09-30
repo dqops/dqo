@@ -53,11 +53,9 @@ WHERE top_values_rank <= {{ parameters.top }}
 
 {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
 
-    {%- if partition_by_enabled == true -%}PARTITION BY
+    {%- if partition_by_enabled == true and lib.data_groupings is not none -%}PARTITION BY
         {%- if lib.time_series is not none -%}
             {{" "}}top_col_values.time_period
-        {%- elif lib.data_groupings is none -%}
-            {{" "}}NULL
         {%- endif -%}
     {%- endif -%}
 

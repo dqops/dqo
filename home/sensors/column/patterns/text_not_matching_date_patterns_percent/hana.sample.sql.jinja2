@@ -1,4 +1,4 @@
 {% import '/dialects/hana.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler() -%}
-    {{ lib.render_target_column('analyzed_table') }} LIKE_REGEXPR {{lib.render_date_format(parameters.date_format)}}
+    {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{lib.render_date_format_regex(parameters.date_format)}}
 {%- endcall -%}
