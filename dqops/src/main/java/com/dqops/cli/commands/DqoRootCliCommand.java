@@ -260,6 +260,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the maximum number of tables that are imported from a data source. DQOps supports importing more tables by importing additional tables specified by a different table filter.", defaultValue = "300")
     private Integer metadataImportTablesImportLimit;
 
+    @CommandLine.Option(names = {"--dqo.metadata.auto-import-tables-limit"},
+            description = "Sets the maximum number of tables that are imported from a data source by the auto import that is scheduled on the DQOps CRON scheduler.", defaultValue = "300")
+    private Integer metadataImportAutoImportTablesLimit;
+
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
             description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")
     private Boolean dqoSecretsEnableGcpSecretManager;

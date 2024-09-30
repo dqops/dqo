@@ -15,6 +15,7 @@
  */
 package com.dqops.core.scheduler.importtables;
 
+import com.dqops.core.configuration.DqoMetadataImportConfigurationProperties;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJob;
@@ -49,6 +50,7 @@ public class AutoImportTablesDqoJob extends ParentDqoQueueJob<Integer> {
     private ExecutionContextFactory executionContextFactory;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
+    private DqoMetadataImportConfigurationProperties dqoMetadataImportConfigurationProperties;
     private CronScheduleSpec cronSchedule;
 
     /**
@@ -57,16 +59,19 @@ public class AutoImportTablesDqoJob extends ParentDqoQueueJob<Integer> {
      * @param executionContextFactory Check execution context that will create a context - opening the local user home.
      * @param dqoQueueJobFactory Job factory to create table import jobs.
      * @param dqoJobQueue DQO job queue to push connection level jobs.
+     * @param dqoMetadataImportConfigurationProperties Metadata import configuration parameters to read the tables import limit.
      */
     @Autowired
     public AutoImportTablesDqoJob(JobSchedulerService jobSchedulerService,
                                   ExecutionContextFactory executionContextFactory,
                                   DqoQueueJobFactory dqoQueueJobFactory,
-                                  DqoJobQueue dqoJobQueue) {
+                                  DqoJobQueue dqoJobQueue,
+                                  DqoMetadataImportConfigurationProperties dqoMetadataImportConfigurationProperties) {
         this.jobSchedulerService = jobSchedulerService;
         this.executionContextFactory = executionContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
+        this.dqoMetadataImportConfigurationProperties = dqoMetadataImportConfigurationProperties;
     }
 
     /**
@@ -123,6 +128,7 @@ public class AutoImportTablesDqoJob extends ParentDqoQueueJob<Integer> {
             importParameters.setConnectionName(connectionWrapper.getName());
             importParameters.setSchemaName(autoImportTables.getSchemaFilter());
             importParameters.setTableNameContains(autoImportTables.getTableNameContains());
+            importParameters.setTablesImportLimit(this.dqoMetadataImportConfigurationProperties.getAutoImportTablesLimit());
             importTablesJob.setImportParameters(importParameters);
 
             childConnectionImportJobs.add(importTablesJob);

@@ -144,6 +144,7 @@ dqo:
   metadata:
     import:
       tables-import-limit: 300
+      auto-import-tables-limit: 300
   sensor:
     limits:
       sensor-readout-limit: 1000

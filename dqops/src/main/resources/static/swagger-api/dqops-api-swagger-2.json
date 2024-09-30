@@ -39528,6 +39528,11 @@
           "items" : {
             "type" : "string"
           }
+        },
+        "tablesImportLimit" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Optional parameter to configure the limit of tables that are imported from a single schema. Leave this parameter blank to use the default limit (300 tables)."
         }
       }
     },

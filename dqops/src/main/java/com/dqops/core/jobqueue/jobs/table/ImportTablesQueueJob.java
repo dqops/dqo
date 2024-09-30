@@ -164,7 +164,8 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
                     List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
                             sourceSchemaModel.getSchemaName(),
                             this.importParameters.getTableNameContains(),
-                            this.metadataImportConfigurationProperties.getTablesImportLimit(),
+                            this.importParameters.getTablesImportLimit() != null ? this.importParameters.getTablesImportLimit() :
+                                    this.metadataImportConfigurationProperties.getTablesImportLimit(),
                             this.importParameters.getTableNames(),
                             connectionWrapper,
                             secretValueLookupContext);
