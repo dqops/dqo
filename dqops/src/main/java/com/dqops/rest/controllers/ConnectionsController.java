@@ -204,6 +204,46 @@ public class ConnectionsController {
     }
 
     /**
+     * Retrieves the configuration of table auto import for a requested connection identified by the connection name.
+     * @param connectionName  Connection name.
+     * @return Connection's auto import configuration.
+     */
+    @GetMapping(value = "/{connectionName}/autoimport", produces = "application/json")
+    @ApiOperation(value = "getConnectionAutoImport", notes = "Return the configuration of the table auto import for a connection", response = AutoImportTablesSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Connection's table auto import returned", response = AutoImportTablesSpec.class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Mono<AutoImportTablesSpec>>> getConnectionAutoImport(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+
+            AutoImportTablesSpec autoImportTables = connectionSpec.getAutoImportTables();
+            if (autoImportTables == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
+
+            return new ResponseEntity<>(Mono.justOrEmpty(autoImportTables), HttpStatus.OK); // 200
+        }));
+    }
+
+    /**
      * Retrieves a named schedule of a connection for a requested connection identified by the connection name.
      * @param connectionName  Connection name.
      * @param schedulingGroup Scheduling group.
@@ -647,6 +687,57 @@ public class ConnectionsController {
     }
 
     /**
+     * Updates the configuration of the table auto import on an existing connection.
+     * @param connectionName        Connection name.
+     * @param autoImportTablesSpec  Table auto import specification.
+     * @return Empty response.
+     */
+    @PutMapping(value = "/{connectionName}/autoimport", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateConnectionAutoImport",
+            notes = "Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Connection's auto import settings successfully updated", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionAutoImport(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Auto import settings to store") @RequestBody AutoImportTablesSpec autoImportTablesSpec) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
+
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
+
+                        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                        existingConnectionSpec.setAutoImportTables(autoImportTablesSpec);
+
+                        boolean scheduleChanged = existingConnectionSpec.isDirty();
+                        userHomeContext.flush();
+
+                        if (scheduleChanged) {
+                            this.jobSchedulerService.triggerMetadataSynchronization(principal.getDataDomainIdentity().getDataDomainCloud());
+                        }
+
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
+    }
+
+    /**
      * Updates the configuration of a check run schedule for a scheduling group (named schedule) of an existing connection.
      * @param connectionName        Connection name.
      * @param cronScheduleSpec Schedule specification.
@@ -721,7 +812,7 @@ public class ConnectionsController {
                         userHomeContext.flush();
 
                         if (scheduleChanged) {
-                            this.jobSchedulerService.triggerMetadataSynchronization();
+                            this.jobSchedulerService.triggerMetadataSynchronization(principal.getDataDomainIdentity().getDataDomainCloud());
                         }
 
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

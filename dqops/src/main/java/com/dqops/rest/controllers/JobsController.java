@@ -1022,7 +1022,7 @@ public class JobsController {
                     this.jobSchedulerService.start(
                             this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
                             this.dqoSchedulerConfigurationProperties.getCheckRunMode());
-                    this.jobSchedulerService.triggerMetadataSynchronization();
+                    this.jobSchedulerService.triggerMetadataSynchronization(null);
                 }
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
             } else {

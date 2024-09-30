@@ -35,6 +35,9 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -780,6 +783,42 @@ public class UserHomeImpl implements UserHome, Cloneable {
         catch (CloneNotSupportedException ex) {
             throw new UnsupportedOperationException("Cannot clone object", ex);
         }
+    }
+
+    private Disposable warmupConnectionsDisposableReference; // stored only to keep a reference
+
+    /**
+     * Initiates loading all connections to cache them and let label and other services find relevant data.
+     * Loading will continue in the background.
+     */
+    @Override
+    public void warmUpConnections() {
+        Mono<UserHome> loadMono = Flux.fromIterable(this.connections)
+            .parallel(Runtime.getRuntime().availableProcessors())
+            .map(connectionWrapper -> connectionWrapper.getSpec())
+            .then()
+            .then(Mono.just(this)); // keep the reference
+
+        this.warmupConnectionsDisposableReference = loadMono.subscribe();
+    }
+
+    private Disposable warmupTablesDisposableReference; // stored only to keep a reference
+
+
+    /**
+     * Initiates loading all connections to cache them and let label, quality status, data lineage and other services find relevant information.
+     * Loading will continue in the background.
+     */
+    @Override
+    public void warmUpTables() {
+        Mono<UserHome> loadMono = Flux.fromIterable(this.connections)
+                .parallel(Runtime.getRuntime().availableProcessors())
+                .flatMap(connectionWrapper -> Flux.fromIterable(connectionWrapper.getTables()))
+                .map(tableWrapper -> tableWrapper.getSpec())
+                .then()
+                .then(Mono.just(this)); // keep the reference
+
+        this.warmupTablesDisposableReference = loadMono.subscribe();
     }
 
     /**

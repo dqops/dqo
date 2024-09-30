@@ -72,8 +72,9 @@ public interface JobSchedulerService {
 
     /**
      * Triggers the metadata synchronization job on the job scheduler. Calls the cloud sync and reload the metadata to detect new schedules.
+     * @param dataDomain Data domain name. Leave null to refresh all data domains.
      */
-    void triggerMetadataSynchronization();
+    void triggerMetadataSynchronization(String dataDomain);
 
     /**
      * Analyzes the list of active data domains for which the job scheduler is scheduling jobs.

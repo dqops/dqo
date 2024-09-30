@@ -464,9 +464,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
     /**
      * Triggers the metadata synchronization job on the job scheduler. Calls the cloud sync and reload the metadata to detect new schedules.
+     * @param dataDomain Data domain name. Pass null to refresh all data domains.
      */
     @Override
-    public void triggerMetadataSynchronization() {
+    public void triggerMetadataSynchronization(String dataDomain) {
         if (!this.started || this.shutdownInitiated) {
             return;
         }
@@ -474,10 +475,18 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         log.debug("Triggering the SYNCHRONIZE_METADATA job on the job scheduler.");
 
         try {
-            for (String dataDomainName : new ArrayList<>(this.scheduledDataDomains)) {
-                JobDataMap jobDataMap = new JobDataMap();
-                this.jobDataMapAdapter.setDataDomain(jobDataMap, dataDomainName);
-                this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+            if (dataDomain == null) {
+                for (String scheduledDataDomainName : new ArrayList<>(this.scheduledDataDomains)) {
+                    JobDataMap jobDataMap = new JobDataMap();
+                    this.jobDataMapAdapter.setDataDomain(jobDataMap, scheduledDataDomainName);
+                    this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+                }
+            } else {
+                if (this.scheduledDataDomains.contains(dataDomain)) {
+                    JobDataMap jobDataMap = new JobDataMap();
+                    this.jobDataMapAdapter.setDataDomain(jobDataMap, dataDomain);
+                    this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+                }
             }
         }
         catch (Exception ex) {

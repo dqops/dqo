@@ -103,7 +103,7 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     public Integer call() throws Exception {
         if (!this.jobSchedulerService.isStarted()) {
             this.jobSchedulerService.start(this.synchronizationMode, this.checkRunMode);
-            this.jobSchedulerService.triggerMetadataSynchronization();
+            this.jobSchedulerService.triggerMetadataSynchronization(null);
 
             return 0;
         }

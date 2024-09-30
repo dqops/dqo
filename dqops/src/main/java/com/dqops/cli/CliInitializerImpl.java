@@ -210,6 +210,10 @@ public class CliInitializerImpl implements CliInitializer {
         JdbcTypeColumnMapping.ensureInitializedJdbc();
 
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
+        this.labelsIndexer.start();
+        this.tableStatusCache.start();
+        this.tableLineageCache.start();
+
         boolean newUserHomeInitialized = this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
         this.defaultTimeZoneProvider.invalidate();
         this.localDataDomainManager.start();
@@ -234,9 +238,6 @@ public class CliInitializerImpl implements CliInitializer {
         }
         finally {
             this.jobQueueMonitoringService.start();
-            this.labelsIndexer.start();
-            this.tableStatusCache.start();
-            this.tableLineageCache.start();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 
@@ -248,7 +249,7 @@ public class CliInitializerImpl implements CliInitializer {
                     this.jobSchedulerService.start(
                             this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
                             this.dqoSchedulerConfigurationProperties.getCheckRunMode());
-                    this.jobSchedulerService.triggerMetadataSynchronization();
+                    this.jobSchedulerService.triggerMetadataSynchronization(null);
                 }
 
                 if (!this.rootConfigurationProperties.isSilent()) {

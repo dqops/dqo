@@ -563,6 +563,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         userHomeContext.flush();
+        userHome.warmUpConnections();
+        userHome.warmUpTables();
     }
 
     /**

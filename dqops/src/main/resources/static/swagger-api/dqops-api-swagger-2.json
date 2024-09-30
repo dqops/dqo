@@ -529,6 +529,91 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/autoimport" : {
+      "get" : {
+        "tags" : [ "Connections" ],
+        "summary" : "getConnectionAutoImport",
+        "description" : "Return the configuration of the table auto import for a connection",
+        "operationId" : "getConnectionAutoImport",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Connection's table auto import returned",
+            "schema" : {
+              "$ref" : "#/definitions/AutoImportTablesSpec"
+            }
+          },
+          "404" : {
+            "description" : "Connection not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Connections" ],
+        "summary" : "updateConnectionAutoImport",
+        "description" : "Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.",
+        "operationId" : "updateConnectionAutoImport",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Auto import settings to store",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/AutoImportTablesSpec"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoResponseEntityMonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Connection's auto import settings successfully updated"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Connection not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/basic" : {
       "get" : {
         "tags" : [ "Connections" ],

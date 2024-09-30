@@ -2457,7 +2457,7 @@ public class TablesController {
                         userHomeContext.flush();
 
                         if (scheduleUpdated && this.jobSchedulerService != null) {
-                            this.jobSchedulerService.triggerMetadataSynchronization();
+                            this.jobSchedulerService.triggerMetadataSynchronization(principal.getDataDomainIdentity().getDataDomainCloud());
                         }
 
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
