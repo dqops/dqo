@@ -53,8 +53,8 @@ class HanaColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extends
     private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private final String testedColumnName = "ip6";
-    private final String validExamplesFilterText = "result = 1";
-    private final String invalidExamplesFilterText = "result = 0";
+    private final String validExamplesFilterText = "\"result\" = 1";
+    private final String invalidExamplesFilterText = "\"result\" = 0";
 
     @BeforeEach
     void setUp() {

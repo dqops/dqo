@@ -174,9 +174,13 @@ public class HanaTableUniquenessDuplicateRecordCountSensorParametersSpecIntegrat
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(0, resultTable.rowCount());
-        Assertions.assertEquals(1, resultTable.columnCount());
+        // Generally, the error sampling for the sensor does not return anything.
+        // No result is captured and replaced with default result for error sampling test purpose, search for "if (sensorResultRows.rowCount() == 0"
+        // So that default is asserted here
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
