@@ -20,7 +20,7 @@ import com.dqops.core.incidents.IncidentNotificationConfigurations;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
-import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
+import com.dqops.data.checkresults.models.HistogramFilterParameters;
 import com.dqops.data.checkresults.models.IssueHistogramModel;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.incidents.factory.IncidentStatus;
@@ -362,14 +362,14 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                                                                     int year,
                                                                     int month,
                                                                     String incidentId,
-                                                                    IncidentHistogramFilterParameters filterParameters,
+                                                                    HistogramFilterParameters filterParameters,
                                                                     UserDomainIdentity userDomainIdentity) {
         IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId, userDomainIdentity);
         if (incidentModel == null) {
             return null;
         }
 
-        IssueHistogramModel histogramModel = this.checkResultsDataService.buildDailyIssuesHistogramForIncident(connectionName,
+        IssueHistogramModel histogramModel = this.checkResultsDataService.buildDailyIssuesHistogram(connectionName,
                 new PhysicalTableName(incidentModel.getSchema(), incidentModel.getTable()),
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),

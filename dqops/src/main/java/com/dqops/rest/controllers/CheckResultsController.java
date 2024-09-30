@@ -21,6 +21,8 @@ import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.CheckResultsListModel;
+import com.dqops.data.checkresults.models.HistogramFilterParameters;
+import com.dqops.data.checkresults.models.IssueHistogramModel;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
@@ -43,6 +45,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -667,6 +670,113 @@ public class CheckResultsController {
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
             return new ResponseEntity<>(Flux.fromArray(checkResultsListModels), HttpStatus.OK); // 200
+        }));
+    }
+
+    /**
+     * Generates a histogram of data quality issues for each day on a given table., returning the number of data quality issues on that day.
+     * The other histograms are by a column name and by a check name.
+     * @param connectionName Connection name.
+     * @param schemaName Schema name.
+     * @param tableName Table name.
+     * @param filter Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions.
+     * @param days Optional filter for a number of recent days to read the related issues.
+     * @param date Optional date filter.
+     * @param column Optional column name filter.
+     * @param check Optional check name filter.
+     * @return Incident histogram of data quality issues.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/histogram", produces = "application/json")
+    @ApiOperation(value = "getTableIssuesHistogram", notes = "Generates a histograms of data quality issues for each day on a table, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
+            response = IssueHistogramModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Issue histograms for a table returned", response = IssueHistogramModel.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Mono<IssueHistogramModel>>> getTableIssuesHistogram(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "executedSince", value = "Optional date filter to find issues returned since that date. When missing, loads issues executed during the current and previous months", required = false)
+            @RequestParam(required = false) Optional<LocalDate> executedSince,
+            @ApiParam(name = "filter", value = "Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions", required = false)
+            @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "days", value = "Optional filter for a number of recent days to read the related issues", required = false)
+            @RequestParam(required = false) Optional<Integer> days,
+            @ApiParam(name = "date", value = "Optional date filter to select one day", required = false)
+            @RequestParam(required = false) Optional<LocalDate> date,
+            @ApiParam(name = "column", value = "Optional column name filter", required = false)
+            @RequestParam(required = false) Optional<String> column,
+            @ApiParam(name = "check", value = "Optional check name filter", required = false)
+            @RequestParam(required = false) Optional<String> check,
+            @ApiParam(name = "checkType", value = "Optional check type filter, when not provided, returns a combined histogram of monitoring and partition checks", required = false)
+            @RequestParam(required = false) Optional<CheckType> checkType) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            HistogramFilterParameters filterParameters = new HistogramFilterParameters();
+            if (filter.isPresent()) {
+                filterParameters.setFilter(filter.get());
+            }
+            if (days.isPresent()) {
+                filterParameters.setDays(days.get());
+            }
+            if (date.isPresent()) {
+                filterParameters.setDate(date.get());
+            }
+            if (column.isPresent()) {
+                filterParameters.setColumn(column.get());
+            }
+            if (check.isPresent()) {
+                filterParameters.setCheck(check.get());
+            }
+            if (checkType.isPresent()) {
+                filterParameters.setCheckType(checkType.get());
+            }
+
+            LocalDate executedSinceLocalDate = executedSince.orElseGet(() -> LocalDate.now().withDayOfMonth(1).minusMonths(1L));
+            Instant executedAtSince = executedSinceLocalDate.atStartOfDay(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).toInstant();
+
+            IssueHistogramModel histogramModel = this.checkResultsDataService.buildDailyIssuesHistogram(
+                    connectionName,
+                    physicalTableName,
+                    null,
+                    executedAtSince,
+                    null,
+                    1,
+                    filterParameters,
+                    principal.getDataDomainIdentity());
+
+            if (histogramModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            return new ResponseEntity<>(Mono.just(histogramModel), HttpStatus.OK); // 200
         }));
     }
 }

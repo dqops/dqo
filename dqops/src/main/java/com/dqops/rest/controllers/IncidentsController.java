@@ -238,14 +238,14 @@ public class IncidentsController {
      * @return Incident histogram of data quality issues.
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", produces = "application/json")
-    @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
+    @ApiOperation(value = "getIncidentHistogram", notes = "Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
             response = IssueHistogramModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Incidents' histograms returned", response = IssueHistogramModel.class),
+            @ApiResponse(code = 200, message = "Incident's histogram returned", response = IssueHistogramModel.class),
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -267,7 +267,7 @@ public class IncidentsController {
             @ApiParam(name = "check", value = "Optional check name filter", required = false)
             @RequestParam(required = false) Optional<String> check) {
         return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
-            IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
+            HistogramFilterParameters filterParameters = new HistogramFilterParameters();
             if (filter.isPresent()) {
                 filterParameters.setFilter(filter.get());
             }

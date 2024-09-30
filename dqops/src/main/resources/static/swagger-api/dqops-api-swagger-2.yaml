@@ -6441,6 +6441,92 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/histogram:
+    get:
+      tags:
+      - "CheckResults"
+      summary: "getTableIssuesHistogram"
+      description: "Generates a histograms of data quality issues for each day on\
+        \ a table, returning the number of data quality issues on that day. The other\
+        \ histograms are by a column name and by a check name."
+      operationId: "getTableIssuesHistogram"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "executedSince"
+        in: "query"
+        description: "Optional date filter to find issues returned since that date.\
+          \ When missing, loads issues executed during the current and previous months"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "filter"
+        in: "query"
+        description: "Optional full text search filter that supports *prefix, suffix*\
+          \ and nest*ed filter expressions"
+        required: false
+        type: "string"
+      - name: "days"
+        in: "query"
+        description: "Optional filter for a number of recent days to read the related\
+          \ issues"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "date"
+        in: "query"
+        description: "Optional date filter to select one day"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "column"
+        in: "query"
+        description: "Optional column name filter"
+        required: false
+        type: "string"
+      - name: "check"
+        in: "query"
+        description: "Optional check name filter"
+        required: false
+        type: "string"
+      - name: "checkType"
+        in: "query"
+        description: "Optional check type filter, when not provided, returns a combined\
+          \ histogram of monitoring and partition checks"
+        required: false
+        type: "string"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
+      responses:
+        200:
+          description: "Issue histograms for a table returned"
+          schema:
+            $ref: "#/definitions/IssueHistogramModel"
+        404:
+          description: "Table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping:
     get:
       tags:
@@ -13193,7 +13279,7 @@ paths:
       tags:
       - "Incidents"
       summary: "getIncidentHistogram"
-      description: "Generates histograms of data quality issues for each day, returning\
+      description: "Generates a histogram of data quality issues for each day, returning\
         \ the number of data quality issues on that day. The other histograms are\
         \ by a column name and by a check name."
       operationId: "getIncidentHistogram"
@@ -13253,7 +13339,7 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Incidents' histograms returned"
+          description: "Incident's histograms returned"
           schema:
             $ref: "#/definitions/IssueHistogramModel"
         404:
