@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import {
@@ -37,19 +37,13 @@ export default function DataLineageGraph({
     {}
   );
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
-
-  const showDataLineage = useCallback(
-    (index: number) => {
-      const selectedFlow = tableDataLineage.flows?.[index] ?? {};
-      setFlow(selectedFlow);
-      setDetailsDialogOpen(true);
-    },
-    [tableDataLineage]
-  );
+  const showDataLineage = (index: number) => {
+    const selectedFlow = tableDataLineage.flows?.[index] ?? {};
+    setFlow(selectedFlow);
+    setDetailsDialogOpen(true);
+  };
 
   useEffect(() => {
-    window.showDataLineage = showDataLineage;
-
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
       try {
@@ -91,11 +85,14 @@ export default function DataLineageGraph({
     };
 
     fetchTableDataLineageGraph();
+  }, [connection, schema, table]);
 
+  useEffect(() => {
+    window.showDataLineage = showDataLineage;
     return () => {
       window.showDataLineage = null;
     };
-  }, [connection, schema, table]);
+  }, [tableDataLineage]);
 
   const options = {
     tooltip: { isHtml: true },

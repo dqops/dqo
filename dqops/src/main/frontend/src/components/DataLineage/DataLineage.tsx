@@ -4,8 +4,8 @@ import SourceTables from '../Connection/TableView/SourceTables/SourceTables';
 import DataLineageGraph from '../DataLineageGraph/DataLineageGraph';
 import Tabs from '../Tabs';
 const tabs = [
-  { label: 'Source tables', value: 'data-lineage' },
-  { label: 'Data lineage graph', value: 'data-lineage-graph' }
+  { label: 'Data lineage graph', value: 'data-lineage-graph' },
+  { label: 'Source tables', value: 'data-lineage' }
 ];
 export default function DataLineage() {
   const {
