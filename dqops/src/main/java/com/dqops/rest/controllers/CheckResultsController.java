@@ -25,12 +25,14 @@ import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityS
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
+import com.dqops.data.checkresults.services.CheckResultsDetailedLoadMode;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -136,7 +138,7 @@ public class CheckResultsController {
             @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "qualityDimension", value = "Optional data quality dimension", required = false)
             @RequestParam(required = false) Optional<String> qualityDimension) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
@@ -217,9 +219,10 @@ public class CheckResultsController {
             @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
             @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "loadMode", value = "Results load mode", required = false) @RequestParam(required = false) Optional<CheckResultsDetailedLoadMode> loadMode,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -249,6 +252,7 @@ public class CheckResultsController {
             monthStart.ifPresent(loadParams::setStartMonth);
             monthEnd.ifPresent(loadParams::setEndMonth);
             maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            loadMode.ifPresent(loadParams::setLoadMode);
 
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
@@ -293,9 +297,10 @@ public class CheckResultsController {
             @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
             @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "loadMode", value = "Results load mode", required = false) @RequestParam(required = false) Optional<CheckResultsDetailedLoadMode> loadMode,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -325,6 +330,7 @@ public class CheckResultsController {
             monthStart.ifPresent(loadParams::setStartMonth);
             monthEnd.ifPresent(loadParams::setEndMonth);
             maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            loadMode.ifPresent(loadParams::setLoadMode);
 
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     monitoringPartition, loadParams, principal.getDataDomainIdentity());
@@ -369,9 +375,10 @@ public class CheckResultsController {
             @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
             @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "loadMode", value = "Results load mode", required = false) @RequestParam(required = false) Optional<CheckResultsDetailedLoadMode> loadMode,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -401,6 +408,7 @@ public class CheckResultsController {
             monthStart.ifPresent(loadParams::setStartMonth);
             monthEnd.ifPresent(loadParams::setEndMonth);
             maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            loadMode.ifPresent(loadParams::setLoadMode);
 
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
@@ -446,9 +454,10 @@ public class CheckResultsController {
             @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
             @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "loadMode", value = "Results load mode", required = false) @RequestParam(required = false) Optional<CheckResultsDetailedLoadMode> loadMode,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -483,6 +492,7 @@ public class CheckResultsController {
             monthStart.ifPresent(loadParams::setStartMonth);
             monthEnd.ifPresent(loadParams::setEndMonth);
             maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            loadMode.ifPresent(loadParams::setLoadMode);
 
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     checks, loadParams, principal.getDataDomainIdentity());
@@ -529,9 +539,10 @@ public class CheckResultsController {
             @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
             @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "loadMode", value = "Results load mode", required = false) @RequestParam(required = false) Optional<CheckResultsDetailedLoadMode> loadMode,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -566,6 +577,7 @@ public class CheckResultsController {
             monthStart.ifPresent(loadParams::setStartMonth);
             monthEnd.ifPresent(loadParams::setEndMonth);
             maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            loadMode.ifPresent(loadParams::setLoadMode);
 
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     monitoringPartition, loadParams, principal.getDataDomainIdentity());
@@ -612,9 +624,10 @@ public class CheckResultsController {
             @ApiParam(name = "checkName", value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName,
             @ApiParam(name = "category", value = "Check category name", required = false) @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "loadMode", value = "Results load mode", required = false) @RequestParam(required = false) Optional<CheckResultsDetailedLoadMode> loadMode,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -649,6 +662,7 @@ public class CheckResultsController {
             monthStart.ifPresent(loadParams::setStartMonth);
             monthEnd.ifPresent(loadParams::setEndMonth);
             maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            loadMode.ifPresent(loadParams::setLoadMode);
 
             CheckResultsListModel[] checkResultsListModels = this.checkResultsDataService.readCheckStatusesDetailed(
                     partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());

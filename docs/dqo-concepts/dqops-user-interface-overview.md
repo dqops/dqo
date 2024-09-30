@@ -195,7 +195,7 @@ When you hover your cursor over a dashboard name, thumbnails will appear.
 The tree view in the **Incidents** section displays a list of all added sources and the number of open incidents for the
 last 15 days (including today) in brackets. The connections with new incidents are displayed in bold font.
 
-![DQOps tree view  - Incidents](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-incidents.png)
+![DQOps tree view  - Incidents](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-incidents2.png)
 
 
 ### **Configuration tree view**
@@ -376,7 +376,7 @@ The buttons and icons located on the left side of each check name allow you to p
 In the **Profiling**, **Monitoring Checks**, and **Partition Checks**, there is a tab called **Table quality status**.
 This tab provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
 
-![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status2.png){ loading=lazy; width="1200px" }
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status3.png){ loading=lazy; width="1200px" }
 
 
 By using the radio buttons in the upper right corner of the screen, you can view the results for the **Current month**,
@@ -396,9 +396,9 @@ The color indicate the current or the highest severity status:
 - Orange for an error
 - Red for a fatal error
 
-You can view the list of executed checks by clicking on the arrow on the right. Hovering over a check name will display more details.
+You can view the list of executed checks by clicking on the arrow on the left. Hovering over a check name will display more details.
 
-![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view2.png){ loading=lazy; width="1200px" }
+![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view3.png){ loading=lazy; width="1200px" }
 
 ## Notifications
 

@@ -39,6 +39,7 @@ import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.locking.RestApiLockService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,7 +109,7 @@ public class TableQualityPoliciesController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<TableQualityPolicyListModel>>> getTableQualityPolicies(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
             TableQualityPolicyList defaultChecksPatternsList = userHome.getTableQualityPolicies();
@@ -144,7 +145,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<TableQualityPolicyListModel>>> getTableQualityPolicyTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Table pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -188,7 +189,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<TableQualityPolicyModel>>> getTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Table pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -239,7 +240,7 @@ public class TableQualityPoliciesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Default checks pattern model with only the target filters") @RequestBody TableQualityPolicyListModel patternModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
         if (patternModel == null || Strings.isNullOrEmpty(patternName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
@@ -295,7 +296,7 @@ public class TableQualityPoliciesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Default checks pattern model") @RequestBody TableQualityPolicyModel patternModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPolicySpec() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -347,7 +348,7 @@ public class TableQualityPoliciesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Target pattern name") @PathVariable String targetPatternName,
             @ApiParam("Source pattern name") @PathVariable String sourcePatternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(targetPatternName) || Strings.isNullOrEmpty(sourcePatternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
@@ -405,7 +406,7 @@ public class TableQualityPoliciesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Default checks pattern model") @RequestBody TableQualityPolicyListModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getTargetTable() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -464,7 +465,7 @@ public class TableQualityPoliciesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Default checks pattern model") @RequestBody TableQualityPolicyModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getPolicySpec() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -512,7 +513,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<Void>>> deleteTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -559,7 +560,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<CheckContainerModel>>> getProfilingTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -605,7 +606,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<CheckContainerModel>>> getMonitoringDailyTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -650,7 +651,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<CheckContainerModel>>> getMonitoringMonthlyTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -695,7 +696,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<CheckContainerModel>>> getPartitionedDailyTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -740,7 +741,7 @@ public class TableQualityPoliciesController {
     public Mono<ResponseEntity<Mono<CheckContainerModel>>> getPartitionedMonthlyTableQualityPolicy(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
@@ -789,7 +790,7 @@ public class TableQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -845,7 +846,7 @@ public class TableQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -901,7 +902,7 @@ public class TableQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -957,7 +958,7 @@ public class TableQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily partitioned checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -1013,7 +1014,7 @@ public class TableQualityPoliciesController {
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly partitioned checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }

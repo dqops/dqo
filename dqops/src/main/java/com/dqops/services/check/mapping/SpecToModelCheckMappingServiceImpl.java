@@ -43,8 +43,8 @@ import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -710,7 +710,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             checkModel.setSimilarChecks(this.similarCheckCache.findSimilarChecksTo(checkTarget, checkName));
         }
 
-        MonitoringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
+        CronScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);
         if (scheduleOverride != null && !scheduleOverride.isDefault()) {
                 checkModel.setEffectiveSchedule(
@@ -731,6 +731,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataGroupingConfiguration(checkSpec.getDataGrouping());
         checkModel.setAlwaysCollectErrorSamples(checkSpec.isAlwaysCollectErrorSamples());
+        checkModel.setDoNotSchedule(checkSpec.isDoNotSchedule());
         checkModel.setCheckSpec(checkSpec);
         checkModel.setCheckTarget(CheckTargetModel.fromCheckTarget(checkTarget));
 
@@ -1176,7 +1177,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleSpec Schedule configuration containing a CRON expression with execution timetable.
      * @return Time of next execution of <code>scheduleSpec</code> if it's not disabled and the service is able to get it. Else null.
      */
-    protected ZonedDateTime safeGetTimeOfNextExecution(MonitoringScheduleSpec scheduleSpec) {
+    protected ZonedDateTime safeGetTimeOfNextExecution(CronScheduleSpec scheduleSpec) {
         if (this.schedulesUtilityService == null || scheduleSpec == null || scheduleSpec.isDisabled()) {
             return null;
         }
@@ -1190,10 +1191,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleLevel Schedule level.
      * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
      */
-    protected EffectiveScheduleModel getEffectiveScheduleModel(DefaultSchedulesSpec schedulesSpec,
+    protected EffectiveScheduleModel getEffectiveScheduleModel(CronSchedulesSpec schedulesSpec,
                                                                CheckRunScheduleGroup scheduleGroup,
                                                                EffectiveScheduleLevelModel scheduleLevel) {
-        MonitoringScheduleSpec scheduleSpec = schedulesSpec != null
+        CronScheduleSpec scheduleSpec = schedulesSpec != null
                 ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)
                 : null;
 
@@ -1213,7 +1214,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleSpec Schedule configuration for which to get activation status.
      * @return {@link ScheduleEnabledStatusModel} indicating the activation status of <code>scheduleSpec</code>.
      */
-    protected ScheduleEnabledStatusModel getScheduleEnabledStatus(MonitoringScheduleSpec scheduleSpec) {
+    protected ScheduleEnabledStatusModel getScheduleEnabledStatus(CronScheduleSpec scheduleSpec) {
         if (scheduleSpec != null) {
             if (scheduleSpec.isDisabled()) {
                 return ScheduleEnabledStatusModel.disabled;

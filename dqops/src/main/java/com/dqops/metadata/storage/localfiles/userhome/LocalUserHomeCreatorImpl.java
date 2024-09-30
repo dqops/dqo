@@ -35,7 +35,7 @@ import com.dqops.metadata.policies.column.ColumnQualityPolicyWrapper;
 import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.metadata.policies.table.TableQualityPolicyWrapper;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
@@ -44,14 +44,14 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
-import com.dqops.metadata.storage.localfiles.columndefaultpatterns.ColumnDefaultChecksPatternYaml;
+import com.dqops.metadata.storage.localfiles.columndefaultpatterns.ColumnLevelDataQualityPolicyYaml;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
 import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
-import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableDefaultChecksPatternYaml;
+import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableLevelDataQualityPolicyYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
 import lombok.extern.slf4j.Slf4j;
@@ -305,7 +305,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                     .resolve(policyFileName);
 
                 if (!Files.exists(tablePolicyFilePath)) {
-                    TableDefaultChecksPatternYaml qualityPolicyYaml = new TableDefaultChecksPatternYaml();
+                    TableLevelDataQualityPolicyYaml qualityPolicyYaml = new TableLevelDataQualityPolicyYaml();
                     qualityPolicyYaml.setSpec(tableQualityPolicySpec);
                     String serializedQualityPolicy = this.yamlSerializer.serialize(qualityPolicyYaml);
                     Files.writeString(tablePolicyFilePath, serializedQualityPolicy);
@@ -319,7 +319,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                         .resolve(policyFileName);
 
                 if (!Files.exists(columnPolicyFilePath)) {
-                    ColumnDefaultChecksPatternYaml qualityPolicyYaml = new ColumnDefaultChecksPatternYaml();
+                    ColumnLevelDataQualityPolicyYaml qualityPolicyYaml = new ColumnLevelDataQualityPolicyYaml();
                     qualityPolicyYaml.setSpec(columnQualityPolicySpec);
                     String serializedQualityPolicy = this.yamlSerializer.serialize(qualityPolicyYaml);
                     Files.writeString(columnPolicyFilePath, serializedQualityPolicy);
@@ -477,7 +477,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() == null) {
-            DefaultSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultSchedules();
+            CronSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultSchedules();
             userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
         }
 
@@ -563,6 +563,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         userHomeContext.flush();
+        userHome.warmUpConnections();
+        userHome.warmUpTables();
     }
 
     /**

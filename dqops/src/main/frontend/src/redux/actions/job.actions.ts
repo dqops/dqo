@@ -165,3 +165,8 @@ export const setJobAllert = (job_allert: IJobAllert) => ({
   type: JOB_ACTION.SET_JOB_ALLERT,
   job_allert
 });
+
+export const setIsTabChanged = (isTabChanged: boolean) => ({
+  type: JOB_ACTION.SET_IS_TAB_CHANGED,
+  isTabChanged
+});

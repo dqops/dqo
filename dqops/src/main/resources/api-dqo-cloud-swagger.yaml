@@ -34,6 +34,11 @@ paths:
         \ Studio Community Connector to query the tenant's data quality data warehouse."
       operationId: "issueTenantDataROQueryAccessToken"
       parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       - name: "owner"
         in: "query"
         description: "The email of account's owner"

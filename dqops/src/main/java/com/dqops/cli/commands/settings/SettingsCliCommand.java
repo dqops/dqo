@@ -26,13 +26,15 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "settings", description = "Show or set settings", subcommands = {
+@CommandLine.Command(name = "settings", description = "Show or set local instance settings", subcommands = {
 		SettingsEditorCliCommand.class,
 		SettingsInitCliCommand.class,
 		SettingsRemoveCliCommand.class,
 		SettingsApiKeyCliCommand.class,
 		SettingsTimeZoneCliCommand.class,
 		SettingsSmtpCliCommand.class,
+		SettingsCatalogCliCommand.class,
+		SettingsInstanceNameCliCommand.class,
 })
 public class SettingsCliCommand extends BaseCommand {
 }

@@ -1,14 +1,14 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataDictionaryListModel } from '../../api';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import Loader from '../../components/Loader';
 import ClientSidePagination from '../../components/Pagination/ClientSidePagination';
 import SvgIcon from '../../components/SvgIcon';
 import { updateTabLabel } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
 import { DataDictionaryApiClient } from '../../services/apiClient';
-import Loader from '../../components/Loader';
 
 export default function DataDictionaryConfigurationTable({
   setDictionaryToEdit
@@ -92,23 +92,11 @@ export default function DataDictionaryConfigurationTable({
                   className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                   disabled={userProfile.can_manage_definitions !== true}
                 >
-                  <SvgIcon name="edit" className="w-4" />
-                </IconButton>
-              </td>
-              <td className="px-2 py-2 text-left block max-w-100">
-                <IconButton
-                  size="sm"
-                  onClick={() =>
-                    setSelectedDictionaryToDelete(
-                      dictionary.dictionary_name ?? ''
-                    )
-                  }
-                  ripple={false}
-                  disabled={userProfile.can_manage_definitions !== true}
-                  color="teal"
-                  className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
-                >
-                  <SvgIcon name="delete" className="w-4" />
+                  <Tooltip content="Modify">
+                    <div>
+                      <SvgIcon name="edit" className="w-4" />
+                    </div>
+                  </Tooltip>
                 </IconButton>
               </td>
               <td className="px-2 py-2 text-left block max-w-100">
@@ -125,9 +113,33 @@ export default function DataDictionaryConfigurationTable({
                     className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                     ripple={false}
                   >
-                    <SvgIcon name="download" className="w-4" />
+                    <Tooltip content="Download">
+                      <div>
+                        <SvgIcon name="download" className="w-4" />
+                      </div>
+                    </Tooltip>{' '}
                   </IconButton>
                 </a>
+              </td>
+              <td className="px-2 py-2 text-left block max-w-100">
+                <IconButton
+                  size="sm"
+                  onClick={() =>
+                    setSelectedDictionaryToDelete(
+                      dictionary.dictionary_name ?? ''
+                    )
+                  }
+                  ripple={false}
+                  disabled={userProfile.can_manage_definitions !== true}
+                  color="teal"
+                  className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
+                >
+                  <Tooltip content="Delete">
+                    <div>
+                      <SvgIcon name="delete" className="w-4" />
+                    </div>
+                  </Tooltip>
+                </IconButton>
               </td>
             </tr>
           ))}

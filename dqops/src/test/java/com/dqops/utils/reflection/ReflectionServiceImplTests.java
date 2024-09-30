@@ -85,7 +85,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     void reflectClass_whenReflectingCheckSpecification_thenReturnsAllBaseFields() {
         ClassInfo classInfo = this.sut.reflectClass(TableRowCountCheckSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(13, classInfo.getFields().size());
+        Assertions.assertEquals(14, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "comments")));
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "disabled")));
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "excludeFromKpi")));
@@ -99,7 +99,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     void reflectClass_whenReflectingCheckSpecification_thenReturnsAlsoInheritedFieldsFields() {
         ClassInfo classInfo = this.sut.reflectClass(TableRowCountCheckSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(13, classInfo.getFields().size());
+        Assertions.assertEquals(14, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "parameters")));
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "error")));
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "warning")));

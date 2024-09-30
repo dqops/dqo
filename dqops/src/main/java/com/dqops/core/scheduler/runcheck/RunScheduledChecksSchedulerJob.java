@@ -20,7 +20,7 @@ import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.quartz.JobDataMapAdapter;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        final MonitoringScheduleSpec runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
+        final CronScheduleSpec runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
 
         try {
             this.runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();

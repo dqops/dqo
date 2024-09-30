@@ -1,9 +1,7 @@
-import datetime
 from typing import Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
 
@@ -17,23 +15,20 @@ class LocalDataDomainModel:
     Attributes:
         domain_name (Union[Unset, str]): Data domain name.
         display_name (Union[Unset, str]): Data domain display name (user-friendly name).
-        created_at (Union[Unset, datetime.datetime]): Data domain creation time.
+        created_at (Union[Unset, int]): Data domain creation time.
         enable_scheduler (Union[Unset, bool]): Enables the job scheduler for this domain.
     """
 
     domain_name: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
-    created_at: Union[Unset, datetime.datetime] = UNSET
+    created_at: Union[Unset, int] = UNSET
     enable_scheduler: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         domain_name = self.domain_name
         display_name = self.display_name
-        created_at: Union[Unset, str] = UNSET
-        if not isinstance(self.created_at, Unset):
-            created_at = self.created_at.isoformat()
-
+        created_at = self.created_at
         enable_scheduler = self.enable_scheduler
 
         field_dict: Dict[str, Any] = {}
@@ -57,12 +52,7 @@ class LocalDataDomainModel:
 
         display_name = d.pop("display_name", UNSET)
 
-        _created_at = d.pop("created_at", UNSET)
-        created_at: Union[Unset, datetime.datetime]
-        if isinstance(_created_at, Unset):
-            created_at = UNSET
-        else:
-            created_at = isoparse(_created_at)
+        created_at = d.pop("created_at", UNSET)
 
         enable_scheduler = d.pop("enable_scheduler", UNSET)
 

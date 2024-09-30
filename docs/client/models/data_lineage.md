@@ -5,6 +5,58 @@ title: DQOps REST API data_lineage models reference
 The references of all objects used by [data_lineage](../operations/data_lineage.md) REST API operations are listed below.
 
 
+## DomainConnectionTableKey
+A key object that identifies every table. These keys are used in a cache to store the most recent
+ table quality status for each table or a data lineage cache.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`data_domain`</span>|Data domain name.|*string*|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">[`physical_table_name`](./common.md#physicaltablename)</span>|Full table name, including the schema and the table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
+
+
+___
+
+## TableLineageFlowModel
+Table lineage flow model that describes the data flow from one table to another table, and the data quality status of the source table.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`source_table`](./data_lineage.md#domainconnectiontablekey)</span>|The source table.|*[DomainConnectionTableKey](./data_lineage.md#domainconnectiontablekey)*|
+|<span class="no-wrap-code">[`target_table`](./data_lineage.md#domainconnectiontablekey)</span>|The target table.|*[DomainConnectionTableKey](./data_lineage.md#domainconnectiontablekey)*|
+|<span class="no-wrap-code">[`source_table_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status of the source table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
+|<span class="no-wrap-code">[`target_table_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status of the target table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
+|<span class="no-wrap-code">[`upstream_combined_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The data quality status identified from the data quality status of all upstream tables and the target table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
+|<span class="no-wrap-code">`row_count`</span>|The row count of the source table.|*long*|
+
+
+___
+
+## TableLineageModel
+The table lineage model that returns all upstream tables, downstream tables, or both.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`relative_table`](#domainconnectiontablekey)</span>|The table for which the data lineage is generated.|*[DomainConnectionTableKey](#domainconnectiontablekey)*|
+|<span class="no-wrap-code">`flows`</span>|A list of data flows from source tables to direct target tables. Describes the data quality status of the source table.|*List[[TableLineageFlowModel](#tablelineageflowmodel)]*|
+|<span class="no-wrap-code">`data_lineage_fully_loaded`</span>|This flag tells if the data lineage was fully loaded. If any data flows are missing or the data quality status of some tables is missing, this flag will return false, which means that the data lineage must be loaded again.|*boolean*|
+
+
+___
+
 ## TableLineageSourceListModel
 Data lineage model that describes one source table of the current table.
 

@@ -447,37 +447,37 @@ Differently from the customization of sensors and rules, it is not possible to o
 a check with the same name in the *checks* folder.
 
 
-## Default check patterns
+## Data quality policies
 DQOps does not require configuring all data quality checks in [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files.
 Instead, DQOps can activate selected data quality checks on all tables and columns matching a search filter.
 
 The initial content of the DQOps user home folder contains two YAML configuration files.
 
-- [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+- [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnLevelDataQualityPolicyYaml.md)
   file containing the default configuration of 
   [data observability checks](data-observability.md) activated for all columns.
 
-- [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+- [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableLevelDataQualityPolicyYaml.md)
   file containing the default configuration of 
-  [data observability checks](data-observability.md) activated for all columns.
+  [data observability checks](data-observability.md) activated for all tables.
 
-The data quality check pattern files are stored in the *patterns* folder, as shown in the following example of the folder structure.
+The data quality policy files are stored in the *patterns* folder, as shown in the following example of the folder structure.
 
 ``` { .asc .annotate hl_lines="4-5" }
 $DQO_USER_HOME
 ├───...
 ├───patterns
-│   ├───default.dqocolumnpattern.yaml(1)
-│   ├───default.dqotablepattern.yaml(2)
-│   └───custom_table_pattern_name.dqocolumnpattern.yaml(3)
+│   ├───Detect column schema changes.dqocolumnpattern.yaml(1)
+│   ├───Detect empty tables daily.dqotablepattern.yaml(2)
+│   └───custom_column_policy_name.dqocolumnpattern.yaml(3)
 └───...   
 ```
 
-1.  The default configuration of column-level checks applied on all columns.
-2.  The default configuration of table-level checks applied on all tables.
+1.  Column-level data quality policy with configuration of data quality checks applied on columns.
+2.  Table-level data quality policy with configuration of data quality checks applied on tables.
 3.  An example of another check pattern file containing a custom configuration of additional column-level checks.
 
-You can create additional table-level or column-level check patterns to activate
+You can create additional table-level or column-level data quality policies to activate
 the data quality checks for a subset of tables or columns.
 Each check pattern file contains a list of filters to match the target tables and columns.
 

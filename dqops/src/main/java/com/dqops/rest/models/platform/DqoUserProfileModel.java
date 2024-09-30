@@ -97,6 +97,12 @@ public class DqoUserProfileModel {
     private Integer jobsLimit;
 
     /**
+     * Limit of the number of supported data domains in an ENTERPRISE version of DQOps.
+     */
+    @JsonPropertyDescription("Limit of the number of supported data domains in an ENTERPRISE version of DQOps.")
+    private Integer dataDomainsLimit;
+
+    /**
      * User role that limits possible operations that the current user can perform.
      */
     @JsonPropertyDescription("User role that limits possible operations that the current user can perform.")
@@ -211,11 +217,21 @@ public class DqoUserProfileModel {
     private boolean canUseDataDomains;
 
     /**
+     * User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role."
+     */
+    @JsonPropertyDescription("User can synchronize data to a data catalog. The instance must be configured correctly and the user must have at least an EDITOR role.")
+    private boolean canSynchronizeToDataCatalog;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQOps Cloud api key.
+     * @param principal Calling user principal.
+     * @param syncToDataCatalogPossible True when it is possible to synchronize to a data catalog.
      * @return User profile.
      */
-    public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey, DqoUserPrincipal principal) {
+    public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey,
+                                                             DqoUserPrincipal principal,
+                                                             boolean syncToDataCatalogPossible) {
         DqoUserProfileModel model = new DqoUserProfileModel() {{
             setUser(principal.getDataDomainIdentity().getUserName());
             setAccountRole(principal.getAccountRole());
@@ -234,6 +250,7 @@ public class DqoUserProfileModel {
             setCanCompareTables(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
             setCanManageUsers(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
             setCanManageAndViewSharedCredentials(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setCanSynchronizeToDataCatalog(syncToDataCatalogPossible && principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
         }};
 
         if (dqoCloudApiKey != null) {
@@ -248,6 +265,7 @@ public class DqoUserProfileModel {
             model.setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
             model.setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
             model.setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+            model.setDataDomainsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.DATA_DOMAINS_LIMIT));
             model.setDataQualityDataWarehouseEnabled(dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == null ||
                     dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == true);
             model.setCanChangeOwnPassword(true);

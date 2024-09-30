@@ -102,7 +102,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         jobCancellationToken.throwIfCancelled();
 
         StatisticsCollectorSearchFilters searchFiltersWithLimit = statisticsCollectorSearchFilters.clone();
-        Integer effectiveSamplesLimit =  samplesLimit != null ? samplesLimit : this.statisticsCollectorConfigurationProperties.getSamplesLimit();
+        Integer effectiveSamplesLimit = samplesLimit != null ? samplesLimit : this.statisticsCollectorConfigurationProperties.getSamplesLimit();
 
         if (startChildJobsPerTable) {
             List<DqoQueueJob<StatisticsCollectionExecutionSummary>> childTableJobs = new ArrayList<>();

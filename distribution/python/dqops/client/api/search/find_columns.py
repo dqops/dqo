@@ -7,6 +7,7 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_type import CheckType
 from ...models.column_list_model import ColumnListModel
+from ...models.data_type_category import DataTypeCategory
 from ...types import UNSET, Response, Unset
 
 
@@ -17,6 +18,7 @@ def _get_kwargs(
     table: Union[Unset, None, str] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     column_type: Union[Unset, None, str] = UNSET,
+    column_category: Union[Unset, None, DataTypeCategory] = UNSET,
     label: Union[Unset, None, List[str]] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
@@ -35,6 +37,12 @@ def _get_kwargs(
     params["column"] = column
 
     params["columnType"] = column_type
+
+    json_column_category: Union[Unset, None, str] = UNSET
+    if not isinstance(column_category, Unset):
+        json_column_category = column_category.value if column_category else None
+
+    params["columnCategory"] = json_column_category
 
     json_label: Union[Unset, None, List[str]] = UNSET
     if not isinstance(label, Unset):
@@ -101,6 +109,7 @@ def sync_detailed(
     table: Union[Unset, None, str] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     column_type: Union[Unset, None, str] = UNSET,
+    column_category: Union[Unset, None, DataTypeCategory] = UNSET,
     label: Union[Unset, None, List[str]] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
@@ -116,6 +125,7 @@ def sync_detailed(
         table (Union[Unset, None, str]):
         column (Union[Unset, None, str]):
         column_type (Union[Unset, None, str]):
+        column_category (Union[Unset, None, DataTypeCategory]):
         label (Union[Unset, None, List[str]]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
@@ -135,6 +145,7 @@ def sync_detailed(
         table=table,
         column=column,
         column_type=column_type,
+        column_category=column_category,
         label=label,
         page=page,
         limit=limit,
@@ -156,6 +167,7 @@ def sync(
     table: Union[Unset, None, str] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     column_type: Union[Unset, None, str] = UNSET,
+    column_category: Union[Unset, None, DataTypeCategory] = UNSET,
     label: Union[Unset, None, List[str]] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
@@ -171,6 +183,7 @@ def sync(
         table (Union[Unset, None, str]):
         column (Union[Unset, None, str]):
         column_type (Union[Unset, None, str]):
+        column_category (Union[Unset, None, DataTypeCategory]):
         label (Union[Unset, None, List[str]]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
@@ -191,6 +204,7 @@ def sync(
         table=table,
         column=column,
         column_type=column_type,
+        column_category=column_category,
         label=label,
         page=page,
         limit=limit,
@@ -206,6 +220,7 @@ async def asyncio_detailed(
     table: Union[Unset, None, str] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     column_type: Union[Unset, None, str] = UNSET,
+    column_category: Union[Unset, None, DataTypeCategory] = UNSET,
     label: Union[Unset, None, List[str]] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
@@ -221,6 +236,7 @@ async def asyncio_detailed(
         table (Union[Unset, None, str]):
         column (Union[Unset, None, str]):
         column_type (Union[Unset, None, str]):
+        column_category (Union[Unset, None, DataTypeCategory]):
         label (Union[Unset, None, List[str]]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
@@ -240,6 +256,7 @@ async def asyncio_detailed(
         table=table,
         column=column,
         column_type=column_type,
+        column_category=column_category,
         label=label,
         page=page,
         limit=limit,
@@ -259,6 +276,7 @@ async def asyncio(
     table: Union[Unset, None, str] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     column_type: Union[Unset, None, str] = UNSET,
+    column_category: Union[Unset, None, DataTypeCategory] = UNSET,
     label: Union[Unset, None, List[str]] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
@@ -274,6 +292,7 @@ async def asyncio(
         table (Union[Unset, None, str]):
         column (Union[Unset, None, str]):
         column_type (Union[Unset, None, str]):
+        column_category (Union[Unset, None, DataTypeCategory]):
         label (Union[Unset, None, List[str]]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
@@ -295,6 +314,7 @@ async def asyncio(
             table=table,
             column=column,
             column_type=column_type,
+            column_category=column_category,
             label=label,
             page=page,
             limit=limit,

@@ -9,8 +9,8 @@ Ensuring data quality requires a process that has two main stages.
 The first stage is the data quality assessment, which focuses on understanding the dataset's structure and finding data quality issues.
 It is followed by an optional data cleansing step to fix identified issues.
 
-The second stage focuses on data quality monitoring to detect data quality issues in the future. 
-This stage is also called data observability and depends on running data quality checks and anomaly detection triggered by a scheduler.
+The second stage focuses on data quality monitoring to detect data quality issues in the future.
+This stage, also called data observability, depends on running data quality checks and anomaly detection triggered by a scheduler.
 
 
 ### Problem
@@ -43,10 +43,10 @@ graph LR
   DATA_QUALITY_REVIEW --> |Valid issues<br/>confirmed| DATA_CLEANSING[<strong>Data cleansing<br/></strong> to fix data<br/>quality issues]:::cleansing;
   DATA_CLEANSING --> |Activate<br/>data observablity| DATA_OBSERVABILITY[<strong>Data quality<br/>monitoring</strong>]:::monitoring;
   
-  classDef assessment fill:#57ff6a;
-  classDef review fill:#57e3ff;
-  classDef cleansing fill:#5795ff;
-  classDef monitoring fill:#fccf86;
+  classDef assessment fill:#A9DBD4;
+  classDef review fill:#8EB5CD;
+  classDef cleansing fill:#A9B4DB;
+  classDef monitoring fill:#F9D59F;
 ```
 
 The data quality lifecycle is a holistic process of ensuring data quality. 
@@ -65,7 +65,7 @@ graph LR
   ASSESSMENT_RESULTS_REVIEW --> |Correct data<br/>quality rules| DISABLE_FALSE_CHECKS[Disable false-positive<br/>checks and tweak rules]:::step;
   DISABLE_FALSE_CHECKS --> |Share data quality<br/>status report| CONSULT_DQ_ISSUES[Review data quality<br/>issues with the data owner]:::step;
   
-  classDef step fill:#57ff6a;
+  classDef step fill:#A9DBD4;
 ```
 
 The purpose of performing a data quality assessment of a table is to understand its structure and data distribution
@@ -106,9 +106,9 @@ DQOps users, such as data engineers, data stewards, or data quality teams,
 can speed up this process by using the DQOps rule mining engine to propose the configuration of data quality checks
 to detect the most common data quality issues. DQOps uses statistics and data samples to propose these checks and their rule thresholds (parameters).
 
-The following screenshot shows the proposition of some data quality checks that should detect issues if less than 2% of records are invalid.
+The following screenshot shows the rule mining proposals of data quality checks that should detect issues if less than 2% of records are invalid.
 
-![Data quality rule mining screen in DQOps](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-assessment-rule-mining-min.png){ loading=lazy; width="1200px" }
+![Data quality rule mining screen in DQOps](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-assessment-rule-mining-min2.png){ loading=lazy; width="1200px" }
 
 
 ### Review data quality issues
@@ -117,27 +117,27 @@ graph LR
   EXPORT_DATA_QUALITY_REPOT[Export data<br/>quality report]:::step --> |Send issue report<br/>for review| REVIEW_ISSUES[Review and confirm<br/>data quality issues<br/>by data owner]:::step;
   REVIEW_ISSUES --> |Receive confirmation<br/> of valid issues| PLAN_DATA_CLEANSING[Plan data cleansing<br/>and tune data quality rules]:::step;
   
-  classDef step fill:#57e3ff;
+  classDef step fill:#8EB5CD;
 ```
 
 After performing the data quality assessment, the user will identify data quality issues that should be fixed. The data quality issues will fall into two categories:
 
-* Invalid data in the data sources, which requires the engagement of the data source's owner to fix.
+* **Invalid data in the data sources**, which requires the engagement of the data source's owner to fix.
   For example, the data must be fixed in a line-of-business application (i.e., CRM, ERP).
 
-* Data transformation issues that can be corrected in the data pipeline.
+* **Data transformation issues** that can be corrected in the data pipeline.
 
 The tasks for fixing confirmed data quality issues should be planned for the data cleansing tasks.
 False-positive issues will require disabling incorrectly configured data quality checks.
 
-DQOps shows the [data quality status](dqops-user-interface-overview.md#table-quality-status) for each table in the form of a matrix.
-Each row shows the data quality health status for one table's row. 
-The columns on this view group checks into [categories of data quality checks](../categories-of-data-quality-checks/index.md),
+DQOps displays the [**Data quality status**](dqops-user-interface-overview.md#table-quality-status) for each table in the form of a matrix.
+Each row represents the data quality health status for one table's row. 
+The columns in this view group checks into [categories of data quality checks](../categories-of-data-quality-checks/index.md),
 but an alternative view to show [data quality dimensions](data-quality-dimensions.md) is also supported.
 
 The data quality checks are configured to raise data quality issues at various [severity levels](definition-of-data-quality-checks/index.md#issue-severity-levels). 
 Warnings for minor problems, errors for problems that require fixing within a reasonable time, 
-and fatal issues that require stopping data pipelines and applying data cleansing immediately.
+and fatal errors that require stopping data pipelines and applying data cleansing immediately.
 The colors of cells in the matrix show the severity status of the most severe data quality issue for each column and category of checks.
 
 ![Table data quality status in DQOps](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-table-quality-status-min.png){ loading=lazy; width="1200px" }
@@ -155,7 +155,7 @@ graph LR
   FIX_IN_DATA_SOURCE --> |Issues fixed<br/>in the data source| FIX_DATA_PIPELINES[Fix transformations<br/>in data pipelines]:::step; 
   FIX_DATA_PIPELINES --> |Data<br/>fixed| VALIDATE_WITH_CHECKS[Validate fixes<br/>with data quality checks]:::step;
   
-  classDef step fill:#5795ff;
+  classDef step fill:#A9B4DB;
 ```
 
 The responsibility of fixing data cleansing tasks lies with the business platform owners, who are equipped to address issues in line-of-business applications.
@@ -164,7 +164,7 @@ The issues that can be fixed in the data pipelines should be fixed by updating t
 After the data is fixed, the data profiling checks previously configured in DQOps should be rerun to confirm that the data quality issues were fixed.
 
 DQOps assists in data cleansing by [capturing data quality error samples](data-quality-error-sampling.md) from a subset of invalid records.
-The following screen shows how DQOps detected column values not in the list of accepted categorical values.
+The following screen shows how DQOps detected column values that were not in the list of accepted categorical values.
 
 ![Data quality errors captured by DQOps error sampling](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-error-sampling-min.png){ loading=lazy; width="1200px" }
 
@@ -179,15 +179,16 @@ graph LR
   REVIEW_AND_CONFIRM_ISSUE --> |Incident<br/>acknowledged| FIX_DATA[Fix data<br/>or data pipelines]:::step;
   FIX_DATA --> |Issues<br/>fixed| REVALIDATE_DATA_WITH_CHECKS[Revalidate data<br/>with data<br/>quality checks]:::step;
   
-  classDef step fill:#fccf86;
+  classDef step fill:#F9D59F;
 ```
 
-As soon as a valid set of data profiling checks is selected and false-positive data quality checks are disabled, the user is ready to activate continuous data quality monitoring.
+As soon as a valid set of data profiling checks is selected and false-positive data quality checks are disabled, 
+the user is ready to activate continuous data quality monitoring.
 
 DQOps supports two types of continuous data quality monitoring checks:
 
-* [Monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) perform full-table scans in daily or monthly periods.
-* [Partition checks](definition-of-data-quality-checks/partition-checks.md) evaluate the quality of each daily or monthly partition for append-only or huge tables.
+* [**Monitoring checks**](definition-of-data-quality-checks/data-observability-monitoring-checks.md) perform full-table scans in daily or monthly periods.
+* [**Partition checks**](definition-of-data-quality-checks/partition-checks.md) evaluate the quality of each daily or monthly partition for append-only or huge tables.
 
 These two types of checks are configured in the *Monitoring* and *Partition* sections of the [DQOps user interface](dqops-user-interface-overview.md).
 DQOps will evaluate the configured data quality checks and raise [data quality incidents](grouping-data-quality-issues-to-incidents.md#incident-management) when data quality issues are detected.
@@ -207,8 +208,8 @@ DQOps measures the health of each table by calculating a data quality KPI score 
 The [data quality KPI formula](definition-of-data-quality-kpis.md#data-quality-score-formula) used by DQOps
 is derived as the percentage of successful data quality checks out of all executed data quality checks during the current reporting period, which is the current month.
 
-The data quality KPI below 100% is a piece of information for the data consumer that says that the table
-is currently affected by data quality issues or it was affected by issues recently. 
+The data quality KPI below 100% is information for the data consumer that says the table is currently 
+affected by data quality issues or was recently affected by issues 
 The user should not fully trust that the dataset will be healthy tomorrow.
 
 The color of each cell identifies the highest [severity level](definition-of-data-quality-checks/index.md#issue-severity-levels)
@@ -216,21 +217,21 @@ The color of each cell identifies the highest [severity level](definition-of-dat
 
 ![Data quality KPIs for tables screenshot in DQOps](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-table-kpis-list-min.png){ loading=lazy; width="1200px" }
 
-The DQOps data quality process depends on two stages. In the first stage, users are performing
-the data quality assessment using data quality checks available in the **Profiling** section of the application.
-The user should review the data quality status of the table after running profiling checks on it. 
+The DQOps data quality process has two stages. In the first stage, users perform the data quality assessment using data 
+quality checks available in the **Profiling** section of the application. After running profiling checks on a table, 
+the user should review its data quality status.
 The false-positive data quality checks should be disabled, or their data quality rule thresholds should be tweaked to match requirements and the actual data distribution.
 
-Once the user has configured all [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md),
-DQOps requires a second stage to copy **approved** data quality checks from the profiling section to the **Monitoring checks** or **Partition checks** sections. 
-This process is assisted by using the rule mining engine to copy profiling checks and their parameters.
+Once the user configures all [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md),
+DQOps requires a second stage to copy **approved** data quality checks from the profiling section to the **Monitoring checks** or **Partition checks** sections.
+The rule mining engine assists this process by copying profiling checks and their parameters.
 
 The data observability engine will run the checks copied to the monitoring or partition check sections, 
 and the data quality results will be checkpointed in the local [data quality data lake](architecture/dqops-architecture.md#data-quality-data-lake).
 DQOps stores the [results of all data quality checks](data-storage-of-data-quality-results.md)
 locally in Parquet files structured to be compatible with any data lake.
 
-![Configuring data quality monitoring checks in DQOps using rule miner](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-rule-mining-monitoring-checks-min.png){ loading=lazy; width="1200px" }
+![Configuring data quality monitoring checks in DQOps using rule miner](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-rule-mining-monitoring-checks-min2.png){ loading=lazy; width="1200px" }
 
 An alternative method of configuring data quality checks is using only [data quality policies](data-observability.md) managed by the data observability engine.
 The policies are named configurations of data quality checks that are activated on every table or column that matches a filter.
@@ -239,7 +240,7 @@ The data quality policy configuration will activate not null checks for all thes
 
 An example of a data quality check named "*Abnormal change in row count since the last known value*"
 shown on one of the previous screenshots of the check editor shows such a check.
-Its on/off switch control uses a light green color instead of regular green for checks configured manually or using the [rule engine](data-quality-rule-mining.md).
+Its on/off switch control uses a light green color instead of dark green for checks configured manually or using the [rule engine](data-quality-rule-mining.md).
 
 
 ## Data quality incident management
@@ -269,8 +270,8 @@ The details of the incident are shown after clicking a single incident. DQOps su
 
 ![Data quality incident screen in DQOps](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-incidents-detail-min.png){ loading=lazy; width="1200px" }
 
-The users can also [configure incident notifications](grouping-data-quality-issues-to-incidents.md#incident-notifications)
-and route notifications to correct data teams based on filters, such as the connection or table name.
+Users can also [configure incident notifications](grouping-data-quality-issues-to-incidents.md#incident-notifications)
+and route them to the correct data teams based on filters, such as the connection or table name.
 
 
 ## What's next

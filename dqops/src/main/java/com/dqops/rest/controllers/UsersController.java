@@ -26,6 +26,7 @@ import com.dqops.core.principal.DqoAccessDeniedException;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,7 +77,7 @@ public class UsersController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<DqoUserRolesModel>>> getAllUsers(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             try {
                 Collection<DqoUserRolesModel> dqoUserRolesModels = this.userManagementService.listUsers(principal);
                 Stream<DqoUserRolesModel> sortedStream = dqoUserRolesModels.stream()
@@ -110,7 +111,7 @@ public class UsersController {
     public Mono<ResponseEntity<Mono<DqoUserRolesModel>>> getUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(email)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -152,7 +153,7 @@ public class UsersController {
     public Mono<ResponseEntity<Mono<Void>>> createUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User model") @RequestBody DqoUserRolesModel userModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (userModel == null || Strings.isNullOrEmpty(userModel.getEmail())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -195,7 +196,7 @@ public class UsersController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
             @ApiParam("User model") @RequestBody DqoUserRolesModel userModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (userModel == null || Strings.isNullOrEmpty(email) ||
                     !Objects.equals(email, userModel.getEmail())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -237,7 +238,7 @@ public class UsersController {
     public Mono<ResponseEntity<Mono<Void>>> deleteUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(email)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -280,7 +281,7 @@ public class UsersController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
             @ApiParam("New Password") @RequestBody String password) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(email) || Strings.isNullOrEmpty(password)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -323,7 +324,7 @@ public class UsersController {
     public Mono<ResponseEntity<Mono<Void>>> changeCallerPassword(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("New Password") @RequestBody String password) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             try {
                 this.userManagementService.changePassword(principal, principal.getDataDomainIdentity().getUserName(), password);
             }

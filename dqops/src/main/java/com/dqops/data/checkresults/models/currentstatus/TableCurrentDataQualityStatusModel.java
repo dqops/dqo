@@ -50,6 +50,17 @@ import java.util.stream.Stream;
 @Data
 public class TableCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder, Cloneable {
     /**
+     * A fake column name that collects values from all upstream columns.
+     */
+    public static final String UPSTREAM_FAKE_COLUMN_NAME = "__upstream_columns_combined_status";
+
+    /**
+     * Data domain name.
+     */
+    @JsonPropertyDescription("Data domain name.")
+    private String dataDomain;
+
+    /**
      * The connection name in DQOps.
      */
     @JsonPropertyDescription("The connection name in DQOps.")
@@ -66,6 +77,18 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      */
     @JsonPropertyDescription("The table name.")
     private String tableName;
+
+    /**
+     * Most recent row count. Returned only when the status of the monitoring or profiling checks was requested.
+     */
+    @JsonPropertyDescription("Most recent row count. Returned only when the status of the monitoring or profiling checks was requested.")
+    private Long totalRowCount;
+
+    /**
+     * The last measured data freshness delay in days. Requires any of the data freshness checks in the monitoring section configured and up to date.
+     */
+    @JsonPropertyDescription("The last measured data freshness delay in days. Requires any of the data freshness checks in the monitoring section configured and up to date.")
+    private Double dataFreshnessDelayDays;
 
     /**
      * The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
@@ -169,6 +192,9 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      * Analyzes all table level checks and column level checks to calculate the highest severity level at a table level.
      */
     public void calculateHighestCurrentAndHistoricSeverity() {
+        this.currentSeverity = null;
+        this.highestHistoricalSeverity = null;
+
         for (ColumnCurrentDataQualityStatusModel columnModel : this.columns.values()) {
             columnModel.calculateHighestCurrentAndHistoricSeverity();
 
@@ -267,6 +293,8 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      * Calculates the status for each data quality dimension, aggregates statuses of data quality checks for each data quality dimension.
      */
     public void calculateStatusesForDataQualityDimensions() {
+        this.dimensions.clear();
+
         for (ColumnCurrentDataQualityStatusModel columnModel : this.columns.values()) {
             columnModel.calculateStatusesForDimensions();
 
@@ -315,6 +343,30 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);
         }
+    }
+
+    /**
+     * Creates a deep clone of the object.
+     * @return Deep cloned object.
+     */
+    public TableCurrentDataQualityStatusModel deepClone() {
+        TableCurrentDataQualityStatusModel cloned = this.clone();
+        cloned.checks = new LinkedHashMap<>();
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> checkEntry : this.checks.entrySet()) {
+            cloned.checks.put(checkEntry.getKey(), checkEntry.getValue().clone());
+        }
+
+        cloned.columns = new LinkedHashMap<>();
+        for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> columnEntry : this.columns.entrySet()) {
+            cloned.columns.put(columnEntry.getKey(), columnEntry.getValue().deepClone());
+        }
+
+        cloned.dimensions = new LinkedHashMap<>();
+        for (Map.Entry<String, DimensionCurrentDataQualityStatusModel> dimensionEntry : this.dimensions.entrySet()) {
+            cloned.dimensions.put(dimensionEntry.getKey(), dimensionEntry.getValue().clone());
+        }
+
+        return cloned;
     }
 
     /**
@@ -371,6 +423,49 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         return tableStatusClone;
     }
 
+    /**
+     * Appends results from another table to find the highest severity issues. When this table and the appended tables have the same
+     * columns or checks, picks the highest severity of both.
+     * This operation is used to calculate a cumulative data quality status that includes the statuses of source tables along the upstream data lineage.
+     * @param upstreamTableResults Data quality status from another table.
+     */
+    public void appendResultsFromUpstreamTable(TableCurrentDataQualityStatusModel upstreamTableResults) {
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> otherCheckEntry : upstreamTableResults.getChecks().entrySet()) {
+            CheckCurrentDataQualityStatusModel currentCheckStatus = this.checks.get(otherCheckEntry.getKey());
+            if (currentCheckStatus == null) {
+                this.checks.put(otherCheckEntry.getKey(), otherCheckEntry.getValue());
+            } else {
+                currentCheckStatus.appendCheckFromUpstreamTable(otherCheckEntry.getValue());
+            }
+        }
+
+        if (!upstreamTableResults.getColumns().isEmpty()) {
+            ColumnCurrentDataQualityStatusModel upstreamAggregateColumn = this.columns.get(UPSTREAM_FAKE_COLUMN_NAME);
+            if (upstreamAggregateColumn == null) {
+                upstreamAggregateColumn = new ColumnCurrentDataQualityStatusModel();
+            }
+            this.columns.put(UPSTREAM_FAKE_COLUMN_NAME, upstreamAggregateColumn);
+
+            for (Map.Entry<String, ColumnCurrentDataQualityStatusModel> otherColumn : upstreamTableResults.getColumns().entrySet()) {
+                for (Map.Entry<String, CheckCurrentDataQualityStatusModel> otherCheckEntry : otherColumn.getValue().getChecks().entrySet()) {
+                    CheckCurrentDataQualityStatusModel currentCheckStatus = upstreamAggregateColumn.getChecks().get(otherCheckEntry.getKey());
+
+                    if (currentCheckStatus == null) {
+                        upstreamAggregateColumn.getChecks().put(otherCheckEntry.getKey(), otherCheckEntry.getValue());
+                    } else {
+                        currentCheckStatus.appendCheckFromUpstreamTable(otherCheckEntry.getValue());
+                    }
+                }
+            }
+        }
+
+        countIssuesFromCheckResults();
+        calculateHighestCurrentAndHistoricSeverity();
+        calculateStatusesForDataQualityDimensions();
+
+        this.tableExist = this.tableExist && upstreamTableResults.tableExist;
+    }
+
     public static class TableCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<TableCurrentDataQualityStatusModel> {
         @Override
         public TableCurrentDataQualityStatusModel createSample() {
@@ -416,6 +511,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                     (validResultsAggregate + warningResults) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
 
             TableCurrentDataQualityStatusModel result = new TableCurrentDataQualityStatusModel() {{
+                setDataDomain("");
                 setConnectionName(SampleStringsRegistry.getConnectionName());
                 setSchemaName(SampleStringsRegistry.getSchemaName());
                 setTableName(SampleStringsRegistry.getTableName());
@@ -431,6 +527,8 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                 setDataQualityKpi(dataQualityKpi);
                 setFatals(0);
                 setExecutionErrors(0);
+                setTotalRowCount(122000L);
+                setDataFreshnessDelayDays(1.221);
             }};
             result.calculateHighestCurrentAndHistoricSeverity();
             return result;

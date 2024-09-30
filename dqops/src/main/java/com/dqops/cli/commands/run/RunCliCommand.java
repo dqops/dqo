@@ -149,7 +149,7 @@ public class RunCliCommand extends BaseCommand implements ICommand {
         }
         if (this.dqoSchedulerConfigurationProperties.getStart() == null) {
             // the scheduler was not configured before
-            this.jobSchedulerService.triggerMetadataSynchronization();
+            this.jobSchedulerService.triggerMetadataSynchronization(null);
         }
 
         if (runDuration == null) {

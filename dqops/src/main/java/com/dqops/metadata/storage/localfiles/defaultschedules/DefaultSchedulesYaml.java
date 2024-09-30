@@ -1,7 +1,7 @@
 package com.dqops.metadata.storage.localfiles.defaultschedules;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -22,7 +22,7 @@ public class DefaultSchedulesYaml implements InvalidYamlStatusHolder {
     private SpecificationKind kind = SpecificationKind.default_schedules;
 
     @JsonPropertyDescription("The configuration object with the definition of the default schedules")
-    private DefaultSchedulesSpec spec = new DefaultSchedulesSpec();
+    private CronSchedulesSpec spec = new CronSchedulesSpec();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -30,7 +30,7 @@ public class DefaultSchedulesYaml implements InvalidYamlStatusHolder {
     public DefaultSchedulesYaml() {
     }
 
-    public DefaultSchedulesYaml(DefaultSchedulesSpec spec) {
+    public DefaultSchedulesYaml(CronSchedulesSpec spec) {
         this.spec = spec;
     }
 
@@ -70,7 +70,7 @@ public class DefaultSchedulesYaml implements InvalidYamlStatusHolder {
      * Returns a data source specification.
      * @return Data source specification.
      */
-    public DefaultSchedulesSpec getSpec() {
+    public CronSchedulesSpec getSpec() {
         return spec;
     }
 
@@ -78,7 +78,7 @@ public class DefaultSchedulesYaml implements InvalidYamlStatusHolder {
      * Sets a data source specification.
      * @param spec Data source specification.
      */
-    public void setSpec(DefaultSchedulesSpec spec) {
+    public void setSpec(CronSchedulesSpec spec) {
         this.spec = spec;
     }
 

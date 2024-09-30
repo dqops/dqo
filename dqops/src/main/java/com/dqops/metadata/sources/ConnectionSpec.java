@@ -38,7 +38,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -87,6 +87,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
 
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
+            put("auto_import_tables", o -> o.autoImportTables);
             put("incident_grouping", o -> o.incidentGrouping);
         }
     };
@@ -188,7 +189,17 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultSchedulesSpec schedules;
+    private CronSchedulesSpec schedules;
+
+    @JsonPropertyDescription("Configuration of CRON schedule used to automatically import new tables in regular intervals.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private AutoImportTablesSpec autoImportTables;
+
+    @JsonPropertyDescription("Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is \"cloud\".")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String scheduleOnInstance;
 
     @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
     @ToString.Exclude
@@ -503,7 +514,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
-    public DefaultSchedulesSpec getSchedules() {
+    public CronSchedulesSpec getSchedules() {
         return schedules;
     }
 
@@ -511,10 +522,45 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
      * Sets the configuration of schedules for running each type of checks.
      * @param schedules Configuration of schedules.
      */
-    public void setSchedules(DefaultSchedulesSpec schedules) {
+    public void setSchedules(CronSchedulesSpec schedules) {
         setDirtyIf(!Objects.equals(this.schedules, schedules));
         this.schedules = schedules;
         propagateHierarchyIdToField(schedules, "schedules");
+    }
+
+    /**
+     * Returns the configuration of automatic table import that is performed by a CRON scheduler.
+     * @return Automatic table import settings.
+     */
+    public AutoImportTablesSpec getAutoImportTables() {
+        return autoImportTables;
+    }
+
+    /**
+     * Sets the configuration of an automatic table import.
+     * @param autoImportTables Configuration of an automatic table import.
+     */
+    public void setAutoImportTables(AutoImportTablesSpec autoImportTables) {
+        setDirtyIf(!Objects.equals(this.autoImportTables, autoImportTables));
+        this.autoImportTables = autoImportTables;
+        propagateHierarchyIdToField(autoImportTables, "auto_import_tables");
+    }
+
+    /**
+     * Returns the name of a named DQOps instance where checks from this connection are triggered by a CRON scheduler.
+     * @return Instance name which schedules checks in this connection.
+     */
+    public String getScheduleOnInstance() {
+        return scheduleOnInstance;
+    }
+
+    /**
+     * Sets the name of a DQOps instance that will schedule checks.
+     * @param scheduleOnInstance Instance name to schedule or null to run on any instance.
+     */
+    public void setScheduleOnInstance(String scheduleOnInstance) {
+        setDirtyIf(!Objects.equals(this.scheduleOnInstance, scheduleOnInstance));
+        this.scheduleOnInstance = scheduleOnInstance;
     }
 
     /**
@@ -709,6 +755,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             cloned.comments = null;
             cloned.schedules = null;
             cloned.advancedProperties = null;
+            cloned.autoImportTables = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -729,6 +776,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             cloned.schedules = null;
             cloned.incidentGrouping = null;
             cloned.advancedProperties = null;
+            cloned.autoImportTables = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

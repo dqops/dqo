@@ -6,14 +6,14 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_run_schedule_group import CheckRunScheduleGroup
-from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
+from ...models.cron_schedule_spec import CronScheduleSpec
 from ...types import Response
 
 
 def _get_kwargs(
     scheduling_group: CheckRunScheduleGroup,
     *,
-    json_body: MonitoringScheduleSpec,
+    json_body: CronScheduleSpec,
 ) -> Dict[str, Any]:
 
     pass
@@ -55,7 +55,7 @@ def sync_detailed(
     scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
-    json_body: MonitoringScheduleSpec,
+    json_body: CronScheduleSpec,
 ) -> Response[Any]:
     """updateDefaultSchedules
 
@@ -63,7 +63,7 @@ def sync_detailed(
 
     Args:
         scheduling_group (CheckRunScheduleGroup):
-        json_body (MonitoringScheduleSpec):
+        json_body (CronScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -89,7 +89,7 @@ async def asyncio_detailed(
     scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
-    json_body: MonitoringScheduleSpec,
+    json_body: CronScheduleSpec,
 ) -> Response[Any]:
     """updateDefaultSchedules
 
@@ -97,7 +97,7 @@ async def asyncio_detailed(
 
     Args:
         scheduling_group (CheckRunScheduleGroup):
-        json_body (MonitoringScheduleSpec):
+        json_body (CronScheduleSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

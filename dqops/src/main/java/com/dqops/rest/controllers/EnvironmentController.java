@@ -15,6 +15,8 @@
  */
 package com.dqops.rest.controllers;
 
+import com.dqops.core.catalogsync.DataCatalogHealthSendService;
+import com.dqops.core.configuration.DqoIntegrationsConfigurationProperties;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -26,6 +28,7 @@ import com.dqops.core.secrets.signature.SignedObject;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +65,8 @@ public class EnvironmentController {
     private Environment springEnvironment;
     private InstanceCloudLoginService instanceCloudLoginService;
     private LocalDataDomainRegistry dataDomainRegistry;
+    private DataCatalogHealthSendService dataCatalogHealthSendService;
+
 
     /**
      * Dependency injection constructor of the environment controller.
@@ -69,16 +74,20 @@ public class EnvironmentController {
      * @param springEnvironment Spring Boot environment.
      * @param instanceCloudLoginService Local instance authentication token service, used to issue a local API key.
      * @param dataDomainRegistry Data domain registry - to detect if there are any data domains, so data domains are supported.
+     * @param dataCatalogHealthSendService Data catalog notification send service - to see if data catalog synchronization is possible.
      */
     @Autowired
     public EnvironmentController(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                                  Environment springEnvironment,
                                  InstanceCloudLoginService instanceCloudLoginService,
-                                 LocalDataDomainRegistry dataDomainRegistry) {
+                                 LocalDataDomainRegistry dataDomainRegistry,
+                                 DataCatalogHealthSendService dataCatalogHealthSendService) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.springEnvironment = springEnvironment;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dataDomainRegistry = dataDomainRegistry;
+
+        this.dataCatalogHealthSendService = dataCatalogHealthSendService;
     }
 
     /**
@@ -99,7 +108,7 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<DqoSettingsModel>>> getDqoSettings(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             final DqoSettingsModel dqoSettingsModel = new DqoSettingsModel();
             final MutablePropertySources sources = ((AbstractEnvironment) this.springEnvironment).getPropertySources();
 
@@ -149,19 +158,20 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<DqoUserProfileModel>>> getUserProfile(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-            return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
-            if (apiKey == null) {
-                DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+            return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+                DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
+                if (apiKey == null) {
+                    DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+                    return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+                }
+
+                DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(
+                        apiKey, principal, this.dataCatalogHealthSendService.isSynchronizationSupported());
+                if (this.dataDomainRegistry.getNestedDataDomains() == null) {
+                    dqoUserProfileModel.setCanUseDataDomains(false);
+                }
+
                 return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
-            }
-
-            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
-            if (this.dataDomainRegistry.getNestedDataDomains() == null) {
-                dqoUserProfileModel.setCanUseDataDomains(false);
-            }
-
-            return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
         }));
     }
 
@@ -184,10 +194,10 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<String>>> issueApiKey(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-                return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
+                return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+                    SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
 
-            return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
-        }));
+                    return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
+                }));
     }
 }

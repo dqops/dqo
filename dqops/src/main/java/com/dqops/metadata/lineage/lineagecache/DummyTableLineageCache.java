@@ -16,6 +16,8 @@
 
 package com.dqops.metadata.lineage.lineagecache;
 
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -29,7 +31,7 @@ public class DummyTableLineageCache implements TableLineageCache {
      * @return Table entry node or null when the lineage for the table was not retrieved.
      */
     @Override
-    public TableLineageCacheEntry getTableLineageEntry(TableLineageCacheKey tableLineageCacheKey) {
+    public TableLineageCacheEntry getTableLineageEntry(DomainConnectionTableKey tableLineageCacheKey) {
         return null;
     }
 
@@ -41,7 +43,7 @@ public class DummyTableLineageCache implements TableLineageCache {
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     @Override
-    public void invalidateObject(TableLineageCacheKey tableLineageKey, boolean replacingCachedFile) {
+    public void invalidateObject(DomainConnectionTableKey tableLineageKey, boolean replacingCachedFile) {
 
     }
 

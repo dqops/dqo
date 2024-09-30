@@ -136,6 +136,9 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
      * Calculates the highest current severity status and historic severity status from all checks.
      */
     public void calculateHighestCurrentAndHistoricSeverity() {
+        this.currentSeverity = null;
+        this.highestHistoricalSeverity = null;
+
         for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
             if (this.currentSeverity == null) {
                 this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
@@ -159,7 +162,9 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
      * Processes the check results and computes results for each data quality dimension.
      */
     public void calculateStatusesForDimensions() {
-        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+        this.dimensions.clear();
+
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : this.checks.values()) {
             String qualityDimension = checkStatusModel.getQualityDimension();
             if (qualityDimension == null) {
                 continue; // should not happen, but if somebody intentionally configures an empty dimension....
@@ -201,6 +206,26 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);
         }
+    }
+
+    /**
+     * Makes a deep clone of the object.
+     * @return Deep clone of the object.
+     */
+    public ColumnCurrentDataQualityStatusModel deepClone() {
+        ColumnCurrentDataQualityStatusModel cloned = this.clone();
+
+        cloned.checks = new LinkedHashMap<>();
+        for (Map.Entry<String, CheckCurrentDataQualityStatusModel> checkEntry : this.checks.entrySet()) {
+            cloned.checks.put(checkEntry.getKey(), checkEntry.getValue().clone());
+        }
+
+        cloned.dimensions = new LinkedHashMap<>();
+        for (Map.Entry<String, DimensionCurrentDataQualityStatusModel> dimensionEntry : this.dimensions.entrySet()) {
+            cloned.dimensions.put(dimensionEntry.getKey(), dimensionEntry.getValue().clone());
+        }
+
+        return cloned;
     }
 
     /**

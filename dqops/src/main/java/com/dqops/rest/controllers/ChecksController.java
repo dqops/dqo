@@ -32,6 +32,7 @@ import com.dqops.rest.models.metadata.CheckDefinitionFolderModel;
 import com.dqops.rest.models.metadata.CheckDefinitionListModel;
 import com.dqops.rest.models.metadata.CheckDefinitionModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class ChecksController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<CheckDefinitionListModel>>> getAllChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
             List<CheckDefinitionListModel> allChecks = checkDefinitionFolderModel.getAllChecks();
             allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
@@ -119,7 +120,7 @@ public class ChecksController {
     public Mono<ResponseEntity<Mono<CheckDefinitionModel>>> getCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullCheckName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -172,7 +173,7 @@ public class ChecksController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName,
             @ApiParam("Check model") @RequestBody CheckDefinitionModel checkDefinitionModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (checkDefinitionModel == null || Strings.isNullOrEmpty(fullCheckName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -224,7 +225,7 @@ public class ChecksController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("List of check definitions") @RequestBody CheckDefinitionModel checkDefinitionModel,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullCheckName) || checkDefinitionModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -293,7 +294,7 @@ public class ChecksController {
     public Mono<ResponseEntity<Mono<Void>>> deleteCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullCheckName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -334,7 +335,7 @@ public class ChecksController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<CheckDefinitionFolderModel>>> getCheckFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
 
             return new ResponseEntity<>(Mono.just(checkDefinitionFolderModel), HttpStatus.OK);

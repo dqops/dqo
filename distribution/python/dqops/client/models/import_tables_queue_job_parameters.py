@@ -18,12 +18,15 @@ class ImportTablesQueueJobParameters:
             imported must contain a substring matching this parameter. This filter is case sensitive.
         table_names (Union[Unset, List[str]]): Optional list of table names inside the schema. When the list of tables
             is empty, all tables are imported.
+        tables_import_limit (Union[Unset, int]): Optional parameter to configure the limit of tables that are imported
+            from a single schema. Leave this parameter blank to use the default limit (300 tables).
     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name_contains: Union[Unset, str] = UNSET
     table_names: Union[Unset, List[str]] = UNSET
+    tables_import_limit: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -33,6 +36,8 @@ class ImportTablesQueueJobParameters:
         table_names: Union[Unset, List[str]] = UNSET
         if not isinstance(self.table_names, Unset):
             table_names = self.table_names
+
+        tables_import_limit = self.tables_import_limit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -45,6 +50,8 @@ class ImportTablesQueueJobParameters:
             field_dict["tableNameContains"] = table_name_contains
         if table_names is not UNSET:
             field_dict["tableNames"] = table_names
+        if tables_import_limit is not UNSET:
+            field_dict["tablesImportLimit"] = tables_import_limit
 
         return field_dict
 
@@ -59,11 +66,14 @@ class ImportTablesQueueJobParameters:
 
         table_names = cast(List[str], d.pop("tableNames", UNSET))
 
+        tables_import_limit = d.pop("tablesImportLimit", UNSET)
+
         import_tables_queue_job_parameters = cls(
             connection_name=connection_name,
             schema_name=schema_name,
             table_name_contains=table_name_contains,
             table_names=table_names,
+            tables_import_limit=tables_import_limit,
         )
 
         import_tables_queue_job_parameters.additional_properties = d

@@ -216,7 +216,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`warning`](./table-profiling-checks.md#customruleparametersspec)</span>|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|*[CustomRuleParametersSpec](./table-profiling-checks.md#customruleparametersspec)*| | | |
 |<span class="no-wrap-code ">[`error`](./table-profiling-checks.md#customruleparametersspec)</span>|Default alerting thresholdthat raises a data quality issue at an error severity level|*[CustomRuleParametersSpec](./table-profiling-checks.md#customruleparametersspec)*| | | |
 |<span class="no-wrap-code ">[`fatal`](./table-profiling-checks.md#customruleparametersspec)</span>|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|*[CustomRuleParametersSpec](./table-profiling-checks.md#customruleparametersspec)*| | | |
-|<span class="no-wrap-code ">[`schedule_override`](./table-profiling-checks.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](./table-profiling-checks.md#monitoringschedulespec)*| | | |
+|<span class="no-wrap-code ">[`schedule_override`](./table-profiling-checks.md#cronschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[CronScheduleSpec](./table-profiling-checks.md#cronschedulespec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](./table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|*boolean*| | | |
 |<span class="no-wrap-code ">`exclude_from_kpi`</span>|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|*boolean*| | | |
@@ -225,6 +225,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`display_name`</span>|Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|*string*| | | |
 |<span class="no-wrap-code ">`data_grouping`</span>|Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check&#x27;s result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.|*string*| | | |
 |<span class="no-wrap-code ">`always_collect_error_samples`</span>|Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.|*boolean*| | | |
+|<span class="no-wrap-code ">`do_not_schedule`</span>|Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting &quot;run checks&quot; job.|*boolean*| | | |
 
 
 
@@ -251,8 +252,8 @@ Custom data quality rule.
 
 ___
 
-## MonitoringScheduleSpec
-Monitoring job schedule specification.
+## CronScheduleSpec
+Cron job schedule specification.
 
 
 The structure of this object is described below

@@ -70,6 +70,9 @@ public class ConnectionModel {
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
 
+    @JsonPropertyDescription("Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is \"cloud\".")
+    private String scheduleOnInstance;
+
     /**
      * Database provider type (required). Accepts: bigquery, snowflake, etc.
      */
@@ -238,6 +241,7 @@ public class ConnectionModel {
         return new ConnectionModel() {{
             setConnectionName(connectionName);
             setParallelJobsLimit(connectionSpec.getParallelJobsLimit());
+            setScheduleOnInstance(connectionSpec.getScheduleOnInstance());
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
             setBigquery(connectionSpec.getBigquery());
@@ -310,6 +314,7 @@ public class ConnectionModel {
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
         targetConnectionSpec.setParallelJobsLimit(this.parallelJobsLimit);
+        targetConnectionSpec.setScheduleOnInstance(this.scheduleOnInstance);
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());

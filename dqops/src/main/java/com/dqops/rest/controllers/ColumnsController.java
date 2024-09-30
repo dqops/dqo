@@ -33,7 +33,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.currentstatus.ColumnCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
-import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
@@ -61,6 +61,7 @@ import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.ColumnService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,7 +160,7 @@ public class ColumnsController {
             @RequestParam(required = false) Optional<Boolean> dataQualityStatus,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
             TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
@@ -180,7 +181,7 @@ public class ColumnsController {
 
             if (dataQualityStatus.isEmpty() || dataQualityStatus.get()) {
                 columnModelsList.forEach(listModel -> {
-                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                    DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                             listModel.getConnectionName(), listModel.getTable());
                     TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                     if (currentTableStatus != null) {
@@ -197,7 +198,7 @@ public class ColumnsController {
                             .thenMany(Flux.fromIterable(columnModelsList)
                                     .map(columnListModel -> {
                                         if (columnListModel.getDataQualityStatus() == null) {
-                                            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                            DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                     columnListModel.getConnectionName(), columnListModel.getTable());
                                             TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                             if (currentTableStatus != null) {
@@ -243,7 +244,7 @@ public class ColumnsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -321,7 +322,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
             TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
@@ -375,7 +376,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
             TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
@@ -426,7 +427,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
             TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
@@ -482,7 +483,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -520,7 +521,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -559,7 +560,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -598,7 +599,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -642,7 +643,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -686,7 +687,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -731,7 +732,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
             if (columnSpec == null) {
@@ -776,7 +777,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -854,7 +855,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -932,7 +933,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1009,7 +1010,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1071,7 +1072,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1133,7 +1134,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1197,7 +1198,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1281,7 +1282,7 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1365,7 +1366,7 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -1445,7 +1446,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Column specification") @RequestBody ColumnSpec columnSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1506,7 +1507,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Column specification") @RequestBody ColumnSpec columnSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1568,7 +1569,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Basic column information to store") @RequestBody ColumnListModel columnListModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1637,7 +1638,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column")
             @RequestBody LabelSetSpec labelSetSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1692,7 +1693,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column")
             @RequestBody CommentsListSpec commentsListSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1747,7 +1748,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column")
             @RequestBody ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1802,7 +1803,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column")
             @RequestBody ColumnDailyMonitoringCheckCategoriesSpec columnDailyMonitoringSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName)  ||
@@ -1870,7 +1871,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column")
             @RequestBody ColumnMonthlyMonitoringCheckCategoriesSpec columnMonthlyMonitoringSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -1938,7 +1939,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
             @RequestBody ColumnDailyPartitionedCheckCategoriesSpec columnDailyPartitionedSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -2006,7 +2007,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
             @RequestBody ColumnMonthlyPartitionedCheckCategoriesSpec columnMonthlyPartitionedSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -2075,7 +2076,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -2147,7 +2148,7 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality monitoring configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -2220,7 +2221,7 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality partitioned checks configuration")
             @RequestBody CheckContainerModel allChecksModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                     Strings.isNullOrEmpty(schemaName) ||
                     Strings.isNullOrEmpty(tableName) ||
@@ -2285,7 +2286,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);

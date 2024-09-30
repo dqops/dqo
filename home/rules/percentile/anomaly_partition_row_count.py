@@ -80,7 +80,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     :return: Object with the decision to accept or reject the value.
     """
 
-    if not hasattr(rule_parameters, 'actual_value'):
+    if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
         return RuleExecutionResult()
 
     extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in

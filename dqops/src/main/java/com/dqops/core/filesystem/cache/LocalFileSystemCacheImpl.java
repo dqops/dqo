@@ -23,7 +23,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
-import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProvider;
 import com.dqops.data.storage.LoadedMonthlyPartition;
@@ -33,7 +33,6 @@ import com.dqops.metadata.labels.labelloader.LabelRefreshTarget;
 import com.dqops.metadata.labels.labelloader.LabelsIndexer;
 import com.dqops.metadata.labels.labelloader.LabelsIndexerProvider;
 import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
-import com.dqops.metadata.lineage.lineagecache.TableLineageCacheKey;
 import com.dqops.metadata.lineage.lineagecache.TableLineageCacheProvider;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -504,7 +503,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 String decodedConnectionName = FileNameSanitizer.decodeFileSystemName(connectionNameFolder.substring(2));
                 PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(schemaTableNameFolder.substring(2));
                 TableStatusCache tableStatusCache = this.tableStatusCacheProvider.getTableStatusCache();
-                tableStatusCache.invalidateTableStatus(new CurrentTableStatusKey(folder.getDataDomain(), decodedConnectionName, physicalTableName), replacingCachedFile);
+                tableStatusCache.invalidateTableStatus(new DomainConnectionTableKey(folder.getDataDomain(), decodedConnectionName, physicalTableName), replacingCachedFile);
             }
         }
 
@@ -525,7 +524,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                         replacingCachedFile);
 
                 TableLineageCache tableLineageCache = this.tableLineageCacheProvider.getTableLineageCache();
-                tableLineageCache.invalidateObject(new TableLineageCacheKey(folder.getDataDomain(), connectionName, physicalTableName), replacingCachedFile);
+                tableLineageCache.invalidateObject(new DomainConnectionTableKey(folder.getDataDomain(), connectionName, physicalTableName), replacingCachedFile);
             }
         }
     }

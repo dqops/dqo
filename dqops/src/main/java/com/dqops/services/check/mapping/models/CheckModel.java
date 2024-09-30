@@ -23,9 +23,8 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
@@ -38,9 +37,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -165,7 +162,7 @@ public class CheckModel implements Cloneable {
      * Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.
      */
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    private MonitoringScheduleSpec scheduleOverride;
+    private CronScheduleSpec scheduleOverride;
 
     /**
      * Model of configured schedule enabled on the check level.
@@ -239,6 +236,13 @@ public class CheckModel implements Cloneable {
     @JsonPropertyDescription("Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean alwaysCollectErrorSamples;
+
+    /**
+     * Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
+     */
+    @JsonPropertyDescription("Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean doNotSchedule;
 
     /**
      * Type of the check's target (column, table).

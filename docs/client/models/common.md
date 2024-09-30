@@ -167,8 +167,8 @@ Default rule severity levels. Matches the severity level name (warning - 1, aler
 
 ___
 
-## MonitoringScheduleSpec
-Monitoring job schedule specification.
+## CronScheduleSpec
+Cron job schedule specification.
 
 
 **The structure of this object is described below**
@@ -350,7 +350,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">`default_check`</span>|This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.|*boolean*|
 |<span class="no-wrap-code">[`default_severity`](#defaultruleseveritylevel)</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*[DefaultRuleSeverityLevel](#defaultruleseveritylevel)*|
 |<span class="no-wrap-code">[`data_grouping_override`](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)</span>|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)*|
-|<span class="no-wrap-code">[`schedule_override`](./common.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`schedule_override`](./common.md#cronschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[CronScheduleSpec](./common.md#cronschedulespec)*|
 |<span class="no-wrap-code">[`effective_schedule`](#effectiveschedulemodel)</span>|Model of configured schedule enabled on the check level.|*[EffectiveScheduleModel](#effectiveschedulemodel)*|
 |<span class="no-wrap-code">[`schedule_enabled_status`](#scheduleenabledstatusmodel)</span>|State of the scheduling override for this check.|*[ScheduleEnabledStatusModel](#scheduleenabledstatusmodel)*|
 |<span class="no-wrap-code">[`comments`](#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](#commentslistspec)*|
@@ -363,6 +363,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
 |<span class="no-wrap-code">`data_grouping_configuration`</span>|The name of a data grouping configuration defined at a table that should be used for this check.|*string*|
 |<span class="no-wrap-code">`always_collect_error_samples`</span>|Forces collecting error samples for this check whenever it fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect error samples will impose additional load on the data source.|*boolean*|
+|<span class="no-wrap-code">`do_not_schedule`</span>|Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.|*boolean*|
 |<span class="no-wrap-code">[`check_target`](#checktargetmodel)</span>|Type of the check's target (column, table).|*[CheckTargetModel](#checktargetmodel)*|
 |<span class="no-wrap-code">`configuration_requirements_errors`</span>|List of configuration errors that must be fixed before the data quality check can be executed.|*List[string]*|
 |<span class="no-wrap-code">`similar_checks`</span>|List of similar checks in other check types or in other time scales.|*List[[SimilarCheckModel](#similarcheckmodel)]*|
@@ -632,6 +633,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
 |<span class="no-wrap-code">`connection_hash`</span>|Connection hash that identifies the connection using a unique hash code.|*long*|
 |<span class="no-wrap-code">`parallel_jobs_limit`</span>|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|*integer*|
+|<span class="no-wrap-code">`schedule_on_instance`</span>|Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is "cloud".|*string*|
 |<span class="no-wrap-code">[`provider_type`](#providertype)</span>|Database provider type (required). Accepts: bigquery, snowflake, etc.|*[ProviderType](#providertype)*|
 |<span class="no-wrap-code">[`bigquery`](../../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)</span>|BigQuery connection parameters. Specify parameters in the bigquery section.|*[BigQueryParametersSpec](../../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)*|
 |<span class="no-wrap-code">[`snowflake`](../../reference/yaml/ConnectionYaml.md#snowflakeparametersspec)</span>|Snowflake connection parameters.|*[SnowflakeParametersSpec](../../reference/yaml/ConnectionYaml.md#snowflakeparametersspec)*|

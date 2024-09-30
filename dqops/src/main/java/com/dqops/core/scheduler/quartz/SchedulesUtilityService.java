@@ -15,7 +15,7 @@
  */
 package com.dqops.core.scheduler.quartz;
 
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 
 import java.time.ZonedDateTime;
 
@@ -28,5 +28,5 @@ public interface SchedulesUtilityService {
      * @param scheduleSpec Schedule spec for which to get the scheduled time.
      * @return Date and time of the next execution. Null if <code>scheduleSpec</code> is invalid.
      */
-    ZonedDateTime getTimeOfNextExecution(MonitoringScheduleSpec scheduleSpec);
+    ZonedDateTime getTimeOfNextExecution(CronScheduleSpec scheduleSpec);
 }

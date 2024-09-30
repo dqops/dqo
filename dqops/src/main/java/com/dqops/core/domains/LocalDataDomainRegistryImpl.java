@@ -182,7 +182,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         ArrayList<LocalDataDomainSpec> allDomains = new ArrayList<>();
         allDomains.add(new LocalDataDomainSpec() {{
             setDataDomainName(UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME);
-            setDisplayName("Root data domain");
+            setDisplayName(UserDomainIdentity.ROOT_DOMAIN_DISPLAY_NAME);
         }});
 
         allDomains.addAll(nestedDataDomains);

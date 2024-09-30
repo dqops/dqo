@@ -41,11 +41,10 @@ The *Profile data (local time)* is the time period (month) for which the profili
 to the 1st day of the month when the [profiling data quality checks were run](../running-data-quality-checks.md#running-profiling-checks).
 
 ### **Initial data quality KPI score**
-The [data quality dashboard](../types-of-data-quality-dashboards.md) showing the data profiling results are located in the *Profiling* folder.
-The *Profiling KPIs scorecard - summary* dashboard shows the initial [data quality KPI score](../definition-of-data-quality-kpis.md),
-which is calculated as a percentage of passed data profiling checks for the current month.
+Initial data quality KPI score can be quickly verified in the [Table quality status](../dqops-user-interface-overview.md#table-quality-status)
+This screen provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
 
-![data profiling initial data quality score dashboard](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-data-quality-kpi-scorecard-min.png){ loading=lazy; width="1200px" }
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status3.png){ loading=lazy; width="1200px" }
 
 ## Profiling checks pros and cons
 

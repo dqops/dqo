@@ -260,6 +260,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the maximum number of tables that are imported from a data source. DQOps supports importing more tables by importing additional tables specified by a different table filter.", defaultValue = "300")
     private Integer metadataImportTablesImportLimit;
 
+    @CommandLine.Option(names = {"--dqo.metadata.auto-import-tables-limit"},
+            description = "Sets the maximum number of tables that are imported from a data source by the auto import that is scheduled on the DQOps CRON scheduler.", defaultValue = "300")
+    private Integer metadataImportAutoImportTablesLimit;
+
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
             description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")
     private Boolean dqoSecretsEnableGcpSecretManager;
@@ -308,6 +312,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "When not configured, DQOps will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
     private String dqoInstanceSignatureKey;
 
+    @CommandLine.Option(names = {"--dqo.instance.name"},
+            description = "DQOps instance name. DQOps uses this instance name when finding which data quality checks should be run on this DQOps instance. " +
+                    "When a connection is limited to run scheduled data quality checks only on a named instance, the instance name must math. " +
+                    "This parameter can be overwritten in the instance's local settings file.")
+    private String dqoInstanceName;
+
     @CommandLine.Option(names = {"--dqo.smtp-server.host"},
             description = "Sets the  host name of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerHost;
@@ -327,6 +337,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.smtp-server.password"},
             description = "Sets the password of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerPassword;
+
+    @CommandLine.Option(names = {"--dqo.integrations.table-health-webhook-urls"},
+            description = "A comma separated list of webhook URLs where DQOps sends updates of the table data quality status changes.")
+    private Integer dqoIntegrationsTableHealthWebhookUrls;
 
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
             description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). " +

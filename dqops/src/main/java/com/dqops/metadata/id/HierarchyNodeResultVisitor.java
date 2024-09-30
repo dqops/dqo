@@ -34,6 +34,7 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.settings.DataCatalogUrlsSetSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpecMap;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
@@ -65,8 +66,8 @@ import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.lineage.*;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
@@ -411,11 +412,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a monitoring schedule specification, it is the cron expression how to schedule the job.
-     * @param monitoringScheduleSpec Monitoring schedule.
+     * @param cronScheduleSpec Monitoring schedule.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(MonitoringScheduleSpec monitoringScheduleSpec, P parameter);
+    R accept(CronScheduleSpec cronScheduleSpec, P parameter);
 
     /**
      * Accepts a parameter definition specification, it describes a single parameter for custom sensors and rules.
@@ -588,11 +589,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of schedules, divided by the time range.
-     * @param defaultSchedulesSpec Container of schedule categories.
+     * @param cronSchedulesSpec Container of schedule categories.
      * @param parameter              Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DefaultSchedulesSpec defaultSchedulesSpec, P parameter);
+    R accept(CronSchedulesSpec cronSchedulesSpec, P parameter);
 
     /**
      * Accepts a configuration of incremental partition checks.
@@ -988,4 +989,20 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(LocalDataDomainSpecMap localDataDomainSpecMap, P parameter);
+
+    /**
+     * Accepts the set of data catalog urls.
+     * @param urlsSetSpec Collection of data quality urls to send data quality health statuses.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DataCatalogUrlsSetSpec urlsSetSpec, P parameter);
+
+    /**
+     * Accepts an auto table import configuration object that is configured on a connection level.
+     * @param autoImportTablesSpec Auto import tables specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AutoImportTablesSpec autoImportTablesSpec, P parameter);
 }

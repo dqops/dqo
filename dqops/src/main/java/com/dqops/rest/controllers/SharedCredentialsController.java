@@ -30,6 +30,7 @@ import com.dqops.rest.models.credentials.CredentialType;
 import com.dqops.rest.models.credentials.SharedCredentialListModel;
 import com.dqops.rest.models.credentials.SharedCredentialModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
@@ -87,7 +88,7 @@ public class SharedCredentialsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<SharedCredentialListModel>>> getAllSharedCredentials(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -127,7 +128,7 @@ public class SharedCredentialsController {
     public Mono<ResponseEntity<Mono<SharedCredentialModel>>> getSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential file name") @PathVariable String credentialName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(credentialName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -178,7 +179,7 @@ public class SharedCredentialsController {
     public Mono<ResponseEntity<Mono<byte[]>>> downloadSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential file name") @PathVariable String credentialName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(credentialName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -232,7 +233,7 @@ public class SharedCredentialsController {
     public Mono<ResponseEntity<Mono<Void>>> createSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential model") @RequestBody SharedCredentialModel sharedCredentialModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(sharedCredentialModel.getCredentialName())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -300,7 +301,7 @@ public class SharedCredentialsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential model") @RequestBody SharedCredentialModel sharedCredentialModel,
             @ApiParam("Credential file name that will be updated") @PathVariable String credentialName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(credentialName) || sharedCredentialModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -369,7 +370,7 @@ public class SharedCredentialsController {
     public Mono<ResponseEntity<Mono<Void>>> deleteSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full shared credential name") @PathVariable String credentialName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(credentialName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);

@@ -13,6 +13,33 @@ from .anomaly_differencing_percentile_moving_average_rule_fatal_01_pct_parameter
 from .anomaly_differencing_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
     AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
+from .anomaly_partition_row_count_rule_error_05_pct_parameters_spec import (
+    AnomalyPartitionRowCountRuleError05PctParametersSpec,
+)
+from .anomaly_partition_row_count_rule_fatal_01_pct_parameters_spec import (
+    AnomalyPartitionRowCountRuleFatal01PctParametersSpec,
+)
+from .anomaly_partition_row_count_rule_warning_1_pct_parameters_spec import (
+    AnomalyPartitionRowCountRuleWarning1PctParametersSpec,
+)
+from .anomaly_stationary_count_values_rule_error_05_pct_parameters_spec import (
+    AnomalyStationaryCountValuesRuleError05PctParametersSpec,
+)
+from .anomaly_stationary_count_values_rule_fatal_01_pct_parameters_spec import (
+    AnomalyStationaryCountValuesRuleFatal01PctParametersSpec,
+)
+from .anomaly_stationary_count_values_rule_warning_1_pct_parameters_spec import (
+    AnomalyStationaryCountValuesRuleWarning1PctParametersSpec,
+)
+from .anomaly_stationary_percent_values_rule_error_05_pct_parameters_spec import (
+    AnomalyStationaryPercentValuesRuleError05PctParametersSpec,
+)
+from .anomaly_stationary_percent_values_rule_fatal_01_pct_parameters_spec import (
+    AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec,
+)
+from .anomaly_stationary_percent_values_rule_warning_1_pct_parameters_spec import (
+    AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec,
+)
 from .anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
 )
@@ -22,7 +49,17 @@ from .anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_
 from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
+from .anomaly_timeliness_delay_rule_error_05_pct_parameters_spec import (
+    AnomalyTimelinessDelayRuleError05PctParametersSpec,
+)
+from .anomaly_timeliness_delay_rule_fatal_01_pct_parameters_spec import (
+    AnomalyTimelinessDelayRuleFatal01PctParametersSpec,
+)
+from .anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
+    AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
+)
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
+from .auto_import_tables_spec import AutoImportTablesSpec
 from .aws_authentication_mode import AwsAuthenticationMode
 from .azure_authentication_mode import AzureAuthenticationMode
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
@@ -84,6 +121,7 @@ from .check_model import CheckModel
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
 from .check_result_status import CheckResultStatus
+from .check_results_detailed_load_mode import CheckResultsDetailedLoadMode
 from .check_results_list_model import CheckResultsListModel
 from .check_results_overview_data_model import CheckResultsOverviewDataModel
 from .check_run_schedule_group import CheckRunScheduleGroup
@@ -1388,6 +1426,8 @@ from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
 from .count_between_rule_parameters_spec import CountBetweenRuleParametersSpec
 from .credential_type import CredentialType
+from .cron_schedule_spec import CronScheduleSpec
+from .cron_schedules_spec import CronSchedulesSpec
 from .csv_file_format_spec import CsvFileFormatSpec
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
@@ -1411,7 +1451,6 @@ from .databricks_parameters_spec import DatabricksParametersSpec
 from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from .default_rule_severity_level import DefaultRuleSeverityLevel
-from .default_schedules_spec import DefaultSchedulesSpec
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
@@ -1427,6 +1466,7 @@ from .dimension_current_data_quality_status_model import (
     DimensionCurrentDataQualityStatusModel,
 )
 from .display_hint import DisplayHint
+from .domain_connection_table_key import DomainConnectionTableKey
 from .dqo_job_change_model import DqoJobChangeModel
 from .dqo_job_entry_parameters_model import DqoJobEntryParametersModel
 from .dqo_job_history_entry_model import DqoJobHistoryEntryModel
@@ -1541,7 +1581,6 @@ from .min_percent_rule_100_warning_parameters_spec import (
     MinPercentRule100WarningParametersSpec,
 )
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
-from .monitoring_schedule_spec import MonitoringScheduleSpec
 from .mono import Mono
 from .mono_response_entity_mono_dqo_queue_job_id import (
     MonoResponseEntityMonoDqoQueueJobId,
@@ -1555,8 +1594,8 @@ from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .new_line_character_type import NewLineCharacterType
 from .notification_filter_spec import NotificationFilterSpec
 from .optional import Optional
+from .optional_cron_schedule_spec import OptionalCronScheduleSpec
 from .optional_incident_notification_spec import OptionalIncidentNotificationSpec
-from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_data_type import ParameterDataType
@@ -1822,6 +1861,8 @@ from .table_duplicate_record_percent_sensor_parameters_spec import (
     TableDuplicateRecordPercentSensorParametersSpec,
 )
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
+from .table_lineage_flow_model import TableLineageFlowModel
+from .table_lineage_model import TableLineageModel
 from .table_lineage_source_list_model import TableLineageSourceListModel
 from .table_lineage_source_list_model_properties import (
     TableLineageSourceListModelProperties,
@@ -2068,10 +2109,23 @@ __all__ = (
     "AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+    "AnomalyPartitionRowCountRuleError05PctParametersSpec",
+    "AnomalyPartitionRowCountRuleFatal01PctParametersSpec",
+    "AnomalyPartitionRowCountRuleWarning1PctParametersSpec",
+    "AnomalyStationaryCountValuesRuleError05PctParametersSpec",
+    "AnomalyStationaryCountValuesRuleFatal01PctParametersSpec",
+    "AnomalyStationaryCountValuesRuleWarning1PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+    "AnomalyStationaryPercentValuesRuleError05PctParametersSpec",
+    "AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec",
+    "AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec",
+    "AnomalyTimelinessDelayRuleError05PctParametersSpec",
+    "AnomalyTimelinessDelayRuleFatal01PctParametersSpec",
+    "AnomalyTimelinessDelayRuleWarning1PctParametersSpec",
     "AuthenticatedDashboardModel",
+    "AutoImportTablesSpec",
     "AwsAuthenticationMode",
     "AzureAuthenticationMode",
     "BetweenFloatsRuleParametersSpec",
@@ -2109,6 +2163,7 @@ __all__ = (
     "CheckMiningProposalModelColumnChecks",
     "CheckModel",
     "CheckResultEntryModel",
+    "CheckResultsDetailedLoadMode",
     "CheckResultsListModel",
     "CheckResultSortOrder",
     "CheckResultsOverviewDataModel",
@@ -2625,6 +2680,8 @@ __all__ = (
     "ConnectionTestStatus",
     "CountBetweenRuleParametersSpec",
     "CredentialType",
+    "CronScheduleSpec",
+    "CronSchedulesSpec",
     "CsvFileFormatSpec",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
@@ -2646,7 +2703,6 @@ __all__ = (
     "DataTypeCategory",
     "DatetimeBuiltInDateFormats",
     "DefaultRuleSeverityLevel",
-    "DefaultSchedulesSpec",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
@@ -2656,6 +2712,7 @@ __all__ = (
     "DetectedDatatypeEqualsRuleParametersSpec",
     "DimensionCurrentDataQualityStatusModel",
     "DisplayHint",
+    "DomainConnectionTableKey",
     "DqoJobChangeModel",
     "DqoJobEntryParametersModel",
     "DqoJobHistoryEntryModel",
@@ -2752,7 +2809,6 @@ __all__ = (
     "MinPercentRule100ErrorParametersSpec",
     "MinPercentRule100WarningParametersSpec",
     "MinPercentRule95ParametersSpec",
-    "MonitoringScheduleSpec",
     "Mono",
     "MonoResponseEntityMonoDqoQueueJobId",
     "MonoResponseEntityMonoObject",
@@ -2764,8 +2820,8 @@ __all__ = (
     "NewLineCharacterType",
     "NotificationFilterSpec",
     "Optional",
+    "OptionalCronScheduleSpec",
     "OptionalIncidentNotificationSpec",
-    "OptionalMonitoringScheduleSpec",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",
     "ParameterDataType",
@@ -2913,6 +2969,8 @@ __all__ = (
     "TableDuplicateRecordPercentCheckSpec",
     "TableDuplicateRecordPercentSensorParametersSpec",
     "TableIncidentGroupingSpec",
+    "TableLineageFlowModel",
+    "TableLineageModel",
     "TableLineageSourceListModel",
     "TableLineageSourceListModelProperties",
     "TableLineageSourceSpec",

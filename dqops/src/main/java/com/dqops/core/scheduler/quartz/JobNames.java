@@ -30,6 +30,16 @@ public final class JobNames {
     public static final String RUN_CHECKS = "RUN_CHECKS";
 
     /**
+     * Job name to periodically collect statistics.
+     */
+    public static final String COLLECT_STATISTICS = "COLLECT_STATISTICS";
+
+    /**
+     * Job name to periodically import tables automatically.
+     */
+    public static final String IMPORT_TABLES = "IMPORT_TABLES";
+
+    /**
      * Job name that does nothing.
      */
     public static final String DUMMY = "DUMMY";

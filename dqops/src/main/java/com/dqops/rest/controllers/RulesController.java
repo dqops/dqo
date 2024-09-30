@@ -32,6 +32,7 @@ import com.dqops.rest.models.metadata.RuleFolderModel;
 import com.dqops.rest.models.metadata.RuleListModel;
 import com.dqops.rest.models.metadata.RuleModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class RulesController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<RuleListModel>>> getAllRules(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
             List<RuleListModel> allRules = ruleFolderModel.getAllRules();
             allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
@@ -119,7 +120,7 @@ public class RulesController {
     public Mono<ResponseEntity<Mono<RuleModel>>> getRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullRuleName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -172,7 +173,7 @@ public class RulesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName,
             @ApiParam("Rule model") @RequestBody RuleModel ruleModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (ruleModel == null || Strings.isNullOrEmpty(fullRuleName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -219,7 +220,7 @@ public class RulesController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Rule model") @RequestBody RuleModel ruleModel,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullRuleName) || ruleModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -286,7 +287,7 @@ public class RulesController {
     public Mono<ResponseEntity<Mono<Void>>> deleteRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullRuleName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -327,7 +328,7 @@ public class RulesController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<RuleFolderModel>>> getRuleFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
 
             return new ResponseEntity<>(Mono.just(ruleFolderModel), HttpStatus.OK);

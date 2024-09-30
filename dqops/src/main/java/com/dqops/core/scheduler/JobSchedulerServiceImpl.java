@@ -25,6 +25,8 @@ import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.scheduler.collectstatistics.CollectScheduledStatisticsSchedulerJob;
+import com.dqops.core.scheduler.importtables.AutoImportTablesSchedulerJob;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
@@ -32,7 +34,8 @@ import com.dqops.core.scheduler.synchronize.SynchronizeMetadataSchedulerJob;
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -74,8 +77,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private LocalDataDomainRegistry localDataDomainRegistry;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
+    private JobDetail collectStatisticsJob;
+    private JobDetail importTablesJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
     private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.silent;
+    private StatisticsCollectorExecutionReportingMode collectStatisticsReportingMode = StatisticsCollectorExecutionReportingMode.silent;
     private Set<String> scheduledDataDomains = ConcurrentHashMap.newKeySet();
 
     /**
@@ -125,7 +131,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @return File synchronization reporting mode.
      */
     public FileSystemSynchronizationReportingMode getSynchronizationMode() {
-        return synchronizationMode;
+        return this.synchronizationMode;
     }
 
     /**
@@ -133,7 +139,17 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @return Reporting mode during the check execution.
      */
     public CheckRunReportingMode getCheckRunReportingMode() {
-        return checkRunReportingMode;
+        return this.checkRunReportingMode;
+    }
+
+    /**
+     * Returns the reporting mode for running the checks by the scheduler.
+     *
+     * @return Reporting mode used when running the checks.
+     */
+    @Override
+    public StatisticsCollectorExecutionReportingMode getCollectStatisticsReportingMode() {
+        return this.collectStatisticsReportingMode;
     }
 
     /**
@@ -225,6 +241,22 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 this.scheduler.addJob(this.synchronizeMetadataJob, true);
             }
 
+            if (!this.scheduler.checkExists(JobKeys.COLLECT_STATISTICS)) {
+                this.collectStatisticsJob = newJob(CollectScheduledStatisticsSchedulerJob.class)
+                        .withIdentity(JobKeys.COLLECT_STATISTICS)
+                        .storeDurably()
+                        .build();
+                this.scheduler.addJob(this.collectStatisticsJob, true);
+            }
+
+            if (!this.scheduler.checkExists(JobKeys.IMPORT_TABLES)) {
+                this.importTablesJob = newJob(AutoImportTablesSchedulerJob.class)
+                        .withIdentity(JobKeys.IMPORT_TABLES)
+                        .storeDurably()
+                        .build();
+                this.scheduler.addJob(this.importTablesJob, true);
+            }
+
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
             DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createLocalInstanceAdminPrincipal();
             DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
@@ -239,8 +271,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
             String mountedRootDomainName = userPrincipalForAdministrator.getDataDomainIdentity().getDataDomainCloud();
             this.scheduledDataDomains.add(mountedRootDomainName);
-            MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
-            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA,
+            CronScheduleSpec scanMetadataCronScheduleSpec = new CronScheduleSpec(scanMetadataCronSchedule);
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataCronScheduleSpec, JobKeys.SYNCHRONIZE_METADATA,
                     mountedRootDomainName);
             this.scheduler.scheduleJob(scanMetadataTrigger);
         } catch (SchedulerException ex) {
@@ -280,8 +312,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
-            MonitoringScheduleSpec scanMetadataMonitoringScheduleSpec = new MonitoringScheduleSpec(scanMetadataCronSchedule);
-            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataMonitoringScheduleSpec,
+            CronScheduleSpec scanMetadataCronScheduleSpec = new CronScheduleSpec(scanMetadataCronSchedule);
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataCronScheduleSpec,
                     JobKeys.SYNCHRONIZE_METADATA, newDomainName);
             try {
                 this.scheduler.scheduleJob(scanMetadataTrigger);
@@ -314,8 +346,28 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 }
 
                 List<? extends Trigger> triggersOfSynchronizeMetadata = this.scheduler.getTriggersOfJob(JobKeys.SYNCHRONIZE_METADATA);
-                if (triggersOfRunChecks != null) {
+                if (triggersOfSynchronizeMetadata != null) {
                     for (Trigger trigger : triggersOfSynchronizeMetadata) {
+                        String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(trigger.getJobDataMap());
+                        if (Objects.equals(dataDomainInJob, existingDomainName)) {
+                            this.scheduler.unscheduleJob(trigger.getKey());
+                        }
+                    }
+                }
+
+                List<? extends Trigger> triggersOfCollectStatistics = this.scheduler.getTriggersOfJob(JobKeys.COLLECT_STATISTICS);
+                if (triggersOfCollectStatistics != null) {
+                    for (Trigger trigger : triggersOfCollectStatistics) {
+                        String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(trigger.getJobDataMap());
+                        if (Objects.equals(dataDomainInJob, existingDomainName)) {
+                            this.scheduler.unscheduleJob(trigger.getKey());
+                        }
+                    }
+                }
+
+                List<? extends Trigger> triggersOfImportTables = this.scheduler.getTriggersOfJob(JobKeys.IMPORT_TABLES);
+                if (triggersOfImportTables != null) {
+                    for (Trigger trigger : triggersOfImportTables) {
                         String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(trigger.getJobDataMap());
                         if (Objects.equals(dataDomainInJob, existingDomainName)) {
                             this.scheduler.unscheduleJob(trigger.getKey());
@@ -375,8 +427,22 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 }
 
                 List<? extends Trigger> triggersOfSynchronizeMeta = this.scheduler.getTriggersOfJob(JobKeys.SYNCHRONIZE_METADATA);
-                if (triggersOfRunChecks != null) {
+                if (triggersOfSynchronizeMeta != null) {
                     for (Trigger trigger : triggersOfSynchronizeMeta) {
+                        this.scheduler.unscheduleJob(trigger.getKey());
+                    }
+                }
+
+                List<? extends Trigger> triggersOfCollectStatistics = this.scheduler.getTriggersOfJob(JobKeys.COLLECT_STATISTICS);
+                if (triggersOfCollectStatistics != null) {
+                    for (Trigger trigger : triggersOfCollectStatistics) {
+                        this.scheduler.unscheduleJob(trigger.getKey());
+                    }
+                }
+
+                List<? extends Trigger> triggersOfImportTables = this.scheduler.getTriggersOfJob(JobKeys.IMPORT_TABLES);
+                if (triggersOfImportTables != null) {
+                    for (Trigger trigger : triggersOfImportTables) {
                         this.scheduler.unscheduleJob(trigger.getKey());
                     }
                 }
@@ -398,9 +464,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
     /**
      * Triggers the metadata synchronization job on the job scheduler. Calls the cloud sync and reload the metadata to detect new schedules.
+     * @param dataDomain Data domain name. Pass null to refresh all data domains.
      */
     @Override
-    public void triggerMetadataSynchronization() {
+    public void triggerMetadataSynchronization(String dataDomain) {
         if (!this.started || this.shutdownInitiated) {
             return;
         }
@@ -408,10 +475,18 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         log.debug("Triggering the SYNCHRONIZE_METADATA job on the job scheduler.");
 
         try {
-            for (String dataDomainName : new ArrayList<>(this.scheduledDataDomains)) {
-                JobDataMap jobDataMap = new JobDataMap();
-                this.jobDataMapAdapter.setDataDomain(jobDataMap, dataDomainName);
-                this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+            if (dataDomain == null) {
+                for (String scheduledDataDomainName : new ArrayList<>(this.scheduledDataDomains)) {
+                    JobDataMap jobDataMap = new JobDataMap();
+                    this.jobDataMapAdapter.setDataDomain(jobDataMap, scheduledDataDomainName);
+                    this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+                }
+            } else {
+                if (this.scheduledDataDomains.contains(dataDomain)) {
+                    JobDataMap jobDataMap = new JobDataMap();
+                    this.jobDataMapAdapter.setDataDomain(jobDataMap, dataDomain);
+                    this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA, jobDataMap);
+                }
             }
         }
         catch (Exception ex) {
@@ -451,7 +526,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 String dataDomainInJob = this.jobDataMapAdapter.getDataDomain(jobDataMap);
 
                 if (Objects.equals(dataDomainInJob, dataDomainName)) {
-                    MonitoringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(jobDataMap);
+                    CronScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(jobDataMap);
                     schedulesCollection.add(schedule);
                 }
             }
@@ -488,7 +563,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         for (Trigger trigger : triggersOfJob) {
-            MonitoringScheduleSpec scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+            CronScheduleSpec scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
 
             if (schedulesDelta.getSchedulesToDelete().contains(scheduleOnTrigger)) {
                 try {
@@ -503,7 +578,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
         }
 
-        for (MonitoringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
+        for (CronScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
             try {
                 Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey, dataDomainName);
 

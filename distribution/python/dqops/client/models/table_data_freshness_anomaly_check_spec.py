@@ -6,17 +6,17 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
+    from ..models.anomaly_timeliness_delay_rule_error_05_pct_parameters_spec import (
+        AnomalyTimelinessDelayRuleError05PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
+    from ..models.anomaly_timeliness_delay_rule_fatal_01_pct_parameters_spec import (
+        AnomalyTimelinessDelayRuleFatal01PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
+    from ..models.anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
+        AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.table_timeliness_data_freshness_sensor_parameters_spec import (
         TableTimelinessDataFreshnessSensorParametersSpec,
     )
@@ -29,7 +29,7 @@ T = TypeVar("T", bound="TableDataFreshnessAnomalyCheckSpec")
 class TableDataFreshnessAnomalyCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, MonitoringScheduleSpec]):
+        schedule_override (Union[Unset, CronScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
@@ -53,13 +53,15 @@ class TableDataFreshnessAnomalyCheckSpec:
         always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
+        do_not_schedule (Union[Unset, bool]): Disables running this check by a DQOps CRON scheduler. When a check is
+            disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
         parameters (Union[Unset, TableTimelinessDataFreshnessSensorParametersSpec]):
-        warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec]):
-        error (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec]):
-        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec]):
+        warning (Union[Unset, AnomalyTimelinessDelayRuleWarning1PctParametersSpec]):
+        error (Union[Unset, AnomalyTimelinessDelayRuleError05PctParametersSpec]):
+        fatal (Union[Unset, AnomalyTimelinessDelayRuleFatal01PctParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "CronScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -68,16 +70,11 @@ class TableDataFreshnessAnomalyCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
+    do_not_schedule: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "TableTimelinessDataFreshnessSensorParametersSpec"] = UNSET
-    warning: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
-    ] = UNSET
-    error: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
-    ] = UNSET
-    fatal: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
-    ] = UNSET
+    warning: Union[Unset, "AnomalyTimelinessDelayRuleWarning1PctParametersSpec"] = UNSET
+    error: Union[Unset, "AnomalyTimelinessDelayRuleError05PctParametersSpec"] = UNSET
+    fatal: Union[Unset, "AnomalyTimelinessDelayRuleFatal01PctParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -100,6 +97,7 @@ class TableDataFreshnessAnomalyCheckSpec:
         display_name = self.display_name
         data_grouping = self.data_grouping
         always_collect_error_samples = self.always_collect_error_samples
+        do_not_schedule = self.do_not_schedule
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -137,6 +135,8 @@ class TableDataFreshnessAnomalyCheckSpec:
             field_dict["data_grouping"] = data_grouping
         if always_collect_error_samples is not UNSET:
             field_dict["always_collect_error_samples"] = always_collect_error_samples
+        if do_not_schedule is not UNSET:
+            field_dict["do_not_schedule"] = do_not_schedule
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
         if warning is not UNSET:
@@ -150,28 +150,28 @@ class TableDataFreshnessAnomalyCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
+        from ..models.anomaly_timeliness_delay_rule_error_05_pct_parameters_spec import (
+            AnomalyTimelinessDelayRuleError05PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
+        from ..models.anomaly_timeliness_delay_rule_fatal_01_pct_parameters_spec import (
+            AnomalyTimelinessDelayRuleFatal01PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
+        from ..models.anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
+            AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.table_timeliness_data_freshness_sensor_parameters_spec import (
             TableTimelinessDataFreshnessSensorParametersSpec,
         )
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, MonitoringScheduleSpec]
+        schedule_override: Union[Unset, CronScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = CronScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -194,6 +194,8 @@ class TableDataFreshnessAnomalyCheckSpec:
 
         always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
 
+        do_not_schedule = d.pop("do_not_schedule", UNSET)
+
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, TableTimelinessDataFreshnessSensorParametersSpec]
         if isinstance(_parameters, Unset):
@@ -204,37 +206,27 @@ class TableDataFreshnessAnomalyCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec
-        ]
+        warning: Union[Unset, AnomalyTimelinessDelayRuleWarning1PctParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec.from_dict(
+            warning = AnomalyTimelinessDelayRuleWarning1PctParametersSpec.from_dict(
                 _warning
             )
 
         _error = d.pop("error", UNSET)
-        error: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec
-        ]
+        error: Union[Unset, AnomalyTimelinessDelayRuleError05PctParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec.from_dict(
-                _error
-            )
+            error = AnomalyTimelinessDelayRuleError05PctParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec
-        ]
+        fatal: Union[Unset, AnomalyTimelinessDelayRuleFatal01PctParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec.from_dict(
-                _fatal
-            )
+            fatal = AnomalyTimelinessDelayRuleFatal01PctParametersSpec.from_dict(_fatal)
 
         table_data_freshness_anomaly_check_spec = cls(
             schedule_override=schedule_override,
@@ -246,6 +238,7 @@ class TableDataFreshnessAnomalyCheckSpec:
             display_name=display_name,
             data_grouping=data_grouping,
             always_collect_error_samples=always_collect_error_samples,
+            do_not_schedule=do_not_schedule,
             parameters=parameters,
             warning=warning,
             error=error,

@@ -36,6 +36,7 @@ import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
 import com.dqops.services.metadata.SchemaService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +94,7 @@ public class SchemasController {
     public Mono<ResponseEntity<Flux<SchemaModel>>> getSchemas(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -196,7 +197,7 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -275,7 +276,7 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -354,7 +355,7 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -410,7 +411,7 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -453,7 +454,7 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -496,7 +497,7 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 

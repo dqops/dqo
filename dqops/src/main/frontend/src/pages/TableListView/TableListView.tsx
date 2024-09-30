@@ -69,8 +69,8 @@ export default function TableListView() {
     //      schema ? addPrefix(schema) : addPrefix(searchFilters.schema)
     //    );
     const res = await SearchApiClient.findTables(
-      connection ? addPrefix(connection) : addPrefix(searchFilters.connection),
-      schema ? addPrefix(schema) : addPrefix(searchFilters.schema),
+      connection ? connection : addPrefix(searchFilters.connection),
+      schema ? schema : addPrefix(searchFilters.schema),
       addPrefix(searchFilters.table ?? ''),
       labels,
       filters.page,

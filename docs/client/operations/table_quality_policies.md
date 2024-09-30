@@ -228,7 +228,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -287,7 +288,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -349,7 +351,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -411,7 +414,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -893,6 +897,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -957,6 +962,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1024,6 +1030,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1091,6 +1098,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1236,6 +1244,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1300,6 +1309,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1367,6 +1377,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1434,6 +1445,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1579,6 +1591,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1643,6 +1656,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1710,6 +1724,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1777,6 +1792,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1922,6 +1938,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1986,6 +2003,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2053,6 +2071,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2120,6 +2139,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2265,6 +2285,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2329,6 +2350,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2396,6 +2418,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2463,6 +2486,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2929,7 +2953,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 								disabled=False,
 								exclude_from_kpi=False,
 								include_in_sla=False,
-								always_collect_error_samples=False
+								always_collect_error_samples=False,
+								do_not_schedule=False
 							)
 						),
 						comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2984,7 +3009,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 								disabled=False,
 								exclude_from_kpi=False,
 								include_in_sla=False,
-								always_collect_error_samples=False
+								always_collect_error_samples=False,
+								do_not_schedule=False
 							)
 						),
 						comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -3042,7 +3068,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 								disabled=False,
 								exclude_from_kpi=False,
 								include_in_sla=False,
-								always_collect_error_samples=False
+								always_collect_error_samples=False,
+								do_not_schedule=False
 							)
 						),
 						comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -3100,7 +3127,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 								disabled=False,
 								exclude_from_kpi=False,
 								include_in_sla=False,
-								always_collect_error_samples=False
+								always_collect_error_samples=False,
+								do_not_schedule=False
 							)
 						),
 						comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -3439,6 +3467,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3502,6 +3531,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3568,6 +3598,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3634,6 +3665,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3748,6 +3780,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3811,6 +3844,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3877,6 +3911,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3943,6 +3978,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/monitoring/monthly
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4057,6 +4093,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4120,6 +4157,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4186,6 +4224,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4252,6 +4291,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/daily
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4366,6 +4406,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4429,6 +4470,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4495,6 +4537,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4561,6 +4604,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/partitioned/monthl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4675,6 +4719,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4738,6 +4783,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4804,6 +4850,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4870,6 +4917,7 @@ http://localhost:8888/api/policies/checks/table/{patternName}/profiling
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4981,7 +5029,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -5040,7 +5089,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -5102,7 +5152,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -5164,7 +5215,8 @@ http://localhost:8888/api/policies/checks/table/{patternName}
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					),
 					comparisons=TableComparisonDailyMonitoringChecksSpecMap()

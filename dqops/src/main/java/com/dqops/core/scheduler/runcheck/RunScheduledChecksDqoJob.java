@@ -15,7 +15,6 @@
  */
 package com.dqops.core.scheduler.runcheck;
 
-import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.core.jobqueue.DqoJobExecutionContext;
 import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.ParentDqoQueueJob;
@@ -31,7 +30,7 @@ import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -47,8 +46,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
     private CheckExecutionService checkExecutionService;
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
-    private TerminalTableWritter terminalTableWritter;
-    private MonitoringScheduleSpec cronSchedule;
+    private CronScheduleSpec cronSchedule;
 
     /**
      * Creates a dqo job that runs checks scheduled for one cron expression.
@@ -56,26 +54,23 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * @param checkExecutionService Check execution service that runs the data quality checks.
      * @param executionContextFactory Check execution context that will create a context - opening the local user home.
      * @param checkExecutionProgressListenerProvider Check execution progress listener used to get the correct logger.
-     * @param terminalTableWriter Terminal table writer - used to write the summary information about the progress to the console.
      */
     @Autowired
     public RunScheduledChecksDqoJob(JobSchedulerService jobSchedulerService,
                                     CheckExecutionService checkExecutionService,
                                     ExecutionContextFactory executionContextFactory,
-                                    CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
-                                    TerminalTableWritter terminalTableWriter) {
+                                    CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider) {
         this.jobSchedulerService = jobSchedulerService;
         this.checkExecutionService = checkExecutionService;
         this.executionContextFactory = executionContextFactory;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
-        this.terminalTableWritter = terminalTableWriter;
     }
 
     /**
      * Cron schedule (cron expression and time zone) that is executed.
      * @return Cron schedule.
      */
-    public MonitoringScheduleSpec getCronSchedule() {
+    public CronScheduleSpec getCronSchedule() {
         return cronSchedule;
     }
 
@@ -83,7 +78,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      * Sets the cron schedule that is triggered and whose checks are executed.
      * @param cronSchedule Cron schedule.
      */
-    public void setCronSchedule(MonitoringScheduleSpec cronSchedule) {
+    public void setCronSchedule(CronScheduleSpec cronSchedule) {
         this.cronSchedule = cronSchedule;
     }
 
@@ -103,7 +98,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
-                checkRunReportingMode, true);
+                checkRunReportingMode, checkRunReportingMode != CheckRunReportingMode.silent);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
                 executionContext, this.cronSchedule, progressListener, jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken(),

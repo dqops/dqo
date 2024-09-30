@@ -41,7 +41,6 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
-	private DqoCloudApiKeyProvider apiKeyProvider;
 
 	public SettingsSmtpSetCliCommand() {
 	}
@@ -49,12 +48,10 @@ public class SettingsSmtpSetCliCommand extends BaseCommand implements ICommand {
 	@Autowired
 	public SettingsSmtpSetCliCommand(SettingsCliService settingsCliService,
 									 TerminalReader terminalReader,
-									 TerminalWriter terminalWriter,
-									 DqoCloudApiKeyProvider apiKeyProvider) {
+									 TerminalWriter terminalWriter) {
 		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.apiKeyProvider = apiKeyProvider;
 	}
 
 	/**

@@ -19,6 +19,8 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJob;
+import com.dqops.core.scheduler.collectstatistics.CollectScheduledStatisticsDqoJob;
+import com.dqops.core.scheduler.importtables.AutoImportTablesDqoJob;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
@@ -51,6 +53,18 @@ public interface DqoQueueJobFactory {
      * @return New collect statistics parent job.
      */
     CollectStatisticsQueueJob createCollectStatisticsJob();
+
+    /**
+     * Creates a job that runs the data profiler and collects statistics for a given schedule.
+     * @return Job that collects statistics when triggered by a scheduler.
+     */
+    CollectScheduledStatisticsDqoJob createCollectScheduledStatisticsJob();
+
+    /**
+     * Creates a job that automatically imports tables for all connections scheduled for a given schedule.
+     * @return Job that automatically imports tables when triggered by a scheduler.
+     */
+    AutoImportTablesDqoJob createAutoImportTablesJob();
 
     /**
      * Creates a child job that runs profilers (collects statistics) on a single table.

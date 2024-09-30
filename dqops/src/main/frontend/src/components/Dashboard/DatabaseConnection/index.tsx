@@ -398,6 +398,17 @@ filterPropertiesDirectories(database)
             }
           }}
         />
+        <Input
+          label="Schedule only on DQOps instance"
+          value={database.schedule_on_instance}
+          placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
+          onChange={(e) => {
+            onChange({
+              ...database,
+              schedule_on_instance: String(e.target.value)
+            });
+          }}
+        />
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}
         </div>

@@ -2209,7 +2209,8 @@ http://localhost:8888/api/jobs/importtables
 									disabled=False,
 									exclude_from_kpi=False,
 									include_in_sla=False,
-									always_collect_error_samples=False
+									always_collect_error_samples=False,
+									do_not_schedule=False
 								)
 							)
 						),
@@ -2292,7 +2293,8 @@ http://localhost:8888/api/jobs/importtables
 									disabled=False,
 									exclude_from_kpi=False,
 									include_in_sla=False,
-									always_collect_error_samples=False
+									always_collect_error_samples=False,
+									do_not_schedule=False
 								)
 							)
 						),
@@ -2378,7 +2380,8 @@ http://localhost:8888/api/jobs/importtables
 									disabled=False,
 									exclude_from_kpi=False,
 									include_in_sla=False,
-									always_collect_error_samples=False
+									always_collect_error_samples=False,
+									do_not_schedule=False
 								)
 							)
 						),
@@ -2464,7 +2467,8 @@ http://localhost:8888/api/jobs/importtables
 									disabled=False,
 									exclude_from_kpi=False,
 									include_in_sla=False,
-									always_collect_error_samples=False
+									always_collect_error_samples=False,
+									do_not_schedule=False
 								)
 							)
 						),

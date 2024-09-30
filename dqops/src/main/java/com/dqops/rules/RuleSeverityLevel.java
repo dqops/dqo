@@ -67,6 +67,26 @@ public enum RuleSeverityLevel {
     }
 
     /**
+     * Finds the maximum severity level from two check results.
+     * @param first First severity level.
+     * @param second Second severity level.
+     * @return The maximum severity level detected.
+     */
+    public static RuleSeverityLevel max(RuleSeverityLevel first, RuleSeverityLevel second) {
+        if (first == null) {
+            return second;
+        } else  if (second == null) {
+            return first;
+        }
+
+        if (first.getSeverity() >= second.getSeverity()) {
+            return first;
+        }
+
+        return second;
+    }
+
+    /**
      * Converts the check result status (that includes also an execution error status) to a rule severity status. Null values and an execution error are returned as null.
      * @param checkResultStatus Check execution status.
      * @return Matching rule severity status or null for an execution error or a null check status.

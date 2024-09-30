@@ -163,4 +163,16 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of default observability checks definitions.
      */
     DefaultIncidentNotificationsWrapper getDefaultIncidentNotifications();
+
+    /**
+     * Initiates loading all connections to cache them and let label and other services find relevant data.
+     * Loading will continue in the background.
+     */
+    void warmUpConnections();
+
+    /**
+     * Initiates loading all connections to cache them and let label, quality status, data lineage and other services find relevant information.
+     * Loading will continue in the background.
+     */
+    void warmUpTables();
 }

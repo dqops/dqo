@@ -97,28 +97,30 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
             String dataDomain = this.jobDataMapAdapter.getDataDomain(jobExecutionContext.getTrigger().getJobDataMap());
             DqoUserPrincipal principal = this.principalProvider.createLocalDomainAdminPrincipal(dataDomain);
             DqoCloudApiKeyPayload cloudApiKeyPayload = principal.getApiKeyPayload();
+            boolean runCloudSync = true;
+
             if (cloudApiKeyPayload == null) {
-                return;
+                runCloudSync = false;
             }
 
-            if (cloudApiKeyPayload.getDataQualityDataWarehouse() != null &&
+            if (runCloudSync && cloudApiKeyPayload.getDataQualityDataWarehouse() != null &&
                     cloudApiKeyPayload.getDataQualityDataWarehouse() == false) {
-                return; // the user was not granted access to the data quality data warehouse
+                runCloudSync = false; // the user was not granted access to the data quality data warehouse
             }
 
-            if (jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
+            if (runCloudSync && jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
                     cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
                     cloudApiKeyPayload.getExpiresAt() != null)) {
                 // free user
 
                 LocalDateTime executionHour = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.hour);
                 if (Objects.equals(executionHour, lastExecutedAtHour)) {
-                    return;
+                    runCloudSync = false;
                 }
 
                 lastExecutedAtHour = executionHour;
-                if (!waitRandomTime(jobExecutionContext, 3600 - MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
-                    return;
+                if (runCloudSync && !waitRandomTime(jobExecutionContext, 3600 - MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+                    runCloudSync = false;
                 }
             }
 
@@ -129,7 +131,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
             this.synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
             SynchronizeMultipleFoldersDqoQueueJobParameters jobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
 
-            if (this.dqoSchedulerConfigurationProperties.isEnableCloudSync()) {
+            if (runCloudSync && this.dqoSchedulerConfigurationProperties.isEnableCloudSync()) {
                 if (jobRunCount == 0 ||  // first synchronization when the application starts, must download everything
                         this.dqoSchedulerConfigurationProperties.getSynchronizedFolders() == ScheduledSynchronizationFolderSelectionMode.all) {
                     jobParameters.synchronizeAllFolders();

@@ -17,12 +17,13 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.checks.CheckType;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.currentstatus.ColumnCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
-import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.search.ColumnSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -37,6 +38,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.ColumnListModel;
 import com.dqops.rest.models.metadata.TableListModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -127,7 +129,7 @@ public class SearchController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
             ConnectionList connections = userHome.getConnections();
@@ -183,7 +185,7 @@ public class SearchController {
                     .collect(Collectors.toList());
 
             tableModelsList.forEach(listModel -> {
-                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getConnectionName(), listModel.getTarget());
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                 listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
@@ -197,7 +199,7 @@ public class SearchController {
                         .thenMany(Flux.fromIterable(tableModelsList)
                                 .map(tableListModel -> {
                                     if (tableListModel.getDataQualityStatus() == null) {
-                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                        DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                 tableListModel.getConnectionName(), tableListModel.getTarget());
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                         tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
@@ -248,6 +250,8 @@ public class SearchController {
             @RequestParam(required = false) Optional<String> column,
             @ApiParam(name = "columnType", value = "Optional physical column's data type filter", required = false)
             @RequestParam(required = false) Optional<String> columnType,
+            @ApiParam(name = "columnCategory", value = "Optional data type category filter", required = false)
+            @RequestParam(required = false) Optional<DataTypeCategory> columnCategory,
             @ApiParam(name = "label", value = "Optional labels to filter the columns", required = false)
             @RequestParam(required = false) Optional<List<String>> label,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
@@ -256,7 +260,7 @@ public class SearchController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
             ConnectionList connections = userHome.getConnections();
@@ -280,6 +284,7 @@ public class SearchController {
 
             columnSearchFilters.setColumnName(column.orElse(null));
             columnSearchFilters.setColumnDataType(columnType.orElse(null));
+            columnSearchFilters.setDataTypeCategory(columnCategory.orElse(null));
 
             Integer resultsLimit = DEFAULT_SEARCH_LIMIT;
             Integer skip = null;
@@ -317,7 +322,7 @@ public class SearchController {
                     .collect(Collectors.toList());
 
             columnModelsList.forEach(listModel -> {
-                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getConnectionName(), listModel.getTable());
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                 if (currentTableStatus != null) {
@@ -335,7 +340,7 @@ public class SearchController {
                         .thenMany(Flux.fromIterable(columnModelsList)
                                 .map(listModel -> {
                                     if (listModel.getDataQualityStatus() == null) {
-                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                        DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                 listModel.getConnectionName(), listModel.getTable());
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                         if (currentTableStatus != null) {

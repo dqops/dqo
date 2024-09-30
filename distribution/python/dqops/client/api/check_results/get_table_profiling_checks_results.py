@@ -6,6 +6,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_results_detailed_load_mode import CheckResultsDetailedLoadMode
 from ...models.check_results_list_model import CheckResultsListModel
 from ...types import UNSET, Response, Unset
 
@@ -21,6 +22,7 @@ def _get_kwargs(
     check_name: Union[Unset, None, str] = UNSET,
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
+    load_mode: Union[Unset, None, CheckResultsDetailedLoadMode] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
 
@@ -46,6 +48,12 @@ def _get_kwargs(
     params["category"] = category
 
     params["tableComparison"] = table_comparison
+
+    json_load_mode: Union[Unset, None, str] = UNSET
+    if not isinstance(load_mode, Unset):
+        json_load_mode = load_mode.value if load_mode else None
+
+    params["loadMode"] = json_load_mode
 
     params["maxResultsPerCheck"] = max_results_per_check
 
@@ -103,6 +111,7 @@ def sync_detailed(
     check_name: Union[Unset, None, str] = UNSET,
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
+    load_mode: Union[Unset, None, CheckResultsDetailedLoadMode] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Response[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
@@ -120,6 +129,7 @@ def sync_detailed(
         check_name (Union[Unset, None, str]):
         category (Union[Unset, None, str]):
         table_comparison (Union[Unset, None, str]):
+        load_mode (Union[Unset, None, CheckResultsDetailedLoadMode]):
         max_results_per_check (Union[Unset, None, int]):
 
     Raises:
@@ -140,6 +150,7 @@ def sync_detailed(
         check_name=check_name,
         category=category,
         table_comparison=table_comparison,
+        load_mode=load_mode,
         max_results_per_check=max_results_per_check,
     )
 
@@ -162,6 +173,7 @@ def sync(
     check_name: Union[Unset, None, str] = UNSET,
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
+    load_mode: Union[Unset, None, CheckResultsDetailedLoadMode] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
@@ -179,6 +191,7 @@ def sync(
         check_name (Union[Unset, None, str]):
         category (Union[Unset, None, str]):
         table_comparison (Union[Unset, None, str]):
+        load_mode (Union[Unset, None, CheckResultsDetailedLoadMode]):
         max_results_per_check (Union[Unset, None, int]):
 
     Raises:
@@ -200,6 +213,7 @@ def sync(
         check_name=check_name,
         category=category,
         table_comparison=table_comparison,
+        load_mode=load_mode,
         max_results_per_check=max_results_per_check,
     ).parsed
 
@@ -216,6 +230,7 @@ async def asyncio_detailed(
     check_name: Union[Unset, None, str] = UNSET,
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
+    load_mode: Union[Unset, None, CheckResultsDetailedLoadMode] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Response[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
@@ -233,6 +248,7 @@ async def asyncio_detailed(
         check_name (Union[Unset, None, str]):
         category (Union[Unset, None, str]):
         table_comparison (Union[Unset, None, str]):
+        load_mode (Union[Unset, None, CheckResultsDetailedLoadMode]):
         max_results_per_check (Union[Unset, None, int]):
 
     Raises:
@@ -253,6 +269,7 @@ async def asyncio_detailed(
         check_name=check_name,
         category=category,
         table_comparison=table_comparison,
+        load_mode=load_mode,
         max_results_per_check=max_results_per_check,
     )
 
@@ -273,6 +290,7 @@ async def asyncio(
     check_name: Union[Unset, None, str] = UNSET,
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
+    load_mode: Union[Unset, None, CheckResultsDetailedLoadMode] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["CheckResultsListModel"]]:
     """getTableProfilingChecksResults
@@ -290,6 +308,7 @@ async def asyncio(
         check_name (Union[Unset, None, str]):
         category (Union[Unset, None, str]):
         table_comparison (Union[Unset, None, str]):
+        load_mode (Union[Unset, None, CheckResultsDetailedLoadMode]):
         max_results_per_check (Union[Unset, None, int]):
 
     Raises:
@@ -312,6 +331,7 @@ async def asyncio(
             check_name=check_name,
             category=category,
             table_comparison=table_comparison,
+            load_mode=load_mode,
             max_results_per_check=max_results_per_check,
         )
     ).parsed

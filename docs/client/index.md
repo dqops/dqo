@@ -416,7 +416,8 @@ ImportTablesQueueJobResult(
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
-							always_collect_error_samples=False
+							always_collect_error_samples=False,
+							do_not_schedule=False
 						)
 					)
 				),
@@ -464,11 +465,14 @@ By running this operation you should get a response that resembles the one below
 
 ```python
 TableCurrentDataQualityStatusModel(
+	data_domain='',
 	connection_name='sample_connection',
 	schema_name='sample_schema',
 	table_name='sample_table',
+	total_row_count=122000,
+	data_freshness_delay_days=1.221,
 	current_severity=RuleSeverityLevel.WARNING,
-	highest_historical_severity=RuleSeverityLevel.FATAL,
+	highest_historical_severity=RuleSeverityLevel.ERROR,
 	last_check_executed_at='2007-10-14T16:42:42Z',
 	executed_checks=8,
 	valid_results=3,
@@ -681,6 +685,7 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[Columns](./operations/columns.md)|Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.|
 |[Connections](./operations/connections.md)|Operations for adding/updating/deleting the configuration of data sources managed by DQOps.|
 |[Dashboards](./operations/dashboards.md)|Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.|
+|[DataCatalogSynchronization](./operations/data_catalog_synchronization.md)|Operations related to synchronization of data quality health results to the a data catalog.|
 |[DataDomains](./operations/data_domains.md)|Data domain management API to create different data domains.|
 |[DataGroupingConfigurations](./operations/data_grouping_configurations.md)|Operations for managing the configuration of data groupings on a table level in DQOps.|
 |[DataLineage](./operations/data_lineage.md)|Operations related to managing and inspecting table and column lineage.|

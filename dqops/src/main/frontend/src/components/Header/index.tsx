@@ -8,6 +8,7 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   setAdvisorJobId,
   setAdvisorObject,
+  setIsTabChanged,
   setJobAllert,
   toggleAdvisor
 } from '../../redux/actions/job.actions';
@@ -21,6 +22,7 @@ import {
   getFirstLevelTableTab,
   useDecodedParams
 } from '../../utils';
+import DomainSwitch from '../DomainSwitch/DomainSwitch';
 import HelpMenu from '../HelpMenu';
 import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
@@ -66,6 +68,7 @@ const Header = () => {
   const { isAdvisorOpen, job_dictionary_state, advisorJobId, job_allert } =
     useSelector((state: IRootState) => state.job);
   const onClick = (newCheckTypes: CheckTypes) => () => {
+    dispatch(setIsTabChanged(true));
     dispatch(setJobAllert({}));
     let url = '';
     let value = '';
@@ -139,6 +142,7 @@ const Header = () => {
         column
       );
     }
+    console.log('url', url);
     if (!url) {
       url = `/` + newCheckTypes;
       history.push(url);
@@ -185,7 +189,7 @@ const Header = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 1250);
-      setIsTextWrapped(window.innerWidth < 1475);
+      setIsTextWrapped(window.innerWidth < 1610);
     };
 
     window.addEventListener('resize', handleResize);
@@ -367,6 +371,7 @@ const Header = () => {
         </div>
       </div>
       <div className="flex">
+        <DomainSwitch />
         <HelpMenu />
         <SynchronizeButton />
         <NotificationMenu />

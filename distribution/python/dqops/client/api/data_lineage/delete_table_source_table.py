@@ -21,7 +21,7 @@ def _get_kwargs(
 
     return {
         "method": "delete",
-        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/from/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}".format(
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources/{sourceConnection}/schemas/{sourceSchema}/tables/{sourceTable}".format(
             connectionName=connection_name,
             schemaName=schema_name,
             tableName=table_name,

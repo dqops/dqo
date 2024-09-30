@@ -6,5 +6,5 @@ import com.dqops.metadata.basespecs.ObjectName;
 /**
  * Monitoring schedules spec wrapper.
  */
-public interface MonitoringSchedulesWrapper extends ElementWrapper<DefaultSchedulesSpec>, ObjectName<String> {
+public interface MonitoringSchedulesWrapper extends ElementWrapper<CronSchedulesSpec>, ObjectName<String> {
 }

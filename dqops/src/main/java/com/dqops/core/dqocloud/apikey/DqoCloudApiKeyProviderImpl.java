@@ -47,29 +47,25 @@ import java.util.Map;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
-    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private JsonSerializer jsonSerializer;
-    private final Map<String, DqoCloudApiKey> cachedApiKeysPerDomain = new LinkedHashMap<>();
+    private DqoCloudApiKey cachedApiKey;
     private final Object lock = new Object();
 
     /**
      * Default injection constructor.
      * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
-     * @param dqoUserConfigurationProperties Configuration properties with the default user home.
      * @param userHomeContextFactory User home context factory - required to load the user settings.
      * @param secretValueProvider Secret value provider - used to resolve expressions in the settings.
      * @param jsonSerializer Json serializer - used to decode the API key.
      */
     @Autowired
     public DqoCloudApiKeyProviderImpl(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
-                                      DqoUserConfigurationProperties dqoUserConfigurationProperties,
                                       UserHomeContextFactory userHomeContextFactory,
                                       SecretValueProvider secretValueProvider,
                                       JsonSerializer jsonSerializer) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
-        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
         this.jsonSerializer = jsonSerializer;
@@ -83,17 +79,11 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     @Override
     public DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity) {
         try {
-            DqoCloudApiKey cachedApiKeyPerDomain;
+            DqoCloudApiKey currentCachedApiKey;
             synchronized (this.lock) {
-                if (userIdentity != null) {
-                    String dataDomainCloud = userIdentity.getDataDomainCloud();
-                    cachedApiKeyPerDomain = this.cachedApiKeysPerDomain.get(dataDomainCloud);
-                } else {
-                    cachedApiKeyPerDomain = this.cachedApiKeysPerDomain.get(this.dqoUserConfigurationProperties.getDefaultDataDomain());
-                }
-
-                if (cachedApiKeyPerDomain != null) {
-                    return cachedApiKeyPerDomain;
+                currentCachedApiKey = this.cachedApiKey;
+                if (currentCachedApiKey != null) {
+                    return currentCachedApiKey;
                 }
             }
 
@@ -119,13 +109,9 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
             }
 
             DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
-            String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDefaultDomain();
-            if (Strings.isNullOrEmpty(apiKeyDomain)) {
-                apiKeyDomain = UserDomainIdentity.ROOT_DATA_DOMAIN;
-            }
 
             synchronized (this.lock) {
-                this.cachedApiKeysPerDomain.put(apiKeyDomain, dqoCloudApiKey);
+                this.cachedApiKey = dqoCloudApiKey;
             }
 
             return dqoCloudApiKey;
@@ -158,7 +144,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     @Override
     public void invalidate() {
         synchronized (this.lock) {
-            this.cachedApiKeysPerDomain.clear();
+            this.cachedApiKey = null;
         }
     }
 

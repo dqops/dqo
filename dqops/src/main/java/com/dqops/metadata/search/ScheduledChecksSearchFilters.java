@@ -16,8 +16,7 @@
 package com.dqops.metadata.search;
 
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import java.util.Set;
@@ -30,7 +29,7 @@ public class ScheduledChecksSearchFilters {
     @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled checks. The default value is *true*.")
     private Boolean enabled = true;
 
-    private MonitoringScheduleSpec schedule;
+    private CronScheduleSpec schedule;
 
     private Set<CheckRunScheduleGroup> schedulingGroups;
 
@@ -64,7 +63,7 @@ public class ScheduledChecksSearchFilters {
      * Returns a schedule that must be equal.
      * @return Schedule that must equal.
      */
-    public MonitoringScheduleSpec getSchedule() {
+    public CronScheduleSpec getSchedule() {
         return schedule;
     }
 
@@ -72,7 +71,7 @@ public class ScheduledChecksSearchFilters {
      * Sets a schedule template that must equal exactly.
      * @param schedule Expected schedule.
      */
-    public void setSchedule(MonitoringScheduleSpec schedule) {
+    public void setSchedule(CronScheduleSpec schedule) {
         this.schedule = schedule;
     }
 

@@ -125,6 +125,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 |<span class="no-wrap-code">[`delete_connection`</span>](./connections.md#delete_connection)|DELETE|Deletes a connection|
 |<span class="no-wrap-code">[`get_all_connections`</span>](./connections.md#get_all_connections)|GET|Returns a list of connections (data sources)|
 |<span class="no-wrap-code">[`get_connection`</span>](./connections.md#get_connection)|GET|Return the full details of a connection given the connection name|
+|<span class="no-wrap-code">[`get_connection_auto_import`</span>](./connections.md#get_connection_auto_import)|GET|Return the configuration of the table auto import for a connection|
 |<span class="no-wrap-code">[`get_connection_basic`</span>](./connections.md#get_connection_basic)|GET|Return the basic details of a connection given the connection name|
 |<span class="no-wrap-code">[`get_connection_comments`</span>](./connections.md#get_connection_comments)|GET|Return the comments for a connection|
 |<span class="no-wrap-code">[`get_connection_common_columns`</span>](./connections.md#get_connection_common_columns)|GET|Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.|
@@ -133,6 +134,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 |<span class="no-wrap-code">[`get_connection_labels`</span>](./connections.md#get_connection_labels)|GET|Return the labels for a connection|
 |<span class="no-wrap-code">[`get_connection_scheduling_group`</span>](./connections.md#get_connection_scheduling_group)|GET|Return the schedule for a connection for a scheduling group|
 |<span class="no-wrap-code">[`update_connection`</span>](./connections.md#update_connection)|PUT|Updates an existing connection|
+|<span class="no-wrap-code">[`update_connection_auto_import`</span>](./connections.md#update_connection_auto_import)|PUT|Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.|
 |<span class="no-wrap-code">[`update_connection_basic`</span>](./connections.md#update_connection_basic)|PUT|Updates the basic information of a connection|
 |<span class="no-wrap-code">[`update_connection_comments`</span>](./connections.md#update_connection_comments)|PUT|Updates (replaces) the list of comments of a connection|
 |<span class="no-wrap-code">[`update_connection_default_grouping_configuration`</span>](./connections.md#update_connection_default_grouping_configuration)|PUT|Updates the default data grouping connection of a connection|
@@ -154,6 +156,14 @@ Operations for retrieving the list of data quality dashboards supported by DQOps
 |<span class="no-wrap-code">[`get_dashboard_level_5`</span>](./dashboards.md#get_dashboard_level_5)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
 
 
+## data_catalog_synchronization
+Operations related to synchronization of data quality health results to the a data catalog.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`push_data_quality_status_to_data_catalog`</span>](./data_catalog_synchronization.md#push_data_quality_status_to_data_catalog)|PUT|Pushes the data quality status of tables matching the search filters to the data catalog.|
+
+
 ## data_domains
 Data domain management API to create different data domains.
 
@@ -163,7 +173,7 @@ Data domain management API to create different data domains.
 |<span class="no-wrap-code">[`delete_data_domain`</span>](./data_domains.md#delete_data_domain)|DELETE|Deletes a data domain. The domain is deleted in the DQOps SaaS cloud and locally.|
 |<span class="no-wrap-code">[`get_local_data_domains`</span>](./data_domains.md#get_local_data_domains)|GET|Returns a list of local data domains that this instance is maintaining. Data domains are supported only in an ENTERPRISE versions of DQOps.|
 |<span class="no-wrap-code">[`switch_to_data_domain`</span>](./data_domains.md#switch_to_data_domain)|GET|Switches to a different data domain. This operation sends a special cookie and redirects the user to the home screen.|
-|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.|
+|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.|
 
 
 ## data_grouping_configurations
@@ -186,8 +196,10 @@ Operations related to managing and inspecting table and column lineage.
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`create_table_source_table`</span>](./data_lineage.md#create_table_source_table)|POST|Creates a new source table of the table&#x27;s data lineage.|
 |<span class="no-wrap-code">[`delete_table_source_table`</span>](./data_lineage.md#delete_table_source_table)|DELETE|Deletes a specific data lineage source table of the given table.|
+|<span class="no-wrap-code">[`get_table_data_lineage_graph`</span>](./data_lineage.md#get_table_data_lineage_graph)|GET|Returns a data lineage graph around the given table.|
 |<span class="no-wrap-code">[`get_table_source_table`</span>](./data_lineage.md#get_table_source_table)|GET|Reads a specific data lineage source table defined on a target tale.|
 |<span class="no-wrap-code">[`get_table_source_tables`</span>](./data_lineage.md#get_table_source_tables)|GET|Returns a list of source tables on the data lineage that are sources of the given table.|
+|<span class="no-wrap-code">[`get_table_target_tables`</span>](./data_lineage.md#get_table_target_tables)|GET|Returns a list of target tables on the data lineage that are downstream tables of the given table.|
 |<span class="no-wrap-code">[`update_table_source_table`</span>](./data_lineage.md#update_table_source_table)|PUT|Update a specific data lineage source table using a new model.|
 
 

@@ -44,7 +44,7 @@ public interface TableStatusCache {
      *                  When the <code>checkType</code> is null, this method returns a model for monitoring and partitioned checks combined.
      * @return Table status model or null when it is not yet loaded.
      */
-    TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType);
+    TableCurrentDataQualityStatusModel getCurrentTableStatus(DomainConnectionTableKey tableStatusKey, CheckType checkType);
 
     /**
      * Retrieves the current table status for a requested table including all columns.
@@ -52,7 +52,14 @@ public interface TableStatusCache {
      * @param tableStatusKey Table status key.
      * @return Table status model or null when it is not yet loaded.
      */
-    TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey);
+    TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(DomainConnectionTableKey tableStatusKey);
+
+    /**
+     * Retrieves the current table status for a requested table and sends the combined monitoring + partition check status
+     * to the data catalog.
+     * @param tableStatusKey Table status key.
+     */
+     void sendCurrentTableStatusToDataCatalog(DomainConnectionTableKey tableStatusKey);
 
     /**
      * Notifies the table status cache that the table result were updated and should be invalidated.
@@ -61,7 +68,7 @@ public interface TableStatusCache {
      * @param replacingCachedFile True when we are replacing a file that was already in a cache, false when a file is just placed into a cache,
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
-    void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile);
+    void invalidateTableStatus(DomainConnectionTableKey tableStatusKey, boolean replacingCachedFile);
 
     /**
      * Returns a future that is completed when there are no queued table status reload operations.

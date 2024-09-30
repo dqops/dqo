@@ -95,19 +95,26 @@ public class DqoUserRolesModel {
             LinkedHashMap<String, DqoUserRole> localDataDomains = new LinkedHashMap<>();
             if (cloudUserModel.getDataDomainRoles() != null) {
                 for (Map.Entry<String, DqoUserModel.InnerEnum> cloudDomainRolePair : cloudUserModel.getDataDomainRoles().entrySet()) {
-                    localDataDomains.put(cloudDomainRolePair.getKey(), DqoUserRole.convertFromApiDomainRole(cloudDomainRolePair.getValue()));
+                    String cloudDomainName = cloudDomainRolePair.getKey();
+                    String displaySafeDataDomainName = Objects.equals(cloudDomainName, UserDomainIdentity.ROOT_DATA_DOMAIN) ?
+                            UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME : cloudDomainName;
+
+                    localDataDomains.put(displaySafeDataDomainName, DqoUserRole.convertFromApiDomainRole(cloudDomainRolePair.getValue()));
                 }
             }
 
             for (LocalDataDomainSpec localDataDomainSpec : allDataDomains) {
                 String localDomainName = localDataDomainSpec.getDataDomainName();
-                if (cloudUserModel.getDataDomainRoles() != null && cloudUserModel.getDataDomainRoles().containsKey(localDomainName)) {
+
+                if (cloudUserModel.getDataDomainRoles() != null && cloudUserModel.getDataDomainRoles().containsKey(
+                        Objects.equals(localDomainName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME) ? UserDomainIdentity.ROOT_DATA_DOMAIN : localDomainName)) {
                     continue; // already mapped
                 }
 
                 // add missing data domains with no access rights
                 String displaySafeDataDomainName = Objects.equals(localDomainName, UserDomainIdentity.ROOT_DATA_DOMAIN) ?
                         UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME : localDomainName;
+
                 localDataDomains.put(displaySafeDataDomainName, DqoUserRole.NONE);
             }
 

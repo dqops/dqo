@@ -44,7 +44,9 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`databricks`](./ConnectionYaml.md#databricksparametersspec)</span>|Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).|*[DatabricksParametersSpec](./ConnectionYaml.md#databricksparametersspec)*| | | |
 |<span class="no-wrap-code ">`parallel_jobs_limit`</span>|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|*integer*| | | |
 |<span class="no-wrap-code ">[`default_grouping_configuration`](./ConnectionYaml.md#datagroupingconfigurationspec)</span>|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](./ConnectionYaml.md#datagroupingconfigurationspec)*| | | |
-|<span class="no-wrap-code ">[`schedules`](./ConnectionYaml.md#defaultschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[DefaultSchedulesSpec](./ConnectionYaml.md#defaultschedulesspec)*| | | |
+|<span class="no-wrap-code ">[`schedules`](./ConnectionYaml.md#cronschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[CronSchedulesSpec](./ConnectionYaml.md#cronschedulesspec)*| | | |
+|<span class="no-wrap-code ">[`auto_import_tables`](./ConnectionYaml.md#autoimporttablesspec)</span>|Configuration of CRON schedule used to automatically import new tables in regular intervals.|*[AutoImportTablesSpec](./ConnectionYaml.md#autoimporttablesspec)*| | | |
+|<span class="no-wrap-code ">`schedule_on_instance`</span>|Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is &quot;cloud&quot;.|*string*| | | |
 |<span class="no-wrap-code ">[`incident_grouping`](./ConnectionYaml.md#connectionincidentgroupingspec)</span>|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|*[ConnectionIncidentGroupingSpec](./ConnectionYaml.md#connectionincidentgroupingspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
@@ -473,7 +475,7 @@ The structure of this object is described below
 
 ___
 
-## DefaultSchedulesSpec
+## CronSchedulesSpec
 Container of all monitoring schedules (cron expressions) for each type of checks.
  Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
  Each group of checks can be further divided by time scale (daily, monthly, etc).
@@ -485,11 +487,27 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`profiling`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running profiling data quality checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`monitoring_daily`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running daily monitoring checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`monitoring_monthly`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running monthly monitoring checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`partitioned_daily`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running daily partitioned checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`partitioned_monthly`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running monthly partitioned checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
+|<span class="no-wrap-code ">[`profiling`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running profiling data quality checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`monitoring_daily`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running daily monitoring checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`monitoring_monthly`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running monthly monitoring checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`partitioned_daily`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running daily partitioned checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`partitioned_monthly`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running monthly partitioned checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+
+
+
+___
+
+## AutoImportTablesSpec
+Specification object configured on a connection that configures how DQOps performs automatic schema import by a CRON scheduler.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`schema_filter`</span>|Source schema name filter. Accepts filters in the form of *s, s* and *s* to restrict import to selected schemas.|*string*| | | |
+|<span class="no-wrap-code ">`table_name_contains`</span>|Source table name filter. It is a table name or a text that must be present inside the table name.|*string*| | | |
+|<span class="no-wrap-code ">[`schedule`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for importing source tables using a CRON scheduler.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
 
 
 

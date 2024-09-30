@@ -29,6 +29,7 @@ import com.dqops.rest.models.metadata.DataGroupingConfigurationModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationTrimmedModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
             if (tableSpec == null) {
@@ -153,7 +154,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String groupingConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
             TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
@@ -211,7 +212,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String dataGroupingConfigurationName,
             @ApiParam("Data grouping configuration simplified model") @RequestBody DataGroupingConfigurationTrimmedModel dataGroupingConfigurationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(schemaName)     ||
                     Strings.isNullOrEmpty(tableName)      ||
@@ -285,7 +286,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration simplified model") @RequestBody DataGroupingConfigurationTrimmedModel dataGroupingConfigurationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(schemaName)     ||
                     Strings.isNullOrEmpty(tableName)      ||
@@ -341,7 +342,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "dataGroupingConfigurationName", value = "Data grouping configuration name or empty to disable data grouping", required = true)
             @RequestParam(required = true) String dataGroupingConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -394,7 +395,7 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String dataGroupingConfigurationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(schemaName)     ||
                     Strings.isNullOrEmpty(tableName)      ||

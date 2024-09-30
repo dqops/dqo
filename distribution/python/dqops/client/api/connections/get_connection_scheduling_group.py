@@ -6,7 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_run_schedule_group import CheckRunScheduleGroup
-from ...models.monitoring_schedule_spec import MonitoringScheduleSpec
+from ...models.cron_schedule_spec import CronScheduleSpec
 from ...types import Response
 
 
@@ -28,9 +28,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[MonitoringScheduleSpec]:
+) -> Optional[CronScheduleSpec]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = MonitoringScheduleSpec.from_dict(response.json())
+        response_200 = CronScheduleSpec.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -41,7 +41,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[MonitoringScheduleSpec]:
+) -> Response[CronScheduleSpec]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -55,7 +55,7 @@ def sync_detailed(
     scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
-) -> Response[MonitoringScheduleSpec]:
+) -> Response[CronScheduleSpec]:
     """getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
@@ -69,7 +69,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonitoringScheduleSpec]
+        Response[CronScheduleSpec]
     """
 
     kwargs = _get_kwargs(
@@ -89,7 +89,7 @@ def sync(
     scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
-) -> Optional[MonitoringScheduleSpec]:
+) -> Optional[CronScheduleSpec]:
     """getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
@@ -103,7 +103,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonitoringScheduleSpec
+        CronScheduleSpec
     """
 
     return sync_detailed(
@@ -118,7 +118,7 @@ async def asyncio_detailed(
     scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
-) -> Response[MonitoringScheduleSpec]:
+) -> Response[CronScheduleSpec]:
     """getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
@@ -132,7 +132,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonitoringScheduleSpec]
+        Response[CronScheduleSpec]
     """
 
     kwargs = _get_kwargs(
@@ -150,7 +150,7 @@ async def asyncio(
     scheduling_group: CheckRunScheduleGroup,
     *,
     client: AuthenticatedClient,
-) -> Optional[MonitoringScheduleSpec]:
+) -> Optional[CronScheduleSpec]:
     """getConnectionSchedulingGroup
 
      Return the schedule for a connection for a scheduling group
@@ -164,7 +164,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonitoringScheduleSpec
+        CronScheduleSpec
     """
 
     return (

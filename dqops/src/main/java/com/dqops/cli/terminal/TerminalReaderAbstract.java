@@ -16,6 +16,7 @@
 package com.dqops.cli.terminal;
 
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import tech.tablesaw.api.Table;
@@ -80,7 +81,7 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      */
     @Override
     public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration, boolean peekOnly) {
-        CompletableFuture<Boolean> inputReceivedCompletableFuture = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Boolean> inputReceivedCompletableFuture = CompletableFutureRunner.supplyAsync(() -> {
             Character c = this.tryReadChar(waitDuration.toMillis(), peekOnly);
             return c != null;
         });
