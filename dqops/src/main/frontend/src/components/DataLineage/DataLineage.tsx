@@ -4,8 +4,8 @@ import SourceTables from '../Connection/TableView/SourceTables/SourceTables';
 import DataLineageGraph from '../DataLineageGraph/DataLineageGraph';
 import Tabs from '../Tabs';
 const tabs = [
-  { label: 'Source tables', value: 'data-lineage' },
-  { label: 'Data lineage graph', value: 'data-lineage-graph' }
+  { label: 'Data lineage graph', value: 'data-lineage-graph' },
+  { label: 'Source tables', value: 'data-lineage' }
 ];
 export default function DataLineage() {
   const {
@@ -13,7 +13,7 @@ export default function DataLineage() {
     schema,
     table
   }: { connection: string; schema: string; table: string } = useDecodedParams();
-  const [activeTab, setActiveTab] = React.useState('data-lineage');
+  const [activeTab, setActiveTab] = React.useState('data-lineage-graph');
   return (
     <div className="py-2">
       <div className="border-b border-gray-300">

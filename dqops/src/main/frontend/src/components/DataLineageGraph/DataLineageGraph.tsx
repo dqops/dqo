@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import {
@@ -33,19 +33,18 @@ export default function DataLineageGraph({
   const [loading, setLoading] = useState(false);
   const [severityColors, setSeverityColors] = useState<string[]>([]);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
-  const [tableDataLineage, setTableDataLineage] = useState<TableLineageModel>(
-    {}
-  );
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
 
-  const showDataLineage = useCallback(
-    (index: number) => {
-      const selectedFlow = tableDataLineage.flows?.[index] ?? {};
+  const tableDataLineageRef = useRef<TableLineageModel | null>(null);
+
+  const showDataLineage = (index: number) => {
+    const tableDataLineage = tableDataLineageRef.current;
+    if (tableDataLineage && tableDataLineage.flows) {
+      const selectedFlow = tableDataLineage.flows[index] ?? {};
       setFlow(selectedFlow);
       setDetailsDialogOpen(true);
-    },
-    [tableDataLineage]
-  );
+    }
+  };
 
   useEffect(() => {
     window.showDataLineage = showDataLineage;
@@ -59,10 +58,10 @@ export default function DataLineageGraph({
           table
         );
         const data = response.data;
-        setTableDataLineage(data);
+
+        tableDataLineageRef.current = data;
 
         if (!data.data_lineage_fully_loaded) {
-          // TODO: Show a spinner over the graph, not instead of the graph (we can show partial graphs)
           setTimeout(() => fetchTableDataLineageGraph(), 500);
         }
 
@@ -107,33 +106,32 @@ export default function DataLineageGraph({
     }
   };
 
-  if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
-      </div>
-    );
-  }
-
-  if (!graphArray.length) {
-    return <></>;
-  }
-
   return (
-    <div>
-      <Chart
-        chartType="Sankey"
-        width="100%"
-        height="100%"
-        data={[
-          ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
-          ...graphArray
-        ]}
-        options={options}
-      />
+    <div className="relative w-full h-full">
+      {loading && (
+        <div className="absolute inset-0 z-10 flex justify-center items-center bg-white bg-opacity-70">
+          <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+        </div>
+      )}
+
+      {graphArray.length > 0 ? (
+        <Chart
+          chartType="Sankey"
+          width="100%"
+          height="100%"
+          data={[
+            ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
+            ...graphArray
+          ]}
+          options={options}
+        />
+      ) : null}
+
       <DataLineageDetailsDialog
         isOpen={detailsDialogOpen}
-        onClose={() => setDetailsDialogOpen(false)}
+        onClose={() => {
+          setDetailsDialogOpen(false), setFlow({});
+        }}
         flow={flow}
       />
     </div>
