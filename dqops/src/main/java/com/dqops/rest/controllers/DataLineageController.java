@@ -221,7 +221,7 @@ public class DataLineageController {
                     listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
                     return;
                 }
-                TableWrapper sourceTableWrapper = connectionWrapper.getTables().getByObjectName(
+                TableWrapper sourceTableWrapper = sourceConnectionWrapper.getTables().getByObjectName(
                         new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()), true);
                 if (sourceTableWrapper == null) {
                     listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
