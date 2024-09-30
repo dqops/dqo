@@ -1,4 +1,4 @@
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FilteredNotificationModel } from '../../../../api';
@@ -239,7 +239,11 @@ export default function NotificationPatternTable({
                             'ml-1.5'
                         )}
                       >
-                        <SvgIcon name="edit" className="w-4" />
+                        <Tooltip content="Modify">
+                          <div>
+                            <SvgIcon name="edit" className="w-4" />
+                          </div>
+                        </Tooltip>
                       </IconButton>
                       {notificationPattern.name !== 'default' && (
                         <IconButton
@@ -250,7 +254,11 @@ export default function NotificationPatternTable({
                           color="teal"
                           className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                         >
-                          <SvgIcon name="delete" className="w-4" />
+                          <Tooltip content="Delete">
+                            <div>
+                              <SvgIcon name="delete" className="w-4" />
+                            </div>
+                          </Tooltip>
                         </IconButton>
                       )}
                     </div>
