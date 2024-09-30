@@ -463,7 +463,7 @@ export const IncidentDetail = () => {
               title={'Collapse data lineage'}
               svgIcon
               onClick={() => setShowDataLineage(false)}
-              className="mt-1"
+              className="mt-2"
             >
               <DataLineageGraph
                 connection={incidentDetail?.connection || ''}
