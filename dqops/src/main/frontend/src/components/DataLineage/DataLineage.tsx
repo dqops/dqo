@@ -13,7 +13,7 @@ export default function DataLineage() {
     schema,
     table
   }: { connection: string; schema: string; table: string } = useDecodedParams();
-  const [activeTab, setActiveTab] = React.useState('data-lineage');
+  const [activeTab, setActiveTab] = React.useState('data-lineage-graph');
   return (
     <div className="py-2">
       <div className="border-b border-gray-300">

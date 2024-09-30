@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import {
@@ -33,17 +33,22 @@ export default function DataLineageGraph({
   const [loading, setLoading] = useState(false);
   const [severityColors, setSeverityColors] = useState<string[]>([]);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
-  const [tableDataLineage, setTableDataLineage] = useState<TableLineageModel>(
-    {}
-  );
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
+
+  const tableDataLineageRef = useRef<TableLineageModel | null>(null);
+
   const showDataLineage = (index: number) => {
-    const selectedFlow = tableDataLineage.flows?.[index] ?? {};
-    setFlow(selectedFlow);
-    setDetailsDialogOpen(true);
+    const tableDataLineage = tableDataLineageRef.current;
+    if (tableDataLineage && tableDataLineage.flows) {
+      const selectedFlow = tableDataLineage.flows[index] ?? {};
+      setFlow(selectedFlow);
+      setDetailsDialogOpen(true);
+    }
   };
 
   useEffect(() => {
+    window.showDataLineage = showDataLineage;
+
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
       try {
@@ -53,10 +58,10 @@ export default function DataLineageGraph({
           table
         );
         const data = response.data;
-        setTableDataLineage(data);
+
+        tableDataLineageRef.current = data;
 
         if (!data.data_lineage_fully_loaded) {
-          // TODO: Show a spinner over the graph, not instead of the graph (we can show partial graphs)
           setTimeout(() => fetchTableDataLineageGraph(), 500);
         }
 
@@ -85,14 +90,11 @@ export default function DataLineageGraph({
     };
 
     fetchTableDataLineageGraph();
-  }, [connection, schema, table]);
 
-  useEffect(() => {
-    window.showDataLineage = showDataLineage;
     return () => {
       window.showDataLineage = null;
     };
-  }, [tableDataLineage]);
+  }, [connection, schema, table]);
 
   const options = {
     tooltip: { isHtml: true },
@@ -104,10 +106,6 @@ export default function DataLineageGraph({
     }
   };
 
-  if (!graphArray.length) {
-    return <></>;
-  }
-
   return (
     <div className="relative w-full h-full">
       {loading && (
@@ -116,19 +114,24 @@ export default function DataLineageGraph({
         </div>
       )}
 
-      <Chart
-        chartType="Sankey"
-        width="100%"
-        height="100%"
-        data={[
-          ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
-          ...graphArray
-        ]}
-        options={options}
-      />
+      {graphArray.length > 0 ? (
+        <Chart
+          chartType="Sankey"
+          width="100%"
+          height="100%"
+          data={[
+            ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
+            ...graphArray
+          ]}
+          options={options}
+        />
+      ) : null}
+
       <DataLineageDetailsDialog
         isOpen={detailsDialogOpen}
-        onClose={() => setDetailsDialogOpen(false)}
+        onClose={() => {
+          setDetailsDialogOpen(false), setFlow({});
+        }}
         flow={flow}
       />
     </div>
