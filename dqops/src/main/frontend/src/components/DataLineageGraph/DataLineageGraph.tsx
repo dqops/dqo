@@ -107,20 +107,18 @@ export default function DataLineageGraph({
     }
   };
 
-  if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
-      </div>
-    );
-  }
-
   if (!graphArray.length) {
     return <></>;
   }
 
   return (
-    <div>
+    <div className="relative w-full h-full">
+      {loading && (
+        <div className="absolute inset-0 z-10 flex justify-center items-center bg-white bg-opacity-70">
+          <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+        </div>
+      )}
+
       <Chart
         chartType="Sankey"
         width="100%"
