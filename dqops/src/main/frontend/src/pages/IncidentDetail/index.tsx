@@ -100,6 +100,7 @@ export const IncidentDetail = () => {
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
   const [createNotificationDialogOpen, setCreateNotificationDialogOpen] =
     useState(false);
+  const [showDataLineage, setShowDataLineage] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
@@ -434,7 +435,7 @@ export const IncidentDetail = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center p-4 gap-6 mb-4 text-sm">
+        <div className="flex items-center p-4 gap-6 text-sm">
           <div className="grow">
             <Input
               value={searchTerm}
@@ -455,6 +456,31 @@ export const IncidentDetail = () => {
               />
             ))}
           </div>
+        </div>
+        <div className="pb-5 px-4 overflow-y-auto">
+          {showDataLineage ? (
+            <SectionWrapper
+              title={'Collapse data lineage'}
+              svgIcon
+              onClick={() => setShowDataLineage(false)}
+              className="mt-1"
+            >
+              <DataLineageGraph
+                connection={incidentDetail?.connection || ''}
+                schema={incidentDetail?.schema || ''}
+                table={incidentDetail?.table || ''}
+              />
+            </SectionWrapper>
+          ) : (
+            <div className="flex items-center text-sm">
+              <SvgIcon
+                name="chevron-down"
+                className="w-5 h-5"
+                onClick={() => setShowDataLineage(true)}
+              />
+              <div> Expand data lineage</div>
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-4 gap-4 px-4 text-sm">
           <SectionWrapper title="Table">
@@ -656,15 +682,6 @@ export const IncidentDetail = () => {
             </div>
           </SectionWrapper>
         </div>
-        {incidentDetail?.connection &&
-          incidentDetail?.schema &&
-          incidentDetail?.table && (
-            <DataLineageGraph
-              connection={incidentDetail?.connection}
-              schema={incidentDetail?.schema}
-              table={incidentDetail?.table}
-            />
-          )}
         {issues?.length === 0 &&
         Object.keys(histograms?.checks ?? {}).length === 0 &&
         Object.keys(histograms?.columns ?? {}).length === 0 ? (
