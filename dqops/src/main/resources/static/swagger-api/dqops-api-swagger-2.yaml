@@ -36352,6 +36352,7 @@ definitions:
         - "spark"
         - "sqlserver"
         - "trino"
+        - "hana"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36389,6 +36390,9 @@ definitions:
       databricks:
         description: "Databricks connection parameters."
         $ref: "#/definitions/DatabricksParametersSpec"
+      hana:
+        description: "HANA connection parameters."
+        $ref: "#/definitions/HanaParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -36465,6 +36469,7 @@ definitions:
         - "spark"
         - "sqlserver"
         - "trino"
+        - "hana"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36513,6 +36518,10 @@ definitions:
         description: "Databricks connection parameters. Specify parameters in the\
           \ databricks section or set the url (which is the Databricks JDBC url)."
         $ref: "#/definitions/DatabricksParametersSpec"
+      hana:
+        description: "HANA connection parameters. Specify parameters in the databricks\
+          \ section or set the url (which is the Databricks JDBC url)."
+        $ref: "#/definitions/HanaParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -38306,6 +38315,37 @@ definitions:
       do_not_create_incidents:
         type: "boolean"
         description: "Flag to remove incident that match the filters."
+  HanaParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "Hana host name. Supports also a ${HANA_HOST} configuration with\
+          \ a custom environment variable."
+      port:
+        type: "string"
+        description: "Hana port number. The default port is 30015. Supports also a\
+          \ ${HANA_PORT} configuration with a custom environment variable."
+      instance_number:
+        type: "string"
+        description: "Hana instance number. Supports also a ${HANA_INSTANCE_NUMBER}\
+          \ configuration with a custom environment variable."
+      user:
+        type: "string"
+        description: "Hana user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "Hana database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
+      database:
+        type: "string"
   HierarchyIdModel:
     type: "object"
     properties:
@@ -39406,6 +39446,7 @@ definitions:
         - "spark"
         - "sqlserver"
         - "trino"
+        - "hana"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -39438,6 +39479,7 @@ definitions:
         - "spark"
         - "sqlserver"
         - "trino"
+        - "hana"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
