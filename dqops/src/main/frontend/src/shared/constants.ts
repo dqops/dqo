@@ -410,7 +410,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.hana,
     name: 'SAP HANA',
-    iconName: 'saphana',
+    iconName: '',
     displayName: 'SAP HANA'
   },
   {
