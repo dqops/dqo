@@ -1515,6 +1515,7 @@ from .filtered_notification_spec import FilteredNotificationSpec
 from .folder_synchronization_status import FolderSynchronizationStatus
 from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
+from .histogram_daily_issues_count import HistogramDailyIssuesCount
 from .historic_data_points_grouping import HistoricDataPointsGrouping
 from .iceberg_file_format_spec import IcebergFileFormatSpec
 from .import_schema_queue_job_parameters import ImportSchemaQueueJobParameters
@@ -1523,15 +1524,10 @@ from .import_tables_queue_job_parameters import ImportTablesQueueJobParameters
 from .import_tables_queue_job_result import ImportTablesQueueJobResult
 from .import_tables_result import ImportTablesResult
 from .incident_counts_model import IncidentCountsModel
-from .incident_daily_issues_count import IncidentDailyIssuesCount
 from .incident_filtered_notification_location import (
     IncidentFilteredNotificationLocation,
 )
 from .incident_grouping_level import IncidentGroupingLevel
-from .incident_issue_histogram_model import IncidentIssueHistogramModel
-from .incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
-from .incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
-from .incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
 from .incident_model import IncidentModel
 from .incident_notification_spec import IncidentNotificationSpec
 from .incident_notification_spec_filtered_notifications import (
@@ -1542,6 +1538,10 @@ from .incident_severity_level_counts_model import IncidentSeverityLevelCountsMod
 from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
 from .incidents_per_connection_model import IncidentsPerConnectionModel
+from .issue_histogram_model import IssueHistogramModel
+from .issue_histogram_model_checks import IssueHistogramModelChecks
+from .issue_histogram_model_columns import IssueHistogramModelColumns
+from .issue_histogram_model_days import IssueHistogramModelDays
 from .json_file_format_spec import JsonFileFormatSpec
 from .json_format_type import JsonFormatType
 from .json_records_type import JsonRecordsType
@@ -2757,6 +2757,7 @@ __all__ = (
     "FolderSynchronizationStatus",
     "HierarchyIdModel",
     "HierarchyIdModelPathItem",
+    "HistogramDailyIssuesCount",
     "HistoricDataPointsGrouping",
     "IcebergFileFormatSpec",
     "ImportSchemaQueueJobParameters",
@@ -2765,13 +2766,8 @@ __all__ = (
     "ImportTablesQueueJobResult",
     "ImportTablesResult",
     "IncidentCountsModel",
-    "IncidentDailyIssuesCount",
     "IncidentFilteredNotificationLocation",
     "IncidentGroupingLevel",
-    "IncidentIssueHistogramModel",
-    "IncidentIssueHistogramModelChecks",
-    "IncidentIssueHistogramModelColumns",
-    "IncidentIssueHistogramModelDays",
     "IncidentModel",
     "IncidentNotificationSpec",
     "IncidentNotificationSpecFilteredNotifications",
@@ -2780,6 +2776,10 @@ __all__ = (
     "IncidentSortOrder",
     "IncidentsPerConnectionModel",
     "IncidentStatus",
+    "IssueHistogramModel",
+    "IssueHistogramModelChecks",
+    "IssueHistogramModelColumns",
+    "IssueHistogramModelDays",
     "JsonFileFormatSpec",
     "JsonFormatType",
     "JsonRecordsType",

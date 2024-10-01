@@ -5,11 +5,11 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="IncidentDailyIssuesCount")
+T = TypeVar("T", bound="HistogramDailyIssuesCount")
 
 
 @_attrs_define
-class IncidentDailyIssuesCount:
+class HistogramDailyIssuesCount:
     """
     Attributes:
         warnings (Union[Unset, int]): The number of failed data quality checks that generated a warning severity data
@@ -58,15 +58,15 @@ class IncidentDailyIssuesCount:
 
         total_count = d.pop("totalCount", UNSET)
 
-        incident_daily_issues_count = cls(
+        histogram_daily_issues_count = cls(
             warnings=warnings,
             errors=errors,
             fatals=fatals,
             total_count=total_count,
         )
 
-        incident_daily_issues_count.additional_properties = d
-        return incident_daily_issues_count
+        histogram_daily_issues_count.additional_properties = d
+        return histogram_daily_issues_count
 
     @property
     def additional_keys(self) -> List[str]:

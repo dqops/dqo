@@ -44,6 +44,8 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ProviderType*](./common.md#providertype)|Data source provider type (dialect type). We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.|
 |[*ConnectionModel*](./common.md#connectionmodel)|Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 |[*DqoQueueJobId*](./common.md#dqoqueuejobid)|Identifies a single job.|
+|[*HistogramDailyIssuesCount*](./common.md#histogramdailyissuescount)|A model that stores a daily number of incidents.|
+|[*IssueHistogramModel*](./common.md#issuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident or a table. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*ProfilingTimePeriodTruncation*](./common.md#profilingtimeperiodtruncation)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
 |[*TableListModel*](./common.md#tablelistmodel)|Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 
@@ -214,8 +216,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |------------|---------------------------------|
 |[*CheckResultEntryModel*](./incidents.md#checkresultentrymodel)|Detailed results for a single check. Represent one row in the check results table.|
 |[*CheckResultSortOrder*](./incidents.md#checkresultsortorder)|Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that can be sorted.|
-|[*IncidentDailyIssuesCount*](./incidents.md#incidentdailyissuescount)|A model that stores a daily number of incidents.|
-|[*IncidentIssueHistogramModel*](./incidents.md#incidentissuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*IncidentStatus*](./incidents.md#incidentstatus)|Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.|
 |[*IncidentFilteredNotificationLocation*](./incidents.md#incidentfilterednotificationlocation)|Enumeration that says where a filtered notification for an incident is defined. Is it defined on a connection level, or on the global level.|
 |[*IncidentModel*](./incidents.md#incidentmodel)|Data quality incident model shown on an incident details screen.|

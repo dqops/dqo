@@ -3,11 +3,11 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="IncidentIssueHistogramModelColumns")
+T = TypeVar("T", bound="IssueHistogramModelColumns")
 
 
 @_attrs_define
-class IncidentIssueHistogramModelColumns:
+class IssueHistogramModelColumns:
     """A map of column names with the most data quality issues related to the incident. The map returns the count of issues
     as the value.
 
@@ -26,10 +26,10 @@ class IncidentIssueHistogramModelColumns:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        incident_issue_histogram_model_columns = cls()
+        issue_histogram_model_columns = cls()
 
-        incident_issue_histogram_model_columns.additional_properties = d
-        return incident_issue_histogram_model_columns
+        issue_histogram_model_columns.additional_properties = d
+        return issue_histogram_model_columns
 
     @property
     def additional_keys(self) -> List[str]:

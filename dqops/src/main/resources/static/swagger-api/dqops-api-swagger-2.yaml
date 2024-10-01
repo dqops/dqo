@@ -13339,7 +13339,7 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Incident's histograms returned"
+          description: "Incident's histogram returned"
           schema:
             $ref: "#/definitions/IssueHistogramModel"
         404:

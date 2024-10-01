@@ -679,6 +679,45 @@ Identifies a single job.
 
 ___
 
+## HistogramDailyIssuesCount
+A model that stores a daily number of incidents.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`warnings`</span>|The number of failed data quality checks that generated a warning severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`errors`</span>|The number of failed data quality checks that generated an error severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`fatals`</span>|The number of failed data quality checks that generated a fatal severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`total_count`</span>|The total count of failed data quality checks on this day.|*integer*|
+
+
+___
+
+## IssueHistogramModel
+Model that returns histograms of the data quality issue occurrences related to a data quality incident or a table.
+ The dates in the daily histogram are using the default timezone of the DQOps server.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`has_profiling_issues`</span>|True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_daily_monitoring_issues`</span>|True when this data quality incident is based on data quality issues from daily monitoring checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_monthly_monitoring_issues`</span>|True when this data quality incident is based on data quality issues from monthly monitoring checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_daily_partitioned_issues`</span>|True when this data quality incident is based on data quality issues from daily partitioned checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_monthly_partitioned_issues`</span>|True when this data quality incident is based on data quality issues from monthly partitioned checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`days`</span>|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|*Dict[date, [HistogramDailyIssuesCount](#histogramdailyissuescount)]*|
+|<span class="no-wrap-code">`columns`</span>|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|*Dict[string, integer]*|
+|<span class="no-wrap-code">`checks`</span>|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|*Dict[string, integer]*|
+
+
+___
+
 ## ProfilingTimePeriodTruncation
 The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
  The default profiling check stores one value per month. When profiling checks is re-executed during the month,

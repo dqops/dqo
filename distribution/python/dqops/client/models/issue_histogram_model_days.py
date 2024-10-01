@@ -4,17 +4,17 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
-    from ..models.incident_daily_issues_count import IncidentDailyIssuesCount
+    from ..models.histogram_daily_issues_count import HistogramDailyIssuesCount
 
 
-T = TypeVar("T", bound="IncidentIssueHistogramModelDays")
+T = TypeVar("T", bound="IssueHistogramModelDays")
 
 
 @_attrs_define
-class IncidentIssueHistogramModelDays:
+class IssueHistogramModelDays:
     """A map of the numbers of data quality issues per day, the day uses the DQOps server timezone."""
 
-    additional_properties: Dict[str, "IncidentDailyIssuesCount"] = _attrs_field(
+    additional_properties: Dict[str, "HistogramDailyIssuesCount"] = _attrs_field(
         init=False, factory=dict
     )
 
@@ -31,30 +31,28 @@ class IncidentIssueHistogramModelDays:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.incident_daily_issues_count import IncidentDailyIssuesCount
+        from ..models.histogram_daily_issues_count import HistogramDailyIssuesCount
 
         d = src_dict.copy()
-        incident_issue_histogram_model_days = cls()
+        issue_histogram_model_days = cls()
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
-            additional_property = IncidentDailyIssuesCount.from_dict(prop_dict)
+            additional_property = HistogramDailyIssuesCount.from_dict(prop_dict)
 
             additional_properties[prop_name] = additional_property
 
-        incident_issue_histogram_model_days.additional_properties = (
-            additional_properties
-        )
-        return incident_issue_histogram_model_days
+        issue_histogram_model_days.additional_properties = additional_properties
+        return issue_histogram_model_days
 
     @property
     def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
-    def __getitem__(self, key: str) -> "IncidentDailyIssuesCount":
+    def __getitem__(self, key: str) -> "HistogramDailyIssuesCount":
         return self.additional_properties[key]
 
-    def __setitem__(self, key: str, value: "IncidentDailyIssuesCount") -> None:
+    def __setitem__(self, key: str, value: "HistogramDailyIssuesCount") -> None:
         self.additional_properties[key] = value
 
     def __delitem__(self, key: str) -> None:
