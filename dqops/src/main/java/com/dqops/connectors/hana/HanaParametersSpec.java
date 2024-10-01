@@ -36,8 +36,12 @@ public class HanaParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--hana-port"}, description = "Hana port number")
-    @JsonPropertyDescription("Hana port number. The default port is 10000. Supports also a ${HANA_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("Hana port number. The default port is 30015. Supports also a ${HANA_PORT} configuration with a custom environment variable.")
     private String port;
+
+    @CommandLine.Option(names = {"--hana-instance-number"}, description = "Hana instance number")
+    @JsonPropertyDescription("Hana instance number. Supports also a ${HANA_INSTANCE_NUMBER} configuration with a custom environment variable.")
+    private String instanceNumber;
 
     @CommandLine.Option(names = {"--hana-user"}, description = "Hana user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Hana user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -79,11 +83,28 @@ public class HanaParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Sets the port number.
-     * @param port Port name.
+     * @param port Port number.
      */
     public void setPort(String port) {
         setDirtyIf(!Objects.equals(this.port, port));
         this.port = port;
+    }
+
+    /**
+     * Returns the instance number. The value should store an environment variable expression or a numeric instance number.
+     * @return Instance number or an expression to be extracted.
+     */
+    public String getInstanceNumber() {
+        return instanceNumber;
+    }
+
+    /**
+     * Sets the instance number.
+     * @param instanceNumber instance number.
+     */
+    public void setInstanceNumber(String instanceNumber) {
+        setDirtyIf(!Objects.equals(this.instanceNumber, instanceNumber));
+        this.instanceNumber = instanceNumber;
     }
 
     /**
@@ -166,6 +187,7 @@ public class HanaParametersSpec extends BaseProviderParametersSpec
         HanaParametersSpec cloned = this.deepClone();
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
+        cloned.instanceNumber = secretValueProvider.expandValue(cloned.instanceNumber, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);

@@ -47,6 +47,13 @@ const HanaConnection = ({
       />
       <FieldTypeInput
         data={sharedCredentials}
+        label="Instance number"
+        className="mb-4"
+        value={hana?.instance_number}
+        onChange={(value) => handleChange({ instance_number: value })}
+      />
+      <FieldTypeInput
+        data={sharedCredentials}
         label="User name"
         className="mb-4"
         value={hana?.user}
