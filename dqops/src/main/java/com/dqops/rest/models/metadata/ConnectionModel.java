@@ -20,6 +20,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.hana.HanaParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -152,6 +153,12 @@ public class ConnectionModel {
     private DatabricksParametersSpec databricks;
 
     /**
+     * HANA connection parameters.
+     */
+    @JsonPropertyDescription("HANA connection parameters.")
+    private HanaParametersSpec hana;
+
+    /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
      */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
@@ -256,6 +263,7 @@ public class ConnectionModel {
             setPresto(connectionSpec.getPresto());
             setTrino(connectionSpec.getTrino());
             setDatabricks(connectionSpec.getDatabricks());
+            setHana(connectionSpec.getHana());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -327,6 +335,7 @@ public class ConnectionModel {
         targetConnectionSpec.setPresto(this.getPresto());
         targetConnectionSpec.setTrino(this.getTrino());
         targetConnectionSpec.setDatabricks(this.getDatabricks());
+        targetConnectionSpec.setHana(this.getHana());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

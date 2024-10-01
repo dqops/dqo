@@ -85,8 +85,8 @@ public class HanaContainer<SELF extends HanaContainer<SELF>> extends JdbcDatabas
          * License available at: https://www.sap.com/docs/download/cmp/2016/06/sap-hana-express-dev-agmt-and-exhibit.pdf
          */
 
-        Boolean licenseAccepted = Boolean.getBoolean("I_HAVE_ACCEPTED_SAP_LICENSE");
-        if (licenseAccepted == null){
+        boolean licenseAccepted = Boolean.getBoolean("I_HAVE_ACCEPTED_SAP_LICENSE");
+        if (!licenseAccepted){
             return;
         }
 
