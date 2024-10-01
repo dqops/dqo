@@ -42471,6 +42471,12 @@ definitions:
       relative_table:
         description: "The table for which the data lineage is generated."
         $ref: "#/definitions/DomainConnectionTableKey"
+      relative_table_cumulative_quality_status:
+        description: "The data quality status of the reference table (in the middle\
+          \ of the data lineage) showing the highest severity problems detected on\
+          \ the reference table and all upstream tables from which some issues have\
+          \ come."
+        $ref: "#/definitions/TableCurrentDataQualityStatusModel"
       flows:
         type: "array"
         description: "A list of data flows from source tables to direct target tables.\

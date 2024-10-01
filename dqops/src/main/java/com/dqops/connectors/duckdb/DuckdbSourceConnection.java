@@ -51,6 +51,7 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -75,6 +76,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final TablesListerProvider tablesListerProvider;
     private final DuckdbInMemoryInstance duckdbInMemoryInstance;
     private final AzureCredentialsProvider azureCredentialsProvider;
+    private boolean extensionsAreNotAvailable; // flag to tell that we cannot register extensions
 
     /**
      * Injection constructor for the duckdb connection.
@@ -280,7 +282,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     private void registerExtensions() {
         try {
-            String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
+            File userLocationFile = Path.of(this.homeLocationFindService.getUserHomePath()).resolve("bin/.duckdb/extensions").toFile();
+            String setExtensionsQuery =
+                    userLocationFile.exists() && userLocationFile.isDirectory() ?
+                            DuckdbQueriesProvider.provideSetExtensionsQuery(this.homeLocationFindService.getUserHomePath()) :
+                            DuckdbQueriesProvider.provideSetExtensionsQuery(this.homeLocationFindService.getDqoHomePath());
             this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
 
             List<String> availableExtensionList = getAvailableExtensions();
@@ -291,12 +297,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     String loadExtensionQuery = "LOAD " + extensionName;
                     this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
                 } catch (Exception exception) {
-                    log.error("Extension " + extensionName + " cannot be loaded.");
-                    log.error(exception.getMessage());
+                    log.warn("Extension " + extensionName + " cannot be loaded.");
+                    log.warn(exception.getMessage());
                 }
             });
         } catch (Exception e) {
-            throw new DqoRuntimeException(e);
+            this.extensionsAreNotAvailable = true;
         }
     }
 

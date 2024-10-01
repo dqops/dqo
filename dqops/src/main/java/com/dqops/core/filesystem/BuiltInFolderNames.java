@@ -105,6 +105,16 @@ public final class BuiltInFolderNames {
     public static final String LOGS = ".logs";
 
     /**
+     * Local user folder to store additional binary files.
+     */
+    public static final String BIN = "bin";
+
+    /**
+     * Local user folder to store additional .jar libraries.
+     */
+    public static final String JARS = "jars";
+
+    /**
      * The folder with additional data domains. Each data domain is a subfolder under the "domains" folder,
      * which is a new DQOps user home folder, but without nested data domains.
      */
