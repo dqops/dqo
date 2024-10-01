@@ -79,6 +79,7 @@ public class TableLineageServiceImpl implements TableLineageService {
         if (upstreamLineage) {
             upstreamCombinedQualityStatus = collectUpstreamLineage(
                     userHome, referenceTable, tableLineageModel, upstreamTableStatuses, visitedTables, onStackTables);
+            tableLineageModel.setRelativeTableCumulativeQualityStatus(upstreamCombinedQualityStatus);
         }
 
         if (downstreamLineage) {

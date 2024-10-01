@@ -63,7 +63,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private DqoUserPrincipalProvider principalProvider;
     private JobDataMapAdapter jobDataMapAdapter;
-    private static LocalDateTime lastExecutedAtHour;
+//    private static LocalDateTime lastExecutedAtHour;
     private static final Map<String, Integer> jobRunCountPerDomain = new ConcurrentHashMap<>();
     private static final Map<String, Instant> lastSynchronizationPerDomain = new ConcurrentHashMap<>();
     private static Random random = new Random();
@@ -114,26 +114,25 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
             }
 
             final int jobRunCount = jobRunCountPerDomain.getOrDefault(dataDomain, 0);
-            final Instant lastSynchronization = lastSynchronizationPerDomain.get(dataDomain);
+//            final Instant lastSynchronization = lastSynchronizationPerDomain.get(dataDomain);
 
 //            if (runCloudSync && jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
-//                    cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE)) {
+//                    cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE) ||
+//                    cloudApiKeyPayload.getExpiresAt() != null) {
 //                // free user
 //
-//                LocalDateTime executionHour = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.hour);
-//                if (Objects.equals(executionHour, lastExecutedAtHour)) {
-//                    runCloudSync = false;
-//                }
+////                LocalDateTime executionHour = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.hour);
+////                if (Objects.equals(executionHour, lastExecutedAtHour)) {
+////                    runCloudSync = false;
+////                }
 //
-//                lastExecutedAtHour = executionHour;
-//                if (runCloudSync && !waitRandomTime(jobExecutionContext, 3600 - MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
-//                    runCloudSync = false;
-//                }
+////                lastExecutedAtHour = executionHour;
+////                if (runCloudSync && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+////                    runCloudSync = false;
+////                }
 //            }
 
-            if (jobRunCount > 0 && !interrupted && lastSynchronization != null &&
-                    Instant.now().isBefore(lastSynchronization.plus(MINIMUM_SYNCHRONIZATION_DELAY_SECONDS, ChronoUnit.SECONDS)) &&
-                    !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+            if (jobRunCount > 0 && !interrupted && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
                 return;
             }
 
@@ -176,8 +175,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     public boolean waitRandomTime(JobExecutionContext jobExecutionContext,
                                   int waitSeconds)
             throws InterruptedException, SchedulerException {
-        int startSecondOffset = (Math.abs(random.nextInt()) % (waitSeconds / 2)) +
-                                (waitSeconds / 2);
+        int startSecondOffset = Math.abs(random.nextInt()) % waitSeconds;
 
         Instant expectedRunAt = Instant.now().plus(startSecondOffset, ChronoUnit.SECONDS);
         while (Instant.now().isBefore(expectedRunAt)) {
