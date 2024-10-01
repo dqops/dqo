@@ -408,6 +408,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'MariaDB'
   },
   {
+    type: ConnectionModelProviderTypeEnum.hana,
+    name: 'SAP HANA',
+    iconName: '',
+    displayName: 'SAP HANA'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.sqlserver,
     name: 'SQL Server',
     iconName: 'sqlserver',

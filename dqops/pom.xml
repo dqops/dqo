@@ -1448,5 +1448,15 @@
 				<npm.build.script>build:profile</npm.build.script>
 			</properties>
 		</profile>
+		<profile>
+			<id>include-license-drivers</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.sap.cloud.db.jdbc</groupId>
+					<artifactId>ngdbc</artifactId>
+					<version>2.22.11</version>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 </project>

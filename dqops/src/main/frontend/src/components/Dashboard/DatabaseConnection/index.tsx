@@ -43,6 +43,7 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
+import HanaConnection from './HanaConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -192,6 +193,8 @@ filterPropertiesDirectories(database)
         return 'Spark Connection Settings';
       case ConnectionModelProviderTypeEnum.databricks:
         return 'Databricks Connection Settings';
+      case ConnectionModelProviderTypeEnum.hana:
+        return 'SAP HANA Connection Settings';
       default:
         return 'Database Connection Settings';
     }
@@ -315,6 +318,13 @@ filterPropertiesDirectories(database)
       <DatabricksConnection
         databricks={database.databricks}
         onChange={(databricks) => onChange({ ...database, databricks })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.hana]: (
+      <HanaConnection
+        hana={database.hana}
+        onChange={(hana) => onChange({ ...hana, hana })}
         sharedCredentials={sharedCredentials}
       />
     )

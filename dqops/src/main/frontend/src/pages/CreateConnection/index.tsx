@@ -150,6 +150,11 @@ const CreateConnection = () => {
             DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials,
           properties: { '': '' }
         };
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.hana: {
+        copiedDatabase.hana = { port: '30015', properties: { '': '' } };
+        break;
       }
     }
     setDatabase(copiedDatabase);

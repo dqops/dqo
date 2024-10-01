@@ -20,6 +20,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.hana.HanaParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -69,6 +70,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         {
 			put("comments", o -> o.comments);
 			put("default_grouping_configuration", o -> o.defaultGroupingConfiguration);
+
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("postgresql", o -> o.postgresql);
@@ -81,6 +83,8 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("oracle", o -> o.oracle);
             put("spark", o -> o.spark);
             put("databricks", o -> o.databricks);
+            put("hana", o -> o.hana);
+
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("auto_import_tables", o -> o.autoImportTables);
@@ -162,6 +166,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DatabricksParametersSpec databricks;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("HANA connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private HanaParametersSpec hana;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -483,6 +493,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns the connection parameters for SAP HANA.
+     * @return SAP HANA connection parameters.
+     */
+    public HanaParametersSpec getHana() {
+        return hana;
+    }
+
+    /**
+     * Sets the SAP HANA connection parameters.
+     * @param hana New SAP HANA connection parameters.
+     */
+    public void setHana(HanaParametersSpec hana) {
+        setDirtyIf(!Objects.equals(this.hana, hana));
+        this.hana = hana;
+        propagateHierarchyIdToField(hana, "hana");
+    }
+
+    /**
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
@@ -717,6 +745,9 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             if (cloned.databricks != null) {
                 cloned.databricks = cloned.databricks.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.hana != null) {
+                cloned.hana = cloned.hana.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);
