@@ -115,7 +115,7 @@ DQOps will configure the [contains_email_percent](../checks/column/pii/contains-
 
 DQOps rule miner also supports custom data quality checks as long as they use built-in data quality rules, such as the [max_percent](../reference/rules/Comparison.md#max-percent) rule.
 
-The data quality results of the profiling checks are used further in DQOps when activating vetted data quality checks for continuous data quality monitoring
+The data quality results of the profiling checks are used further in DQOps when activating data quality checks for continuous data quality monitoring
 in the [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) or [partition](definition-of-data-quality-checks/partition-checks.md) sections.
 
 
