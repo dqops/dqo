@@ -75,7 +75,7 @@ export default function DataLineageGraph({
             renderTooltip(flow, index)
           );
           const color = getColor(
-            flow.upstream_combined_quality_status?.current_severity
+            flow.source_table_quality_status?.current_severity
           );
           colors.push(color);
           return [fromTable, toTable, rowCount, tooltip];
@@ -101,7 +101,8 @@ export default function DataLineageGraph({
     sankey: {
       link: { colors: [...severityColors], colorMode: 'source' },
       node: {
-        colors: [...severityColors]
+        colors: [...severityColors],
+        nodePadding: 20
       }
     }
   };
@@ -118,7 +119,7 @@ export default function DataLineageGraph({
         <Chart
           chartType="Sankey"
           width="100%"
-          height="100%"
+          height="600px"
           data={[
             ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
             ...graphArray
