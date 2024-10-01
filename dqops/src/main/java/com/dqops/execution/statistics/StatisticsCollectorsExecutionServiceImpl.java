@@ -200,7 +200,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @return Collection of table wrappers.
      */
     public Collection<TableWrapper> listTargetTables(UserHome userHome, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
-        Collection<TableWrapper> tables = this.hierarchyNodeTreeSearcher.findTables(userHome.getConnections(), statisticsCollectorSearchFilters);
+        Collection<TableWrapper> tables = this.hierarchyNodeTreeSearcher.findTablesForStatisticsCollection(userHome.getConnections(), statisticsCollectorSearchFilters);
         return tables;
     }
 }

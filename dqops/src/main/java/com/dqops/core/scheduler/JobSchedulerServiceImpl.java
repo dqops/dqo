@@ -582,7 +582,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             try {
                 Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey, dataDomainName);
 
-                if (!this.scheduler.checkExists(triggerToAdd.getKey())) {
+                TriggerKey triggerKey = triggerToAdd.getKey();
+                if (!this.scheduler.checkExists(triggerKey)) {
                     this.scheduler.scheduleJob(triggerToAdd);
                 }
             }

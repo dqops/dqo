@@ -15,8 +15,6 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
 import com.dqops.metadata.policies.table.TableQualityPolicyList;
@@ -24,30 +22,21 @@ import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
-import com.dqops.sensors.AbstractSensorParametersSpec;
-import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
-import com.dqops.statistics.AbstractStatisticsCollectorCategorySpec;
-import com.dqops.statistics.AbstractStatisticsCollectorSpec;
-import com.dqops.statistics.StatisticsCollectorTarget;
-import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
-import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.google.common.base.Strings;
 
-import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * Visitor for {@link StatisticsCollectorSearchFilters} that finds statistics collectors to execute.
+ * Visitor for {@link StatisticsCollectorSearchFilters} that finds target tables on which statistics collectors are run.
  */
-public class StatisticsCollectorTableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
+public class StatisticsCollectorTargetTableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     protected final StatisticsCollectorSearchFilters filters;
 
     /**
      * Creates a visitor for the given filters.
      * @param filters Check search filters.
      */
-    public StatisticsCollectorTableSearchFiltersVisitor(StatisticsCollectorSearchFilters filters) {
+    public StatisticsCollectorTargetTableSearchFiltersVisitor(StatisticsCollectorSearchFilters filters) {
         this.filters = filters;
     }
 
@@ -147,33 +136,7 @@ public class StatisticsCollectorTableSearchFiltersVisitor extends AbstractSearch
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getFullTableName();
-
-        if (Strings.isNullOrEmpty(schemaTableName)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-        }
-
-        PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
-        if (physicalTableName.isSearchPattern()) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
-        }
-
-        if (tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-        }
-
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
-    }
-
-    /**
-     * Accepts a table specification.
-     *
-     * @param tableSpec Table specification.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
+        TableSpec tableSpec = tableWrapper.getSpec();
         Boolean enabledFilter = this.filters.getEnabled();
 
         if (this.filters.isIgnoreTablesWithoutSchedule()) {
@@ -195,6 +158,35 @@ public class StatisticsCollectorTableSearchFiltersVisitor extends AbstractSearch
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
 
+        if (labelsSearcherObject != null) {
+            labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
+        }
+
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
+
+        if (labelsSearcherObject.getTableLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
+        }
+
+        if (labelsSearcherObject.getConnectionLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+        }
+
+        if (!LabelsSearchMatcher.matchTableLabels(this.filters, overriddenLabels)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        PhysicalTableName physicalTableName = this.filters.getPhysicalTableName();
+        if (physicalTableName != null) {
+            if (!tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+        else {
+            parameter.getNodes().add(tableWrapper);
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
         if (tableSpec.isDisabled()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
@@ -208,7 +200,7 @@ public class StatisticsCollectorTableSearchFiltersVisitor extends AbstractSearch
             }
         }
 
-        parameter.getNodes().add(tableSpec);
+        parameter.getNodes().add(tableWrapper);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }

@@ -55,7 +55,7 @@ public interface HierarchyNodeTreeSearcher {
      * @param statisticsCollectorSearchFilters Search filters.
      * @return Collection of tables that passed the filter and will be analyzed to collect statistics.
      */
-    Collection<TableSpec> findTablesForStatisticsCollection(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters);
+    Collection<TableWrapper> findTablesForStatisticsCollection(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters);
 
     /**
      * Search for connection in the tree.

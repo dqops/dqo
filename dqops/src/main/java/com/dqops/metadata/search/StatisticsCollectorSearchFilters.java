@@ -85,8 +85,8 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Create a hierarchy tree node traversal visitor that will search for tables matching the filters.
      * @return Search visitor.
      */
-    public StatisticsCollectorTableSearchFiltersVisitor createTableCollectorSearchFilterVisitor() {
-        return new StatisticsCollectorTableSearchFiltersVisitor(this);
+    public StatisticsCollectorTargetTableSearchFiltersVisitor createTargetTableCollectorSearchFilterVisitor() {
+        return new StatisticsCollectorTargetTableSearchFiltersVisitor(this);
     }
 
     /**
