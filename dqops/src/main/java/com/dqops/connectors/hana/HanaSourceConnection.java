@@ -82,7 +82,7 @@ public class HanaSourceConnection extends AbstractJdbcSourceConnection {
                 driverRegistered = true;
             }
         } catch (ClassNotFoundException e) {
-            throw new DqoRuntimeException("Please contact DQOps to get access to a commercial version of DQOps. " +
+            throw new DqoRuntimeException("Please contact DQOps sales team to get access to a commercial version of DQOps. " +
                     "SAP HANA drivers are not provided in an open-source version due to license limitations.");
         }
     }
