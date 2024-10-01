@@ -31,7 +31,6 @@ export default function DataLineageGraph({
     (string | number | undefined)[][]
   >([]);
   const [loading, setLoading] = useState(false);
-  const [severityColors, setSeverityColors] = useState<string[]>([]);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
 
@@ -69,18 +68,17 @@ export default function DataLineageGraph({
         const graph = data.flows?.map((flow, index) => {
           const fromTable = flow.source_table?.compact_key;
           const toTable = flow.target_table?.compact_key;
-          const rowCount = flow.row_count;
+          const weight = flow.row_count && flow.row_count > 10000 ?  Math.sqrt(Math.sqrt(flow.row_count)) : 1;
 
           const tooltip = ReactDOMServer.renderToString(
             renderTooltip(flow, index)
           );
           const color = getColor(
-            flow.source_table_quality_status?.current_severity
+            flow.upstream_combined_quality_status?.current_severity
           );
           colors.push(color);
-          return [fromTable, toTable, rowCount, tooltip];
+          return [fromTable, toTable, weight, tooltip, 'fill-color: ' + color + ';'];
         });
-        setSeverityColors(colors);
         setGraphArray(graph ?? []);
       } catch (error) {
         console.error('Error fetching data lineage graph:', error);
@@ -99,10 +97,9 @@ export default function DataLineageGraph({
   const options = {
     tooltip: { isHtml: true },
     sankey: {
-      link: { colors: [...severityColors], colorMode: 'source' },
       node: {
-        colors: [...severityColors],
-        nodePadding: 20
+        colors: ['#222222'],
+        nodePadding: 30
       }
     }
   };
@@ -121,7 +118,7 @@ export default function DataLineageGraph({
           width="100%"
           height="600px"
           data={[
-            ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }],
+            ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }, { type: 'string', role: 'style'}],
             ...graphArray
           ]}
           options={options}
