@@ -16,6 +16,7 @@
 
 package com.dqops.data.checkresults.models;
 
+import com.dqops.checks.CheckType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -30,7 +31,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class IncidentHistogramFilterParameters {
+public class HistogramFilterParameters {
     /**
      * Optional filter that is a pattern expression. Filter is used on schema names, table names, dimensions, categories, etc.
      */
@@ -60,4 +61,10 @@ public class IncidentHistogramFilterParameters {
      */
     @JsonPropertyDescription("Optional filter for an exact data quality check name.")
     private String check;
+
+    /**
+     * Optional check type to show issues only for one check type.
+     */
+    @JsonPropertyDescription("Optional check type to show issues only for one check type.")
+    private CheckType checkType;
 }

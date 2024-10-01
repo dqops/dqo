@@ -140,6 +140,11 @@ public class TableLineageServiceImpl implements TableLineageService {
             Set<DomainConnectionTableKey> upstreamSourceTables = tableLineageEntry.getUpstreamSourceTables();
             for (DomainConnectionTableKey upstreamTableKey : upstreamSourceTables) {
                 TableCurrentDataQualityStatusModel upstreamOnlyQualityStatus = this.tableStatusCache.getCurrentTableStatus(upstreamTableKey, null);
+                if (upstreamOnlyQualityStatus == null) {
+                    upstreamOnlyQualityStatus = new TableCurrentDataQualityStatusModel() {{
+                        setTableExist(false);
+                    }};
+                }
 
                 if (visitedTables.contains(upstreamTableKey)) {
                     if (!onStackTables.contains(upstreamTableKey)) {

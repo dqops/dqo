@@ -28,7 +28,7 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
-import com.dqops.data.checks.services.ChecksDeleteService;
+import com.dqops.services.check.delete.ChecksDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.services.ErrorsDeleteService;
 import com.dqops.data.errorsamples.models.ErrorsSamplesFragmentFilter;

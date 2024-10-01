@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  IncidentIssueHistogramModel,
+  IssueHistogramModel,
   IncidentModel,
   IncidentModelNotificationLocationEnum,
   IncidentModelStatusEnum
@@ -104,7 +104,7 @@ export const IncidentDetail = () => {
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
-  const { histograms }: { histograms: IncidentIssueHistogramModel } =
+  const { histograms }: { histograms: IssueHistogramModel } =
     useSelector(getFirstLevelIncidentsState);
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(

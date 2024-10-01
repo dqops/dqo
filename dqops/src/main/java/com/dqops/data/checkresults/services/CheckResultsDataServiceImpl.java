@@ -703,27 +703,27 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param incidentHash      Incident hash.
-     * @param firstSeen         The timestamp when the incident was first seen.
-     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param executedAtSince         The timestamp when the incident was first seen.
+     * @param executedAtUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
      * @param filterParameters  Optional filter to limit the issues included in the histogram.
      * @param userDomainIdentity User identity with the data domain.
      * @return Daily histogram of failed data quality checks.
      */
     @Override
-    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                            PhysicalTableName physicalTableName,
-                                                                            long incidentHash,
-                                                                            Instant firstSeen,
-                                                                            Instant incidentUntil,
-                                                                            int minSeverity,
-                                                                            IncidentHistogramFilterParameters filterParameters,
-                                                                            UserDomainIdentity userDomainIdentity) {
+    public IssueHistogramModel buildDailyIssuesHistogram(String connectionName,
+                                                         PhysicalTableName physicalTableName,
+                                                         Long incidentHash,
+                                                         Instant executedAtSince,
+                                                         Instant executedAtUntil,
+                                                         int minSeverity,
+                                                         HistogramFilterParameters filterParameters,
+                                                         UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
-        LocalDate startDay = firstSeen.atZone(defaultTimeZoneId).toLocalDate()
+        LocalDate startDay = executedAtSince.atZone(defaultTimeZoneId).toLocalDate()
                 .minus(this.dqoIncidentsConfigurationProperties.getPartitionedChecksTimeWindowDays(), ChronoUnit.DAYS);
 
         if (filterParameters.getDays() != null) {
@@ -733,24 +733,28 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 startDay = earliestRequestedDate;
             }
         }
+
+        if (executedAtUntil == null) {
+            executedAtUntil = Instant.now().plus(1L, ChronoUnit.DAYS);
+        }
         
-        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
+        LocalDate endMonth = executedAtUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startDay, endMonth)) {
-            return new IncidentIssueHistogramModel();
+            return new IssueHistogramModel();
         }
 
-        Instant startTimestamp = firstSeen;
+        Instant startTimestamp = executedAtSince;
         if (filterParameters.getDays() != null) {
             startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
                     .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
                     .toInstant();
 
-            if (startTimestamp.isBefore(firstSeen)) {
-                startTimestamp = firstSeen;
+            if (startTimestamp.isBefore(executedAtSince)) {
+                startTimestamp = executedAtSince;
             }
         }
 
-        IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
+        IssueHistogramModel histogramModel = new IssueHistogramModel();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -765,19 +769,24 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
 
             TextColumn checkTypeColumn = checkResultsNormalizedResult.getCheckTypeColumn();
-            Selection notProfilingSelection = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
+            Selection checkTypeSelection =
+                    filterParameters.getCheckType() != null ? checkTypeColumn.isEqualTo(filterParameters.getCheckType().getDisplayName()) :
+                    checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName()); // by default, we are snowing monitoring and partition checks, excluding profiling checks, but user can pick a different check type
 
             InstantColumn executedAtColumn = checkResultsNormalizedResult.getExecutedAtColumn();
             DateTimeColumn timePeriodColumn = checkResultsNormalizedResult.getTimePeriodColumn();
 
             Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
-                    PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
-            Selection incidentHashSelection = checkResultsNormalizedResult.getIncidentHashColumn().isIn(incidentHash);
+                    PackedInstant.pack(startTimestamp), PackedInstant.pack(executedAtUntil));
+            Selection incidentHashSelection = incidentHash != null ? checkResultsNormalizedResult.getIncidentHashColumn().isIn(incidentHash) : null;
 
             Selection selectionOfMatchingIssues = minSeveritySelection
-                    .and(notProfilingSelection)
-                    .and(issuesInTimeRange)
-                    .and(incidentHashSelection);
+                    .and(checkTypeSelection)
+                    .and(issuesInTimeRange);
+            if (incidentHashSelection != null) {
+                selectionOfMatchingIssues = selectionOfMatchingIssues.and(incidentHashSelection);
+            }
+
             if (selectionOfMatchingIssues.size() == 0) {
                 continue;
             }

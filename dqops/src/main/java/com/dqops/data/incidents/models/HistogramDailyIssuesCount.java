@@ -22,16 +22,13 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
 /**
  * A model that stores a daily number of incidents.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class IncidentDailyIssuesCount {
+public class HistogramDailyIssuesCount {
     /**
      * The number of failed data quality checks that generated a warning severity data quality issue.
      */
@@ -77,10 +74,10 @@ public class IncidentDailyIssuesCount {
     /**
      * Sample factory for an incident model.
      */
-    public static class IncidentDailyIssuesCountSampleFactory implements SampleValueFactory<IncidentDailyIssuesCount> {
+    public static class IncidentDailyIssuesCountSampleFactory implements SampleValueFactory<HistogramDailyIssuesCount> {
         @Override
-        public IncidentDailyIssuesCount createSample() {
-            return new IncidentDailyIssuesCount() {{
+        public HistogramDailyIssuesCount createSample() {
+            return new HistogramDailyIssuesCount() {{
                 setTotalCount(10);
                 setWarnings(2);
                 setErrors(7);

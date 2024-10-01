@@ -6441,6 +6441,92 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/histogram:
+    get:
+      tags:
+      - "CheckResults"
+      summary: "getTableIssuesHistogram"
+      description: "Generates a histograms of data quality issues for each day on\
+        \ a table, returning the number of data quality issues on that day. The other\
+        \ histograms are by a column name and by a check name."
+      operationId: "getTableIssuesHistogram"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "executedSince"
+        in: "query"
+        description: "Optional date filter to find issues returned since that date.\
+          \ When missing, loads issues executed during the current and previous months"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "filter"
+        in: "query"
+        description: "Optional full text search filter that supports *prefix, suffix*\
+          \ and nest*ed filter expressions"
+        required: false
+        type: "string"
+      - name: "days"
+        in: "query"
+        description: "Optional filter for a number of recent days to read the related\
+          \ issues"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "date"
+        in: "query"
+        description: "Optional date filter to select one day"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "column"
+        in: "query"
+        description: "Optional column name filter"
+        required: false
+        type: "string"
+      - name: "check"
+        in: "query"
+        description: "Optional check name filter"
+        required: false
+        type: "string"
+      - name: "checkType"
+        in: "query"
+        description: "Optional check type filter, when not provided, returns a combined\
+          \ histogram of monitoring and partition checks"
+        required: false
+        type: "string"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
+      responses:
+        200:
+          description: "Issue histograms for a table returned"
+          schema:
+            $ref: "#/definitions/IssueHistogramModel"
+        404:
+          description: "Table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping:
     get:
       tags:
@@ -13193,7 +13279,7 @@ paths:
       tags:
       - "Incidents"
       summary: "getIncidentHistogram"
-      description: "Generates histograms of data quality issues for each day, returning\
+      description: "Generates a histogram of data quality issues for each day, returning\
         \ the number of data quality issues on that day. The other histograms are\
         \ by a column name and by a check name."
       operationId: "getIncidentHistogram"
@@ -13253,9 +13339,9 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Incidents' histograms returned"
+          description: "Incident's histograms returned"
           schema:
-            $ref: "#/definitions/IncidentIssueHistogramModel"
+            $ref: "#/definitions/IssueHistogramModel"
         404:
           description: "Incident not found"
         500:
@@ -38227,6 +38313,28 @@ definitions:
         type: "array"
         items:
           type: "object"
+  HistogramDailyIssuesCount:
+    type: "object"
+    properties:
+      warnings:
+        type: "integer"
+        format: "int32"
+        description: "The number of failed data quality checks that generated a warning\
+          \ severity data quality issue."
+      errors:
+        type: "integer"
+        format: "int32"
+        description: "The number of failed data quality checks that generated an error\
+          \ severity data quality issue."
+      fatals:
+        type: "integer"
+        format: "int32"
+        description: "The number of failed data quality checks that generated a fatal\
+          \ severity data quality issue."
+      totalCount:
+        type: "integer"
+        format: "int32"
+        description: "The total count of failed data quality checks on this day."
   IcebergFileFormatSpec:
     type: "object"
     properties:
@@ -38346,77 +38454,6 @@ definitions:
         type: "string"
         format: "date"
         description: "The first day of the previous month date."
-  IncidentDailyIssuesCount:
-    type: "object"
-    properties:
-      warnings:
-        type: "integer"
-        format: "int32"
-        description: "The number of failed data quality checks that generated a warning\
-          \ severity data quality issue."
-      errors:
-        type: "integer"
-        format: "int32"
-        description: "The number of failed data quality checks that generated an error\
-          \ severity data quality issue."
-      fatals:
-        type: "integer"
-        format: "int32"
-        description: "The number of failed data quality checks that generated a fatal\
-          \ severity data quality issue."
-      totalCount:
-        type: "integer"
-        format: "int32"
-        description: "The total count of failed data quality checks on this day."
-  IncidentIssueHistogramModel:
-    type: "object"
-    properties:
-      hasProfilingIssues:
-        type: "boolean"
-        description: "True when this data quality incident is based on data quality\
-          \ issues from profiling checks within the filters applied to search for\
-          \ linked data quality issues."
-      hasDailyMonitoringIssues:
-        type: "boolean"
-        description: "True when this data quality incident is based on data quality\
-          \ issues from daily monitoring checks within the filters applied to search\
-          \ for linked data quality issues."
-      hasMonthlyMonitoringIssues:
-        type: "boolean"
-        description: "True when this data quality incident is based on data quality\
-          \ issues from monthly monitoring checks within the filters applied to search\
-          \ for linked data quality issues."
-      hasDailyPartitionedIssues:
-        type: "boolean"
-        description: "True when this data quality incident is based on data quality\
-          \ issues from daily partitioned checks within the filters applied to search\
-          \ for linked data quality issues."
-      hasMonthlyPartitionedIssues:
-        type: "boolean"
-        description: "True when this data quality incident is based on data quality\
-          \ issues from monthly partitioned checks within the filters applied to search\
-          \ for linked data quality issues."
-      days:
-        type: "object"
-        description: "A map of the numbers of data quality issues per day, the day\
-          \ uses the DQOps server timezone."
-        additionalProperties:
-          $ref: "#/definitions/IncidentDailyIssuesCount"
-      columns:
-        type: "object"
-        description: "A map of column names with the most data quality issues related\
-          \ to the incident. The map returns the count of issues as the value."
-        additionalProperties:
-          type: "integer"
-          format: "int32"
-      checks:
-        type: "object"
-        description: "A map of data quality check names with the most data quality\
-          \ issues related to the incident. The map returns the count of issues as\
-          \ the value."
-        additionalProperties:
-          type: "integer"
-          format: "int32"
   IncidentModel:
     type: "object"
     properties:
@@ -38615,6 +38652,55 @@ definitions:
         format: "int64"
         description: "The UTC timestamp when the most recent data quality incident\
           \ was first seen."
+  IssueHistogramModel:
+    type: "object"
+    properties:
+      hasProfilingIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from profiling checks within the filters applied to search for\
+          \ linked data quality issues."
+      hasDailyMonitoringIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from daily monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyMonitoringIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from monthly monitoring checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasDailyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from daily partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
+      hasMonthlyPartitionedIssues:
+        type: "boolean"
+        description: "True when this data quality incident is based on data quality\
+          \ issues from monthly partitioned checks within the filters applied to search\
+          \ for linked data quality issues."
+      days:
+        type: "object"
+        description: "A map of the numbers of data quality issues per day, the day\
+          \ uses the DQOps server timezone."
+        additionalProperties:
+          $ref: "#/definitions/HistogramDailyIssuesCount"
+      columns:
+        type: "object"
+        description: "A map of column names with the most data quality issues related\
+          \ to the incident. The map returns the count of issues as the value."
+        additionalProperties:
+          type: "integer"
+          format: "int32"
+      checks:
+        type: "object"
+        description: "A map of data quality check names with the most data quality\
+          \ issues related to the incident. The map returns the count of issues as\
+          \ the value."
+        additionalProperties:
+          type: "integer"
+          format: "int32"
   JsonFileFormatSpec:
     type: "object"
     properties:
