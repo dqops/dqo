@@ -65,7 +65,7 @@ export default function DataLineageGraph({
         }
 
         const colors: string[] = [];
-        const graph = data.flows?.map((flow, index) => {
+        const graph = data.flows?.reverse().map((flow, index) => {
           const fromTable = flow.source_table?.compact_key;
           const toTable = flow.target_table?.compact_key;
           const weight = flow.row_count && flow.row_count > 10000 ?  Math.sqrt(Math.sqrt(flow.row_count)) : 1;
@@ -97,6 +97,7 @@ export default function DataLineageGraph({
   const options = {
     tooltip: { isHtml: true },
     sankey: {
+      iterations: 32,
       node: {
         colors: ['#222222'],
         nodePadding: 30
