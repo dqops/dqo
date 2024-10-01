@@ -28,6 +28,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.utils.conversion.NumericTypeConverter;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -77,11 +78,12 @@ public class HanaSourceConnection extends AbstractJdbcSourceConnection {
         }
         try {
             synchronized (driverRegisterLock){
-                Class.forName("org.apache.hive.jdbc.HiveDriver");
+                Class.forName("com.sap.db.jdbc.Driver");
                 driverRegistered = true;
             }
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException("Please contact DQOps to get access to a commercial version of DQOps. " +
+                    "SAP HANA drivers are not provided in an open-source version due to license limitations.");
         }
     }
 
