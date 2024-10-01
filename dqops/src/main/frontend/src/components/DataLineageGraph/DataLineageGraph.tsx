@@ -75,7 +75,7 @@ export default function DataLineageGraph({
             renderTooltip(flow, index)
           );
           const color = getColor(
-            flow.upstream_combined_quality_status?.current_severity
+            flow.source_table_quality_status?.current_severity
           );
           colors.push(color);
           return [fromTable, toTable, rowCount, tooltip];
