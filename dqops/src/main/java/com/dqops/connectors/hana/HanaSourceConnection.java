@@ -317,7 +317,7 @@ public class HanaSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Returns the schema name of the INFORMATION_SCHEMA.
+     * Returns the schema name of the INFORMATION_SCHEMA equivalent.
      * @return Information schema name.
      */
     public String getInformationSchemaName() {

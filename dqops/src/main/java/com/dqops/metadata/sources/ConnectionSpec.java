@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.hana.HanaParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
@@ -84,6 +85,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("spark", o -> o.spark);
             put("databricks", o -> o.databricks);
             put("hana", o -> o.hana);
+            put("db2", o -> o.db2);
 
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
@@ -168,10 +170,16 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     private DatabricksParametersSpec databricks;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("HANA connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).")
+    @JsonPropertyDescription("HANA connection parameters. Specify parameters in the hana section or set the url (which is the HANA JDBC url).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private HanaParametersSpec hana;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("DB2 connection parameters. Specify parameters in the db2 section or set the url (which is the DB2 JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private Db2ParametersSpec db2;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -511,6 +519,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns the connection parameters for IBM DB2
+     * @return IBM DB2 connection parameters.
+     */
+    public Db2ParametersSpec getDb2() {
+        return db2;
+    }
+
+    /**
+     * Sets the IBM DB2 connection parameters.
+     * @param db2 New IBM DB2 connection parameters.
+     */
+    public void setDb2(Db2ParametersSpec db2) {
+        setDirtyIf(!Objects.equals(this.db2, db2));
+        this.db2 = db2;
+        propagateHierarchyIdToField(db2, "db2");
+    }
+
+    /**
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
@@ -748,6 +774,9 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             if (cloned.hana != null) {
                 cloned.hana = cloned.hana.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.db2 != null) {
+                cloned.db2 = cloned.db2.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);
