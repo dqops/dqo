@@ -8,6 +8,7 @@ import {
   TableLineageModel
 } from '../../api';
 import { DataLineageApiClient } from '../../services/apiClient';
+import Button from '../Button';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import Loader from '../Loader';
 import DataLineageDetailsDialog from './DataLineageDetailsDialog';
@@ -21,11 +22,13 @@ declare global {
 export default function DataLineageGraph({
   connection,
   schema,
-  table
+  table,
+  configureSourceTables
 }: {
   connection: string;
   schema: string;
   table: string;
+  configureSourceTables: () => void;
 }) {
   const [graphArray, setGraphArray] = useState<
     (string | number | undefined)[][]
@@ -68,7 +71,10 @@ export default function DataLineageGraph({
         const graph = data.flows?.reverse().map((flow, index) => {
           const fromTable = flow.source_table?.compact_key;
           const toTable = flow.target_table?.compact_key;
-          const weight = flow.row_count && flow.row_count > 10000 ?  Math.sqrt(Math.sqrt(flow.row_count)) : 1;
+          const weight =
+            flow.row_count && flow.row_count > 10000
+              ? Math.sqrt(Math.sqrt(flow.row_count))
+              : 1;
 
           const tooltip = ReactDOMServer.renderToString(
             renderTooltip(flow, index)
@@ -77,7 +83,13 @@ export default function DataLineageGraph({
             flow.upstream_combined_quality_status?.current_severity
           );
           colors.push(color);
-          return [fromTable, toTable, weight, tooltip, 'fill-color: ' + color + ';'];
+          return [
+            fromTable,
+            toTable,
+            weight,
+            tooltip,
+            'fill-color: ' + color + ';'
+          ];
         });
         setGraphArray(graph ?? []);
       } catch (error) {
@@ -113,18 +125,33 @@ export default function DataLineageGraph({
         </div>
       )}
 
-      {graphArray.length > 0 ? (
+      {graphArray && graphArray.length > 0 ? (
         <Chart
           chartType="Sankey"
           width="100%"
           height="600px"
           data={[
-            ['From', 'To', 'Weight', { type: 'string', role: 'tooltip' }, { type: 'string', role: 'style'}],
+            [
+              'From',
+              'To',
+              'Weight',
+              { type: 'string', role: 'tooltip' },
+              { type: 'string', role: 'style' }
+            ],
             ...graphArray
           ]}
           options={options}
         />
-      ) : null}
+      ) : (
+        !loading && (
+          <Button
+            label="Configure source tables"
+            color="primary"
+            className="!w-50 !my-5 ml-4"
+            onClick={() => configureSourceTables()}
+          />
+        )
+      )}
 
       <DataLineageDetailsDialog
         isOpen={detailsDialogOpen}
