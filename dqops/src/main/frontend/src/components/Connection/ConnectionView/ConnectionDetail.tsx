@@ -42,8 +42,10 @@ import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeCon
 import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
 import SqlServerConnection from '../../Dashboard/DatabaseConnection/SqlServerConnection';
 import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
+import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Input from '../../Input';
 import Loader from '../../Loader';
+import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
 
 const ConnectionDetail = () => {
@@ -71,6 +73,7 @@ const ConnectionDetail = () => {
   const [showError, setShowError] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
+  const [showAdvancedProperties, setShowAdvancedProperties] = useState(false);
   const [sharedCredentials, setSharedCredentials] = useState<
     SharedCredentialListModel[]
   >([]);
@@ -166,21 +169,21 @@ const ConnectionDetail = () => {
         isUpdating={isUpdating}
         isUpdated={isUpdatedConnectionBasic}
       />
-      <table className="mb-1">
-        <tbody>
-          <tr>
-            <td className="px-4 py-2">
-              <div>Connection name</div>
-            </td>
-            <td className="px-4 py-2">
-              <div>{connectionBasic?.connection_name}</div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">
-              <div>Parallel jobs limit</div>
-            </td>
-            <td className="px-4 py-2">
+      <div className="mb-1">
+        <div className="flex px-4 py-2 pb-4">
+          <div>Connection name</div>
+          <div className="ml-4">{connectionBasic?.connection_name}</div>
+        </div>
+
+        {showAdvancedProperties ? (
+          <SectionWrapper
+            title="Advanced properties"
+            svgIcon
+            onClick={() => setShowAdvancedProperties(false)}
+            className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
+          >
+            <div className="flex px-4 py-2 mt-4 items-center">
+              <div className="!w-60">Parallel jobs limit</div>
               <div>
                 <Input
                   value={connectionBasic?.parallel_jobs_limit}
@@ -197,33 +200,41 @@ const ConnectionDetail = () => {
                   }}
                 />
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">
-              <div>Schedule only on DQOps instance</div>
-            </td>
-            <td className="px-4 py-2">
+            </div>
+
+            <div className="flex px-4 py-2 items-center">
+              <div className="!w-60">Schedule only on DQOps instance</div>
               <div>
                 <Input
                   value={connectionBasic?.schedule_on_instance}
-                  placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
+                  placeholder="Enter the name of a DQOps named instance which will run scheduled data quality checks"
                   onChange={(e) => {
                     onChange({
                       ...connectionBasic,
                       schedule_on_instance: String(e.target.value)
                     });
                   }}
+                  className="!min-w-145"
                 />
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </SectionWrapper>
+        ) : (
+          <div
+            className="flex items-center ml-4 mb-4 text-sm font-bold cursor-pointer"
+            onClick={() => setShowAdvancedProperties(true)}
+          >
+            <SvgIcon name="chevron-right" className="w-5 h-5" />
+            Advanced properties
+          </div>
+        )}
+      </div>
+
       <AdvancedProperties
         properties={connectionBasic?.advanced_properties}
         handleChange={onChange}
         sharedCredentials={sharedCredentials}
+        title="Data source connection properties"
       />
 
       <div className="px-4 !mt-6">

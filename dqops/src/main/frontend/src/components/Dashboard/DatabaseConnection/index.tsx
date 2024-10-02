@@ -29,11 +29,13 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
+import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
 import DatabricksConnection from './DatabricksConnection';
 import DuckDBConnection from './DuckDBConnection';
 import ErrorModal from './ErrorModal';
+import HanaConnection from './HanaConnection';
 import MySQLConnection from './MySQLConnection';
 import OracleConnection from './OracleConnection';
 import PostgreSQLConnection from './PostgreSQLConnection';
@@ -43,7 +45,6 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
-import HanaConnection from './HanaConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -63,6 +64,7 @@ const DatabaseConnection = ({
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
+  const [showAdvancedProperties, setShowAdvancedProperties] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -81,7 +83,7 @@ const DatabaseConnection = ({
     setIsSaving(true);
     await ConnectionApiClient.createConnectionBasic(
       database?.connection_name ?? '',
- filterPropertiesDirectories(database)
+      filterPropertiesDirectories(database)
     );
     const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
@@ -119,7 +121,7 @@ const DatabaseConnection = ({
       testRes = (
         await DataSourcesApi.testConnection(
           true,
-filterPropertiesDirectories(database)
+          filterPropertiesDirectories(database)
         )
       ).data;
       setIsTesting(false);
@@ -136,13 +138,12 @@ filterPropertiesDirectories(database)
         ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS
       ) {
         setMessage(testRes?.errorMessage);
-      }
-      else if (
+      } else if (
         testRes?.connectionTestResult ===
         ConnectionTestModelConnectionTestResultEnum.FAILURE
       ) {
         setMessage(testRes?.errorMessage);
-        setShowConfirm(true)
+        setShowConfirm(true);
       }
     }
   };
@@ -151,7 +152,8 @@ filterPropertiesDirectories(database)
     try {
       setIsTesting(true);
       const res = await DataSourcesApi.testConnection(
-        true, filterPropertiesDirectories(database)
+        true,
+        filterPropertiesDirectories(database)
       );
       setTestResult(res.data);
     } catch (err) {
@@ -393,32 +395,53 @@ filterPropertiesDirectories(database)
           error={!!nameError}
           helperText={nameError}
         />
-        <Input
-          label="Parallel jobs limit"
-          value={database.parallel_jobs_limit}
-          onChange={(e) => {
-            if (!isNaN(Number(e.target.value))) {
-              onChange({
-                ...database,
-                parallel_jobs_limit:
-                  String(e.target.value).length === 0
-                    ? undefined
-                    : Number(e.target.value)
-              });
-            }
-          }}
-        />
-        <Input
-          label="Schedule only on DQOps instance"
-          value={database.schedule_on_instance}
-          placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
-          onChange={(e) => {
-            onChange({
-              ...database,
-              schedule_on_instance: String(e.target.value)
-            });
-          }}
-        />
+        {showAdvancedProperties ? (
+          <SectionWrapper
+            title="Advanced properties"
+            svgIcon
+            onClick={() => setShowAdvancedProperties(false)}
+            className="!pb-1 !pt-1 !mt-6 !mb-4"
+          >
+            <div className="mt-4">
+              <Input
+                label="Parallel jobs limit"
+                value={database.parallel_jobs_limit}
+                onChange={(e) => {
+                  if (!isNaN(Number(e.target.value))) {
+                    onChange({
+                      ...database,
+                      parallel_jobs_limit:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
+                    });
+                  }
+                }}
+                className="!mb-3"
+              />
+            </div>
+            <Input
+              label="Schedule only on DQOps instance"
+              value={database.schedule_on_instance}
+              placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
+              onChange={(e) => {
+                onChange({
+                  ...database,
+                  schedule_on_instance: String(e.target.value)
+                });
+              }}
+              className="!mb-3"
+            />
+          </SectionWrapper>
+        ) : (
+          <div
+            className="flex items-center mb-4 text-sm font-bold cursor-pointer mt-2"
+            onClick={() => setShowAdvancedProperties(true)}
+          >
+            <SvgIcon name="chevron-right" className="w-5 h-5" />
+            Advanced properties
+          </div>
+        )}
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}
         </div>

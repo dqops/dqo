@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  IssueHistogramModel,
   IncidentModel,
   IncidentModelNotificationLocationEnum,
-  IncidentModelStatusEnum
+  IncidentModelStatusEnum,
+  IssueHistogramModel
 } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
@@ -105,8 +105,9 @@ export const IncidentDetail = () => {
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
-  const { histograms }: { histograms: IssueHistogramModel } =
-    useSelector(getFirstLevelIncidentsState);
+  const { histograms }: { histograms: IssueHistogramModel } = useSelector(
+    getFirstLevelIncidentsState
+  );
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(
       (res) => {
@@ -354,6 +355,34 @@ export const IncidentDetail = () => {
     );
   };
 
+  const configureSourceTables = () => {
+    const schema = incidentDetail?.schema || '';
+    const table = incidentDetail?.table || '';
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'source_tables'
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {
+          showSourceTables: true
+        },
+        label: 'Source tables'
+      })
+    );
+    history.push(url);
+  };
+
   return (
     <>
       <div className="relative">
@@ -469,6 +498,7 @@ export const IncidentDetail = () => {
                 connection={incidentDetail?.connection || ''}
                 schema={incidentDetail?.schema || ''}
                 table={incidentDetail?.table || ''}
+                configureSourceTables={configureSourceTables}
               />
             </SectionWrapper>
           ) : (
