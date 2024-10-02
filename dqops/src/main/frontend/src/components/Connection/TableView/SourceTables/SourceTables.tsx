@@ -48,12 +48,14 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
             setSourceTableEdit={setSourceTableEdit}
             isTarget={isTarget}
           />
-          <Button
-            label={`Add ${isTarget ? 'target' : 'source'} table`}
-            color="primary"
-            className="!w-50 !my-5 ml-4"
-            onClick={() => setAddSourceTable(true)}
-          />
+          {!isTarget && (
+            <Button
+              label={`Add source table`}
+              color="primary"
+              className="!w-50 !my-5 ml-4"
+              onClick={() => setAddSourceTable(true)}
+            />
+          )}
         </>
       )}
     </div>
