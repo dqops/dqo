@@ -136,11 +136,14 @@ export default function SourceTablesTable({
       source?.table ?? ''
     ).then(() => {
       const newTables = tables.filter(
-        (t) =>
+        (table) =>
           !(
-            t.source_connection === source?.connection &&
-            t.source_schema === source?.schema &&
-            t.source_table === source?.table
+            (isTarget ? table.target_connection : table.source_connection) ===
+              source?.connection &&
+            (isTarget ? table.target_schema : table.source_schema) ===
+              source?.schema &&
+            (isTarget ? table.target_table : table.source_table) ===
+              source?.table
           )
       );
       setTables(newTables);
@@ -151,24 +154,36 @@ export default function SourceTablesTable({
   const history = useHistory();
 
   const goTable = (dataLineage: TableLineageSourceListModel) => {
+    const connection = isTarget
+      ? dataLineage.target_connection
+      : dataLineage.source_connection;
+    const schema = isTarget
+      ? dataLineage.target_schema
+      : dataLineage.source_schema;
+    const table = isTarget
+      ? dataLineage.target_table
+      : dataLineage.source_table;
+
     const url = ROUTES.TABLE_LEVEL_PAGE(
       CheckTypes.SOURCES,
-      dataLineage.source_connection ?? '',
-      dataLineage.source_schema ?? '',
-      dataLineage.source_table ?? '',
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
       'detail'
     );
+
     const value = ROUTES.TABLE_LEVEL_VALUE(
       CheckTypes.SOURCES,
-      dataLineage.source_connection ?? '',
-      dataLineage.source_schema ?? '',
-      dataLineage.source_table ?? ''
+      connection ?? '',
+      schema ?? '',
+      table ?? ''
     );
+
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
-        label: dataLineage.source_table ?? '',
+        label: table ?? '',
         state: {}
       })
     );
@@ -176,31 +191,39 @@ export default function SourceTablesTable({
   };
 
   const onChangeExpandedLineage = (lineage: TableLineageSourceListModel) => {
+    const connection = isTarget
+      ? lineage.target_connection
+      : lineage.source_connection;
+    const schema = isTarget ? lineage.target_schema : lineage.source_schema;
+    const table = isTarget ? lineage.target_table : lineage.source_table;
+
     const newExpandedLineage = [...(expandedLineage ?? [])];
+
     if (
       newExpandedLineage.find(
         (expandedLiceage) =>
-          expandedLiceage.connection === lineage.source_connection &&
-          expandedLiceage.schema === lineage.source_schema &&
-          expandedLiceage.table === lineage.source_table
+          expandedLiceage.connection === connection &&
+          expandedLiceage.schema === schema &&
+          expandedLiceage.table === table
       )
     ) {
       newExpandedLineage.splice(
         newExpandedLineage.findIndex(
           (expandedLiceage) =>
-            expandedLiceage.connection === lineage.source_connection &&
-            expandedLiceage.schema === lineage.source_schema &&
-            expandedLiceage.table === lineage.source_table
+            expandedLiceage.connection === connection &&
+            expandedLiceage.schema === schema &&
+            expandedLiceage.table === table
         ),
         1
       );
     } else {
       newExpandedLineage.push({
-        connection: lineage.source_connection ?? '',
-        schema: lineage.source_schema ?? '',
-        table: lineage.source_table ?? ''
+        connection: connection ?? '',
+        schema: schema ?? '',
+        table: table ?? ''
       });
     }
+
     setExpandedLineage(newExpandedLineage);
   };
 
@@ -280,9 +303,16 @@ export default function SourceTablesTable({
                     <div className="pl-2">
                       {expandedLineage?.find(
                         (lineage) =>
-                          lineage.connection === table.source_connection &&
-                          lineage.schema === table.source_schema &&
-                          lineage.table === table.source_table
+                          lineage.connection ===
+                            (isTarget
+                              ? table.target_connection
+                              : table.source_connection) &&
+                          lineage.schema ===
+                            (isTarget
+                              ? table.target_schema
+                              : table.source_schema) &&
+                          lineage.table ===
+                            (isTarget ? table.target_table : table.source_table)
                       ) ? (
                         <SvgIcon name="chevron-down" className="w-4" />
                       ) : (
@@ -372,9 +402,18 @@ export default function SourceTablesTable({
                       <IconButton
                         onClick={() =>
                           setSorceTableToDelete({
-                            connection: table.source_connection ?? '',
-                            schema: table.source_schema ?? '',
-                            table: table.source_table ?? ''
+                            connection:
+                              (isTarget
+                                ? table.target_connection
+                                : table.source_connection) ?? '',
+                            schema:
+                              (isTarget
+                                ? table.target_schema
+                                : table.source_schema) ?? '',
+                            table:
+                              (isTarget
+                                ? table.target_table
+                                : table.source_table) ?? ''
                           })
                         }
                         size="sm"
@@ -399,23 +438,28 @@ export default function SourceTablesTable({
               </tr>
               {expandedLineage?.find(
                 (lineage) =>
-                  lineage.connection === table.source_connection &&
-                  lineage.schema === table.source_schema &&
-                  lineage.table === table.source_table &&
+                  lineage.connection ===
+                    (isTarget
+                      ? table.target_connection
+                      : table.source_connection) &&
+                  lineage.schema ===
+                    (isTarget ? table.target_schema : table.source_schema) &&
+                  lineage.table ===
+                    (isTarget ? table.target_table : table.source_table) &&
                   table.source_table_data_quality_status?.table_exist
               ) && (
                 <tr>
                   <td colSpan={5} className="pl-4 py-1">
                     <SourceTablesTable
                       connection={
-                        isTarget ? table.target_schema : table.source_schema
+                        isTarget
+                          ? table.target_connection
+                          : table.source_connection
                       }
                       schema={
                         isTarget ? table.target_schema : table.source_schema
                       }
-                      table={
-                        isTarget ? table.target_schema : table.source_schema
-                      }
+                      table={isTarget ? table.target_table : table.source_table}
                       showHeader={false}
                       isTarget={isTarget}
                     />
