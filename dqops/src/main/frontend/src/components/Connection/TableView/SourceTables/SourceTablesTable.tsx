@@ -320,17 +320,19 @@ export default function SourceTablesTable({
                 </td>
                 <td className="px-4">
                   <div className="min-w-20 !max-w-100 truncate">
-                    {table.source_connection}
+                    {isTarget
+                      ? table.target_connection
+                      : table.source_connection}
                   </div>
                 </td>
                 <td className="px-4">
                   <div className="min-w-20 !max-w-100 truncate">
-                    {table.source_schema}
+                    {isTarget ? table.target_schema : table.source_schema}
                   </div>
                 </td>
                 <td className="px-4">
                   <div className="min-w-20 !max-w-100 truncate">
-                    {table.source_table}
+                    {isTarget ? table.target_table : table.source_table}
                   </div>
                 </td>
                 {setSourceTableEdit && (
