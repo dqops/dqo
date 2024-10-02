@@ -10,12 +10,12 @@ This example verifies that the table is not empty and meets the size requirement
 
 **PROBLEM**
 
-[America’s Health Rankings](https://www.americashealthrankings.org/about/methodology/our-reports) provides an analysis of national health on a state-by-state basis
+[America's Health Rankings](https://www.americashealthrankings.org/about/methodology/our-reports) provides an analysis of national health on a state-by-state basis
 by evaluating a historical and comprehensive set of health, environmental and socioeconomic data to determine national health benchmarks and state rankings.
 
 The platform analyzes more than 340 measures of behaviors, social and economic factors, physical environment and clinical care data.
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
-the world’s largest, annual population-based telephone survey of over 400,000 people.
+the world’s largest annual population-based telephone survey of over 400,000 people.
 
 For any database analysis, empty or incomplete data can significantly hinder analysis and lead to inaccurate conclusions.  
 In this example, we will detect that the table is not empty and meet the size requirement.
@@ -39,7 +39,7 @@ which activates the [daily_row_count](../../checks/table/volume/row-count.md) ch
 
 ### **Navigate to Monitoring checks editor**
 
-To explore a list of monitoring checks activated by the [built-in data quality policies](../../dqo-concepts/data-observability.md)
+To explore a list of monitoring checks activated by the [built-in data quality policies](../../dqo-concepts/data-observability.md),
 we will navigate to the **Data quality checks editor**:
 
 1. Click on the **Monitoring checks** section.
@@ -48,7 +48,7 @@ we will navigate to the **Data quality checks editor**:
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories.
 
-You can [lean more about the **Check editor** on the concept page](../../dqo-concepts/dqops-user-interface-overview.md#check-editor). 
+You can [learn more about the **Check editor** on the concept page](../../dqo-concepts/dqops-user-interface-overview.md#check-editor). 
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-navigating-to-the-list-of-checks2.png){ loading=lazy; width="1200px" }
 
@@ -87,15 +87,15 @@ Setting threshold can be done automatically using the [rule miner engine](../../
 
 ### **Collect basic data profiling**
 
-To propose configuration of data quality checks, the rule miner requires basic data statistics.
+To propose a configuration of data quality checks, the rule miner requires basic data statistics.
 
-Follow these steps to collect basic data statistic:
+Follow these steps to collect basic data statistics:
 
 1. Navigate to the **Profiling section**.
 2. Select the `ahr` table from the tree view on the left. This will open the **Basic data statistics** tab.
 3. Click on the **Collect statistics**.
 
-This will collect the basic statistics of for the table and all columns, as show on the screen below.
+This will collect the basic statistics for the table and all columns, as shown on the screen below.
 
 ![Collect basic statistics](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-collect-basic-statitistics1.png){ loading=lazy; width="1200px" }
 
@@ -114,7 +114,7 @@ Filter the results to include only checks from the **volume** category by enteri
 
 ![Propose a configuration of volume checks using rule miner](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-propose-configuration-of-checks-using-rule-mining.png){ loading=lazy; width="1200px" }
 
-You will see a proposition of profile_row_count check configuration that will rise an error if the minimum count of rows
+You will see a proposition of profile_row_count check configuration that will raise an error if the minimum count of rows
 fails below 16,339.
 
 Pressing the **Apply** button saves the configuration of data quality checks and their rules.
@@ -122,19 +122,19 @@ A popup window will appear, notifying you that the checks have been activated an
 clicking on the **Confirm** button.
 
 ### Copy the verified profiling check to the monitoring checks
-To start monitoring data quality using newly configured check we need to copy the configuration of the [row_count](../../checks/table/volume/row-count.md)
-check in the Profiling section to Monitoring checks:
+To start monitoring data quality using a newly configured check we need to copy the configuration of the [row_count](../../checks/table/volume/row-count.md)
+check in the Profiling section to the Monitoring checks:
 
 1. Navigate to the **Monitoring checks** section.
 2. Select the table from the tree view on the left.
 3. Click on the **Copy verified profiling checks** tab.
 4. Click the **Apply** button.
-5. Click the **Confirm** button in the popup to run configured check.
+5. Click the **Confirm** button in the popup to run configured checks.
 
 ![Copy verified profiling checks to monitoring section](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-copy-verified-profiling-checks-to-monitoring-section1.png){ loading=lazy; width="1200px" }
 
 ### Review Table quality status
-After the **Run checks** job finishes, you can review the summary of the identified data quality issues.
+After the **Run checks** job finishes, you can review the summary of the identified data quality issues
 on the **Table quality status** screen. Click on the **Table quality status** tab to navigate to that screen.
 
 ![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-review-table-quality-status1.png){ loading=lazy; width="1200px" }
@@ -151,10 +151,10 @@ orange for an error, red for a fatal error, and grey stripes for an execution er
 You can click on the colored box to view a list of checks that contribute to the result. Hovering over the check name will provide more details.
 
 In this example, we have demonstrated how to use DQOps to verify that the table is not empty and meets the size requirements.
-By using the [daily_row_count](../../checks/table/volume/row-count.md) table check, we can monitor that the number of
+By using the [daily_row_count](../../checks/table/volume/row-count.md) table check, we can monitor the number of
 rows in a table does not fall below the minimum accepted count. If it does, DQOps will create an incident and can send a notification.
 
-Follow the link, to read [how to configure notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
+Follow the link to learn [how to configure notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 
 ## Next steps
 
