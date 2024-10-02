@@ -38,9 +38,9 @@ if exist "%~dp0dqops\pom.xml" (
     )
 
     if not "x%DQO_PREPEND_CLASSES%"=="x" (
-        set DQO_LAUNCH_CLASSPATH=%DQO_PREPEND_CLASSES%;%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*;%DQO_USER_HOME%\jars\*
+        set DQO_LAUNCH_CLASSPATH="%DQO_PREPEND_CLASSES%;%DQO_USER_HOME%\jars\*;%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*"
     ) else (
-        set DQO_LAUNCH_CLASSPATH=%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*;%DQO_USER_HOME%\jars\*
+        set DQO_LAUNCH_CLASSPATH="%DQO_USER_HOME%\jars\*;%~dp0dqops\target\dqo-dqops-%DQO_VERSION%.jar;%~dp0lib\target\output\dqo-lib-%DQO_VERSION%\jars\*"
     )
 ) else (
     if not exist "%DQO_HOME%\jars" (
@@ -49,9 +49,9 @@ if exist "%~dp0dqops\pom.xml" (
     )
 
     if not "x%DQO_PREPEND_CLASSES%"=="x" (
-        set DQO_LAUNCH_CLASSPATH=%DQO_PREPEND_CLASSES%;%DQO_HOME%\jars\*;%DQO_USER_HOME%\jars\*
+        set DQO_LAUNCH_CLASSPATH="%DQO_PREPEND_CLASSES%;%DQO_USER_HOME%\jars\*;%DQO_HOME%\jars\*"
     ) else (
-        set DQO_LAUNCH_CLASSPATH=%DQO_HOME%\jars\*;%DQO_USER_HOME%\jars\*
+        set DQO_LAUNCH_CLASSPATH="%DQO_USER_HOME%\jars\*;%DQO_HOME%\jars\*"
     )
 )
 
