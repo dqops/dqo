@@ -14,10 +14,17 @@ import Loader from '../../../Loader';
 import ClientSidePagination from '../../../Pagination/ClientSidePagination';
 import SvgIcon from '../../../SvgIcon';
 
-const HEADER_ELEMENTS = [
+const SOURCE_HEADER_ELEMENTS = [
   { label: 'Source connection', key: 'source_connection' },
   { label: 'Source schema', key: 'source_schema' },
   { label: 'Source table', key: 'source_table' },
+  { label: 'Action', key: 'action' }
+];
+
+const TARGET_HEADER_ELEMENTS = [
+  { label: 'Target connection', key: 'source_connection' },
+  { label: 'Target schema', key: 'source_schema' },
+  { label: 'Target table', key: 'source_table' },
   { label: 'Action', key: 'action' }
 ];
 
@@ -26,7 +33,8 @@ export default function SourceTablesTable({
   schema: parentSchema,
   table: parentTable,
   setSourceTableEdit,
-  showHeader: showHeader = true
+  showHeader: showHeader = true,
+  isTarget
 }: {
   connection?: string;
   schema?: string;
@@ -35,6 +43,7 @@ export default function SourceTablesTable({
     obj: { connection: string; schema: string; table: string } | null
   ) => void;
   showHeader?: boolean;
+  isTarget?: boolean;
 }) {
   const {
     connection,
@@ -67,13 +76,23 @@ export default function SourceTablesTable({
 
   const getTables = async () => {
     setLoading(true);
-    DataLineageApiClient.getTableSourceTables(connection, schema, table)
-      .then((res) => {
-        setLoading(false);
-        setTables(res.data);
-        refetchTables(res.data);
-      })
-      .finally(() => setLoading(false));
+    if (isTarget) {
+      await DataLineageApiClient.getTableTargetTables(connection, schema, table)
+        .then((res) => {
+          setLoading(false);
+          setTables(res.data);
+          refetchTables(res.data);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      DataLineageApiClient.getTableSourceTables(connection, schema, table)
+        .then((res) => {
+          setLoading(false);
+          setTables(res.data);
+          refetchTables(res.data);
+        })
+        .finally(() => setLoading(false));
+    }
   };
 
   const refetchTables = (tables?: TableLineageSourceListModel[]) => {
@@ -201,47 +220,51 @@ export default function SourceTablesTable({
             <tr>
               <th></th>
               <th></th>
-              {HEADER_ELEMENTS.map((elem, index) => {
-                if (elem.key === 'action' && !setSourceTableEdit) {
-                  return null;
+              {(isTarget ? TARGET_HEADER_ELEMENTS : SOURCE_HEADER_ELEMENTS).map(
+                (elem, index) => {
+                  if (elem.key === 'action' && !setSourceTableEdit) {
+                    return null;
+                  }
+                  return (
+                    <th key={index} onClick={() => handleSort(elem, index)}>
+                      <div
+                        className={clsx(
+                          'flex items-center gap-x-1 px-4',
+                          elem.key === 'action' && 'ml-10'
+                        )}
+                      >
+                        {elem.label}
+                        {elem.key !== 'action' && (
+                          <div>
+                            {!(
+                              indexSortingElement === index && dir === 'asc'
+                            ) ? (
+                              <SvgIcon
+                                name="chevron-up"
+                                className="w-2 h-2 text-black cursor-pointer"
+                                onClick={() => handleSort(elem, index)}
+                              />
+                            ) : (
+                              <div className="w-2 h-2" />
+                            )}
+                            {!(
+                              indexSortingElement === index && dir === 'desc'
+                            ) ? (
+                              <SvgIcon
+                                name="chevron-down"
+                                className="w-2 h-2 text-black cursor-pointer"
+                                onClick={() => handleSort(elem, index)}
+                              />
+                            ) : (
+                              <div className="w-2 h-2" />
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </th>
+                  );
                 }
-                return (
-                  <th key={index} onClick={() => handleSort(elem, index)}>
-                    <div
-                      className={clsx(
-                        'flex items-center gap-x-1 px-4',
-                        elem.key === 'action' && 'ml-10'
-                      )}
-                    >
-                      {elem.label}
-                      {elem.key !== 'action' && (
-                        <div>
-                          {!(indexSortingElement === index && dir === 'asc') ? (
-                            <SvgIcon
-                              name="chevron-up"
-                              className="w-2 h-2 text-black cursor-pointer"
-                              onClick={() => handleSort(elem, index)}
-                            />
-                          ) : (
-                            <div className="w-2 h-2" />
-                          )}
-                          {!(
-                            indexSortingElement === index && dir === 'desc'
-                          ) ? (
-                            <SvgIcon
-                              name="chevron-down"
-                              className="w-2 h-2 text-black cursor-pointer"
-                              onClick={() => handleSort(elem, index)}
-                            />
-                          ) : (
-                            <div className="w-2 h-2" />
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </th>
-                );
-              })}
+              )}
             </tr>
           </thead>
         )}
@@ -382,6 +405,7 @@ export default function SourceTablesTable({
                         schema={table.source_schema}
                         table={table.source_table}
                         showHeader={false}
+                        isTarget={isTarget}
                       />
                     </td>
                   </tr>

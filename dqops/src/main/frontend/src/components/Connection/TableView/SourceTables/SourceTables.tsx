@@ -5,7 +5,7 @@ import TableActionGroup from '../TableActionGroup';
 import SourceTableDetail from './SourceTableDetail';
 import SourceTablesTable from './SourceTablesTable';
 
-export default function SourceTables() {
+export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
   const [addSourceTable, setAddSourceTable] = React.useState(false);
   const [sourceTableEdit, setSourceTableEdit] = React.useState<{
     connection: string;
@@ -44,9 +44,12 @@ export default function SourceTables() {
         <>
           <TableActionGroup onUpdate={onBack} isDisabled />
           <div className="flex mb-4 text-sm"></div>
-          <SourceTablesTable setSourceTableEdit={setSourceTableEdit} />
+          <SourceTablesTable
+            setSourceTableEdit={setSourceTableEdit}
+            isTarget={isTarget}
+          />
           <Button
-            label="Add source table"
+            label={`Add ${isTarget ? 'target' : 'source'} table`}
             color="primary"
             className="!w-50 !my-5 ml-4"
             onClick={() => setAddSourceTable(true)}
