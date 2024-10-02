@@ -85,6 +85,11 @@ public final class BuiltInFolderNames {
     public static final String INDEX = ".index";
 
     /**
+     * Local connection similarity folder inside the .index folder.
+     */
+    public static final String CONNECTION_SIMILARITY_INDEX = SOURCES;
+
+    /**
      * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQOps cloud.
      */
     public static final String CREDENTIALS = ".credentials";

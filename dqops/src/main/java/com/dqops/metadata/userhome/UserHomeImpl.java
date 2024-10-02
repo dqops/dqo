@@ -31,6 +31,8 @@ import com.dqops.metadata.id.*;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexList;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexListImpl;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -57,6 +59,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("credentials", o -> o.credentials);
             put("dictionaries", o -> o.dictionaries);
             put("file_indices", o -> o.fileIndices);
+            put("connection_similarity_indices", o -> o.connectionSimilarityIndices);
             put("dashboards", o -> o.dashboards);
             put("default_schedules", o -> o.defaultSchedules);
             put("table_quality_policies", o -> o.tableQualityPolicies);
@@ -76,6 +79,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
     private SharedCredentialListImpl credentials;
     private DictionaryListImpl dictionaries;
     private FileIndexList fileIndices;
+    private ConnectionSimilarityIndexList connectionSimilarityIndices;
     private DashboardFolderListSpecWrapperImpl dashboards;
 
     /**
@@ -120,6 +124,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setCredentials(new SharedCredentialListImpl(readOnly));
         this.setDictionaries(new DictionaryListImpl(readOnly));
         this.setFileIndices(new FileIndexListImpl(readOnly));
+        this.setConnectionSimilarityIndices(new ConnectionSimilarityIndexListImpl(readOnly));
         this.setDashboards(new DashboardFolderListSpecWrapperImpl(readOnly));
         this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl(readOnly));
         this.setTableQualityPolicies(new TableQualityPolicyListImpl(readOnly));
@@ -140,6 +145,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param credentials Collection of shared credentials.
      * @param dictionaries Collection of data dictionaries.
      * @param fileIndices File synchronization indexes.
+     * @param connectionSimilarityIndices Connection similarity indices.
      * @param dashboards Custom dashboards wrapper.
      * @param schedules Default monitoring schedules wrapper.
      * @param tableQualityPolicies Default table-level checks.
@@ -155,6 +161,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         SharedCredentialListImpl credentials,
                         DictionaryListImpl dictionaries,
                         FileIndexListImpl fileIndices,
+                        ConnectionSimilarityIndexList connectionSimilarityIndices,
                         DashboardFolderListSpecWrapperImpl dashboards,
                         MonitoringSchedulesWrapperImpl schedules,
                         TableQualityPolicyListImpl tableQualityPolicies,
@@ -170,6 +177,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setCredentials(credentials);
         this.setDictionaries(dictionaries);
         this.setFileIndices(fileIndices);
+        this.setConnectionSimilarityIndices(connectionSimilarityIndices);
         this.setDashboards(dashboards);
         this.setDefaultSchedules(schedules);
         this.setTableQualityPolicies(tableQualityPolicies);
@@ -365,6 +373,28 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns a list of connection similarity indices.
+     * @return List of connection similarity indices.
+     */
+    @Override
+    public ConnectionSimilarityIndexList getConnectionSimilarityIndices() {
+        return connectionSimilarityIndices;
+    }
+
+    /**
+     * Changes the collection of connection similarity indices.
+     * @param connectionSimilarityIndices New connection similarity indices.
+     */
+    public void setConnectionSimilarityIndices(ConnectionSimilarityIndexList connectionSimilarityIndices) {
+        this.connectionSimilarityIndices = connectionSimilarityIndices;
+        if (connectionSimilarityIndices != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "connection_similarity_indices");
+            connectionSimilarityIndices.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("connection_similarity_indices").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Returns a collection of custom dashboards in the user home folder.
      * @return Collection of user's custom dashboards.
      */
@@ -486,6 +516,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getCredentials().flush();
         this.getDictionaries().flush();
         this.getFileIndices().flush();
+        this.getConnectionSimilarityIndices().flush();
         this.getDashboards().flush();
         this.getDefaultSchedules().flush();
         this.getTableQualityPolicies().flush();

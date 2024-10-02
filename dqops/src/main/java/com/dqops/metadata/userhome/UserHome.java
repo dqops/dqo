@@ -30,6 +30,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.SettingsWrapper;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexList;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -94,6 +95,12 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return List of file indexes.
      */
     FileIndexList getFileIndices();
+
+    /**
+     * Returns a list of connection similarity indices for each connection.
+     * @return List of connection similarity indices.
+     */
+    ConnectionSimilarityIndexList getConnectionSimilarityIndices();
 
     /**
      * Finds a connection wrapper on the given hierarchy path.

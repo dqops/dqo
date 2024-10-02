@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.storage.localfiles.fileindices;
+package com.dqops.metadata.storage.localfiles.similarity;
 
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.fileindices.FileIndexName;
-import com.dqops.metadata.fileindices.FileIndexSpec;
-import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexSpec;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.JsonSerializer;
@@ -32,9 +32,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 
 /**
- * File based file index spec wrapper. Loads and writes the file index to a json file in the user's home folder.
+ * File based connection similarity index spec wrapper. Loads and writes the file index to a json file in the user's home folder.
  */
-public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
+public class FileConnectionSimilarityIndexWrapperImpl extends ConnectionSimilarityIndexWrapperImpl {
     @JsonIgnore
     private final FolderTreeNode indicesFolderNode;
     @JsonIgnore
@@ -43,12 +43,12 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
     /**
      * Creates a table wrapper for a file index specification that uses json files for storage.
      * @param indicesFolderNode Folder with json files for file index specifications.
-     * @param indexName Real base file name, it is the actual file name before the table spec file extension.
+     * @param connectionName Real base file name, it is the actual file name before the table spec file extension.
      * @param jsonSerializer Json serializer.
      * @param readOnly Make the list read-only.
      */
-    public FileFileIndexWrapperImpl(FolderTreeNode indicesFolderNode, FileIndexName indexName, JsonSerializer jsonSerializer, boolean readOnly) {
-        super(indexName, readOnly);
+    public FileConnectionSimilarityIndexWrapperImpl(FolderTreeNode indicesFolderNode, String connectionName, JsonSerializer jsonSerializer, boolean readOnly) {
+        super(connectionName, readOnly);
         this.indicesFolderNode = indicesFolderNode;
         this.jsonSerializer = jsonSerializer;
     }
@@ -62,23 +62,23 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
     }
 
     /**
-     * Loads the file index spec with the list of indexed files.
+     * Loads the file index spec with the list of similarity scores.
      * @return Loaded file index specification.
      */
     @Override
-    public FileIndexSpec getSpec() {
-        FileIndexSpec spec = super.getSpec();
+    public ConnectionSimilarityIndexSpec getSpec() {
+        ConnectionSimilarityIndexSpec spec = super.getSpec();
         if (spec == null) {
-            String fileNameWithExt = this.getIndexName().toBaseFileName() + SpecFileNames.FILE_INDEX_SPEC_FILE_EXT_JSON;
+            String fileNameWithExt = FileNameSanitizer.encodeForFileSystem(this.getConnectionName()) + SpecFileNames.CONNECTION_SIMILARITY_INDEX_SPEC_FILE_EXT_JSON;
             FileTreeNode fileNode = this.indicesFolderNode.getChildFileByFileName(fileNameWithExt);
             FileContent fileContent = fileNode.getContent();
             String textContent = fileContent.getTextContent();
-            FileIndexJson deserialized = this.jsonSerializer.deserialize(textContent, FileIndexJson.class);
-            FileIndexSpec deserializedSpec = deserialized.getSpec();
+            ConnectionSimilarityIndexJson deserialized = this.jsonSerializer.deserialize(textContent, ConnectionSimilarityIndexJson.class);
+            ConnectionSimilarityIndexSpec deserializedSpec = deserialized.getSpec();
             if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                 throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
             }
-            if (deserialized.getKind() != SpecificationKind.file_index) {
+            if (deserialized.getKind() != SpecificationKind.connection_similarity_index) {
                 throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
             }
 
@@ -108,10 +108,10 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
 			this.setStatus(InstanceStatus.MODIFIED);
         }
 
-        FileIndexJson fileIndexJson = new FileIndexJson(this.getSpec());
+        ConnectionSimilarityIndexJson fileIndexJson = new ConnectionSimilarityIndexJson(this.getSpec());
         String specAsJson = this.jsonSerializer.serialize(fileIndexJson);
         FileContent newFileContent = new FileContent(specAsJson);
-        String fileNameWithExt = this.getIndexName().toBaseFileName() + SpecFileNames.FILE_INDEX_SPEC_FILE_EXT_JSON;
+        String fileNameWithExt = FileNameSanitizer.encodeForFileSystem(this.getConnectionName()) + SpecFileNames.CONNECTION_SIMILARITY_INDEX_SPEC_FILE_EXT_JSON;
 
         switch (this.getStatus()) {
             case ADDED:
