@@ -76,6 +76,8 @@ public class TableLineageServiceImpl implements TableLineageService {
         TableCurrentDataQualityStatusModel upstreamCombinedQualityStatus = this.tableStatusCache.getCurrentTableStatus(
                 referenceTable, null);
 
+        visitedTables.add(referenceTable);
+
         if (upstreamLineage) {
             upstreamCombinedQualityStatus = collectUpstreamLineage(
                     userHome, referenceTable, tableLineageModel, upstreamTableStatuses, visitedTables, onStackTables);
