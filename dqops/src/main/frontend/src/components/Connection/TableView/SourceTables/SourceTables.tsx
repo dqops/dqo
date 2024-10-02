@@ -22,7 +22,7 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
     <div className="p-2">
       {addSourceTable || sourceTableEdit ? (
         <div>
-          <div className="flex space-x-4 items-center absolute right-10 top-30">
+          <div className="flex space-x-4 items-center absolute right-10 top-40">
             <Button
               label="Back"
               color="primary"
