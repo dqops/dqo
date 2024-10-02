@@ -407,9 +407,15 @@ export default function SourceTablesTable({
                 <tr>
                   <td colSpan={5} className="pl-4 py-1">
                     <SourceTablesTable
-                      connection={table.source_connection}
-                      schema={table.source_schema}
-                      table={table.source_table}
+                      connection={
+                        isTarget ? table.target_schema : table.source_schema
+                      }
+                      schema={
+                        isTarget ? table.target_schema : table.source_schema
+                      }
+                      table={
+                        isTarget ? table.target_schema : table.source_schema
+                      }
                       showHeader={false}
                       isTarget={isTarget}
                     />
