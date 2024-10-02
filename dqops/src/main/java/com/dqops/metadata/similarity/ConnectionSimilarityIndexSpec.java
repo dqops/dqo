@@ -20,11 +20,16 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Table similarity score holder at a connection level that stores a score used to find the most similar tables.
@@ -38,6 +43,9 @@ public class ConnectionSimilarityIndexSpec extends AbstractSpec implements Clone
         {
         }
     };
+
+    @JsonPropertyDescription("Dictionary of scores for each table, identified by a schema and table.")
+    private Map<String, Map<String, TableSimilarityStore>> tables = new LinkedHashMap<>();
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -67,6 +75,17 @@ public class ConnectionSimilarityIndexSpec extends AbstractSpec implements Clone
      */
     public ConnectionSimilarityIndexSpec deepClone() {
         ConnectionSimilarityIndexSpec cloned = (ConnectionSimilarityIndexSpec) super.deepClone();
+        cloned.tables = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Map<String, TableSimilarityStore>> schemaEntry : this.tables.entrySet()) {
+            LinkedHashMap<String, TableSimilarityStore> clonedTables = new LinkedHashMap<>();
+            for (Map.Entry<String, TableSimilarityStore> tableEntry : schemaEntry.getValue().entrySet()) {
+                clonedTables.put(tableEntry.getKey(), tableEntry.getValue().clone());
+            }
+
+            this.tables.put(schemaEntry.getKey(), clonedTables);
+        }
+
         return cloned;
     }
 }
