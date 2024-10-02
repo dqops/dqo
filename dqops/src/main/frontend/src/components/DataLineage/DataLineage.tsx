@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getFirstLevelState } from '../../redux/selectors';
+import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import SourceTables from '../Connection/TableView/SourceTables/SourceTables';
 import DataLineageGraph from '../DataLineageGraph/DataLineageGraph';
@@ -13,7 +16,13 @@ export default function DataLineage() {
     schema,
     table
   }: { connection: string; schema: string; table: string } = useDecodedParams();
-  const [activeTab, setActiveTab] = React.useState('data-lineage-graph');
+  const { showSourceTables } = useSelector(
+    getFirstLevelState(CheckTypes.SOURCES)
+  );
+  const [activeTab, setActiveTab] = React.useState(
+    showSourceTables ? 'data-lineage' : 'data-lineage-graph'
+  );
+
   return (
     <div className="py-2">
       <div className="border-b border-gray-300">
@@ -26,6 +35,7 @@ export default function DataLineage() {
             connection={connection}
             schema={schema}
             table={table}
+            configureSourceTables={() => setActiveTab('data-lineage')}
           />
         </div>
       )}
