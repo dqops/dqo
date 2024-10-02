@@ -344,9 +344,18 @@ export default function SourceTablesTable({
                           onClick={() =>
                             setSourceTableEdit &&
                             setSourceTableEdit({
-                              connection: table.source_connection ?? '',
-                              schema: table.source_schema ?? '',
-                              table: table.source_table ?? ''
+                              connection:
+                                (isTarget
+                                  ? table.target_connection
+                                  : table.source_connection) ?? '',
+                              schema:
+                                (isTarget
+                                  ? table.target_schema
+                                  : table.source_schema) ?? '',
+                              table:
+                                (isTarget
+                                  ? table.target_table
+                                  : table.source_table) ?? ''
                             })
                           }
                           size="sm"
