@@ -5,7 +5,8 @@ import DataLineageGraph from '../DataLineageGraph/DataLineageGraph';
 import Tabs from '../Tabs';
 const tabs = [
   { label: 'Data lineage graph', value: 'data-lineage-graph' },
-  { label: 'Source tables', value: 'data-lineage' }
+  { label: 'Source tables', value: 'data-lineage' },
+  { label: 'Target tables', value: 'target-tables' }
 ];
 export default function DataLineage() {
   const {
@@ -20,6 +21,7 @@ export default function DataLineage() {
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
       {activeTab === 'data-lineage' && <SourceTables />}
+      {activeTab === 'target-tables' && <SourceTables isTarget />}
       {activeTab === 'data-lineage-graph' && (
         <div className="p-4">
           <DataLineageGraph
