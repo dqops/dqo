@@ -13,6 +13,17 @@ DQOps uses the DuckDB connector.
 - [Installed DQOps](../getting-started/installation.md).
 - Access permission and authentication to Azure Blob Storage.
 
+!!! note "DQOps free version limits"
+
+    DuckDB extensions are not included in the free version of DQOps.
+    If your company network restricts access to external resources, 
+    analyzing the quality of data in the cloud (AWS, Azure, GCP) 
+    and data formats (Iceberg and Delta Lake) may not be possible. 
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
+
+
 ### **Choose the Azure authentication mode**
 
 To connect DQOps to Azure Blob Storage, you need to set the authentication method. 

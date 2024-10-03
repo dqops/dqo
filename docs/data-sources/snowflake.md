@@ -16,6 +16,12 @@ By default, Snowflake instances are open to any IP address unless you configure 
 policies that restrict this communication. In case of restrictions you need to add the IP address used by DQOps to 
 [Allowed IP Addresses in Snowflake Network Policies](https://docs.snowflake.com/en/user-guide/network-policies#modifying-network-policies).
 
+!!! note "DQOps free version limits"
+
+    Snowflake drivers are not provided in an open-source version.
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
 ## Add a Snowflake connection using the user interface
 
 ### **Navigate to the connection settings**
