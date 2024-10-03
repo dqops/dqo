@@ -13,6 +13,16 @@ buckets, DQOps uses the DuckDB connector.
 - [Installed DQOps](../getting-started/installation.md).
 - Access permission and credentials to AWS S3.
 
+!!! note "DQOps free version limits"
+
+   If your company network restricts access to external resources, 
+   analyzing the quality of data in the cloud (AWS, Azure, GCP) 
+   and data formats (Iceberg and Delta Lake) may not be possible 
+   because DuckDB extensions are not included in the free version of DQOps. 
+   
+   For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
+
 ### **Generate Credentials**
 
 To connect DQOps to AWS S3, you need to obtain credentials.
