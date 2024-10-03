@@ -17,6 +17,7 @@ import {
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import { ChartView } from '../../../DataQualityChecks/CheckDetails/ChartView';
 import SelectTailwind from '../../../Select/SelectTailwind';
+import { calculateDateRange, getColor } from './ObservabilityStatus.utils';
 
 export default function ObservabilityStatus() {
   const {
@@ -38,6 +39,7 @@ export default function ObservabilityStatus() {
     column?: string;
     check?: string;
   }>({ checkTypes });
+  const [groupingOptions, setGroupingOptions] = useState<string[]>([]);
   const [isAnomalyRowCount, setIsAnomalyRowCount] = useState<boolean>(false);
   const [dataGroup, setDataGroup] = useState<string | undefined>('');
   const [month, setMonth] = useState<string>('Last 3 months');
@@ -70,7 +72,7 @@ export default function ObservabilityStatus() {
           schema,
           table,
           'daily',
-          undefined,
+          dataGroup,
           startDate,
           endDate,
           undefined,
@@ -79,6 +81,7 @@ export default function ObservabilityStatus() {
           undefined,
           15
         ).then((res) => {
+          setGroupingOptions(res.data.map((item) => item.dataGroup ?? ''));
           setAllResults(
             res.data.filter((x) => x.checkCategory === 'schema') ?? []
           );
@@ -92,7 +95,7 @@ export default function ObservabilityStatus() {
           schema,
           table,
           'daily',
-          undefined,
+          dataGroup,
           startDate,
           endDate,
           undefined,
@@ -142,8 +145,6 @@ export default function ObservabilityStatus() {
     });
   }, [connection, schema, table, histogramFilter]);
 
-  console.log(allResults);
-
   return (
     <div className="p-4 mt-2">
       <SectionWrapper
@@ -155,13 +156,12 @@ export default function ObservabilityStatus() {
             <SelectTailwind
               value={dataGroup || results[0]?.dataGroup}
               options={
-                (results ?? []).map((item) => ({
-                  label: item.dataGroup ?? '',
-                  value: item.dataGroup
+                (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
+                  label: item ?? '',
+                  value: item
                 })) || []
               }
               onChange={setDataGroup}
-              disabled={true}
             />
           </div>
           <div className="flex space-x-4 items-center">
@@ -295,36 +295,3 @@ export default function ObservabilityStatus() {
     </div>
   );
 }
-
-const calculateDateRange = (month: string) => {
-  if (!month) return { startDate: '', endDate: '' };
-
-  if (month === 'Last 3 months') {
-    return {
-      startDate: moment().add(-3, 'month').format('YYYY-MM-DD'),
-      endDate: moment().format('YYYY-MM-DD')
-    };
-  }
-
-  return {
-    startDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD'),
-    endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
-  };
-};
-
-const getColor = (status: number | undefined) => {
-  switch (status) {
-    case 0:
-      return 'bg-teal-500';
-    case 1:
-      return 'bg-yellow-900';
-    case 2:
-      return 'bg-orange-900';
-    case 3:
-      return 'bg-red-900';
-    case 4:
-      return 'bg-black';
-    default:
-      return 'bg-black';
-  }
-};
