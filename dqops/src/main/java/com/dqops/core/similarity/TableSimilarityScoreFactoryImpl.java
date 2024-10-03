@@ -22,7 +22,7 @@ import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.data.statistics.services.StatisticsDataService;
-import com.dqops.metadata.similarity.TableSimilarityStore;
+import com.dqops.metadata.similarity.TableSimilarityContainer;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
@@ -67,12 +67,12 @@ public class TableSimilarityScoreFactoryImpl implements TableSimilarityScoreFact
      * @return Table similarity score or null when the table has no statistics.
      */
     @Override
-    public TableSimilarityStore calculateSimilarityScore(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
+    public TableSimilarityContainer calculateSimilarityScore(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         HashFunction hashFunction = Hashing.farmHashFingerprint64();
         DataSimilarityCalculator tableSimilarityCalculator = new DataSimilarityCalculator();
 
-        TableSimilarityStore tableSimilarityStore = new TableSimilarityStore();
+        TableSimilarityContainer tableSimilarityContainer = new TableSimilarityContainer();
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(
                 connectionName, physicalTableName,
                 CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
@@ -103,10 +103,10 @@ public class TableSimilarityScoreFactoryImpl implements TableSimilarityScoreFact
                 }
             }
 
-            tableSimilarityStore.getCs().put(columnStatistics.getColumnName(), columnSimilarityCalculator.getScore());
+            tableSimilarityContainer.getCs().put(columnStatistics.getColumnName(), columnSimilarityCalculator.getScore());
         }
 
-        tableSimilarityStore.setTs(tableSimilarityCalculator.getScore());
-        return tableSimilarityStore;
+        tableSimilarityContainer.setTs(tableSimilarityCalculator.getScore());
+        return tableSimilarityContainer;
     }
 }

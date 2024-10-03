@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Data
 @EqualsAndHashCode
-public class TableSimilarityStore implements Cloneable {
+public class TableSimilarityContainer implements Cloneable {
     private long[] ts;
     private Map<String, long[]> cs = new LinkedHashMap<>();
 
@@ -69,9 +69,9 @@ public class TableSimilarityStore implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public TableSimilarityStore clone() {
+    public TableSimilarityContainer clone() {
         try {
-            TableSimilarityStore clone = (TableSimilarityStore) super.clone();
+            TableSimilarityContainer clone = (TableSimilarityContainer) super.clone();
             if (this.ts != null) {
                 clone.ts = Arrays.copyOf(this.ts, this.ts.length);
             }

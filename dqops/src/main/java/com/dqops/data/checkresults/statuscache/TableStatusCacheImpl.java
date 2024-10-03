@@ -266,7 +266,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
         try {
             currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.LOADING);
 
-            UserDomainIdentity userDomainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForLocalDomain(tableStatusKey.getDataDomain());
+            UserDomainIdentity userDomainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(tableStatusKey.getDataDomain());
 
             TableCurrentDataQualityStatusFilterParameters filterParameters =
                 TableCurrentDataQualityStatusFilterParameters.builder()

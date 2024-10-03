@@ -17,7 +17,7 @@
 package com.dqops.core.similarity;
 
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.metadata.similarity.TableSimilarityStore;
+import com.dqops.metadata.similarity.TableSimilarityContainer;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 /**
@@ -32,5 +32,5 @@ public interface TableSimilarityScoreFactory {
      * @param userDomainIdentity User identity and the data domain.
      * @return Table similarity score or null when the table has no statistics.
      */
-    TableSimilarityStore calculateSimilarityScore(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
+    TableSimilarityContainer calculateSimilarityScore(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
 }
