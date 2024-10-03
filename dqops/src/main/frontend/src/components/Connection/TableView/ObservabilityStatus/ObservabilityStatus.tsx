@@ -206,6 +206,7 @@ export default function ObservabilityStatus() {
       {!column && (
         <SectionWrapper
           title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
+          className="mb-6"
         >
           <div className="flex space-x-8 items-center">
             <div className="flex space-x-4 items-center">
@@ -236,10 +237,10 @@ export default function ObservabilityStatus() {
           <ChartView data={results} />
         </SectionWrapper>
       )}
-      <SectionWrapper title="Data quality issue severity" className="mt-8 mb-4">
+      <SectionWrapper title="Data quality issue severity" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
           <div className="col-span-2">
-            <BarChart histograms={histograms} />
+            <BarChart histograms={histograms} setHistograms={setHistograms} />
           </div>
           {!column && (
             <SectionWrapper title="Filter by columns" className="text-sm">
