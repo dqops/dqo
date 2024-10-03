@@ -27,6 +27,7 @@ import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -78,7 +79,6 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
-
     /**
      * Manually registers the JDBC Driver allowing the control of the registration time.
      */
@@ -92,7 +92,8 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
                 driverRegistered = true;
             }
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException("Please contact DQOps sales team to get access to a commercial version of DQOps. " +
+                    "Databricks drivers are not provided in an open-source version.");
         }
     }
 
