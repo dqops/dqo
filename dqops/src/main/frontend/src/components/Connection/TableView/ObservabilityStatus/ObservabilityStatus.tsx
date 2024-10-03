@@ -1,6 +1,7 @@
+import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckResultEntryModel,
   CheckResultsListModel,
@@ -9,7 +10,10 @@ import {
 import { BarChart } from '../../../../pages/IncidentDetail/BarChart';
 import { CheckResultApi } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
-import { useDecodedParams } from '../../../../utils';
+import {
+  getLocalDateInUserTimeZone,
+  useDecodedParams
+} from '../../../../utils';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import { ChartView } from '../../../DataQualityChecks/CheckDetails/ChartView';
 import SelectTailwind from '../../../Select/SelectTailwind';
@@ -26,15 +30,17 @@ export default function ObservabilityStatus() {
     schema: string;
     table: string;
   } = useDecodedParams();
-  const [results, setResults] = React.useState<CheckResultEntryModel[]>([]);
-  const [histograms, setHistograms] = React.useState<IssueHistogramModel>({});
-  const [histogramFilter, setHistogramFilter] = React.useState<{
+  const [results, setResults] = useState<CheckResultEntryModel[]>([]);
+  const [allResults, setAllResults] = useState<CheckResultsListModel[]>([]);
+  const [histograms, setHistograms] = useState<IssueHistogramModel>({});
+  const [histogramFilter, setHistogramFilter] = useState<{
     checkTypes: CheckTypes;
     column?: string;
     check?: string;
   }>({ checkTypes });
-  const [dataGroup, setDataGroup] = React.useState<string | undefined>('');
-  const [month, setMonth] = React.useState<string>('Last 3 months');
+  const [isAnomalyRowCount, setIsAnomalyRowCount] = useState<boolean>(false);
+  const [dataGroup, setDataGroup] = useState<string | undefined>('');
+  const [month, setMonth] = useState<string>('Last 3 months');
 
   const onChangeFilter = (obj: Partial<{ column: string; check: string }>) => {
     setHistogramFilter({ ...histogramFilter, ...obj });
@@ -48,6 +54,7 @@ export default function ObservabilityStatus() {
           result.checkName?.includes('row_count_anomaly')
         )
       ) {
+        setIsAnomalyRowCount(true);
         return results.filter((result) =>
           result.checkName?.includes('row_count_anomaly')
         )[0]?.checkResultEntries;
@@ -65,8 +72,16 @@ export default function ObservabilityStatus() {
           'daily',
           undefined,
           startDate,
-          endDate
+          endDate,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          15
         ).then((res) => {
+          setAllResults(
+            res.data.filter((x) => x.checkCategory === 'schema') ?? []
+          );
           setResults(getRowCountResults(res.data ?? []) ?? []);
         });
         break;
@@ -79,8 +94,16 @@ export default function ObservabilityStatus() {
           'daily',
           undefined,
           startDate,
-          endDate
+          endDate,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          15
         ).then((res) => {
+          setAllResults(
+            res.data.filter((x) => x.checkCategory === 'schema') ?? []
+          );
           setResults(getRowCountResults(res.data ?? []) ?? []);
         });
         break;
@@ -119,9 +142,13 @@ export default function ObservabilityStatus() {
     });
   }, [connection, schema, table, histogramFilter]);
 
+  console.log(allResults);
+
   return (
     <div className="p-4 mt-2">
-      <SectionWrapper title="Row count">
+      <SectionWrapper
+        title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
+      >
         <div className="flex space-x-8 items-center">
           <div className="flex space-x-4 items-center">
             <div className="text-sm">Data group (time series)</div>
@@ -210,6 +237,61 @@ export default function ObservabilityStatus() {
           </SectionWrapper>
         </div>
       </SectionWrapper>
+      <div className="flex items-center gap-x-4">
+        {allResults.map((result, index) => (
+          <SectionWrapper
+            key={index}
+            title={result.checkName ?? ''}
+            className="mt-8 mb-4"
+          >
+            <div className="flex items-center gap-x-1">
+              {result.checkResultEntries?.map((entry, index) => (
+                <Tooltip
+                  key={index}
+                  content={
+                    <div className="text-white">
+                      <div>Sensor value: {entry.sensorName}</div>
+                      {/* <div>
+                        Most severe status:{' '}
+                        <span className="capitalize">
+                          {getStatusLabel(status)}
+                        </span>
+                      </div> */}
+                      <div>
+                        Executed at:{' '}
+                        {entry.executedAt
+                          ? moment(
+                              getLocalDateInUserTimeZone(
+                                new Date(entry.executedAt)
+                              )
+                            ).format('YYYY-MM-DD HH:mm:ss')
+                          : ''}
+                      </div>
+                      <div>
+                        Time period:{' '}
+                        {entry.timePeriod
+                          ? moment(
+                              getLocalDateInUserTimeZone(
+                                new Date(entry.timePeriod)
+                              )
+                            ).format('YYYY-MM-DD HH:mm:ss')
+                          : ''}
+                      </div>
+                      <div>Data group: {entry.dataGroup}</div>
+                    </div>
+                  }
+                  className="max-w-80 py-2 px-2 bg-gray-800"
+                >
+                  <div
+                    key={index}
+                    className={clsx('w-3 h-3', getColor(entry.severity))}
+                  />
+                </Tooltip>
+              ))}
+            </div>
+          </SectionWrapper>
+        ))}
+      </div>
     </div>
   );
 }
@@ -228,4 +310,21 @@ const calculateDateRange = (month: string) => {
     startDate: moment(month, 'MMMM YYYY').format('YYYY-MM-DD'),
     endDate: moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
   };
+};
+
+const getColor = (status: number | undefined) => {
+  switch (status) {
+    case 0:
+      return 'bg-teal-500';
+    case 1:
+      return 'bg-yellow-900';
+    case 2:
+      return 'bg-orange-900';
+    case 3:
+      return 'bg-red-900';
+    case 4:
+      return 'bg-black';
+    default:
+      return 'bg-black';
+  }
 };
