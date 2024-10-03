@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import ObservabilityStatus from '../../components/Connection/TableView/ObservabilityStatus/ObservabilityStatus';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -26,6 +27,10 @@ import ColumnActionGroup from './ColumnActionGroup';
 
 const initTabs = [
   {
+    label: 'Observability status',
+    value: 'observability-status'
+  },
+  {
     label: 'Daily partitions',
     value: 'daily'
   },
@@ -49,7 +54,7 @@ const ColumnPartitionedChecksView = () => {
     schema: string;
     table: string;
     column: string;
-    tab: 'daily' | 'monthly';
+    tab: 'observability-status' | 'daily' | 'monthly';
   } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
 
@@ -77,7 +82,7 @@ const ColumnPartitionedChecksView = () => {
       schema,
       table,
       column,
-      tab
+      tab === 'daily' ? 'daily' : 'monthly'
     ).then((res) => {
       setCheckResultsOverview(res.data);
     });
@@ -239,6 +244,8 @@ const ColumnPartitionedChecksView = () => {
             <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
           </div>
         )}
+      {tab === 'observability-status' && <ObservabilityStatus />}
+
       {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}

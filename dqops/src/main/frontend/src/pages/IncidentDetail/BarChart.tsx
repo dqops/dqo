@@ -1,18 +1,16 @@
 import moment from 'moment/moment';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import {
-  HistogramDailyIssuesCount,
-  IssueHistogramModel
-} from '../../api';
+import { HistogramDailyIssuesCount, IssueHistogramModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setIncidentsHistogram } from '../../redux/actions/incidents.actions';
 
 type BarChartProps = {
   histograms: IssueHistogramModel;
+  setHistograms?: (histograms: IssueHistogramModel) => void;
 };
 
-export const BarChart = ({ histograms }: BarChartProps) => {
+export const BarChart = ({ histograms, setHistograms }: BarChartProps) => {
   const [savedHistograms, setSavedHistograms] =
     useState<IssueHistogramModel | null>(null);
   const dispatch = useActionDispatch();
@@ -91,7 +89,11 @@ export const BarChart = ({ histograms }: BarChartProps) => {
           Object.keys(histograms?.days ?? {})?.length === 1 &&
           savedHistograms
         ) {
-          dispatch(setIncidentsHistogram(savedHistograms));
+          if (setHistograms) {
+            setHistograms(savedHistograms);
+          } else {
+            dispatch(setIncidentsHistogram(savedHistograms));
+          }
           setSavedHistograms(null);
           return;
         }
@@ -100,7 +102,11 @@ export const BarChart = ({ histograms }: BarChartProps) => {
           ...histograms,
           days: { [formattedDate]: histograms?.days?.[formattedDate] ?? {} }
         };
-        dispatch(setIncidentsHistogram(filteredHistorgrams));
+        if (setHistograms) {
+          setHistograms(filteredHistorgrams);
+        } else {
+          dispatch(setIncidentsHistogram(filteredHistorgrams));
+        }
       }
     }
   };
