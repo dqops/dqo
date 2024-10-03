@@ -24,12 +24,14 @@ export default function ObservabilityStatus() {
     checkTypes,
     connection,
     schema,
-    table
+    table,
+    column
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
+    column: string;
   } = useDecodedParams();
   const [results, setResults] = useState<CheckResultEntryModel[]>([]);
   const [allResults, setAllResults] = useState<CheckResultsListModel[]>([]);
@@ -38,7 +40,7 @@ export default function ObservabilityStatus() {
     checkTypes: CheckTypes;
     column?: string;
     check?: string;
-  }>({ checkTypes });
+  }>({ checkTypes, column });
   const [groupingOptions, setGroupingOptions] = useState<string[]>([]);
   const [isAnomalyRowCount, setIsAnomalyRowCount] = useState<boolean>(false);
   const [dataGroup, setDataGroup] = useState<string | undefined>('');
@@ -67,52 +69,104 @@ export default function ObservabilityStatus() {
     };
     switch (checkTypes) {
       case CheckTypes.MONITORING: {
-        CheckResultApi.getTableMonitoringChecksResults(
-          connection,
-          schema,
-          table,
-          'daily',
-          dataGroup,
-          startDate,
-          endDate,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          15
-        ).then((res) => {
-          setGroupingOptions(res.data.map((item) => item.dataGroup ?? ''));
-          setAllResults(
-            res.data.filter((x) => x.checkCategory === 'schema') ?? []
-          );
-          setResults(getRowCountResults(res.data ?? []) ?? []);
-        });
-        break;
+        if (column) {
+          CheckResultApi.getColumnMonitoringChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setGroupingOptions(
+              res.data.map((item) => item.dataGroup ?? '') ?? []
+            );
+            console.log(res.data);
+            setAllResults(
+              res.data.filter((x) => x.checkCategory === 'schema') ?? []
+            );
+            setResults(getRowCountResults(res.data ?? []) ?? []);
+          });
+          break;
+        } else {
+          CheckResultApi.getTableMonitoringChecksResults(
+            connection,
+            schema,
+            table,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setGroupingOptions(res.data.map((item) => item.dataGroup ?? ''));
+            setAllResults(
+              res.data.filter((x) => x.checkCategory === 'schema') ?? []
+            );
+            setResults(getRowCountResults(res.data ?? []) ?? []);
+          });
+          break;
+        }
       }
       case CheckTypes.PARTITIONED: {
-        CheckResultApi.getTablePartitionedChecksResults(
-          connection,
-          schema,
-          table,
-          'daily',
-          dataGroup,
-          startDate,
-          endDate,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          15
-        ).then((res) => {
-          setAllResults(
-            res.data.filter((x) => x.checkCategory === 'schema') ?? []
-          );
-          setResults(getRowCountResults(res.data ?? []) ?? []);
-        });
-        break;
+        if (column) {
+          CheckResultApi.getColumnPartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setAllResults(
+              res.data.filter((x) => x.checkCategory === 'schema') ?? []
+            );
+            setResults(getRowCountResults(res.data ?? []) ?? []);
+          });
+          break;
+        } else {
+          CheckResultApi.getTablePartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setAllResults(
+              res.data.filter((x) => x.checkCategory === 'schema') ?? []
+            );
+            setResults(getRowCountResults(res.data ?? []) ?? []);
+          });
+          break;
+        }
       }
     }
-  }, [checkTypes, connection, schema, table, month]);
+  }, [checkTypes, connection, schema, table, column, month]);
 
   const monthOptions = useMemo(() => {
     return [
@@ -138,82 +192,90 @@ export default function ObservabilityStatus() {
       undefined,
       undefined,
       undefined,
-      histogramFilter.column,
-      histogramFilter.check
+      column ? column : histogramFilter.column,
+      histogramFilter.check,
+      checkTypes as 'monitoring' | 'partitioned'
     ).then((res) => {
+      console.log(res.data);
       setHistograms(res.data);
     });
-  }, [connection, schema, table, histogramFilter]);
+  }, [connection, schema, table, column, histogramFilter]);
 
   return (
     <div className="p-4 mt-2">
-      <SectionWrapper
-        title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
-      >
-        <div className="flex space-x-8 items-center">
-          <div className="flex space-x-4 items-center">
-            <div className="text-sm">Data group (time series)</div>
-            <SelectTailwind
-              value={dataGroup || results[0]?.dataGroup}
-              options={
-                (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
-                  label: item ?? '',
-                  value: item
-                })) || []
-              }
-              onChange={setDataGroup}
-            />
+      {!column && (
+        <SectionWrapper
+          title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
+        >
+          <div className="flex space-x-8 items-center">
+            <div className="flex space-x-4 items-center">
+              <div className="text-sm">Data group (time series)</div>
+              <SelectTailwind
+                value={dataGroup || results[0]?.dataGroup}
+                options={
+                  (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
+                    label: item ?? '',
+                    value: item
+                  })) || []
+                }
+                onChange={setDataGroup}
+              />
+            </div>
+            <div className="flex space-x-4 items-center">
+              <div className="text-sm">Month</div>
+              <SelectTailwind
+                value={month}
+                options={monthOptions}
+                onChange={setMonth}
+              />
+            </div>
           </div>
-          <div className="flex space-x-4 items-center">
-            <div className="text-sm">Month</div>
-            <SelectTailwind
-              value={month}
-              options={monthOptions}
-              onChange={setMonth}
-            />
-          </div>
-        </div>
-        {results.length === 0 && (
-          <div className="text-gray-700 mt-5 text-sm">No Data</div>
-        )}
-        <ChartView data={results} />
-      </SectionWrapper>
+          {results.length === 0 && (
+            <div className="text-gray-700 mt-5 text-sm">No Data</div>
+          )}
+          <ChartView data={results} />
+        </SectionWrapper>
+      )}
       <SectionWrapper title="Data quality issue severity" className="mt-8 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
           <div className="col-span-2">
             <BarChart histograms={histograms} />
           </div>
-
-          <SectionWrapper title="Filter by columns" className="text-sm">
-            {Object.keys(histograms?.columns || {}).map((column, index) => (
-              <div
-                className={clsx(
-                  'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
-                  {
-                    'font-bold text-gray-700':
-                      histogramFilter?.column === column,
-                    'text-gray-500':
-                      histogramFilter?.column &&
-                      histogramFilter?.column !== column
+          {!column && (
+            <SectionWrapper title="Filter by columns" className="text-sm">
+              {Object.keys(histograms?.columns || {}).map((column, index) => (
+                <div
+                  className={clsx(
+                    'flex gap-2 mb-2 cursor-pointer whitespace-normal break-all',
+                    {
+                      'font-bold text-gray-700':
+                        histogramFilter?.column === column,
+                      'text-gray-500':
+                        histogramFilter?.column &&
+                        histogramFilter?.column !== column
+                    }
+                  )}
+                  key={index}
+                  onClick={() =>
+                    onChangeFilter({
+                      column:
+                        histogramFilter?.column === column ? undefined : column
+                    })
                   }
-                )}
-                key={index}
-                onClick={() =>
-                  onChangeFilter({
-                    column:
-                      histogramFilter?.column === column ? undefined : column
-                  })
-                }
-              >
-                <span>
-                  {column.length === 0 ? '(no column name)' : ''}
-                  {column}
-                </span>
-                ({histograms?.columns?.[column]})
-              </div>
-            ))}
-          </SectionWrapper>
-          <SectionWrapper title="Filter by check name" className="text-sm">
+                >
+                  <span>
+                    {column.length === 0 ? '(no column name)' : ''}
+                    {column}
+                  </span>
+                  ({histograms?.columns?.[column]})
+                </div>
+              ))}
+            </SectionWrapper>
+          )}
+          <SectionWrapper
+            title="Filter by check name"
+            className={clsx('text-sm', column && 'w-80')}
+          >
             {Object.keys(histograms?.checks || {}).map((check, index) => (
               <div
                 className={clsx(
@@ -237,12 +299,12 @@ export default function ObservabilityStatus() {
           </SectionWrapper>
         </div>
       </SectionWrapper>
-      <div className="flex items-center gap-x-4">
+      <div className="flex flex-wrap items-center gap-x-4 mt-4">
         {allResults.map((result, index) => (
           <SectionWrapper
             key={index}
             title={result.checkName ?? ''}
-            className="mt-8 mb-4"
+            className=" mb-4"
           >
             <div className="flex items-center gap-x-1">
               {result.checkResultEntries?.map((entry, index) => (

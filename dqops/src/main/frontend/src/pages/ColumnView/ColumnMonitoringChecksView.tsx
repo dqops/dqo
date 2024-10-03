@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
+import ObservabilityStatus from '../../components/Connection/TableView/ObservabilityStatus/ObservabilityStatus';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -24,7 +25,6 @@ import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
-import ColumnObservabilityStatus from './ColumnObservabilityStatus/ColumnObservabilityStatus';
 
 const initTabs = [
   {
@@ -247,7 +247,7 @@ const ColumnMonitoringChecksView = () => {
             />
           </div>
         )}
-      {activeTab === 'observability-status' && <ColumnObservabilityStatus />}
+      {activeTab === 'observability-status' && <ObservabilityStatus />}
       {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
