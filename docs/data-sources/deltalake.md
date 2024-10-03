@@ -16,6 +16,17 @@ Additional configuration is required **only when using remote storage** (AWS S3,
 When using remote cloud storage, make sure your account has access to the remote directory containing Delta Lake table. 
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
+!!! note "DQOps free version limits"
+
+    DuckDB extensions are not included in the free version of DQOps.
+    If your company network restricts access to external resources, 
+    analyzing the quality of data in the cloud (AWS, Azure, GCP) 
+    and data formats (Iceberg and Delta Lake) may not be possible. 
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
+
+
 ## Add a connection to Delta Lake tables using the user interface
 
 ### **Navigate to the connection settings**

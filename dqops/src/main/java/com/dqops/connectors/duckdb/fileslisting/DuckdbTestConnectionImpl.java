@@ -42,8 +42,6 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
         verifyEmptyPaths(directories);
 
         directories.keySet().forEach(schema -> {
-            List<SourceTableModel> tables;
-
             DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
             if (storageType != null && storageType.equals(DuckdbStorageType.s3)) {
 
@@ -83,7 +81,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             }
 
             TablesLister tablesLister = tablesListerProvider.createTablesLister(storageType);
-            tables = tablesLister.listTables(duckdbParametersSpec, schema, null, 10);
+            List<SourceTableModel> tables = tablesLister.listTables(duckdbParametersSpec, schema, null, 10);
 
             if (tables == null || tables.isEmpty()) {
                 throw new RuntimeException("No files found in the path " + directories.get(schema));
