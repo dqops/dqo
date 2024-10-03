@@ -98,7 +98,7 @@ $DQO_USER_HOME
 If you want to use AWS authentication, replace the content of the files with your aws_access_key_id, aws_secret_access_key, and region.
 To learn more about [how to manage access keys for IAM users, you can refer to the AWS documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
-!!! warning 'AWS system default credentials'
+!!! warning "AWS system default credentials"
 
     If you do not replace the content of the files, the system will load default credentials for AWS only.
 

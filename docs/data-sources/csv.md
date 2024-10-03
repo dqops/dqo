@@ -347,7 +347,7 @@ You can find more details on how to [manage access keys for IAM users](https://d
 
 If you wish to use Azure authentication, you need service principal credentials that must be replaced in Azure file content.
 
-!!! warning 'AWS system default credentials'
+!!! warning "AWS system default credentials"
 
     If you do not replace the content of the files, the default credentials will be loaded from system for AWS only.
 
