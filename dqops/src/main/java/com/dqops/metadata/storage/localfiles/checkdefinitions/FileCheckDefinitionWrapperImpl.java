@@ -91,6 +91,7 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
             FileTreeNode fileNode = this.customCheckFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 CheckDefinitionSpec deserializedSpec = (CheckDefinitionSpec) fileContent.getCachedObjectInstance();
 

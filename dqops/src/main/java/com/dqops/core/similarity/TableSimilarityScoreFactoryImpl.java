@@ -70,7 +70,7 @@ public class TableSimilarityScoreFactoryImpl implements TableSimilarityScoreFact
     public TableSimilarityContainer calculateSimilarityScore(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         HashFunction hashFunction = Hashing.farmHashFingerprint64();
-        DataSimilarityCalculator tableSimilarityCalculator = new DataSimilarityCalculator();
+        DataSimilarityFormula tableSimilarityCalculator = new DataSimilarityFormula();
 
         TableSimilarityContainer tableSimilarityContainer = new TableSimilarityContainer();
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(
@@ -82,7 +82,7 @@ public class TableSimilarityScoreFactoryImpl implements TableSimilarityScoreFact
         }
 
         for (StatisticsResultsForColumnModel columnStatistics : mostRecentStatisticsForTable.getColumns().values()) {
-            DataSimilarityCalculator columnSimilarityCalculator = new DataSimilarityCalculator();
+            DataSimilarityFormula columnSimilarityCalculator = new DataSimilarityFormula();
 
             for (StatisticsMetricModel statisticsMetricModel : columnStatistics.getMetrics()) {
                 String sensorName = statisticsMetricModel.getSensorName();
@@ -107,6 +107,7 @@ public class TableSimilarityScoreFactoryImpl implements TableSimilarityScoreFact
         }
 
         tableSimilarityContainer.setTs(tableSimilarityCalculator.getScore());
+        tableSimilarityContainer.setLm(this.statisticsDataService.getStatisticsLastModified(connectionName, physicalTableName, userDomainIdentity));
         return tableSimilarityContainer;
     }
 }

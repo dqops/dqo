@@ -47,6 +47,7 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 CronSchedulesSpec deserializedSpec = (CronSchedulesSpec) fileContent.getCachedObjectInstance();
 

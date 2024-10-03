@@ -72,6 +72,7 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
         if (spec == null) {
             FileTreeNode fileNode = this.sensorFolderNode.getChildFileByFileName(SpecFileNames.SENSOR_SPEC_FILE_NAME_YAML);
             FileContent fileContent = fileNode.getContent();
+            this.setLastModified(fileContent.getLastModified());
             String textContent = fileContent.getTextContent();
             SensorDefinitionSpec deserializedSpec = (SensorDefinitionSpec) fileContent.getCachedObjectInstance();
 

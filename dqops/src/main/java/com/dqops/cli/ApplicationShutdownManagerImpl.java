@@ -19,6 +19,7 @@ import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import com.dqops.core.scheduler.JobSchedulerService;
+import com.dqops.core.similarity.TableSimilarityRefreshService;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.metadata.labels.labelloader.LabelsIndexer;
 import com.dqops.metadata.lineage.lineagecache.TableLineageCache;
@@ -42,6 +43,7 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
     private TableStatusCache tableStatusCache;
     private LabelsIndexer labelsIndexer;
     private TableLineageCache tableLineageCache;
+    private TableSimilarityRefreshService tableSimilarityRefreshService;
 
     /**
      * Constructor that receives dependencies to services that should be notified to shut down.
@@ -53,6 +55,7 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
      * @param tableStatusCache Table status cache.
      * @param labelsIndexer Label indexer service that indexes all labels.
      * @param tableLineageCache Table data lineage cache.
+     * @param tableSimilarityRefreshService Table similarity refresh service.
      */
     @Autowired
     public ApplicationShutdownManagerImpl(ApplicationContext applicationContext,
@@ -62,7 +65,8 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
                                           DqoJobQueueMonitoringService jobQueueMonitoringService,
                                           TableStatusCache tableStatusCache,
                                           LabelsIndexer labelsIndexer,
-                                          TableLineageCache tableLineageCache) {
+                                          TableLineageCache tableLineageCache,
+                                          TableSimilarityRefreshService tableSimilarityRefreshService) {
         this.applicationContext = applicationContext;
         this.dqoJobQueue = dqoJobQueue;
         this.parentDqoJobQueue = parentDqoJobQueue;
@@ -71,6 +75,7 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
         this.tableStatusCache = tableStatusCache;
         this.labelsIndexer = labelsIndexer;
         this.tableLineageCache = tableLineageCache;
+        this.tableSimilarityRefreshService = tableSimilarityRefreshService;
     }
 
     /**
@@ -82,6 +87,7 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
         if (log.isDebugEnabled()) {
             log.debug("Shutdown initialized with a return code: " + returnCode);
         }
+        this.tableSimilarityRefreshService.stop();
         this.labelsIndexer.stop();
         this.tableStatusCache.stop();
         this.tableLineageCache.stop();

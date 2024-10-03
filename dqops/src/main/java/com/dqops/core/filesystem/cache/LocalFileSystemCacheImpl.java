@@ -23,6 +23,8 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.similarity.TableSimilarityRefreshService;
+import com.dqops.core.similarity.TableSimilarityRefreshServiceProvider;
 import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProvider;
@@ -75,6 +77,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final TableStatusCacheProvider tableStatusCacheProvider;
     private final LabelsIndexerProvider labelsIndexerProvider;
     private final TableLineageCacheProvider tableLineageCacheProvider;
+    private final TableSimilarityRefreshServiceProvider tableSimilarityRefreshServiceProvider;
     private final HomeLocationFindService homeLocationFindService;
     private final Path userHomeRootPath;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
@@ -86,6 +89,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param tableStatusCacheProvider Table status cache provider.
      * @param labelsIndexerProvider Labels indexer, notified to update labels for loaded or modified connections and tables.
      * @param tableLineageCacheProvider Table lineage cache provider to inform about loaded table yamls.
+     * @param tableSimilarityRefreshServiceProvider Table similarity refresh service provider.
      * @param homeLocationFindService Service that finds the location of the user home, used to translate file paths of updated files to relative file paths in the user home.
      */
     @Autowired
@@ -93,11 +97,13 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                                     TableStatusCacheProvider tableStatusCacheProvider,
                                     LabelsIndexerProvider labelsIndexerProvider,
                                     TableLineageCacheProvider tableLineageCacheProvider,
+                                    TableSimilarityRefreshServiceProvider tableSimilarityRefreshServiceProvider,
                                     HomeLocationFindService homeLocationFindService) {
         this.dqoCacheConfigurationProperties = dqoCacheConfigurationProperties;
         this.tableStatusCacheProvider = tableStatusCacheProvider;
         this.labelsIndexerProvider = labelsIndexerProvider;
         this.tableLineageCacheProvider = tableLineageCacheProvider;
+        this.tableSimilarityRefreshServiceProvider = tableSimilarityRefreshServiceProvider;
         this.homeLocationFindService = homeLocationFindService;
         this.userHomeRootPath = homeLocationFindService.getUserHomePath() != null ? Path.of(homeLocationFindService.getUserHomePath()) : Path.of(".");
 
@@ -493,7 +499,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         if (folder.size() >= 4 && Objects.equals(BuiltInFolderNames.DATA, folder.get(0).getFileSystemName()) &&
                 (Objects.equals(BuiltInFolderNames.CHECK_RESULTS, folder.get(1).getFileSystemName()) ||
                         Objects.equals(BuiltInFolderNames.ERRORS, folder.get(1).getFileSystemName()))) {
-            // parquet file updated
+            // check results or errors parquet file updated
 
             String connectionNameFolder = folder.get(2).getFileSystemName();
             String schemaTableNameFolder = folder.get(3).getFileSystemName();
@@ -504,6 +510,22 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
                 PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(schemaTableNameFolder.substring(2));
                 TableStatusCache tableStatusCache = this.tableStatusCacheProvider.getTableStatusCache();
                 tableStatusCache.invalidateTableStatus(new DomainConnectionTableKey(folder.getDataDomain(), decodedConnectionName, physicalTableName), replacingCachedFile);
+            }
+        }
+
+        if (folder.size() >= 4 && Objects.equals(BuiltInFolderNames.DATA, folder.get(0).getFileSystemName()) &&
+                Objects.equals(BuiltInFolderNames.STATISTICS, folder.get(1).getFileSystemName())) {
+            // statistics parquet file updated
+
+            String connectionNameFolder = folder.get(2).getFileSystemName();
+            String schemaTableNameFolder = folder.get(3).getFileSystemName();
+
+            if (connectionNameFolder.startsWith(ParquetPartitioningKeys.CONNECTION + "=") && connectionNameFolder.length() > 2 &&
+                    schemaTableNameFolder.startsWith(ParquetPartitioningKeys.SCHEMA_TABLE  + "=") && schemaTableNameFolder.length() > 2) {
+                String decodedConnectionName = FileNameSanitizer.decodeFileSystemName(connectionNameFolder.substring(2));
+                PhysicalTableName physicalTableName = PhysicalTableName.fromBaseFileName(schemaTableNameFolder.substring(2));
+                TableSimilarityRefreshService tableSimilarityRefreshService = this.tableSimilarityRefreshServiceProvider.getTableSimilarityRefreshService();
+                tableSimilarityRefreshService.refreshTable(folder.getDataDomain(), decodedConnectionName, physicalTableName);
             }
         }
 

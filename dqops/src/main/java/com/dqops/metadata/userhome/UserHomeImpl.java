@@ -16,6 +16,8 @@
 package com.dqops.metadata.userhome;
 
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.similarity.DataSimilarityMatch;
+import com.dqops.core.similarity.SimilarTableModel;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.policies.column.ColumnQualityPolicyListImpl;
@@ -31,8 +33,7 @@ import com.dqops.metadata.id.*;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
-import com.dqops.metadata.similarity.ConnectionSimilarityIndexList;
-import com.dqops.metadata.similarity.ConnectionSimilarityIndexListImpl;
+import com.dqops.metadata.similarity.*;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,9 +42,8 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Root user home model for reading and managing the definitions in the user's home.
@@ -850,6 +850,79 @@ public class UserHomeImpl implements UserHome, Cloneable {
                 .then(Mono.just(this)); // keep the reference
 
         this.warmupTablesDisposableReference = loadMono.subscribe();
+    }
+
+    /**
+     * Finds tables that are similar to a given table.
+     *
+     * @param connectionName Connection name where the table is present.
+     * @param referenceTableName Reference table to find similar tables.
+     * @param maxResults     Maximum number of results to return.
+     * @return List of tables that are similar.
+     */
+    @Override
+    public List<SimilarTableModel> findTablesSimilarTo(String connectionName, PhysicalTableName referenceTableName, int maxResults) {
+        ConnectionWrapper connectionWrapper = this.getConnections().getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ArrayList<>();
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(referenceTableName, true);
+        if (tableWrapper == null) {
+            return new ArrayList<>();
+        }
+
+        ConnectionSimilarityIndexWrapper referenceSimilarConnectionWrapper = this.getConnectionSimilarityIndices().getByObjectName(connectionName, true);
+        if (referenceSimilarConnectionWrapper == null) {
+            return new ArrayList<>();
+        }
+
+        TableSimilarityContainer referenceTableSimilarityScore = referenceSimilarConnectionWrapper.getSpec().get(referenceTableName);
+        if (referenceTableSimilarityScore == null) {
+            return new ArrayList<>();
+        }
+
+        TreeSet<SimilarTableModel> mostSimilarTables = new TreeSet<>(Comparator.comparing(m -> m.getDifference()));
+
+        for (ConnectionSimilarityIndexWrapper connectionSimilarityIndexWrapper : this.getConnectionSimilarityIndices()) {
+            ConnectionWrapper similarConnectionWrapper = this.getConnections().getByObjectName(connectionSimilarityIndexWrapper.getConnectionName(), true);
+            if (similarConnectionWrapper == null) {
+                continue; // outdated index
+            }
+
+            ConnectionSimilarityIndexSpec similarityIndexSpec = connectionSimilarityIndexWrapper.getSpec();
+            for (Map.Entry<String, Map<String, TableSimilarityContainer>> schemaSimilarityEntry : similarityIndexSpec.getTables().entrySet()) {
+                for (Map.Entry<String, TableSimilarityContainer> tableSimilarityContainerEntry : schemaSimilarityEntry.getValue().entrySet()) {
+                    PhysicalTableName similarPhysicalTableName = new PhysicalTableName(schemaSimilarityEntry.getKey(), tableSimilarityContainerEntry.getKey());
+                    if (Objects.equals(connectionSimilarityIndexWrapper.getConnectionName(), connectionName) &&
+                        Objects.equals(similarPhysicalTableName, referenceTableName)) {
+                        continue; // do not add self
+                    }
+
+                    TableSimilarityContainer similarTableScore = tableSimilarityContainerEntry.getValue();
+                    int matchScore = DataSimilarityMatch.calculateMatch(referenceTableSimilarityScore.getTs(), similarTableScore.getTs());
+
+                    if (mostSimilarTables.size() == maxResults) {
+                        SimilarTableModel last = mostSimilarTables.last();
+                        if (last.getDifference() <= matchScore) {
+                            continue;
+                        }
+                    }
+
+                    if (similarConnectionWrapper.getTables().getByObjectName(similarPhysicalTableName, true) == null) {
+                        continue;
+                    }
+
+                    mostSimilarTables.add(new SimilarTableModel(matchScore, connectionSimilarityIndexWrapper.getConnectionName(), similarPhysicalTableName));
+                    if (mostSimilarTables.size() > maxResults) {
+                        SimilarTableModel lastAfterAdding = mostSimilarTables.last();
+                        mostSimilarTables.remove(lastAfterAdding);
+                    }
+                }
+            }
+        }
+
+        return mostSimilarTables.stream().collect(Collectors.toList());
     }
 
     /**

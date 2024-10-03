@@ -12415,6 +12415,64 @@
         } ]
       }
     },
+    "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/similar" : {
+      "get" : {
+        "tags" : [ "Tables" ],
+        "summary" : "findSimilarTables",
+        "description" : "Finds a list of tables that are most similar to a given table",
+        "operationId" : "findSimilarTables",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The maximum number of similar tables to return. The default result is 50 similar tables.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of similar tables returned",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/SimilarTableModel"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Connection or table not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/statistics" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -41769,6 +41827,29 @@
       },
       "description" : "Model that identifies a similar check in another category or another type of check (monitoring, partition)."
     },
+    "SimilarTableModel" : {
+      "type" : "object",
+      "properties" : {
+        "difference" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Table similarity score. Lower numbers indicate higher similarity."
+        },
+        "connection_name" : {
+          "type" : "string",
+          "description" : "Connection name"
+        },
+        "schema_name" : {
+          "type" : "string",
+          "description" : "Schema name"
+        },
+        "table_name" : {
+          "type" : "string",
+          "description" : "Table name"
+        }
+      },
+      "description" : "Model that describes a table that is similar to a reference table. Similar tables are used to build the data lineage graph."
+    },
     "SingleStoreDbParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -42152,7 +42233,7 @@
       "properties" : {
         "folder" : {
           "type" : "string",
-          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_error_samples", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
+          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_error_samples", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_indexes_sources", "_local_settings" ]
         },
         "direction" : {
           "type" : "string",

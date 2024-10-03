@@ -20,6 +20,7 @@ import com.dqops.utils.exceptions.DqoRuntimeException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,37 +33,54 @@ import java.util.Map;
 public class TableSimilarityContainer implements Cloneable {
     private long[] ts;
     private Map<String, long[]> cs = new LinkedHashMap<>();
+    private Instant lm;
 
     /**
-     * Returns table similarity scores.
-     * @return Table similarity scores.
+     * Returns table data similarity scores.
+     * @return Table data similarity scores.
      */
     public long[] getTs() {
         return ts;
     }
 
     /**
-     * Sets table similarity scores.
-     * @param ts Table similarity scores.
+     * Sets table data similarity scores.
+     * @param ts Table data similarity scores.
      */
     public void setTs(long[] ts) {
         this.ts = ts;
     }
 
     /**
-     * Returns column similarity scores.
-     * @return Column similarity scores.
+     * Returns column data similarity scores.
+     * @return Column data similarity scores.
      */
     public Map<String, long[]> getCs() {
         return cs;
     }
 
     /**
-     * Sets column similarity scores.
-     * @param cs Column similarity scores.
+     * Sets column data similarity scores.
+     * @param cs Column data similarity scores.
      */
     public void setCs(Map<String, long[]> cs) {
         this.cs = cs;
+    }
+
+    /**
+     * Returns the last modification timestamp of the table statistics last modification timestamp.
+     * @return Data last modification timestamp.
+     */
+    public Instant getLm() {
+        return lm;
+    }
+
+    /**
+     * Sets the timestamp when the data was last modified.
+     * @param lm Data last modification timestamp.
+     */
+    public void setLm(Instant lm) {
+        this.lm = lm;
     }
 
     /**

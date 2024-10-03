@@ -88,36 +88,41 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
         if (spec == null) {
             String fileNameWithExt = this.getRealBaseFileName() + SpecFileNames.TABLE_SPEC_FILE_EXT_YAML;
             FileTreeNode fileNode = this.connectionFolderNode.getChildFileByFileName(fileNameWithExt);
-            FileContent fileContent = fileNode.getContent();
-            String textContent = fileContent.getTextContent();
-            TableSpec deserializedSpec = (TableSpec) fileContent.getCachedObjectInstance();
+            if (fileNode != null) {
+                FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
+                String textContent = fileContent.getTextContent();
+                TableSpec deserializedSpec = (TableSpec) fileContent.getCachedObjectInstance();
 
-            if (deserializedSpec == null) {
-                TableYaml deserialized = this.yamlSerializer.deserialize(textContent, TableYaml.class, fileNode.getPhysicalAbsolutePath());
-                deserializedSpec = deserialized.getSpec();
                 if (deserializedSpec == null) {
-                    deserializedSpec = new TableSpec();
+                    TableYaml deserialized = this.yamlSerializer.deserialize(textContent, TableYaml.class, fileNode.getPhysicalAbsolutePath());
+                    deserializedSpec = deserialized.getSpec();
+                    if (deserializedSpec == null) {
+                        deserializedSpec = new TableSpec();
+                    }
+
+                    if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
+                        throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
+                    }
+                    if (deserialized.getKind() != SpecificationKind.table) {
+                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                    }
+                    TableSpec cachedObjectInstance = deserializedSpec.deepClone();
+                    cachedObjectInstance.makeReadOnly(true);
+                    if (this.getHierarchyId() != null) {
+                        cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
+                    }
+                    fileContent.setCachedObjectInstance(cachedObjectInstance);
+                } else {
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
                 }
 
-                if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
-                    throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
-                }
-                if (deserialized.getKind() != SpecificationKind.table) {
-                    throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
-                }
-                TableSpec cachedObjectInstance = deserializedSpec.deepClone();
-                cachedObjectInstance.makeReadOnly(true);
-                if (this.getHierarchyId() != null) {
-                    cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
-                }
-                fileContent.setCachedObjectInstance(cachedObjectInstance);
+                this.setSpec(deserializedSpec);
+                this.clearDirty(false);
+                return deserializedSpec;
             } else {
-                deserializedSpec = this.isReadOnly() ? deserializedSpec : deserializedSpec.deepClone();
+                this.setSpec(null);
             }
-
-			this.setSpec(deserializedSpec);
-			this.clearDirty(false);
-            return deserializedSpec;
         }
         return spec;
     }

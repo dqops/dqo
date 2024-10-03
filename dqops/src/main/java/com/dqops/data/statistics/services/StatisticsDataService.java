@@ -21,6 +21,9 @@ import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.metadata.sources.PhysicalTableName;
 import tech.tablesaw.api.Table;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 /**
  * Service that provides access to read requested data statistics results.
  */
@@ -61,9 +64,18 @@ public interface StatisticsDataService {
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
      * @param userDomainIdentity User identity with the data domain.
-     * @return True when there are any results, false when there are no results.
+     * @return Not null date of the most recent statistics results within a reasonable period. Null when recent statistics are not present.
      */
-    boolean hasAnyRecentStatisticsResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
+    LocalDate getMostRecentStatisticsPartitionMonth(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Returns the last modification timestamp of the most recent partition with statistics.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return Not null timestamp when statistics are present - returns the file modification timestamp.
+     */
+    Instant getStatisticsLastModified(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity);
 
     /**
      * Parses and filters results from statistics and returns a statistics model.

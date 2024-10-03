@@ -98,6 +98,20 @@ public class ConnectionSimilarityIndexSpec extends AbstractSpec implements Clone
     }
 
     /**
+     * Retrieves a table similarity container for a given table.
+     * @param tableKey Table key.
+     * @return Table similarity container or null.
+     */
+    public TableSimilarityContainer get(PhysicalTableName tableKey) {
+        Map<String, TableSimilarityContainer> schemaTablesMap = this.tables.get(tableKey.getSchemaName());
+        if (schemaTablesMap == null) {
+            return null;
+        }
+
+        return schemaTablesMap.get(tableKey.getTableName());
+    }
+
+    /**
      * Stores a table similarity container for a given table.
      * @param tableKey Table key (physical table name).
      * @param tableSimilarityContainer Similarity score container.
@@ -169,7 +183,7 @@ public class ConnectionSimilarityIndexSpec extends AbstractSpec implements Clone
                 clonedTables.put(tableEntry.getKey(), tableEntry.getValue().clone());
             }
 
-            this.tables.put(schemaEntry.getKey(), clonedTables);
+            cloned.tables.put(schemaEntry.getKey(), clonedTables);
         }
 
         return cloned;

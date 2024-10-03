@@ -71,20 +71,25 @@ public class FileConnectionSimilarityIndexWrapperImpl extends ConnectionSimilari
         if (spec == null) {
             String fileNameWithExt = FileNameSanitizer.encodeForFileSystem(this.getConnectionName()) + SpecFileNames.CONNECTION_SIMILARITY_INDEX_SPEC_FILE_EXT_JSON;
             FileTreeNode fileNode = this.indicesFolderNode.getChildFileByFileName(fileNameWithExt);
-            FileContent fileContent = fileNode.getContent();
-            String textContent = fileContent.getTextContent();
-            ConnectionSimilarityIndexJson deserialized = this.jsonSerializer.deserialize(textContent, ConnectionSimilarityIndexJson.class);
-            ConnectionSimilarityIndexSpec deserializedSpec = deserialized.getSpec();
-            if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
-                throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
-            }
-            if (deserialized.getKind() != SpecificationKind.connection_similarity_index) {
-                throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
-            }
+            if (fileNode != null) {
+                FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
+                String textContent = fileContent.getTextContent();
+                ConnectionSimilarityIndexJson deserialized = this.jsonSerializer.deserialize(textContent, ConnectionSimilarityIndexJson.class);
+                ConnectionSimilarityIndexSpec deserializedSpec = deserialized.getSpec();
+                if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
+                    throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
+                }
+                if (deserialized.getKind() != SpecificationKind.connection_similarity_index) {
+                    throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
+                }
 
-			this.setSpec(deserializedSpec);
-			this.clearDirty(true);
-            return deserializedSpec;
+                this.setSpec(deserializedSpec);
+                this.clearDirty(true);
+                return deserializedSpec;
+            } else {
+                this.setSpec(null);
+            }
         }
         return spec;
     }

@@ -31,6 +31,7 @@ import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.JobSchedulerService;
+import com.dqops.core.similarity.SimilarTableModel;
 import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
@@ -268,6 +269,56 @@ public class TablesController {
     }
 
     /**
+     * Retrieves the list of tables that are similar to a given table.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return List of most similar tables.
+     */
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/similar", produces = "application/json")
+    @ApiOperation(value = "findSimilarTables", notes = "Finds a list of tables that are most similar to a given table", response = SimilarTableModel[].class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of similar tables returned", response = SimilarTableModel[].class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Flux<SimilarTableModel>>> findSimilarTables(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "limit", value = "The maximum number of similar tables to return. The default result is 50 similar tables.", required = false)
+            @RequestParam(required = false) Optional<Integer> limit) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            List<SimilarTableModel> tablesSimilarTo = userHome.findTablesSimilarTo(connectionName, physicalTableName, limit.orElse(50));
+
+            return new ResponseEntity<>(Flux.fromIterable(tablesSimilarTo), HttpStatus.OK); // 200
+        }));
+    }
+
+
+    /**
      * Retrieves the table details given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -425,8 +476,8 @@ public class TablesController {
                     tableSpec.hasAnyChecksConfigured(CheckType.partitioned) ||
                     tableSpec.getColumns().values().stream().anyMatch(columnSpec -> columnSpec.hasAnyChecksConfigured(CheckType.partitioned)));
 
-            statusModel.setBasicStatisticsCollected(this.statisticsDataService.hasAnyRecentStatisticsResults(
-                    connectionWrapper.getName(), tableSpec.getPhysicalTableName(), principal.getDataDomainIdentity()));
+            statusModel.setBasicStatisticsCollected(this.statisticsDataService.getMostRecentStatisticsPartitionMonth(
+                    connectionWrapper.getName(), tableSpec.getPhysicalTableName(), principal.getDataDomainIdentity()) != null);
             statusModel.setCheckResultsPresent(this.checkResultsDataService.hasAnyRecentCheckResults(
                     connectionWrapper.getName(), tableSpec.getPhysicalTableName(), principal.getDataDomainIdentity()));
 

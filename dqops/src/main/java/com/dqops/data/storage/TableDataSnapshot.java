@@ -308,6 +308,20 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Find partitions with partition parquet files. Adds them to the partitions list, but without the data.
+     * @param startDate Start date (oldest partition to find).
+     * @param endDate End date (latest partition to find).
+     */
+    public Map<ParquetPartitionId, LoadedMonthlyPartition> findPartitionsInRange(LocalDate startDate, LocalDate endDate) {
+        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startDate);
+        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endDate);
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> foundPartitions = this.storageService.lookupPartitionsForMonthsRange(
+                this.connectionName, this.tableName, startMonth, endMonth, this.storageSettings, this.userIdentity);
+        return foundPartitions;
+    }
+
+    /**
      * Ensures that all the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start Start date of the month. This can be any date in the month, as the entire month is always loaded.

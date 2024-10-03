@@ -86,6 +86,25 @@ public interface ParquetPartitionStorageService {
             UserDomainIdentity userIdentity);
 
     /**
+     * Looks up multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>.
+     * This method does not read the partitions. It only returns empty partitions for the time range when data was found.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name (schema.table).
+     * @param start           Start date, that is truncated to the beginning of the first loaded month.
+     * @param end             End date, the whole month of the given date is loaded.
+     * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param userIdentity    User identity, specifies the data domain.
+     * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
+     */
+    Map<ParquetPartitionId, LoadedMonthlyPartition> lookupPartitionsForMonthsRange(
+            String connectionName,
+            PhysicalTableName tableName,
+            LocalDate start,
+            LocalDate end,
+            FileStorageSettings storageSettings,
+            UserDomainIdentity userIdentity);
+
+    /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
      * Also deletes rows that should be deleted. In case that the file was modified since it was loaded into the loaded partition
      * snapshot (parameter: <code>loadedPartition</code>), the partition is reloaded using an exclusive write lock and the changes

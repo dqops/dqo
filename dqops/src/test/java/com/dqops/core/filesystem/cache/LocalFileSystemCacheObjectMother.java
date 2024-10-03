@@ -18,6 +18,8 @@ package com.dqops.core.filesystem.cache;
 
 import com.dqops.core.configuration.DqoCacheSpecConfigurationPropertiesObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
+import com.dqops.core.similarity.DummyTableSimilarityRefreshService;
+import com.dqops.core.similarity.TableSimilarityRefreshServiceProviderImpl;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProviderImpl;
 import com.dqops.metadata.labels.labelloader.DummyLabelsIndexer;
 import com.dqops.metadata.labels.labelloader.LabelsIndexerProviderImpl;
@@ -54,6 +56,7 @@ public class LocalFileSystemCacheObjectMother {
                 new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
                 new LabelsIndexerProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyLabelsIndexer()),
                 new TableLineageCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableLineageCache()),
+                new TableSimilarityRefreshServiceProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableSimilarityRefreshService()),
                 HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
     }
 
@@ -66,6 +69,7 @@ public class LocalFileSystemCacheObjectMother {
                 new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
                 new LabelsIndexerProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyLabelsIndexer()),
                 new TableLineageCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableLineageCache()),
+                new TableSimilarityRefreshServiceProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableSimilarityRefreshService()),
                 HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
     }
 }
