@@ -19,5 +19,6 @@ FROM (
    FROM {{ lib.render_target_table() }} original_table
    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
 ) analyzed_table
+{{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
