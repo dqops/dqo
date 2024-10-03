@@ -177,6 +177,10 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
+    {
       label: 'Table quality status',
       value: 'table-quality-status'
     },
@@ -194,6 +198,10 @@ export const TABLE_LEVEL_TABS: {
     }
   ],
   [CheckTypes.MONITORING]: [
+    {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
     {
       label: 'Table quality status',
       value: 'table-quality-status'
@@ -242,6 +250,10 @@ export const COLUMN_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
+    {
       label: 'Daily checks',
       value: 'daily'
     },
@@ -251,6 +263,10 @@ export const COLUMN_LEVEL_TABS: {
     }
   ],
   [CheckTypes.MONITORING]: [
+    {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
     {
       label: 'Daily checks',
       value: 'daily'

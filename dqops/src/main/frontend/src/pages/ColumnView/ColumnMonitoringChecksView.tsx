@@ -24,8 +24,13 @@ import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
+import ColumnObservabilityStatus from './ColumnObservabilityStatus/ColumnObservabilityStatus';
 
 const initTabs = [
+  {
+    label: 'Observability status',
+    value: 'observability-status'
+  },
   {
     label: 'Daily checkpoints',
     value: 'daily'
@@ -242,6 +247,7 @@ const ColumnMonitoringChecksView = () => {
             />
           </div>
         )}
+      {activeTab === 'observability-status' && <ColumnObservabilityStatus />}
       {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}

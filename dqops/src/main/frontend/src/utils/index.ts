@@ -267,9 +267,9 @@ export const getFirstLevelTableTab = (checkType: CheckTypes) => {
     case CheckTypes.PROFILING:
       return 'statistics';
     case CheckTypes.PARTITIONED:
-      return 'table-quality-status';
+      return 'observability-status';
     case CheckTypes.MONITORING:
-      return 'table-quality-status';
+      return 'observability-status';
   }
 };
 
@@ -280,9 +280,9 @@ export const getFirstLevelColumnTab = (checkType: CheckTypes) => {
     case CheckTypes.PROFILING:
       return 'statistics';
     case CheckTypes.PARTITIONED:
-      return 'daily';
+      return 'observability-status';
     case CheckTypes.MONITORING:
-      return 'daily';
+      return 'observability-status';
   }
 };
 export const limitTextLength = (str: string | undefined, maxSize: number) => {

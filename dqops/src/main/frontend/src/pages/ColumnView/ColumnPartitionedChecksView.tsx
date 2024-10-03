@@ -23,8 +23,13 @@ import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
+import ColumnObservabilityStatus from './ColumnObservabilityStatus/ColumnObservabilityStatus';
 
 const initTabs = [
+  {
+    label: 'Observability status',
+    value: 'observability-status'
+  },
   {
     label: 'Daily partitions',
     value: 'daily'
@@ -49,7 +54,7 @@ const ColumnPartitionedChecksView = () => {
     schema: string;
     table: string;
     column: string;
-    tab: 'daily' | 'monthly';
+    tab: 'observability-status' | 'daily' | 'monthly';
   } = useDecodedParams();
   const [tabs, setTabs] = useState(initTabs);
 
@@ -77,7 +82,7 @@ const ColumnPartitionedChecksView = () => {
       schema,
       table,
       column,
-      tab
+      tab === 'daily' ? 'daily' : 'monthly'
     ).then((res) => {
       setCheckResultsOverview(res.data);
     });
@@ -239,6 +244,8 @@ const ColumnPartitionedChecksView = () => {
             <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
           </div>
         )}
+      {tab === 'observability-status' && <ColumnObservabilityStatus />}
+
       {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
