@@ -95,11 +95,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.snowflake</groupId>
-			<artifactId>snowflake-jdbc</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.facebook.presto</groupId>
 			<artifactId>presto-jdbc</artifactId>
 			<version>0.284</version>
@@ -188,13 +183,6 @@
 <!--				</exclusion>-->
 <!--			</exclusions>-->
 <!--		</dependency>-->
-
-		<dependency>
-			<groupId>com.databricks</groupId>
-			<artifactId>databricks-jdbc</artifactId>
-			<version>2.6.25</version>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.singlestore</groupId>
 			<artifactId>singlestore-jdbc-client</artifactId>

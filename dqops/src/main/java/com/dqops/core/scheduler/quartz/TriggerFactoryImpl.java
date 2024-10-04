@@ -87,8 +87,9 @@ public class TriggerFactoryImpl implements TriggerFactory {
         jobDataMapAdapter.setSchedule(triggerJobData, schedule);
         jobDataMapAdapter.setDataDomain(triggerJobData, dataDomainName);
 
+        String key = "job=" + jobKey.getName() + ",cron=" + schedule.getCronExpression() + ",domain=" + dataDomainName;
         TriggerBuilder<Trigger> triggerBuilder = newTrigger()
-                .withIdentity(schedule.toString() + "/" + dataDomainName)
+                .withIdentity(key)
                 .usingJobData(triggerJobData);
 
         ScheduleBuilder<?> scheduleBuilder = null;

@@ -20,6 +20,7 @@ import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -85,6 +86,10 @@ public class TableLineageCacheEntry {
      * @param downstreamTable Downstream table.
      */
     public void addDownstreamTargetTable(DomainConnectionTableKey downstreamTable) {
+        if (Objects.equals(this.tableKey, downstreamTable)) {
+            return; // user error, cannot add self
+        }
+
         synchronized (this.lock) {
             LinkedHashSet<DomainConnectionTableKey> newSet = new LinkedHashSet<>(this.downstreamTargetTables);
             newSet.add(downstreamTable);
@@ -121,6 +126,10 @@ public class TableLineageCacheEntry {
      * @param upstreamTable Upstream table.
      */
     public void addUpstreamSourceTable(DomainConnectionTableKey upstreamTable) {
+        if (Objects.equals(this.tableKey, upstreamTable)) {
+            return; // user error, cannot add self
+        }
+
         synchronized (this.lock) {
             LinkedHashSet<DomainConnectionTableKey> newSet = new LinkedHashSet<>(this.upstreamSourceTables);
             newSet.add(upstreamTable);

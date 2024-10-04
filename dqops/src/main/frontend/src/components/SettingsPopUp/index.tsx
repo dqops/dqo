@@ -1,19 +1,21 @@
-import { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react';
-import { DqoSettingsModel } from '../../api';
-import { EnviromentApiClient } from '../../services/apiClient';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { toggleSettings } from '../../redux/actions/job.actions';
 import {
   Popover,
-  PopoverHandler,
-  PopoverContent
+  PopoverContent,
+  PopoverHandler
 } from '@material-tailwind/react';
+import { AxiosResponse } from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { DqoSettingsModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { toggleSettings } from '../../redux/actions/job.actions';
+import { IRootState } from '../../redux/reducers';
+import { EnviromentApiClient } from '../../services/apiClient';
 
 function SettingsPopUp() {
-  const { areSettingsOpen } = useSelector((state: IRootState) => state.job || {});
+  const { areSettingsOpen } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const dispatch = useActionDispatch();
 
@@ -61,7 +63,7 @@ function SettingsPopUp() {
       <PopoverHandler>
         <div className="text-black h-6 cursor-pointer">Settings</div>
       </PopoverHandler>
-      <PopoverContent className="bg-white min-w-1/3 h-100 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black overflow-y-auto">
+      <PopoverContent className="bg-white min-w-1/3 h-100 rounded-md border border-gray-400 flex-col justify-center items-center z-[999999] text-black overflow-y-auto">
         <div>{objectElements}</div>
       </PopoverContent>
     </Popover>

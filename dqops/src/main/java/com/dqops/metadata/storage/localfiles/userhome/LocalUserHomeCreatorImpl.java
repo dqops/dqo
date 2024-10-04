@@ -261,6 +261,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                         BuiltInFolderNames.DATA + "/\n" +
                         BuiltInFolderNames.INDEX + "/\n" +
                         BuiltInFolderNames.LOGS + "/\n" +
+                        BuiltInFolderNames.BIN + "/\n" +
+                        BuiltInFolderNames.JARS + "/\n" +
                         ".venv/\n" +
                         SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML + "\n";
 

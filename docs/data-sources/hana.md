@@ -8,6 +8,12 @@ Read this guide to learn how to connect DQOps to SAP HANA from the UI, command-l
 
 SAP HANA® is a multi-model database that stores data in its memory instead of keeping it on a disk.
 
+!!! note "DQOps free version limits"
+
+    SAP HANA drivers are not provided in an open-source version.
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
 ## Add a SAP HANA connection using the user interface
 
 ### **Navigate to the connection settings**

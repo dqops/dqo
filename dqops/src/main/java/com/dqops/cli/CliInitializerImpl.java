@@ -32,6 +32,8 @@ import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.JobSchedulerService;
+import com.dqops.core.similarity.TableSimilarityReconciliationService;
+import com.dqops.core.similarity.TableSimilarityRefreshService;
 import com.dqops.core.synchronization.status.FileSynchronizationChangeDetectionService;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.storage.TablesawParquetSupportFix;
@@ -77,6 +79,8 @@ public class CliInitializerImpl implements CliInitializer {
     private TableLineageCache tableLineageCache;
     private LocalDataDomainManager localDataDomainManager;
     private DataDomainsService dataDomainsService;
+    private TableSimilarityReconciliationService tableSimilarityReconciliationService;
+    private TableSimilarityRefreshService tableSimilarityRefreshService;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -102,6 +106,8 @@ public class CliInitializerImpl implements CliInitializer {
      * @param tableLineageCache Table data lineage cache.
      * @param localDataDomainManager Local data domain manager - to initialize local domains.
      * @param dataDomainsService Data domains service to synchronize domains from the SaaS backend.
+     * @param tableSimilarityReconciliationService Table similarity reindexing service.
+     * @param tableSimilarityRefreshService Table similarity dynamic refresh service.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -125,7 +131,9 @@ public class CliInitializerImpl implements CliInitializer {
                               LabelsIndexer labelsIndexer,
                               TableLineageCache tableLineageCache,
                               LocalDataDomainManager localDataDomainManager,
-                              DataDomainsService dataDomainsService) {
+                              DataDomainsService dataDomainsService,
+                              TableSimilarityReconciliationService tableSimilarityReconciliationService,
+                              TableSimilarityRefreshService tableSimilarityRefreshService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -148,6 +156,8 @@ public class CliInitializerImpl implements CliInitializer {
         this.tableLineageCache = tableLineageCache;
         this.localDataDomainManager = localDataDomainManager;
         this.dataDomainsService = dataDomainsService;
+        this.tableSimilarityReconciliationService = tableSimilarityReconciliationService;
+        this.tableSimilarityRefreshService = tableSimilarityRefreshService;
     }
 
     /**
@@ -217,6 +227,8 @@ public class CliInitializerImpl implements CliInitializer {
         boolean newUserHomeInitialized = this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
         this.defaultTimeZoneProvider.invalidate();
         this.localDataDomainManager.start();
+        this.tableSimilarityReconciliationService.start();
+        this.tableSimilarityRefreshService.start();
 
         if (newUserHomeInitialized) {
             this.dataDomainsService.synchronizeDataDomainList(true);

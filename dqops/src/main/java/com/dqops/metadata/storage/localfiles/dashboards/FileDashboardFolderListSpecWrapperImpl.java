@@ -62,6 +62,7 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
             FileTreeNode fileNode = this.dashboardsFolderNode.getChildFileByFileName(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 DashboardsFolderListSpec deserializedSpec = (DashboardsFolderListSpec) fileContent.getCachedObjectInstance();
 

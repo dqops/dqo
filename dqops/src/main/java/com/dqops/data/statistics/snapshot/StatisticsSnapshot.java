@@ -26,6 +26,8 @@ import com.dqops.data.storage.TablePartitioningPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import tech.tablesaw.api.Table;
 
+import java.time.LocalDate;
+
 
 /**
  * Profiling results snapshot that contains an in-memory statistics' results snapshot

@@ -86,9 +86,14 @@ You can also run a check for the entire category by clicking on the **Run** butt
 
 To view detailed check results, sensor readouts, execution errors, or [error samples](../dqo-concepts/data-quality-error-sampling.md) click on the **Results** icon. 
 
+- The **Check results** tab shows the severity level resulting from the verification of sensor readouts based on set rule thresholds.
+- The **Sensor readouts** tab displays the values obtained by the sensors from the data source.
+- The **Execution errors** tab displays any errors that occurred during the check's execution.
+- The **Error sampling** tab allows you to view representative examples of data that fail to meet specified data quality criteria.
+
 ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/detailed-check-results2.png){ loading=lazy; width="1200px" }
 
-A table will appear with detailed information about the run check. You can filter the table by data group and month
+The **Check results** table displays detailed information about the run check. You can filter the table by data group and month
 using the dropdowns. Additionally, you can switch between the table and chart view by clicking on the icons on the
 right of the month filter dropdown. To close the detailed results view, click on the **Results** icon again or use
 the X button on the right.

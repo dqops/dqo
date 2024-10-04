@@ -28,6 +28,7 @@ import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJobParameters;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,11 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Quartz job implementation that scans the metadata and activates new schedules or stops unused schedules.
@@ -59,8 +63,9 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private DqoUserPrincipalProvider principalProvider;
     private JobDataMapAdapter jobDataMapAdapter;
-    private static LocalDateTime lastExecutedAtHour;
-    private static int jobRunCount;
+//    private static LocalDateTime lastExecutedAtHour;
+    private static final Map<String, Integer> jobRunCountPerDomain = new ConcurrentHashMap<>();
+    private static final Map<String, Instant> lastSynchronizationPerDomain = new ConcurrentHashMap<>();
     private static Random random = new Random();
     private volatile boolean interrupted;
     private volatile SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob;
@@ -108,21 +113,24 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
                 runCloudSync = false; // the user was not granted access to the data quality data warehouse
             }
 
-            if (runCloudSync && jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
-                    cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
-                    cloudApiKeyPayload.getExpiresAt() != null)) {
-                // free user
+            final int jobRunCount = jobRunCountPerDomain.getOrDefault(dataDomain, 0);
+//            final Instant lastSynchronization = lastSynchronizationPerDomain.get(dataDomain);
 
-                LocalDateTime executionHour = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.hour);
-                if (Objects.equals(executionHour, lastExecutedAtHour)) {
-                    runCloudSync = false;
-                }
-
-                lastExecutedAtHour = executionHour;
-                if (runCloudSync && !waitRandomTime(jobExecutionContext, 3600 - MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
-                    runCloudSync = false;
-                }
-            }
+//            if (runCloudSync && jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
+//                    cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE) ||
+//                    cloudApiKeyPayload.getExpiresAt() != null) {
+//                // free user
+//
+////                LocalDateTime executionHour = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.hour);
+////                if (Objects.equals(executionHour, lastExecutedAtHour)) {
+////                    runCloudSync = false;
+////                }
+//
+////                lastExecutedAtHour = executionHour;
+////                if (runCloudSync && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
+////                    runCloudSync = false;
+////                }
+//            }
 
             if (jobRunCount > 0 && !interrupted && !waitRandomTime(jobExecutionContext, MINIMUM_SYNCHRONIZATION_DELAY_SECONDS)) {
                 return;
@@ -140,7 +148,9 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
                 }
             }
 
-            jobRunCount++;
+            jobRunCountPerDomain.put(dataDomain, jobRunCount + 1);
+            lastSynchronizationPerDomain.put(dataDomain, Instant.now());
+
             jobParameters.setDetectCronSchedules(true);
             synchronizeMultipleFoldersJob.setParameters(jobParameters);
 
@@ -165,7 +175,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     public boolean waitRandomTime(JobExecutionContext jobExecutionContext,
                                   int waitSeconds)
             throws InterruptedException, SchedulerException {
-        int startSecondOffset = random.nextInt() % waitSeconds;
+        int startSecondOffset = Math.abs(random.nextInt()) % waitSeconds;
 
         Instant expectedRunAt = Instant.now().plus(startSecondOffset, ChronoUnit.SECONDS);
         while (Instant.now().isBefore(expectedRunAt)) {

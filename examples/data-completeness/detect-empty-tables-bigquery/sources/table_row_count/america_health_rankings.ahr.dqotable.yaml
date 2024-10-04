@@ -5,12 +5,6 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      volume:
-        daily_row_count:
-          warning:
-            min_count: 1
   columns:
     edition:
       type_snapshot:

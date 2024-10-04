@@ -40,6 +40,11 @@ public final class SpecFileNames {
     public static final String FILE_INDEX_SPEC_FILE_EXT_JSON = ".dqofidx.json";
 
     /**
+     * Connection similarity index spec file extension.
+     */
+    public static final String CONNECTION_SIMILARITY_INDEX_SPEC_FILE_EXT_JSON = ".dqocsidx.json";
+
+    /**
      * Provider specific sensor definition file extension.
      */
     public static final String PROVIDER_SENSOR_SPEC_FILE_EXT_YAML = ".dqoprovidersensor.yaml";

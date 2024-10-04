@@ -26,11 +26,16 @@ import { useDecodedParams } from '../../../utils';
 import DataQualityChecks from '../../DataQualityChecks';
 import RuleMining from '../../RuleMining/RuleMining';
 import Tabs from '../../Tabs';
+import ObservabilityStatus from './ObservabilityStatus/ObservabilityStatus';
 import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
 
 const initTabs = [
+  {
+    label: 'Observability status',
+    value: 'observability-status'
+  },
   {
     label: 'Table quality status',
     value: 'table-quality-status'
@@ -309,6 +314,7 @@ const MonitoringView = () => {
           setTimePartitioned={setTimePartitioned}
         />
       )}
+      {activeTab === 'observability-status' && <ObservabilityStatus />}
       {activeTab === 'table-comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}

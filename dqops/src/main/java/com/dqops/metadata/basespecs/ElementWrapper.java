@@ -17,6 +17,8 @@ package com.dqops.metadata.basespecs;
 
 import com.dqops.metadata.id.HierarchyNode;
 
+import java.time.Instant;
+
 /**
  * Base model wrapper interface.
  */
@@ -40,6 +42,12 @@ public interface ElementWrapper<V> extends Flushable, InstanceStatusTracking, Hi
      * @return Object status (added, modified, deleted, etc).
      */
     InstanceStatus getStatus();
+
+    /**
+     * Returns the timestamp when the file was last modified.
+     * @return Last modified timestamp.
+     */
+    Instant getLastModified();
 
     /**
      * Changes the status of the model.

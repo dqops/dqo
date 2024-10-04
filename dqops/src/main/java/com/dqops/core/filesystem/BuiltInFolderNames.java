@@ -85,6 +85,11 @@ public final class BuiltInFolderNames {
     public static final String INDEX = ".index";
 
     /**
+     * Local connection similarity folder inside the .index folder.
+     */
+    public static final String CONNECTION_SIMILARITY_INDEX = SOURCES;
+
+    /**
      * Credentials folder to store local credentials that are not stored in the repository, but are synchronized to DQOps cloud.
      */
     public static final String CREDENTIALS = ".credentials";
@@ -103,6 +108,16 @@ public final class BuiltInFolderNames {
      * Local log folder inside the user home that stores logs.
      */
     public static final String LOGS = ".logs";
+
+    /**
+     * Local user folder to store additional binary files.
+     */
+    public static final String BIN = "bin";
+
+    /**
+     * Local user folder to store additional .jar libraries.
+     */
+    public static final String JARS = "jars";
 
     /**
      * The folder with additional data domains. Each data domain is a subfolder under the "domains" folder,

@@ -91,6 +91,7 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
             FileTreeNode fileNode = this.customRuleFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 RuleDefinitionSpec deserializedSpec = (RuleDefinitionSpec) fileContent.getCachedObjectInstance();
 

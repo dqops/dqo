@@ -92,6 +92,7 @@ public class FileColumnQualityPolicyWrapperImpl extends ColumnQualityPolicyWrapp
             FileTreeNode fileNode = this.defaultsFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 ColumnQualityPolicySpec deserializedSpec = (ColumnQualityPolicySpec) fileContent.getCachedObjectInstance();
 

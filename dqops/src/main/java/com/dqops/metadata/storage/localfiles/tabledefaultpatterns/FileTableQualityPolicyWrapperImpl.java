@@ -92,6 +92,7 @@ public class FileTableQualityPolicyWrapperImpl extends TableQualityPolicyWrapper
             FileTreeNode fileNode = this.defaultsFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 TableQualityPolicySpec deserializedSpec = (TableQualityPolicySpec) fileContent.getCachedObjectInstance();
 

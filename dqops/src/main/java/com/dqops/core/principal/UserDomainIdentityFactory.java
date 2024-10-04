@@ -23,6 +23,7 @@ public interface UserDomainIdentityFactory {
     /**
      * Maps the name of a real data domain (used on the DQOps Cloud data lake) to the local folder. Takes into account that
      * a data domain could be mounted at the root DQOps user home folder.
+     *
      * @param dataDomainCloudName Data domain name as used in DQOps cloud (the real data domain name).
      * @return Local data domain folder name (just name, no path).
      */
@@ -36,12 +37,4 @@ public interface UserDomainIdentityFactory {
      * @return User domain identity for the admin user.
      */
     UserDomainIdentity createDataDomainAdminIdentityForCloudDomain(String dataDomainCloudName);
-
-    /**
-     * Creates a data domain identity for the admin user, given the data domain name mapped locally.
-     * Checks what data domain was mounted at the local DQOps user home root folder and picks the right folder name where the data will be mounted.
-     * @param localDataDomainName Data domain name as used locally.
-     * @return User domain identity for the admin user.
-     */
-    UserDomainIdentity createDataDomainAdminIdentityForLocalDomain(String localDataDomainName);
 }

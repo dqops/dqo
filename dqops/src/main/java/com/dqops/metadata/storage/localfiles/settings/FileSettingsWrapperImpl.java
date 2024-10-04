@@ -60,6 +60,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
+				this.setLastModified(fileContent.getLastModified());
 				String textContent = fileContent.getTextContent();
 				LocalSettingsSpec deserializedSpec = (LocalSettingsSpec) fileContent.getCachedObjectInstance();
 

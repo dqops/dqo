@@ -2,7 +2,7 @@
 title: How to detect empty or incomplete tables using data quality checks
 ---
 # How to detect empty or incomplete tables using data quality checks
-This sample shows how to use data quality checks in the DQOps platform to detect empty tables and view the results on data quality dashboards.
+This sample shows how to use the DQOps platform to detect empty tables and view the results on data quality dashboards.
 
 ## Overview
 
@@ -10,328 +10,151 @@ This example verifies that the table is not empty and meets the size requirement
 
 **PROBLEM**
 
-[America’s Health Rankings](https://www.americashealthrankings.org/about/methodology/our-reports) provides an analysis of national health on a state-by-state basis
+[America's Health Rankings](https://www.americashealthrankings.org/about/methodology/our-reports) provides an analysis of national health on a state-by-state basis
 by evaluating a historical and comprehensive set of health, environmental and socioeconomic data to determine national health benchmarks and state rankings.
 
 The platform analyzes more than 340 measures of behaviors, social and economic factors, physical environment and clinical care data.
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
-the world’s largest, annual population-based telephone survey of over 400,000 people.
+the world’s largest annual population-based telephone survey of over 400,000 people.
 
-For any database analysis, it is important that the tables are not empty. In this example, we will detect empty or too small tables.
+For any database analysis, empty or incomplete data can significantly hinder analysis and lead to inaccurate conclusions.  
+In this example, we will detect that the table is not empty and meet the size requirement.
 
 **SOLUTION**
 
-You will verify the data using monitoring [row_count](../../checks/table/volume/row-count.md) table check.
-Row_count check has a default configuration of warning threshold set to 1. You will use this check to validate if a table is not empty.
+DQOps offers [built-in data quality policies](../../dqo-concepts/data-observability.md) that address common issues like table emptiness.
+You will run the [row_count](../../checks/table/volume/row-count.md) table check to validate if the table is not empty.
 
-Next, after you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
-We aim to verify if the table meets size requirements and is not too small:
-
-- warning: 692
-- error: 381
-- fatal: 150
-
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
+Once we confirm the table is not empty, the DQOps [rule miner engine](../../dqo-concepts/data-quality-rule-mining.md) can
+help us automatically set higher thresholds to monitor if the table size meets our size requirements.
 
 **VALUE**
 
-If the number of rows falls below 692, a warning alert will be triggered.
+If the number of rows in a table falls below a set threshold, DQOps will create an incident and can send a notification to relevant stakeholders.
 
-## Data structure
+## Run check activated by data quality policies
+To detect empty tables daily, we can take advantage of DQOps' built-in data quality policy
+[Detect empty tables daily](../../dqo-concepts/data-observability.md#detect-empty-tables-daily),
+which activates the [daily_row_count](../../checks/table/volume/row-count.md) check.
 
-The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.
+### **Navigate to Monitoring checks editor**
 
-| edition | report_type             | measure_name | state_name    | subpopulation | value |
-|:--------|:------------------------|:-------------|:--------------|:--------------|:------|
-| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |               | 79    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |               | 88    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia |               | 77    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | Female        | 78    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | California    | Female        | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | Female        | 87    |
+To explore a list of monitoring checks activated by the [built-in data quality policies](../../dqo-concepts/data-observability.md),
+we will navigate to the **Data quality checks editor**:
 
-## Run the example using the user interface - validation if the table is not empty
+1. Click on the **Monitoring checks** section.
+2. Select the `ahr` table  from the **tree view** on the left.
+3. Click on the **Data quality checks editor** tab.
 
-### **Navigate to a list of checks**
+The table with data quality checks contains a list of checks divided into different data quality subcategories.
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
+You can [learn more about the **Check editor** on the concept page](../../dqo-concepts/dqops-user-interface-overview.md#check-editor). 
 
-1. Go to the **Monitoring** section. 
-    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
-    Here you can see that the default check warning threshold is 1 which allows you to validate whether your table is empty or not.
-
-    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks-warning1.png){ loading=lazy; width="1200px" }
-
-2. Select the table or column mentioned in the example description from the **tree view** on the left.
-
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
-
-3. Select the **Daily checks** tab.
-
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
-
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-navigating-to-the-list-of-checks2.png){ loading=lazy; width="1200px" }
 
 ### **Run checks**
 
-Run the activated check using the **Run check** button.
+Run the activated [row_count](../../checks/table/volume/row-count.md) check using the **Run check** button.
 
-You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+You can also run all table checks using the **Run check** button located in the top right corner of the table.
 
-![Run check](https://dqops.com/docs/images/examples/row-count-run-check-warning1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-run-check1.png){ loading=lazy; width="1200px" }
 
+A green square should appear next to the name of the checks indicating the correct result.
+
+You can find more information about [running checks in the Working with DQOps section](../../working-with-dqo/run-data-quality-checks.md). 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Check details](https://dqops.com/docs/images/examples/row-count-check-details-warning1.png){ loading=lazy; width="1200px" }
+![Check details](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-check-results-details2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-The Sensor readouts category displays the values obtained by the sensors from the data source.
-The Execution errors category displays any error
-that occurred during the check's execution.
+In the Results window, you will find four tabs: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 
-The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
-The check gives a correct result (notice the green square to the left of the check name).
-Now you can be sure that you table is not empty.
+- The **Check results** tab shows the severity level resulting from the verification of sensor readouts based on set rule thresholds.
+- The **Sensor readouts** tab displays the values obtained by the sensors from the data source.
+- The **Execution errors** tab displays any errors that occurred during the check's execution.
+- The **Error sampling** tab allows you to view [representative examples ](../../dqo-concepts/data-quality-error-sampling.md) of data that fail to meet specified data quality criteria.
 
-### **Synchronize the results with the cloud account**
-
-Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
-of the user interface.
-Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
-
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+The actual value of rows in this example is 18155, which is above the `min_count` rule threshold warning severity level of 1.
+The check gives a correct result, providing assurance that your table is not empty.
 
 ## Validation that the table meets the size requirements
 
-### **Change the threshold levels**
+After confirming that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
+Setting threshold can be done automatically using the [rule miner engine](../../dqo-concepts/data-quality-rule-mining.md).
 
-Next, after you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
-We aim to verify if the table meets size requirements and is not too small:
+### **Collect basic data profiling**
 
-Set the new threshold levels:
+To propose a configuration of data quality checks, the rule miner requires basic data statistics.
 
-- warning: 692
-- error: 381
-- fatal: 150
+Follow these steps to collect basic data statistics:
 
-![Changing the threshold levels](https://dqops.com/docs/images/examples/row-count-changing-the-threshold-levels.png){ loading=lazy; width="1200px" }
+1. Navigate to the **Profiling section**.
+2. Select the `ahr` table from the tree view on the left. This will open the **Basic data statistics** tab.
+3. Click on the **Collect statistics**.
 
-### **Run checks and view detailed results**
+This will collect the basic statistics for the table and all columns, as shown on the screen below.
 
-1. Run the activated check again using the **Run check** button.
+![Collect basic statistics](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-collect-basic-statitistics1.png){ loading=lazy; width="1200px" }
 
-2. Access the results by clicking the **Results** button.
+Learn more about [basic statistics in the Working with DQOps section](../../working-with-dqo/collecting-basic-data-statistics.md).
 
-    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-new-tresholds.png){ loading=lazy; width="1200px" }
+### **Propose a configuration of data quality check using rule mining**
 
-    The new results will replace the previous one. 
+After collecting the basic statistics, the rule mining screen can propose a configuration of data quality checks.
+To navigate to the rule miner, click on the **Data quality rule mining** tab in the **Profiling section**.
 
-### **Synchronize the results with the cloud account**
+The rule mining screen allows you to view and select the automatically proposed configuration of data quality checks.
+DQOps proposes a list of data quality checks instantly upon entering the rule mining screen.
 
-Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+You can use filters to narrow down the list of data quality check proposals.
+Filter the results to include only checks from the **volume** category by entering "volume" in the Check category input field.
 
-Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+![Propose a configuration of volume checks using rule miner](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-propose-configuration-of-checks-using-rule-mining.png){ loading=lazy; width="1200px" }
 
-### **Review the results on the data quality dashboards**
+You will see a proposition of profile_row_count check configuration that will raise an error if the minimum count of rows
+fails below 16,339.
 
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+Pressing the **Apply** button saves the configuration of data quality checks and their rules.
+A popup window will appear, notifying you that the checks have been activated and that you can run the activated check by
+clicking on the **Confirm** button.
 
-Below you can see the results displayed on the **Largest tables by number of rows** dashboard located in the Volume group. 
-This dashboard displays tables monitored with [row_count](../../checks/table/volume/row-count.md) check and allows 
-review the number of rows in these tables.
+### Copy the verified profiling check to the monitoring checks
+To start monitoring data quality using a newly configured check we need to copy the configuration of the [row_count](../../checks/table/volume/row-count.md)
+check in the Profiling section to the Monitoring checks:
 
-This dashboard allows filtering data by:
-    
-* time window (from last 7 days to last 3 months)
-* row count
-* connection,
-* schema,
-* data group,
-* stages,
-* table.
+1. Navigate to the **Monitoring checks** section.
+2. Select the table from the tree view on the left.
+3. Click on the **Copy verified profiling checks** tab.
+4. Click the **Apply** button.
+5. Click the **Confirm** button in the popup to run configured checks.
 
-![Row-count results on largest tables by number of rows dashboard](https://dqops.com/docs/images/examples/row-count-check-results-on-largest-tables-by-number-of-rows-dashboard.png){ loading=lazy; width="1200px" }
+![Copy verified profiling checks to monitoring section](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-copy-verified-profiling-checks-to-monitoring-section1.png){ loading=lazy; width="1200px" }
 
+### Review Table quality status
+After the **Run checks** job finishes, you can review the summary of the identified data quality issues
+on the **Table quality status** screen. Click on the **Table quality status** tab to navigate to that screen.
 
-## Change a schedule at the connection level
+![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-review-table-quality-status1.png){ loading=lazy; width="1200px" }
 
-With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
-table, or individual check.
+The **Table quality status** screen summarizes data quality issues identified for each column and each category of data quality checks.
+It includes the number of executed checks and detailed results per table and columns grouped by check categories or [data quality dimensions](../../dqo-concepts/data-quality-dimensions.md).
+DQOps calculates a [data quality KPI score](../../dqo-concepts/definition-of-data-quality-kpis.md), which is measured as the percentage of data quality checks that passed successfully.
 
-After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
+At the bottom of the screen, you will find a table that displays the check results per category, table, and column.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+The colored boxes indicate the current or the highest severity status: green for a correct result, yellow for a warning,
+orange for an error, red for a fatal error, and grey stripes for an execution error.
 
-1. Navigate to the **Data Source** section.
-
-2. Choose the connection from the tree view on the left.
-
-3. Click on the **Schedule** tab.
-
-4. Select the **Monitoring daily** tab
-
-5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
-
-6. Once you have set the schedule, click on the **Save** button to save your changes.
-
-    By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
-
-    ![Turn off job scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png){ loading=lazy }
-
-Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
-all tables associated with that connection.
-
-You can [read more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
-
-You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
-
-## YAML configuration file
-
-The YAML configuration file stores both the table details and checks configurations.
-
-In this example, we have set minimum count threshold level for the check:
-
-- warning: 1
-
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
-
-```yaml hl_lines="7-16"
-apiVersion: dqo/v1
-kind: table
-spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      volume:
-        daily_row_count:
-          warning:
-            min_count: 1
-  columns:
-    edition:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    report_type:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-```
-
-
-In this example, we have set three minimum count thresholds levels for the check:
-
-- warning: 692
-- error: 381
-- fatal: 150
-
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
-
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
-
-```yaml hl_lines="7-16"
-apiVersion: dqo/v1
-kind: table
-spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      volume:
-        daily_row_count:
-          warning:
-            min_count: 692
-          error:
-            min_count: 381
-          fatal:
-            min_count: 150
-  columns:
-    edition:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    report_type:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The number of rows is above 1 and the check gives correct result.
-
-```
-Check evaluation summary per table:
-+---------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection     |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+---------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|table_row_count|america_health_rankings.ahr|1     |1             |1            |0       |0     |0           |0               |
-+---------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection table_row_count (bigquery)
-SQL to be executed on the connection:
-SELECT
-    COUNT(*) AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value of rows in this example is 18155, which is above the minimum
-threshold level set in the warning (1).
-
-```
-**************************************************
-Finished executing a sensor for a check row_count on the table america_health_rankings.ahr using a sensor definition table/volume/row_count, sensor result count: 1
-
-Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|18155       |2023-05-05T12:29:22.192Z|2023-05-05T12:29:22.192Z|
-+------------+------------------------+------------------------+
-**************************************************
-```
+You can click on the colored box to view a list of checks that contribute to the result. Hovering over the check name will provide more details.
 
 In this example, we have demonstrated how to use DQOps to verify that the table is not empty and meets the size requirements.
-By using the [row_count](../../checks/table/volume/row-count.md) table check, we can monitor that the number of
-rows in a table does not fall below the minimum accepted count. If it does, you will get a warning, error or fatal result.
+By using the [daily_row_count](../../checks/table/volume/row-count.md) table check, we can monitor the number of
+rows in a table does not fall below the minimum accepted count. If it does, DQOps will create an incident and can send a notification.
+
+Follow the link to learn [how to configure notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 
 ## Next steps
 

@@ -347,6 +347,9 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 				case JOBS_LIMIT:
 					limitEntryName = "Maximum number of parallel data quality jobs";
 					break;
+				case DATA_DOMAINS_LIMIT:
+					limitEntryName = "Maximum number of data domains";
+					break;
 				default:
 					limitEntryName = limitEntry.getKey().toString();
 					break;

@@ -159,7 +159,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = new StatisticsCollectionExecutionSummary();
         CollectorExecutionStatistics executionStatistics = new CollectorExecutionStatistics();
 
-        Collection<AbstractStatisticsCollectorSpec<?>> collectors = this.hierarchyNodeTreeSearcher.findStatisticsCollectors(targetTable, statisticsCollectorSearchFilters);
+        Collection<AbstractStatisticsCollectorSpec<?>> collectors = this.hierarchyNodeTreeSearcher.findStatisticsCollectors(targetTable.getSpec(), statisticsCollectorSearchFilters);
         if (collectors.size() == 0) {
             statisticsCollectionExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), executionStatistics);
             return statisticsCollectionExecutionSummary; // no checks for this table

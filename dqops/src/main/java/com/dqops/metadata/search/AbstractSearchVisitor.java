@@ -72,6 +72,9 @@ import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexListImpl;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexSpec;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexWrapperImpl;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
@@ -1339,6 +1342,42 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(AutoImportTablesSpec autoImportTablesSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a table similarity score holder.
+     *
+     * @param connectionSimilarityIndexSpec Table similarity score holder.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ConnectionSimilarityIndexSpec connectionSimilarityIndexSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a wrapper over a connection similarity score holder.
+     *
+     * @param connectionTableSimilarityScoresWrapper Connection table similarity score wrapper.
+     * @param parameter                              Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ConnectionSimilarityIndexWrapperImpl connectionTableSimilarityScoresWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of connection similarity wrappers.
+     *
+     * @param connectionSimilarityIndexWrappers Connection similarity wrappers.
+     * @param parameter                         Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ConnectionSimilarityIndexListImpl connectionSimilarityIndexWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

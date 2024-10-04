@@ -16,6 +16,7 @@
 
 package com.dqops.metadata.lineage.lineageservices;
 
+import com.dqops.data.checkresults.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,6 +41,13 @@ public class TableLineageModel {
      */
     @JsonPropertyDescription("The table for which the data lineage is generated.")
     private DomainConnectionTableKey relativeTable;
+
+    /**
+     * The data quality status of the reference table (in the middle of the data lineage) showing the highest severity
+     * problems detected on the reference table and all upstream tables from which some issues have come.
+     */
+    @JsonPropertyDescription("The data quality status of the reference table (in the middle of the data lineage) showing the highest severity problems detected on the reference table and all upstream tables from which some issues have come.")
+    private TableCurrentDataQualityStatusModel relativeTableCumulativeQualityStatus;
 
     /**
      * A list of data flows from source tables to direct target tables. Describes the data quality status of the source table.

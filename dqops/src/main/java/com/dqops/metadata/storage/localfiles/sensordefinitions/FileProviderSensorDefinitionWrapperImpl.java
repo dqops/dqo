@@ -77,6 +77,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
 
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 ProviderSensorDefinitionSpec deserializedSpec = (ProviderSensorDefinitionSpec) fileContent.getCachedObjectInstance();
 

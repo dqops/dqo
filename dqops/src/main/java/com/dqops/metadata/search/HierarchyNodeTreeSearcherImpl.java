@@ -98,8 +98,8 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of tables that passed the filter and will be analyzed to collect statistics.
      */
     @Override
-    public Collection<TableSpec> findTablesForStatisticsCollection(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
-        StatisticsCollectorTableSearchFiltersVisitor searchFilterVisitor = statisticsCollectorSearchFilters.createTableCollectorSearchFilterVisitor();
+    public Collection<TableWrapper> findTablesForStatisticsCollection(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
+        StatisticsCollectorTargetTableSearchFiltersVisitor searchFilterVisitor = statisticsCollectorSearchFilters.createTargetTableCollectorSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
         DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
@@ -107,7 +107,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 searchParameterObject));
 
-        return (List<TableSpec>)(ArrayList<?>)matchingNodes;
+        return (List<TableWrapper>)(ArrayList<?>)matchingNodes;
     }
 
     /**

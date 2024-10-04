@@ -28,6 +28,7 @@ import com.dqops.metadata.storage.localfiles.defaultschedules.FileMonitoringSche
 import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
+import com.dqops.metadata.storage.localfiles.similarity.FileConnectionSimilarityIndexListImpl;
 import com.dqops.metadata.storage.localfiles.sources.FileConnectionListImpl;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.FileDefaultIncidentNotificationsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.FileTableQualityPolicyListImpl;
@@ -56,6 +57,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param credentials Credentials.
      * @param dictionaries Data dictionaries.
      * @param fileIndices File indices list.
+     * @param connectionSimilarityIndexList Connection similarity indices.
      * @param dashboards Custom dashboards.
      * @param tableDefaultChecksPattern Default table check patterns.
      * @param columnDefaultChecksPattern Default column check patterns.
@@ -71,6 +73,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileSharedCredentialListImpl credentials,
                             FileDictionaryListImpl dictionaries,
                             FileFileIndexListImpl fileIndices,
+                            FileConnectionSimilarityIndexListImpl connectionSimilarityIndexList,
                             FileDashboardFolderListSpecWrapperImpl dashboards,
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
                             FileTableQualityPolicyListImpl tableDefaultChecksPattern,
@@ -78,7 +81,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileDefaultIncidentNotificationsWrapperImpl incidentNotifications,
                             UserHomeContext userHomeContext,
                             boolean readOnly) {
-        super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
+        super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, connectionSimilarityIndexList, dashboards,
                 monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, incidentNotifications, readOnly);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
@@ -98,6 +101,8 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode rulesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
         FolderTreeNode checksFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
         FolderTreeNode indexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX);
+        FolderTreeNode connectionSimilarityIndexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX)
+                .getOrAddDirectFolder(BuiltInFolderNames.CONNECTION_SIMILARITY_INDEX);
         FolderTreeNode settingsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SETTINGS);
         FolderTreeNode credentialsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CREDENTIALS);
         FolderTreeNode dictionariesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.DICTIONARIES);
@@ -112,6 +117,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileSharedCredentialListImpl credentials = new FileSharedCredentialListImpl(credentialsFolder, readOnly);
         FileDictionaryListImpl dictionaries = new FileDictionaryListImpl(dictionariesFolder, readOnly);
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer, readOnly);
+        FileConnectionSimilarityIndexListImpl connectionSimilarityIndices = new FileConnectionSimilarityIndexListImpl(connectionSimilarityIndexFolder, jsonSerializer, readOnly);
         FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer, readOnly);
         FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer, readOnly);
         FileTableQualityPolicyListImpl tableDefaultChecksPatterns = new FileTableQualityPolicyListImpl(patternsFolder, yamlSerializer, readOnly);
@@ -119,7 +125,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileDefaultIncidentNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentNotificationsWrapperImpl(settingsFolder, yamlSerializer, readOnly);
 
         return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,
-                sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
+                sensors, rules, checks, settings, credentials, dictionaries, fileIndices, connectionSimilarityIndices, dashboards,
                 monitoringSchedules, tableDefaultChecksPatterns, columnDefaultChecksPatterns,
                 notificationWebhooks, userHomeContext, readOnly);
     }
