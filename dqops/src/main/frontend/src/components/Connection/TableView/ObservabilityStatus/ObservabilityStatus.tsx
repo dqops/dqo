@@ -1,4 +1,4 @@
-import { Tooltip } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -17,7 +17,9 @@ import {
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import { ChartView } from '../../../DataQualityChecks/CheckDetails/ChartView';
 import SelectTailwind from '../../../Select/SelectTailwind';
+import SvgIcon from '../../../SvgIcon';
 import { calculateDateRange, getColor } from './ObservabilityStatus.utils';
+import { Table } from '../../../Table';
 
 export default function ObservabilityStatus() {
   const {
@@ -45,6 +47,7 @@ export default function ObservabilityStatus() {
   const [isAnomalyRowCount, setIsAnomalyRowCount] = useState<boolean>(false);
   const [dataGroup, setDataGroup] = useState<string | undefined>('');
   const [month, setMonth] = useState<string>('Last 3 months');
+  const [mode, setMode] = useState<'chart' | 'table'>('chart');
 
   const onChangeFilter = (obj: Partial<{ column: string; check: string }>) => {
     setHistogramFilter({ ...histogramFilter, ...obj });
@@ -200,9 +203,240 @@ export default function ObservabilityStatus() {
       setHistograms(res.data);
     });
   }, [connection, schema, table, column, histogramFilter]);
+  const columns = [
+    {
+      label:
+        checkTypes === 'profiling'
+          ? 'Profile date (local time)'
+          : checkTypes === 'partitioned'
+          ? 'Partition date'
+          : 'Checkpoint date',
+      value: 'timePeriod',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
+    },
+    {
+      label: 'Time scale',
+      value: 'timeGradient',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
+    },
+    {
+      label: 'Executed at',
+      value: 'executedAt',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
+    },
+    {
+      label: 'Actual value',
+      value: 'actualValue',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      label: 'Expected value',
+      value: 'expectedValue',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      header: () => (
+        <span>
+          Issue
+          <br />
+          severity level
+        </span>
+      ),
+      value: 'severity',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left',
+      render: (value: number) => {
+        let name = '';
+        switch (value) {
+          case 0:
+            name = 'Success';
+            break;
+          case 1:
+            name = 'Warning';
+            break;
+          case 2:
+            name = 'Error';
+            break;
+          case 3:
+            name = 'Fatal';
+            break;
+          default:
+            break;
+        }
 
+        return <div>{name}</div>;
+      }
+    },
+    {
+      header: () => (
+        <span>
+          Warning
+          <br />
+          lower threshold
+        </span>
+      ),
+      value: 'warningLowerBound',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      header: () => (
+        <span>
+          Warning
+          <br />
+          upper threshold
+        </span>
+      ),
+      value: 'warningUpperBound',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      header: () => (
+        <span>
+          Error
+          <br />
+          lower threshold
+        </span>
+      ),
+      value: 'errorLowerBound',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      header: () => (
+        <span>
+          Error
+          <br />
+          upper threshold
+        </span>
+      ),
+      value: 'errorUpperBound',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      header: () => (
+        <span>
+          Fatal
+          <br />
+          lower threshold
+        </span>
+      ),
+      value: 'fatalLowerBound',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      header: () => (
+        <span>
+          Fatal
+          <br />
+          upper threshold
+        </span>
+      ),
+      value: 'fatalUpperBound',
+      className:
+        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => (
+        <div>{typeof value === 'number' ? value : ''}</div>
+      )
+    },
+    {
+      label: 'Duration ms',
+      value: 'durationMs',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+    },
+    {
+      label: 'Data group',
+      value: 'dataGroup',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
+    },
+    {
+      label: 'Id',
+      value: 'id',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
+    }
+  ];
   return (
     <div className="p-4 mt-2">
+      <div className="flex flex-wrap items-center gap-x-4 mt-4">
+        {allResults.map((result, index) => (
+          <SectionWrapper
+            key={index}
+            title={result.checkDisplayName ?? ''}
+            className=" mb-4"
+          >
+            <div className="flex items-center gap-x-1 min-w-60">
+              {result.checkResultEntries?.map((entry, index) => (
+                <Tooltip
+                  key={index}
+                  content={
+                    <div className="text-white">
+                      <div>Sensor value: {entry.sensorName}</div>
+                      {/* <div>
+                                                  Most severe status:{' '}
+                                                  <span className="capitalize">
+                                                    {getStatusLabel(status)}
+                                                  </span>
+                                                </div> */}
+                      <div>
+                        Executed at:{' '}
+                        {entry.executedAt
+                          ? moment(
+                              getLocalDateInUserTimeZone(
+                                new Date(entry.executedAt)
+                              )
+                            ).format('YYYY-MM-DD HH:mm:ss')
+                          : ''}
+                      </div>
+                      <div>
+                        Time period:{' '}
+                        {entry.timePeriod
+                          ? moment(
+                              getLocalDateInUserTimeZone(
+                                new Date(entry.timePeriod)
+                              )
+                            ).format('YYYY-MM-DD HH:mm:ss')
+                          : ''}
+                      </div>
+                      <div>Data group: {entry.dataGroup}</div>
+                    </div>
+                  }
+                  className="max-w-80 py-2 px-2 bg-gray-800"
+                >
+                  <div
+                    key={index}
+                    className={clsx('w-3 h-3', getColor(entry.severity))}
+                  />
+                </Tooltip>
+              ))}
+            </div>
+          </SectionWrapper>
+        ))}
+      </div>
       {!column && (
         <SectionWrapper
           title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
@@ -230,14 +464,91 @@ export default function ObservabilityStatus() {
                 onChange={setMonth}
               />
             </div>
+            <div className="flex space-x-4 items-center">
+              <IconButton
+                ripple={false}
+                size="sm"
+                className={
+                  mode === 'chart'
+                    ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                    : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+                }
+                onClick={() => {
+                  setMode('table');
+                }}
+              >
+                <Tooltip
+                  content="View results in a table"
+                  className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+                >
+                  <div>
+                    <SvgIcon
+                      name="table"
+                      className={clsx(
+                        'w-4 h-4 cursor-pointer ',
+                        mode === 'table'
+                          ? 'font-bold text-white'
+                          : 'text-teal-500'
+                      )}
+                    />
+                  </div>
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                size="sm"
+                ripple={false}
+                className={
+                  mode === 'table'
+                    ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                    : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+                }
+                onClick={() => {
+                  setMode('chart');
+                }}
+              >
+                <Tooltip
+                  content="View results in a graph"
+                  className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+                >
+                  <div>
+                    <SvgIcon
+                      name="chart-line"
+                      className={clsx(
+                        'w-4 h-4 cursor-pointer',
+                        mode === 'chart'
+                          ? 'font-bold text-white'
+                          : 'text-teal-500'
+                      )}
+                    />
+                  </div>
+                </Tooltip>
+              </IconButton>
+            </div>
           </div>
           {results.length === 0 && (
             <div className="text-gray-700 mt-5 text-sm">No Data</div>
           )}
-          <ChartView data={results} />
+          {mode === 'chart' ? (
+            <ChartView data={results} />
+          ) : (
+            <Table
+              className="mt-1 w-full"
+              columns={columns}
+              data={(results ?? []).map((item) => ({
+                ...item,
+                checkName: results[0].checkName,
+                executedAt: moment(
+                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+                ).format('YYYY-MM-DD HH:mm:ss'),
+                timePeriod: item.timePeriod?.replace(/T/g, ' ')
+              }))}
+              emptyMessage="No data"
+              getRowClass={getColor}
+            />
+          )}
         </SectionWrapper>
       )}
-      <SectionWrapper title="Data quality issue severity" className="mt-2 mb-4">
+      <SectionWrapper title="Data quality issues" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
           <div className="col-span-2">
             <BarChart histograms={histograms} setHistograms={setHistograms} />
@@ -300,61 +611,6 @@ export default function ObservabilityStatus() {
           </SectionWrapper>
         </div>
       </SectionWrapper>
-      <div className="flex flex-wrap items-center gap-x-4 mt-4">
-        {allResults.map((result, index) => (
-          <SectionWrapper
-            key={index}
-            title={result.checkName ?? ''}
-            className=" mb-4"
-          >
-            <div className="flex items-center gap-x-1">
-              {result.checkResultEntries?.map((entry, index) => (
-                <Tooltip
-                  key={index}
-                  content={
-                    <div className="text-white">
-                      <div>Sensor value: {entry.sensorName}</div>
-                      {/* <div>
-                        Most severe status:{' '}
-                        <span className="capitalize">
-                          {getStatusLabel(status)}
-                        </span>
-                      </div> */}
-                      <div>
-                        Executed at:{' '}
-                        {entry.executedAt
-                          ? moment(
-                              getLocalDateInUserTimeZone(
-                                new Date(entry.executedAt)
-                              )
-                            ).format('YYYY-MM-DD HH:mm:ss')
-                          : ''}
-                      </div>
-                      <div>
-                        Time period:{' '}
-                        {entry.timePeriod
-                          ? moment(
-                              getLocalDateInUserTimeZone(
-                                new Date(entry.timePeriod)
-                              )
-                            ).format('YYYY-MM-DD HH:mm:ss')
-                          : ''}
-                      </div>
-                      <div>Data group: {entry.dataGroup}</div>
-                    </div>
-                  }
-                  className="max-w-80 py-2 px-2 bg-gray-800"
-                >
-                  <div
-                    key={index}
-                    className={clsx('w-3 h-3', getColor(entry.severity))}
-                  />
-                </Tooltip>
-              ))}
-            </div>
-          </SectionWrapper>
-        ))}
-      </div>
     </div>
   );
 }
