@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { CheckResultsOverviewDataModelStatusesEnum } from '../../../../api';
 
 export const calculateDateRange = (month: string) => {
   if (!month) return { startDate: '', endDate: '' };
@@ -16,19 +17,21 @@ export const calculateDateRange = (month: string) => {
   };
 };
 
-export const getColor = (status: number | undefined) => {
+export const getColor = (
+  status?: CheckResultsOverviewDataModelStatusesEnum
+) => {
   switch (status) {
-    case 0:
+    case 'valid':
       return 'bg-teal-500';
-    case 1:
+    case 'warning':
       return 'bg-yellow-900';
-    case 2:
+    case 'error':
       return 'bg-orange-900';
-    case 3:
+    case 'fatal':
       return 'bg-red-900';
-    case 4:
+    case 'execution_error':
       return 'bg-black';
     default:
-      return '';
+      return 'bg-black';
   }
 };

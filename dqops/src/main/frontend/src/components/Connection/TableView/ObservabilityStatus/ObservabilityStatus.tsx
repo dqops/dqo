@@ -3,23 +3,23 @@ import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  CheckResultEntryModel,
   CheckResultsListModel,
+  CheckResultsOverviewDataModel,
   IssueHistogramModel
 } from '../../../../api';
 import { BarChart } from '../../../../pages/IncidentDetail/BarChart';
-import { CheckResultApi } from '../../../../services/apiClient';
-import { CheckTypes } from '../../../../shared/routes';
 import {
-  getLocalDateInUserTimeZone,
-  useDecodedParams
-} from '../../../../utils';
+  CheckResultApi,
+  CheckResultOverviewApi
+} from '../../../../services/apiClient';
+import { CheckTypes } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import { ChartView } from '../../../DataQualityChecks/CheckDetails/ChartView';
 import SelectTailwind from '../../../Select/SelectTailwind';
 import SvgIcon from '../../../SvgIcon';
-import { calculateDateRange, getColor } from './ObservabilityStatus.utils';
 import { Table } from '../../../Table';
+import { getColor } from './ObservabilityStatus.utils';
 
 export default function ObservabilityStatus() {
   const {
@@ -35,8 +35,12 @@ export default function ObservabilityStatus() {
     table: string;
     column: string;
   } = useDecodedParams();
-  const [results, setResults] = useState<CheckResultEntryModel[]>([]);
-  const [allResults, setAllResults] = useState<CheckResultsListModel[]>([]);
+  const [results, setResults] = useState<Array<CheckResultsOverviewDataModel>>(
+    []
+  );
+  const [allResults, setAllResults] = useState<
+    Array<CheckResultsOverviewDataModel>
+  >([]);
   const [histograms, setHistograms] = useState<IssueHistogramModel>({});
   const [histogramFilter, setHistogramFilter] = useState<{
     checkTypes: CheckTypes;
@@ -54,7 +58,7 @@ export default function ObservabilityStatus() {
   };
 
   useEffect(() => {
-    const { startDate, endDate } = calculateDateRange(month);
+    // const { startDate, endDate } = calculateDateRange(month);
     const getRowCountResults = (results: Array<CheckResultsListModel>) => {
       if (
         results.find((result) =>
@@ -73,25 +77,19 @@ export default function ObservabilityStatus() {
     switch (checkTypes) {
       case CheckTypes.MONITORING: {
         if (column) {
-          CheckResultApi.getColumnMonitoringChecksResults(
+          CheckResultOverviewApi.getColumnMonitoringChecksOverview(
             connection,
             schema,
             table,
             column,
             'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
             undefined,
             undefined,
             15
           ).then((res) => {
             setGroupingOptions(
-              res.data.map((item) => item.dataGroup ?? '') ?? []
+              res.data.map((item) => item.dataGroups?.[0] ?? '') ?? []
             );
-            console.log(res.data);
             setAllResults(
               res.data.filter((x) => x.checkCategory === 'schema') ?? []
             );
@@ -99,21 +97,19 @@ export default function ObservabilityStatus() {
           });
           break;
         } else {
-          CheckResultApi.getTableMonitoringChecksResults(
+          CheckResultOverviewApi.getTableMonitoringChecksOverview(
             connection,
             schema,
             table,
             'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
             undefined,
             undefined,
             15
           ).then((res) => {
-            setGroupingOptions(res.data.map((item) => item.dataGroup ?? ''));
+            console.log(res.data);
+            setGroupingOptions(
+              res.data.map((item) => item.dataGroups?.[0] ?? '')
+            );
             setAllResults(
               res.data.filter((x) => x.checkCategory === 'schema') ?? []
             );
@@ -124,17 +120,12 @@ export default function ObservabilityStatus() {
       }
       case CheckTypes.PARTITIONED: {
         if (column) {
-          CheckResultApi.getColumnPartitionedChecksResults(
+          CheckResultOverviewApi.getColumnPartitionedChecksOverview(
             connection,
             schema,
             table,
             column,
             'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
             undefined,
             undefined,
             15
@@ -146,16 +137,12 @@ export default function ObservabilityStatus() {
           });
           break;
         } else {
-          CheckResultApi.getTablePartitionedChecksResults(
+          CheckResultOverviewApi.getTablePartitionedChecksOverview(
             connection,
             schema,
             table,
             'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
+
             undefined,
             undefined,
             15
@@ -199,7 +186,6 @@ export default function ObservabilityStatus() {
       histogramFilter.check,
       checkTypes as 'monitoring' | 'partitioned'
     ).then((res) => {
-      console.log(res.data);
       setHistograms(res.data);
     });
   }, [connection, schema, table, column, histogramFilter]);
@@ -386,22 +372,17 @@ export default function ObservabilityStatus() {
         {allResults.map((result, index) => (
           <SectionWrapper
             key={index}
-            title={result.checkDisplayName ?? ''}
+            title={result.checkName ?? ''}
             className=" mb-4"
           >
             <div className="flex items-center gap-x-1 min-w-60">
-              {result.checkResultEntries?.map((entry, index) => (
+              {result.results?.map((entry, index) => (
                 <Tooltip
                   key={index}
                   content={
                     <div className="text-white">
-                      <div>Sensor value: {entry.sensorName}</div>
-                      {/* <div>
-                                                  Most severe status:{' '}
-                                                  <span className="capitalize">
-                                                    {getStatusLabel(status)}
-                                                  </span>
-                                                </div> */}
+                      {/* <div>Sensor value: {result}</div>
+                      
                       <div>
                         Executed at:{' '}
                         {entry.executedAt
@@ -422,14 +403,17 @@ export default function ObservabilityStatus() {
                             ).format('YYYY-MM-DD HH:mm:ss')
                           : ''}
                       </div>
-                      <div>Data group: {entry.dataGroup}</div>
+                      <div>Data group: {entry.dataGroup}</div> */}
                     </div>
                   }
                   className="max-w-80 py-2 px-2 bg-gray-800"
                 >
                   <div
                     key={index}
-                    className={clsx('w-3 h-3', getColor(entry.severity))}
+                    className={clsx(
+                      'w-3 h-3',
+                      getColor(result.statuses?.[index])
+                    )}
                   />
                 </Tooltip>
               ))}
@@ -446,7 +430,7 @@ export default function ObservabilityStatus() {
             <div className="flex space-x-4 items-center">
               <div className="text-sm">Data group (time series)</div>
               <SelectTailwind
-                value={dataGroup || results[0]?.dataGroup}
+                value={dataGroup || results?.[0]?.dataGroups?.[0]}
                 options={
                   (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
                     label: item ?? '',
@@ -536,11 +520,11 @@ export default function ObservabilityStatus() {
               columns={columns}
               data={(results ?? []).map((item) => ({
                 ...item,
-                checkName: results[0].checkName,
-                executedAt: moment(
-                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
-                ).format('YYYY-MM-DD HH:mm:ss'),
-                timePeriod: item.timePeriod?.replace(/T/g, ' ')
+                checkName: results[0].checkName
+                // executedAt: moment(
+                //   getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+                // ).format('YYYY-MM-DD HH:mm:ss'),
+                // timePeriod: item.timePeriod?.replace(/T/g, ' ')
               }))}
               emptyMessage="No data"
               getRowClass={getColor}
