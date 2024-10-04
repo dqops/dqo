@@ -156,6 +156,10 @@ const CreateConnection = () => {
         copiedDatabase.hana = { port: '30015', properties: { '': '' } };
         break;
       }
+      case ConnectionModelProviderTypeEnum.db2: {
+        copiedDatabase.db2 = { port: '50000', properties: { '': '' } };
+        break;
+      }
     }
     setDatabase(copiedDatabase);
   };
