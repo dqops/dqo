@@ -29,6 +29,6 @@ export const getColor = (status: number | undefined) => {
     case 4:
       return 'bg-black';
     default:
-      return 'bg-black';
+      return '';
   }
 };
