@@ -46,6 +46,7 @@ export interface ISourceState {
   };
   ['home']: {
     activeTab?: string;
+    secondTab?: string;
   };
 }
 
@@ -1438,7 +1439,17 @@ const connectionReducer = (state = initialState, action: Action) => {
       return {
         ...state,
         ['home']: {
+          ...state.home,
           activeTab: action.data
+        }
+      };
+    }
+    case SOURCE_ACTION.SET_SECOND_LEVEL_HOME_TAB: {
+      return {
+        ...state,
+        ['home']: {
+          ...state?.home,
+          secondTab: (action as any)?.secondTab
         }
       };
     }

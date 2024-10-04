@@ -26,7 +26,7 @@ const tabs = [
   // }
 ];
 const HomePage = () => {
-  const { activeTab } = useSelector(
+  const { activeTab, secondTab } = useSelector(
     (state: IRootState) => state.source['home']
   );
   const history = useHistory();
@@ -60,7 +60,9 @@ const HomePage = () => {
       </div>
       <div className="mt-24.5">
         {activeTab === '/home' && <StaticHomePage />}
-        {activeTab === '/data-quality-summary' && <DataQualitySummary />}
+        {activeTab === '/data-quality-summary' && (
+          <DataQualitySummary secondTab={secondTab} />
+        )}
         {activeTab === '/global-incidents' && <GlobalIncidents />}
         {/* {activeTab === '/global-incidents?groupBy=category' && (
         <GlobalIncidents groupBy="category" />

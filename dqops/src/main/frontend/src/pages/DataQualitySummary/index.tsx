@@ -1,5 +1,7 @@
 import React from 'react';
 import Tabs from '../../components/Tabs';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setHomeSecondLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnListView from '../ColumnListView/ColumnListView';
@@ -14,13 +16,31 @@ const tabs = [
     value: 'columns'
   }
 ];
-export default function DataQualitySummary() {
+export default function DataQualitySummary({
+  secondTab
+}: {
+  secondTab?: string;
+}) {
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
-  const [activeTab, setActiveTab] = React.useState('tables');
+  const [activeTab, setActiveTab] = React.useState(secondTab ?? 'tables');
+  const dispatch = useActionDispatch();
+  const onChangeTab = (value: string) => {
+    if (!checkTypes) {
+      dispatch(setHomeSecondLevelTab(value));
+    }
+    setActiveTab(value);
+  };
+
+  // useEffect(() => {
+  //   if (secondTab && secondTab !== activeTab) {
+  //     setActiveTab(secondTab);
+  //   }
+  // }, [secondTab]);
+
   return (
     <div className="py-2">
       <div className="border-b border-gray-300 px-0">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {checkTypes === CheckTypes.PROFILING && (
         <div className="px-4 pt-4 pb-6 text-sm">

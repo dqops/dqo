@@ -1247,6 +1247,11 @@ export const setHomeFirstLevelTab = (data: string) => ({
   data
 });
 
+export const setHomeSecondLevelTab = (secondTab: string) => ({
+  type: SOURCE_ACTION.SET_SECOND_LEVEL_HOME_TAB,
+  secondTab
+});
+
 export const setRuleParametersConfigured = (
   checkType: CheckTypes,
   activeTab: string,
