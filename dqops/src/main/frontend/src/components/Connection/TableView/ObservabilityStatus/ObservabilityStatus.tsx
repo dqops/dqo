@@ -548,7 +548,7 @@ export default function ObservabilityStatus() {
           )}
         </SectionWrapper>
       )}
-      <SectionWrapper title="Data quality issue severity" className="mt-2 mb-4">
+      <SectionWrapper title="Data quality issues" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
           <div className="col-span-2">
             <BarChart histograms={histograms} setHistograms={setHistograms} />
