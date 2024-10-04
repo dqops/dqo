@@ -81,9 +81,10 @@ DQOps proposes a list of data quality checks instantly upon entering the rule mi
 You can use filters to narrow down the list of data quality check proposals.
 Filter the results to include only checks from the **nulls** category by entering "nulls" in the Check category input field and **source** in the Column name field.
 
-![Propose a configuration of volume checks using rule miner](https://dqops.com/docs/images/examples/daily-null-count-propose_configuration-checks-using-rule-miner1.png){ loading=lazy; width="1200px" }
+![Propose a configuration of volume checks using rule miner](https://dqops.com/docs/images/examples/daily-null-count-propose_configuration-checks-using-rule-miner2.PNG){ loading=lazy; width="1200px" }
 
-Select the profile_nulls_count check configuration proposal, which will throw an error if the number of null values ​​exceeds 0.
+After clicking the Propose button, select checks from the proposed list for the selected columns using the switches. In the example, profile_nulls_count was selected for the source and source_data columns.
+Selected checks will throw an error if the number of null values ​​exceeds 0.
 
 Pressing the **Apply** button saves the configuration of data quality checks and their rules.
 A popup window will appear, notifying you that the checks have been activated and that you can run the activated check by
@@ -94,7 +95,7 @@ clicking on the **Confirm** button.
 After the **Run checks** job finishes, you can review the summary of the identified data quality issues
 on the **Table quality status** screen. Click on the **Table quality status** tab to navigate to that screen.
 
-![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/examples/daily-null-count-review-table-quality-status1.png){ loading=lazy; width="1200px" }
+![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/examples/daily-null-count-review-table-quality-status2.PNG){ loading=lazy; width="1200px" }
 
 The **Table quality status** screen summarizes data quality issues identified for each column and each category of data quality checks.
 It includes the number of executed checks and detailed results per table and columns grouped by check categories or [data quality dimensions](../../dqo-concepts/data-quality-dimensions.md).
@@ -124,7 +125,7 @@ check in the Profiling section to the Monitoring checks:
 4. Click the **Apply** button.
 5. Click the **Confirm** button in the popup to run configured checks.
 
-![Copy verified profiling checks to monitoring section](https://dqops.com/docs/images/examples/daily-null-count-copy-profiling-checks-to-monitoring-section1.png){ loading=lazy; width="1200px" }
+![Copy verified profiling checks to monitoring section](https://dqops.com/docs/images/examples/daily-null-count-copy-profiling-checks-to-monitoring-section3.png){ loading=lazy; width="1200px" }
 
 ### **Run checks**
 
@@ -166,7 +167,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/daily-null-count-change-shedule1.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/daily-null-count-change-shedule3.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -176,7 +177,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 
 4. Select the **Monitoring daily** tab
 
-5. Select the **Run every day at** and change the time, for example, to 12:00 A.M. You can also select any other option. 
+5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
@@ -190,6 +191,77 @@ all tables associated with that connection.
 You can [read more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
 
 You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example. 
+
+## YAML configuration file
+
+The YAML configuration file stores both the table details and checks configurations.
+
+In this example, we set the maximum number of thresholds for checks to 0.
+
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_nulls_count` checks are configured.
+
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
+
+```yaml hl_lines="40-57"
+apiVersion: dqo/v1
+kind: table
+spec:
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   columns:
+      edition:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      report_type:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      measure_name:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      state_name:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      subpopulation:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      value:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      lower_ci:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      upper_ci:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      source:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         profiling_checks:
+            nulls:
+               profile_nulls_count:
+                  error:
+                     max_count: 0
+      source_date:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         profiling_checks:
+            nulls:
+               profile_nulls_count:
+                  error:
+                     max_count: 0
+
+```
 
 ## Next steps
 
