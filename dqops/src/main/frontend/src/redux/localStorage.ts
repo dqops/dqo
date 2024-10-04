@@ -49,7 +49,8 @@ const transformSourceState = (state: ISourceState): ISourceState => {
         })) ?? []
     },
     ['home']: {
-      activeTab: newState['home']?.activeTab
+      activeTab: newState['home']?.activeTab,
+      secondTab: newState['home']?.secondTab
     }
   };
 };
