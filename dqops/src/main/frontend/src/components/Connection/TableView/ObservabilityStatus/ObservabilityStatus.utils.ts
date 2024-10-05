@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { CheckResultsOverviewDataModelStatusesEnum } from '../../../../api';
+import { checkNameDictionary } from './ObservabilityStatus.constans';
 
 export const calculateDateRange = (month: string) => {
   if (!month) return { startDate: '', endDate: '' };
@@ -32,6 +33,13 @@ export const getColor = (
     case 'execution_error':
       return 'bg-black';
     default:
-      return 'bg-black';
+      return '  ';
   }
+};
+
+export const getDisplayCheckNameFromDictionary = (checkName: string) => {
+  if (checkName in checkNameDictionary) {
+    return checkNameDictionary[checkName as keyof typeof checkNameDictionary];
+  }
+  return checkName;
 };

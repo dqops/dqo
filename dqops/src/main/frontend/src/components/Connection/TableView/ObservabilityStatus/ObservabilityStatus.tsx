@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  CheckResultEntryModel,
   CheckResultsListModel,
   CheckResultsOverviewDataModel,
   IssueHistogramModel
@@ -13,13 +14,20 @@ import {
   CheckResultOverviewApi
 } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
-import { useDecodedParams } from '../../../../utils';
+import {
+  getLocalDateInUserTimeZone,
+  useDecodedParams
+} from '../../../../utils';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import { ChartView } from '../../../DataQualityChecks/CheckDetails/ChartView';
 import SelectTailwind from '../../../Select/SelectTailwind';
 import SvgIcon from '../../../SvgIcon';
 import { Table } from '../../../Table';
-import { getColor } from './ObservabilityStatus.utils';
+import {
+  calculateDateRange,
+  getColor,
+  getDisplayCheckNameFromDictionary
+} from './ObservabilityStatus.utils';
 
 export default function ObservabilityStatus() {
   const {
@@ -35,10 +43,10 @@ export default function ObservabilityStatus() {
     table: string;
     column: string;
   } = useDecodedParams();
-  const [results, setResults] = useState<Array<CheckResultsOverviewDataModel>>(
-    []
-  );
-  const [allResults, setAllResults] = useState<
+  const [checkResultsEntry, setCheckResultsEntry] = useState<
+    CheckResultEntryModel[]
+  >([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
     Array<CheckResultsOverviewDataModel>
   >([]);
   const [histograms, setHistograms] = useState<IssueHistogramModel>({});
@@ -58,7 +66,7 @@ export default function ObservabilityStatus() {
   };
 
   useEffect(() => {
-    // const { startDate, endDate } = calculateDateRange(month);
+    const { startDate, endDate } = calculateDateRange(month);
     const getRowCountResults = (results: Array<CheckResultsListModel>) => {
       if (
         results.find((result) =>
@@ -74,88 +82,255 @@ export default function ObservabilityStatus() {
         result.checkName?.includes('row_count')
       )[0]?.checkResultEntries;
     };
-    switch (checkTypes) {
-      case CheckTypes.MONITORING: {
-        if (column) {
-          CheckResultOverviewApi.getColumnMonitoringChecksOverview(
-            connection,
-            schema,
-            table,
-            column,
-            'daily',
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setGroupingOptions(
-              res.data.map((item) => item.dataGroups?.[0] ?? '') ?? []
-            );
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
-        } else {
-          CheckResultOverviewApi.getTableMonitoringChecksOverview(
-            connection,
-            schema,
-            table,
-            'daily',
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            console.log(res.data);
-            setGroupingOptions(
-              res.data.map((item) => item.dataGroups?.[0] ?? '')
-            );
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
-        }
-      }
-      case CheckTypes.PARTITIONED: {
-        if (column) {
-          CheckResultOverviewApi.getColumnPartitionedChecksOverview(
-            connection,
-            schema,
-            table,
-            column,
-            'daily',
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
-        } else {
-          CheckResultOverviewApi.getTablePartitionedChecksOverview(
-            connection,
-            schema,
-            table,
-            'daily',
 
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
+    const getCheckListData = (data: CheckResultsOverviewDataModel[]) => {
+      const isAnomalyRowCount = data.find((x) =>
+        x.checkName?.includes('row_count_anomaly')
+      );
+      const isRowCount = data.find((x) => x.checkName?.includes('row_count'));
+      if (!isAnomalyRowCount && !isRowCount) {
+        return;
+      }
+      switch (checkTypes) {
+        case CheckTypes.MONITORING: {
+          if (column) {
+            CheckResultApi.getColumnMonitoringChecksResults(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              setGroupingOptions(
+                res.data.map((item) => item.dataGroup ?? '') ?? []
+              );
+              console.log(res.data);
+              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultApi.getTableMonitoringChecksResults(
+              connection,
+              schema,
+              table,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          }
+        }
+        case CheckTypes.PARTITIONED: {
+          if (column) {
+            CheckResultApi.getColumnPartitionedChecksResults(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultApi.getTablePartitionedChecksResults(
+              connection,
+              schema,
+              table,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          }
         }
       }
-    }
+    };
+
+    const filterColumnChecks = (data: CheckResultsOverviewDataModel[]) => {
+      if (
+        data.find(
+          (x) =>
+            x.checkCategory === 'daily_distinct_count_anomaly' &&
+            x.checkName === 'daily_nulls_percent_anomaly'
+        )
+      ) {
+        return data.filter(
+          (x) =>
+            x.checkCategory === 'schema' ||
+            x.checkName === 'daily_distinct_count_anomaly' ||
+            x.checkName === 'daily_nulls_percent_anomaly'
+        );
+      }
+      if (
+        data.find((x) => x.checkCategory === 'daily_distinct_count_anomaly')
+      ) {
+        return data.filter(
+          (x) =>
+            x.checkCategory === 'schema' ||
+            x.checkName === 'daily_distinct_count_anomaly' ||
+            x.checkName === 'daily_nulls_percent'
+        );
+      }
+      if (data.find((x) => x.checkCategory === 'daily_nulls_percent_anomaly')) {
+        return data.filter(
+          (x) =>
+            x.checkCategory === 'schema' ||
+            x.checkName === 'daily_nulls_percent_anomaly' ||
+            x.checkName === 'daily_distinct_count'
+        );
+      }
+      return data.filter(
+        (x) =>
+          x.checkCategory === 'schema' ||
+          x.checkName === 'daily_nulls_percent' ||
+          x.checkName === 'daily_distinct_count'
+      );
+    };
+
+    const filterTableChecks = (data: CheckResultsOverviewDataModel[]) => {
+      if (
+        data.find(
+          (x) =>
+            x.checkCategory === 'daily_data_freshness_anomaly' &&
+            x.checkName === 'daily_nulls_percent_anomaly'
+        )
+      ) {
+        return data.filter(
+          (x) =>
+            x.checkCategory === 'schema' ||
+            x.checkName === 'daily_data_freshness_anomaly' ||
+            x.checkName === 'daily_nulls_percent_anomaly'
+        );
+      }
+      if (
+        data.find((x) => x.checkCategory === 'daily_data_freshness_anomaly')
+      ) {
+        return data.filter(
+          (x) =>
+            x.checkCategory === 'schema' ||
+            x.checkName === 'daily_data_freshness_anomaly' ||
+            x.checkName === 'daily_nulls_percent'
+        );
+      }
+      if (data.find((x) => x.checkCategory === 'daily_nulls_percent_anomaly')) {
+        return data.filter(
+          (x) =>
+            x.checkCategory === 'schema' ||
+            x.checkName === 'daily_nulls_percent_anomaly' ||
+            x.checkName === 'daily_nulls_percent'
+        );
+      }
+      return data.filter((x) => x.checkCategory === 'schema');
+    };
+    const getOverviewData = () => {
+      switch (checkTypes) {
+        case CheckTypes.MONITORING: {
+          if (column) {
+            CheckResultOverviewApi.getColumnMonitoringChecksOverview(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              undefined,
+              undefined
+            ).then((res) => {
+              console.log(res.data);
+              setCheckResultsOverview(filterColumnChecks(res.data ?? []) ?? []);
+              getCheckListData(res.data);
+              //setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultOverviewApi.getTableMonitoringChecksOverview(
+              connection,
+              schema,
+              table,
+              'daily',
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              console.log(res.data);
+              getCheckListData(res.data);
+              setCheckResultsOverview(filterTableChecks(res.data ?? []) ?? []);
+
+              // setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          }
+        }
+        case CheckTypes.PARTITIONED: {
+          if (column) {
+            CheckResultOverviewApi.getColumnPartitionedChecksOverview(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              getCheckListData(res.data);
+              setCheckResultsOverview(filterColumnChecks(res.data ?? []) ?? []);
+              //  setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultOverviewApi.getTablePartitionedChecksOverview(
+              connection,
+              schema,
+              table,
+              'daily',
+
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              getCheckListData(res.data);
+              setCheckResultsOverview(filterTableChecks(res.data ?? []) ?? []);
+              //  setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          }
+        }
+      }
+    };
+    getOverviewData();
   }, [checkTypes, connection, schema, table, column, month]);
 
   const monthOptions = useMemo(() => {
@@ -369,41 +544,39 @@ export default function ObservabilityStatus() {
   return (
     <div className="p-4 mt-2">
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
-        {allResults.map((result, index) => (
+        {checkResultsOverview.map((result, index) => (
           <SectionWrapper
             key={index}
-            title={result.checkName ?? ''}
+            title={getDisplayCheckNameFromDictionary(result.checkName ?? '')}
             className=" mb-4"
           >
             <div className="flex items-center gap-x-1 min-w-60">
-              {result.results?.map((entry, index) => (
+              {result?.statuses?.map((status, index) => (
                 <Tooltip
                   key={index}
                   content={
                     <div className="text-white">
-                      {/* <div>Sensor value: {result}</div>
-                      
+                      <div>Sensor value: {result?.results?.[index]}</div>
                       <div>
                         Executed at:{' '}
-                        {entry.executedAt
+                        {result?.executedAtTimestamps
                           ? moment(
                               getLocalDateInUserTimeZone(
-                                new Date(entry.executedAt)
+                                new Date(result.executedAtTimestamps[index])
                               )
                             ).format('YYYY-MM-DD HH:mm:ss')
                           : ''}
                       </div>
                       <div>
                         Time period:{' '}
-                        {entry.timePeriod
-                          ? moment(
-                              getLocalDateInUserTimeZone(
-                                new Date(entry.timePeriod)
-                              )
-                            ).format('YYYY-MM-DD HH:mm:ss')
+                        {result?.timePeriodDisplayTexts
+                          ? result.timePeriodDisplayTexts[index]
                           : ''}
                       </div>
-                      <div>Data group: {entry.dataGroup}</div> */}
+                      <div>
+                        Data group:{' '}
+                        {result?.dataGroups ? result.dataGroups[index] : ''}
+                      </div>
                     </div>
                   }
                   className="max-w-80 py-2 px-2 bg-gray-800"
@@ -424,13 +597,13 @@ export default function ObservabilityStatus() {
       {!column && (
         <SectionWrapper
           title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
-          className="mb-6"
+          className="mb-6 max-w-200"
         >
           <div className="flex space-x-8 items-center">
             <div className="flex space-x-4 items-center">
               <div className="text-sm">Data group (time series)</div>
               <SelectTailwind
-                value={dataGroup || results?.[0]?.dataGroups?.[0]}
+                value={dataGroup || checkResultsEntry[0]?.dataGroup}
                 options={
                   (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
                     label: item ?? '',
@@ -509,26 +682,25 @@ export default function ObservabilityStatus() {
               </IconButton>
             </div>
           </div>
-          {results.length === 0 && (
-            <div className="text-gray-700 mt-5 text-sm">No Data</div>
-          )}
           {mode === 'chart' ? (
-            <ChartView data={results} />
+            <ChartView data={checkResultsEntry} />
           ) : (
-            <Table
-              className="mt-1 w-full"
-              columns={columns}
-              data={(results ?? []).map((item) => ({
-                ...item,
-                checkName: results[0].checkName
-                // executedAt: moment(
-                //   getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
-                // ).format('YYYY-MM-DD HH:mm:ss'),
-                // timePeriod: item.timePeriod?.replace(/T/g, ' ')
-              }))}
-              emptyMessage="No data"
-              getRowClass={getColor}
-            />
+            <div className="w-full overflow-x-auto">
+              <Table
+                className="mt-1 w-full"
+                columns={columns}
+                data={(checkResultsEntry ?? []).map((item) => ({
+                  ...item,
+                  checkName: checkResultsEntry[0].checkName,
+                  executedAt: moment(
+                    getLocalDateInUserTimeZone(new Date(String()))
+                  ).format('YYYY-MM-DD HH:mm:ss'),
+                  timePeriod: item.timePeriod?.replace(/T/g, ' ')
+                }))}
+                emptyMessage="No data"
+                getRowClass={getColor}
+              />
+            </div>
           )}
         </SectionWrapper>
       )}
