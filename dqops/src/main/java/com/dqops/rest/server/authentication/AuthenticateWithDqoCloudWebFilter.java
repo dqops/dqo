@@ -29,6 +29,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.signature.SignedObject;
+import com.dqops.rest.server.StaticResourcesConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.Strings;
@@ -47,6 +48,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,6 +58,21 @@ import java.util.Objects;
 @Component
 @Slf4j
 public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
+    /**
+     * URL paths of public urls that are available without authentication.
+     */
+    public static final List<String> ANONYMOUS_URLS = new ArrayList<>() {{
+        add(LOGO_PATH);
+        add(ISSUE_TOKEN_REQUEST_PATH);
+        add(HEALTHCHECK_REQUEST_PATH);
+        add(MANIFEST_JSON_REQUEST_PATH);
+    }};
+
+    /**
+     * Logo url.
+     */
+    public static final String LOGO_PATH = "/" + StaticResourcesConfiguration.LOGO_ICON_FILE_NAME;
+
     /**
      * Special url that receives a post with the authentication token received from DQOps Cloud.
      */
@@ -314,7 +331,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             }
 
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
-        } else if (Objects.equals(requestPath, HEALTHCHECK_REQUEST_PATH) || Objects.equals(requestPath, MANIFEST_JSON_REQUEST_PATH)) {
+        } else if (ANONYMOUS_URLS.stream().anyMatch(path -> requestPath.startsWith(path))) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAnonymousToken();
 
             ServerWebExchange mutatedExchange = exchange.mutate()
