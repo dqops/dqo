@@ -31,6 +31,7 @@ import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
+import com.dqops.rest.server.authentication.DqoAuthenticationMethod;
 import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
@@ -296,16 +297,16 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Allow starting DQOps without a DQOps Cloud API Key and without prompting to log in to DQOps Cloud.", defaultValue = "false")
     private Boolean dqoCloudStartWithoutApiKey;
 
-    @CommandLine.Option(names = {"--dqo.cloud.authenticate-with-dqo-cloud"},
-            description = "Turns on user authentication by using DQOps Cloud credentials. Users will be redirected to the DQOps Cloud login screen " +
-                    "to login and will be returned back to the local DQOps instance.", defaultValue = "false")
-    private Boolean dqoCloudAuthenticateWithDqoCloud;
-
     @CommandLine.Option(names = {"--dqo.instance.return-base-url"},
             description = "Base url of this instance that is used as a return url when authentication with DQOps Cloud credentials is forwarded and " +
                     "the user must be forwarded back to the current instance from the https://cloud.dqops.com login screen. " +
                     "When this parameter is not provided, DQOps will use the url from the \"Host\" HTTP header.")
     private String dqoInstanceReturnBaseUrl;
+
+    @CommandLine.Option(names = {"--dqo.webserver.authentication-method"},
+            description = "User authentication method. A standalone instance has no user authentication. " +
+                    "Paid versions of DQOps support federated authentication using Single-Sign-On. Please contact DQOps sales for details: https://dqops.com/contact-us/.", defaultValue = "none")
+    private DqoAuthenticationMethod dqoWebserverAuthenticationMethod;
 
     @CommandLine.Option(names = {"--dqo.instance.signature-key"},
             description = "DQOps local instance signature key that is used to issue and verify digital signatures on API keys. It is a base64 encoded byte array (32 bytes). " +

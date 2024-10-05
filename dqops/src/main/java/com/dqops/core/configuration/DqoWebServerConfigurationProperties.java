@@ -15,6 +15,7 @@
  */
 package com.dqops.core.configuration;
 
+import com.dqops.rest.server.authentication.DqoAuthenticationMethod;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoWebServerConfigurationProperties implements Cloneable {
     private Integer staticFilesCacheControlMaxAge;
     private Integer dynamicFilesCacheControlMaxAge;
+    private DqoAuthenticationMethod authenticationMethod = DqoAuthenticationMethod.none;
 
     /**
      * Returns the maximum age for public caching using a Cache-Control header for static files. The value is in seconds.
@@ -59,6 +61,22 @@ public class DqoWebServerConfigurationProperties implements Cloneable {
      */
     public void setDynamicFilesCacheControlMaxAge(Integer dynamicFilesCacheControlMaxAge) {
         this.dynamicFilesCacheControlMaxAge = dynamicFilesCacheControlMaxAge;
+    }
+
+    /**
+     * Returns the authentication method used to authenticate local users.
+     * @return Authentication method.
+     */
+    public DqoAuthenticationMethod getAuthenticationMethod() {
+        return authenticationMethod;
+    }
+
+    /**
+     * Sets an authentication method to authenticate local users.
+     * @param authenticationMethod Authentication method.
+     */
+    public void setAuthenticationMethod(DqoAuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = authenticationMethod;
     }
 
     /**

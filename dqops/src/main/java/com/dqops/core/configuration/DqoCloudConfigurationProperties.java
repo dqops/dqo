@@ -38,7 +38,6 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private int maxRetries = 5;
     private long retryBackoffMillis = 10;
     private boolean startWithoutApiKey;
-    private boolean authenticateWithDqoCloud;
     private long idleTimeoutSeconds = 30;
 
     /**
@@ -232,22 +231,6 @@ public class DqoCloudConfigurationProperties implements Cloneable {
      */
     public void setStartWithoutApiKey(boolean startWithoutApiKey) {
         this.startWithoutApiKey = startWithoutApiKey;
-    }
-
-    /**
-     * Enables user authentication using DQOps Cloud credentials.
-     * @return Authenticate users with DQOps Cloud.
-     */
-    public boolean isAuthenticateWithDqoCloud() {
-        return authenticateWithDqoCloud;
-    }
-
-    /**
-     * Sets the flag to enable user authentication with DQOps Cloud credentials.
-     * @param authenticateWithDqoCloud Authenticate users with DQOps Cloud credentials.
-     */
-    public void setAuthenticateWithDqoCloud(boolean authenticateWithDqoCloud) {
-        this.authenticateWithDqoCloud = authenticateWithDqoCloud;
     }
 
     /**

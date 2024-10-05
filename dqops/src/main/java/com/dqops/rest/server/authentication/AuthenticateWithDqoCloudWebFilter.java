@@ -18,6 +18,7 @@ package com.dqops.rest.server.authentication;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.configuration.DqoWebServerConfigurationProperties;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -81,6 +82,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     public static final String DATA_DOMAIN_COOKIE = "DQODataDomain";
 
 
+    private final DqoWebServerConfigurationProperties dqoWebServerConfigurationProperties;
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private final DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
@@ -91,7 +93,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     private final LocalDataDomainRegistry localDataDomainRegistry;
 
     @Autowired
-    public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
+    public AuthenticateWithDqoCloudWebFilter(DqoWebServerConfigurationProperties dqoWebServerConfigurationProperties,
+                                             DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                                              DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                              InstanceCloudLoginService instanceCloudLoginService,
                                              DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
@@ -99,6 +102,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                                              DqoUserPrincipalProvider dqoUserPrincipalProvider,
                                              DqoUserConfigurationProperties dqoUserConfigurationProperties,
                                              LocalDataDomainRegistry localDataDomainRegistry) {
+        this.dqoWebServerConfigurationProperties = dqoWebServerConfigurationProperties;
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
@@ -206,7 +210,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
         }
 
-        if (!this.dqoCloudConfigurationProperties.isAuthenticateWithDqoCloud()) {
+        if (this.dqoWebServerConfigurationProperties.getAuthenticationMethod() == DqoAuthenticationMethod.none) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey(activeDataDomainCloudName);
 
             if (log.isDebugEnabled()) {
