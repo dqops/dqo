@@ -69,6 +69,7 @@ public class SecurityWebFilterChainBuilderImpl implements SecurityWebFilterChain
         http.securityContextRepository(this.dqoServerSecurityContextRepository);
 
         http.authorizeExchange(customizer -> {
+            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.LOGO_PATH).permitAll();
             customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.ISSUE_TOKEN_REQUEST_PATH).permitAll();
             customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_REQUEST_PATH).permitAll();
             customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.MANIFEST_JSON_REQUEST_PATH).permitAll();
