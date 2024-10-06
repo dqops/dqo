@@ -44,7 +44,7 @@ export default function ObservabilityStatus() {
     column: string;
   } = useDecodedParams();
   const [checkResultsEntry, setCheckResultsEntry] = useState<
-    CheckResultEntryModel[]
+    Array<CheckResultEntryModel[]>
   >([]);
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     Array<CheckResultsOverviewDataModel>
@@ -56,7 +56,6 @@ export default function ObservabilityStatus() {
     check?: string;
   }>({ checkTypes, column });
   const [groupingOptions, setGroupingOptions] = useState<string[]>([]);
-  const [isAnomalyRowCount, setIsAnomalyRowCount] = useState<boolean>(false);
   const [dataGroup, setDataGroup] = useState<string | undefined>('');
   const [month, setMonth] = useState<string>('Last 3 months');
   const [mode, setMode] = useState<'chart' | 'table'>('chart');
@@ -67,20 +66,56 @@ export default function ObservabilityStatus() {
 
   useEffect(() => {
     const { startDate, endDate } = calculateDateRange(month);
-    const getRowCountResults = (results: Array<CheckResultsListModel>) => {
-      if (
-        results.find((result) =>
-          result.checkName?.includes('row_count_anomaly')
-        )
-      ) {
-        setIsAnomalyRowCount(true);
-        return results.filter((result) =>
-          result.checkName?.includes('row_count_anomaly')
-        )[0]?.checkResultEntries;
-      }
-      return results.filter((result) =>
-        result.checkName?.includes('row_count')
-      )[0]?.checkResultEntries;
+    const getResultsForCharts = (results: Array<CheckResultsListModel>) => {
+      const newResults: Array<CheckResultEntryModel[]> = [];
+      results.forEach((result) => {
+        if (!column) {
+          if (result.checkName === 'daily_row_count_anomaly') {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find((x) => x.checkName === 'daily_row_count_anomaly') &&
+            result.checkName === 'daily_row_count'
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName?.includes('daily_data_freshness_anomaly')) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_data_freshness_anomaly'
+            ) &&
+            result.checkName?.includes('daily_data_freshness')
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+        } else {
+          if (result.checkName?.includes('daily_nulls_percent_anomaly')) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_nulls_percent_anomaly'
+            ) &&
+            result.checkName?.includes('daily_nulls_percent')
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName?.includes('daily_distinct_count_anomaly')) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_distinct_count_anomaly'
+            ) &&
+            result.checkName?.includes('daily_distinct_count')
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+        }
+      });
+      return newResults;
     };
 
     const getCheckListData = (data: CheckResultsOverviewDataModel[]) => {
@@ -109,11 +144,11 @@ export default function ObservabilityStatus() {
               undefined,
               15
             ).then((res) => {
+              console.log(res.data);
               setGroupingOptions(
                 res.data.map((item) => item.dataGroup ?? '') ?? []
               );
-              console.log(res.data);
-              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
             });
             break;
           } else {
@@ -131,7 +166,8 @@ export default function ObservabilityStatus() {
               undefined,
               15
             ).then((res) => {
-              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+              console.log(res.data);
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
             });
             break;
           }
@@ -153,7 +189,7 @@ export default function ObservabilityStatus() {
               undefined,
               15
             ).then((res) => {
-              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
             });
             break;
           } else {
@@ -171,7 +207,7 @@ export default function ObservabilityStatus() {
               undefined,
               15
             ).then((res) => {
-              setCheckResultsEntry(getRowCountResults(res.data ?? []) ?? []);
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
             });
             break;
           }
@@ -180,79 +216,10 @@ export default function ObservabilityStatus() {
     };
 
     const filterColumnChecks = (data: CheckResultsOverviewDataModel[]) => {
-      if (
-        data.find(
-          (x) =>
-            x.checkCategory === 'daily_distinct_count_anomaly' &&
-            x.checkName === 'daily_nulls_percent_anomaly'
-        )
-      ) {
-        return data.filter(
-          (x) =>
-            x.checkCategory === 'schema' ||
-            x.checkName === 'daily_distinct_count_anomaly' ||
-            x.checkName === 'daily_nulls_percent_anomaly'
-        );
-      }
-      if (
-        data.find((x) => x.checkCategory === 'daily_distinct_count_anomaly')
-      ) {
-        return data.filter(
-          (x) =>
-            x.checkCategory === 'schema' ||
-            x.checkName === 'daily_distinct_count_anomaly' ||
-            x.checkName === 'daily_nulls_percent'
-        );
-      }
-      if (data.find((x) => x.checkCategory === 'daily_nulls_percent_anomaly')) {
-        return data.filter(
-          (x) =>
-            x.checkCategory === 'schema' ||
-            x.checkName === 'daily_nulls_percent_anomaly' ||
-            x.checkName === 'daily_distinct_count'
-        );
-      }
-      return data.filter(
-        (x) =>
-          x.checkCategory === 'schema' ||
-          x.checkName === 'daily_nulls_percent' ||
-          x.checkName === 'daily_distinct_count'
-      );
+      return data.filter((x) => x.checkCategory === 'schema');
     };
 
     const filterTableChecks = (data: CheckResultsOverviewDataModel[]) => {
-      if (
-        data.find(
-          (x) =>
-            x.checkCategory === 'daily_data_freshness_anomaly' &&
-            x.checkName === 'daily_nulls_percent_anomaly'
-        )
-      ) {
-        return data.filter(
-          (x) =>
-            x.checkCategory === 'schema' ||
-            x.checkName === 'daily_data_freshness_anomaly' ||
-            x.checkName === 'daily_nulls_percent_anomaly'
-        );
-      }
-      if (
-        data.find((x) => x.checkCategory === 'daily_data_freshness_anomaly')
-      ) {
-        return data.filter(
-          (x) =>
-            x.checkCategory === 'schema' ||
-            x.checkName === 'daily_data_freshness_anomaly' ||
-            x.checkName === 'daily_nulls_percent'
-        );
-      }
-      if (data.find((x) => x.checkCategory === 'daily_nulls_percent_anomaly')) {
-        return data.filter(
-          (x) =>
-            x.checkCategory === 'schema' ||
-            x.checkName === 'daily_nulls_percent_anomaly' ||
-            x.checkName === 'daily_nulls_percent'
-        );
-      }
       return data.filter((x) => x.checkCategory === 'schema');
     };
     const getOverviewData = () => {
@@ -268,7 +235,6 @@ export default function ObservabilityStatus() {
               undefined,
               undefined
             ).then((res) => {
-              console.log(res.data);
               setCheckResultsOverview(filterColumnChecks(res.data ?? []) ?? []);
               getCheckListData(res.data);
               //setResults(getRowCountResults(res.data ?? []) ?? []);
@@ -284,7 +250,6 @@ export default function ObservabilityStatus() {
               undefined,
               15
             ).then((res) => {
-              console.log(res.data);
               getCheckListData(res.data);
               setCheckResultsOverview(filterTableChecks(res.data ?? []) ?? []);
 
@@ -541,6 +506,7 @@ export default function ObservabilityStatus() {
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
+  console.log(checkResultsEntry);
   return (
     <div className="p-4 mt-2">
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
@@ -594,16 +560,13 @@ export default function ObservabilityStatus() {
           </SectionWrapper>
         ))}
       </div>
-      {!column && (
-        <SectionWrapper
-          title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
-          className="mb-6 max-w-200"
-        >
+      {checkResultsEntry.map((result, index) => (
+        <SectionWrapper title={''} className="mb-6 max-w-200" key={index}>
           <div className="flex space-x-8 items-center">
             <div className="flex space-x-4 items-center">
               <div className="text-sm">Data group (time series)</div>
               <SelectTailwind
-                value={dataGroup || checkResultsEntry[0]?.dataGroup}
+                value={dataGroup || result[0]?.dataGroup}
                 options={
                   (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
                     label: item ?? '',
@@ -683,15 +646,15 @@ export default function ObservabilityStatus() {
             </div>
           </div>
           {mode === 'chart' ? (
-            <ChartView data={checkResultsEntry} />
+            <ChartView data={result} />
           ) : (
             <div className="w-full overflow-x-auto">
               <Table
                 className="mt-1 w-full"
                 columns={columns}
-                data={(checkResultsEntry ?? []).map((item) => ({
+                data={(result ?? []).map((item) => ({
                   ...item,
-                  checkName: checkResultsEntry[0].checkName,
+                  checkName: result[0].checkName,
                   executedAt: moment(
                     getLocalDateInUserTimeZone(new Date(String()))
                   ).format('YYYY-MM-DD HH:mm:ss'),
@@ -703,7 +666,7 @@ export default function ObservabilityStatus() {
             </div>
           )}
         </SectionWrapper>
-      )}
+      ))}
       <SectionWrapper title="Data quality issues" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
           <div className="col-span-2">
