@@ -103,7 +103,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      */
     private String prepareUrlToIncident(IncidentNotificationMessage notificationMessage){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "/incidents/"
+                + "incidents/"
                 + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8) + "/"
                 + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getYear() + "/"
                 + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getMonthValue() + "/"
@@ -117,7 +117,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      */
     private String prepareUrlToTable(IncidentNotificationMessage notificationMessage){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "/sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
+                + "sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
                 + "/schema/" + URLEncoder.encode(notificationMessage.getSchema(), StandardCharsets.UTF_8)
                 + "/table/" + URLEncoder.encode(notificationMessage.getTable(), StandardCharsets.UTF_8)
                 + "/detail";
