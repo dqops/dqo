@@ -506,7 +506,7 @@ export default function ObservabilityStatus() {
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
-  console.log(checkResultsEntry);
+
   return (
     <div className="p-4 mt-2">
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
