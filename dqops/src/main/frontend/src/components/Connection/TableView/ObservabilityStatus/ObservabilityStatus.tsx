@@ -5,10 +5,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckResultEntryModel,
   CheckResultsListModel,
+  CheckResultsOverviewDataModel,
   IssueHistogramModel
 } from '../../../../api';
 import { BarChart } from '../../../../pages/IncidentDetail/BarChart';
-import { CheckResultApi } from '../../../../services/apiClient';
+import {
+  CheckResultApi,
+  CheckResultOverviewApi
+} from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import {
   getLocalDateInUserTimeZone,
@@ -18,8 +22,12 @@ import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import { ChartView } from '../../../DataQualityChecks/CheckDetails/ChartView';
 import SelectTailwind from '../../../Select/SelectTailwind';
 import SvgIcon from '../../../SvgIcon';
-import { calculateDateRange, getColor } from './ObservabilityStatus.utils';
 import { Table } from '../../../Table';
+import {
+  calculateDateRange,
+  getColor,
+  getDisplayCheckNameFromDictionary
+} from './ObservabilityStatus.utils';
 
 export default function ObservabilityStatus() {
   const {
@@ -35,8 +43,12 @@ export default function ObservabilityStatus() {
     table: string;
     column: string;
   } = useDecodedParams();
-  const [results, setResults] = useState<CheckResultEntryModel[]>([]);
-  const [allResults, setAllResults] = useState<CheckResultsListModel[]>([]);
+  const [checkResultsEntry, setCheckResultsEntry] = useState<
+    Array<CheckResultEntryModel[]>
+  >([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    Array<CheckResultsOverviewDataModel>
+  >([]);
   const [histograms, setHistograms] = useState<IssueHistogramModel>({});
   const [histogramFilter, setHistogramFilter] = useState<{
     checkTypes: CheckTypes;
@@ -44,7 +56,6 @@ export default function ObservabilityStatus() {
     check?: string;
   }>({ checkTypes, column });
   const [groupingOptions, setGroupingOptions] = useState<string[]>([]);
-  const [isAnomalyRowCount, setIsAnomalyRowCount] = useState<boolean>(false);
   const [dataGroup, setDataGroup] = useState<string | undefined>('');
   const [month, setMonth] = useState<string>('Last 3 months');
   const [mode, setMode] = useState<'chart' | 'table'>('chart');
@@ -55,120 +66,236 @@ export default function ObservabilityStatus() {
 
   useEffect(() => {
     const { startDate, endDate } = calculateDateRange(month);
-    const getRowCountResults = (results: Array<CheckResultsListModel>) => {
-      if (
-        results.find((result) =>
-          result.checkName?.includes('row_count_anomaly')
-        )
-      ) {
-        setIsAnomalyRowCount(true);
-        return results.filter((result) =>
-          result.checkName?.includes('row_count_anomaly')
-        )[0]?.checkResultEntries;
-      }
-      return results.filter((result) =>
-        result.checkName?.includes('row_count')
-      )[0]?.checkResultEntries;
+    const getResultsForCharts = (results: Array<CheckResultsListModel>) => {
+      const newResults: Array<CheckResultEntryModel[]> = [];
+      results.forEach((result) => {
+        if (!column) {
+          if (result.checkName === 'daily_row_count_anomaly') {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find((x) => x.checkName === 'daily_row_count_anomaly') &&
+            result.checkName === 'daily_row_count'
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName?.includes('daily_data_freshness_anomaly')) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_data_freshness_anomaly'
+            ) &&
+            result.checkName?.includes('daily_data_freshness')
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+        } else {
+          if (result.checkName?.includes('daily_nulls_percent_anomaly')) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_nulls_percent_anomaly'
+            ) &&
+            result.checkName?.includes('daily_nulls_percent')
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName?.includes('daily_distinct_count_anomaly')) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_distinct_count_anomaly'
+            ) &&
+            result.checkName?.includes('daily_distinct_count')
+          ) {
+            newResults.push(result.checkResultEntries ?? []);
+          }
+        }
+      });
+      return newResults;
     };
-    switch (checkTypes) {
-      case CheckTypes.MONITORING: {
-        if (column) {
-          CheckResultApi.getColumnMonitoringChecksResults(
-            connection,
-            schema,
-            table,
-            column,
-            'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setGroupingOptions(
-              res.data.map((item) => item.dataGroup ?? '') ?? []
-            );
-            console.log(res.data);
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
-        } else {
-          CheckResultApi.getTableMonitoringChecksResults(
-            connection,
-            schema,
-            table,
-            'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setGroupingOptions(res.data.map((item) => item.dataGroup ?? ''));
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
+
+    const getCheckListData = (data: CheckResultsOverviewDataModel[]) => {
+      const isAnomalyRowCount = data.find((x) =>
+        x.checkName?.includes('row_count_anomaly')
+      );
+      const isRowCount = data.find((x) => x.checkName?.includes('row_count'));
+      if (!isAnomalyRowCount && !isRowCount) {
+        return;
+      }
+      switch (checkTypes) {
+        case CheckTypes.MONITORING: {
+          if (column) {
+            CheckResultApi.getColumnMonitoringChecksResults(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              console.log(res.data);
+              setGroupingOptions(
+                res.data.map((item) => item.dataGroup ?? '') ?? []
+              );
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultApi.getTableMonitoringChecksResults(
+              connection,
+              schema,
+              table,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              console.log(res.data);
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
+            });
+            break;
+          }
+        }
+        case CheckTypes.PARTITIONED: {
+          if (column) {
+            CheckResultApi.getColumnPartitionedChecksResults(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultApi.getTablePartitionedChecksResults(
+              connection,
+              schema,
+              table,
+              'daily',
+              dataGroup,
+              startDate,
+              endDate,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
+            });
+            break;
+          }
         }
       }
-      case CheckTypes.PARTITIONED: {
-        if (column) {
-          CheckResultApi.getColumnPartitionedChecksResults(
-            connection,
-            schema,
-            table,
-            column,
-            'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
-        } else {
-          CheckResultApi.getTablePartitionedChecksResults(
-            connection,
-            schema,
-            table,
-            'daily',
-            dataGroup,
-            startDate,
-            endDate,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            15
-          ).then((res) => {
-            setAllResults(
-              res.data.filter((x) => x.checkCategory === 'schema') ?? []
-            );
-            setResults(getRowCountResults(res.data ?? []) ?? []);
-          });
-          break;
+    };
+
+    const filterColumnChecks = (data: CheckResultsOverviewDataModel[]) => {
+      return data.filter((x) => x.checkCategory === 'schema');
+    };
+
+    const filterTableChecks = (data: CheckResultsOverviewDataModel[]) => {
+      return data.filter((x) => x.checkCategory === 'schema');
+    };
+    const getOverviewData = () => {
+      switch (checkTypes) {
+        case CheckTypes.MONITORING: {
+          if (column) {
+            CheckResultOverviewApi.getColumnMonitoringChecksOverview(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              undefined,
+              undefined
+            ).then((res) => {
+              setCheckResultsOverview(filterColumnChecks(res.data ?? []) ?? []);
+              getCheckListData(res.data);
+              //setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultOverviewApi.getTableMonitoringChecksOverview(
+              connection,
+              schema,
+              table,
+              'daily',
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              getCheckListData(res.data);
+              setCheckResultsOverview(filterTableChecks(res.data ?? []) ?? []);
+
+              // setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          }
+        }
+        case CheckTypes.PARTITIONED: {
+          if (column) {
+            CheckResultOverviewApi.getColumnPartitionedChecksOverview(
+              connection,
+              schema,
+              table,
+              column,
+              'daily',
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              getCheckListData(res.data);
+              setCheckResultsOverview(filterColumnChecks(res.data ?? []) ?? []);
+              //  setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          } else {
+            CheckResultOverviewApi.getTablePartitionedChecksOverview(
+              connection,
+              schema,
+              table,
+              'daily',
+
+              undefined,
+              undefined,
+              15
+            ).then((res) => {
+              getCheckListData(res.data);
+              setCheckResultsOverview(filterTableChecks(res.data ?? []) ?? []);
+              //  setResults(getRowCountResults(res.data ?? []) ?? []);
+            });
+            break;
+          }
         }
       }
-    }
+    };
+    getOverviewData();
   }, [checkTypes, connection, schema, table, column, month]);
 
   const monthOptions = useMemo(() => {
@@ -199,7 +326,6 @@ export default function ObservabilityStatus() {
       histogramFilter.check,
       checkTypes as 'monitoring' | 'partitioned'
     ).then((res) => {
-      console.log(res.data);
       setHistograms(res.data);
     });
   }, [connection, schema, table, column, histogramFilter]);
@@ -380,56 +506,53 @@ export default function ObservabilityStatus() {
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     }
   ];
+
   return (
     <div className="p-4 mt-2">
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
-        {allResults.map((result, index) => (
+        {checkResultsOverview.map((result, index) => (
           <SectionWrapper
             key={index}
-            title={result.checkDisplayName ?? ''}
+            title={getDisplayCheckNameFromDictionary(result.checkName ?? '')}
             className=" mb-4"
           >
             <div className="flex items-center gap-x-1 min-w-60">
-              {result.checkResultEntries?.map((entry, index) => (
+              {result?.statuses?.map((status, index) => (
                 <Tooltip
                   key={index}
                   content={
                     <div className="text-white">
-                      <div>Sensor value: {entry.sensorName}</div>
-                      {/* <div>
-                                                  Most severe status:{' '}
-                                                  <span className="capitalize">
-                                                    {getStatusLabel(status)}
-                                                  </span>
-                                                </div> */}
+                      <div>Sensor value: {result?.results?.[index]}</div>
                       <div>
                         Executed at:{' '}
-                        {entry.executedAt
+                        {result?.executedAtTimestamps
                           ? moment(
                               getLocalDateInUserTimeZone(
-                                new Date(entry.executedAt)
+                                new Date(result.executedAtTimestamps[index])
                               )
                             ).format('YYYY-MM-DD HH:mm:ss')
                           : ''}
                       </div>
                       <div>
                         Time period:{' '}
-                        {entry.timePeriod
-                          ? moment(
-                              getLocalDateInUserTimeZone(
-                                new Date(entry.timePeriod)
-                              )
-                            ).format('YYYY-MM-DD HH:mm:ss')
+                        {result?.timePeriodDisplayTexts
+                          ? result.timePeriodDisplayTexts[index]
                           : ''}
                       </div>
-                      <div>Data group: {entry.dataGroup}</div>
+                      <div>
+                        Data group:{' '}
+                        {result?.dataGroups ? result.dataGroups[index] : ''}
+                      </div>
                     </div>
                   }
                   className="max-w-80 py-2 px-2 bg-gray-800"
                 >
                   <div
                     key={index}
-                    className={clsx('w-3 h-3', getColor(entry.severity))}
+                    className={clsx(
+                      'w-3 h-3',
+                      getColor(result.statuses?.[index])
+                    )}
                   />
                 </Tooltip>
               ))}
@@ -437,116 +560,116 @@ export default function ObservabilityStatus() {
           </SectionWrapper>
         ))}
       </div>
-      {!column && (
-        <SectionWrapper
-          title={isAnomalyRowCount ? 'Anomaly row count' : 'Row count'}
-          className="mb-6"
-        >
-          <div className="flex space-x-8 items-center">
-            <div className="flex space-x-4 items-center">
-              <div className="text-sm">Data group (time series)</div>
-              <SelectTailwind
-                value={dataGroup || results[0]?.dataGroup}
-                options={
-                  (Array.from(new Set(groupingOptions)) ?? []).map((item) => ({
-                    label: item ?? '',
-                    value: item
-                  })) || []
-                }
-                onChange={setDataGroup}
-              />
-            </div>
-            <div className="flex space-x-4 items-center">
-              <div className="text-sm">Month</div>
-              <SelectTailwind
-                value={month}
-                options={monthOptions}
-                onChange={setMonth}
-              />
-            </div>
-            <div className="flex space-x-4 items-center">
-              <IconButton
-                ripple={false}
-                size="sm"
-                className={
-                  mode === 'chart'
-                    ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
-                    : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
-                }
-                onClick={() => {
-                  setMode('table');
-                }}
-              >
-                <Tooltip
-                  content="View results in a table"
-                  className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+      {(checkResultsEntry.length > 0 ? checkResultsEntry : [[]]).map(
+        (result, index) => (
+          <SectionWrapper title={''} className="mb-6 max-w-200" key={index}>
+            <div className="flex space-x-8 items-center">
+              <div className="flex space-x-4 items-center">
+                <div className="text-sm">Data group (time series)</div>
+                <SelectTailwind
+                  value={dataGroup || result[0]?.dataGroup}
+                  options={
+                    (Array.from(new Set(groupingOptions)) ?? []).map(
+                      (item) => ({
+                        label: item ?? '',
+                        value: item
+                      })
+                    ) || []
+                  }
+                  onChange={setDataGroup}
+                />
+              </div>
+              <div className="flex space-x-4 items-center">
+                <div className="text-sm">Month</div>
+                <SelectTailwind
+                  value={month}
+                  options={monthOptions}
+                  onChange={setMonth}
+                />
+              </div>
+              <div className="flex space-x-4 items-center">
+                <IconButton
+                  ripple={false}
+                  size="sm"
+                  className={
+                    mode === 'chart'
+                      ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                      : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+                  }
+                  onClick={() => {
+                    setMode('table');
+                  }}
                 >
-                  <div>
-                    <SvgIcon
-                      name="table"
-                      className={clsx(
-                        'w-4 h-4 cursor-pointer ',
-                        mode === 'table'
-                          ? 'font-bold text-white'
-                          : 'text-teal-500'
-                      )}
-                    />
-                  </div>
-                </Tooltip>
-              </IconButton>
-              <IconButton
-                size="sm"
-                ripple={false}
-                className={
-                  mode === 'table'
-                    ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
-                    : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
-                }
-                onClick={() => {
-                  setMode('chart');
-                }}
-              >
-                <Tooltip
-                  content="View results in a graph"
-                  className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+                  <Tooltip
+                    content="View results in a table"
+                    className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+                  >
+                    <div>
+                      <SvgIcon
+                        name="table"
+                        className={clsx(
+                          'w-4 h-4 cursor-pointer ',
+                          mode === 'table'
+                            ? 'font-bold text-white'
+                            : 'text-teal-500'
+                        )}
+                      />
+                    </div>
+                  </Tooltip>
+                </IconButton>
+                <IconButton
+                  size="sm"
+                  ripple={false}
+                  className={
+                    mode === 'table'
+                      ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                      : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+                  }
+                  onClick={() => {
+                    setMode('chart');
+                  }}
                 >
-                  <div>
-                    <SvgIcon
-                      name="chart-line"
-                      className={clsx(
-                        'w-4 h-4 cursor-pointer',
-                        mode === 'chart'
-                          ? 'font-bold text-white'
-                          : 'text-teal-500'
-                      )}
-                    />
-                  </div>
-                </Tooltip>
-              </IconButton>
+                  <Tooltip
+                    content="View results in a graph"
+                    className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+                  >
+                    <div>
+                      <SvgIcon
+                        name="chart-line"
+                        className={clsx(
+                          'w-4 h-4 cursor-pointer',
+                          mode === 'chart'
+                            ? 'font-bold text-white'
+                            : 'text-teal-500'
+                        )}
+                      />
+                    </div>
+                  </Tooltip>
+                </IconButton>
+              </div>
             </div>
-          </div>
-          {results.length === 0 && (
-            <div className="text-gray-700 mt-5 text-sm">No Data</div>
-          )}
-          {mode === 'chart' ? (
-            <ChartView data={results} />
-          ) : (
-            <Table
-              className="mt-1 w-full"
-              columns={columns}
-              data={(results ?? []).map((item) => ({
-                ...item,
-                checkName: results[0].checkName,
-                executedAt: moment(
-                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
-                ).format('YYYY-MM-DD HH:mm:ss'),
-                timePeriod: item.timePeriod?.replace(/T/g, ' ')
-              }))}
-              emptyMessage="No data"
-              getRowClass={getColor}
-            />
-          )}
-        </SectionWrapper>
+            {mode === 'chart' ? (
+              <ChartView data={result} />
+            ) : (
+              <div className="w-full overflow-x-auto">
+                <Table
+                  className="mt-1 w-full"
+                  columns={columns}
+                  data={(result ?? []).map((item) => ({
+                    ...item,
+                    checkName: result[0].checkName,
+                    executedAt: moment(
+                      getLocalDateInUserTimeZone(new Date(String()))
+                    ).format('YYYY-MM-DD HH:mm:ss'),
+                    timePeriod: item.timePeriod?.replace(/T/g, ' ')
+                  }))}
+                  emptyMessage="No data"
+                  getRowClass={getColor}
+                />
+              </div>
+            )}
+          </SectionWrapper>
+        )
       )}
       <SectionWrapper title="Data quality issues" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
