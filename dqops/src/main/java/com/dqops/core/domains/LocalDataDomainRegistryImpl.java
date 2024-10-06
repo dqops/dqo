@@ -155,7 +155,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
     @Override
     public Collection<LocalDataDomainSpec> getNestedDataDomains() {
         if (this.localDataDomainManager == null) {
-            throw new DqoRuntimeException("Data domain registry not initialized yet");
+            return null; // cannot return null yet, because of race conditions when the web server starts before services
         }
 
         synchronized (this.lock) {

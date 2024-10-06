@@ -30,13 +30,13 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * Data lineage model that describes one source table of the current table.
+ * Data lineage model that describes one source or target table of the current table.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableLineageSourceListModel", description = "Data lineage model that describes one source table of the current table.")
-public class TableLineageSourceListModel {
+@ApiModel(value = "TableLineageTableListModel", description = "Data lineage model that describes one source or target table of the current table.")
+public class TableLineageTableListModel {
     /**
      * The connection name where the target table is defined
      */
@@ -99,7 +99,7 @@ public class TableLineageSourceListModel {
     @JsonPropertyDescription("The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. " +
             "In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private TableCurrentDataQualityStatusModel sourceTableDataQualityStatus;
+    private TableCurrentDataQualityStatusModel tableDataQualityStatus;
 
     /**
      * Creates a table lineage list model from a source specification.
@@ -107,10 +107,10 @@ public class TableLineageSourceListModel {
      * @param canEdit True if the current user can edit the object.
      * @return Source table lineage model.
      */
-    public static TableLineageSourceListModel fromSpecification(TableLineageSourceSpec sourceSpec, boolean canEdit) {
+    public static TableLineageTableListModel fromSpecification(TableLineageSourceSpec sourceSpec, boolean canEdit) {
         HierarchyId hierarchyId = sourceSpec.getHierarchyId();
 
-        return new TableLineageSourceListModel() {{
+        return new TableLineageTableListModel() {{
             setTargetConnection(hierarchyId != null ? hierarchyId.getConnectionName() : null);
             setTargetSchema(hierarchyId != null ? hierarchyId.getPhysicalTableName().getSchemaName() : null);
             setTargetTable(hierarchyId != null ? hierarchyId.getPhysicalTableName().getTableName() : null);
@@ -122,10 +122,10 @@ public class TableLineageSourceListModel {
         }};
     }
 
-    public static class TableLineageSourceListModelSampleFactory implements SampleValueFactory<TableLineageSourceListModel> {
+    public static class TableLineageSourceListModelSampleFactory implements SampleValueFactory<TableLineageTableListModel> {
         @Override
-        public TableLineageSourceListModel createSample() {
-            return new TableLineageSourceListModel() {{
+        public TableLineageTableListModel createSample() {
+            return new TableLineageTableListModel() {{
                 setSourceConnection("sourcedb");
                 setSourceSchema("app");
                 setSourceTable("t_customers");
