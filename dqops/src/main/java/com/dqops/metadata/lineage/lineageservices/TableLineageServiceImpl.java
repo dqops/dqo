@@ -120,14 +120,15 @@ public class TableLineageServiceImpl implements TableLineageService {
             LinkedHashSet<DomainConnectionTableKey> onStackTables) {
         TableCurrentDataQualityStatusModel targetTableQualityStatus = this.tableStatusCache.getCurrentTableStatus(
                 targetTable, null);
+        boolean tableExists = checkIfTableExists(userHome, targetTable);
 
-        if (targetTableQualityStatus == null || !checkIfTableExists(userHome, targetTable)) {
+        if (targetTableQualityStatus == null && tableExists) {
             tableLineageModel.setDataLineageFullyLoaded(false);
         }
 
         TableCurrentDataQualityStatusModel resultStatus = targetTableQualityStatus == null ?
                 new TableCurrentDataQualityStatusModel() {{
-                    setTableExist(false);
+                    setTableExist(tableExists);
                 }} : targetTableQualityStatus.deepClone();
 
         visitedTables.add(targetTable);
@@ -136,8 +137,7 @@ public class TableLineageServiceImpl implements TableLineageService {
         TableLineageCacheEntry tableLineageEntry = this.tableLineageCache.getTableLineageEntry(targetTable);
         if (tableLineageEntry != null) {
             if (tableLineageEntry.getStatus() != TableLineageRefreshStatus.LOADED) {
-                tableLineageModel.setDataLineageFullyLoaded(false);
-                resultStatus.setTableExist(false); // some missing information, requires reload
+                tableLineageModel.setDataLineageFullyLoaded(false); // some missing information, requires reload
             }
 
             Set<DomainConnectionTableKey> upstreamSourceTables = tableLineageEntry.getUpstreamSourceTables();
@@ -145,7 +145,7 @@ public class TableLineageServiceImpl implements TableLineageService {
                 TableCurrentDataQualityStatusModel upstreamOnlyQualityStatus = this.tableStatusCache.getCurrentTableStatus(upstreamTableKey, null);
                 if (upstreamOnlyQualityStatus == null) {
                     upstreamOnlyQualityStatus = new TableCurrentDataQualityStatusModel() {{
-                        setTableExist(false);
+                        setTableExist(checkIfTableExists(userHome, upstreamTableKey));
                     }};
                 }
 
@@ -170,8 +170,9 @@ public class TableLineageServiceImpl implements TableLineageService {
                 }
             }
         } else {
-            tableLineageModel.setDataLineageFullyLoaded(false);
-            resultStatus.setTableExist(false); // some missing information, requires reload
+            if (tableExists) {
+                tableLineageModel.setDataLineageFullyLoaded(false); // some missing information, requires reload
+            }
         }
 
         onStackTables.remove(targetTable);
@@ -198,7 +199,8 @@ public class TableLineageServiceImpl implements TableLineageService {
         onStackTables.add(sourceTable);
 
         TableCurrentDataQualityStatusModel sourceTableQualityStatus = this.tableStatusCache.getCurrentTableStatus(sourceTable, null);
-        if (sourceTableQualityStatus == null || !checkIfTableExists(userHome, sourceTable)) {
+        boolean tableExists = checkIfTableExists(userHome, sourceTable);
+        if (sourceTableQualityStatus == null && tableExists) {
             tableLineageModel.setDataLineageFullyLoaded(false);
         }
 
@@ -206,8 +208,7 @@ public class TableLineageServiceImpl implements TableLineageService {
 
         if (tableLineageEntry != null) {
             if (tableLineageEntry.getStatus() != TableLineageRefreshStatus.LOADED) {
-                tableLineageModel.setDataLineageFullyLoaded(false);
-                upstreamCombinedQualityStatus.setTableExist(false); // some missing information, requires reload
+                tableLineageModel.setDataLineageFullyLoaded(false); // some missing information, requires reload
             }
 
             Set<DomainConnectionTableKey> downstreamTargetTables = tableLineageEntry.getDownstreamTargetTables();
@@ -238,8 +239,9 @@ public class TableLineageServiceImpl implements TableLineageService {
                 }
             }
         } else {
-            tableLineageModel.setDataLineageFullyLoaded(false);
-            upstreamCombinedQualityStatus.setTableExist(false); // some missing information, requires reload
+            if (tableExists) {
+                tableLineageModel.setDataLineageFullyLoaded(false); // some missing information, requires reload
+            }
         }
 
         onStackTables.remove(sourceTable);

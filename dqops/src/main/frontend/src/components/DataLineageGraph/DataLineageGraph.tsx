@@ -50,6 +50,7 @@ export default function DataLineageGraph({
 
   useEffect(() => {
     window.showDataLineage = showDataLineage;
+    let timer : NodeJS.Timeout;
 
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
@@ -61,10 +62,11 @@ export default function DataLineageGraph({
         );
         const data = response.data;
 
+
         tableDataLineageRef.current = data;
 
         if (!data.data_lineage_fully_loaded) {
-          setTimeout(() => fetchTableDataLineageGraph(), 500);
+          timer = setTimeout(() => fetchTableDataLineageGraph(), 500);
         }
 
         const colors: string[] = [];
@@ -103,6 +105,9 @@ export default function DataLineageGraph({
 
     return () => {
       window.showDataLineage = null;
+      if (timer) {
+        clearTimeout(timer);
+      }
     };
   }, [connection, schema, table]);
 
