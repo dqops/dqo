@@ -27,6 +27,7 @@ import com.dqops.cli.commands.run.RunCliCommand;
 import com.dqops.cli.commands.scheduler.SchedulerCliCommand;
 import com.dqops.cli.commands.sensor.SensorCliCommand;
 import com.dqops.cli.commands.settings.SettingsCliCommand;
+import com.dqops.cli.commands.sso.SsoCliCommand;
 import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -71,7 +72,8 @@ import java.util.List;
             SchedulerCliCommand.class,
             DataCliCommand.class,
             RunCliCommand.class,
-            RuleCliCommand.class
+            RuleCliCommand.class,
+            SsoCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {

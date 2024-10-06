@@ -155,7 +155,16 @@ const CheckListItem = ({
     }
     if (check?.configured) {
       toggleExpand();
-      const initTabs = [
+      const initTabs = isDefaultEditing ? [
+        {
+          label: 'Check Settings',
+          value: 'check-settings'
+        },
+        {
+          label: 'Comments',
+          value: 'comments'
+        }
+      ] : [
         {
           label: 'Check Settings',
           value: 'check-settings'
