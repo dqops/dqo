@@ -53,7 +53,6 @@ type ChartType = {
   checkName: string;
   dataGroup?: string;
 };
-
 export const getResultsForCharts = (
   results: Array<CheckResultsListModel>,
   column?: string,
@@ -63,10 +62,19 @@ export const getResultsForCharts = (
   const newResults: Array<ChartType> = [];
   results.forEach((result) => {
     if (!column) {
+      // Row Count Checks
       if (result.checkName === 'daily_row_count_anomaly') {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
+          dataGroup,
+          checkName: result?.checkName ?? ''
+        });
+      }
+      if (result.checkName === 'daily_partition_row_count_anomaly') {
+        newResults.push({
+          results: result.checkResultEntries ?? [],
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
@@ -77,15 +85,30 @@ export const getResultsForCharts = (
       ) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
       }
+      if (
+        !results.find(
+          (x) => x.checkName === 'daily_partition_row_count_anomaly'
+        ) &&
+        result.checkName === 'daily_partition_row_count'
+      ) {
+        newResults.push({
+          results: result.checkResultEntries ?? [],
+          month: month ?? 'Last 3 months',
+          dataGroup,
+          checkName: result?.checkName ?? ''
+        });
+      }
+
+      // Data Freshness Checks
       if (result.checkName?.includes('daily_data_freshness_anomaly')) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
@@ -96,16 +119,25 @@ export const getResultsForCharts = (
       ) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
       }
     } else {
+      // Nulls Percent Checks
       if (result.checkName?.includes('daily_nulls_percent_anomaly')) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
+          dataGroup,
+          checkName: result?.checkName ?? ''
+        });
+      }
+      if (result.checkName?.includes('daily_partition_nulls_percent_anomaly')) {
+        newResults.push({
+          results: result.checkResultEntries ?? [],
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
@@ -116,15 +148,40 @@ export const getResultsForCharts = (
       ) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
       }
+      if (
+        !results.find(
+          (x) => x.checkName === 'daily_partition_nulls_percent_anomaly'
+        ) &&
+        result.checkName?.includes('daily_partition_nulls_percent')
+      ) {
+        newResults.push({
+          results: result.checkResultEntries ?? [],
+          month: month ?? 'Last 3 months',
+          dataGroup,
+          checkName: result?.checkName ?? ''
+        });
+      }
+
+      // Distinct Count Checks
       if (result.checkName?.includes('daily_distinct_count_anomaly')) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
+          dataGroup,
+          checkName: result?.checkName ?? ''
+        });
+      }
+      if (
+        result.checkName?.includes('daily_partition_distinct_count_anomaly')
+      ) {
+        newResults.push({
+          results: result.checkResultEntries ?? [],
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
@@ -135,12 +192,26 @@ export const getResultsForCharts = (
       ) {
         newResults.push({
           results: result.checkResultEntries ?? [],
-          month: 'Last 3 months',
+          month: month ?? 'Last 3 months',
+          dataGroup,
+          checkName: result?.checkName ?? ''
+        });
+      }
+      if (
+        !results.find(
+          (x) => x.checkName === 'daily_partition_distinct_count_anomaly'
+        ) &&
+        result.checkName?.includes('daily_partition_distinct_count')
+      ) {
+        newResults.push({
+          results: result.checkResultEntries ?? [],
+          month: month ?? 'Last 3 months',
           dataGroup,
           checkName: result?.checkName ?? ''
         });
       }
     }
   });
+
   return newResults;
 };
