@@ -560,7 +560,7 @@ The parameters for a single configured data quality checks are shown on the
 [data quality check editor screen](dqops-user-interface-overview.md#check-editor) in the user interface
 after clicking the wheel icon.
 
-![Data quality check settings panel in DQOps](https://dqops.com/docs/images/concepts/configuring-checks/check_level_settings_panel_min.png){ loading=lazy; width="1200px" }
+![Data quality check settings panel in DQOps](https://dqops.com/docs/images/concepts/configuring-checks/check-level-settings-panel2.png){ loading=lazy; width="1200px" }
 
 
 ### **Disable a data quality check**
