@@ -113,6 +113,14 @@ public class Db2ConnectionProvider extends AbstractSqlConnectionProvider {
             connectionSpec.setDb2(db2Spec);
         }
 
+        if (db2Spec.getDb2PlatformType() == null) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--db2-platform");
+            }
+            Db2PlatformType platformType = terminalReader.promptEnum("DB2 platform type (--db2-platform)", Db2PlatformType.class, null, false);
+            db2Spec.setDb2PlatformType(platformType);
+        }
+
         if (Strings.isNullOrEmpty(db2Spec.getHost())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--db2-host");

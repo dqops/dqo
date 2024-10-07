@@ -31,6 +31,10 @@ public class Db2ParametersSpec extends BaseProviderParametersSpec
         }
     };
 
+    @CommandLine.Option(names = {"--db2-platform"}, description = "DB2 platform type.")
+    @JsonPropertyDescription("DB2 platform type. Supports also a ${DB2_PLATFORM} configuration with a custom environment variable.")
+    private Db2PlatformType db2PlatformType;
+
     @CommandLine.Option(names = {"--db2-host"}, description = "DB2 host name")
     @JsonPropertyDescription("DB2 host name. Supports also a ${DB2_HOST} configuration with a custom environment variable.")
     private String host;
@@ -55,6 +59,23 @@ public class Db2ParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
+
+    /**
+     * Returns the DB2 platform type.
+     * @return DB2 platform type.
+     */
+    public Db2PlatformType getDb2PlatformType() {
+        return db2PlatformType;
+    }
+
+    /**
+     * Sets the DB2 platform type.
+     * @param db2PlatformType New DB2 platform type.
+     */
+    public void setDb2PlatformType(Db2PlatformType db2PlatformType) {
+        setDirtyIf(!Objects.equals(this.db2PlatformType, db2PlatformType));
+        this.db2PlatformType = db2PlatformType;
+    }
 
     /**
      * Returns the host name.

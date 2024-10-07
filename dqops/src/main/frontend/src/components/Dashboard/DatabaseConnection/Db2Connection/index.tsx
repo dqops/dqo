@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import {
   Db2ParametersSpec,
+  Db2ParametersSpecDb2PlatformTypeEnum,
   SharedCredentialListModel,
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
@@ -18,17 +19,16 @@ interface IDb2ParametersSpec {
   onNameOfDatabaseChange?: (name: string) => void;
 }
 
-// const options = [
-//   {
-//     label: 'Trino',
-//     value: TrinoParametersSpecTrinoEngineTypeEnum.trino
-//   },
-//   {
-//     label: 'AWS Athena',
-//     value: TrinoParametersSpecTrinoEngineTypeEnum.athena
-//   }
-// ];
-
+const options = [
+  {
+    label: 'LUW',
+    value: Db2ParametersSpecDb2PlatformTypeEnum.luw
+  },
+  {
+    label: 'z/OS',
+    value: Db2ParametersSpecDb2PlatformTypeEnum.zos
+  }
+];
 
 const Db2Connection = ({
   db2,
@@ -48,28 +48,18 @@ const Db2Connection = ({
 
   return (
     <SectionWrapper title="DB2 connection parameters" className="mb-4">
-      {/* <Select
-        label="Trino engine type"
+      <Select
+        label="DB2 platform type"
         options={options}
-        className={clsx(
-          'mb-4',
-          !trino?.trino_engine_type ? 'border border-red-500' : ''
-        )}
+        className={'mb-4'}
         value={
-          trino?.trino_engine_type ||
-          (nameOfDatabase &&
-            (nameOfDatabase.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum))
+           db2?.db2_platform_type ||
+           (nameOfDatabase &&
+            (nameOfDatabase.toLowerCase() as Db2ParametersSpecDb2PlatformTypeEnum) )
         }
         onChange={(value) => {
-          handleChange({
-            trino_engine_type: value,
-            catalog:
-              value === TrinoParametersSpecTrinoEngineTypeEnum.trino
-                ? ''
-                : 'awsdatacatalog'
-          }),
-            value &&
-              onNameOfDatabaseChange &&
+          handleChange({ db2_platform_type: value }),
+            value && onNameOfDatabaseChange &&
               onNameOfDatabaseChange(
                 String(value).replace(/\w/, (x) => x.toUpperCase())
               );
@@ -77,37 +67,37 @@ const Db2Connection = ({
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
         menuClassName="!top-14"
-      /> */}
-        <FieldTypeInput
-          data={sharedCredentials}
-          label="Host"
-          className="mb-4"
-          value={db2?.host}
-          onChange={(value) => handleChange({ host: value })}
-          inputClassName={!db2?.host ? 'border border-red-500' : ''}
-        />
-        <FieldTypeInput
-          data={sharedCredentials}
-          label="Port"
-          className="mb-4"
-          value={db2?.port}
-          onChange={(value) => handleChange({ port: value })}
-        />
-        <FieldTypeInput
-          data={sharedCredentials}
-          label="Database"
-          className="mb-4"
-          value={db2?.database}
-          onChange={(value) => handleChange({ database: value })}
-        />
-        <FieldTypeInput
-          data={sharedCredentials}
-          label="User name"
-          className="mb-4"
-          value={db2?.user}
-          onChange={(value) => handleChange({ user: value })}
-        />
-        <FieldTypeInput
+      />
+      <FieldTypeInput
+        data={sharedCredentials}
+        label="Host"
+        className="mb-4"
+        value={db2?.host}
+        onChange={(value) => handleChange({ host: value })}
+        inputClassName={!db2?.host ? 'border border-red-500' : ''}
+      />
+      <FieldTypeInput
+        data={sharedCredentials}
+        label="Port"
+        className="mb-4"
+        value={db2?.port}
+        onChange={(value) => handleChange({ port: value })}
+      />
+      <FieldTypeInput
+        data={sharedCredentials}
+        label="Database"
+        className="mb-4"
+        value={db2?.database}
+        onChange={(value) => handleChange({ database: value })}
+      />
+      <FieldTypeInput
+        data={sharedCredentials}
+        label="User name"
+        className="mb-4"
+        value={db2?.user}
+        onChange={(value) => handleChange({ user: value })}
+      />
+      <FieldTypeInput
         data={sharedCredentials}
         label="Password"
         className="mb-4"

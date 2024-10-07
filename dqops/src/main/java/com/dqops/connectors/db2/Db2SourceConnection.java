@@ -180,17 +180,22 @@ public class Db2SourceConnection extends AbstractJdbcSourceConnection {
     public String buildListTablesSql(String schemaName, String tableNameContains, int limit) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
-//        where CREATOR = 'SCHEMA'
-//        and name like '%CUR%'
-//        and type = 'T';
-
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT CREATOR AS table_schema, NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".systables\n");
-        sqlBuilder.append("WHERE CREATOR='");
+        sqlBuilder.append("WHERE ");
+        if (this.getConnectionSpec().getDb2().getDb2PlatformType().equals(Db2PlatformType.luw)) {
+            sqlBuilder.append("CREATOR");
+        } else {
+            sqlBuilder.append("OWNER");
+        }
+
+        sqlBuilder.append("='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
+
+        sqlBuilder.append(" AND TYPE = 'T'");
 
         if (!Strings.isNullOrEmpty(tableNameContains)) {
             sqlBuilder.append(" AND NAME LIKE '%");
