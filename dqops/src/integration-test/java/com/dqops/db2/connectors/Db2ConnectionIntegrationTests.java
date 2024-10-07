@@ -66,7 +66,7 @@ public class Db2ConnectionIntegrationTests extends BaseDb2IntegrationTest {
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
         Assertions.assertEquals(1, schemas.size());
-        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "default")));
+        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "DB2INST1")));
     }
 
     @Test
