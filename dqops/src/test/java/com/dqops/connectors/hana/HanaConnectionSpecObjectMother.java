@@ -44,7 +44,7 @@ public class HanaConnectionSpecObjectMother {
      */
     public static ConnectionSpec create() {
         String persistentContainerEnvVar = System.getenv("PERSISTENT_DATABASE_CONTAINER");
-        boolean persistentContainer = Boolean.getBoolean(persistentContainerEnvVar);
+        boolean persistentContainer = Boolean.parseBoolean(persistentContainerEnvVar);
 
         if (persistentContainer) {
             ConnectionSpec connectionSpec = new ConnectionSpec()
