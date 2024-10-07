@@ -133,6 +133,37 @@ check in the Profiling section to the Monitoring checks:
 
 ![Copy verified profiling checks to monitoring section](https://dqops.com/docs/images/examples/detect-empty-or-incomplete-table-copy-verified-profiling-checks-to-monitoring-section1.png){ loading=lazy; width="1200px" }
 
+The highlighted fragments in the YAML file below represent the segment where the profiling and monitoring `row_count` checks are configured.
+
+```yaml hl_lines="7-17"
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  profiling_checks:
+    volume:
+      profile_row_count:
+        error:
+          min_count: 16339
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count:
+          error:
+            min_count: 16339
+  columns:
+    edition:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    report_type:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+```
+
 ### Review Table quality status
 After the **Run checks** job finishes, you can review the summary of the identified data quality issues
 on the **Table quality status** screen. Click on the **Table quality status** tab to navigate to that screen.

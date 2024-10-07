@@ -30,7 +30,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.rest.models.metadata.TableLineageSourceListModel;
+import com.dqops.rest.models.metadata.TableLineageTableListModel;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -104,7 +104,7 @@ public class DataLineageControllerUTTests extends BaseTest {
     void getTableSourceTables_whenSampleTableRequested_thenReturnsListOfSourceTables() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        Mono<ResponseEntity<Flux<TableLineageSourceListModel>>> responseEntity = this.sut.getTableSourceTables(
+        Mono<ResponseEntity<Flux<TableLineageTableListModel>>> responseEntity = this.sut.getTableSourceTables(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -112,7 +112,7 @@ public class DataLineageControllerUTTests extends BaseTest {
                 Optional.empty());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
 
-        List<TableLineageSourceListModel> result = responseEntity.block().getBody().collectList().block();
+        List<TableLineageTableListModel> result = responseEntity.block().getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(
@@ -124,7 +124,7 @@ public class DataLineageControllerUTTests extends BaseTest {
     void getTableSourceTables_whenSourceTableNotExist_thenTableCurrentDataQualityStatusTablePartiallySetAndExistIsFalse() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        Mono<ResponseEntity<Flux<TableLineageSourceListModel>>> responseEntity = this.sut.getTableSourceTables(
+        Mono<ResponseEntity<Flux<TableLineageTableListModel>>> responseEntity = this.sut.getTableSourceTables(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -132,12 +132,12 @@ public class DataLineageControllerUTTests extends BaseTest {
                 Optional.empty());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
 
-        List<TableLineageSourceListModel> result = responseEntity.block().getBody().collectList().block();
+        List<TableLineageTableListModel> result = responseEntity.block().getBody().collectList().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getConnection(), result.get(0).getSourceTableDataQualityStatus().getConnectionName());
-        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getSchema(), result.get(0).getSourceTableDataQualityStatus().getSchemaName());
-        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getTable(), result.get(0).getSourceTableDataQualityStatus().getTableName());
-        Assertions.assertFalse(result.get(0).getSourceTableDataQualityStatus().isTableExist());
+        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getConnection(), result.get(0).getTableDataQualityStatus().getConnectionName());
+        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getSchema(), result.get(0).getTableDataQualityStatus().getSchemaName());
+        Assertions.assertEquals(TABLE_LINEAGE_SOURCE_1.getTable(), result.get(0).getTableDataQualityStatus().getTableName());
+        Assertions.assertFalse(result.get(0).getTableDataQualityStatus().isTableExist());
 
     }
 

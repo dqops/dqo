@@ -202,7 +202,7 @@ Below is an example of the **Configuration** screen for the `daily_row_count` ch
 This screen is responsible for editing the specification files for a custom data quality check
 stored in the [*$DQO_USER_HOME/checks/\*\*/\*.dqocheck.yaml*](../../reference/yaml/CheckDefinitionYaml.md) files.
 
-![Check definition configuration](https://dqops.com/docs/images/concepts/check-definition-configuration.png){ loading=lazy; width="1200px" }
+![Check definition configuration](https://dqops.com/docs/images/concepts/check-definition-configuration2.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

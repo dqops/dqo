@@ -143,13 +143,13 @@ public class CliApplication {
 					         Objects.equals(System.getenv("SILENT"), "true")));
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
-			springApplication.setAdditionalProfiles("cli");
+			springApplication.setAdditionalProfiles("cli", "paid");
 			springApplication.setLogStartupInfo(false);
 			springApplication.setBannerMode(silentEnabledByArgument ? Banner.Mode.OFF : Banner.Mode.CONSOLE);
 			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
 
-			// calls CliMainCommandRunner and calls commands in io.dqo.cli.command, find the right command there if you want to know what happens now
+			// calls CliMainCommandRunner and calls commands in com.dqops.cli.command, find the right command there if you want to know what happens now
 		}
 	    catch (Throwable t) {
 			if (t instanceof ApplicationContextException && t.getCause() instanceof PortInUseException) {

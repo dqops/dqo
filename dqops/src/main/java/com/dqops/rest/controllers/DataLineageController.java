@@ -35,7 +35,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.TableLineageSourceListModel;
+import com.dqops.rest.models.metadata.TableLineageTableListModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
 import com.dqops.utils.threading.CompletableFutureRunner;
@@ -161,18 +161,18 @@ public class DataLineageController {
      * @return List of source tables on the data lineage that are sources of the given table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources", produces = "application/json")
-    @ApiOperation(value = "getTableSourceTables", notes = "Returns a list of source tables on the data lineage that are sources of the given table.", response = TableLineageSourceListModel[].class,
+    @ApiOperation(value = "getTableSourceTables", notes = "Returns a list of source tables on the data lineage that are sources of the given table.", response = TableLineageTableListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = TableLineageSourceListModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableLineageTableListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Flux<TableLineageSourceListModel>>> getTableSourceTables(
+    public Mono<ResponseEntity<Flux<TableLineageTableListModel>>> getTableSourceTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -202,9 +202,9 @@ public class DataLineageController {
                 return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // 200 - empty
             }
 
-            List<TableLineageSourceListModel> sourceTables = tableSpec.getSourceTables()
+            List<TableLineageTableListModel> sourceTables = tableSpec.getSourceTables()
                     .stream()
-                    .map(sourceSpec -> TableLineageSourceListModel.fromSpecification(
+                    .map(sourceSpec -> TableLineageTableListModel.fromSpecification(
                             sourceSpec, isEditor))
                     .collect(Collectors.toList());
 
@@ -218,34 +218,34 @@ public class DataLineageController {
                 }};
                 ConnectionWrapper sourceConnectionWrapper = connections.getByObjectName(listModel.getSourceConnection(), true);
                 if (sourceConnectionWrapper == null) {
-                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    listModel.setTableDataQualityStatus(notFoundTableStatus);
                     return;
                 }
                 TableWrapper sourceTableWrapper = sourceConnectionWrapper.getTables().getByObjectName(
                         new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()), true);
                 if (sourceTableWrapper == null) {
-                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    listModel.setTableDataQualityStatus(notFoundTableStatus);
                     return;
                 }
 
                 DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                         listModel.getSourceConnection(), new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()));
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                listModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                listModel.setTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
             });
 
-            if (sourceTables.stream().anyMatch(model -> model.getSourceTableDataQualityStatus() == null)) {
+            if (sourceTables.stream().anyMatch(model -> model.getTableDataQualityStatus() == null)) {
                 // the results not loaded yet, we need to wait until the queue is empty
                 CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
 
-                Flux<TableLineageSourceListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                Flux<TableLineageTableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
                         .thenMany(Flux.fromIterable(sourceTables)
                                 .map(tableListModel -> {
-                                    if (tableListModel.getSourceTableDataQualityStatus() == null) {
+                                    if (tableListModel.getTableDataQualityStatus() == null) {
                                         DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                                 tableListModel.getSourceConnection(), new PhysicalTableName(tableListModel.getSourceSchema(), tableListModel.getSourceTable()));
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                        tableListModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                                        tableListModel.setTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
                                     }
                                     return tableListModel;
                                 }));
@@ -265,19 +265,19 @@ public class DataLineageController {
      * @return List of target tables on the data lineage that are downstream tables of the given table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/targets", produces = "application/json")
-    @ApiOperation(value = "getTableTargetTables", notes = "Returns a list of target tables on the data lineage that are downstream tables of the given table.", response = TableLineageSourceListModel[].class,
+    @ApiOperation(value = "getTableTargetTables", notes = "Returns a list of target tables on the data lineage that are downstream tables of the given table.", response = TableLineageTableListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = TableLineageSourceListModel[].class),
-            @ApiResponse(code = 203, message = "The list of target tables returned, but it is probably not complete", response = TableLineageSourceListModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableLineageTableListModel[].class),
+            @ApiResponse(code = 203, message = "The list of target tables returned, but it is probably not complete", response = TableLineageTableListModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Flux<TableLineageSourceListModel>>> getTableTargetTables(
+    public Mono<ResponseEntity<Flux<TableLineageTableListModel>>> getTableTargetTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -314,7 +314,7 @@ public class DataLineageController {
                     HttpStatus.NON_AUTHORITATIVE_INFORMATION : HttpStatus.OK;
 
             Set<DomainConnectionTableKey> downstreamTargetTables = tableLineageEntry.getDownstreamTargetTables();
-            List<TableLineageSourceListModel> targetTables = downstreamTargetTables
+            List<TableLineageTableListModel> targetTables = downstreamTargetTables
                     .stream()
                     .map(tableKey -> {
                         ConnectionWrapper targetConnectionWrapper = connections.getByObjectName(tableKey.getConnectionName(), true);
@@ -341,7 +341,7 @@ public class DataLineageController {
                         return tableLineageFromSource.orElse(null);
                     })
                     .filter(sourceLineage -> sourceLineage != null)
-                    .map(sourceSpec -> TableLineageSourceListModel.fromSpecification(
+                    .map(sourceSpec -> TableLineageTableListModel.fromSpecification(
                             sourceSpec, isEditor))
                     .collect(Collectors.toList());
 
@@ -355,34 +355,34 @@ public class DataLineageController {
                 }};
                 ConnectionWrapper sourceConnectionWrapper = connections.getByObjectName(listModel.getSourceConnection(), true);
                 if (sourceConnectionWrapper == null) {
-                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    listModel.setTableDataQualityStatus(notFoundTableStatus);
                     return;
                 }
                 TableWrapper sourceTableWrapper = connectionWrapper.getTables().getByObjectName(
                         new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()), true);
                 if (sourceTableWrapper == null) {
-                    listModel.setSourceTableDataQualityStatus(notFoundTableStatus);
+                    listModel.setTableDataQualityStatus(notFoundTableStatus);
                     return;
                 }
 
                 DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(dataDomain,
                         listModel.getSourceConnection(), new PhysicalTableName(listModel.getSourceSchema(), listModel.getSourceTable()));
                 TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                listModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                listModel.setTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
             });
 
-            if (targetTables.stream().anyMatch(model -> model.getSourceTableDataQualityStatus() == null)) {
+            if (targetTables.stream().anyMatch(model -> model.getTableDataQualityStatus() == null)) {
                 // the results not loaded yet, we need to wait until the queue is empty
                 CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
 
-                Flux<TableLineageSourceListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                Flux<TableLineageTableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
                         .thenMany(Flux.fromIterable(targetTables)
                                 .map(tableListModel -> {
-                                    if (tableListModel.getSourceTableDataQualityStatus() == null) {
+                                    if (tableListModel.getTableDataQualityStatus() == null) {
                                         DomainConnectionTableKey tableStatusKey = new DomainConnectionTableKey(dataDomain,
                                                 tableListModel.getSourceConnection(), new PhysicalTableName(tableListModel.getSourceSchema(), tableListModel.getSourceTable()));
                                         TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                        tableListModel.setSourceTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                                        tableListModel.setTableDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
                                     }
                                     return tableListModel;
                                 }));

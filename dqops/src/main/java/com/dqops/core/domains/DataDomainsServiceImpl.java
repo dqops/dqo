@@ -29,6 +29,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.settings.domains.LocalDataDomainSpec;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,13 +99,7 @@ public class DataDomainsServiceImpl implements DataDomainsService {
     @Override
     public void synchronizeDataDomainList(boolean silent) {
         try {
-            DqoUserPrincipal rootDomainAdminUser = this.dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal();
-            validateDqopsLicense(rootDomainAdminUser);
-            UserDomainIdentity userDomainIdentity = rootDomainAdminUser.getDataDomainIdentity();
-            DataDomainsApi dataDomainClient = this.createDataDomainClient(userDomainIdentity);
-            String tenantIdFull = userDomainIdentity.getTenantId() + "/" + userDomainIdentity.getTenantGroupId();
-
-            List<DataDomainModel> cloudDataDomainsList = dataDomainClient.getDataDomainsList(userDomainIdentity.getTenantOwner(), tenantIdFull);
+            List<DataDomainModel> cloudDataDomainsList = loadNestedDataDomainsFromServer();
 
             List<LocalDataDomainSpec> newDataDomainList = new ArrayList<>();
             for (DataDomainModel cloudDataDomainModel : cloudDataDomainsList) {
@@ -121,6 +116,21 @@ public class DataDomainsServiceImpl implements DataDomainsService {
             }
             throw new DqoDataDomainException("Cannot synchronize the list of data domains with DQOps Cloud", ex);
         }
+    }
+
+    /**
+     * Calls the DQOps server and reads a list of nested data domains defined for this instance.
+     * @return List of data domains.
+     */
+    protected List<DataDomainModel> loadNestedDataDomainsFromServer() {
+        DqoUserPrincipal rootDomainAdminUser = this.dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal();
+        validateDqopsLicense(rootDomainAdminUser);
+        UserDomainIdentity userDomainIdentity = rootDomainAdminUser.getDataDomainIdentity();
+        DataDomainsApi dataDomainClient = this.createDataDomainClient(userDomainIdentity);
+        String tenantIdFull = userDomainIdentity.getTenantId() + "/" + userDomainIdentity.getTenantGroupId();
+
+        List<DataDomainModel> cloudDataDomainsList = dataDomainClient.getDataDomainsList(userDomainIdentity.getTenantOwner(), tenantIdFull);
+        return cloudDataDomainsList;
     }
 
     /**
@@ -213,14 +223,7 @@ public class DataDomainsServiceImpl implements DataDomainsService {
                 throw new DqoDataDomainException("The data domain name '" + dataDomainDisplayName + "' is invalid. Only names containing digits, spaces, and latin letters are accepted.");
             }
 
-            DqoUserPrincipal rootDomainAdminUser = this.dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal();
-            validateDqopsLicense(rootDomainAdminUser);
-            UserDomainIdentity userDomainIdentity = rootDomainAdminUser.getDataDomainIdentity();
-            DataDomainsApi dataDomainClient = this.createDataDomainClient(userDomainIdentity);
-            String tenantIdFull = userDomainIdentity.getTenantId() + "/" + userDomainIdentity.getTenantGroupId();
-
-            DataDomainModel cloudDataDomainModel = dataDomainClient.createDataDomain(dataDomainDisplayName, userDomainIdentity.getTenantOwner(), tenantIdFull);
-            LocalDataDomainSpec localDataDomainSpec = LocalDataDomainSpec.createFromCloudDomainModel(cloudDataDomainModel);
+            LocalDataDomainSpec localDataDomainSpec = createDataDomainOnServer(dataDomainDisplayName);
 
             this.localDataDomainRegistry.addNestedDataDomain(localDataDomainSpec);
 
@@ -233,6 +236,23 @@ public class DataDomainsServiceImpl implements DataDomainsService {
         catch (Exception ex) {
             throw new DqoDataDomainException("Cannot create a new data domain. Your DQOps Cloud API Key is invalid, or you don't have an ENTERPRISE license of DQOps. Error: " + ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Creates a new nested data domain on the server.
+     * @param dataDomainDisplayName Data domain display name.
+     * @return Data domain information.
+     */
+    protected LocalDataDomainSpec createDataDomainOnServer(String dataDomainDisplayName) {
+        DqoUserPrincipal rootDomainAdminUser = this.dqoUserPrincipalProvider.createLocalInstanceAdminPrincipal();
+        validateDqopsLicense(rootDomainAdminUser);
+        UserDomainIdentity userDomainIdentity = rootDomainAdminUser.getDataDomainIdentity();
+        DataDomainsApi dataDomainClient = this.createDataDomainClient(userDomainIdentity);
+        String tenantIdFull = userDomainIdentity.getTenantId() + "/" + userDomainIdentity.getTenantGroupId();
+
+        DataDomainModel cloudDataDomainModel = dataDomainClient.createDataDomain(dataDomainDisplayName, userDomainIdentity.getTenantOwner(), tenantIdFull);
+        LocalDataDomainSpec localDataDomainSpec = LocalDataDomainSpec.createFromCloudDomainModel(cloudDataDomainModel);
+        return localDataDomainSpec;
     }
 
     /**

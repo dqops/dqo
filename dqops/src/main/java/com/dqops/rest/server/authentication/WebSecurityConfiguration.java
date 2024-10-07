@@ -15,12 +15,11 @@
  */
 package com.dqops.rest.server.authentication;
 
-import com.dqops.core.principal.DqoPermissionNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
@@ -29,15 +28,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
  */
 @Configuration
 @EnableWebFluxSecurity
+@EnableReactiveMethodSecurity(useAuthorizationManager=true)
 public class WebSecurityConfiguration {
-    private AuthenticateWithDqoCloudWebFilter authenticateWithDqoCloudWebFilter;
-    private DqoServerSecurityContextRepository dqoServerSecurityContextRepository;
+    private final SecurityWebFilterChainBuilder securityWebFilterChainBuilder;
 
     @Autowired
-    public WebSecurityConfiguration(AuthenticateWithDqoCloudWebFilter authenticateWithDqoCloudWebFilter,
-                                    DqoServerSecurityContextRepository dqoServerSecurityContextRepository) {
-        this.authenticateWithDqoCloudWebFilter = authenticateWithDqoCloudWebFilter;
-        this.dqoServerSecurityContextRepository = dqoServerSecurityContextRepository;
+    public WebSecurityConfiguration(SecurityWebFilterChainBuilder securityWebFilterChainBuilder) {
+        this.securityWebFilterChainBuilder = securityWebFilterChainBuilder;
     }
 
     /**
@@ -47,32 +44,7 @@ public class WebSecurityConfiguration {
      */
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.csrf(customizer -> {
-            customizer.disable();
-        });
-
-        http.anonymous(customizer -> {
-            customizer.disable();
-        });
-
-        http.httpBasic(customizer -> {
-            customizer.disable();
-        });
-
-        http.formLogin(customizer -> {
-            customizer.disable();
-        });
-
-        http.securityContextRepository(this.dqoServerSecurityContextRepository);
-
-        http.authorizeExchange(customizer -> {
-            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.ISSUE_TOKEN_REQUEST_PATH).permitAll();
-            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_REQUEST_PATH).permitAll();
-            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.MANIFEST_JSON_REQUEST_PATH).permitAll();
-            customizer.pathMatchers("/**").hasAuthority(DqoPermissionNames.VIEW);
-        });
-
-        http.addFilterBefore(this.authenticateWithDqoCloudWebFilter, SecurityWebFiltersOrder.REACTOR_CONTEXT);
+        this.securityWebFilterChainBuilder.configureSecurityFilterChain(http);
 
         return http.build();
     }

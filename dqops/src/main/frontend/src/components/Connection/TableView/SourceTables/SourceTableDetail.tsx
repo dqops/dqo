@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  TableLineageSourceListModel,
+  TableLineageTableListModel,
   TableLineageSourceSpec
 } from '../../../../api';
 import { DataLineageApiClient } from '../../../../services/apiClient';
@@ -33,7 +33,7 @@ export default function SourceTableDetail({
     table: string;
   } = useDecodedParams();
   const [dataLineage, setDataLineage] =
-    React.useState<TableLineageSourceListModel>({});
+    React.useState<TableLineageTableListModel>({});
   const [dataLineageSpec, setDataLineageSpec] =
     useState<TableLineageSourceSpec>({});
 
@@ -42,7 +42,7 @@ export default function SourceTableDetail({
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onChangeParameters = (obj: Partial<TableLineageSourceListModel>) => {
+  const onChangeParameters = (obj: Partial<TableLineageTableListModel>) => {
     setDataLineage((prevState) => ({
       ...prevState,
       ...obj

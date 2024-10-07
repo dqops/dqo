@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import { TableLineageSourceListModel } from '../../../../api';
+import { TableLineageTableListModel } from '../../../../api';
 import {
   ConnectionApiClient,
   SchemaApiClient,
@@ -10,8 +10,8 @@ import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import Select, { Option } from '../../../Select';
 
 type TSelectConnectionSchemaTable = {
-  editConfigurationParameters: TableLineageSourceListModel;
-  onChangeParameters: (obj: Partial<TableLineageSourceListModel>) => void;
+  editConfigurationParameters: TableLineageTableListModel;
+  onChangeParameters: (obj: Partial<TableLineageTableListModel>) => void;
   create: boolean;
   setIsUpdated?: (value: boolean) => void;
 };

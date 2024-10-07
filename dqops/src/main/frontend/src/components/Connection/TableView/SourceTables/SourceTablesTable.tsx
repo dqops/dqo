@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { TableLineageSourceListModel } from '../../../../api';
+import { TableLineageTableListModel } from '../../../../api';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { DataLineageApiClient } from '../../../../services/apiClient';
@@ -66,13 +66,14 @@ export default function SourceTablesTable({
   } | null>(null);
   const [indexSortingElement, setIndexSortingElement] = useState(1);
   const [displayedTables, setDisplayedTables] = useState<
-    TableLineageSourceListModel[]
+    TableLineageTableListModel[]
   >([]);
   const [expandedLineage, setExpandedLineage] = useState<
     { connection: string; schema: string; table: string }[] | null
   >(null);
-  const [tables, setTables] = useState<TableLineageSourceListModel[]>([]);
+  const [tables, setTables] = useState<TableLineageTableListModel[]>([]);
   const [loading, setLoading] = useState(false);
+  const [refreshTimer, setRefreshTimer] = useState<NodeJS.Timer>();
 
   const getTables = async () => {
     setLoading(true);
@@ -83,7 +84,10 @@ export default function SourceTablesTable({
           setTables(res.data);
           refetchTables(res.data);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          setRefreshTimer(undefined);
+        });
     } else {
       DataLineageApiClient.getTableSourceTables(connection, schema, table)
         .then((res) => {
@@ -91,24 +95,33 @@ export default function SourceTablesTable({
           setTables(res.data);
           refetchTables(res.data);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          setRefreshTimer(undefined);
+        });
     }
   };
 
-  const refetchTables = (tables?: TableLineageSourceListModel[]) => {
+  const refetchTables = (tables?: TableLineageTableListModel[]) => {
     const shouldRefetch = tables?.some(
-      (table) => !table?.source_table_data_quality_status
+      (table) => !table?.table_data_quality_status
     );
 
     if (shouldRefetch) {
-      setTimeout(() => {
-        getTables();
-      }, 5000);
+      setRefreshTimer(
+        setTimeout(() => {
+          getTables();
+        }, 5000));
     }
   };
 
   useEffect(() => {
     getTables();
+    return () => {
+      if (refreshTimer) {
+        clearTimeout(refreshTimer);
+      }
+    };
   }, [connection, schema, table]);
 
   const handleSort = (elem: { label: string; key: string }, index: number) => {
@@ -116,7 +129,7 @@ export default function SourceTablesTable({
     setDisplayedTables(
       sortPatterns(
         tables,
-        elem.key as keyof TableLineageSourceListModel,
+        elem.key as keyof TableLineageTableListModel,
         newDir
       )
     );
@@ -153,7 +166,7 @@ export default function SourceTablesTable({
   const dispatch = useActionDispatch();
   const history = useHistory();
 
-  const goTable = (dataLineage: TableLineageSourceListModel) => {
+  const goTable = (dataLineage: TableLineageTableListModel) => {
     const connection = isTarget
       ? dataLineage.target_connection
       : dataLineage.source_connection;
@@ -190,7 +203,7 @@ export default function SourceTablesTable({
     history.push(url);
   };
 
-  const onChangeExpandedLineage = (lineage: TableLineageSourceListModel) => {
+  const onChangeExpandedLineage = (lineage: TableLineageTableListModel) => {
     const connection = isTarget
       ? lineage.target_connection
       : lineage.source_connection;
@@ -292,6 +305,13 @@ export default function SourceTablesTable({
           </thead>
         )}
         <tbody className={clsx('', showHeader && 'border-t border-gray-100')}>
+          {displayedTables && tables.length === 0 && (
+            <tr className="!h-6">
+              <td>
+                This table has no {isTarget ? "target" : "source"} tables.
+              </td>
+            </tr>
+          )}
           {(displayedTables ?? tables).map((table, index) => (
             <React.Fragment key={index}>
               <tr className="!h-6">
@@ -299,7 +319,7 @@ export default function SourceTablesTable({
                   onClick={() => onChangeExpandedLineage(table)}
                   className="cursor-pointer"
                 >
-                  {table.source_table_data_quality_status && (
+                  {table.table_data_quality_status && (
                     <div className="pl-2">
                       {expandedLineage?.find(
                         (lineage) =>
@@ -323,16 +343,16 @@ export default function SourceTablesTable({
                 </td>
                 <td>
                   <div className="flex items-center gap-x-2 min-w-20 !max-w-40">
-                    {table.source_table_data_quality_status ? (
+                    {table.table_data_quality_status ? (
                       <QualityDimensionStatuses
                         dimensions={
-                          table.source_table_data_quality_status?.dimensions
+                          table.table_data_quality_status?.dimensions
                         }
                       />
                     ) : (
                       <SvgIcon name="hourglass" className="w-4 h-4" />
                     )}
-                    {!table.source_table_data_quality_status?.table_exist && (
+                    {!table.table_data_quality_status?.table_exist && (
                       <Tooltip
                         color="light"
                         content="Table doesn't exist"
@@ -368,7 +388,7 @@ export default function SourceTablesTable({
                 {setSourceTableEdit && (
                   <td className="px-4">
                     <div className="flex items-center gap-x-4">
-                      {table.source_table_data_quality_status?.table_exist ? (
+                      {table.table_data_quality_status?.table_exist ? (
                         <IconButton
                           ripple={false}
                           onClick={() =>
@@ -394,7 +414,11 @@ export default function SourceTablesTable({
                             '!shadow-none hover:!shadow-none hover:bg-[#028770]'
                           )}
                         >
-                          <SvgIcon name="edit" className="w-4" />
+                          <Tooltip content="Edit data lineage mapping">
+                            <div>
+                              <SvgIcon name="edit" className="w-4" />
+                            </div>
+                          </Tooltip>
                         </IconButton>
                       ) : (
                         <div className="w-8" />
@@ -420,16 +444,24 @@ export default function SourceTablesTable({
                         color="teal"
                         className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                       >
-                        <SvgIcon name="delete" className="w-4" />
+                        <Tooltip content="Delete data lineage mapping">
+                          <div>
+                            <SvgIcon name="delete" className="w-4" />
+                          </div>
+                        </Tooltip>
                       </IconButton>
-                      {table.source_table_data_quality_status?.table_exist && (
+                      {table.table_data_quality_status?.table_exist && (
                         <IconButton
                           onClick={() => goTable(table)}
                           size="sm"
                           color="teal"
                           className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                         >
-                          <SvgIcon name="data_sources_white" className="w-5" />
+                          <Tooltip content={isTarget ? "Jump to the target (downstream) table" : "Jump to the source (upstream) table"}>
+                            <div>
+                              <SvgIcon name="data_sources_white" className="w-5" />
+                            </div>
+                          </Tooltip>
                         </IconButton>
                       )}
                     </div>
@@ -446,7 +478,7 @@ export default function SourceTablesTable({
                     (isTarget ? table.target_schema : table.source_schema) &&
                   lineage.table ===
                     (isTarget ? table.target_table : table.source_table) &&
-                  table.source_table_data_quality_status?.table_exist
+                  table.table_data_quality_status?.table_exist
               ) && (
                 <tr>
                   <td colSpan={5} className="pl-4 py-1">
@@ -478,9 +510,9 @@ export default function SourceTablesTable({
           setSorceTableToDelete(null);
         }}
         onClose={() => setSorceTableToDelete(null)}
-        message={`Are you sure you want to delete this data lineage?`}
+        message={`Are you sure you want to delete this ` + (isTarget ? `target` : `source`) + ` table?`}
       />
-      <div className="px-4">
+      <div className={"px-4 " + (!tables || tables.length < 25) ? "hidden" : ""}>
         <ClientSidePagination
           items={tables}
           onChangeItems={setDisplayedTables}
