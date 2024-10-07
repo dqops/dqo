@@ -32,6 +32,7 @@ import {
 type ChartType = {
   results: CheckResultEntryModel[];
   month: string;
+  checkName: string;
   dataGroup?: string;
 };
 
@@ -78,24 +79,27 @@ export default function ObservabilityStatus() {
 
     const updateResultsEntry = (res: any) => {
       const newResults = getResultsForCharts(res.data ?? [], column) ?? [];
-
       if (checkName) {
         const existingCheck = checkResultsEntry.find(
-          (x) => x.results?.[0].checkName === checkName
+          (x) => x.checkName === checkName
         );
-
         if (existingCheck) {
           const updatedResults = checkResultsEntry.map((entry) =>
-            entry.results?.[0].checkName === checkName
-              ? { results: newResults?.[0].results, month, dataGroup }
+            entry.checkName === checkName
+              ? {
+                  results:
+                    newResults.length === 0 ? [] : newResults?.[0].results,
+                  month,
+                  dataGroup,
+                  checkName
+                }
               : entry
           );
-          console.log(updatedResults, checkResultsEntry);
           setCheckResultsEntry(updatedResults);
         } else {
           setCheckResultsEntry([
             ...checkResultsEntry,
-            { results: newResults, month, dataGroup }
+            { results: newResults, month, dataGroup, checkName }
           ]);
         }
       } else {
@@ -511,7 +515,6 @@ export default function ObservabilityStatus() {
   ) => {
     getChecksForChart(month, dataGroup, checkName);
   };
-
   return (
     <div className="p-4 mt-2">
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
@@ -594,7 +597,7 @@ export default function ObservabilityStatus() {
                     onChangeMonthDataGroup(
                       result.month,
                       dataGroup,
-                      result?.results?.[0]?.checkName
+                      result?.checkName
                     )
                   }
                 />
@@ -608,7 +611,7 @@ export default function ObservabilityStatus() {
                     onChangeMonthDataGroup(
                       month,
                       result?.dataGroup,
-                      result?.results?.[0]?.checkName
+                      result?.checkName
                     )
                   }
                 />

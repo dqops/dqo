@@ -50,6 +50,7 @@ export const getDisplayCheckNameFromDictionary = (checkName: string) => {
 type ChartType = {
   results: CheckResultEntryModel[];
   month: string;
+  checkName: string;
   dataGroup?: string;
 };
 
@@ -62,11 +63,12 @@ export const getResultsForCharts = (
   const newResults: Array<ChartType> = [];
   results.forEach((result) => {
     if (!column) {
-      if (result) {
+      if (result.checkName === 'daily_row_count_anomaly') {
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
       if (
@@ -76,14 +78,16 @@ export const getResultsForCharts = (
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
       if (result.checkName?.includes('daily_data_freshness_anomaly')) {
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
       if (
@@ -93,7 +97,8 @@ export const getResultsForCharts = (
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
     } else {
@@ -101,7 +106,8 @@ export const getResultsForCharts = (
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
       if (
@@ -111,14 +117,16 @@ export const getResultsForCharts = (
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
       if (result.checkName?.includes('daily_distinct_count_anomaly')) {
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
       if (
@@ -128,7 +136,8 @@ export const getResultsForCharts = (
         newResults.push({
           results: result.checkResultEntries ?? [],
           month: 'Last 3 months',
-          dataGroup
+          dataGroup,
+          checkName: result?.checkName ?? ''
         });
       }
     }
