@@ -47,6 +47,8 @@ import Input from '../../Input';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import HanaConnection from '../../Dashboard/DatabaseConnection/HanaConnection';
+import Db2Connection from '../../Dashboard/DatabaseConnection/Db2Connection';
 
 const ConnectionDetail = () => {
   const {
@@ -333,6 +335,21 @@ const ConnectionDetail = () => {
             onChange={(duckdb) => onChange({ duckdb })}
             sharedCredentials={sharedCredentials}
             freezeFileType
+          />
+        )}
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.hana && (
+          <HanaConnection
+            hana={connectionBasic?.hana}
+            onChange={(hana) => onChange({ hana })}
+            sharedCredentials={sharedCredentials}
+          />
+        )}{connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.db2 && (
+          <Db2Connection
+            db2={connectionBasic?.db2}
+            onChange={(db2) => onChange({ db2 })}
+            sharedCredentials={sharedCredentials}
           />
         )}
       </div>

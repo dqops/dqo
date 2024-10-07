@@ -43,6 +43,7 @@ import { ReactComponent as DataSourcesSvg } from './svg/data_sources.svg';
 import { ReactComponent as DataSourcesWhite } from './svg/data_sources_white.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
+import { ReactComponent as Db2Svg } from './svg/ibm-db2.svg';
 import { ReactComponent as DefinitionsPoliciesSvg } from './svg/definitions-policies.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
 import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
@@ -261,7 +262,8 @@ const iconsMap: any = {
   data_sources_white: DataSourcesWhite,
   definitions_policies: DefinitionsPoliciesSvg,
   domain: DomainSvg,
-  password_change: PasswordChange
+  password_change: PasswordChange,
+  ibm_db2: Db2Svg
 };
 
 interface SvgIconProps {

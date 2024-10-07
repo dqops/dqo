@@ -16,7 +16,7 @@ The components involved in running a data quality check are shown below.
 The example below shows how DQOps performs the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count)
 data quality check that verifies if the number of rows in the monitored table is greater than the expected minimum row count.
 
-![Data quality check components](https://dqops.com/docs/images/concepts/data_quality_check_structure_min.png)
+![Data quality check components](https://dqops.com/docs/images/concepts/data-quality-check-structure2.png){ loading=lazy }
 
 The data quality check is evaluated on a monitored table (or column) in three phases.
 
@@ -40,22 +40,26 @@ The data quality check is evaluated on a monitored table (or column) in three ph
 ## Activating data quality checks
 
 ### **DQOps user interface**
-Data quality checks are activated in the DQOps user interface on the [data quality check editor](../dqops-user-interface-overview.md#check-editor)
-screen shown below.
-The data quality check is activated by turning the green switch on the left to an *ON* position.
+Data quality checks are activated in the DQOps user interface on the [data quality check editor](../dqops-user-interface-overview.md#check-editor).
+
+There are two types of checks editors **Simplified** and **Advanced**. The primary difference lies in
+the ability to define multiple severity levels in the Advanced mode.
+Both types of editors share the same core functionalities, such as activation, deactivation and run of table and column-level
+checks, viewing results, and accessing additional settings. 
+
+The data quality check is activated by turning the green toggle button on the left to an *ON* position.
 The alerting thresholds for [data quality issue severity levels](#issue-severity-levels) are configured in the *Warning threshold*, 
 *Error threshold* and *Fatal threshold* columns.
 
-The following example shows a [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count) data quality check that measures
+The following example shows Advanced checks editor with a [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count) data quality check that measures
 the row count captured for each day. It is a [*daily monitoring check*](data-observability-monitoring-checks.md#daily-monitoring-checks) type.
-The table in this example stores a list of all known countries recognized by the United Nations. The last known row count was 249 rows (countries).
 The configuration of alerting rules are:
 
 - raise a [*warning* severity data quality issue](#warning) when the row count (the number of countries) drops below **240**
 - raise an [*error* severity data quality issue](#error) when the row count (the number of countries) drops below **100**
 - raise a [*fatal* severity data quality issue](#fatal) when the table is empty, because the row count (the number of countries) is below **1**
 
-![data quality rule severity levels in DQOps check editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/check_editor_rules-min.png){ loading=lazy; width="1200px" }
+![Data quality rule severity levels in DQOps check editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/check-editor-rules2.png){ loading=lazy; width="1200px" }
 
 
 ### **DQOps YAML files**

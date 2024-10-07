@@ -97,7 +97,7 @@ The data quality issues can be divided into two groups
 
 Data quality checks are excluded from KPI calculation in the check's settings section in DQOps as shown below.
 
-![Excluding data quality check from KPI calculation screenshot](https://dqops.com/docs/images/concepts/data-quality-kpis/exclude-check-from-kpi-in-ui-min.png){ loading=lazy; width="1200px" }
+![Excluding data quality check from KPI calculation screenshot](https://dqops.com/docs/images/concepts/data-quality-kpis/exclude-check-from-kpi-in-ui2.png){ loading=lazy; width="1200px" }
 
 The configuration is stored in the *exclude_from_kpi* field in the YAML file, as shown below.
 
@@ -160,7 +160,7 @@ tables within the first weeks of the project.
 
 DQOps uses numeric priorities (1, 2, 3, ...) configured on the table's metadata screen in the *Data Sources* section as shown below.
 
-![Table priority configuration in DQOps](https://dqops.com/docs/images/concepts/data-quality-kpis/table-priority-field-screenshot-min.png){ loading=lazy }
+![Table priority configuration in DQOps](https://dqops.com/docs/images/concepts/data-quality-kpis/table-priority-field-screenshot2.png){ loading=lazy }
 
 
 ### **Profile tables**

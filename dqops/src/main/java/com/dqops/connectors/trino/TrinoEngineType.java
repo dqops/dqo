@@ -2,7 +2,9 @@ package com.dqops.connectors.trino;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// todo: description
+/**
+ * The engine type of Trino
+ */
 public enum TrinoEngineType {
 
     @JsonProperty("trino")

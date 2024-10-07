@@ -4,6 +4,7 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
+  Db2ParametersSpecDb2PlatformTypeEnum,
   DuckdbParametersSpecAwsAuthenticationModeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum,
@@ -154,6 +155,13 @@ const CreateConnection = () => {
       }
       case ConnectionModelProviderTypeEnum.hana: {
         copiedDatabase.hana = { port: '30015', properties: { '': '' } };
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.db2: {
+        copiedDatabase.db2 = { 
+          port: '50000', 
+          db2_platform_type: Db2ParametersSpecDb2PlatformTypeEnum.luw,
+          properties: { '': '' } };
         break;
       }
     }

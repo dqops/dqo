@@ -477,11 +477,6 @@
 		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
-<!--		<dependency>-->
-<!--			<groupId>com.ibm.db2</groupId>-->
-<!--			<artifactId>jcc</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -745,6 +740,11 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>trino</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>db2</artifactId>
 			<scope>test</scope>
 		</dependency>
     </dependencies>
@@ -1453,6 +1453,11 @@
 					<groupId>com.databricks</groupId>
 					<artifactId>databricks-jdbc</artifactId>
 					<version>2.6.25</version>
+				</dependency>
+				<dependency>
+					<groupId>com.ibm.db2</groupId>
+					<artifactId>jcc</artifactId>
+					<version>11.5.9.0</version>
 				</dependency>
 			</dependencies>
 		</profile>

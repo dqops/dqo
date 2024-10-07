@@ -20,6 +20,7 @@ import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
 import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
+import Db2Logo from '../../SvgIcon/svg/ibm-db2.svg';
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
@@ -45,6 +46,7 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
+import Db2Connection from './Db2Connection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -197,6 +199,8 @@ const DatabaseConnection = ({
         return 'Databricks Connection Settings';
       case ConnectionModelProviderTypeEnum.hana:
         return 'SAP HANA Connection Settings';
+      case ConnectionModelProviderTypeEnum.db2:
+        return 'IBM DB2 Connection Settings';
       default:
         return 'Database Connection Settings';
     }
@@ -326,7 +330,14 @@ const DatabaseConnection = ({
     [ConnectionModelProviderTypeEnum.hana]: (
       <HanaConnection
         hana={database.hana}
-        onChange={(hana) => onChange({ ...hana, hana })}
+        onChange={(hana) => onChange({ ...database, hana })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.db2]: (
+      <Db2Connection
+        db2={database.db2}
+        onChange={(db2) => onChange({ ...database, db2 })}
         sharedCredentials={sharedCredentials}
       />
     )
@@ -356,6 +367,8 @@ const DatabaseConnection = ({
         return SparkLogo;
       case ConnectionModelProviderTypeEnum.databricks:
         return DatabricksLogo;
+      case ConnectionModelProviderTypeEnum.db2:
+        return Db2Logo;
       default:
         return '';
     }

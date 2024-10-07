@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
+import com.dqops.connectors.db2.Db2ConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckDbTypesMappings;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.hana.HanaConnectionSpecObjectMother;
@@ -41,7 +42,9 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
-import com.dqops.sampledata.files.*;
+import com.dqops.sampledata.files.SampleDataFilesProvider;
+import com.dqops.sampledata.files.SampleTableFromTestDataFile;
+import com.dqops.sampledata.files.TestDataSampleFilesObjectMother;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.columns.Column;
 
@@ -98,6 +101,10 @@ public class SampleTableMetadataObjectMother {
 
             case hana:
                 return HanaConnectionSpecObjectMother.create();
+
+            case db2:
+                return Db2ConnectionSpecObjectMother.create();
+
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -153,6 +160,9 @@ public class SampleTableMetadataObjectMother {
 
             case hana:
                 return HanaConnectionSpecObjectMother.getSchemaName();
+
+            case db2:
+                return Db2ConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

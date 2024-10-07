@@ -394,6 +394,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Databricks'
   },
   {
+    type: ConnectionModelProviderTypeEnum.db2,
+    name: 'DB2',
+    iconName: 'ibm_db2',
+    displayName: 'DB2'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'Delta Lake',
     iconName: 'deltalake',

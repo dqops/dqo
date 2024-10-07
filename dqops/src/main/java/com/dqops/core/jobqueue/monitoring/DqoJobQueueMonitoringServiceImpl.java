@@ -324,7 +324,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             synchronized (this.lock) {
                 changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
                 jobs = this.allJobs.values().stream()
-                        .filter(dqoJobHistoryEntryModel -> Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain))
+                        .filter(dqoJobHistoryEntryModel -> dqoJobHistoryEntryModel != null && Objects.equals(dqoJobHistoryEntryModel.getDataDomain(), dataDomain))
                         .collect(Collectors.toList());
             }
 
@@ -417,7 +417,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                     if (jobChange.getStatus() == DqoJobStatus.queued) {
                         // new job
                         DqoQueueJobId jobId = jobChange.getJobId();
-                        this.allJobs.put(jobId, jobChange.getUpdatedModel());
+                        if (jobChange.getUpdatedModel() != null) {
+                            this.allJobs.put(jobId, jobChange.getUpdatedModel());
+                        }
                         if (jobId.getJobBusinessKey() != null) {
                             this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
                         }
@@ -451,7 +453,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                                     this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
                                 }
                             } else {
-                                this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel());
                                 if (jobChange.getJobId().getJobBusinessKey() != null) {
                                     this.businessKeyToJobIdMap.put(jobChange.getJobId().getJobBusinessKey(), jobChange.getJobId());
                                 }

@@ -205,11 +205,11 @@ export default function ObservabilityStatus() {
 
   useEffect(() => {
     const getCheckListData = (data: CheckResultsOverviewDataModel[]) => {
-      const isAnomalyRowCount = data.find((x) =>
-        x.checkName?.includes('row_count_anomaly')
+      const hasAnyKnownCheck = data.find(
+        (x) =>
+          getDisplayCheckNameFromDictionary(x.checkName ?? '') === x.checkName
       );
-      const isRowCount = data.find((x) => x.checkName?.includes('row_count'));
-      if (!isAnomalyRowCount && !isRowCount) {
+      if (!hasAnyKnownCheck) {
         return;
       }
       getChecksForChart('Last 3 months');
