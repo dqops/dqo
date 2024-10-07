@@ -19,6 +19,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.hana.HanaParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
@@ -159,6 +160,12 @@ public class ConnectionModel {
     private HanaParametersSpec hana;
 
     /**
+     * HANA connection parameters.
+     */
+    @JsonPropertyDescription("DB2 connection parameters.")
+    private Db2ParametersSpec db2;
+
+    /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
      */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
@@ -264,6 +271,7 @@ public class ConnectionModel {
             setTrino(connectionSpec.getTrino());
             setDatabricks(connectionSpec.getDatabricks());
             setHana(connectionSpec.getHana());
+            setDb2(connectionSpec.getDb2());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -336,6 +344,7 @@ public class ConnectionModel {
         targetConnectionSpec.setTrino(this.getTrino());
         targetConnectionSpec.setDatabricks(this.getDatabricks());
         targetConnectionSpec.setHana(this.getHana());
+        targetConnectionSpec.setDb2(this.getDb2());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

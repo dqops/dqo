@@ -125,6 +125,14 @@ public class HanaConnectionProvider extends AbstractSqlConnectionProvider {
             hanaSpec.setPort(terminalReader.prompt("HANA port number (--hana-port)", "${HANA_PORT}", false));
         }
 
+        if (Strings.isNullOrEmpty(hanaSpec.getInstanceNumber())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--hana-instance-number");
+            }
+
+            hanaSpec.setInstanceNumber(terminalReader.prompt("HANA instance number (--hana-instance-number)", "${HANA_INSTANCE_NUMBER}", false));
+        }
+
         if (Strings.isNullOrEmpty(hanaSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--hana-user");

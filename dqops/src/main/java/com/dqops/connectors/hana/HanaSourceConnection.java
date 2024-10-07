@@ -15,10 +15,7 @@
  */
 package com.dqops.connectors.hana;
 
-import com.dqops.connectors.ConnectionProviderSpecificParameters;
-import com.dqops.connectors.ConnectionQueryException;
-import com.dqops.connectors.ConnectorOperationFailedException;
-import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.*;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -138,6 +135,32 @@ public class HanaSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT SCHEMA_NAME as schema_name FROM ");
+        sqlBuilder.append(getInformationSchemaName());
+        sqlBuilder.append(".M_TABLES ");
+        sqlBuilder.append("WHERE schema_name NOT IN ('SYS', '_SYS_EPM', '_SYS_RT', '_SYS_REPO', '_SYS_STATISTICS', '_SYS_TELEMETRY', '_SYS_AFL', '_SYS_WORKLOAD_REPLAY', '_SYS_PLAN_STABILITY', '_SYS_DI', '_SYS_BI', '_SYS_SECURITY', '_SYS_AUDIT', '_SYS_TASK', '_SYS_XS', '_SYS_SQL_ANALYZER', '_SYS_ADVISOR', '_SYS_DATA_ANONYMIZATION') ");
+        sqlBuilder.append("GROUP BY SCHEMA_NAME");
+        String listSchemataSql = sqlBuilder.toString();
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        List<SourceSchemaModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
+            String schemaName = schemaRows.getString(rowIndex, "schema_name");
+            SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
+            results.add(schemaModel);
+        }
+
+        return results;
     }
 
     /**
@@ -317,7 +340,7 @@ public class HanaSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Returns the schema name of the INFORMATION_SCHEMA.
+     * Returns the schema name of the INFORMATION_SCHEMA equivalent.
      * @return Information schema name.
      */
     public String getInformationSchemaName() {
