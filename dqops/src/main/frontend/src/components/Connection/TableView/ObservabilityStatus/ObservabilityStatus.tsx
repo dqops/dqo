@@ -4,7 +4,6 @@ import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckResultEntryModel,
-  CheckResultsListModel,
   CheckResultsOverviewDataModel,
   IssueHistogramModel
 } from '../../../../api';
@@ -26,8 +25,15 @@ import { Table } from '../../../Table';
 import {
   calculateDateRange,
   getColor,
-  getDisplayCheckNameFromDictionary
+  getDisplayCheckNameFromDictionary,
+  getResultsForCharts
 } from './ObservabilityStatus.utils';
+
+type ChartType = {
+  results: CheckResultEntryModel[];
+  month: string;
+  dataGroup?: string;
+};
 
 export default function ObservabilityStatus() {
   const {
@@ -43,9 +49,10 @@ export default function ObservabilityStatus() {
     table: string;
     column: string;
   } = useDecodedParams();
-  const [checkResultsEntry, setCheckResultsEntry] = useState<
-    Array<CheckResultEntryModel[]>
-  >([]);
+
+  const [checkResultsEntry, setCheckResultsEntry] = useState<Array<ChartType>>(
+    []
+  );
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     Array<CheckResultsOverviewDataModel>
   >([]);
@@ -56,68 +63,143 @@ export default function ObservabilityStatus() {
     check?: string;
   }>({ checkTypes, column });
   const [groupingOptions, setGroupingOptions] = useState<string[]>([]);
-  const [dataGroup, setDataGroup] = useState<string | undefined>('');
-  const [month, setMonth] = useState<string>('Last 3 months');
   const [mode, setMode] = useState<'chart' | 'table'>('chart');
 
   const onChangeFilter = (obj: Partial<{ column: string; check: string }>) => {
     setHistogramFilter({ ...histogramFilter, ...obj });
   };
 
-  useEffect(() => {
+  const getChecksForChart = (
+    month: string,
+    dataGroup?: string,
+    checkName?: string
+  ) => {
     const { startDate, endDate } = calculateDateRange(month);
-    const getResultsForCharts = (results: Array<CheckResultsListModel>) => {
-      const newResults: Array<CheckResultEntryModel[]> = [];
-      results.forEach((result) => {
-        if (!column) {
-          if (result.checkName === 'daily_row_count_anomaly') {
-            newResults.push(result.checkResultEntries ?? []);
-          }
-          if (
-            !results.find((x) => x.checkName === 'daily_row_count_anomaly') &&
-            result.checkName === 'daily_row_count'
-          ) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
-          if (result.checkName?.includes('daily_data_freshness_anomaly')) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
-          if (
-            !results.find(
-              (x) => x.checkName === 'daily_data_freshness_anomaly'
-            ) &&
-            result.checkName?.includes('daily_data_freshness')
-          ) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
+
+    const updateResultsEntry = (res: any) => {
+      const newResults = getResultsForCharts(res.data ?? [], column) ?? [];
+
+      if (checkName) {
+        const existingCheck = checkResultsEntry.find(
+          (x) => x.results?.[0].checkName === checkName
+        );
+
+        if (existingCheck) {
+          const updatedResults = checkResultsEntry.map((entry) =>
+            entry.results?.[0].checkName === checkName
+              ? { results: newResults?.[0].results, month, dataGroup }
+              : entry
+          );
+          console.log(updatedResults, checkResultsEntry);
+          setCheckResultsEntry(updatedResults);
         } else {
-          if (result.checkName?.includes('daily_nulls_percent_anomaly')) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
-          if (
-            !results.find(
-              (x) => x.checkName === 'daily_nulls_percent_anomaly'
-            ) &&
-            result.checkName?.includes('daily_nulls_percent')
-          ) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
-          if (result.checkName?.includes('daily_distinct_count_anomaly')) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
-          if (
-            !results.find(
-              (x) => x.checkName === 'daily_distinct_count_anomaly'
-            ) &&
-            result.checkName?.includes('daily_distinct_count')
-          ) {
-            newResults.push(result.checkResultEntries ?? []);
-          }
+          setCheckResultsEntry([
+            ...checkResultsEntry,
+            { results: newResults, month, dataGroup }
+          ]);
         }
-      });
-      return newResults;
+      } else {
+        setCheckResultsEntry(newResults);
+      }
     };
 
+    switch (checkTypes) {
+      case CheckTypes.MONITORING: {
+        if (column) {
+          CheckResultApi.getColumnMonitoringChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            checkName,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setGroupingOptions(
+              res.data.map((item) => item.dataGroup ?? '') ?? []
+            );
+            updateResultsEntry(res);
+          });
+          break;
+        } else {
+          CheckResultApi.getTableMonitoringChecksResults(
+            connection,
+            schema,
+            table,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            checkName,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setGroupingOptions(
+              res.data.map((item) => item.dataGroup ?? '') ?? []
+            );
+            updateResultsEntry(res);
+          });
+          break;
+        }
+      }
+      case CheckTypes.PARTITIONED: {
+        if (column) {
+          CheckResultApi.getColumnPartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            checkName,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setGroupingOptions(
+              res.data.map((item) => item.dataGroup ?? '') ?? []
+            );
+            updateResultsEntry(res);
+          });
+          break;
+        } else {
+          CheckResultApi.getTablePartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            'daily',
+            dataGroup,
+            startDate,
+            endDate,
+            checkName,
+            undefined,
+            undefined,
+            undefined,
+            15
+          ).then((res) => {
+            setGroupingOptions(
+              res.data.map((item) => item.dataGroup ?? '') ?? []
+            );
+            updateResultsEntry(res);
+          });
+          break;
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
     const getCheckListData = (data: CheckResultsOverviewDataModel[]) => {
       const isAnomalyRowCount = data.find((x) =>
         x.checkName?.includes('row_count_anomaly')
@@ -126,93 +208,7 @@ export default function ObservabilityStatus() {
       if (!isAnomalyRowCount && !isRowCount) {
         return;
       }
-      switch (checkTypes) {
-        case CheckTypes.MONITORING: {
-          if (column) {
-            CheckResultApi.getColumnMonitoringChecksResults(
-              connection,
-              schema,
-              table,
-              column,
-              'daily',
-              dataGroup,
-              startDate,
-              endDate,
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              15
-            ).then((res) => {
-              console.log(res.data);
-              setGroupingOptions(
-                res.data.map((item) => item.dataGroup ?? '') ?? []
-              );
-              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
-            });
-            break;
-          } else {
-            CheckResultApi.getTableMonitoringChecksResults(
-              connection,
-              schema,
-              table,
-              'daily',
-              dataGroup,
-              startDate,
-              endDate,
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              15
-            ).then((res) => {
-              console.log(res.data);
-              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
-            });
-            break;
-          }
-        }
-        case CheckTypes.PARTITIONED: {
-          if (column) {
-            CheckResultApi.getColumnPartitionedChecksResults(
-              connection,
-              schema,
-              table,
-              column,
-              'daily',
-              dataGroup,
-              startDate,
-              endDate,
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              15
-            ).then((res) => {
-              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
-            });
-            break;
-          } else {
-            CheckResultApi.getTablePartitionedChecksResults(
-              connection,
-              schema,
-              table,
-              'daily',
-              dataGroup,
-              startDate,
-              endDate,
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              15
-            ).then((res) => {
-              setCheckResultsEntry(getResultsForCharts(res.data ?? []) ?? []);
-            });
-            break;
-          }
-        }
-      }
+      getChecksForChart('Last 3 months');
     };
 
     const filterColumnChecks = (data: CheckResultsOverviewDataModel[]) => {
@@ -296,7 +292,7 @@ export default function ObservabilityStatus() {
       }
     };
     getOverviewData();
-  }, [checkTypes, connection, schema, table, column, month]);
+  }, [checkTypes, connection, schema, table, column]);
 
   const monthOptions = useMemo(() => {
     return [
@@ -329,6 +325,7 @@ export default function ObservabilityStatus() {
       setHistograms(res.data);
     });
   }, [connection, schema, table, column, histogramFilter]);
+
   const columns = [
     {
       label:
@@ -507,6 +504,14 @@ export default function ObservabilityStatus() {
     }
   ];
 
+  const onChangeMonthDataGroup = (
+    month: string,
+    dataGroup?: string,
+    checkName?: string
+  ) => {
+    getChecksForChart(month, dataGroup, checkName);
+  };
+
   return (
     <div className="p-4 mt-2">
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
@@ -560,14 +565,23 @@ export default function ObservabilityStatus() {
           </SectionWrapper>
         ))}
       </div>
-      {(checkResultsEntry.length > 0 ? checkResultsEntry : [[]]).map(
-        (result, index) => (
-          <SectionWrapper title={''} className="mb-6 max-w-200" key={index}>
+      <div className="flex flex-wrap gap-x-6">
+        {(checkResultsEntry.length > 0
+          ? checkResultsEntry
+          : [{} as ChartType]
+        ).map((result, index) => (
+          <SectionWrapper
+            title={getDisplayCheckNameFromDictionary(
+              checkResultsEntry?.[index]?.results?.[0]?.checkDisplayName ?? ''
+            )}
+            className="mb-6 max-w-200"
+            key={index}
+          >
             <div className="flex space-x-8 items-center">
               <div className="flex space-x-4 items-center">
                 <div className="text-sm">Data group (time series)</div>
                 <SelectTailwind
-                  value={dataGroup || result[0]?.dataGroup}
+                  value={result.dataGroup || result?.results?.[0]?.dataGroup}
                   options={
                     (Array.from(new Set(groupingOptions)) ?? []).map(
                       (item) => ({
@@ -576,15 +590,27 @@ export default function ObservabilityStatus() {
                       })
                     ) || []
                   }
-                  onChange={setDataGroup}
+                  onChange={(dataGroup) =>
+                    onChangeMonthDataGroup(
+                      result.month,
+                      dataGroup,
+                      result?.results?.[0]?.checkName
+                    )
+                  }
                 />
               </div>
               <div className="flex space-x-4 items-center">
                 <div className="text-sm">Month</div>
                 <SelectTailwind
-                  value={month}
+                  value={result.month}
                   options={monthOptions}
-                  onChange={setMonth}
+                  onChange={(month) =>
+                    onChangeMonthDataGroup(
+                      month,
+                      result?.dataGroup,
+                      result?.results?.[0]?.checkName
+                    )
+                  }
                 />
               </div>
               <div className="flex space-x-4 items-center">
@@ -649,15 +675,15 @@ export default function ObservabilityStatus() {
               </div>
             </div>
             {mode === 'chart' ? (
-              <ChartView data={result} />
+              <ChartView data={result?.results ?? []} />
             ) : (
               <div className="w-full overflow-x-auto">
                 <Table
                   className="mt-1 w-full"
                   columns={columns}
-                  data={(result ?? []).map((item) => ({
+                  data={(result.results ?? []).map((item) => ({
                     ...item,
-                    checkName: result[0].checkName,
+                    checkName: result?.results?.[0].checkName,
                     executedAt: moment(
                       getLocalDateInUserTimeZone(new Date(String()))
                     ).format('YYYY-MM-DD HH:mm:ss'),
@@ -669,8 +695,8 @@ export default function ObservabilityStatus() {
               </div>
             )}
           </SectionWrapper>
-        )
-      )}
+        ))}
+      </div>
       <SectionWrapper title="Data quality issues" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
           <div className="col-span-2">
