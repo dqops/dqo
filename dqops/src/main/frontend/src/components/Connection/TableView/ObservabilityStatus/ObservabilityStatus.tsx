@@ -46,6 +46,7 @@ export default function ObservabilityStatus() {
   const [checkResultsEntry, setCheckResultsEntry] = useState<
     Array<CheckResultEntryModel[]>
   >([]);
+  const [checkNamesCharts, setCheckNamesCharts] = useState<Array<string>>([]);
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     Array<CheckResultsOverviewDataModel>
   >([]);
@@ -68,18 +69,33 @@ export default function ObservabilityStatus() {
     const { startDate, endDate } = calculateDateRange(month);
     const getResultsForCharts = (results: Array<CheckResultsListModel>) => {
       const newResults: Array<CheckResultEntryModel[]> = [];
+      const newCheckNamesForCharts: Array<string> = [];
       results.forEach((result) => {
         if (!column) {
           if (result.checkName === 'daily_row_count_anomaly') {
+            newCheckNamesForCharts.push('daily_row_count_anomaly');
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName === 'daily_partition_row_count_anomaly') {
+            newCheckNamesForCharts.push('daily_partition_row_count_anomaly');
             newResults.push(result.checkResultEntries ?? []);
           }
           if (
             !results.find((x) => x.checkName === 'daily_row_count_anomaly') &&
             result.checkName === 'daily_row_count'
           ) {
+            newCheckNamesForCharts.push('daily_row_count');
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find((x) => x.checkName === 'daily_partition_row_count_anomaly') &&
+            result.checkName === 'daily_partition_row_count'
+          ) {
+            newCheckNamesForCharts.push('daily_partition_row_count');
             newResults.push(result.checkResultEntries ?? []);
           }
           if (result.checkName?.includes('daily_data_freshness_anomaly')) {
+            newCheckNamesForCharts.push('daily_data_freshness_anomaly');
             newResults.push(result.checkResultEntries ?? []);
           }
           if (
@@ -88,10 +104,16 @@ export default function ObservabilityStatus() {
             ) &&
             result.checkName?.includes('daily_data_freshness')
           ) {
+            newCheckNamesForCharts.push('daily_data_freshness');
             newResults.push(result.checkResultEntries ?? []);
           }
         } else {
           if (result.checkName?.includes('daily_nulls_percent_anomaly')) {
+            newCheckNamesForCharts.push('daily_nulls_percent_anomaly');
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName?.includes('daily_partition_nulls_percent_anomaly')) {
+            newCheckNamesForCharts.push('daily_partition_nulls_percent_anomaly');
             newResults.push(result.checkResultEntries ?? []);
           }
           if (
@@ -100,9 +122,24 @@ export default function ObservabilityStatus() {
             ) &&
             result.checkName?.includes('daily_nulls_percent')
           ) {
+            newCheckNamesForCharts.push('daily_nulls_percent');
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_partition_nulls_percent_anomaly'
+            ) &&
+            result.checkName?.includes('daily_partition_nulls_percent')
+          ) {
+            newCheckNamesForCharts.push('daily_partition_nulls_percent');
             newResults.push(result.checkResultEntries ?? []);
           }
           if (result.checkName?.includes('daily_distinct_count_anomaly')) {
+            newCheckNamesForCharts.push('daily_distinct_count_anomaly');
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (result.checkName?.includes('daily_partition_distinct_count_anomaly')) {
+            newCheckNamesForCharts.push('daily_partition_distinct_count_anomaly');
             newResults.push(result.checkResultEntries ?? []);
           }
           if (
@@ -111,10 +148,22 @@ export default function ObservabilityStatus() {
             ) &&
             result.checkName?.includes('daily_distinct_count')
           ) {
+            newCheckNamesForCharts.push('daily_distinct_count');
+            newResults.push(result.checkResultEntries ?? []);
+          }
+          if (
+            !results.find(
+              (x) => x.checkName === 'daily_partition_distinct_count_anomaly'
+            ) &&
+            result.checkName?.includes('daily_partition_distinct_count')
+          ) {
+            newCheckNamesForCharts.push('daily_partition_distinct_count');
             newResults.push(result.checkResultEntries ?? []);
           }
         }
       });
+
+      setCheckNamesCharts(newCheckNamesForCharts);
       return newResults;
     };
 
@@ -562,7 +611,7 @@ export default function ObservabilityStatus() {
       </div>
       {(checkResultsEntry.length > 0 ? checkResultsEntry : [[]]).map(
         (result, index) => (
-          <SectionWrapper title={''} className="mb-6 max-w-200" key={index}>
+          <SectionWrapper title={getDisplayCheckNameFromDictionary(checkNamesCharts[index])} className="mb-6 max-w-200" key={index}>
             <div className="flex space-x-8 items-center">
               <div className="flex space-x-4 items-center">
                 <div className="text-sm">Data group (time series)</div>
