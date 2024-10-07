@@ -36400,6 +36400,7 @@ definitions:
         - "sqlserver"
         - "trino"
         - "hana"
+        - "db2"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36440,6 +36441,9 @@ definitions:
       hana:
         description: "HANA connection parameters."
         $ref: "#/definitions/HanaParametersSpec"
+      db2:
+        description: "DB2 connection parameters."
+        $ref: "#/definitions/Db2ParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -36517,6 +36521,7 @@ definitions:
         - "sqlserver"
         - "trino"
         - "hana"
+        - "db2"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36566,9 +36571,13 @@ definitions:
           \ databricks section or set the url (which is the Databricks JDBC url)."
         $ref: "#/definitions/DatabricksParametersSpec"
       hana:
-        description: "HANA connection parameters. Specify parameters in the databricks\
-          \ section or set the url (which is the Databricks JDBC url)."
+        description: "HANA connection parameters. Specify parameters in the hana section\
+          \ or set the url (which is the HANA JDBC url)."
         $ref: "#/definitions/HanaParametersSpec"
+      db2:
+        description: "DB2 connection parameters. Specify parameters in the db2 section\
+          \ or set the url (which is the DB2 JDBC url)."
+        $ref: "#/definitions/Db2ParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -37167,6 +37176,42 @@ definitions:
           type: "string"
       database:
         type: "string"
+  Db2ParametersSpec:
+    type: "object"
+    properties:
+      db2_platform_type:
+        type: "string"
+        description: "DB2 platform type. Supports also a ${DB2_PLATFORM} configuration\
+          \ with a custom environment variable."
+        enum:
+        - "luw"
+        - "zos"
+      host:
+        type: "string"
+        description: "DB2 host name. Supports also a ${DB2_HOST} configuration with\
+          \ a custom environment variable."
+      port:
+        type: "string"
+        description: "DB2 port number. The default port is 50000. Supports also a\
+          \ ${DB2_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "DB2 database name. Supports also a ${DB2_DATABASE} configuration\
+          \ with a custom environment variable."
+      user:
+        type: "string"
+        description: "DB2 user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "DB2 database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   DeleteStoredDataQueueJobParameters:
     type: "object"
     properties:
@@ -39494,6 +39539,7 @@ definitions:
         - "sqlserver"
         - "trino"
         - "hana"
+        - "db2"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -39527,6 +39573,7 @@ definitions:
         - "sqlserver"
         - "trino"
         - "hana"
+        - "db2"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
