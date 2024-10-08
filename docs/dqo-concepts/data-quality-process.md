@@ -130,7 +130,7 @@ After performing the data quality assessment, the user will identify data qualit
 The tasks for fixing confirmed data quality issues should be planned for the data cleansing tasks.
 False-positive issues will require disabling incorrectly configured data quality checks.
 
-DQOps displays the [**Data quality status**](dqops-user-interface-overview.md#table-quality-status) for each table in the form of a matrix.
+DQOps displays the [**Table quality status**](dqops-user-interface-overview.md#table-quality-status) for each table in the form of a matrix.
 Each row represents the data quality health status for one table's row. 
 The columns in this view group checks into [categories of data quality checks](../categories-of-data-quality-checks/index.md),
 but an alternative view to show [data quality dimensions](data-quality-dimensions.md) is also supported.
@@ -224,7 +224,7 @@ The false-positive data quality checks should be disabled, or their data quality
 
 Once the user configures all [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md),
 DQOps requires a second stage to copy **approved** data quality checks from the profiling section to the **Monitoring checks** or **Partition checks** sections.
-The rule mining engine assists this process by copying profiling checks and their parameters.
+The [rule mining engine](data-quality-rule-mining.md) assists this process by copying profiling checks and their parameters.
 
 The data observability engine will run the checks copied to the monitoring or partition check sections, 
 and the data quality results will be checkpointed in the local [data quality data lake](architecture/dqops-architecture.md#data-quality-data-lake).
@@ -233,7 +233,7 @@ locally in Parquet files structured to be compatible with any data lake.
 
 ![Configuring data quality monitoring checks in DQOps using rule miner](https://dqops.com/docs/images/concepts/data-quality-process/dq-process-rule-mining-monitoring-checks-min2.png){ loading=lazy; width="1200px" }
 
-An alternative method of configuring data quality checks is using only [data quality policies](data-observability.md) managed by the data observability engine.
+An alternative method of configuring data quality checks is using [data quality policies](data-observability.md) managed by the data observability engine.
 The policies are named configurations of data quality checks that are activated on every table or column that matches a filter.
 For example, the filter can target all columns named as `*_id` in tables named `fact_*`. 
 The data quality policy configuration will activate not null checks for all these tables without using the rule engine or the data quality check editor.
