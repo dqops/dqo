@@ -27,7 +27,7 @@ _term() {
 trap _term SIGTERM
 trap _term SIGINT
 
-exec 3<&0 java $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED -cp dqo/app:/dqo/app/lib/*:/dqo/home/jars/*:/dqo/userhome/jars/*:/dqo/userhome/jars/:/dqo/userhome/jars/paid/* com.dqops.cli.CliApplication $* <&3 &
+exec 3<&0 java $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED -cp /dqo/app:/dqo/app/lib/*:/dqo/home/jars/*:/dqo/userhome/jars/*:/dqo/userhome/jars/:/dqo/userhome/jars/paid/* com.dqops.cli.CliApplication $* <&3 &
 
 child=$!
 wait $child
