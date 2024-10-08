@@ -21,12 +21,16 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.sqltemplates.rendering.ErrorSamplingRenderParameters;
+import com.dqops.metadata.dqohome.DqoHome;
+import com.dqops.metadata.dqohome.DqoHomeObjectMother;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sampledata.SampleTableMetadata;
+import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
 
@@ -215,6 +219,30 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(userHome, connectionSpec, tableSpec, columnSpec,
                 checkSpec, null, checkType, null, null,
                 timeSeriesConfigurationSpec, null, dialectSettings);
+        return sensorExecutionRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters object to run an profiling check on a given sample table, when a column is selected.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param columnName Target column name.
+     * @param statisticsCollectorSpec Check specification.
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableColumnStatisticsCollectorAtTableScope(
+            SampleTableMetadata sampleTableMetadata,
+            String columnName,
+            AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec) {
+        ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
+        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        SensorExecutionRunParametersFactory factory = getFactory();
+        DqoHome dqoHome = DqoHomeObjectMother.getDqoHome();
+
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createStatisticsSensorParameters(
+                dqoHome, null, connectionSpec, tableSpec, columnSpec,
+                statisticsCollectorSpec, null, StatisticsDataScope.table, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
