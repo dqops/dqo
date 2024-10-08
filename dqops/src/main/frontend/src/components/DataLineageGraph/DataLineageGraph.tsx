@@ -173,17 +173,17 @@ const renderTooltip = (flow: TableLineageFlowModel, index: number) => {
   return (
     <div className="w-130 p-2 text-sm">
       <div className="flex items-center py-1">
-        <div className="!w-60 !max-w-60 !min-w-60 ">Connection name</div>
+        <div className="!w-60 !max-w-60 !min-w-60 ">Source connection name</div>
         <div className="truncate">{flow.source_table?.connection_name}</div>
       </div>{' '}
       <div className="flex items-center  py-1">
-        <div className="!w-60 !max-w-60 !min-w-60 ">Schema name</div>
+        <div className="!w-60 !max-w-60 !min-w-60 ">Source schema name</div>
         <div className="truncate">
           {flow.source_table?.physical_table_name?.schema_name}
         </div>
       </div>{' '}
       <div className="flex items-center py-1">
-        <div className="w-60 !max-w-60 !min-w-60">Table name</div>
+        <div className="w-60 !max-w-60 !min-w-60">Source table name</div>
         <div className="truncate">
           {flow.source_table?.physical_table_name?.table_name}
         </div>

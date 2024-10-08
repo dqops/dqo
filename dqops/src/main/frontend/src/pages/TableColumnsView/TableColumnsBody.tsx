@@ -16,6 +16,7 @@ import { dateToString, formatNumber } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getDetectedDatatype,
+  getFirstLevelColumnTab,
   limitTextLength,
   useDecodedParams
 } from '../../utils';
@@ -103,7 +104,7 @@ export default function TableColumnsBody({
       schema,
       table,
       column,
-      checkTypes === CheckTypes.PROFILING ? 'statistics' : 'daily'
+      getFirstLevelColumnTab(checkTypes)
     );
     const value = ROUTES.COLUMN_LEVEL_VALUE(
       checkTypes,
