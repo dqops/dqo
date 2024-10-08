@@ -569,136 +569,133 @@ export default function ObservabilityStatus() {
         ))}
       </div>
       <div className="flex flex-wrap gap-x-6">
-        {(checkResultsEntry.length > 0
-          ? checkResultsEntry
-          : [{} as ChartType]
-        ).map((result, index) => (
-          <SectionWrapper
-            title={getDisplayCheckNameFromDictionary(
-              checkResultsEntry?.[index]?.results?.[0]?.checkDisplayName ?? ''
-            )}
-            className="mb-6 max-w-200"
-            key={index}
-          >
-            <div className="flex space-x-8 items-center">
-              <div className="flex space-x-4 items-center">
-                <div className="text-sm">Data group (time series)</div>
-                <SelectTailwind
-                  value={result.dataGroup || result?.results?.[0]?.dataGroup}
-                  options={
-                    (Array.from(new Set(groupingOptions)) ?? []).map(
-                      (item) => ({
-                        label: item ?? '',
-                        value: item
-                      })
-                    ) || []
-                  }
-                  onChange={(dataGroup) =>
-                    onChangeMonthDataGroup(
-                      result.month,
-                      dataGroup,
-                      result?.checkName
-                    )
-                  }
-                />
-              </div>
-              <div className="flex space-x-4 items-center">
-                <div className="text-sm">Month</div>
-                <SelectTailwind
-                  value={result.month}
-                  options={monthOptions}
-                  onChange={(month) =>
-                    onChangeMonthDataGroup(
-                      month,
-                      result?.dataGroup,
-                      result?.checkName
-                    )
-                  }
-                />
-              </div>
-              <div className="flex space-x-4 items-center">
-                <IconButton
-                  ripple={false}
-                  size="sm"
-                  className={
-                    mode === 'chart'
-                      ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
-                      : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
-                  }
-                  onClick={() => {
-                    setMode('table');
-                  }}
-                >
-                  <Tooltip
-                    content="View results in a table"
-                    className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+        {(checkResultsEntry.length > 0 ? checkResultsEntry : []).map(
+          (result, index) => (
+            <SectionWrapper
+              title={getDisplayCheckNameFromDictionary(result.checkName ?? '')}
+              className="mb-6 max-w-200"
+              key={index}
+            >
+              <div className="flex space-x-8 items-center">
+                <div className="flex space-x-4 items-center">
+                  <div className="text-sm">Data group (time series)</div>
+                  <SelectTailwind
+                    value={result.dataGroup || result?.results?.[0]?.dataGroup}
+                    options={
+                      (Array.from(new Set(groupingOptions)) ?? []).map(
+                        (item) => ({
+                          label: item ?? '',
+                          value: item
+                        })
+                      ) || []
+                    }
+                    onChange={(dataGroup) =>
+                      onChangeMonthDataGroup(
+                        result.month,
+                        dataGroup,
+                        result?.checkName
+                      )
+                    }
+                  />
+                </div>
+                <div className="flex space-x-4 items-center">
+                  <div className="text-sm">Month</div>
+                  <SelectTailwind
+                    value={result.month}
+                    options={monthOptions}
+                    onChange={(month) =>
+                      onChangeMonthDataGroup(
+                        month,
+                        result?.dataGroup,
+                        result?.checkName
+                      )
+                    }
+                  />
+                </div>
+                <div className="flex space-x-4 items-center">
+                  <IconButton
+                    ripple={false}
+                    size="sm"
+                    className={
+                      mode === 'chart'
+                        ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                        : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+                    }
+                    onClick={() => {
+                      setMode('table');
+                    }}
                   >
-                    <div>
-                      <SvgIcon
-                        name="table"
-                        className={clsx(
-                          'w-4 h-4 cursor-pointer ',
-                          mode === 'table'
-                            ? 'font-bold text-white'
-                            : 'text-teal-500'
-                        )}
-                      />
-                    </div>
-                  </Tooltip>
-                </IconButton>
-                <IconButton
-                  size="sm"
-                  ripple={false}
-                  className={
-                    mode === 'table'
-                      ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
-                      : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
-                  }
-                  onClick={() => {
-                    setMode('chart');
-                  }}
-                >
-                  <Tooltip
-                    content="View results in a graph"
-                    className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+                    <Tooltip
+                      content="View results in a table"
+                      className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute"
+                    >
+                      <div>
+                        <SvgIcon
+                          name="table"
+                          className={clsx(
+                            'w-4 h-4 cursor-pointer ',
+                            mode === 'table'
+                              ? 'font-bold text-white'
+                              : 'text-teal-500'
+                          )}
+                        />
+                      </div>
+                    </Tooltip>
+                  </IconButton>
+                  <IconButton
+                    size="sm"
+                    ripple={false}
+                    className={
+                      mode === 'table'
+                        ? 'bg-white border border-teal-500 !shadow-none hover:!shadow-none hover:bg-[#DDF2EF] '
+                        : 'bg-teal-500 !shadow-none hover:!shadow-none hover:bg-[#028770]'
+                    }
+                    onClick={() => {
+                      setMode('chart');
+                    }}
                   >
-                    <div>
-                      <SvgIcon
-                        name="chart-line"
-                        className={clsx(
-                          'w-4 h-4 cursor-pointer',
-                          mode === 'chart'
-                            ? 'font-bold text-white'
-                            : 'text-teal-500'
-                        )}
-                      />
-                    </div>
-                  </Tooltip>
-                </IconButton>
+                    <Tooltip
+                      content="View results in a graph"
+                      className="max-w-80 py-2 px-2 !mb-6 bg-gray-800 !absolute "
+                    >
+                      <div>
+                        <SvgIcon
+                          name="chart-line"
+                          className={clsx(
+                            'w-4 h-4 cursor-pointer',
+                            mode === 'chart'
+                              ? 'font-bold text-white'
+                              : 'text-teal-500'
+                          )}
+                        />
+                      </div>
+                    </Tooltip>
+                  </IconButton>
+                </div>
               </div>
-            </div>
-            {mode === 'chart' ? (
-              <ChartView data={result?.results ?? []} />
-            ) : (
-              <div className="w-full overflow-x-auto">
-                <Table
-                  className="mt-1 w-full"
-                  columns={columns}
-                  data={(result.results ?? []).map((item) => ({
-                    ...item,
-                    checkName: result?.results?.[0].checkName,
-                    executedAt: moment(
-                      getLocalDateInUserTimeZone(new Date(String()))
-                    ).format('YYYY-MM-DD HH:mm:ss'),
-                    timePeriod: item.timePeriod?.replace(/T/g, ' ')
-                  }))}
-                  emptyMessage="No data"
-                  getRowClass={getColor}
-                />
-              </div>
-            )}
-          </SectionWrapper>
-        ))}
+              {mode === 'chart' ? (
+                <ChartView data={result?.results ?? []} />
+              ) : (
+                <div className="w-full overflow-x-auto">
+                  <Table
+                    className="mt-1 w-full"
+                    columns={columns}
+                    data={(result.results ?? []).map((item) => ({
+                      ...item,
+                      checkName: result?.results?.[0].checkName,
+                      executedAt: moment(
+                        getLocalDateInUserTimeZone(new Date(String()))
+                      ).format('YYYY-MM-DD HH:mm:ss'),
+                      timePeriod: item.timePeriod?.replace(/T/g, ' ')
+                    }))}
+                    emptyMessage="No data"
+                    getRowClass={getColor}
+                  />
+                </div>
+              )}
+            </SectionWrapper>
+          )
+        )}
       </div>
       <SectionWrapper title="Data quality issues" className="mt-2 mb-4">
         <div className="grid grid-cols-4 px-4 gap-4 my-6">
