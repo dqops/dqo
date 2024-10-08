@@ -33,6 +33,8 @@ export default function TableListView() {
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [refreshTimer, setRefreshTimer] = useState<NodeJS.Timer>();
+
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -78,7 +80,10 @@ export default function TableListView() {
       (checkTypes === CheckTypes.SOURCES
         ? CheckTypes.MONITORING
         : checkTypes) ?? filters.checkType
-    ).finally(() => setLoading(false));
+    ).finally(() => {
+      setLoading(false);
+      setRefreshTimer(undefined);
+    });
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
       const jItem = { ...item, schema: item.target?.schema_name };
@@ -105,6 +110,11 @@ export default function TableListView() {
 
     fetchData();
     getLabels();
+    return () => {
+      if (refreshTimer) {
+        clearTimeout(refreshTimer);
+      }
+    };
   }, [filters, checkTypes, connection, schema]);
 
   useEffect(() => {
@@ -130,9 +140,11 @@ export default function TableListView() {
     const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
 
     if (shouldRefetch) {
-      setTimeout(() => {
-        getTables();
-      }, 5000);
+      setRefreshTimer(
+        setTimeout(() => {
+          getTables();
+        }, 5000)
+      );
     }
   };
 
