@@ -37,14 +37,14 @@ FROM(
             WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
             OVER (
                 {%- if lib.data_groupings is not none or lib.time_series is not none %}
-                  PARTITION BY
+                PARTITION BY
                 {%- endif -%}
                         {{ render_local_time_dimension_projection('original_table') -}}
                         {{ render_local_data_grouping_projections('original_table') }}
                     ) AS actual_value
         {{- lib.render_time_dimension_projection('original_table') }}
     FROM {{ lib.render_target_table() }} original_table
-    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
 ) analyzed_table
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
