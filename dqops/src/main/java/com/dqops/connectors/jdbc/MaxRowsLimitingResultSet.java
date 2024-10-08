@@ -29,6 +29,7 @@ import java.util.Map;
 
 /**
  * A wrapper over a JDBC rowset that stops reading rows after reading up to the limit of max rows.
+ * This wrapper also performs data type conversion from unknown column types.
  */
 public class MaxRowsLimitingResultSet implements ResultSet {
 
@@ -59,7 +60,13 @@ public class MaxRowsLimitingResultSet implements ResultSet {
      */
     @Override
     public Object getObject(int columnIndex) throws SQLException {
-        return resultSet.getObject(columnIndex);
+        int jdbcColumnType = this.getColumnType(columnIndex);
+        Object value = resultSet.getObject(columnIndex);
+        if (JdbcTypeColumnMapping.hasJdbcTypeMappingConfigured(jdbcColumnType)) {
+            return value;
+        }
+
+        return value != null ? value.toString() : null;
     }
 
     /**
@@ -92,7 +99,14 @@ public class MaxRowsLimitingResultSet implements ResultSet {
      */
     @Override
     public Object getObject(String columnLabel) throws SQLException {
-        return resultSet.getObject(columnLabel);
+        int columnIndex = findColumn(columnLabel);
+        int jdbcColumnType = this.getColumnType(columnIndex);
+        Object value = resultSet.getObject(columnLabel);
+        if (JdbcTypeColumnMapping.hasJdbcTypeMappingConfigured(jdbcColumnType)) {
+            return value;
+        }
+
+        return value != null ? value.toString() : null;
     }
 
     /**
