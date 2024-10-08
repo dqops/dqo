@@ -214,6 +214,57 @@ spec:
                 END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -254,6 +305,57 @@ spec:
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             ```
     ??? example "MySQL"
 
@@ -322,8 +424,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -414,7 +516,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -630,7 +731,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -792,6 +892,63 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -832,6 +989,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -903,8 +1117,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -1004,7 +1218,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1239,7 +1452,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1480,6 +1692,57 @@ spec:
                 END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1520,6 +1783,57 @@ spec:
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1588,8 +1902,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -1680,7 +1994,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1896,7 +2209,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2059,6 +2371,63 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2099,6 +2468,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -2170,8 +2596,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -2271,7 +2697,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2506,7 +2931,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2747,6 +3171,57 @@ spec:
                 END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2787,6 +3262,57 @@ spec:
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             ```
     ??? example "MySQL"
 
@@ -2855,8 +3381,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -2947,7 +3473,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3163,7 +3688,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3326,6 +3850,63 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -3366,6 +3947,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -3437,8 +4075,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -3538,7 +4176,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3773,7 +4410,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4032,6 +4668,63 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -4074,6 +4767,63 @@ spec:
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4148,8 +4898,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -4250,7 +5000,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4490,7 +5239,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4673,6 +5421,67 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -4715,6 +5524,67 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4788,8 +5658,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -4895,7 +5765,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5140,7 +6009,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5403,6 +6271,63 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE))) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -5445,6 +6370,63 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
+                TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -5519,8 +6501,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -5621,7 +6603,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5861,7 +6842,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6044,6 +7024,67 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE))) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -6086,6 +7127,67 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE_REGEXPR {{ lib.render_regex(parameters.regex) }}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" NOT LIKE_REGEXPR '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
+                TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -6159,8 +7261,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -6266,7 +7368,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6511,7 +7612,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}

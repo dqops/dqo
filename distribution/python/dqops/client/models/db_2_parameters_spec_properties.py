@@ -3,15 +3,12 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="TableLineageSourceListModelProperties")
+T = TypeVar("T", bound="Db2ParametersSpecProperties")
 
 
 @_attrs_define
-class TableLineageSourceListModelProperties:
-    """A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are
-    importing data lineage mappings from external data lineage sources can use it to store mapping information.
-
-    """
+class Db2ParametersSpecProperties:
+    """A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."""
 
     additional_properties: Dict[str, str] = _attrs_field(init=False, factory=dict)
 
@@ -26,10 +23,10 @@ class TableLineageSourceListModelProperties:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        table_lineage_source_list_model_properties = cls()
+        db_2_parameters_spec_properties = cls()
 
-        table_lineage_source_list_model_properties.additional_properties = d
-        return table_lineage_source_list_model_properties
+        db_2_parameters_spec_properties.additional_properties = d
+        return db_2_parameters_spec_properties
 
     @property
     def additional_keys(self) -> List[str]:

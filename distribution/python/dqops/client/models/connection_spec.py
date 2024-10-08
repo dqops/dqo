@@ -19,7 +19,9 @@ if TYPE_CHECKING:
     from ..models.cron_schedules_spec import CronSchedulesSpec
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
     from ..models.databricks_parameters_spec import DatabricksParametersSpec
+    from ..models.db_2_parameters_spec import Db2ParametersSpec
     from ..models.duckdb_parameters_spec import DuckdbParametersSpec
+    from ..models.hana_parameters_spec import HanaParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -51,6 +53,8 @@ class ConnectionSpec:
         oracle (Union[Unset, OracleParametersSpec]):
         spark (Union[Unset, SparkParametersSpec]):
         databricks (Union[Unset, DatabricksParametersSpec]):
+        hana (Union[Unset, HanaParametersSpec]):
+        db2 (Union[Unset, Db2ParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
@@ -83,6 +87,8 @@ class ConnectionSpec:
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     spark: Union[Unset, "SparkParametersSpec"] = UNSET
     databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
+    hana: Union[Unset, "HanaParametersSpec"] = UNSET
+    db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[Unset, "DataGroupingConfigurationSpec"] = (
         UNSET
@@ -149,6 +155,14 @@ class ConnectionSpec:
         if not isinstance(self.databricks, Unset):
             databricks = self.databricks.to_dict()
 
+        hana: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.hana, Unset):
+            hana = self.hana.to_dict()
+
+        db2: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.db2, Unset):
+            db2 = self.db2.to_dict()
+
         parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
@@ -214,6 +228,10 @@ class ConnectionSpec:
             field_dict["spark"] = spark
         if databricks is not UNSET:
             field_dict["databricks"] = databricks
+        if hana is not UNSET:
+            field_dict["hana"] = hana
+        if db2 is not UNSET:
+            field_dict["db2"] = db2
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
@@ -253,7 +271,9 @@ class ConnectionSpec:
             DataGroupingConfigurationSpec,
         )
         from ..models.databricks_parameters_spec import DatabricksParametersSpec
+        from ..models.db_2_parameters_spec import Db2ParametersSpec
         from ..models.duckdb_parameters_spec import DuckdbParametersSpec
+        from ..models.hana_parameters_spec import HanaParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -356,6 +376,20 @@ class ConnectionSpec:
         else:
             databricks = DatabricksParametersSpec.from_dict(_databricks)
 
+        _hana = d.pop("hana", UNSET)
+        hana: Union[Unset, HanaParametersSpec]
+        if isinstance(_hana, Unset):
+            hana = UNSET
+        else:
+            hana = HanaParametersSpec.from_dict(_hana)
+
+        _db2 = d.pop("db2", UNSET)
+        db2: Union[Unset, Db2ParametersSpec]
+        if isinstance(_db2, Unset):
+            db2 = UNSET
+        else:
+            db2 = Db2ParametersSpec.from_dict(_db2)
+
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
@@ -424,6 +458,8 @@ class ConnectionSpec:
             oracle=oracle,
             spark=spark,
             databricks=databricks,
+            hana=hana,
+            db2=db2,
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,

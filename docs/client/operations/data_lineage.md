@@ -831,7 +831,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`table_lineage_source_list_model`</span>||*List[[TableLineageSourceListModel](../models/data_lineage.md#tablelineagesourcelistmodel)]*|
+|<span class="no-wrap-code">`table_lineage_table_list_model`</span>||*List[[TableLineageTableListModel](../models/data_lineage.md#tablelineagetablelistmodel)]*|
 
 
 
@@ -924,7 +924,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -933,7 +933,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -942,7 +942,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -985,7 +985,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -994,7 +994,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1003,7 +1003,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1049,7 +1049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1058,7 +1058,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1067,7 +1067,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1113,7 +1113,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1122,7 +1122,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1131,7 +1131,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1164,7 +1164,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`table_lineage_source_list_model`</span>||*List[[TableLineageSourceListModel](../models/data_lineage.md#tablelineagesourcelistmodel)]*|
+|<span class="no-wrap-code">`table_lineage_table_list_model`</span>||*List[[TableLineageTableListModel](../models/data_lineage.md#tablelineagetablelistmodel)]*|
 
 
 
@@ -1257,7 +1257,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1266,7 +1266,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1275,7 +1275,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1318,7 +1318,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1327,7 +1327,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1336,7 +1336,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1382,7 +1382,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1391,7 +1391,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1400,7 +1400,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1446,7 +1446,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         [
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1455,7 +1455,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',
@@ -1464,7 +1464,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				source_table='t_customers',
 				can_edit=False
 			),
-			TableLineageSourceListModel(
+			TableLineageTableListModel(
 				target_connection='datalake',
 				target_schema='landing_app',
 				target_table='customers_landing',

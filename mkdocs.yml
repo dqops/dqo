@@ -192,6 +192,7 @@ nav:
     - data: 'command-line-interface/data.md'
     - run: 'command-line-interface/run.md'
     - rule: 'command-line-interface/rule.md'
+    - sso: 'command-line-interface/sso.md'
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - REST API Python client:

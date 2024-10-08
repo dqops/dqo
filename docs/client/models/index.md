@@ -151,11 +151,11 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DomainConnectionTableKey*](./data_lineage.md#domainconnectiontablekey)|A key object that identifies every table. These keys are used in a cache to store the most recent table quality status for each table or a data lineage cache.|
 |[*TableLineageFlowModel*](./data_lineage.md#tablelineageflowmodel)|Table lineage flow model that describes the data flow from one table to another table, and the data quality status of the source table.|
 |[*TableLineageModel*](./data_lineage.md#tablelineagemodel)|The table lineage model that returns all upstream tables, downstream tables, or both.|
-|[*TableLineageSourceListModel*](./data_lineage.md#tablelineagesourcelistmodel)|Data lineage model that describes one source table of the current table.|
 |[*SourceColumnsSetSpec*](./data_lineage.md#sourcecolumnssetspec)|A collection of unique names of source columns from which the current column receives data. This information is used to track column-level data lineage.|
 |[*ColumnLineageSourceSpec*](./data_lineage.md#columnlineagesourcespec)|Describes the list of source columns for a column in the current table.|
 |[*ColumnLineageSourceSpecMap*](./data_lineage.md#columnlineagesourcespecmap)|Dictionary of mapping of source columns to the columns in the current table. The keys in this dictionary are the column names in the current table.|
 |[*TableLineageSourceSpec*](./data_lineage.md#tablelineagesourcespec)|Data lineage specification for a table to identify a source table of the current table where this object is stored.|
+|[*TableLineageTableListModel*](./data_lineage.md#tablelineagetablelistmodel)|Data lineage model that describes one source or target table of the current table.|
 
 
 ## data_sources
@@ -391,6 +391,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
+|[*SimilarTableModel*](./tables.md#similartablemodel)|Model that describes a table that is similar to a reference table. Similar tables are used to build the data lineage graph.|
 |[*TableComparisonDailyMonitoringChecksSpecMap*](./tables.md#tablecomparisondailymonitoringchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains the daily monitoring comparison checks for each configured reference table.|
 |[*CustomCheckSpecMap*](./tables.md#customcheckspecmap)|Dictionary of custom checks indexed by a check name.|
 |[*TableDailyMonitoringCheckCategoriesSpec*](./tables.md#tabledailymonitoringcheckcategoriesspec)|Container of table level daily monitoring. Contains categories of daily monitoring.|

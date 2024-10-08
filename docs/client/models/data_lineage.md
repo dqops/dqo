@@ -51,31 +51,9 @@ The table lineage model that returns all upstream tables, downstream tables, or 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`relative_table`](#domainconnectiontablekey)</span>|The table for which the data lineage is generated.|*[DomainConnectionTableKey](#domainconnectiontablekey)*|
+|<span class="no-wrap-code">[`relative_table_cumulative_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The data quality status of the reference table (in the middle of the data lineage) showing the highest severity problems detected on the reference table and all upstream tables from which some issues have come.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
 |<span class="no-wrap-code">`flows`</span>|A list of data flows from source tables to direct target tables. Describes the data quality status of the source table.|*List[[TableLineageFlowModel](#tablelineageflowmodel)]*|
 |<span class="no-wrap-code">`data_lineage_fully_loaded`</span>|This flag tells if the data lineage was fully loaded. If any data flows are missing or the data quality status of some tables is missing, this flag will return false, which means that the data lineage must be loaded again.|*boolean*|
-
-
-___
-
-## TableLineageSourceListModel
-Data lineage model that describes one source table of the current table.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`target_connection`</span>|The connection name where the target table is defined.|*string*|
-|<span class="no-wrap-code">`target_schema`</span>|The schema name in the target connection where the target table is defined.|*string*|
-|<span class="no-wrap-code">`target_table`</span>|The name of the target table inside the target schema.|*string*|
-|<span class="no-wrap-code">`source_connection`</span>|The name of a source connection that is defined in DQOps and contains a source table from which the current table receives data.|*string*|
-|<span class="no-wrap-code">`source_schema`</span>|The name of a source schema within the source connection that contains a source table from which the current table receives data.|*string*|
-|<span class="no-wrap-code">`source_table`</span>|The name of a source schema within the source connection that contains a source table from which the current table receives data.|*string*|
-|<span class="no-wrap-code">`data_lineage_source_tool`</span>|The name of a source tool from which this data lineage information was copied. This field should be filled when the data lineage was imported from another data catalog or a data lineage tracking platform.|*string*|
-|<span class="no-wrap-code">`properties`</span>|A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.|*Dict[string, string]*|
-|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
-|<span class="no-wrap-code">[`source_table_data_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
 
 
 ___
@@ -138,6 +116,29 @@ Data lineage specification for a table to identify a source table of the current
 |<span class="no-wrap-code">`data_lineage_source_tool`</span>|The name of a source tool from which this data lineage information was copied. This field should be filled when the data lineage was imported from another data catalog or a data lineage tracking platform.|*string*|
 |<span class="no-wrap-code">`properties`</span>|A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.|*Dict[string, string]*|
 |<span class="no-wrap-code">[`columns`](#columnlineagesourcespecmap)</span>|Configuration of source columns for each column in the current table. The keys in this dictionary are column names in the current table. The object stored in the dictionary contain a list of source columns.|*[ColumnLineageSourceSpecMap](#columnlineagesourcespecmap)*|
+
+
+___
+
+## TableLineageTableListModel
+Data lineage model that describes one source or target table of the current table.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`target_connection`</span>|The connection name where the target table is defined.|*string*|
+|<span class="no-wrap-code">`target_schema`</span>|The schema name in the target connection where the target table is defined.|*string*|
+|<span class="no-wrap-code">`target_table`</span>|The name of the target table inside the target schema.|*string*|
+|<span class="no-wrap-code">`source_connection`</span>|The name of a source connection that is defined in DQOps and contains a source table from which the current table receives data.|*string*|
+|<span class="no-wrap-code">`source_schema`</span>|The name of a source schema within the source connection that contains a source table from which the current table receives data.|*string*|
+|<span class="no-wrap-code">`source_table`</span>|The name of a source schema within the source connection that contains a source table from which the current table receives data.|*string*|
+|<span class="no-wrap-code">`data_lineage_source_tool`</span>|The name of a source tool from which this data lineage information was copied. This field should be filled when the data lineage was imported from another data catalog or a data lineage tracking platform.|*string*|
+|<span class="no-wrap-code">`properties`</span>|A dictionary of mapping properties stored as a key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external data lineage sources can use it to store mapping information.|*Dict[string, string]*|
+|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
+|<span class="no-wrap-code">[`table_data_quality_status`](./check_results.md#tablecurrentdataqualitystatusmodel)</span>|The current data quality status for the table, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the table.|*[TableCurrentDataQualityStatusModel](./check_results.md#tablecurrentdataqualitystatusmodel)*|
 
 
 ___

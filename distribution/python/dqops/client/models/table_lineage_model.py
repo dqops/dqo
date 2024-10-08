@@ -7,6 +7,9 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.domain_connection_table_key import DomainConnectionTableKey
+    from ..models.table_current_data_quality_status_model import (
+        TableCurrentDataQualityStatusModel,
+    )
     from ..models.table_lineage_flow_model import TableLineageFlowModel
 
 
@@ -20,6 +23,11 @@ class TableLineageModel:
     Attributes:
         relative_table (Union[Unset, DomainConnectionTableKey]): Table key that identifies a table in the data quality
             cache or a data lineage cache.
+        relative_table_cumulative_quality_status (Union[Unset, TableCurrentDataQualityStatusModel]): The table's most
+            recent data quality status. It is a summary of the results of the most recently executed data quality checks on
+            the table. Verify the value of the highest_severity_level to see if there are any data quality issues on the
+            table. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an
+            error was detected, 3 - a fatal data quality issue was detected.
         flows (Union[Unset, List['TableLineageFlowModel']]): A list of data flows from source tables to direct target
             tables. Describes the data quality status of the source table.
         data_lineage_fully_loaded (Union[Unset, bool]): This flag tells if the data lineage was fully loaded. If any
@@ -28,6 +36,9 @@ class TableLineageModel:
     """
 
     relative_table: Union[Unset, "DomainConnectionTableKey"] = UNSET
+    relative_table_cumulative_quality_status: Union[
+        Unset, "TableCurrentDataQualityStatusModel"
+    ] = UNSET
     flows: Union[Unset, List["TableLineageFlowModel"]] = UNSET
     data_lineage_fully_loaded: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -36,6 +47,12 @@ class TableLineageModel:
         relative_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.relative_table, Unset):
             relative_table = self.relative_table.to_dict()
+
+        relative_table_cumulative_quality_status: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.relative_table_cumulative_quality_status, Unset):
+            relative_table_cumulative_quality_status = (
+                self.relative_table_cumulative_quality_status.to_dict()
+            )
 
         flows: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.flows, Unset):
@@ -52,6 +69,10 @@ class TableLineageModel:
         field_dict.update({})
         if relative_table is not UNSET:
             field_dict["relative_table"] = relative_table
+        if relative_table_cumulative_quality_status is not UNSET:
+            field_dict["relative_table_cumulative_quality_status"] = (
+                relative_table_cumulative_quality_status
+            )
         if flows is not UNSET:
             field_dict["flows"] = flows
         if data_lineage_fully_loaded is not UNSET:
@@ -62,6 +83,9 @@ class TableLineageModel:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.domain_connection_table_key import DomainConnectionTableKey
+        from ..models.table_current_data_quality_status_model import (
+            TableCurrentDataQualityStatusModel,
+        )
         from ..models.table_lineage_flow_model import TableLineageFlowModel
 
         d = src_dict.copy()
@@ -71,6 +95,21 @@ class TableLineageModel:
             relative_table = UNSET
         else:
             relative_table = DomainConnectionTableKey.from_dict(_relative_table)
+
+        _relative_table_cumulative_quality_status = d.pop(
+            "relative_table_cumulative_quality_status", UNSET
+        )
+        relative_table_cumulative_quality_status: Union[
+            Unset, TableCurrentDataQualityStatusModel
+        ]
+        if isinstance(_relative_table_cumulative_quality_status, Unset):
+            relative_table_cumulative_quality_status = UNSET
+        else:
+            relative_table_cumulative_quality_status = (
+                TableCurrentDataQualityStatusModel.from_dict(
+                    _relative_table_cumulative_quality_status
+                )
+            )
 
         flows = []
         _flows = d.pop("flows", UNSET)
@@ -83,6 +122,7 @@ class TableLineageModel:
 
         table_lineage_model = cls(
             relative_table=relative_table,
+            relative_table_cumulative_quality_status=relative_table_cumulative_quality_status,
             flows=flows,
             data_lineage_fully_loaded=data_lineage_fully_loaded,
         )

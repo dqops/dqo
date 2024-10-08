@@ -9,17 +9,17 @@ if TYPE_CHECKING:
     from ..models.table_current_data_quality_status_model import (
         TableCurrentDataQualityStatusModel,
     )
-    from ..models.table_lineage_source_list_model_properties import (
-        TableLineageSourceListModelProperties,
+    from ..models.table_lineage_table_list_model_properties import (
+        TableLineageTableListModelProperties,
     )
 
 
-T = TypeVar("T", bound="TableLineageSourceListModel")
+T = TypeVar("T", bound="TableLineageTableListModel")
 
 
 @_attrs_define
-class TableLineageSourceListModel:
-    """Data lineage model that describes one source table of the current table.
+class TableLineageTableListModel:
+    """Data lineage model that describes one source or target table of the current table.
 
     Attributes:
         target_connection (Union[Unset, str]): The connection name where the target table is defined.
@@ -34,15 +34,15 @@ class TableLineageSourceListModel:
         data_lineage_source_tool (Union[Unset, str]): The name of a source tool from which this data lineage information
             was copied. This field should be filled when the data lineage was imported from another data catalog or a data
             lineage tracking platform.
-        properties (Union[Unset, TableLineageSourceListModelProperties]): A dictionary of mapping properties stored as a
+        properties (Union[Unset, TableLineageTableListModelProperties]): A dictionary of mapping properties stored as a
             key/value dictionary. Data lineage synchronization tools that are importing data lineage mappings from external
             data lineage sources can use it to store mapping information.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
-        source_table_data_quality_status (Union[Unset, TableCurrentDataQualityStatusModel]): The table's most recent
-            data quality status. It is a summary of the results of the most recently executed data quality checks on the
-            table. Verify the value of the highest_severity_level to see if there are any data quality issues on the table.
-            The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error
-            was detected, 3 - a fatal data quality issue was detected.
+        table_data_quality_status (Union[Unset, TableCurrentDataQualityStatusModel]): The table's most recent data
+            quality status. It is a summary of the results of the most recently executed data quality checks on the table.
+            Verify the value of the highest_severity_level to see if there are any data quality issues on the table. The
+            values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was
+            detected, 3 - a fatal data quality issue was detected.
     """
 
     target_connection: Union[Unset, str] = UNSET
@@ -52,11 +52,11 @@ class TableLineageSourceListModel:
     source_schema: Union[Unset, str] = UNSET
     source_table: Union[Unset, str] = UNSET
     data_lineage_source_tool: Union[Unset, str] = UNSET
-    properties: Union[Unset, "TableLineageSourceListModelProperties"] = UNSET
+    properties: Union[Unset, "TableLineageTableListModelProperties"] = UNSET
     can_edit: Union[Unset, bool] = UNSET
-    source_table_data_quality_status: Union[
-        Unset, "TableCurrentDataQualityStatusModel"
-    ] = UNSET
+    table_data_quality_status: Union[Unset, "TableCurrentDataQualityStatusModel"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,11 +72,9 @@ class TableLineageSourceListModel:
             properties = self.properties.to_dict()
 
         can_edit = self.can_edit
-        source_table_data_quality_status: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.source_table_data_quality_status, Unset):
-            source_table_data_quality_status = (
-                self.source_table_data_quality_status.to_dict()
-            )
+        table_data_quality_status: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.table_data_quality_status, Unset):
+            table_data_quality_status = self.table_data_quality_status.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -99,10 +97,8 @@ class TableLineageSourceListModel:
             field_dict["properties"] = properties
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
-        if source_table_data_quality_status is not UNSET:
-            field_dict["source_table_data_quality_status"] = (
-                source_table_data_quality_status
-            )
+        if table_data_quality_status is not UNSET:
+            field_dict["table_data_quality_status"] = table_data_quality_status
 
         return field_dict
 
@@ -111,8 +107,8 @@ class TableLineageSourceListModel:
         from ..models.table_current_data_quality_status_model import (
             TableCurrentDataQualityStatusModel,
         )
-        from ..models.table_lineage_source_list_model_properties import (
-            TableLineageSourceListModelProperties,
+        from ..models.table_lineage_table_list_model_properties import (
+            TableLineageTableListModelProperties,
         )
 
         d = src_dict.copy()
@@ -131,30 +127,24 @@ class TableLineageSourceListModel:
         data_lineage_source_tool = d.pop("data_lineage_source_tool", UNSET)
 
         _properties = d.pop("properties", UNSET)
-        properties: Union[Unset, TableLineageSourceListModelProperties]
+        properties: Union[Unset, TableLineageTableListModelProperties]
         if isinstance(_properties, Unset):
             properties = UNSET
         else:
-            properties = TableLineageSourceListModelProperties.from_dict(_properties)
+            properties = TableLineageTableListModelProperties.from_dict(_properties)
 
         can_edit = d.pop("can_edit", UNSET)
 
-        _source_table_data_quality_status = d.pop(
-            "source_table_data_quality_status", UNSET
-        )
-        source_table_data_quality_status: Union[
-            Unset, TableCurrentDataQualityStatusModel
-        ]
-        if isinstance(_source_table_data_quality_status, Unset):
-            source_table_data_quality_status = UNSET
+        _table_data_quality_status = d.pop("table_data_quality_status", UNSET)
+        table_data_quality_status: Union[Unset, TableCurrentDataQualityStatusModel]
+        if isinstance(_table_data_quality_status, Unset):
+            table_data_quality_status = UNSET
         else:
-            source_table_data_quality_status = (
-                TableCurrentDataQualityStatusModel.from_dict(
-                    _source_table_data_quality_status
-                )
+            table_data_quality_status = TableCurrentDataQualityStatusModel.from_dict(
+                _table_data_quality_status
             )
 
-        table_lineage_source_list_model = cls(
+        table_lineage_table_list_model = cls(
             target_connection=target_connection,
             target_schema=target_schema,
             target_table=target_table,
@@ -164,11 +154,11 @@ class TableLineageSourceListModel:
             data_lineage_source_tool=data_lineage_source_tool,
             properties=properties,
             can_edit=can_edit,
-            source_table_data_quality_status=source_table_data_quality_status,
+            table_data_quality_status=table_data_quality_status,
         )
 
-        table_lineage_source_list_model.additional_properties = d
-        return table_lineage_source_list_model
+        table_lineage_table_list_model.additional_properties = d
+        return table_lineage_table_list_model
 
     @property
     def additional_keys(self) -> List[str]:

@@ -617,7 +617,7 @@ Data source provider type (dialect type).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>duckdb<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>|
+|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>duckdb<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>hana<br/>db2<br/>|
 
 ___
 
@@ -647,6 +647,8 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |<span class="no-wrap-code">[`oracle`](../../reference/yaml/ConnectionYaml.md#oracleparametersspec)</span>|Oracle connection parameters.|*[OracleParametersSpec](../../reference/yaml/ConnectionYaml.md#oracleparametersspec)*|
 |<span class="no-wrap-code">[`spark`](../../reference/yaml/ConnectionYaml.md#sparkparametersspec)</span>|Spark connection parameters.|*[SparkParametersSpec](../../reference/yaml/ConnectionYaml.md#sparkparametersspec)*|
 |<span class="no-wrap-code">[`databricks`](../../reference/yaml/ConnectionYaml.md#databricksparametersspec)</span>|Databricks connection parameters.|*[DatabricksParametersSpec](../../reference/yaml/ConnectionYaml.md#databricksparametersspec)*|
+|<span class="no-wrap-code">[`hana`](../../reference/yaml/ConnectionYaml.md#hanaparametersspec)</span>|HANA connection parameters.|*[HanaParametersSpec](../../reference/yaml/ConnectionYaml.md#hanaparametersspec)*|
+|<span class="no-wrap-code">[`db2`](../../reference/yaml/ConnectionYaml.md#db2parametersspec)</span>|DB2 connection parameters.|*[Db2ParametersSpec](../../reference/yaml/ConnectionYaml.md#db2parametersspec)*|
 |<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this connection.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this connection.|*[CheckSearchFilters](./common.md#checksearchfilters)*|

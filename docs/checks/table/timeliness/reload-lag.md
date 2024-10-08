@@ -284,6 +284,75 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(DAYS_BETWEEN(
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE),
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)
+                    ))
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- else -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                MAX(SECONDS_BETWEEN(
+                        analyzed_table."col_inserted_at",
+                        analyzed_table."col_event_timestamp"
+                    )) / 24.0 / 3600.0 AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -342,6 +411,85 @@ spec:
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DAYS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- else -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP(analyzed_table."col_event_timestamp"),
+                        TO_TIMESTAMP(analyzed_table."col_inserted_at")
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000 AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -442,17 +590,17 @@ spec:
             SELECT
                 {{ render_ingestion_event_diff() }} AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-                FROM (
-                    SELECT
-                        original_table.*
-                        {{- lib.render_data_grouping_projections('original_table') }}
-                        {{- lib.render_time_dimension_projection('original_table') }}
-                    FROM {{ lib.render_target_table() }} original_table
-                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-                ) analyzed_table
-                {{- lib.render_group_by() -}}
-                {{- lib.render_order_by() -}}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
 
@@ -461,13 +609,13 @@ spec:
                 MAX(CAST(analyzed_table."col_inserted_at" AS DATE) - (CAST(analyzed_table."col_event_timestamp" AS DATE))) AS actual_value,
                 time_period,
                 time_period_utc
-                FROM (
-                    SELECT
-                        original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" original_table
-                ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -588,7 +736,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -937,7 +1084,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1165,6 +1311,79 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(DAYS_BETWEEN(
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE),
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)
+                    ))
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- else -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                MAX(SECONDS_BETWEEN(
+                        analyzed_table."col_inserted_at",
+                        analyzed_table."col_event_timestamp"
+                    )) / 24.0 / 3600.0 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1223,6 +1442,89 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DAYS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- else -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP(analyzed_table."col_event_timestamp"),
+                        TO_TIMESTAMP(analyzed_table."col_inserted_at")
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1322,17 +1624,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 {{ render_ingestion_event_diff() }} AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-                FROM (
-                    SELECT
-                        original_table.*
-                        {{- lib.render_data_grouping_projections('original_table') }}
-                        {{- lib.render_time_dimension_projection('original_table') }}
-                    FROM {{ lib.render_target_table() }} original_table
-                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-                ) analyzed_table
-                {{- lib.render_group_by() -}}
-                {{- lib.render_order_by() -}}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
@@ -1345,15 +1647,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ,
                 time_period,
                 time_period_utc
-                FROM (
-                    SELECT
-                        original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2,
                 TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" original_table
-                ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1473,7 +1775,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1827,7 +2128,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2135,6 +2435,75 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(DAYS_BETWEEN(
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE),
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)
+                    ))
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- else -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                MAX(SECONDS_BETWEEN(
+                        analyzed_table."col_inserted_at",
+                        analyzed_table."col_event_timestamp"
+                    )) / 24.0 / 3600.0 AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE))) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2193,6 +2562,85 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DAYS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- else -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP(analyzed_table."col_event_timestamp"),
+                        TO_TIMESTAMP(analyzed_table."col_inserted_at")
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000 AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
+                TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2293,17 +2741,17 @@ spec:
             SELECT
                 {{ render_ingestion_event_diff() }} AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-                FROM (
-                    SELECT
-                        original_table.*
-                        {{- lib.render_data_grouping_projections('original_table') }}
-                        {{- lib.render_time_dimension_projection('original_table') }}
-                    FROM {{ lib.render_target_table() }} original_table
-                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-                ) analyzed_table
-                {{- lib.render_group_by() -}}
-                {{- lib.render_order_by() -}}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
 
@@ -2312,13 +2760,13 @@ spec:
                 MAX(CAST(analyzed_table."col_inserted_at" AS DATE) - (CAST(analyzed_table."col_event_timestamp" AS DATE))) AS actual_value,
                 time_period,
                 time_period_utc
-                FROM (
-                    SELECT
-                        original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" original_table
-                ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2439,7 +2887,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2788,7 +3235,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3016,6 +3462,79 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(DAYS_BETWEEN(
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE),
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)
+                    ))
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- else -%}
+                    MAX(SECONDS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+                    )) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                MAX(SECONDS_BETWEEN(
+                        analyzed_table."col_inserted_at",
+                        analyzed_table."col_event_timestamp"
+                    )) / 24.0 / 3600.0 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS DATE))) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -3074,6 +3593,89 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DAYS_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- else -%}
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                        TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                MAX(
+                    NANO100_BETWEEN(
+                        TO_TIMESTAMP(analyzed_table."col_event_timestamp"),
+                        TO_TIMESTAMP(analyzed_table."col_inserted_at")
+                    )
+                ) / 24.0 / 3600.0 / 1000.0 / 10000 AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
+                TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3173,17 +3775,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 {{ render_ingestion_event_diff() }} AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-                FROM (
-                    SELECT
-                        original_table.*
-                        {{- lib.render_data_grouping_projections('original_table') }}
-                        {{- lib.render_time_dimension_projection('original_table') }}
-                    FROM {{ lib.render_target_table() }} original_table
-                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-                ) analyzed_table
-                {{- lib.render_group_by() -}}
-                {{- lib.render_order_by() -}}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
@@ -3196,15 +3798,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ,
                 time_period,
                 time_period_utc
-                FROM (
-                    SELECT
-                        original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2,
                 TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                    FROM "<target_schema>"."<target_table>" original_table
-                ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3324,7 +3926,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3678,7 +4279,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}

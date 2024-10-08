@@ -13,10 +13,12 @@ if TYPE_CHECKING:
         ConnectionModelAdvancedProperties,
     )
     from ..models.databricks_parameters_spec import DatabricksParametersSpec
+    from ..models.db_2_parameters_spec import Db2ParametersSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
     from ..models.duckdb_parameters_spec import DuckdbParametersSpec
+    from ..models.hana_parameters_spec import HanaParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -60,6 +62,8 @@ class ConnectionModel:
         oracle (Union[Unset, OracleParametersSpec]):
         spark (Union[Unset, SparkParametersSpec]):
         databricks (Union[Unset, DatabricksParametersSpec]):
+        hana (Union[Unset, HanaParametersSpec]):
+        db2 (Union[Unset, Db2ParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -100,6 +104,8 @@ class ConnectionModel:
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     spark: Union[Unset, "SparkParametersSpec"] = UNSET
     databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
+    hana: Union[Unset, "HanaParametersSpec"] = UNSET
+    db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -172,6 +178,14 @@ class ConnectionModel:
         databricks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.databricks, Unset):
             databricks = self.databricks.to_dict()
+
+        hana: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.hana, Unset):
+            hana = self.hana.to_dict()
+
+        db2: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.db2, Unset):
+            db2 = self.db2.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -252,6 +266,10 @@ class ConnectionModel:
             field_dict["spark"] = spark
         if databricks is not UNSET:
             field_dict["databricks"] = databricks
+        if hana is not UNSET:
+            field_dict["hana"] = hana
+        if db2 is not UNSET:
+            field_dict["db2"] = db2
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -295,10 +313,12 @@ class ConnectionModel:
             ConnectionModelAdvancedProperties,
         )
         from ..models.databricks_parameters_spec import DatabricksParametersSpec
+        from ..models.db_2_parameters_spec import Db2ParametersSpec
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
         )
         from ..models.duckdb_parameters_spec import DuckdbParametersSpec
+        from ..models.hana_parameters_spec import HanaParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -412,6 +432,20 @@ class ConnectionModel:
         else:
             databricks = DatabricksParametersSpec.from_dict(_databricks)
 
+        _hana = d.pop("hana", UNSET)
+        hana: Union[Unset, HanaParametersSpec]
+        if isinstance(_hana, Unset):
+            hana = UNSET
+        else:
+            hana = HanaParametersSpec.from_dict(_hana)
+
+        _db2 = d.pop("db2", UNSET)
+        db2: Union[Unset, Db2ParametersSpec]
+        if isinstance(_db2, Unset):
+            db2 = UNSET
+        else:
+            db2 = Db2ParametersSpec.from_dict(_db2)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -513,6 +547,8 @@ class ConnectionModel:
             oracle=oracle,
             spark=spark,
             databricks=databricks,
+            hana=hana,
+            db2=db2,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

@@ -526,6 +526,7 @@ Operations related to manage the metadata of imported tables, and managing the c
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`create_table`</span>](./tables.md#create_table)|POST|Creates a new table (adds a table metadata)|
 |<span class="no-wrap-code">[`delete_table`</span>](./tables.md#delete_table)|DELETE|Deletes a table|
+|<span class="no-wrap-code">[`find_similar_tables`</span>](./tables.md#find_similar_tables)|GET|Finds a list of tables that are most similar to a given table|
 |<span class="no-wrap-code">[`get_table`</span>](./tables.md#get_table)|GET|Return the table specification|
 |<span class="no-wrap-code">[`get_table_basic`</span>](./tables.md#get_table_basic)|GET|Return the basic table information|
 |<span class="no-wrap-code">[`get_table_columns_monitoring_checks_model`</span>](./tables.md#get_table_columns_monitoring_checks_model)|GET|Return a UI friendly model of configurations for column-level data quality monitoring checks on a table|

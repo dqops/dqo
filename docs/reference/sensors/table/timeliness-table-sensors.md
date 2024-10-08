@@ -115,6 +115,38 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        SECONDS_BETWEEN(CURRENT_TIMESTAMP, CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DAYS_BETWEEN(CURRENT_DATE - CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS DATE))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        SECONDS_BETWEEN(CURRENT_TIMESTAMP, CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) / 24.0 / 3600.0
+        {%- else -%}
+        SECONDS_BETWEEN(CURRENT_TIMESTAMP, CAST(MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}) AS TIMESTAMP)) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -143,6 +175,52 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        DAYS_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- else -%}
+        NANO100_BETWEEN(
+            MAX(
+                TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            ),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -216,8 +294,8 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -298,7 +376,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -505,7 +582,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -633,6 +709,53 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            SECONDS_BETWEEN(
+                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
+                MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)))
+            ) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DAYS_BETWEEN(
+                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
+                MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)))
+            )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            SECONDS_BETWEEN(
+                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE)),
+                MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)))
+            ) / 24.0 / 3600.0
+        {%- else -%}
+            SECONDS_BETWEEN(
+                MAX(CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)),
+                MAX((CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)))
+            ) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -664,6 +787,57 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        CAST(DAYS_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- else -%}
+        NANO100_BETWEEN(
+            MAX(
+                TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+            ),
+            MAX(
+                TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            )
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -744,8 +918,8 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -834,7 +1008,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -1058,7 +1231,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -1176,6 +1348,38 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            SECONDS_BETWEEN(CURRENT_TIMESTAMP, MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            DAYS_BETWEEN(CURRENT_DATE, MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            SECONDS_BETWEEN(CURRENT_TIMESTAMP, MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})) / 24.0 / 3600.0
+        {%- else -%}
+            SECONDS_BETWEEN(CURRENT_TIMESTAMP, MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -1204,6 +1408,52 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            CURRENT_DATE
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        NANO100_BETWEEN(
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- else -%}
+        NANO100_BETWEEN(
+            MAX(
+                TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            ),
+            CURRENT_TIMESTAMP
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -1270,17 +1520,17 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         {{ render_current_ingestion_diff() }} AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
-            SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
 
@@ -1359,7 +1609,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -1567,7 +1816,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -1697,6 +1945,53 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            MAX(SECONDS_BETWEEN(
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            )) / 24.0 / 3600.0
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            MAX(DAYS_BETWEEN(
+                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS DATE),
+                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS DATE)
+            ))
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+            MAX(SECONDS_BETWEEN(
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            )) / 24.0 / 3600.0
+        {%- else -%}
+            MAX(SECONDS_BETWEEN(
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            )) / 24.0 / 3600.0
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -1737,6 +2032,61 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            NANO100_BETWEEN(
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            DAYS_BETWEEN(
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        )
+        {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+        and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+        MAX(
+            NANO100_BETWEEN(
+                {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+            )
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- else -%}
+        MAX(
+            NANO100_BETWEEN(
+                TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+                TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+            )
+        ) / 24.0 / 3600.0 / 1000.0 / 10000
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -1817,17 +2167,17 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         {{ render_ingestion_event_diff() }} AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
-            SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
 
@@ -1927,7 +2277,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -2178,7 +2527,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}

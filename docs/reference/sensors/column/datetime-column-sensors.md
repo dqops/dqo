@@ -79,6 +79,34 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -97,6 +125,34 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -146,8 +202,8 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -196,7 +252,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -329,7 +384,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -429,6 +483,43 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                             {{ lib.render_target_column('analyzed_table') }} > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INT))
+                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                             {{ lib.render_target_column('analyzed_table') }} > ADD_DAYS(CURRENT_DATE, CAST({{(parameters.max_future_days)}} AS INT))
+                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                             {{ lib.render_target_column('analyzed_table') }} > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INT))
+                         {% else -%}
+                             CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INT))
+                         {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -457,6 +548,44 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER))
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > ADD_DAYS(CURRENT_DATE, CAST({{(parameters.max_future_days)}} AS INTEGER))
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER))
+                        {% else -%}
+                            TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > ADD_SECONDS(CURRENT_TIMESTAMP, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER))
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -526,8 +655,8 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -600,7 +729,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -767,7 +895,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -852,6 +979,35 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DB2"
+
+    ```sql+jinja
+    {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(CASE
+                  WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                       REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
+                     THEN 1
+                  ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "DuckDB"
 
     ```sql+jinja
@@ -871,6 +1027,36 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "HANA"
+
+    ```sql+jinja
+    {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) LIKE_REGEXPR {{lib.render_date_format_regex(parameters.date_format)}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -922,8 +1108,8 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -976,7 +1162,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
@@ -1103,7 +1288,6 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_data_grouping_projections('original_table') }}
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
     ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}

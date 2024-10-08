@@ -203,6 +203,45 @@ spec:
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+              {{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+                ) AS expected_value,analyzed_table.actual_value
+            FROM (SELECT
+                    MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause() -}} ) analyzed_table
+            GROUP BY actual_value
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw referenced_table
+                ) AS expected_value,analyzed_table.actual_value
+            FROM (SELECT
+                    MAX(original_table."target_column") AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY actual_value
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -229,6 +268,33 @@ spec:
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -745,6 +811,45 @@ spec:
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+              {{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+                ) AS expected_value,analyzed_table.actual_value
+            FROM (SELECT
+                    MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause() -}} ) analyzed_table
+            GROUP BY actual_value
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw referenced_table
+                ) AS expected_value,analyzed_table.actual_value
+            FROM (SELECT
+                    MAX(original_table."target_column") AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY actual_value
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -771,6 +876,33 @@ spec:
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1287,6 +1419,45 @@ spec:
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+              {{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+                ) AS expected_value,analyzed_table.actual_value
+            FROM (SELECT
+                    MAX({{ lib.render_target_column('original_table')}}) AS actual_value
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause() -}} ) analyzed_table
+            GROUP BY actual_value
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw referenced_table
+                ) AS expected_value,analyzed_table.actual_value
+            FROM (SELECT
+                    MAX(original_table."target_column") AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY actual_value
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1313,6 +1484,33 @@ spec:
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 

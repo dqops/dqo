@@ -564,6 +564,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 ___
+## find_similar_tables
+Finds a list of tables that are most similar to a given table
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/find_similar_tables.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/similar
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`similar_table_model`</span>||*List[[SimilarTableModel](../models/tables.md#similartablemodel)]*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`limit`</span>|The maximum number of similar tables to return. The default result is 50 similar tables.|*long*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/similar^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        [ {
+		  "difference" : 0
+		}, {
+		  "difference" : 0
+		}, {
+		  "difference" : 0
+		} ]
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_similar_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_similar_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_similar_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_similar_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+
+___
 ## get_table
 Return the table specification
 

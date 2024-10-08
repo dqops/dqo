@@ -2269,7 +2269,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters,'actual_value') or not hasattr(rule_parameters.parameters, 'expected_value'):
+        if not hasattr(rule_parameters,'actual_value') or not hasattr(rule_parameters.parameters, 'max_missing'):
             return RuleExecutionResult(True, None, None, None)
     
         expected_value = rule_parameters.expected_value
@@ -3482,7 +3482,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
         if not hasattr(rule_parameters, 'actual_value'):
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
     
         if not hasattr(rule_parameters, 'previous_readouts'):
             return RuleExecutionResult(True, None, None, None)

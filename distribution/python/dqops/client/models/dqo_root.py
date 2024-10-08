@@ -17,7 +17,8 @@ class DqoRoot(str, Enum):
     SETTINGS = "settings"
     SOURCES = "sources"
     VALUE_14 = "_indexes"
-    VALUE_15 = "_local_settings"
+    VALUE_15 = "_indexes_sources"
+    VALUE_16 = "_local_settings"
 
     def __str__(self) -> str:
         return str(self.value)

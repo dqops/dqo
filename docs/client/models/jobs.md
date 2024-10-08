@@ -186,7 +186,7 @@ DQOps root folders in the dqo use home that may be replicated to a remote file s
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_error_samples<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
+|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_error_samples<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_indexes_sources<br/>_local_settings<br/>|
 
 ___
 

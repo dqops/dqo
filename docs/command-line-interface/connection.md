@@ -93,7 +93,10 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-http-path=<httpPath>]
                 [--databricks-initialization-sql=<initializationSql>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
-                [--databricks-user=<user>]
+                [--databricks-user=<user>] [--db2-database=<database>]
+                [--db2-host=<host>] [--db2-password=<password>]
+                [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
+                [--db2-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                 [--duckdb-azure-account-name=<accountName>]
                 [--duckdb-azure-authentication-mode=<azureAuthenticationMode>]
@@ -106,7 +109,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
                 [--duckdb-region=<region>]
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
-                [--mysql-database=<database>]
+                [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
+                [--hana-password=<password>] [--hana-port=<port>]
+                [--hana-user=<user>] [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-password=<password>] [--mysql-port=<port>]
                 [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
@@ -139,8 +144,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-Duck=<String=String>]...
-                [-E=<String=String>]... [-F=<String=String>]...
+                [-D=<String=String>]... [-DB2=<String=String>]...
+                [-Duck=<String=String>]... [-E=<String=String>]...
+                [-F=<String=String>]... [-H=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
                 [-R=<String=String>]... [-S=<String=String>]...
@@ -168,7 +174,10 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-http-path=<httpPath>]
                 [--databricks-initialization-sql=<initializationSql>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
-                [--databricks-user=<user>]
+                [--databricks-user=<user>] [--db2-database=<database>]
+                [--db2-host=<host>] [--db2-password=<password>]
+                [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
+                [--db2-user=<user>]
                 [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                 [--duckdb-azure-account-name=<accountName>]
                 [--duckdb-azure-authentication-mode=<azureAuthenticationMode>]
@@ -181,7 +190,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--duckdb-password=<password>] [--duckdb-read-mode=<readMode>]
                 [--duckdb-region=<region>]
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
-                [--mysql-database=<database>]
+                [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
+                [--hana-password=<password>] [--hana-port=<port>]
+                [--hana-user=<user>] [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-password=<password>] [--mysql-port=<port>]
                 [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
@@ -214,8 +225,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-Duck=<String=String>]...
-                [-E=<String=String>]... [-F=<String=String>]...
+                [-D=<String=String>]... [-DB2=<String=String>]...
+                [-Duck=<String=String>]... [-E=<String=String>]...
+                [-F=<String=String>]... [-H=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
                 [-R=<String=String>]... [-S=<String=String>]...
@@ -250,6 +262,12 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-password" class="no-wrap-code">`--databricks-password`</div>|(Obsolete) Databricks database password.| ||
 |<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|(Obsolete) Databricks user name.| ||
+|<div id="connection add--db2-database" class="no-wrap-code">`--db2-database`</div>|DB2 database name| ||
+|<div id="connection add--db2-host" class="no-wrap-code">`--db2-host`</div>|DB2 host name| ||
+|<div id="connection add--db2-password" class="no-wrap-code">`--db2-password`</div>|DB2 database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--db2-platform" class="no-wrap-code">`--db2-platform`</div>|DB2 platform type.| |*luw*<br/>*zos*<br/>|
+|<div id="connection add--db2-port" class="no-wrap-code">`--db2-port`</div>|DB2 port number| ||
+|<div id="connection add--db2-user" class="no-wrap-code">`--db2-user`</div>|DB2 user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection add--duckdb-azure-account-name" class="no-wrap-code">`--duckdb-azure-account-name`</div>|Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-azure-authentication-mode" class="no-wrap-code">`--duckdb-azure-authentication-mode`</div>|The authentication mode for Azure. Supports also a null configuration with a custom environment variable.| |*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>*default_credentials*<br/>|
@@ -265,6 +283,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>*azure*<br/>*gcs*<br/>|
 |<div id="connection add--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection add--hana-host" class="no-wrap-code">`--hana-host`</div>|Hana host name| ||
+|<div id="connection add--hana-instance-number" class="no-wrap-code">`--hana-instance-number`</div>|Hana instance number| ||
+|<div id="connection add--hana-password" class="no-wrap-code">`--hana-password`</div>|Hana database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--hana-port" class="no-wrap-code">`--hana-port`</div>|Hana port number| ||
+|<div id="connection add--hana-user" class="no-wrap-code">`--hana-user`</div>|Hana user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="connection add--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
@@ -294,7 +317,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>|
 |<div id="connection add--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -326,9 +349,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection add--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-DB2" class="no-wrap-code">`-DB2`</div>|DB2 additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-E" class="no-wrap-code">`-E`</div>|Presto additional properties that are added to the JDBC connection string.| ||
 |<div id="connection add-F" class="no-wrap-code">`-F`</div>|Snowflake additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-H" class="no-wrap-code">`-H`</div>|Hana additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
@@ -426,6 +451,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-initialization-sql=<initializationSql>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
+                   [--db2-database=<database>] [--db2-host=<host>]
+                   [--db2-password=<password>]
+                   [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
+                   [--db2-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                    [--duckdb-azure-account-name=<accountName>]
                    [--duckdb-azure-authentication-mode=<azureAuthenticationMode>
@@ -438,7 +467,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--duckdb-password=<password>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
                    [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
-                   [--mysql-database=<database>]
+                   [--hana-host=<host>]
+                   [--hana-instance-number=<instanceNumber>]
+                   [--hana-password=<password>] [--hana-port=<port>]
+                   [--hana-user=<user>] [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-password=<password>] [--mysql-port=<port>]
                    [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
@@ -472,8 +504,9 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-Duck=<String=String>]... [-E=<String=String>]...
-                   [-F=<String=String>]... [-K=<String=String>]...
+                   [-DB2=<String=String>]... [-Duck=<String=String>]...
+                   [-E=<String=String>]... [-F=<String=String>]...
+                   [-H=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
                    [-S=<String=String>]... [-T=<String=String>]...
@@ -501,6 +534,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-initialization-sql=<initializationSql>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
+                   [--db2-database=<database>] [--db2-host=<host>]
+                   [--db2-password=<password>]
+                   [--db2-platform=<db2PlatformType>] [--db2-port=<port>]
+                   [--db2-user=<user>]
                    [--duckdb-aws-authentication-mode=<awsAuthenticationMode>]
                    [--duckdb-azure-account-name=<accountName>]
                    [--duckdb-azure-authentication-mode=<azureAuthenticationMode>
@@ -513,7 +550,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--duckdb-password=<password>]
                    [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
                    [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
-                   [--mysql-database=<database>]
+                   [--hana-host=<host>]
+                   [--hana-instance-number=<instanceNumber>]
+                   [--hana-password=<password>] [--hana-port=<port>]
+                   [--hana-user=<user>] [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-password=<password>] [--mysql-port=<port>]
                    [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
@@ -547,8 +587,9 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-Duck=<String=String>]... [-E=<String=String>]...
-                   [-F=<String=String>]... [-K=<String=String>]...
+                   [-DB2=<String=String>]... [-Duck=<String=String>]...
+                   [-E=<String=String>]... [-F=<String=String>]...
+                   [-H=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
                    [-S=<String=String>]... [-T=<String=String>]...
@@ -582,6 +623,12 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-password" class="no-wrap-code">`--databricks-password`</div>|(Obsolete) Databricks database password.| ||
 |<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|(Obsolete) Databricks user name.| ||
+|<div id="connection update--db2-database" class="no-wrap-code">`--db2-database`</div>|DB2 database name| ||
+|<div id="connection update--db2-host" class="no-wrap-code">`--db2-host`</div>|DB2 host name| ||
+|<div id="connection update--db2-password" class="no-wrap-code">`--db2-password`</div>|DB2 database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--db2-platform" class="no-wrap-code">`--db2-platform`</div>|DB2 platform type.| |*luw*<br/>*zos*<br/>|
+|<div id="connection update--db2-port" class="no-wrap-code">`--db2-port`</div>|DB2 port number| ||
+|<div id="connection update--db2-user" class="no-wrap-code">`--db2-user`</div>|DB2 user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-aws-authentication-mode" class="no-wrap-code">`--duckdb-aws-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
 |<div id="connection update--duckdb-azure-account-name" class="no-wrap-code">`--duckdb-azure-account-name`</div>|Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-azure-authentication-mode" class="no-wrap-code">`--duckdb-azure-authentication-mode`</div>|The authentication mode for Azure. Supports also a null configuration with a custom environment variable.| |*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>*default_credentials*<br/>|
@@ -597,6 +644,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--duckdb-storage-type" class="no-wrap-code">`--duckdb-storage-type`</div>|The storage type.| |*local*<br/>*s3*<br/>*azure*<br/>*gcs*<br/>|
 |<div id="connection update--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name for a remote storage type. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection update--hana-host" class="no-wrap-code">`--hana-host`</div>|Hana host name| ||
+|<div id="connection update--hana-instance-number" class="no-wrap-code">`--hana-instance-number`</div>|Hana instance number| ||
+|<div id="connection update--hana-password" class="no-wrap-code">`--hana-password`</div>|Hana database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--hana-port" class="no-wrap-code">`--hana-port`</div>|Hana port number| ||
+|<div id="connection update--hana-user" class="no-wrap-code">`--hana-user`</div>|Hana user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="connection update--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
@@ -657,9 +709,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection update--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-DB2" class="no-wrap-code">`-DB2`</div>|DB2 additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-E" class="no-wrap-code">`-E`</div>|Presto additional properties that are added to the JDBC connection string.| ||
 |<div id="connection update-F" class="no-wrap-code">`-F`</div>|Snowflake additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-H" class="no-wrap-code">`-H`</div>|Hana additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||

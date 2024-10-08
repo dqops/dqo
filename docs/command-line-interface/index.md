@@ -171,3 +171,11 @@ All command-line commands supported from the DQOps shell or directly from the sy
 
 
 
+
+## sso
+| Command&nbsp;name | Description |
+|--------------|-------------|
+ | <span class="no-wrap-code">[`dqo sso provision`](./sso.md#dqo-sso-provision)</span> | Creates and configures a new realm in Keycloak, configuring all required settings. This command is supported only in paid versions of DQOps. Please contact DQOps sales for details. |
+
+
+

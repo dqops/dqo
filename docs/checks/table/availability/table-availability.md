@@ -202,6 +202,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -235,6 +272,43 @@ spec:
                     SELECT
                         *
                     FROM  AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(0.0 AS DOUBLE) AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CAST(0.0 AS DOUBLE) AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -764,6 +838,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -797,6 +908,43 @@ spec:
                     SELECT
                         *
                     FROM  AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(0.0 AS DOUBLE) AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CAST(0.0 AS DOUBLE) AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1326,6 +1474,43 @@ spec:
                     LIMIT 1
                 ) AS tab_scan
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1359,6 +1544,43 @@ spec:
                     SELECT
                         *
                     FROM  AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(0.0 AS DOUBLE) AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            {% if lib.time_series is not none -%}
+            GROUP BY time_period
+            ORDER BY time_period
+            {%- endif -%}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                CAST(0.0 AS DOUBLE) AS actual_value
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan

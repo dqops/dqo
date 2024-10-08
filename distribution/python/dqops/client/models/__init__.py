@@ -1450,6 +1450,9 @@ from .data_type_category import DataTypeCategory
 from .databricks_parameters_spec import DatabricksParametersSpec
 from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
+from .db_2_parameters_spec import Db2ParametersSpec
+from .db_2_parameters_spec_properties import Db2ParametersSpecProperties
+from .db_2_platform_type import Db2PlatformType
 from .default_rule_severity_level import DefaultRuleSeverityLevel
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
@@ -1513,6 +1516,8 @@ from .file_synchronization_direction import FileSynchronizationDirection
 from .filtered_notification_model import FilteredNotificationModel
 from .filtered_notification_spec import FilteredNotificationSpec
 from .folder_synchronization_status import FolderSynchronizationStatus
+from .hana_parameters_spec import HanaParametersSpec
+from .hana_parameters_spec_properties import HanaParametersSpecProperties
 from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
 from .histogram_daily_issues_count import HistogramDailyIssuesCount
@@ -1652,6 +1657,7 @@ from .sensor_readouts_list_model import SensorReadoutsListModel
 from .shared_credential_list_model import SharedCredentialListModel
 from .shared_credential_model import SharedCredentialModel
 from .similar_check_model import SimilarCheckModel
+from .similar_table_model import SimilarTableModel
 from .single_store_db_load_balancing_mode import SingleStoreDbLoadBalancingMode
 from .single_store_db_parameters_spec import SingleStoreDbParametersSpec
 from .snowflake_parameters_spec import SnowflakeParametersSpec
@@ -1863,13 +1869,13 @@ from .table_duplicate_record_percent_sensor_parameters_spec import (
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_lineage_flow_model import TableLineageFlowModel
 from .table_lineage_model import TableLineageModel
-from .table_lineage_source_list_model import TableLineageSourceListModel
-from .table_lineage_source_list_model_properties import (
-    TableLineageSourceListModelProperties,
-)
 from .table_lineage_source_spec import TableLineageSourceSpec
 from .table_lineage_source_spec_columns import TableLineageSourceSpecColumns
 from .table_lineage_source_spec_properties import TableLineageSourceSpecProperties
+from .table_lineage_table_list_model import TableLineageTableListModel
+from .table_lineage_table_list_model_properties import (
+    TableLineageTableListModelProperties,
+)
 from .table_list_model import TableListModel
 from .table_list_model_advanced_properties import TableListModelAdvancedProperties
 from .table_model import TableModel
@@ -2702,6 +2708,9 @@ __all__ = (
     "DataGroupingDimensionSpec",
     "DataTypeCategory",
     "DatetimeBuiltInDateFormats",
+    "Db2ParametersSpec",
+    "Db2ParametersSpecProperties",
+    "Db2PlatformType",
     "DefaultRuleSeverityLevel",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
@@ -2755,6 +2764,8 @@ __all__ = (
     "FilteredNotificationModel",
     "FilteredNotificationSpec",
     "FolderSynchronizationStatus",
+    "HanaParametersSpec",
+    "HanaParametersSpecProperties",
     "HierarchyIdModel",
     "HierarchyIdModelPathItem",
     "HistogramDailyIssuesCount",
@@ -2876,6 +2887,7 @@ __all__ = (
     "SharedCredentialListModel",
     "SharedCredentialModel",
     "SimilarCheckModel",
+    "SimilarTableModel",
     "SingleStoreDbLoadBalancingMode",
     "SingleStoreDbParametersSpec",
     "SnowflakeParametersSpec",
@@ -2971,11 +2983,11 @@ __all__ = (
     "TableIncidentGroupingSpec",
     "TableLineageFlowModel",
     "TableLineageModel",
-    "TableLineageSourceListModel",
-    "TableLineageSourceListModelProperties",
     "TableLineageSourceSpec",
     "TableLineageSourceSpecColumns",
     "TableLineageSourceSpecProperties",
+    "TableLineageTableListModel",
+    "TableLineageTableListModelProperties",
     "TableListModel",
     "TableListModelAdvancedProperties",
     "TableModel",
