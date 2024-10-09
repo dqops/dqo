@@ -4,6 +4,7 @@ import { DqoUserRolesModelAccountRoleEnum } from '../../api';
 import Button from '../../components/Button';
 import DataDomains from '../../components/DataDomains/DataDomains';
 import Input from '../../components/Input';
+import Loader from '../../components/Loader';
 import Select from '../../components/Select';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { updateTabLabel } from '../../redux/actions/definition.actions';
@@ -12,19 +13,22 @@ import { getFirstLevelSensorState } from '../../redux/selectors';
 import { UsersApi } from '../../services/apiClient';
 
 export default function UserDetail() {
-  const { create, email, role, dataDomainRoles } = useSelector(
-    getFirstLevelSensorState
-  );
+  const { create, email } = useSelector(getFirstLevelSensorState);
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const [userEmail, setUserEmail] = useState<string>(email);
-  const [userRole, setUserRole] =
-    useState<DqoUserRolesModelAccountRoleEnum>(role);
-  const [userDataDomainRoles, setUserDataDomainRoles] = useState<{
-    [key: string]: string;
-  }>(dataDomainRoles);
+  const [userRole, setUserRole] = useState<
+    DqoUserRolesModelAccountRoleEnum | undefined
+  >(undefined);
+  const [userDataDomainRoles, setUserDataDomainRoles] = useState<
+    | {
+        [key: string]: string;
+      }
+    | undefined
+  >({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [message, setMessage] = useState<string>();
   const [creating, setCreating] = useState(false);
+  const [loading, setLoading] = useState(false);
   const onCHangeDataDomainRoles = (dataDomainRoles: {
     [key: string]: string;
   }) => {
@@ -78,13 +82,24 @@ export default function UserDetail() {
       } else {
         setMessage(undefined);
       }
+    } else {
+      setLoading(true);
+      UsersApi.getUser(userEmail)
+        .then((res) => {
+          setUserRole(res.data?.accountRole);
+          setUserDataDomainRoles(res.data?.dataDomainRoles);
+        })
+        .finally(() => setLoading(false));
     }
   }, [userEmail]);
 
-  useEffect(() => {
-    if (dataDomainRoles) setUserDataDomainRoles(dataDomainRoles);
-  }, [dataDomainRoles]);
-
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
   return (
     <div className="text-sm">
       <div className="w-full border-b border-b-gray-400 flex justify-end ">
