@@ -98,8 +98,7 @@ export default function ObservabilityStatus() {
           setCheckResultsEntry(updatedResults);
         } else {
           setCheckResultsEntry([
-            ...checkResultsEntry,
-            { results: newResults, month, dataGroup, checkName }
+            ...checkResultsEntry
           ]);
         }
       } else {

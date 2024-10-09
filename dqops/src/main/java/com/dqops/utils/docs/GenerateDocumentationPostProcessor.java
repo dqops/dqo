@@ -75,6 +75,7 @@ import com.dqops.utils.docs.yaml.YamlDocumentationGenerator;
 import com.dqops.utils.docs.yaml.YamlDocumentationGeneratorImpl;
 import com.dqops.utils.docs.yaml.YamlDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.yaml.YamlDocumentationSchemaNode;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.python.PythonCallerServiceImpl;
 import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
 import com.dqops.utils.reflection.CompletableFutureThreadPoolShutDown;
@@ -127,16 +128,17 @@ public class GenerateDocumentationPostProcessor {
             executePostCorrections(projectDir);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new DqoRuntimeException("Failed to generate documetation: " + e.getMessage(), e);
         } finally {
             if (pythonCaller != null) {
                 pythonCaller.destroy();
             }
 
+            CompletableFutureThreadPoolShutDown completableFutureThreadPoolShutDown = new CompletableFutureThreadPoolShutDown();
+            completableFutureThreadPoolShutDown.destroy();
+
             System.out.println("Documentation was generated");
         }
-
-        CompletableFutureThreadPoolShutDown completableFutureThreadPoolShutDown = new CompletableFutureThreadPoolShutDown();
-        completableFutureThreadPoolShutDown.destroy();
     }
 
     /**

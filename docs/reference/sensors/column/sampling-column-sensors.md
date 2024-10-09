@@ -107,7 +107,7 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
-            GROUP BY 1
+            GROUP BY {{ lib.render_target_column('analyzed_table') }}
         ) AS unlimited_samples
     )
     SELECT
@@ -163,7 +163,7 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
-            GROUP BY 1
+            GROUP BY {{ lib.render_target_column('analyzed_table') }}
         ) AS unlimited_samples
     )
     SELECT
@@ -217,16 +217,16 @@ The templates used to generate the SQL query for each data source supported by D
                 {{ lib.render_target_column('analyzed_table') }} AS sample_value,
                 COUNT(*) AS sample_count
             FROM
-                {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_target_table() }} analyzed_table
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
-            GROUP BY 1
-        ) AS unlimited_samples
+            GROUP BY {{ lib.render_target_column('analyzed_table') }}
+        ) unlimited_samples
     )
     SELECT
        sample_table.sample_value AS actual_value,
        sample_table.sample_count AS sample_count,
        sample_table.sample_index AS sample_index
-    FROM column_samples AS sample_table
+    FROM column_samples sample_table
     WHERE sample_table.sample_index <= {{ parameters.limit }}
     ORDER BY sample_table.sample_index DESC
     ```

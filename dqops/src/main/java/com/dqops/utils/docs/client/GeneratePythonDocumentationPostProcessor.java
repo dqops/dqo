@@ -33,6 +33,7 @@ import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocum
 import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
 import com.dqops.utils.docs.files.*;
 import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
@@ -126,6 +127,7 @@ public class GeneratePythonDocumentationPostProcessor {
             executePostCorrections(projectDir);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new DqoRuntimeException("Failed to generate documentation of the Python client: " + e.getMessage(), e);
         }
     }
 
