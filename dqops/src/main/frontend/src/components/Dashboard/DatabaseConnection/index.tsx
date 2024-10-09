@@ -34,6 +34,7 @@ import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
 import DatabricksConnection from './DatabricksConnection';
+import Db2Connection from './Db2Connection';
 import DuckDBConnection from './DuckDBConnection';
 import ErrorModal from './ErrorModal';
 import HanaConnection from './HanaConnection';
@@ -46,7 +47,6 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
-import Db2Connection from './Db2Connection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -169,41 +169,12 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (database?: ConnectionModel): string => {
+  const getTitle = (): string => {
     if (nameOfDatabase) {
-      return nameOfDatabase + ' Connection Settings';
+      return nameOfDatabase + ' connection settings';
     }
 
-    switch (database?.provider_type) {
-      case ConnectionModelProviderTypeEnum.bigquery:
-        return 'Google BigQuery Connection Settings';
-      case ConnectionModelProviderTypeEnum.snowflake:
-        return 'Snowflake Connection Settings';
-      case ConnectionModelProviderTypeEnum.postgresql:
-        return 'PostgreSQL Connection Settings';
-      case ConnectionModelProviderTypeEnum.redshift:
-        return 'Amazon Redshift Connection Settings';
-      case ConnectionModelProviderTypeEnum.sqlserver:
-        return 'Microsoft SQL Server Connection Settings';
-      case ConnectionModelProviderTypeEnum.presto:
-        return 'PrestoDB Connection Settings';
-      case ConnectionModelProviderTypeEnum.trino:
-        return 'Trino Connection Settings';
-      case ConnectionModelProviderTypeEnum.mysql:
-        return 'MySQL Connection Settings';
-      case ConnectionModelProviderTypeEnum.oracle:
-        return 'Oracle Database Connection Settings';
-      case ConnectionModelProviderTypeEnum.spark:
-        return 'Spark Connection Settings';
-      case ConnectionModelProviderTypeEnum.databricks:
-        return 'Databricks Connection Settings';
-      case ConnectionModelProviderTypeEnum.hana:
-        return 'SAP HANA Connection Settings';
-      case ConnectionModelProviderTypeEnum.db2:
-        return 'IBM DB2 Connection Settings';
-      default:
-        return 'Database Connection Settings';
-    }
+    return 'Database connection settings';
   };
 
   const getIcon = () => {
@@ -387,7 +358,7 @@ const DatabaseConnection = ({
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
-          <div>{getTitle(database)}</div>
+          <div>{getTitle()}</div>
         </div>
         {getIcon()}
       </div>
