@@ -947,6 +947,8 @@ export const getProviderTypeTitle = (
       return 'HANA';
     case ConnectionModelProviderTypeEnum.db2:
       return 'DB2';
+    case ConnectionModelProviderTypeEnum.duckdb:
+      return 'DuckDB';
     default:
       return '';
   }
