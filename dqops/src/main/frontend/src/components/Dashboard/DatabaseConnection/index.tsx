@@ -379,6 +379,9 @@ const DatabaseConnection = ({
           error={!!nameError}
           helperText={nameError}
         />
+        <div className="mt-6">
+          {database.provider_type ? components[database.provider_type] : ''}
+        </div>
         {showAdvancedProperties ? (
           <SectionWrapper
             title="Advanced properties"
@@ -426,9 +429,6 @@ const DatabaseConnection = ({
             Advanced properties
           </div>
         )}
-        <div className="mt-6">
-          {database.provider_type ? components[database.provider_type] : ''}
-        </div>
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (
