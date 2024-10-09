@@ -767,6 +767,23 @@ spec:
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -780,14 +797,15 @@ spec:
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -797,7 +815,7 @@ spec:
                     COUNT(*) OVER (PARTITION BY [id], [created_at]) AS distinct_records
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -1631,6 +1649,23 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -1644,13 +1679,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -1666,14 +1702,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -2506,6 +2541,23 @@ spec:
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -2519,14 +2571,15 @@ spec:
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -2536,7 +2589,7 @@ spec:
                     COUNT(*) OVER (PARTITION BY [id], [created_at]) AS distinct_records
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -3371,6 +3424,23 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -3384,13 +3454,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -3406,14 +3477,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -4246,6 +4316,23 @@ spec:
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -4259,14 +4346,15 @@ spec:
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -4276,7 +4364,7 @@ spec:
                     COUNT(*) OVER (PARTITION BY [id], [created_at]) AS distinct_records
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -5111,6 +5199,23 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -5124,13 +5229,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -5146,14 +5252,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -6076,6 +6181,23 @@ spec:
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -6089,14 +6211,15 @@ spec:
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -6110,12 +6233,11 @@ spec:
                     CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+                GROUP BY [id], [created_at], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ) grouping_table
-            GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-            ORDER BY CAST(analyzed_table.[date_column] AS date)
-            
-                
+            GROUP BY
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -7023,6 +7145,23 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -7036,13 +7175,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -7062,12 +7202,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-            ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -7996,6 +8139,23 @@ spec:
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -8009,14 +8169,15 @@ spec:
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -8030,12 +8191,11 @@ spec:
                     CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+                GROUP BY [id], [created_at], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ) grouping_table
-            GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-            ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
-            
-                
+            GROUP BY
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -8943,6 +9103,23 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {%- endfor -%}
             {% endmacro -%}
             
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -8956,13 +9133,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
+            
+            
             SELECT
                 CASE WHEN SUM(distinct_records) IS NULL THEN 0
                     ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -8982,12 +9160,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-            ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 

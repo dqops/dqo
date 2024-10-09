@@ -762,11 +762,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -782,10 +799,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -801,7 +817,7 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -1630,11 +1646,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -1650,10 +1683,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -1674,14 +1706,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -2509,11 +2540,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -2529,10 +2577,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -2548,7 +2595,7 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -3378,11 +3425,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -3398,10 +3462,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -3422,14 +3485,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -4257,11 +4319,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -4277,10 +4356,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -4296,7 +4374,7 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -5126,11 +5204,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -5146,10 +5241,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -5170,14 +5264,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -6095,11 +6188,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -6115,10 +6225,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -6138,12 +6247,11 @@ spec:
                     CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+                GROUP BY [id], [created_at], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ) grouping_table
-            GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-            ORDER BY CAST(analyzed_table.[date_column] AS date)
-            
-                
+            GROUP BY
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -7046,11 +7154,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -7066,10 +7191,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -7094,12 +7218,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-            ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -8023,11 +8150,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -8043,10 +8187,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -8066,12 +8209,11 @@ spec:
                     CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+                GROUP BY [id], [created_at], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ) grouping_table
-            GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-            ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
-            
-                
+            GROUP BY
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -8974,11 +9116,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -8994,10 +9153,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -9022,12 +9180,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-            ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 

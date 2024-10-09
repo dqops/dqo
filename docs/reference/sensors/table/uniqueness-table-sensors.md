@@ -423,11 +423,28 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+    {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
         {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
         {%- for item in column_names -%}
             {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
         {%- endfor -%}
+    {% endmacro -%}
+    
+    {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+        GROUP BY
+        {%- endif -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {{- ',' if not loop.first -}}{{- lib.eol() }}
+                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+            {%- endfor -%}
+        {%- endif -%}
+        {%- if lib.time_series is not none -%}
+            {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+            {{ indentation }}time_period,{{ lib.eol() -}}
+            {{ indentation }}time_period_utc
+        {%- endif -%}
     {% endmacro %}
     
     SELECT
@@ -443,10 +460,9 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-        GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+        GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
     ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+    {{ render_group_by('grouping_table') }}
     ```
 === "Trino"
 
@@ -911,6 +927,23 @@ The templates used to generate the SQL query for each data source supported by D
         {%- endfor -%}
     {% endmacro -%}
     
+    {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+        GROUP BY
+        {%- endif -%}
+        {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+            {%- for attribute in lib.data_groupings -%}
+                {{- ',' if not loop.first -}}{{- lib.eol() }}
+                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+            {%- endfor -%}
+        {%- endif -%}
+        {%- if lib.time_series is not none -%}
+            {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+            {{ indentation }}time_period,{{ lib.eol() -}}
+            {{ indentation }}time_period_utc
+        {%- endif -%}
+    {% endmacro %}
+    
     SELECT
         CASE WHEN SUM(distinct_records) IS NULL THEN 0
             ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -924,10 +957,9 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-        GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+        GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
     ) grouping_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
+    {{ render_group_by('grouping_table') }}
     ```
 === "Trino"
 
