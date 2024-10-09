@@ -33,7 +33,7 @@ public class Db2ParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--db2-platform"}, description = "DB2 platform type.")
     @JsonPropertyDescription("DB2 platform type. Supports also a ${DB2_PLATFORM} configuration with a custom environment variable.")
-    private Db2PlatformType db2PlatformType;
+    private Db2PlatformType db2PlatformType = Db2PlatformType.luw;
 
     @CommandLine.Option(names = {"--db2-host"}, description = "DB2 host name")
     @JsonPropertyDescription("DB2 host name. Supports also a ${DB2_HOST} configuration with a custom environment variable.")
