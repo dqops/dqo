@@ -4,11 +4,51 @@ title: DQOps Data Quality Operations Center concepts
 # DQOps Data Quality Operations Center concepts
 Follow this guide to learn each concept of DQOps Data Quality Operations Center to start measuring data quality for data sources.
 
+## Introduction
+
+### **What is DQOps?**
+
+DQOps is a powerful open-source data quality and observability platform designed to address the entire data lifecycle,
+from initial data assessment to advanced automation.
+
+* Quickly start a local data quality environment.
+* Configure data quality checks using the user interface or YAML files. Automate this process with rule mining engine and built-in data quality policies. 
+* Run data quality checks directly from your data pipelines.
+* Utilize the user interface for easy testing and issues review.
+* Receive incident notifications via email or webhook, and create multiple notification filters to customize alerts for specific scenarios.
+
+### **Who needs DQOps?**
+DQOps is designed to meet the diverse needs of various data stakeholders across different stages of the data platform lifecycle.
+
+**Data engineers** need to integrate data quality checks directly into data pipelines, test the quality of data sources before they are transformed, and verify the data quality of target tables populated by the pipeline.
+
+**Data steward**, who ensure the trustworthiness and usability of data, need a robust data quality platform to validate the quality of data assets and manage data cleansing workflows to address any issues.
+
+**Data consumer (data scientists and data analysts)** want to know the data quality score for tables and quickly assert their expectations about the data quality of essential data sources.
+
+### **When do you need DQOps?**
+DQOps is essential for organizations that
+
+* Need to assess the data quality of new data sources.
+* Want to establish robust data observability practice to monitor data ingestion, transformation, and storage processes to detect anomalies, errors, or deviations from expected behavior.
+* Aim to demonstrate data quality issues to business sponsors using the user interface and data quality dashboards.
+
+### **How DQOps works?**
+Download DQOps directly from PyPI.
+Run DQOps locally without configuring databases or set up on-premise environment.
+Assess your data with basic statistics and automatically configure profiling checks using the rule mining engine.
+Activate data observability by setting up monitoring checks to automatically detect new data quality issues in the future.
+Receive notifications for critical issues and track their resolution.
+
+DQOps does not use a database to store the configuration. Instead, all data quality configuration files are stored in 
+YAML files. This code-first approach allows the data quality check configuration to be stored in a source code repository
+and versioned along with other pipeline or machine learning code.
+
 ## List of DQOps concepts
 This article is a dictionary of DQOps terms. Click on the links to learn about every concept.
 
 ### **[Data quality process](data-quality-process.md)**
-DQOps follows a two-stage data quality process. The first step is a [data quality assessment](data-quality-process.md#data-quality-assessment) using the [data profiler](definition-of-data-quality-checks/data-profiling-checks.md) . 
+DQOps follows a two-stage data quality process. The first step is a [data quality assessment](data-quality-process.md#data-quality-assessment) using the basic statistics and [data profiler](definition-of-data-quality-checks/data-profiling-checks.md). 
 This step identifies confirmed data quality issues. In the second stage,
 users configure [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and [partition checks](definition-of-data-quality-checks/partition-checks.md) that regularly verify data quality using Data Observability.
 

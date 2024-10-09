@@ -6,7 +6,7 @@ title: What is DQOps Data Quality Operations Center
 
 ## What is DQOps Data Quality Operations Center?
 
-!!! abstract "What is DQOps Data Quality Operations Center"
+!!! abstract "What is the DQOps Data Quality Operations Center"
 
     <br/>
     <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
@@ -136,7 +136,7 @@ title: What is DQOps Data Quality Operations Center
     ---
 
     No data quality project can be started without the support of the top management and business sponsors. 
-    You need to gain their trust that investing in data quality was worth it. Your business sponsors, external vendors that share data
+    You need to gain their trust that investing in data quality is worth it. Your business sponsors and external vendors that share data
     with you need to see a reliable data quality score that they understand and trust.
  
     DQOps measures data quality with **Data Quality KPIs**. Every user receives a complimentary Data Quality Data Warehouse hosted by DQOps,
@@ -195,7 +195,7 @@ title: What is DQOps Data Quality Operations Center
     
         ---
     
-        Explore the wide range of data quality issues tha DQOps can detect. The manual for each category shows how to activate the check.
+        Explore the wide range of data quality issues that DQOps can detect. The manual for each category shows how to activate the check.
     
         [:octicons-arrow-right-24: Review the categories of data quality issues](categories-of-data-quality-checks/index.md)
 
@@ -227,7 +227,7 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
     DQOps has two methods of data quality assessment. The first step is capturing [basic data statistics](working-with-dqo/collecting-basic-data-statistics.md).
     
-    When you know how the table is structured, you can use [rule mining engine](dqo-concepts/data-quality-rule-mining.md) to automatically propose the configuration of [profiling data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
+    When you know how the table is structured, you can use the [rule mining engine](dqo-concepts/data-quality-rule-mining.md) to automatically propose the configuration of [profiling data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
     to detect the most common data quality issues.
 
     [:octicons-arrow-right-24: Review data statistics](working-with-dqo/collecting-basic-data-statistics.md)
@@ -248,12 +248,12 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
     **Activate continuous data quality monitoring**
 
-    DQOps simplifies data quality management with [data polcies that automatically activates checks](dqo-concepts/data-observability.md) on all imported tables and columns. 
+    DQOps simplifies data quality management with [data policies that automatically activate checks](dqo-concepts/data-observability.md) on all imported tables and columns. 
     You have full control to enable, disable, or modify existing policies, and even create new ones.
 
     There are other methods to activate data quality checks. You can:
 
-    [:octicons-arrow-right-24: Copy the checks activated by rule mining engine](dqo-concepts/data-quality-rule-mining.md)
+    [:octicons-arrow-right-24: Copy the checks activated by the rule mining engine](dqo-concepts/data-quality-rule-mining.md)
 
     [:octicons-arrow-right-24: Manually activate checks using the check editor](working-with-dqo/run-data-quality-checks.md)
 
@@ -290,7 +290,7 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
 
 ### Data quality dashboards
-Over 50 built-in data quality dashboards let you drill-down to the problem.
+Over 50 built-in data quality dashboards let you drill down to the problem.
 
 !!! success "Data quality KPIs"
 
@@ -359,13 +359,13 @@ React to data quality incidents and assign them to the right teams who can fix t
     Organizations have separated operations team that react to data quality incidents first, and engineering teams
     that can fix the problems.
 
-    DQOps reduces the alert fatigue by grouping similar data quality issues into **data quality incidents**.
+    DQOps reduces alert fatigue by grouping similar data quality issues into **data quality incidents**.
     You can receive incident notifications via email or webhook, and [create multiple notification filters](dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-notifications)
     to customize alerts for specific scenarios.
     
     [:octicons-arrow-right-24: Data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md)
         
-    [:octicons-arrow-right-24: Sending notifications to slack](integrations/slack/configuring-slack-notifications.md)
+    [:octicons-arrow-right-24: Sending notifications to Slack](integrations/slack/configuring-slack-notifications.md)
     
     [:octicons-arrow-right-24: Sending notifications to any ticketing platform using webhooks](integrations/webhooks/index.md)
 
@@ -441,7 +441,7 @@ using our [REST API Python client](client/index.md).
     ---
 
     What if your table contains aggregated data that was received from different suppliers, departments, vendors, or teams?
-    Data quality issues are detected, but who provided you the corrupted data?
+    Data quality issues are detected, but who provided you with the corrupted data?
     DQOps answers the question by running data quality checks with grouping, supporting a hierarchy of up to 9 levels.
 
     [:octicons-arrow-right-24: Use GROUP BY to measure data quality for different data streams](dqo-concepts/measuring-data-quality-with-data-grouping.md)
@@ -451,8 +451,8 @@ using our [REST API Python client](client/index.md).
     ---
 
     A dashboard is showing the wrong numbers. The business sponsor asks you to monitor
-   it every day to detect when it will show the wrong numbers.
-    You can take the SQL query from the dashboard and turn it into a templated data quality check that DQOps shows on the user interface.
+    it every day to detect when it will show the wrong numbers.
+    You can turn the SQL query from the dashboard into a templated data quality check that DQOps shows on the user interface.
 
     [:octicons-arrow-right-24: How to define a custom data quality check](working-with-dqo/creating-custom-data-quality-checks.md)
 
@@ -471,7 +471,7 @@ Want to learn more about data quality?
     DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
-    The eBook describes a full data quality improvement process that allows you to reach a ~100% data quality KPI score within 6-12 months.
+    The eBook describes a complete data quality improvement process that allows you to reach a ~100% data quality KPI score within 6-12 months.
     [Download the eBook](https://dqops.com/best-practices-for-effective-data-quality-improvement/) to learn the process of managing
     an iterative data quality project that leads to fixing all data quality issues.
     
