@@ -32,6 +32,7 @@ export default function ColumnListView() {
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [refreshTimer, setRefreshTimer] = useState<NodeJS.Timer>();
 
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
@@ -78,7 +79,10 @@ export default function ColumnListView() {
       (checkTypes === CheckTypes.SOURCES
         ? CheckTypes.MONITORING
         : checkTypes) ?? filters.checkType
-    ).finally(() => setLoading(false));
+    ).finally(() => {
+      setLoading(false);
+      setRefreshTimer(undefined);
+    });
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
       const jItem = {
@@ -110,6 +114,12 @@ export default function ColumnListView() {
 
     fetchData();
     getLabels();
+
+    return () => {
+      if (refreshTimer) {
+        clearTimeout(refreshTimer);
+      }
+    };
   }, [filters, checkTypes, connection, schema]);
 
   useEffect(() => {
@@ -135,9 +145,11 @@ export default function ColumnListView() {
     const shouldRefetch = columns?.some((table) => !table?.data_quality_status);
 
     if (shouldRefetch) {
-      setTimeout(() => {
-        getColumns();
-      }, 5000);
+      setRefreshTimer(
+        setTimeout(() => {
+          getColumns();
+        }, 5000)
+      );
     }
   };
 
