@@ -70,7 +70,7 @@ const JdbcPropertiesView = ({
   }, [properties]);
 
   return (
-    <div className="py-4">
+    <div>
       <table className="my-3 w-full">
         <thead>
           <tr>

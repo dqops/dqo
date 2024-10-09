@@ -1,12 +1,11 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
   PrestoParametersSpec,
   SharedCredentialListModel
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IPrestoConnectionProps {
   presto?: PrestoParametersSpec;
@@ -29,7 +28,7 @@ const PrestoConnection = ({
   };
 
   return (
-    <SectionWrapper title="Presto connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         data={sharedCredentials}
         label="Host"
@@ -72,7 +71,7 @@ const PrestoConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

@@ -25,7 +25,7 @@ import {
   SharedCredentialsApi
 } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
-import { useDecodedParams } from '../../../utils';
+import { getProviderTypeTitle, useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
@@ -177,184 +177,192 @@ const ConnectionDetail = () => {
           <div className="ml-4">{connectionBasic?.connection_name}</div>
         </div>
       </div>
-      <div className="px-4 !mt-6">
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.bigquery && (
-          <BigqueryConnection
-            bigquery={connectionBasic?.bigquery}
-            onChange={(bigquery) => onChange({ bigquery })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.snowflake && (
-          <SnowflakeConnection
-            snowflake={connectionBasic?.snowflake}
-            onChange={(snowflake) => onChange({ snowflake })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.redshift && (
-          <RedshiftConnection
-            redshift={connectionBasic?.redshift}
-            onChange={(redshift) => onChange({ redshift })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.sqlserver && (
-          <SqlServerConnection
-            sqlserver={connectionBasic?.sqlserver}
-            onChange={(sqlserver) => onChange({ sqlserver })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.postgresql && (
-          <PostgreSQLConnection
-            postgresql={connectionBasic?.postgresql}
-            onChange={(postgresql) => onChange({ postgresql })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.mysql && (
-          <MySQLConnection
-            mysql={connectionBasic?.mysql}
-            onChange={(mysql) => onChange({ mysql })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.oracle && (
-          <OracleConnection
-            oracle={connectionBasic?.oracle}
-            onChange={(oracle) => onChange({ oracle })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.databricks && (
-          <DatabricksConnection
-            databricks={connectionBasic?.databricks}
-            onChange={(databricks) => onChange({ databricks })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.presto && (
-          <PrestoConnection
-            presto={connectionBasic?.presto}
-            onChange={(presto) => onChange({ presto })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.spark && (
-          <SparkConnection
-            spark={connectionBasic?.spark}
-            onChange={(spark) => onChange({ spark })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.trino && (
-          <TrinoConnection
-            trino={connectionBasic?.trino}
-            onChange={(trino) => onChange({ trino })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.duckdb && (
-          <DuckdbConnection
-            duckdb={connectionBasic?.duckdb}
-            onChange={(duckdb) => onChange({ duckdb })}
-            sharedCredentials={sharedCredentials}
-            freezeFileType
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.hana && (
-          <HanaConnection
-            hana={connectionBasic?.hana}
-            onChange={(hana) => onChange({ hana })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.db2 && (
-          <Db2Connection
-            db2={connectionBasic?.db2}
-            onChange={(db2) => onChange({ db2 })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-      </div>
-      {showAdvancedProperties ? (
-        <SectionWrapper
-          title="Advanced properties"
-          svgIcon
-          onClick={() => setShowAdvancedProperties(false)}
-          className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
-        >
-          <div className="flex px-4 py-2 mt-4 items-center">
-            <div className="!w-60">Parallel jobs limit</div>
-            <div>
-              <Input
-                value={connectionBasic?.parallel_jobs_limit}
-                onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    onChange({
-                      ...connectionBasic,
-                      parallel_jobs_limit:
-                        String(e.target.value).length === 0
-                          ? undefined
-                          : Number(e.target.value)
-                    });
-                  }
-                }}
-              />
-            </div>
-          </div>
-
-          <div className="flex px-4 py-2 items-center">
-            <div className="!w-60">Schedule only on DQOps instance</div>
-            <div>
-              <Input
-                value={connectionBasic?.schedule_on_instance}
-                placeholder="Enter the name of a DQOps named instance which will run scheduled data quality checks"
-                onChange={(e) => {
-                  onChange({
-                    ...connectionBasic,
-                    schedule_on_instance: String(e.target.value)
-                  });
-                }}
-                className="!min-w-145"
-              />
-            </div>
-          </div>
-          <div className="ml-4">
-            <JdbcPropertiesView
-              properties={connectionBasic?.advanced_properties}
-              onChange={(properties) =>
-                onChange({ advanced_properties: properties })
-              }
-              title="Advanced property name"
+      <SectionWrapper
+        title={
+          getProviderTypeTitle(connectionBasic?.provider_type) +
+          ' connection parameters'
+        }
+        className="mb-4 mt-4"
+      >
+        <div className="px-4 !mt-2 mb-6">
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.bigquery && (
+            <BigqueryConnection
+              bigquery={connectionBasic?.bigquery}
+              onChange={(bigquery) => onChange({ bigquery })}
               sharedCredentials={sharedCredentials}
             />
-          </div>
-        </SectionWrapper>
-      ) : (
-        <div
-          className="flex items-center ml-4 mb-4 text-sm font-bold cursor-pointer"
-          onClick={() => setShowAdvancedProperties(true)}
-        >
-          <SvgIcon name="chevron-right" className="w-5 h-5" />
-          Advanced properties
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.snowflake && (
+            <SnowflakeConnection
+              snowflake={connectionBasic?.snowflake}
+              onChange={(snowflake) => onChange({ snowflake })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.redshift && (
+            <RedshiftConnection
+              redshift={connectionBasic?.redshift}
+              onChange={(redshift) => onChange({ redshift })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.sqlserver && (
+            <SqlServerConnection
+              sqlserver={connectionBasic?.sqlserver}
+              onChange={(sqlserver) => onChange({ sqlserver })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.postgresql && (
+            <PostgreSQLConnection
+              postgresql={connectionBasic?.postgresql}
+              onChange={(postgresql) => onChange({ postgresql })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.mysql && (
+            <MySQLConnection
+              mysql={connectionBasic?.mysql}
+              onChange={(mysql) => onChange({ mysql })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.oracle && (
+            <OracleConnection
+              oracle={connectionBasic?.oracle}
+              onChange={(oracle) => onChange({ oracle })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.databricks && (
+            <DatabricksConnection
+              databricks={connectionBasic?.databricks}
+              onChange={(databricks) => onChange({ databricks })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.presto && (
+            <PrestoConnection
+              presto={connectionBasic?.presto}
+              onChange={(presto) => onChange({ presto })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.spark && (
+            <SparkConnection
+              spark={connectionBasic?.spark}
+              onChange={(spark) => onChange({ spark })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.trino && (
+            <TrinoConnection
+              trino={connectionBasic?.trino}
+              onChange={(trino) => onChange({ trino })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb && (
+            <DuckdbConnection
+              duckdb={connectionBasic?.duckdb}
+              onChange={(duckdb) => onChange({ duckdb })}
+              sharedCredentials={sharedCredentials}
+              freezeFileType
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.hana && (
+            <HanaConnection
+              hana={connectionBasic?.hana}
+              onChange={(hana) => onChange({ hana })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.db2 && (
+            <Db2Connection
+              db2={connectionBasic?.db2}
+              onChange={(db2) => onChange({ db2 })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
         </div>
-      )}
+        {showAdvancedProperties ? (
+          <SectionWrapper
+            title="Advanced properties"
+            svgIcon
+            onClick={() => setShowAdvancedProperties(false)}
+            className="ml-4 !pb-1 !pt-1 !mt-4 !mb-4"
+          >
+            <div className="flex px-4 py-2 mt-4 items-center">
+              <div className="!w-60">Parallel jobs limit</div>
+              <div>
+                <Input
+                  value={connectionBasic?.parallel_jobs_limit}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      onChange({
+                        ...connectionBasic,
+                        parallel_jobs_limit:
+                          String(e.target.value).length === 0
+                            ? undefined
+                            : Number(e.target.value)
+                      });
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="flex px-4 py-2 items-center">
+              <div className="!w-60">Schedule only on DQOps instance</div>
+              <div>
+                <Input
+                  value={connectionBasic?.schedule_on_instance}
+                  placeholder="Enter the name of a DQOps named instance which will run scheduled data quality checks"
+                  onChange={(e) => {
+                    onChange({
+                      ...connectionBasic,
+                      schedule_on_instance: String(e.target.value)
+                    });
+                  }}
+                  className="!min-w-145"
+                />
+              </div>
+            </div>
+            <div className="ml-4">
+              <JdbcPropertiesView
+                properties={connectionBasic?.advanced_properties}
+                onChange={(properties) =>
+                  onChange({ advanced_properties: properties })
+                }
+                title="Advanced property name"
+                sharedCredentials={sharedCredentials}
+              />
+            </div>
+          </SectionWrapper>
+        ) : (
+          <div
+            className="flex items-center ml-4 mb-4 text-sm font-bold cursor-pointer"
+            onClick={() => setShowAdvancedProperties(true)}
+          >
+            <SvgIcon name="chevron-right" className="w-5 h-5" />
+            Advanced properties
+          </div>
+        )}
+      </SectionWrapper>
 
       <div className="flex space-x-4 justify-end items-center mt-6 px-4 mb-5">
         {isTesting && (

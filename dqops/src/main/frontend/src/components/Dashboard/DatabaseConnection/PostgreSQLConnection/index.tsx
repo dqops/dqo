@@ -7,7 +7,6 @@ import {
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
 import JdbcPropertiesView from '../JdbcProperties';
 
 interface IPostgreSQLConnectionProps {
@@ -61,7 +60,7 @@ const PostgreSQLConnection = ({
   };
 
   return (
-    <SectionWrapper title="PostgreSQL connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         label="Host"
         className="mb-4"
@@ -112,7 +111,7 @@ const PostgreSQLConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

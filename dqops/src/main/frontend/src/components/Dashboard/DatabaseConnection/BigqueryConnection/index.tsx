@@ -12,7 +12,6 @@ import { BigQueryAuthenticationMode } from '../../../../shared/enums/bigquery.en
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FieldTypeTextarea from '../../../Connection/ConnectionView/FieldTypeTextarea';
 import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
 
 const options = [
   {
@@ -52,7 +51,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   };
 
   return (
-    <SectionWrapper title="BigQuery connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         className="mb-4"
         label="Source GCP project ID"
@@ -139,7 +138,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         disabled={userProfile.can_manage_data_sources !== true}
         data={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

@@ -1,12 +1,11 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
-  SparkParametersSpec,
-  SharedCredentialListModel
+  SharedCredentialListModel,
+  SparkParametersSpec
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface ISparkConnectionProps {
   spark?: SparkParametersSpec;
@@ -29,7 +28,7 @@ const SparkConnection = ({
   };
 
   return (
-    <SectionWrapper title="Spark connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         data={sharedCredentials}
         label="Host"
@@ -65,7 +64,7 @@ const SparkConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

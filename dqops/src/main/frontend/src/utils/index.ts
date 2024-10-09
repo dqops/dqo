@@ -916,3 +916,38 @@ export const getIsAnyCheckResults = (
   });
   return !!param;
 };
+
+export const getProviderTypeTitle = (
+  providerType: ConnectionModelProviderTypeEnum | undefined
+) => {
+  switch (providerType) {
+    case ConnectionModelProviderTypeEnum.bigquery:
+      return 'BigQuery';
+    case ConnectionModelProviderTypeEnum.snowflake:
+      return 'Snowflake';
+    case ConnectionModelProviderTypeEnum.postgresql:
+      return 'PostgreSQL';
+    case ConnectionModelProviderTypeEnum.redshift:
+      return 'Redshift';
+    case ConnectionModelProviderTypeEnum.sqlserver:
+      return 'Microsoft SQL Server/SQL Server connection parameters';
+    case ConnectionModelProviderTypeEnum.presto:
+      return 'Presto';
+    case ConnectionModelProviderTypeEnum.trino:
+      return 'Trino';
+    case ConnectionModelProviderTypeEnum.mysql:
+      return 'MySQL';
+    case ConnectionModelProviderTypeEnum.oracle:
+      return 'Oracle';
+    case ConnectionModelProviderTypeEnum.spark:
+      return 'Spark';
+    case ConnectionModelProviderTypeEnum.databricks:
+      return 'Databricks';
+    case ConnectionModelProviderTypeEnum.hana:
+      return 'HANA';
+    case ConnectionModelProviderTypeEnum.db2:
+      return 'DB2';
+    default:
+      return '';
+  }
+};
