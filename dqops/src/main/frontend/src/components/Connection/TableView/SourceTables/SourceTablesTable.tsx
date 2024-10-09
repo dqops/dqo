@@ -34,7 +34,8 @@ export default function SourceTablesTable({
   table: parentTable,
   setSourceTableEdit,
   showHeader: showHeader = true,
-  isTarget
+  isTarget,
+  setExistingTables
 }: {
   connection?: string;
   schema?: string;
@@ -44,6 +45,9 @@ export default function SourceTablesTable({
   ) => void;
   showHeader?: boolean;
   isTarget?: boolean;
+  setExistingTables?: (
+    tables: { connection: string; schema: string; table: string }[]
+  ) => void;
 }) {
   const {
     connection,
@@ -83,6 +87,12 @@ export default function SourceTablesTable({
           setLoading(false);
           setTables(res.data);
           refetchTables(res.data);
+          const existingTables = res.data.map((table) => ({
+            connection: table.target_connection ?? '',
+            schema: table.target_schema ?? '',
+            table: table.target_table ?? ''
+          }));
+          setExistingTables && setExistingTables(existingTables);
         })
         .finally(() => {
           setLoading(false);
@@ -94,6 +104,12 @@ export default function SourceTablesTable({
           setLoading(false);
           setTables(res.data);
           refetchTables(res.data);
+          const existingTables = res.data.map((table) => ({
+            connection: table.source_connection ?? '',
+            schema: table.source_schema ?? '',
+            table: table.source_table ?? ''
+          }));
+          setExistingTables && setExistingTables(existingTables);
         })
         .finally(() => {
           setLoading(false);
@@ -111,7 +127,8 @@ export default function SourceTablesTable({
       setRefreshTimer(
         setTimeout(() => {
           getTables();
-        }, 5000));
+        }, 5000)
+      );
     }
   };
 
@@ -127,11 +144,7 @@ export default function SourceTablesTable({
   const handleSort = (elem: { label: string; key: string }, index: number) => {
     const newDir = dir === 'asc' ? 'desc' : 'asc';
     setDisplayedTables(
-      sortPatterns(
-        tables,
-        elem.key as keyof TableLineageTableListModel,
-        newDir
-      )
+      sortPatterns(tables, elem.key as keyof TableLineageTableListModel, newDir)
     );
     setDir(newDir);
     setIndexSortingElement(index);
@@ -308,7 +321,7 @@ export default function SourceTablesTable({
           {displayedTables && tables.length === 0 && (
             <tr className="!h-6">
               <td>
-                This table has no {isTarget ? "target" : "source"} tables.
+                This table has no {isTarget ? 'target' : 'source'} tables.
               </td>
             </tr>
           )}
@@ -345,9 +358,7 @@ export default function SourceTablesTable({
                   <div className="flex items-center gap-x-2 min-w-20 !max-w-40">
                     {table.table_data_quality_status ? (
                       <QualityDimensionStatuses
-                        dimensions={
-                          table.table_data_quality_status?.dimensions
-                        }
+                        dimensions={table.table_data_quality_status?.dimensions}
                       />
                     ) : (
                       <SvgIcon name="hourglass" className="w-4 h-4" />
@@ -457,9 +468,18 @@ export default function SourceTablesTable({
                           color="teal"
                           className="!shadow-none hover:!shadow-none hover:bg-[#028770]"
                         >
-                          <Tooltip content={isTarget ? "Jump to the target (downstream) table" : "Jump to the source (upstream) table"}>
+                          <Tooltip
+                            content={
+                              isTarget
+                                ? 'Jump to the target (downstream) table'
+                                : 'Jump to the source (upstream) table'
+                            }
+                          >
                             <div>
-                              <SvgIcon name="data_sources_white" className="w-5" />
+                              <SvgIcon
+                                name="data_sources_white"
+                                className="w-5"
+                              />
                             </div>
                           </Tooltip>
                         </IconButton>
@@ -510,9 +530,15 @@ export default function SourceTablesTable({
           setSorceTableToDelete(null);
         }}
         onClose={() => setSorceTableToDelete(null)}
-        message={`Are you sure you want to delete this ` + (isTarget ? `target` : `source`) + ` table?`}
+        message={
+          `Are you sure you want to delete this ` +
+          (isTarget ? `target` : `source`) +
+          ` table?`
+        }
       />
-      <div className={"px-4 " + (!tables || tables.length < 25) ? "hidden" : ""}>
+      <div
+        className={'px-4 ' + (!tables || tables.length < 25) ? 'hidden' : ''}
+      >
         <ClientSidePagination
           items={tables}
           onChangeItems={setDisplayedTables}

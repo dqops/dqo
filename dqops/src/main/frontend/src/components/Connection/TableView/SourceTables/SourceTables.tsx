@@ -3,6 +3,7 @@ import Button from '../../../Button';
 import SvgIcon from '../../../SvgIcon';
 import TableActionGroup from '../TableActionGroup';
 import SourceTableDetail from './SourceTableDetail';
+import SourceTablesSimilarTablesTable from './SourceTablesSimilarTablesTable';
 import SourceTablesTable from './SourceTablesTable';
 
 export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
@@ -12,10 +13,23 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
     schema: string;
     table: string;
   } | null>(null);
+  const [existingTables, setExistingTables] = React.useState<
+    { connection: string; schema: string; table: string }[]
+  >([]);
 
   const onBack = () => {
     setAddSourceTable(false);
     setSourceTableEdit(null);
+  };
+  const addSimilarTable = (
+    obj: {
+      connection: string;
+      schema: string;
+      table: string;
+    } | null
+  ) => {
+    setSourceTableEdit(obj);
+    setAddSourceTable(true);
   };
 
   return (
@@ -47,6 +61,7 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
           <SourceTablesTable
             setSourceTableEdit={setSourceTableEdit}
             isTarget={isTarget}
+            setExistingTables={setExistingTables}
           />
           {!isTarget && (
             <Button
@@ -56,6 +71,15 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
               onClick={() => setAddSourceTable(true)}
             />
           )}
+          <div className="broder-t border-gray-100">
+            <div className="font-bold text-lg ml-4 mb-4">
+              Most similar tables
+            </div>
+            <SourceTablesSimilarTablesTable
+              setSourceTableEdit={addSimilarTable}
+              existingTables={existingTables}
+            />
+          </div>
         </>
       )}
     </div>

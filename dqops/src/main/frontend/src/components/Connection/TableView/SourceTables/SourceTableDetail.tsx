@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-  TableLineageTableListModel,
-  TableLineageSourceSpec
+  TableLineageSourceSpec,
+  TableLineageTableListModel
 } from '../../../../api';
 import { DataLineageApiClient } from '../../../../services/apiClient';
 import { useDecodedParams } from '../../../../utils';
@@ -50,6 +50,14 @@ export default function SourceTableDetail({
   };
 
   useEffect(() => {
+    if (create && sourceTableEdit) {
+      setDataLineage({
+        source_connection: sourceTableEdit.connection,
+        source_schema: sourceTableEdit.schema,
+        source_table: sourceTableEdit.table
+      });
+      setIsUpdated(true);
+    }
     if (create || !sourceTableEdit) return;
     setLoading(true);
     DataLineageApiClient.getTableSourceTable(
