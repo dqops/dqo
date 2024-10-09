@@ -45,6 +45,9 @@ public enum SpecificationKind {
     @JsonProperty("file_index")
     file_index,
 
+    @JsonProperty("connection_similarity_index")
+    connection_similarity_index,
+
     @JsonProperty("dashboards")
     dashboards,
 

@@ -19,6 +19,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.utils.datetime.TimeZoneUtility;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class TimezonesController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<String>>> getAvailableZoneIds(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return new ResponseEntity<>(Flux.fromIterable(TimeZoneUtility.getAvailableZoneIds()), HttpStatus.OK);
         }));
     }

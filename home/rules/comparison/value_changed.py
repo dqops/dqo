@@ -64,7 +64,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     if not hasattr(rule_parameters, 'previous_readouts'):
         return RuleExecutionResult(True, None, None, None)

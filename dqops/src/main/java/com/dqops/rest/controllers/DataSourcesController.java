@@ -29,6 +29,7 @@ import com.dqops.services.remote.schemas.SourceSchemasService;
 import com.dqops.services.remote.schemas.SourceSchemasServiceException;
 import com.dqops.services.remote.tables.SourceTablesService;
 import com.dqops.services.remote.tables.SourceTablesServiceException;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -95,7 +96,7 @@ public class DataSourcesController {
             @ApiParam(value = "Basic connection model") @RequestBody ConnectionModel connectionModel,
             @ApiParam(name = "verifyNameUniqueness", value = "Verify if the connection name is unique, the default value is true", required = false)
             @RequestParam(required = false) Optional<Boolean> verifyNameUniqueness) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             ConnectionTestModel connectionTestModel;
 
             ConnectionSpec connectionSpec = new ConnectionSpec();
@@ -130,7 +131,7 @@ public class DataSourcesController {
     public Mono<ResponseEntity<Flux<SchemaRemoteModel>>> getRemoteDataSourceSchemas(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             List<SchemaRemoteModel> result;
             try {
                 result = sourceSchemasService.showSchemas(connectionName, principal);
@@ -176,7 +177,7 @@ public class DataSourcesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(name = "tableNameContains", value = "Optional filter to return tables that contain this text inside the table name (case sensitive)", required = false)
             @RequestParam(required = false) Optional<String> tableNameContains) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             List<RemoteTableListModel> result;
             try {
                 result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName, tableNameContains.orElse(null), principal);

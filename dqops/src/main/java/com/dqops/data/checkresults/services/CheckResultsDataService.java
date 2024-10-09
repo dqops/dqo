@@ -124,14 +124,14 @@ public interface CheckResultsDataService {
      * @param userDomainIdentity User identity with the data domain.
      * @return Daily histogram of failed data quality checks.
      */
-    IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                     PhysicalTableName physicalTableName,
-                                                                     long incidentHash,
-                                                                     Instant firstSeen,
-                                                                     Instant incidentUntil,
-                                                                     int minSeverity,
-                                                                     IncidentHistogramFilterParameters filterParameters,
-                                                                     UserDomainIdentity userDomainIdentity);
+    IssueHistogramModel buildDailyIssuesHistogram(String connectionName,
+                                                  PhysicalTableName physicalTableName,
+                                                  Long incidentHash,
+                                                  Instant firstSeen,
+                                                  Instant incidentUntil,
+                                                  int minSeverity,
+                                                  HistogramFilterParameters filterParameters,
+                                                  UserDomainIdentity userDomainIdentity);
 
     /**
      * Analyzes the table to find the status of the most recent data quality check for each time series

@@ -9,13 +9,17 @@ from ...models.local_data_domain_model import LocalDataDomainModel
 from ...types import Response
 
 
-def _get_kwargs() -> Dict[str, Any]:
+def _get_kwargs(
+    data_domain_display_name: str,
+) -> Dict[str, Any]:
 
     pass
 
     return {
         "method": "post",
-        "url": "api/domains/",
+        "url": "api/domains/{dataDomainDisplayName}".format(
+            dataDomainDisplayName=data_domain_display_name,
+        ),
     }
 
 
@@ -44,12 +48,16 @@ def _build_response(
 
 
 def sync_detailed(
+    data_domain_display_name: str,
     *,
     client: AuthenticatedClient,
 ) -> Response[LocalDataDomainModel]:
     """createDataDomain
 
      Creates a new data domain given a data domain display name.
+
+    Args:
+        data_domain_display_name (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -59,7 +67,9 @@ def sync_detailed(
         Response[LocalDataDomainModel]
     """
 
-    kwargs = _get_kwargs()
+    kwargs = _get_kwargs(
+        data_domain_display_name=data_domain_display_name,
+    )
 
     response = client.get_httpx_client().request(
         **kwargs,
@@ -69,12 +79,16 @@ def sync_detailed(
 
 
 def sync(
+    data_domain_display_name: str,
     *,
     client: AuthenticatedClient,
 ) -> Optional[LocalDataDomainModel]:
     """createDataDomain
 
      Creates a new data domain given a data domain display name.
+
+    Args:
+        data_domain_display_name (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -85,17 +99,22 @@ def sync(
     """
 
     return sync_detailed(
+        data_domain_display_name=data_domain_display_name,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
+    data_domain_display_name: str,
     *,
     client: AuthenticatedClient,
 ) -> Response[LocalDataDomainModel]:
     """createDataDomain
 
      Creates a new data domain given a data domain display name.
+
+    Args:
+        data_domain_display_name (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -105,7 +124,9 @@ async def asyncio_detailed(
         Response[LocalDataDomainModel]
     """
 
-    kwargs = _get_kwargs()
+    kwargs = _get_kwargs(
+        data_domain_display_name=data_domain_display_name,
+    )
 
     response = await client.get_async_httpx_client().request(**kwargs)
 
@@ -113,12 +134,16 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    data_domain_display_name: str,
     *,
     client: AuthenticatedClient,
 ) -> Optional[LocalDataDomainModel]:
     """createDataDomain
 
      Creates a new data domain given a data domain display name.
+
+    Args:
+        data_domain_display_name (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -130,6 +155,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
+            data_domain_display_name=data_domain_display_name,
             client=client,
         )
     ).parsed

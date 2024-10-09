@@ -21,7 +21,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 
@@ -65,7 +65,7 @@ public interface CheckExecutionService {
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
-                                                   MonitoringScheduleSpec targetSchedule,
+                                                   CronScheduleSpec targetSchedule,
                                                    CheckExecutionProgressListener progressListener,
                                                    DqoQueueJobId parentJobId,
                                                    JobCancellationToken jobCancellationToken,

@@ -26,6 +26,7 @@ import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshot;
 import com.dqops.data.statistics.snapshot.StatisticsSnapshotFactory;
 import com.dqops.data.storage.LoadedMonthlyPartition;
+import com.dqops.data.storage.ParquetPartitionId;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.google.common.base.Objects;
@@ -33,9 +34,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -245,7 +248,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * @return True when there are any results, false when there are no results.
      */
     @Override
-    public boolean hasAnyRecentStatisticsResults(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
+    public LocalDate getMostRecentStatisticsPartitionMonth(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
         StatisticsSnapshot statisticsResultsSnapshot = this.statisticsResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         LocalDate todayDate = LocalDate.now();
         int monthsToLoad = this.statisticsConfigurationProperties.getViewedStatisticsAgeMonths() - 1;
@@ -257,11 +260,48 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
 
         for (LoadedMonthlyPartition loadedMonthlyPartition : statisticsResultsSnapshot.getLoadedMonthlyPartitions().values()) {
             if (loadedMonthlyPartition != null && loadedMonthlyPartition.getData() != null && loadedMonthlyPartition.getData().rowCount() > 0) {
-                return true;
+                return loadedMonthlyPartition.getPartitionId().getMonth();
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     * Returns the last modification timestamp of the most recent partition with statistics.
+     *
+     * @param connectionName     Connection name.
+     * @param physicalTableName  Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
+     * @return Not null timestamp when statistics are present - returns the file modification timestamp.
+     */
+    @Override
+    public Instant getStatisticsLastModified(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
+        StatisticsSnapshot statisticsResultsSnapshot = this.statisticsResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
+        LocalDate todayDate = LocalDate.now();
+        int monthsToLoad = this.statisticsConfigurationProperties.getViewedStatisticsAgeMonths() - 1;
+        if (monthsToLoad < 0 || monthsToLoad > 36) {
+            monthsToLoad = 3;
+        }
+        LocalDate startDate = todayDate.minus(monthsToLoad, ChronoUnit.MONTHS);
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> partitionsInRange = statisticsResultsSnapshot.findPartitionsInRange(startDate, todayDate);
+        if (partitionsInRange == null) {
+            return null;
+        }
+
+        Instant mostRecentLastModified = null;
+
+        for (LoadedMonthlyPartition loadedMonthlyPartition : partitionsInRange.values()) {
+            if (loadedMonthlyPartition != null && loadedMonthlyPartition.getLastModified() != 0L) {
+                Instant lastModified = Instant.ofEpochMilli(loadedMonthlyPartition.getLastModified());
+                if (mostRecentLastModified == null || mostRecentLastModified.isBefore(lastModified)) {
+                    mostRecentLastModified = lastModified;
+                }
+            }
+        }
+
+        return mostRecentLastModified;
     }
 
     /**

@@ -47,6 +47,7 @@ public class FileDefaultIncidentNotificationsWrapperImpl extends DefaultIncident
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 IncidentNotificationSpec deserializedSpec = (IncidentNotificationSpec) fileContent.getCachedObjectInstance();
 

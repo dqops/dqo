@@ -92,11 +92,12 @@ public class FileTableQualityPolicyWrapperImpl extends TableQualityPolicyWrapper
             FileTreeNode fileNode = this.defaultsFolderNode.getChildFileByFileName(specFileName);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
+                this.setLastModified(fileContent.getLastModified());
                 String textContent = fileContent.getTextContent();
                 TableQualityPolicySpec deserializedSpec = (TableQualityPolicySpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
-                    TableDefaultChecksPatternYaml deserialized = this.yamlSerializer.deserialize(textContent, TableDefaultChecksPatternYaml.class, fileNode.getPhysicalAbsolutePath());
+                    TableLevelDataQualityPolicyYaml deserialized = this.yamlSerializer.deserialize(textContent, TableLevelDataQualityPolicyYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
                     if (deserializedSpec == null) {
                         deserializedSpec = new TableQualityPolicySpec();
@@ -150,7 +151,7 @@ public class FileTableQualityPolicyWrapperImpl extends TableQualityPolicyWrapper
 			this.setStatus(InstanceStatus.MODIFIED);
         }
 
-        TableDefaultChecksPatternYaml defaultChecksPatternYaml = new TableDefaultChecksPatternYaml(this.getSpec());
+        TableLevelDataQualityPolicyYaml defaultChecksPatternYaml = new TableLevelDataQualityPolicyYaml(this.getSpec());
         String specAsYaml = this.yamlSerializer.serialize(defaultChecksPatternYaml);
         FileContent newSpecFileContent = new FileContent(specAsYaml);
         String specFileNameWithExt = FileNameSanitizer.encodeForFileSystem(this.patternFileNameBaseName) + SpecFileNames.TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML;

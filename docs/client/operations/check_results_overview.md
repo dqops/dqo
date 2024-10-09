@@ -37,6 +37,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
 |<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
 |<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`results_count`</span>|Optional number of recent results to return. The default value is 5.|*long*| |
 
 
 
@@ -564,6 +565,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
 |<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
 |<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`results_count`</span>|Optional number of recent results to return. The default value is 5.|*long*| |
 
 
 
@@ -1090,6 +1092,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
 |<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`results_count`</span>|Optional number of recent results to return. The default value is 5.|*long*| |
 
 
 
@@ -1608,6 +1611,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
 |<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
 |<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`results_count`</span>|Optional number of recent results to return. The default value is 5.|*long*| |
 
 
 
@@ -2130,6 +2134,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
 |<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
 |<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`results_count`</span>|Optional number of recent results to return. The default value is 5.|*long*| |
 
 
 
@@ -2651,6 +2656,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
 |<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`results_count`</span>|Optional number of recent results to return. The default value is 5.|*long*| |
 
 
 

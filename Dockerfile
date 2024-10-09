@@ -76,4 +76,6 @@ COPY --from=dqo-libs /workspace/app/lib/target/output/dqo-lib/jars /dqo/app/lib
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/lib /dqo/app/lib
 COPY --from=dqo-libs ${DEPENDENCY}/META-INF /dqo/app/META-INF
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/classes /dqo/app
+
+WORKDIR /dqo/userhome
 ENTRYPOINT ["/dqo/home/bin/dqo_docker_entrypoint.sh"]

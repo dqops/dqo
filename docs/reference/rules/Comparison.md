@@ -1037,7 +1037,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'expected_value'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.expected_value
@@ -1424,7 +1424,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'expected_value'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.expected_value
@@ -1822,7 +1822,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters,'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'max_count'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.max_count
@@ -1962,7 +1962,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters,'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'max_days'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.max_days
@@ -2269,7 +2269,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters,'actual_value'):
+        if not hasattr(rule_parameters,'actual_value') or not hasattr(rule_parameters.parameters, 'max_missing'):
             return RuleExecutionResult(True, None, None, None)
     
         expected_value = rule_parameters.expected_value
@@ -2412,7 +2412,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'max_percent'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.max_percent
@@ -2551,7 +2551,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'max_value'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.max_value
@@ -2690,7 +2690,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'min_value'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.min_value
@@ -2830,7 +2830,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'min_count'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.min_count
@@ -3094,7 +3094,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'min_percent'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.min_percent
@@ -3233,7 +3233,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-        if not hasattr(rule_parameters, 'actual_value'):
+        if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'min_value'):
             return RuleExecutionResult()
     
         expected_value = rule_parameters.parameters.min_value
@@ -3482,7 +3482,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     # rule evaluation method that should be modified for each type of rule
     def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
         if not hasattr(rule_parameters, 'actual_value'):
-            return RuleExecutionResult(True, None, None, None)
+            return RuleExecutionResult()
     
         if not hasattr(rule_parameters, 'previous_readouts'):
             return RuleExecutionResult(True, None, None, None)

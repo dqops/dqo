@@ -20,7 +20,7 @@ import {
   CheckContainerModel,
   CommentSpec,
   DataGroupingConfigurationSpec,
-  MonitoringScheduleSpec,
+  CronScheduleSpec,
   TableListModel,
   TablePartitioningModel,
   TableProfilingCheckCategoriesSpec
@@ -112,7 +112,7 @@ export const getTableSchedulingGroupRequest = (checkType: CheckTypes, activeTab:
   checkType, activeTab,
 });
 
-export const getTableSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, data: MonitoringScheduleSpec) => ({
+export const getTableSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, data: CronScheduleSpec) => ({
   type: SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS,
   checkType, activeTab,
   schedulingGroup,
@@ -164,7 +164,7 @@ export const updateTableSchedulingGroup =
     schemaName: string,
     tableName: string,
     schedulingGroup: CheckRunMonitoringScheduleGroup,
-    data: MonitoringScheduleSpec
+    data: CronScheduleSpec
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableSchedulingGroupRequest(checkType, activeTab));
@@ -826,13 +826,13 @@ export const setUpdatedTableBasic = (checkType: CheckTypes, activeTab: string, t
   activeTab
 });
 
-export const setUpdatedSchedule = (checkType: CheckTypes, activeTab: string, schedule?: MonitoringScheduleSpec) => ({
+export const setUpdatedSchedule = (checkType: CheckTypes, activeTab: string, schedule?: CronScheduleSpec) => ({
   type: SOURCE_ACTION.SET_UPDATED_SCHEDULE,
   data: schedule,
   checkType,
   activeTab
 });
-export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, schedule?: MonitoringScheduleSpec) => ({
+export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunMonitoringScheduleGroup, schedule?: CronScheduleSpec) => ({
   type: SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
   data: {
     schedulingGroup,

@@ -16,6 +16,8 @@
 
 package com.dqops.metadata.lineage.lineagecache;
 
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -28,7 +30,7 @@ public interface TableLineageCache {
      * @param tableLineageCacheKey Table entry cache.
      * @return Table entry node or null when the lineage for the table was not retrieved.
      */
-    TableLineageCacheEntry getTableLineageEntry(TableLineageCacheKey tableLineageCacheKey);
+    TableLineageCacheEntry getTableLineageEntry(DomainConnectionTableKey tableLineageCacheKey);
 
     /**
      * Notifies the data lineage cache that a table yaml files were updated (or loaded into the cache) and should be scanned to load the data lineage.
@@ -37,7 +39,7 @@ public interface TableLineageCache {
      * @param replacingCachedFile True when we are replacing a file that was already in a file system cache, false when a file is just placed into a cache,
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
-    void invalidateObject(TableLineageCacheKey tableLineageKey, boolean replacingCachedFile);
+    void invalidateObject(DomainConnectionTableKey tableLineageKey, boolean replacingCachedFile);
 
     /**
      * Returns a future that is completed when there are no queued data lineage load/reload operations.

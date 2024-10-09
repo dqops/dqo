@@ -182,6 +182,42 @@ spec:
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -207,6 +243,42 @@ spec:
                     DISTINCT(analyzed_table."target_column")
                 ) AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             ```
     ??? example "MySQL"
 
@@ -252,8 +324,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -314,7 +386,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -455,7 +526,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -578,6 +648,48 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -603,6 +715,48 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -651,8 +805,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -722,7 +876,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -882,7 +1035,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1084,6 +1236,42 @@ spec:
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1109,6 +1297,42 @@ spec:
                     DISTINCT(analyzed_table."target_column")
                 ) AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value
+            FROM (
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1154,8 +1378,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -1216,7 +1440,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1357,7 +1580,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1481,6 +1703,48 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1506,6 +1770,48 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -1554,8 +1860,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -1625,7 +1931,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1785,7 +2090,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1825,7 +2129,7 @@ Verifies that the distinct count in a monitored column is within a two-tailed pe
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_distinct_count_anomaly`</span>|Abnormal change in the number of distinct values. Measured as a percentile of anomalous measures.|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)| |
+|<span class="no-wrap-code">`daily_partition_distinct_count_anomaly`</span>|Abnormal change in the number of distinct values. Measured as a percentile of anomalous measures.|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_stationary_count_values*](../../../reference/rules/Percentile.md#anomaly-stationary-count-values)| |
 
 **Command-line examples**
 
@@ -2005,6 +2309,48 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2032,6 +2378,48 @@ spec:
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2083,8 +2471,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -2155,7 +2543,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2320,7 +2707,6 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2464,6 +2850,52 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2491,6 +2923,52 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM  AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2541,8 +3019,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -2618,7 +3096,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2788,7 +3265,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}

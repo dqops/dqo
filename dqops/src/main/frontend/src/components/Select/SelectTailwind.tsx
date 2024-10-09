@@ -1,7 +1,3 @@
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-
-import clsx from 'clsx';
-
 import {
   Menu,
   MenuHandler,
@@ -9,6 +5,8 @@ import {
   MenuList,
   Tooltip
 } from '@material-tailwind/react';
+import clsx from 'clsx';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import SvgIcon from '../SvgIcon';
 
 export interface Option {
@@ -34,6 +32,7 @@ export interface SelectProps {
   addLabel?: string;
   prefix?: string;
   empty?: boolean;
+  mainTooltip?: string;
 }
 
 const SelectTailwind = ({
@@ -51,7 +50,8 @@ const SelectTailwind = ({
   onAdd,
   addLabel,
   prefix,
-  empty
+  empty,
+  mainTooltip
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
@@ -107,10 +107,15 @@ const SelectTailwind = ({
             )}
           >
             {selectedOption ? (
-              <div className="flex items-center gap-2">
-                {selectedOption.icon || ''}
-                {(prefix ? prefix + ' ' : '') + selectedOption.label}
-              </div>
+              <Tooltip
+                content={mainTooltip}
+                className={mainTooltip ? '' : 'hidden'}
+              >
+                <div className="flex items-center gap-2">
+                  {selectedOption.icon || ''}
+                  {(prefix ? prefix + ' ' : '') + selectedOption.label}
+                </div>
+              </Tooltip>
             ) : (
               placeholder
             )}

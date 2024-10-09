@@ -20,6 +20,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -43,6 +44,8 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
     private V spec;
     @JsonIgnore
     private InstanceStatus status = InstanceStatus.NOT_TOUCHED;
+    @JsonIgnore
+    private Instant lastModified;
 
     /**
      * Makes an element wrapper that is mutable.
@@ -68,6 +71,23 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
     @Override
     @JsonIgnore
     public abstract K getObjectName();
+
+    /**
+     * Returns the last modification timestamp. It is not null when the specification was loaded from disk.
+     * Otherwise, it is null.
+     * @return Last file modification timestamp.
+     */
+    public Instant getLastModified() {
+        return lastModified;
+    }
+
+    /**
+     * Sets the last modification timestamp.
+     * @param lastModified Last modification timestamp.
+     */
+    protected void setLastModified(Instant lastModified) {
+        this.lastModified = lastModified;
+    }
 
     /**
      * Returns a model instance that is stored in the model wrapper. Derived classes should override this method

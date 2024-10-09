@@ -277,6 +277,41 @@ spec:
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -302,6 +337,75 @@ spec:
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
+                time_period,
+                time_period_utc
+                {%- endif -%}
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE_CONT({{ parameters.percentile_value }})
+                        WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
+                        OVER (
+                            {%- if lib.data_groupings is not none or lib.time_series is not none %}
+                            PARTITION BY
+                            {%- endif -%}
+                                    {{ render_local_time_dimension_projection('original_table') -}}
+                                    {{ render_local_data_grouping_projections('original_table') }}
+                                ) AS actual_value
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(0.5)
+                        WITHIN GROUP (ORDER BY original_table."target_column")
+                        OVER (
+                                ) AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -320,8 +424,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -903,6 +1007,47 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -930,6 +1075,80 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
+                time_period,
+                time_period_utc
+                {%- endif -%}
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE_CONT({{ parameters.percentile_value }})
+                        WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
+                        OVER (
+                            {%- if lib.data_groupings is not none or lib.time_series is not none %}
+                            PARTITION BY
+                            {%- endif -%}
+                                    {{ render_local_time_dimension_projection('original_table') -}}
+                                    {{ render_local_data_grouping_projections('original_table') }}
+                                ) AS actual_value
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(0.5)
+                        WITHIN GROUP (ORDER BY original_table."target_column")
+                        OVER (
+                            PARTITION BY
+                        original_table."country",
+                        original_table."state"
+                                ) AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -947,8 +1166,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -1623,6 +1842,41 @@ spec:
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
+            FROM(
+                SELECT
+                    original_table.*
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1648,6 +1902,75 @@ spec:
                 WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value
             FROM  AS analyzed_table
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
+                time_period,
+                time_period_utc
+                {%- endif -%}
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE_CONT({{ parameters.percentile_value }})
+                        WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
+                        OVER (
+                            {%- if lib.data_groupings is not none or lib.time_series is not none %}
+                            PARTITION BY
+                            {%- endif -%}
+                                    {{ render_local_time_dimension_projection('original_table') -}}
+                                    {{ render_local_data_grouping_projections('original_table') }}
+                                ) AS actual_value
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(0.5)
+                        WITHIN GROUP (ORDER BY original_table."target_column")
+                        OVER (
+                                ) AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -1666,8 +1989,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -2250,6 +2573,47 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2277,6 +2641,80 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
+                time_period,
+                time_period_utc
+                {%- endif -%}
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE_CONT({{ parameters.percentile_value }})
+                        WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
+                        OVER (
+                            {%- if lib.data_groupings is not none or lib.time_series is not none %}
+                            PARTITION BY
+                            {%- endif -%}
+                                    {{ render_local_time_dimension_projection('original_table') -}}
+                                    {{ render_local_data_grouping_projections('original_table') }}
+                                ) AS actual_value
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(0.5)
+                        WITHIN GROUP (ORDER BY original_table."target_column")
+                        OVER (
+                            PARTITION BY
+                        original_table."country",
+                        original_table."state"
+                                ) AS actual_value
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -2294,8 +2732,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -2994,6 +3432,47 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -3023,6 +3502,84 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
+                time_period,
+                time_period_utc
+                {%- endif -%}
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE_CONT({{ parameters.percentile_value }})
+                        WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
+                        OVER (
+                            {%- if lib.data_groupings is not none or lib.time_series is not none %}
+                            PARTITION BY
+                            {%- endif -%}
+                                    {{ render_local_time_dimension_projection('original_table') -}}
+                                    {{ render_local_data_grouping_projections('original_table') }}
+                                ) AS actual_value
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(0.5)
+                        WITHIN GROUP (ORDER BY original_table."target_column")
+                        OVER (
+                            PARTITION BY
+                        CAST(original_table."date_column" AS DATE),
+                         CAST(original_table."date_column" AS DATE)
+                                ) AS actual_value,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -3041,8 +3598,8 @@ spec:
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
@@ -3693,6 +4250,51 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -3722,6 +4324,86 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
+                time_period,
+                time_period_utc
+                {%- endif -%}
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE_CONT({{ parameters.percentile_value }})
+                        WITHIN GROUP (ORDER BY {{ lib.render_target_column('original_table')}})
+                        OVER (
+                            {%- if lib.data_groupings is not none or lib.time_series is not none %}
+                            PARTITION BY
+                            {%- endif -%}
+                                    {{ render_local_time_dimension_projection('original_table') -}}
+                                    {{ render_local_data_grouping_projections('original_table') }}
+                                ) AS actual_value
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(indentation = '    ', table_alias_prefix='original_table') -}}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            SELECT
+                MAX(analyzed_table.actual_value) AS actual_value,
+                time_period,
+                time_period_utc,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(0.5)
+                        WITHIN GROUP (ORDER BY original_table."target_column")
+                        OVER (
+                            PARTITION BY
+                        CAST(original_table."date_column" AS DATE),
+                         CAST(original_table."date_column" AS DATE),
+                        original_table."country",
+                        original_table."state"
+                                ) AS actual_value,
+                CAST(original_table."date_column" AS DATE) AS time_period,
+                TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -3739,8 +4421,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     {{- lib.render_data_grouping_projections('original_table') }}
                     {{- lib.render_time_dimension_projection('original_table') }}
                 FROM {{ lib.render_target_table() }} original_table
-                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
+            {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```

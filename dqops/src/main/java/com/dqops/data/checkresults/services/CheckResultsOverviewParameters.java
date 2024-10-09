@@ -32,10 +32,15 @@ import java.time.LocalDate;
 @Data
 public class CheckResultsOverviewParameters {
     /**
+     * The default number of results to return.
+     */
+    public static final int DEFAULT_RESULTS_COUNT = 5;
+
+    /**
      * The number of recent results to return.
      */
     @JsonPropertyDescription("Number of recent results to load.")
-    private int resultsCount = 5;
+    private int resultsCount = DEFAULT_RESULTS_COUNT;
 
     /**
      * Start month to load. Loads the data for the whole month identified by the date.

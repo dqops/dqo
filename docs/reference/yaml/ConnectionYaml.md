@@ -14,7 +14,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
-|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|source| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*connection_similarity_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|source| |
 |<span class="no-wrap-code ">[`spec`](./ConnectionYaml.md#connectionspec)</span>|Connection specification object with the connection parameters to the data source|*[ConnectionSpec](./ConnectionYaml.md#connectionspec)*| | | |
 
 
@@ -29,7 +29,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>| | |
+|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>| | |
 |<span class="no-wrap-code ">[`bigquery`](./ConnectionYaml.md#bigqueryparametersspec)</span>|BigQuery connection parameters. Specify parameters in the bigquery section.|*[BigQueryParametersSpec](./ConnectionYaml.md#bigqueryparametersspec)*| | | |
 |<span class="no-wrap-code ">[`snowflake`](./ConnectionYaml.md#snowflakeparametersspec)</span>|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|*[SnowflakeParametersSpec](./ConnectionYaml.md#snowflakeparametersspec)*| | | |
 |<span class="no-wrap-code ">[`postgresql`](./ConnectionYaml.md#postgresqlparametersspec)</span>|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|*[PostgresqlParametersSpec](./ConnectionYaml.md#postgresqlparametersspec)*| | | |
@@ -42,9 +42,13 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`oracle`](./ConnectionYaml.md#oracleparametersspec)</span>|Oracle connection parameters. Specify parameters in the oracle section or set the url (which is the Oracle JDBC url).|*[OracleParametersSpec](./ConnectionYaml.md#oracleparametersspec)*| | | |
 |<span class="no-wrap-code ">[`spark`](./ConnectionYaml.md#sparkparametersspec)</span>|Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).|*[SparkParametersSpec](./ConnectionYaml.md#sparkparametersspec)*| | | |
 |<span class="no-wrap-code ">[`databricks`](./ConnectionYaml.md#databricksparametersspec)</span>|Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).|*[DatabricksParametersSpec](./ConnectionYaml.md#databricksparametersspec)*| | | |
+|<span class="no-wrap-code ">[`hana`](./ConnectionYaml.md#hanaparametersspec)</span>|HANA connection parameters. Specify parameters in the hana section or set the url (which is the HANA JDBC url).|*[HanaParametersSpec](./ConnectionYaml.md#hanaparametersspec)*| | | |
+|<span class="no-wrap-code ">[`db2`](./ConnectionYaml.md#db2parametersspec)</span>|DB2 connection parameters. Specify parameters in the db2 section or set the url (which is the DB2 JDBC url).|*[Db2ParametersSpec](./ConnectionYaml.md#db2parametersspec)*| | | |
 |<span class="no-wrap-code ">`parallel_jobs_limit`</span>|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|*integer*| | | |
 |<span class="no-wrap-code ">[`default_grouping_configuration`](./ConnectionYaml.md#datagroupingconfigurationspec)</span>|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](./ConnectionYaml.md#datagroupingconfigurationspec)*| | | |
-|<span class="no-wrap-code ">[`schedules`](./ConnectionYaml.md#defaultschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[DefaultSchedulesSpec](./ConnectionYaml.md#defaultschedulesspec)*| | | |
+|<span class="no-wrap-code ">[`schedules`](./ConnectionYaml.md#cronschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[CronSchedulesSpec](./ConnectionYaml.md#cronschedulesspec)*| | | |
+|<span class="no-wrap-code ">[`auto_import_tables`](./ConnectionYaml.md#autoimporttablesspec)</span>|Configuration of CRON schedule used to automatically import new tables in regular intervals.|*[AutoImportTablesSpec](./ConnectionYaml.md#autoimporttablesspec)*| | | |
+|<span class="no-wrap-code ">`schedule_on_instance`</span>|Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is &quot;cloud&quot;.|*string*| | | |
 |<span class="no-wrap-code ">[`incident_grouping`](./ConnectionYaml.md#connectionincidentgroupingspec)</span>|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|*[ConnectionIncidentGroupingSpec](./ConnectionYaml.md#connectionincidentgroupingspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
@@ -430,6 +434,45 @@ The structure of this object is described below
 
 ___
 
+## HanaParametersSpec
+Sap Hana connection parameters.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`host`</span>|Hana host name. Supports also a ${HANA_HOST} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`port`</span>|Hana port number. The default port is 30015. Supports also a ${HANA_PORT} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`instance_number`</span>|Hana instance number. Supports also a ${HANA_INSTANCE_NUMBER} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`user`</span>|Hana user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|Hana database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
+
+
+
+___
+
+## Db2ParametersSpec
+IBM DB2 connection parameters.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`db2_platform_type`</span>|DB2 platform type. Supports also a ${DB2_PLATFORM} configuration with a custom environment variable.|*enum*|*luw*<br/>*zos*<br/>| | |
+|<span class="no-wrap-code ">`host`</span>|DB2 host name. Supports also a ${DB2_HOST} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`port`</span>|DB2 port number. The default port is 50000. Supports also a ${DB2_PORT} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`database`</span>|DB2 database name. Supports also a ${DB2_DATABASE} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`user`</span>|DB2 user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|DB2 database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
+
+
+
+___
+
 ## DataGroupingConfigurationSpec
 Configuration of the data groupings that is used to calculate data quality checks with a GROUP BY clause.
  Data grouping levels may be hardcoded if we have different (but similar) tables for different business areas (countries, product groups).
@@ -473,7 +516,7 @@ The structure of this object is described below
 
 ___
 
-## DefaultSchedulesSpec
+## CronSchedulesSpec
 Container of all monitoring schedules (cron expressions) for each type of checks.
  Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
  Each group of checks can be further divided by time scale (daily, monthly, etc).
@@ -485,11 +528,27 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`profiling`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running profiling data quality checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`monitoring_daily`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running daily monitoring checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`monitoring_monthly`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running monthly monitoring checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`partitioned_daily`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running daily partitioned checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
-|<span class="no-wrap-code ">[`partitioned_monthly`](./profiling/table-profiling-checks.md#monitoringschedulespec)</span>|Schedule for running monthly partitioned checks.|*[MonitoringScheduleSpec](./profiling/table-profiling-checks.md#monitoringschedulespec)*| | | |
+|<span class="no-wrap-code ">[`profiling`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running profiling data quality checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`monitoring_daily`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running daily monitoring checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`monitoring_monthly`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running monthly monitoring checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`partitioned_daily`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running daily partitioned checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+|<span class="no-wrap-code ">[`partitioned_monthly`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for running monthly partitioned checks.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
+
+
+
+___
+
+## AutoImportTablesSpec
+Specification object configured on a connection that configures how DQOps performs automatic schema import by a CRON scheduler.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`schema_filter`</span>|Source schema name filter. Accepts filters in the form of *s, s* and *s* to restrict import to selected schemas.|*string*| | | |
+|<span class="no-wrap-code ">`table_name_contains`</span>|Source table name filter. It is a table name or a text that must be present inside the table name.|*string*| | | |
+|<span class="no-wrap-code ">[`schedule`](./profiling/table-profiling-checks.md#cronschedulespec)</span>|Schedule for importing source tables using a CRON scheduler.|*[CronScheduleSpec](./profiling/table-profiling-checks.md#cronschedulespec)*| | | |
 
 
 

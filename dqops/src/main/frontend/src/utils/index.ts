@@ -121,10 +121,13 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'FLOAT';
   }
   if (Number(numberForFile) === 3) {
-    return 'DATETIME';
+    return 'DATE';
   }
   if (Number(numberForFile) === 4) {
     return 'DATETIME';
+  }
+  if (Number(numberForFile) === 5) {
+    return 'TIMESTAMP';
   }
   if (Number(numberForFile) === 6) {
     return 'BOOLEAN';
@@ -267,9 +270,9 @@ export const getFirstLevelTableTab = (checkType: CheckTypes) => {
     case CheckTypes.PROFILING:
       return 'statistics';
     case CheckTypes.PARTITIONED:
-      return 'table-quality-status';
+      return 'observability-status';
     case CheckTypes.MONITORING:
-      return 'table-quality-status';
+      return 'observability-status';
   }
 };
 
@@ -280,9 +283,9 @@ export const getFirstLevelColumnTab = (checkType: CheckTypes) => {
     case CheckTypes.PROFILING:
       return 'statistics';
     case CheckTypes.PARTITIONED:
-      return 'daily';
+      return 'observability-status';
     case CheckTypes.MONITORING:
-      return 'daily';
+      return 'observability-status';
   }
 };
 export const limitTextLength = (str: string | undefined, maxSize: number) => {
@@ -912,4 +915,41 @@ export const getIsAnyCheckResults = (
     }
   });
   return !!param;
+};
+
+export const getProviderTypeTitle = (
+  providerType: ConnectionModelProviderTypeEnum | undefined
+) => {
+  switch (providerType) {
+    case ConnectionModelProviderTypeEnum.bigquery:
+      return 'BigQuery';
+    case ConnectionModelProviderTypeEnum.snowflake:
+      return 'Snowflake';
+    case ConnectionModelProviderTypeEnum.postgresql:
+      return 'PostgreSQL';
+    case ConnectionModelProviderTypeEnum.redshift:
+      return 'Redshift';
+    case ConnectionModelProviderTypeEnum.sqlserver:
+      return 'Microsoft SQL Server/SQL Server connection parameters';
+    case ConnectionModelProviderTypeEnum.presto:
+      return 'Presto';
+    case ConnectionModelProviderTypeEnum.trino:
+      return 'Trino';
+    case ConnectionModelProviderTypeEnum.mysql:
+      return 'MySQL';
+    case ConnectionModelProviderTypeEnum.oracle:
+      return 'Oracle';
+    case ConnectionModelProviderTypeEnum.spark:
+      return 'Spark';
+    case ConnectionModelProviderTypeEnum.databricks:
+      return 'Databricks';
+    case ConnectionModelProviderTypeEnum.hana:
+      return 'HANA';
+    case ConnectionModelProviderTypeEnum.db2:
+      return 'DB2';
+    case ConnectionModelProviderTypeEnum.duckdb:
+      return 'DuckDB';
+    default:
+      return '';
+  }
 };

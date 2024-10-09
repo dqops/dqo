@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  priority: 1000
+  description: Monitors table availability issues daily.
+  monitoring_checks:
+    daily:
+      availability:
+        daily_table_availability:
+          warning:
+            max_failures: 0

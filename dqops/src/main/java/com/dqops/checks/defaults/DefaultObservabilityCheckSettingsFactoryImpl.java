@@ -34,7 +34,6 @@ import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitioned
 import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
-import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
@@ -44,8 +43,6 @@ import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessAnomalyCheckSpec;
-import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
-import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyStationaryPartitionCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
@@ -56,10 +53,6 @@ import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitori
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
-import com.dqops.checks.table.profiling.TableTimelinessProfilingChecksSpec;
-import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
@@ -67,8 +60,7 @@ import com.dqops.metadata.policies.column.ColumnQualityPolicySpec;
 import com.dqops.metadata.policies.table.TableQualityPolicySpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.*;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec;
+import com.dqops.rules.percentile.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -110,12 +102,12 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new TableQualityPolicySpec() {{
             setPolicyName("Detect data freshness anomalies daily");
-            setDescription("Monitors data freshness anomalies daily");
+            setDescription("Monitors data freshness anomalies daily.");
             setMonitoringChecks(new TableMonitoringCheckCategoriesSpec() {{
                 setDaily(new TableDailyMonitoringCheckCategoriesSpec() {{
                     setTimeliness(new TableTimelinessDailyMonitoringChecksSpec() {{
                         setDailyDataFreshnessAnomaly(new TableDataFreshnessAnomalyCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyTimelinessDelayRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -124,7 +116,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new TableQualityPolicySpec() {{
             setPolicyName("Detect table availability issues daily");
-            setDescription("Monitors table availability issues daily");
+            setDescription("Monitors table availability issues daily.");
             setMonitoringChecks(new TableMonitoringCheckCategoriesSpec() {{
                 setDaily(new TableDailyMonitoringCheckCategoriesSpec() {{
                     setAvailability(new TableAvailabilityDailyMonitoringChecksSpec() {{
@@ -152,7 +144,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new TableDailyPartitionedCheckCategoriesSpec() {{
                     setVolume(new TableVolumeDailyPartitionedChecksSpec() {{
                         setDailyPartitionRowCountAnomaly(new TableRowCountAnomalyStationaryPartitionCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyPartitionRowCountRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -223,7 +215,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect empty columns");
-            setDescription("Detects empty columns using both monitoring checks an daily partitioned checks");
+            setDescription("Detects empty columns using both monitoring checks an daily partitioned checks.");
             setDisabled(true);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
@@ -248,7 +240,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect columns containing any null values");
-            setDescription("Detects columns containing any null values using both monitoring checks an daily partitioned checks");
+            setDescription("Detects columns containing any null values using both monitoring checks and daily partitioned checks.");
             setDisabled(true);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
@@ -296,7 +288,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Profile text columns to detect PII values (sensitive data)");
-            setDescription("Activates data profiling checks on all text columns to detect if they contain sensitive data (emails, phone numbers). This policy should be enabled to allow the data quality rule miner to configure PII checks when a few sensitive values were detected.");
+            setDescription("Activates data profiling checks on all text columns to detect if they contain sensitive data (emails, phone numbers). Enabling this policy allows the data quality rule miner to set up PII checks when sensitive values are identified.");
             setDisabled(false);
             setProfilingChecks(new ColumnProfilingCheckCategoriesSpec() {{
                 setPii(new ColumnPiiProfilingChecksSpec() {{
@@ -364,7 +356,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyMonitoringChecksSpec() {{
                         setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -373,7 +365,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyPartitionedCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyPartitionedChecksSpec() {{
                         setDailyPartitionNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -382,7 +374,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect significant changes in the percentage of null values");
-            setDescription("Monitors the percentage of null values in columns and raises an issue when the day-to-day change above a threshold.");
+            setDescription("Monitors the percentage of null values in columns and raises an issue when the day-to-day change is above a threshold.");
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyMonitoringChecksSpec() {{
@@ -419,7 +411,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyPartitionedCheckCategoriesSpec() {{
                     setUniqueness(new ColumnUniquenessDailyPartitionedChecksSpec() {{
                         setDailyPartitionDistinctCountAnomaly(new ColumnDistinctCountAnomalyStationaryPartitionCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryCountValuesRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});

@@ -43,6 +43,7 @@ import { ReactComponent as DataSourcesSvg } from './svg/data_sources.svg';
 import { ReactComponent as DataSourcesWhite } from './svg/data_sources_white.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
+import { ReactComponent as Db2Svg } from './svg/ibm-db2.svg';
 import { ReactComponent as DefinitionsPoliciesSvg } from './svg/definitions-policies.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
 import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
@@ -50,6 +51,7 @@ import { ReactComponent as DeleteSvg } from './svg/delete.svg';
 import { ReactComponent as DeltaLakeBigSvg } from './svg/delta-lake-logo-big.svg';
 import { ReactComponent as DeltaLakeSvg } from './svg/delta-lake-logo.svg';
 import { ReactComponent as DisableSvg } from './svg/disable.svg';
+import { ReactComponent as DomainSvg } from './svg/domain.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
 import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg';
@@ -84,6 +86,7 @@ import { ReactComponent as OptionsSvg } from './svg/options.svg';
 import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 import { ReactComponent as ParquetSvg } from './svg/parquet-icon.svg';
 import { ReactComponent as PartitionedChecksSvg } from './svg/partition-checks.svg';
+import { ReactComponent as PasswordChange } from './svg/password-change.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
 import { ReactComponent as PerconaServerSvg } from './svg/percona-server.svg';
 import { ReactComponent as PlaySvg } from './svg/play.svg';
@@ -257,7 +260,10 @@ const iconsMap: any = {
   'deltalake-big': DeltaLakeBigSvg,
   letter: LetterSvg,
   data_sources_white: DataSourcesWhite,
-  definitions_policies: DefinitionsPoliciesSvg
+  definitions_policies: DefinitionsPoliciesSvg,
+  domain: DomainSvg,
+  password_change: PasswordChange,
+  ibm_db2: Db2Svg
 };
 
 interface SvgIconProps {

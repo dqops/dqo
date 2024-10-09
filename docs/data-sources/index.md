@@ -119,8 +119,13 @@ DQOps supports the following data sources.
     <p>Databricks</p>
   </a>
 
+  <a href="Db2/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/ibm-db2.svg">
+    <p>IBM Db2</p>
+  </a>
+
   <a href="deltalake/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/delta-lake-logo.svg">
+    <img src="https://dqops.com/docs/images/data-sources/delta-lake2.svg">
     <p>Delta Lake</p>
   </a>
 
@@ -177,6 +182,11 @@ DQOps supports the following data sources.
   <a href="presto/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/presto.svg">
     <p>Presto</p>
+  </a>
+
+  <a href="hana/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/sap-hana.svg">
+    <p>SAP HANA</p>
   </a>
 
   <a href="single-store/" class="four-divs-element">

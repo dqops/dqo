@@ -34,7 +34,7 @@ public class TableStatusCacheStub implements TableStatusCache {
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatus(CurrentTableStatusKey tableStatusKey, CheckType checkType) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatus(DomainConnectionTableKey tableStatusKey, CheckType checkType) {
         TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
         return statusModel;
     }
@@ -46,7 +46,7 @@ public class TableStatusCacheStub implements TableStatusCache {
      * @return Table status model or null when it is not yet loaded.
      */
     @Override
-    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(CurrentTableStatusKey tableStatusKey) {
+    public TableCurrentDataQualityStatusModel getCurrentTableStatusWithColumns(DomainConnectionTableKey tableStatusKey) {
         TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
         return statusModel;
     }
@@ -59,7 +59,18 @@ public class TableStatusCacheStub implements TableStatusCache {
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     @Override
-    public void invalidateTableStatus(CurrentTableStatusKey tableStatusKey, boolean replacingCachedFile) {
+    public void invalidateTableStatus(DomainConnectionTableKey tableStatusKey, boolean replacingCachedFile) {
+
+    }
+
+    /**
+     * Retrieves the current table status for a requested table and sends the combined monitoring + partition check status
+     * to the data catalog.
+     *
+     * @param tableStatusKey Table status key.
+     */
+    @Override
+    public void sendCurrentTableStatusToDataCatalog(DomainConnectionTableKey tableStatusKey) {
 
     }
 

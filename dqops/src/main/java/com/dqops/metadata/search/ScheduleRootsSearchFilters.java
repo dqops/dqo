@@ -15,8 +15,7 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
@@ -26,12 +25,15 @@ public class ScheduleRootsSearchFilters {
     @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled scheduling root objects - objects that have their own CRON schedule defined. The default value is *true*.")
     private Boolean enabled = true;
 
-    private MonitoringScheduleSpec schedule;
+    @JsonPropertyDescription("The instance name of the local DQOps instance. It is used to return schedules only from connections that can run on any instance, or are limited to run on this instance.")
+    private String localInstanceName;
+
+    private CronScheduleSpec schedule;
 
     public ScheduleRootsSearchFilters() {
     }
 
-    public ScheduleRootsSearchFilters(Boolean enabled, MonitoringScheduleSpec schedule) {
+    public ScheduleRootsSearchFilters(Boolean enabled, CronScheduleSpec schedule) {
         this.enabled = enabled;
         this.schedule = schedule;
     }
@@ -63,10 +65,26 @@ public class ScheduleRootsSearchFilters {
     }
 
     /**
+     * Returns the name of the current DQOps instance.
+     * @return Current DQOps instance name.
+     */
+    public String getLocalInstanceName() {
+        return localInstanceName;
+    }
+
+    /**
+     * Sets the name of the local DQOps instance.
+     * @param localInstanceName Local DQOps instance name.
+     */
+    public void setLocalInstanceName(String localInstanceName) {
+        this.localInstanceName = localInstanceName;
+    }
+
+    /**
      * Returns a schedule settings (cron expression, etc.) that must match.
      * @return Schedule configuration with a time zone on the connection.
      */
-    public MonitoringScheduleSpec getSchedule() {
+    public CronScheduleSpec getSchedule() {
         return schedule;
     }
 
@@ -74,7 +92,7 @@ public class ScheduleRootsSearchFilters {
      * Sets a schedule (with connection's time zone) that must match.
      * @param schedule Schedule.
      */
-    public void setSchedule(MonitoringScheduleSpec schedule) {
+    public void setSchedule(CronScheduleSpec schedule) {
         this.schedule = schedule;
     }
 }

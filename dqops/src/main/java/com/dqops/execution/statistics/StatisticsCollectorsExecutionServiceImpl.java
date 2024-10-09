@@ -102,7 +102,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         jobCancellationToken.throwIfCancelled();
 
         StatisticsCollectorSearchFilters searchFiltersWithLimit = statisticsCollectorSearchFilters.clone();
-        Integer effectiveSamplesLimit =  samplesLimit != null ? samplesLimit : this.statisticsCollectorConfigurationProperties.getSamplesLimit();
+        Integer effectiveSamplesLimit = samplesLimit != null ? samplesLimit : this.statisticsCollectorConfigurationProperties.getSamplesLimit();
 
         if (startChildJobsPerTable) {
             List<DqoQueueJob<StatisticsCollectionExecutionSummary>> childTableJobs = new ArrayList<>();
@@ -200,7 +200,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @return Collection of table wrappers.
      */
     public Collection<TableWrapper> listTargetTables(UserHome userHome, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
-        Collection<TableWrapper> tables = this.hierarchyNodeTreeSearcher.findTables(userHome.getConnections(), statisticsCollectorSearchFilters);
+        Collection<TableWrapper> tables = this.hierarchyNodeTreeSearcher.findTablesForStatisticsCollection(userHome.getConnections(), statisticsCollectorSearchFilters);
         return tables;
     }
 }

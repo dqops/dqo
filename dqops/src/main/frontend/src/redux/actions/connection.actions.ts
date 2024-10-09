@@ -21,7 +21,7 @@ import {
   CommentSpec,
   ConnectionModel,
   DataGroupingConfigurationSpec,
-  MonitoringScheduleSpec
+  CronScheduleSpec
 } from '../../api';
 import { ConnectionApiClient } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
@@ -155,7 +155,7 @@ export const getConnectionSchedulingGroupSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   schedulingGroup: CheckRunMonitoringScheduleGroup,
-  data: MonitoringScheduleSpec
+  data: CronScheduleSpec
 ) => ({
   type: SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS,
   checkType,
@@ -225,7 +225,7 @@ export const updateConnectionSchedulingGroup =
     activeTab: string,
     connectionName: string,
     schedulingGroup: CheckRunMonitoringScheduleGroup,
-    data: MonitoringScheduleSpec
+    data: CronScheduleSpec
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateConnectionSchedulingGroupRequest(checkType, activeTab));
@@ -548,7 +548,7 @@ export const setUpdatedSchedulingGroup = (
   checkType: CheckTypes,
   activeTab: string,
   schedulingGroup: CheckRunMonitoringScheduleGroup,
-  schedule?: MonitoringScheduleSpec
+  schedule?: CronScheduleSpec
 ) => ({
   type: SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
   checkType,

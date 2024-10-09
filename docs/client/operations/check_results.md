@@ -41,6 +41,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 |<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
 |<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">[`load_mode`](../models/check_results.md#checkresultsdetailedloadmode)</span>|Results load mode|*[CheckResultsDetailedLoadMode](../models/check_results.md#checkresultsdetailedloadmode)*| |
 |<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
@@ -425,7 +426,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -827,7 +829,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -1229,7 +1232,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1634,7 +1638,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2070,6 +2075,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 |<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
 |<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">[`load_mode`](../models/check_results.md#checkresultsdetailedloadmode)</span>|Results load mode|*[CheckResultsDetailedLoadMode](../models/check_results.md#checkresultsdetailedloadmode)*| |
 |<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
@@ -2454,7 +2460,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -2856,7 +2863,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -3258,7 +3266,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3663,7 +3672,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4098,6 +4108,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 |<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
 |<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">[`load_mode`](../models/check_results.md#checkresultsdetailedloadmode)</span>|Results load mode|*[CheckResultsDetailedLoadMode](../models/check_results.md#checkresultsdetailedloadmode)*| |
 |<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
@@ -4482,6 +4493,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -4882,6 +4894,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -5282,6 +5295,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5685,6 +5699,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_column_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6146,11 +6161,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         {
+		  "data_domain" : "",
 		  "connection_name" : "sample_connection",
 		  "schema_name" : "sample_schema",
 		  "table_name" : "sample_table",
+		  "total_row_count" : 122000,
+		  "data_freshness_delay_days" : 1.221,
 		  "current_severity" : "warning",
-		  "highest_historical_severity" : "fatal",
+		  "highest_historical_severity" : "error",
 		  "last_check_executed_at" : "2007-10-14T16:42:42Z",
 		  "executed_checks" : 8,
 		  "valid_results" : 3,
@@ -6338,11 +6356,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         TableCurrentDataQualityStatusModel(
+			data_domain='',
 			connection_name='sample_connection',
 			schema_name='sample_schema',
 			table_name='sample_table',
+			total_row_count=122000,
+			data_freshness_delay_days=1.221,
 			current_severity=RuleSeverityLevel.WARNING,
-			highest_historical_severity=RuleSeverityLevel.FATAL,
+			highest_historical_severity=RuleSeverityLevel.ERROR,
 			last_check_executed_at='2007-10-14T16:42:42Z',
 			executed_checks=8,
 			valid_results=3,
@@ -6537,11 +6558,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         TableCurrentDataQualityStatusModel(
+			data_domain='',
 			connection_name='sample_connection',
 			schema_name='sample_schema',
 			table_name='sample_table',
+			total_row_count=122000,
+			data_freshness_delay_days=1.221,
 			current_severity=RuleSeverityLevel.WARNING,
-			highest_historical_severity=RuleSeverityLevel.FATAL,
+			highest_historical_severity=RuleSeverityLevel.ERROR,
 			last_check_executed_at='2007-10-14T16:42:42Z',
 			executed_checks=8,
 			valid_results=3,
@@ -6739,11 +6763,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         TableCurrentDataQualityStatusModel(
+			data_domain='',
 			connection_name='sample_connection',
 			schema_name='sample_schema',
 			table_name='sample_table',
+			total_row_count=122000,
+			data_freshness_delay_days=1.221,
 			current_severity=RuleSeverityLevel.WARNING,
-			highest_historical_severity=RuleSeverityLevel.FATAL,
+			highest_historical_severity=RuleSeverityLevel.ERROR,
 			last_check_executed_at='2007-10-14T16:42:42Z',
 			executed_checks=8,
 			valid_results=3,
@@ -6941,11 +6968,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     
         ```
         TableCurrentDataQualityStatusModel(
+			data_domain='',
 			connection_name='sample_connection',
 			schema_name='sample_schema',
 			table_name='sample_table',
+			total_row_count=122000,
+			data_freshness_delay_days=1.221,
 			current_severity=RuleSeverityLevel.WARNING,
-			highest_historical_severity=RuleSeverityLevel.FATAL,
+			highest_historical_severity=RuleSeverityLevel.ERROR,
 			last_check_executed_at='2007-10-14T16:42:42Z',
 			executed_checks=8,
 			valid_results=3,
@@ -7115,6 +7145,278 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 ___
+## get_table_issues_histogram
+Generates a histograms of data quality issues for each day on a table, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_issues_histogram.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/histogram
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`issue_histogram_model`](../models/common.md#issuehistogrammodel)</span>||*[IssueHistogramModel](../models/common.md#issuehistogrammodel)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`executed_since`</span>|Optional date filter to find issues returned since that date. When missing, loads issues executed during the current and previous months|*string*| |
+|<span class="no-wrap-code">`filter`</span>|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|*string*| |
+|<span class="no-wrap-code">`days`</span>|Optional filter for a number of recent days to read the related issues|*long*| |
+|<span class="no-wrap-code">`date`</span>|Optional date filter to select one day|*string*| |
+|<span class="no-wrap-code">`column`</span>|Optional column name filter|*string*| |
+|<span class="no-wrap-code">`check`</span>|Optional check name filter|*string*| |
+|<span class="no-wrap-code">[`check_type`](../models/common.md#checktype)</span>|Optional check type filter, when not provided, returns a combined histogram of monitoring and partition checks|*[CheckType](../models/common.md#checktype)*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/histogram^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "hasProfilingIssues" : false,
+		  "hasDailyMonitoringIssues" : false,
+		  "hasMonthlyMonitoringIssues" : false,
+		  "hasDailyPartitionedIssues" : false,
+		  "hasMonthlyPartitionedIssues" : false,
+		  "days" : { },
+		  "columns" : { },
+		  "checks" : { }
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_issues_histogram
+	from dqops.client.models import CheckType
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_issues_histogram.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        IssueHistogramModel(
+			has_profiling_issues=False,
+			has_daily_monitoring_issues=False,
+			has_monthly_monitoring_issues=False,
+			has_daily_partitioned_issues=False,
+			has_monthly_partitioned_issues=False,
+			days={
+			
+			},
+			columns={
+			
+			},
+			checks={
+			
+			}
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_issues_histogram
+	from dqops.client.models import CheckType
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_issues_histogram.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        IssueHistogramModel(
+			has_profiling_issues=False,
+			has_daily_monitoring_issues=False,
+			has_monthly_monitoring_issues=False,
+			has_daily_partitioned_issues=False,
+			has_monthly_partitioned_issues=False,
+			days={
+			
+			},
+			columns={
+			
+			},
+			checks={
+			
+			}
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_issues_histogram
+	from dqops.client.models import CheckType
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_issues_histogram.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        IssueHistogramModel(
+			has_profiling_issues=False,
+			has_daily_monitoring_issues=False,
+			has_monthly_monitoring_issues=False,
+			has_daily_partitioned_issues=False,
+			has_monthly_partitioned_issues=False,
+			days={
+			
+			},
+			columns={
+			
+			},
+			checks={
+			
+			}
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_issues_histogram
+	from dqops.client.models import CheckType
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_issues_histogram.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        IssueHistogramModel(
+			has_profiling_issues=False,
+			has_daily_monitoring_issues=False,
+			has_monthly_monitoring_issues=False,
+			has_daily_partitioned_issues=False,
+			has_monthly_partitioned_issues=False,
+			days={
+			
+			},
+			columns={
+			
+			},
+			checks={
+			
+			}
+		)
+        ```
+    
+    
+    
+
+
+
+___
 ## get_table_monitoring_checks_results
 Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale
 
@@ -7149,6 +7451,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 |<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
 |<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">[`load_mode`](../models/check_results.md#checkresultsdetailedloadmode)</span>|Results load mode|*[CheckResultsDetailedLoadMode](../models/check_results.md#checkresultsdetailedloadmode)*| |
 |<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
@@ -7533,7 +7836,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -7934,7 +8238,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -8335,7 +8640,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -8739,7 +9045,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -9173,6 +9480,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 |<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
 |<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">[`load_mode`](../models/check_results.md#checkresultsdetailedloadmode)</span>|Results load mode|*[CheckResultsDetailedLoadMode](../models/check_results.md#checkresultsdetailedloadmode)*| |
 |<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
@@ -9557,7 +9865,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -9958,7 +10267,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -10359,7 +10669,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -10763,7 +11074,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
+	from dqops.client.models import CheckResultsDetailedLoadMode, \
+	                                CheckTimeScale
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -11196,6 +11508,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 |<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
 |<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">[`load_mode`](../models/check_results.md#checkresultsdetailedloadmode)</span>|Results load mode|*[CheckResultsDetailedLoadMode](../models/check_results.md#checkresultsdetailedloadmode)*| |
 |<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
@@ -11580,6 +11893,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -11979,6 +12293,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -12378,6 +12693,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -12780,6 +13096,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results import get_table_profiling_checks_results
+	from dqops.client.models import CheckResultsDetailedLoadMode
 	
 	token = 's4mp13_4u7h_70k3n'
 	

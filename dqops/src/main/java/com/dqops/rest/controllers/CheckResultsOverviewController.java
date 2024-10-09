@@ -28,6 +28,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller that returns the overview of the recent results and errors on tables and columns.
@@ -72,6 +72,7 @@ public class CheckResultsOverviewController {
      * @param principal      Principal that identifies the calling user.
      * @param category       Optional check category filter.
      * @param checkName      Optional check name filter.
+     * @param resultsCount   Optional number of results to return.
      * @return Overview of the most recent check results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview", produces = "application/json")
@@ -96,8 +97,10 @@ public class CheckResultsOverviewController {
             @ApiParam(name = "category", value = "Optional check category", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
-            @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "resultsCount", value = "Optional number of recent results to return. The default value is 5.", required = false)
+            @RequestParam(required = false) Optional<Integer> resultsCount) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -123,6 +126,7 @@ public class CheckResultsOverviewController {
             CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
             checkResultsOverviewParameters.setCategory(category.orElse(null));
             checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+            checkResultsOverviewParameters.setResultsCount(resultsCount.orElse(CheckResultsOverviewParameters.DEFAULT_RESULTS_COUNT));
 
             CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                     checks, checkResultsOverviewParameters, principal.getDataDomainIdentity());
@@ -139,6 +143,7 @@ public class CheckResultsOverviewController {
      * @param principal      Principal that identifies the calling user.
      * @param category       Optional check category filter.
      * @param checkName      Optional check name filter.
+     * @param resultsCount   Optional number of results to return.
      * @return Overview of the most recent monitoring results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview", produces = "application/json")
@@ -164,8 +169,10 @@ public class CheckResultsOverviewController {
             @ApiParam(name = "category", value = "Optional check category", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
-            @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "resultsCount", value = "Optional number of recent results to return. The default value is 5.", required = false)
+            @RequestParam(required = false) Optional<Integer> resultsCount) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -191,6 +198,7 @@ public class CheckResultsOverviewController {
             CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
             checkResultsOverviewParameters.setCategory(category.orElse(null));
             checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+            checkResultsOverviewParameters.setResultsCount(resultsCount.orElse(CheckResultsOverviewParameters.DEFAULT_RESULTS_COUNT));
 
             CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                     checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
@@ -207,6 +215,7 @@ public class CheckResultsOverviewController {
      * @param principal      Principal that identifies the calling user.
      * @param category       Optional check category filter.
      * @param checkName      Optional check name filter.
+     * @param resultsCount   Optional number of results to return.
      * @return Overview of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview", produces = "application/json")
@@ -232,8 +241,10 @@ public class CheckResultsOverviewController {
             @ApiParam(name = "category", value = "Optional check category", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
-            @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "resultsCount", value = "Optional number of recent results to return. The default value is 5.", required = false)
+            @RequestParam(required = false) Optional<Integer> resultsCount) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -259,6 +270,7 @@ public class CheckResultsOverviewController {
             CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
             checkResultsOverviewParameters.setCategory(category.orElse(null));
             checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+            checkResultsOverviewParameters.setResultsCount(resultsCount.orElse(CheckResultsOverviewParameters.DEFAULT_RESULTS_COUNT));
 
             CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                     checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
@@ -275,6 +287,7 @@ public class CheckResultsOverviewController {
      * @param principal      Principal that identifies the calling user.
      * @param category       Optional check category filter.
      * @param checkName      Optional check name filter.
+     * @param resultsCount   Optional number of results to return.
      * @return Overview of the most recent check results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview", produces = "application/json")
@@ -300,8 +313,10 @@ public class CheckResultsOverviewController {
             @ApiParam(name = "category", value = "Optional check category", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
-            @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "resultsCount", value = "Optional number of recent results to return. The default value is 5.", required = false)
+            @RequestParam(required = false) Optional<Integer> resultsCount) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -332,6 +347,7 @@ public class CheckResultsOverviewController {
             CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
             checkResultsOverviewParameters.setCategory(category.orElse(null));
             checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+            checkResultsOverviewParameters.setResultsCount(resultsCount.orElse(CheckResultsOverviewParameters.DEFAULT_RESULTS_COUNT));
 
             CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                     checks, checkResultsOverviewParameters, principal.getDataDomainIdentity());
@@ -349,6 +365,7 @@ public class CheckResultsOverviewController {
      * @param principal      Principal that identifies the calling user.
      * @param category       Optional check category filter.
      * @param checkName      Optional check name filter.
+     * @param resultsCount   Optional number of results to return.
      * @return Overview of the most recent monitoring results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview", produces = "application/json")
@@ -375,8 +392,10 @@ public class CheckResultsOverviewController {
             @ApiParam(name = "category", value = "Optional check category", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
-            @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "resultsCount", value = "Optional number of recent results to return. The default value is 5.", required = false)
+            @RequestParam(required = false) Optional<Integer> resultsCount) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -407,6 +426,7 @@ public class CheckResultsOverviewController {
             CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
             checkResultsOverviewParameters.setCategory(category.orElse(null));
             checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+            checkResultsOverviewParameters.setResultsCount(resultsCount.orElse(CheckResultsOverviewParameters.DEFAULT_RESULTS_COUNT));
 
             CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                     checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
@@ -424,6 +444,7 @@ public class CheckResultsOverviewController {
      * @param principal      Principal that identifies the calling user.
      * @param category       Optional check category filter.
      * @param checkName      Optional check name filter.
+     * @param resultsCount   Optional number of results to return.
      * @return Overview of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview", produces = "application/json")
@@ -450,8 +471,10 @@ public class CheckResultsOverviewController {
             @ApiParam(name = "category", value = "Optional check category", required = false)
             @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "checkName", value = "Optional check name", required = false)
-            @RequestParam(required = false) Optional<String> checkName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "resultsCount", value = "Optional number of recent results to return. The default value is 5.", required = false)
+            @RequestParam(required = false) Optional<Integer> resultsCount) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -482,6 +505,7 @@ public class CheckResultsOverviewController {
             CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
             checkResultsOverviewParameters.setCategory(category.orElse(null));
             checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+            checkResultsOverviewParameters.setResultsCount(resultsCount.orElse(CheckResultsOverviewParameters.DEFAULT_RESULTS_COUNT));
 
             CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                     checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());

@@ -19,7 +19,9 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.hana.HanaParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -69,6 +71,9 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
+
+    @JsonPropertyDescription("Limits running scheduled checks (started by a CRON job scheduler) to run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud SaaS instance is \"cloud\".")
+    private String scheduleOnInstance;
 
     /**
      * Database provider type (required). Accepts: bigquery, snowflake, etc.
@@ -147,6 +152,18 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("Databricks connection parameters.")
     private DatabricksParametersSpec databricks;
+
+    /**
+     * HANA connection parameters.
+     */
+    @JsonPropertyDescription("HANA connection parameters.")
+    private HanaParametersSpec hana;
+
+    /**
+     * HANA connection parameters.
+     */
+    @JsonPropertyDescription("DB2 connection parameters.")
+    private Db2ParametersSpec db2;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
@@ -238,6 +255,7 @@ public class ConnectionModel {
         return new ConnectionModel() {{
             setConnectionName(connectionName);
             setParallelJobsLimit(connectionSpec.getParallelJobsLimit());
+            setScheduleOnInstance(connectionSpec.getScheduleOnInstance());
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
             setBigquery(connectionSpec.getBigquery());
@@ -252,6 +270,8 @@ public class ConnectionModel {
             setPresto(connectionSpec.getPresto());
             setTrino(connectionSpec.getTrino());
             setDatabricks(connectionSpec.getDatabricks());
+            setHana(connectionSpec.getHana());
+            setDb2(connectionSpec.getDb2());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -310,6 +330,7 @@ public class ConnectionModel {
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
         targetConnectionSpec.setParallelJobsLimit(this.parallelJobsLimit);
+        targetConnectionSpec.setScheduleOnInstance(this.scheduleOnInstance);
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
@@ -322,6 +343,8 @@ public class ConnectionModel {
         targetConnectionSpec.setPresto(this.getPresto());
         targetConnectionSpec.setTrino(this.getTrino());
         targetConnectionSpec.setDatabricks(this.getDatabricks());
+        targetConnectionSpec.setHana(this.getHana());
+        targetConnectionSpec.setDb2(this.getDb2());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

@@ -77,6 +77,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
             this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_error_samples), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
             this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_incidents), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
             this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot._indexes), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot._indexes_sources), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
         }
     }
 

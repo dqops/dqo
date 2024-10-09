@@ -30,6 +30,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.FilteredNotificationModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.locking.RestApiLockService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class FilteredNotificationsController {
     public Mono<ResponseEntity<Flux<FilteredNotificationModel>>> getConnectionFilteredNotificationsConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, false);
             if (filteredNotifications == null) {
@@ -131,7 +132,7 @@ public class FilteredNotificationsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMap(userHomeContext, connectionName, false);
             if (filteredNotifications == null || !filteredNotifications.containsKey(filteredNotificationName)) {
@@ -174,7 +175,7 @@ public class FilteredNotificationsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName,
             @ApiParam("Filtered notification model") @RequestBody FilteredNotificationModel filteredNotificationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(filteredNotificationName) ||
                 filteredNotificationModel == null) {
@@ -234,7 +235,7 @@ public class FilteredNotificationsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Filtered notification model") @RequestBody FilteredNotificationModel filteredNotificationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) ||
                 filteredNotificationModel == null ||
                 Strings.isNullOrEmpty(filteredNotificationModel.getName())) {
@@ -283,7 +284,7 @@ public class FilteredNotificationsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName)     ||
                     Strings.isNullOrEmpty(filteredNotificationName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
@@ -323,7 +324,7 @@ public class FilteredNotificationsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<FilteredNotificationModel>>> getDefaultFilteredNotificationsConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, false);
             if (filteredNotifications == null) {
@@ -362,7 +363,7 @@ public class FilteredNotificationsController {
     public Mono<ResponseEntity<Mono<FilteredNotificationModel>>> getDefaultFilteredNotificationConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             FilteredNotificationSpecMap filteredNotifications = this.readIncidentNotificationMapFromDefaults(userHomeContext, false);
             if (filteredNotifications == null || !filteredNotifications.containsKey(filteredNotificationName)) {
@@ -403,7 +404,7 @@ public class FilteredNotificationsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName,
             @ApiParam("Filtered notification model") @RequestBody FilteredNotificationModel filteredNotificationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(filteredNotificationName) ||
                 filteredNotificationModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
@@ -457,7 +458,7 @@ public class FilteredNotificationsController {
     public Mono<ResponseEntity<Mono<Void>>> createDefaultFilteredNotificationConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Filtered notification model") @RequestBody FilteredNotificationModel filteredNotificationModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (filteredNotificationModel == null ||
                 Strings.isNullOrEmpty(filteredNotificationModel.getName())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
@@ -501,7 +502,7 @@ public class FilteredNotificationsController {
     public Mono<ResponseEntity<Mono<Void>>> deleteDefaultFilteredNotificationConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Filtered notification name") @PathVariable String filteredNotificationName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(filteredNotificationName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }

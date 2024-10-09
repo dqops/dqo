@@ -1,6 +1,6 @@
 {
   "name": "DQOps",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "private": true,
   "dependencies": {
     "@codemirror/lang-python": "6.1.3",
@@ -39,6 +39,7 @@
     "react-datepicker": "4.16.0",
     "react-dom": "18.2.0",
     "react-github-btn": "1.4.0",
+    "react-google-charts": "^4.0.5",
     "react-redux": "8.1.2",
     "react-router-dom": "5.3.4",
     "react-scripts": "5.0.1",

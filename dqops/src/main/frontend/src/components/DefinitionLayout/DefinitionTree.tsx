@@ -494,7 +494,7 @@ export const DefinitionTree = () => {
                     }}
                   >
                     <SvgIcon
-                      name="definitionssensors"
+                      name="definitions_policies"
                       className="w-4 h-4 min-w-4 shrink-0"
                     />
                     <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">

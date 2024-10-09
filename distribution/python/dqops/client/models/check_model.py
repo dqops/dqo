@@ -11,13 +11,13 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.check_search_filters import CheckSearchFilters
     from ..models.comment_spec import CommentSpec
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
     from ..models.effective_schedule_model import EffectiveScheduleModel
     from ..models.field_model import FieldModel
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.rule_thresholds_model import RuleThresholdsModel
     from ..models.similar_check_model import SimilarCheckModel
 
@@ -52,7 +52,7 @@ class CheckModel:
             default data observability check and can be run, but it is not configured in the table YAML.
         default_severity (Union[Unset, DefaultRuleSeverityLevel]):
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
-        schedule_override (Union[Unset, MonitoringScheduleSpec]):
+        schedule_override (Union[Unset, CronScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
             or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution,
             as well as the duration until this time.
@@ -81,6 +81,8 @@ class CheckModel:
         always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
+        do_not_schedule (Union[Unset, bool]): Disables running this check by a DQOps CRON scheduler. When a check is
+            disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
         check_target (Union[Unset, CheckTargetModel]):
         configuration_requirements_errors (Union[Unset, List[str]]): List of configuration errors that must be fixed
             before the data quality check can be executed.
@@ -108,7 +110,7 @@ class CheckModel:
     default_check: Union[Unset, bool] = UNSET
     default_severity: Union[Unset, DefaultRuleSeverityLevel] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
-    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "CronScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
     schedule_enabled_status: Union[Unset, ScheduleEnabledStatusModel] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -121,6 +123,7 @@ class CheckModel:
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     data_grouping_configuration: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
+    do_not_schedule: Union[Unset, bool] = UNSET
     check_target: Union[Unset, CheckTargetModel] = UNSET
     configuration_requirements_errors: Union[Unset, List[str]] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
@@ -197,6 +200,7 @@ class CheckModel:
 
         data_grouping_configuration = self.data_grouping_configuration
         always_collect_error_samples = self.always_collect_error_samples
+        do_not_schedule = self.do_not_schedule
         check_target: Union[Unset, str] = UNSET
         if not isinstance(self.check_target, Unset):
             check_target = self.check_target.value
@@ -278,6 +282,8 @@ class CheckModel:
             field_dict["data_grouping_configuration"] = data_grouping_configuration
         if always_collect_error_samples is not UNSET:
             field_dict["always_collect_error_samples"] = always_collect_error_samples
+        if do_not_schedule is not UNSET:
+            field_dict["do_not_schedule"] = do_not_schedule
         if check_target is not UNSET:
             field_dict["check_target"] = check_target
         if configuration_requirements_errors is not UNSET:
@@ -303,6 +309,7 @@ class CheckModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_search_filters import CheckSearchFilters
         from ..models.comment_spec import CommentSpec
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
         )
@@ -311,7 +318,6 @@ class CheckModel:
         )
         from ..models.effective_schedule_model import EffectiveScheduleModel
         from ..models.field_model import FieldModel
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.rule_thresholds_model import RuleThresholdsModel
         from ..models.similar_check_model import SimilarCheckModel
 
@@ -367,11 +373,11 @@ class CheckModel:
             )
 
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, MonitoringScheduleSpec]
+        schedule_override: Union[Unset, CronScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = CronScheduleSpec.from_dict(_schedule_override)
 
         _effective_schedule = d.pop("effective_schedule", UNSET)
         effective_schedule: Union[Unset, EffectiveScheduleModel]
@@ -427,6 +433,8 @@ class CheckModel:
         data_grouping_configuration = d.pop("data_grouping_configuration", UNSET)
 
         always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
+
+        do_not_schedule = d.pop("do_not_schedule", UNSET)
 
         _check_target = d.pop("check_target", UNSET)
         check_target: Union[Unset, CheckTargetModel]
@@ -491,6 +499,7 @@ class CheckModel:
             data_clean_job_template=data_clean_job_template,
             data_grouping_configuration=data_grouping_configuration,
             always_collect_error_samples=always_collect_error_samples,
+            do_not_schedule=do_not_schedule,
             check_target=check_target,
             configuration_requirements_errors=configuration_requirements_errors,
             similar_checks=similar_checks,

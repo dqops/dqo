@@ -150,40 +150,54 @@ const DataQualityChecks = ({
   ]);
 
   const goToSchedule = () => {
+    let activeTab = checksUI?.effective_schedule?.schedule_group;
+    if (!activeTab) {
+      if (checkTypes === CheckTypes.PROFILING) {
+        activeTab = checkTypes;
+      } else if (checkTypes !== CheckTypes.SOURCES) {
+        let timeScale = timePartitioned;
+
+        if (!timeScale) {
+          timeScale = checksUI?.run_checks_job_template?.timeScale || 'daily';
+        }
+        activeTab = `${checkTypes}_${timeScale}`;
+      }
+    }
+
     if (
       checksUI?.effective_schedule?.schedule_level ===
       EffectiveScheduleModelScheduleLevelEnum.connection
     ) {
+      const url = `${ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'schedule'
+      )}?activeTab=${activeTab}`;
       dispatch(
         addFirstLevelTab(CheckTypes.SOURCES, {
-          url: ROUTES.CONNECTION_DETAIL(
-            CheckTypes.SOURCES,
-            connection,
-            'schedule'
-          ),
+          url: url,
           value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
           state: {},
           label: connection
         })
       );
-      history.push(
-        ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule')
-      );
+      history.push(url);
       return;
     }
     if (
       checksUI?.effective_schedule?.schedule_level ===
       EffectiveScheduleModelScheduleLevelEnum.table_override
     ) {
+      const url = `${ROUTES.TABLE_LEVEL_PAGE(
+        CheckTypes.SOURCES,
+        connection,
+        schema,
+        table,
+        'schedule'
+      )}?activeTab=${activeTab}`;
       dispatch(
         addFirstLevelTab(CheckTypes.SOURCES, {
-          url: ROUTES.TABLE_LEVEL_PAGE(
-            CheckTypes.SOURCES,
-            connection,
-            schema,
-            table,
-            'schedule'
-          ),
+          url: url,
           value: ROUTES.TABLE_LEVEL_VALUE(
             CheckTypes.SOURCES,
             connection,
@@ -194,15 +208,7 @@ const DataQualityChecks = ({
           label: table
         })
       );
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table,
-          'schedule'
-        )
-      );
+      history.push(url);
       return;
     }
   };
@@ -213,7 +219,7 @@ const DataQualityChecks = ({
       if (checkTypes === CheckTypes.PROFILING) {
         activeTab = checkTypes;
       } else if (checkTypes !== CheckTypes.SOURCES) {
-        let timeScale = tab || timePartitioned;
+        let timeScale = timePartitioned;
 
         if (!timeScale) {
           timeScale = checksUI?.run_checks_job_template?.timeScale || 'daily';
@@ -240,15 +246,30 @@ const DataQualityChecks = ({
   };
 
   const goToTableSchedule = () => {
+    let activeTab = checksUI?.effective_schedule?.schedule_group;
+    if (!activeTab) {
+      if (checkTypes === CheckTypes.PROFILING) {
+        activeTab = checkTypes;
+      } else if (checkTypes !== CheckTypes.SOURCES) {
+        let timeScale = timePartitioned;
+
+        if (!timeScale) {
+          timeScale = checksUI?.run_checks_job_template?.timeScale || 'daily';
+        }
+        activeTab = `${checkTypes}_${timeScale}`;
+      }
+    }
+
+    const url = `${ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'schedule'
+    )}?activeTab=${activeTab}`;
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
-        url: ROUTES.TABLE_LEVEL_PAGE(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table,
-          'schedule'
-        ),
+        url: url,
         value: ROUTES.TABLE_LEVEL_VALUE(
           CheckTypes.SOURCES,
           connection,
@@ -259,15 +280,7 @@ const DataQualityChecks = ({
         label: table
       })
     );
-    history.push(
-      `${ROUTES.TABLE_LEVEL_PAGE(
-        CheckTypes.SOURCES,
-        connection,
-        schema,
-        table,
-        'schedule'
-      )}activeTab=${checksUI?.effective_schedule?.schedule_group}`
-    );
+    history.push(url);
     return;
   };
 

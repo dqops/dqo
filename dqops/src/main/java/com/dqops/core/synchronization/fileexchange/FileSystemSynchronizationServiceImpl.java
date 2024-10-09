@@ -119,7 +119,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                     .orElseGet(() -> sourceFileSystemSynchronizationOperations.listFilesInFolder(
                             sourceFileSystemRoot, lastLocalFolderIndex.getRelativePath(), lastLocalFolderIndex));
             newLocalFolderIndex = currentLocalFolderIndex.isFrozen() ? currentLocalFolderIndex.cloneUnfrozen() : currentLocalFolderIndex;
-            if(dqoRoot.isTableFolder()) {
+            if(dqoRoot.isDataFolder()) {
                 newLocalFolderIndex.truncateToLicenseLimits(apiKey.getApiKeyPayload());
             }
 

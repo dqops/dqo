@@ -60,6 +60,12 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> collectorsHierarchyIds;
 
+    @JsonPropertyDescription("Expected CRON profiling schedule.")
+    private String enabledCronScheduleExpression;
+
+    @JsonIgnore
+    private boolean ignoreTablesWithoutSchedule;
+
     @JsonIgnore
     private List<SearchPattern> columnNameSearchPatterns;
     @JsonIgnore
@@ -71,8 +77,16 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
      * @return Search visitor.
      */
-    public StatisticsCollectorSearchFiltersVisitor createProfilerSearchFilterVisitor() {
+    public StatisticsCollectorSearchFiltersVisitor createCollectorSearchFilterVisitor() {
         return new StatisticsCollectorSearchFiltersVisitor(this);
+    }
+
+    /**
+     * Create a hierarchy tree node traversal visitor that will search for tables matching the filters.
+     * @return Search visitor.
+     */
+    public StatisticsCollectorTargetTableSearchFiltersVisitor createTargetTableCollectorSearchFilterVisitor() {
+        return new StatisticsCollectorTargetTableSearchFiltersVisitor(this);
     }
 
     /**
@@ -168,6 +182,42 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      */
     public void setCollectorsHierarchyIds(Set<HierarchyId> collectorsHierarchyIds) {
         this.collectorsHierarchyIds = collectorsHierarchyIds;
+    }
+
+    /**
+     * Returns a CRON schedule that must be enabled and configured on a connection or table a a profiling schedule
+     * It is used to find tables scheduled to run on this schedule.
+     * @return Cron schedule.
+     */
+    public String getEnabledCronScheduleExpression() {
+        return enabledCronScheduleExpression;
+    }
+
+    /**
+     * Sets a CRON schedule that must be configured and enabled on tables.
+     * @param enabledCronScheduleExpression Cron schedule expression.
+     */
+    public void setEnabledCronScheduleExpression(String enabledCronScheduleExpression) {
+        this.enabledCronScheduleExpression = enabledCronScheduleExpression;
+    }
+
+    /**
+     * Returns true if tables without an active schedule should be excluded.
+     * This value is set by the search visitor when visiting every connection, when the <code>enabledCronSchedule</code>
+     * is configured and the cron schedule on the connection was different, so only tables that match a cron schedule
+     * can be included. Those without a schedule should be excluded, because the connection is excluded.
+     * @return True when ignoring tables without a schedule.
+     */
+    public boolean isIgnoreTablesWithoutSchedule() {
+        return ignoreTablesWithoutSchedule;
+    }
+
+    /**
+     * Sets a flag to ignore tables without a schedule.
+     * @param ignoreTablesWithoutSchedule Ignore tables without a schedule configured.
+     */
+    public void setIgnoreTablesWithoutSchedule(boolean ignoreTablesWithoutSchedule) {
+        this.ignoreTablesWithoutSchedule = ignoreTablesWithoutSchedule;
     }
 
     /**

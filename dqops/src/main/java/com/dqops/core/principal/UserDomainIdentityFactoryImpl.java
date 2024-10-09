@@ -69,25 +69,10 @@ public class UserDomainIdentityFactoryImpl implements UserDomainIdentityFactory 
      */
     @Override
     public UserDomainIdentity createDataDomainAdminIdentityForCloudDomain(String dataDomainCloudName) {
-        String effectiveCloudDomainName = dataDomainCloudName == null ? UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomainCloudName;
+        String effectiveCloudDomainName = dataDomainCloudName == null || Objects.equals(UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME, dataDomainCloudName) ?
+                UserDomainIdentity.ROOT_DATA_DOMAIN : dataDomainCloudName;
         String dataDomainFolderName = mapDataDomainCloudNameToFolder(effectiveCloudDomainName);
         UserDomainIdentity dataDomainAdminIdentity = UserDomainIdentity.createDataDomainAdminIdentity(dataDomainFolderName, effectiveCloudDomainName);
         return dataDomainAdminIdentity;
-    }
-
-    /**
-     * Creates a data domain identity for the admin user, given the data domain name mapped locally.
-     * Checks what data domain was mounted at the local DQOps user home root folder and picks the right folder name where the data will be mounted.
-     * @param localDataDomainName Data domain name as used locally.
-     * @return User domain identity for the admin user.
-     */
-    @Override
-    public UserDomainIdentity createDataDomainAdminIdentityForLocalDomain(String localDataDomainName) {
-        if (!Objects.equals(UserDomainIdentity.ROOT_DATA_DOMAIN, this.dqoUserConfigurationProperties.getDefaultDataDomain()) &&
-            Objects.equals(localDataDomainName, UserDomainIdentity.ROOT_DATA_DOMAIN)) {
-            return createDataDomainAdminIdentityForCloudDomain(this.dqoUserConfigurationProperties.getDefaultDataDomain());
-        }
-
-        return createDataDomainAdminIdentityForCloudDomain(localDataDomainName);
     }
 }

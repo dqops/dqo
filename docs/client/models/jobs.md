@@ -186,7 +186,7 @@ DQOps root folders in the dqo use home that may be replicated to a remote file s
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_error_samples<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
+|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_error_samples<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_indexes_sources<br/>_local_settings<br/>|
 
 ___
 
@@ -263,7 +263,7 @@ Job type that identifies a job by type.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|run_checks<br/>run_checks_on_table<br/>collect_statistics<br/>collect_statistics_on_table<br/>collect_error_samples<br/>collect_error_samples_on_table<br/>queue_thread_shutdown<br/>synchronize_folder<br/>synchronize_multiple_folders<br/>run_scheduled_checks_cron<br/>import_schema<br/>import_tables<br/>delete_stored_data<br/>repair_stored_data<br/>|
+|string|run_checks<br/>run_checks_on_table<br/>collect_statistics<br/>collect_scheduled_statistics<br/>collect_statistics_on_table<br/>collect_error_samples<br/>collect_error_samples_on_table<br/>queue_thread_shutdown<br/>synchronize_folder<br/>synchronize_multiple_folders<br/>run_scheduled_checks_cron<br/>import_schema<br/>import_tables<br/>auto_import_tables<br/>delete_stored_data<br/>repair_stored_data<br/>|
 
 ___
 
@@ -426,6 +426,7 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`collector_category`</span>|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|*string*|
 |<span class="no-wrap-code">[`target`](#statisticscollectortarget)</span>|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|*[StatisticsCollectorTarget](#statisticscollectortarget)*|
+|<span class="no-wrap-code">`enabled_cron_schedule_expression`</span>|Expected CRON profiling schedule.|*string*|
 |<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
 |<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|
@@ -538,6 +539,7 @@ Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that im
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
 |<span class="no-wrap-code">`table_name_contains`</span>|Optional filter for the table names to import. The table names that are imported must contain a substring matching this parameter. This filter is case sensitive.|*string*|
 |<span class="no-wrap-code">`table_names`</span>|Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.|*List[string]*|
+|<span class="no-wrap-code">`tables_import_limit`</span>|Optional parameter to configure the limit of tables that are imported from a single schema. Leave this parameter blank to use the default limit (300 tables).|*integer*|
 
 
 ___
@@ -572,7 +574,9 @@ Model object returned to UI that has typed fields for each supported job paramet
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`synchronize_root_folder_parameters`](#synchronizerootfolderdqoqueuejobparameters)</span>|The job parameters for the "synchronize folder" queue job.|*[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)*|
 |<span class="no-wrap-code">[`synchronize_multiple_folders_parameters`](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)</span>|The job parameters for the "synchronize multiple folders" queue job.|*[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)*|
-|<span class="no-wrap-code">[`run_scheduled_checks_parameters`](./common.md#monitoringschedulespec)</span>|The job parameters for the "run scheduled checks cron" queue job.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`run_scheduled_checks_parameters`](./common.md#cronschedulespec)</span>|The job parameters for the "run scheduled checks" cron queue job.|*[CronScheduleSpec](./common.md#cronschedulespec)*|
+|<span class="no-wrap-code">[`collect_scheduled_statistics_parameters`](./common.md#cronschedulespec)</span>|The job parameters for the "collect scheduled statistics" cron queue job.|*[CronScheduleSpec](./common.md#cronschedulespec)*|
+|<span class="no-wrap-code">[`auto_import_tables_parameters`](./common.md#cronschedulespec)</span>|The job parameters for the "auto import tables" cron queue job.|*[CronScheduleSpec](./common.md#cronschedulespec)*|
 |<span class="no-wrap-code">[`run_checks_parameters`](./jobs.md#runchecksparameters)</span>|The job parameters for the "run checks" queue job.|*[RunChecksParameters](./jobs.md#runchecksparameters)*|
 |<span class="no-wrap-code">[`run_checks_on_table_parameters`](#runchecksontableparameters)</span>|The job parameters for the "run checks on table" queue job.|*[RunChecksOnTableParameters](#runchecksontableparameters)*|
 |<span class="no-wrap-code">[`collect_statistics_parameters`](#collectstatisticsqueuejobparameters)</span>|The job parameters for the "collect statistics" queue job.|*[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)*|

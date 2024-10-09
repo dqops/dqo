@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  TableLineageSourceListModel,
+  TableLineageTableListModel,
   TableLineageSourceSpec
 } from '../../../../api';
 import { ColumnApiClient } from '../../../../services/apiClient';
@@ -15,7 +15,7 @@ export default function SourceColumns({
   create,
   setIsUpdated
 }: {
-  dataLineage: TableLineageSourceListModel;
+  dataLineage: TableLineageTableListModel;
   onChangeDataLineageSpec: (dataLineage: TableLineageSourceSpec) => void;
   dataLineageSpec: TableLineageSourceSpec;
   create: boolean;

@@ -14,6 +14,7 @@ Returns all the data quality check results of executed checks on tables and colu
 |<span class="no-wrap-code">[`get_column_partitioned_checks_results`</span>](./check_results.md#get_column_partitioned_checks_results)|GET|Returns an overview of the most recent column level partitioned checks executions for a requested time scale|
 |<span class="no-wrap-code">[`get_column_profiling_checks_results`</span>](./check_results.md#get_column_profiling_checks_results)|GET|Returns an overview of the most recent check executions for all column level data quality profiling checks on a column|
 |<span class="no-wrap-code">[`get_table_data_quality_status`</span>](./check_results.md#get_table_data_quality_status)|GET|Read the most recent results of executed data quality checks on the table and return the current table&#x27;s data quality status - the number of failed data quality checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.|
+|<span class="no-wrap-code">[`get_table_issues_histogram`</span>](./check_results.md#get_table_issues_histogram)|GET|Generates a histograms of data quality issues for each day on a table, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.|
 |<span class="no-wrap-code">[`get_table_monitoring_checks_results`</span>](./check_results.md#get_table_monitoring_checks_results)|GET|Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale|
 |<span class="no-wrap-code">[`get_table_partitioned_checks_results`</span>](./check_results.md#get_table_partitioned_checks_results)|GET|Returns a complete view of the recent table level partitioned checks executions for a requested time scale|
 |<span class="no-wrap-code">[`get_table_profiling_checks_results`</span>](./check_results.md#get_table_profiling_checks_results)|GET|Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table|
@@ -125,6 +126,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 |<span class="no-wrap-code">[`delete_connection`</span>](./connections.md#delete_connection)|DELETE|Deletes a connection|
 |<span class="no-wrap-code">[`get_all_connections`</span>](./connections.md#get_all_connections)|GET|Returns a list of connections (data sources)|
 |<span class="no-wrap-code">[`get_connection`</span>](./connections.md#get_connection)|GET|Return the full details of a connection given the connection name|
+|<span class="no-wrap-code">[`get_connection_auto_import`</span>](./connections.md#get_connection_auto_import)|GET|Return the configuration of the table auto import for a connection|
 |<span class="no-wrap-code">[`get_connection_basic`</span>](./connections.md#get_connection_basic)|GET|Return the basic details of a connection given the connection name|
 |<span class="no-wrap-code">[`get_connection_comments`</span>](./connections.md#get_connection_comments)|GET|Return the comments for a connection|
 |<span class="no-wrap-code">[`get_connection_common_columns`</span>](./connections.md#get_connection_common_columns)|GET|Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.|
@@ -133,6 +135,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 |<span class="no-wrap-code">[`get_connection_labels`</span>](./connections.md#get_connection_labels)|GET|Return the labels for a connection|
 |<span class="no-wrap-code">[`get_connection_scheduling_group`</span>](./connections.md#get_connection_scheduling_group)|GET|Return the schedule for a connection for a scheduling group|
 |<span class="no-wrap-code">[`update_connection`</span>](./connections.md#update_connection)|PUT|Updates an existing connection|
+|<span class="no-wrap-code">[`update_connection_auto_import`</span>](./connections.md#update_connection_auto_import)|PUT|Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.|
 |<span class="no-wrap-code">[`update_connection_basic`</span>](./connections.md#update_connection_basic)|PUT|Updates the basic information of a connection|
 |<span class="no-wrap-code">[`update_connection_comments`</span>](./connections.md#update_connection_comments)|PUT|Updates (replaces) the list of comments of a connection|
 |<span class="no-wrap-code">[`update_connection_default_grouping_configuration`</span>](./connections.md#update_connection_default_grouping_configuration)|PUT|Updates the default data grouping connection of a connection|
@@ -154,6 +157,14 @@ Operations for retrieving the list of data quality dashboards supported by DQOps
 |<span class="no-wrap-code">[`get_dashboard_level_5`</span>](./dashboards.md#get_dashboard_level_5)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
 
 
+## data_catalog_synchronization
+Operations related to synchronization of data quality health results to the a data catalog.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`push_data_quality_status_to_data_catalog`</span>](./data_catalog_synchronization.md#push_data_quality_status_to_data_catalog)|PUT|Pushes the data quality status of tables matching the search filters to the data catalog.|
+
+
 ## data_domains
 Data domain management API to create different data domains.
 
@@ -163,7 +174,7 @@ Data domain management API to create different data domains.
 |<span class="no-wrap-code">[`delete_data_domain`</span>](./data_domains.md#delete_data_domain)|DELETE|Deletes a data domain. The domain is deleted in the DQOps SaaS cloud and locally.|
 |<span class="no-wrap-code">[`get_local_data_domains`</span>](./data_domains.md#get_local_data_domains)|GET|Returns a list of local data domains that this instance is maintaining. Data domains are supported only in an ENTERPRISE versions of DQOps.|
 |<span class="no-wrap-code">[`switch_to_data_domain`</span>](./data_domains.md#switch_to_data_domain)|GET|Switches to a different data domain. This operation sends a special cookie and redirects the user to the home screen.|
-|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.|
+|<span class="no-wrap-code">[`synchronize_data_domains`</span>](./data_domains.md#synchronize_data_domains)|PATCH|Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.|
 
 
 ## data_grouping_configurations
@@ -186,8 +197,10 @@ Operations related to managing and inspecting table and column lineage.
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`create_table_source_table`</span>](./data_lineage.md#create_table_source_table)|POST|Creates a new source table of the table&#x27;s data lineage.|
 |<span class="no-wrap-code">[`delete_table_source_table`</span>](./data_lineage.md#delete_table_source_table)|DELETE|Deletes a specific data lineage source table of the given table.|
+|<span class="no-wrap-code">[`get_table_data_lineage_graph`</span>](./data_lineage.md#get_table_data_lineage_graph)|GET|Returns a data lineage graph around the given table.|
 |<span class="no-wrap-code">[`get_table_source_table`</span>](./data_lineage.md#get_table_source_table)|GET|Reads a specific data lineage source table defined on a target tale.|
 |<span class="no-wrap-code">[`get_table_source_tables`</span>](./data_lineage.md#get_table_source_tables)|GET|Returns a list of source tables on the data lineage that are sources of the given table.|
+|<span class="no-wrap-code">[`get_table_target_tables`</span>](./data_lineage.md#get_table_target_tables)|GET|Returns a list of target tables on the data lineage that are downstream tables of the given table.|
 |<span class="no-wrap-code">[`update_table_source_table`</span>](./data_lineage.md#update_table_source_table)|PUT|Update a specific data lineage source table using a new model.|
 
 
@@ -302,7 +315,7 @@ Data quality incidents controller that supports reading and updating data qualit
 |<span class="no-wrap-code">[`find_recent_incidents_on_connection`</span>](./incidents.md#find_recent_incidents_on_connection)|GET|Returns a list of recent data quality incidents.|
 |<span class="no-wrap-code">[`find_top_incidents_grouped`</span>](./incidents.md#find_top_incidents_grouped)|GET|Finds the most recent incidents grouped by one of the incident&#x27;s attribute, such as a data quality dimension, a data quality check category or the connection name.|
 |<span class="no-wrap-code">[`get_incident`</span>](./incidents.md#get_incident)|GET|Return a single data quality incident&#x27;s details.|
-|<span class="no-wrap-code">[`get_incident_histogram`</span>](./incidents.md#get_incident_histogram)|GET|Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.|
+|<span class="no-wrap-code">[`get_incident_histogram`</span>](./incidents.md#get_incident_histogram)|GET|Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.|
 |<span class="no-wrap-code">[`get_incident_issues`</span>](./incidents.md#get_incident_issues)|GET|Return a paged list of failed data quality check results that are related to an incident.|
 |<span class="no-wrap-code">[`recalibrate_checks_for_incident`</span>](./incidents.md#recalibrate_checks_for_incident)|POST|Recalibrates all data quality checks that caused a given data quality incident to generate less issues by changing the data quality rule parameters.|
 |<span class="no-wrap-code">[`set_incident_issue_url`</span>](./incidents.md#set_incident_issue_url)|POST|Changes the incident&#x27;s issueUrl to a new status.|
@@ -513,6 +526,7 @@ Operations related to manage the metadata of imported tables, and managing the c
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`create_table`</span>](./tables.md#create_table)|POST|Creates a new table (adds a table metadata)|
 |<span class="no-wrap-code">[`delete_table`</span>](./tables.md#delete_table)|DELETE|Deletes a table|
+|<span class="no-wrap-code">[`find_similar_tables`</span>](./tables.md#find_similar_tables)|GET|Finds a list of tables that are most similar to a given table|
 |<span class="no-wrap-code">[`get_table`</span>](./tables.md#get_table)|GET|Return the table specification|
 |<span class="no-wrap-code">[`get_table_basic`</span>](./tables.md#get_table_basic)|GET|Return the basic table information|
 |<span class="no-wrap-code">[`get_table_columns_monitoring_checks_model`</span>](./tables.md#get_table_columns_monitoring_checks_model)|GET|Return a UI friendly model of configurations for column-level data quality monitoring checks on a table|

@@ -16,25 +16,29 @@
 
 package com.dqops.metadata.lineage.lineagecache;
 
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
+
+import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * Object that stores the collection of downstream tables below a given table.
  */
 public class TableLineageCacheEntry {
-    private TableLineageCacheKey tableKey;
+    private DomainConnectionTableKey tableKey;
     private TableLineageRefreshStatus status;
     private final Object lock = new Object();
-    private Set<TableLineageCacheKey> upstreamSourceTables = new LinkedHashSet<>();
-    private Set<TableLineageCacheKey> downstreamTargetTables = new LinkedHashSet<>();
+    private Set<DomainConnectionTableKey> upstreamSourceTables = new LinkedHashSet<>();
+    private Set<DomainConnectionTableKey> downstreamTargetTables = new LinkedHashSet<>();
 
     /**
      * Creates a new entry.
      * @param tableKey Key that identifies the table.
      * @param status Data lineage load status.
      */
-    public TableLineageCacheEntry(TableLineageCacheKey tableKey, TableLineageRefreshStatus status) {
+    public TableLineageCacheEntry(DomainConnectionTableKey tableKey, TableLineageRefreshStatus status) {
         this.tableKey = tableKey;
         this.status = status;
     }
@@ -43,7 +47,7 @@ public class TableLineageCacheEntry {
      * Returns the key that identifies the table in the cache.
      * @return Key.
      */
-    public TableLineageCacheKey getTableKey() {
+    public DomainConnectionTableKey getTableKey() {
         return tableKey;
     }
 
@@ -71,9 +75,9 @@ public class TableLineageCacheEntry {
      * Returns the last known upstream (source) tables.
      * @return Upstream (source) tables.
      */
-    public Set<TableLineageCacheKey> getUpstreamSourceTables() {
+    public Set<DomainConnectionTableKey> getUpstreamSourceTables() {
         synchronized (this.lock) {
-            return this.upstreamSourceTables;
+            return Collections.unmodifiableSet(this.upstreamSourceTables);
         }
     }
 
@@ -81,9 +85,13 @@ public class TableLineageCacheEntry {
      * Adds a downstream (target) table.
      * @param downstreamTable Downstream table.
      */
-    public void addDownstreamTargetTable(TableLineageCacheKey downstreamTable) {
+    public void addDownstreamTargetTable(DomainConnectionTableKey downstreamTable) {
+        if (Objects.equals(this.tableKey, downstreamTable)) {
+            return; // user error, cannot add self
+        }
+
         synchronized (this.lock) {
-            LinkedHashSet<TableLineageCacheKey> newSet = new LinkedHashSet<>(this.downstreamTargetTables);
+            LinkedHashSet<DomainConnectionTableKey> newSet = new LinkedHashSet<>(this.downstreamTargetTables);
             newSet.add(downstreamTable);
 
             this.downstreamTargetTables = newSet;
@@ -94,9 +102,9 @@ public class TableLineageCacheEntry {
      * Removes a downstream (target) table.
      * @param downstreamTable Downstream table.
      */
-    public void removeDownstreamTargetTable(TableLineageCacheKey downstreamTable) {
+    public void removeDownstreamTargetTable(DomainConnectionTableKey downstreamTable) {
         synchronized (this.lock) {
-            LinkedHashSet<TableLineageCacheKey> newSet = new LinkedHashSet<>(this.downstreamTargetTables);
+            LinkedHashSet<DomainConnectionTableKey> newSet = new LinkedHashSet<>(this.downstreamTargetTables);
             newSet.remove(downstreamTable);
 
             this.downstreamTargetTables = newSet;
@@ -107,9 +115,9 @@ public class TableLineageCacheEntry {
      * Returns the downstream (target) tables.
      * @return Downstream (target) tables.
      */
-    public Set<TableLineageCacheKey> getDownstreamTargetTables() {
+    public Set<DomainConnectionTableKey> getDownstreamTargetTables() {
         synchronized (this.lock) {
-            return this.downstreamTargetTables;
+            return Collections.unmodifiableSet(this.downstreamTargetTables);
         }
     }
 
@@ -117,9 +125,13 @@ public class TableLineageCacheEntry {
      * Adds an upstream (source) table.
      * @param upstreamTable Upstream table.
      */
-    public void addUpstreamSourceTable(TableLineageCacheKey upstreamTable) {
+    public void addUpstreamSourceTable(DomainConnectionTableKey upstreamTable) {
+        if (Objects.equals(this.tableKey, upstreamTable)) {
+            return; // user error, cannot add self
+        }
+
         synchronized (this.lock) {
-            LinkedHashSet<TableLineageCacheKey> newSet = new LinkedHashSet<>(this.upstreamSourceTables);
+            LinkedHashSet<DomainConnectionTableKey> newSet = new LinkedHashSet<>(this.upstreamSourceTables);
             newSet.add(upstreamTable);
 
             this.upstreamSourceTables = newSet;
@@ -130,9 +142,9 @@ public class TableLineageCacheEntry {
      * Removes an upstream (source) table.
      * @param upstreamTable Upstream table.
      */
-    public void removeUpstreamSourceTable(TableLineageCacheKey upstreamTable) {
+    public void removeUpstreamSourceTable(DomainConnectionTableKey upstreamTable) {
         synchronized (this.lock) {
-            LinkedHashSet<TableLineageCacheKey> newSet = new LinkedHashSet<>(this.upstreamSourceTables);
+            LinkedHashSet<DomainConnectionTableKey> newSet = new LinkedHashSet<>(this.upstreamSourceTables);
             newSet.remove(upstreamTable);
 
             this.upstreamSourceTables = newSet;

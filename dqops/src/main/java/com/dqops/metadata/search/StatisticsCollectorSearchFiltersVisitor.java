@@ -15,15 +15,14 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.metadata.policies.column.ColumnQualityPolicyList;
-import com.dqops.metadata.policies.table.TableQualityPolicyList;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.labels.LabelSetSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.sensors.AbstractSensorParametersSpec;
-import com.dqops.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
 import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorCategorySpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
@@ -33,6 +32,7 @@ import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.google.common.base.Strings;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -85,8 +85,16 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnection();
+        if (!Strings.isNullOrEmpty(this.filters.getEnabledCronScheduleExpression())) {
+            CronSchedulesSpec schedules = connectionWrapper.getSpec().getSchedules();
+            CronScheduleSpec profilingSchedule = schedules != null ? schedules.getProfiling() : null;
+            this.filters.setIgnoreTablesWithoutSchedule(
+                    profilingSchedule == null ||
+                            profilingSchedule.isDisabled() ||
+                            !Objects.equals(profilingSchedule.getCronExpression(), this.filters.getEnabledCronScheduleExpression()));
+        }
 
+        String connectionNameFilter = this.filters.getConnection();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
 
@@ -137,22 +145,67 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getFullTableName();
+        TableSpec tableSpec = tableWrapper.getSpec();
+        Boolean enabledFilter = this.filters.getEnabled();
 
-        if (Strings.isNullOrEmpty(schemaTableName)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        if (this.filters.isIgnoreTablesWithoutSchedule()) {
+            if (tableSpec.getSchedulesOverride() == null || tableSpec.getSchedulesOverride().getProfiling() == null ||
+                    tableSpec.getSchedulesOverride().getProfiling().isDisabled() ||
+                    !Objects.equals(tableSpec.getSchedulesOverride().getProfiling().getCronExpression(), this.filters.getEnabledCronScheduleExpression())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
         }
 
-        PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
-        if (physicalTableName.isSearchPattern()) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
+        if (!Strings.isNullOrEmpty(this.filters.getEnabledCronScheduleExpression())) {
+            if (tableSpec.getSchedulesOverride() != null && tableSpec.getSchedulesOverride().getProfiling() != null &&
+                    !tableSpec.getSchedulesOverride().getProfiling().isDisabled() &&
+                    !Objects.equals(tableSpec.getSchedulesOverride().getProfiling().getCronExpression(), this.filters.getEnabledCronScheduleExpression())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
         }
 
-        if (tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+        labelsSearcherObject.setTableLabels(tableSpec.getLabels());
+
+        if (labelsSearcherObject != null) {
+            labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
         }
 
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
+
+        if (labelsSearcherObject.getTableLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
+        }
+
+        if (labelsSearcherObject.getConnectionLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+        }
+
+        if (!LabelsSearchMatcher.matchTableLabels(this.filters, overriddenLabels)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        PhysicalTableName physicalTableName = this.filters.getPhysicalTableName();
+        if (physicalTableName != null) {
+            if (!tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        if (tableSpec.isDisabled()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (enabledFilter != null) {
+            if (enabledFilter && tableSpec.isDisabled()) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+            if (!enabledFilter && !tableSpec.isDisabled()) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
@@ -165,6 +218,22 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
     @Override
     public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
+
+        if (this.filters.isIgnoreTablesWithoutSchedule()) {
+            if (tableSpec.getSchedulesOverride() == null || tableSpec.getSchedulesOverride().getProfiling() == null ||
+                    tableSpec.getSchedulesOverride().getProfiling().isDisabled() ||
+                    !Objects.equals(tableSpec.getSchedulesOverride().getProfiling().getCronExpression(), this.filters.getEnabledCronScheduleExpression())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        if (!Strings.isNullOrEmpty(this.filters.getEnabledCronScheduleExpression())) {
+            if (tableSpec.getSchedulesOverride() != null && tableSpec.getSchedulesOverride().getProfiling() != null &&
+                    !tableSpec.getSchedulesOverride().getProfiling().isDisabled() &&
+                    !Objects.equals(tableSpec.getSchedulesOverride().getProfiling().getCronExpression(), this.filters.getEnabledCronScheduleExpression())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
 
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
@@ -327,7 +396,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             DataGroupingConfigurationSpec selectedDataGroupingConfiguration =
                     dataGroupingConfigurationSearcherObject.getDefaultGroupingConfiguration();
 
-            if (!DataStreamsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataGroupingConfiguration)) {
+            if (!DataGroupingsTagsSearchMatcher.matchAllRequiredTags(this.filters.getTags(), selectedDataGroupingConfiguration)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
@@ -413,29 +482,5 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
         }
 
         return super.accept(collectorsCategorySpec, parameter);
-    }
-
-    /**
-     * Accepts a list of default configuration of table observability checks wrappers.
-     *
-     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
-     * @param parameter                         Additional parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(TableQualityPolicyList tableDefaultChecksPatternWrappers, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
-    }
-
-    /**
-     * Accepts a default configuration of column observability checks wrapper.
-     *
-     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
-     * @param parameter                          Additional parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ColumnQualityPolicyList columnDefaultChecksPatternWrappers, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

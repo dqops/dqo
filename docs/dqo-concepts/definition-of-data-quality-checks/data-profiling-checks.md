@@ -17,9 +17,9 @@ a **profiling** version of the data quality check. Every [**monitoring**](data-o
 ### **Summary**
 The following table summarizes the key concepts of *profiling* data quality checks in DQOps.
 
-| Check type      | Purpose                                                                                                                                                                                                                                                               | Time period truncation                                                                                                                         | Check name prefix |
-|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| **_profiling_** | Evaluate the initial data quality score of new tables.<br/>Experiment with DQOps data quality checks before activating [**monitoring**](data-observability-monitoring-checks.md) checks for measuring the [data quality KPIs](../definition-of-data-quality-kpis.md). | One data quality profiling result captured **per month**,<br/> when profiling is repeated in the same month, the previous result is replaced.  | _profile\_\*_     |
+| Check type      | Purpose                                                                                                                                                                                                                                                               | Time period truncation                                                                                                                                     | Check name prefix |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| **_profiling_** | Evaluate the initial data quality score of new tables.<br/>Experiment with DQOps data quality checks before activating [**monitoring**](data-observability-monitoring-checks.md) checks for measuring the [data quality KPIs](../definition-of-data-quality-kpis.md). | A single data quality profiling result is captured **per month**. <br/> If profiling is repeated within the same month, the previous result is replaced. | _profile\_\*_     |
 
 
 ## Data profiling status checkpoints
@@ -29,32 +29,30 @@ This behavior is designed for experimentation and tuning the  parameters for the
 
 ### **Profiling checks in DQOps user interface**
 The following screen shows the profiling results for a [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count)
-data quality check that detects empty tables. By setting the `min_count` rule parameter to **1**, DQOps will raise an **error** [severity](index.md#issue-severity-levels)
+data quality check that detects empty tables. By setting the `min_count` rule parameter to **0**, DQOps will raise an **error** [severity](index.md#issue-severity-levels)
 data quality issue for empty tables. The data quality issue is stored in the [check_results](../../reference/parquetfiles/check_results.md) Parquet table.
 
-![data profiling screen in DQOps](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/table-profiling-checks-results-min.png){ loading=lazy; width="1200px" }
+![data profiling screen in DQOps](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/table-profiling-checks-results-min2.png){ loading=lazy; width="1200px" }
 
-The screenshot above shows the most recent data profiling results captured at *2024-01-20 16:18:49*.
-The dates in the *Executed At* column show the dates when the *profiling* checks were executed according to a [CRON schedule](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md),
-which is _0 12 \* \* \*_ (every day at 12 PM).
+The screenshot above shows the most recent data profiling results captured at *2024-10-03 12:05:03*.
+The dates in the *Executed At* column show the dates when the *profiling* checks were executed.
 The *Profile data (local time)* is the time period (month) for which the profiling result is valid. The date is truncated
 to the 1st day of the month when the [profiling data quality checks were run](../running-data-quality-checks.md#running-profiling-checks).
 
 ### **Initial data quality KPI score**
-The [data quality dashboard](../types-of-data-quality-dashboards.md) showing the data profiling results are located in the *Profiling* folder.
-The *Profiling KPIs scorecard - summary* dashboard shows the initial [data quality KPI score](../definition-of-data-quality-kpis.md),
-which is calculated as a percentage of passed data profiling checks for the current month.
+Initial data quality KPI score can be quickly verified in the [Table quality status](../dqops-user-interface-overview.md#table-quality-status)
+This screen provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
 
-![data profiling initial data quality score dashboard](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-data-quality-kpi-scorecard-min.png){ loading=lazy; width="1200px" }
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status3.png){ loading=lazy; width="1200px" }
 
 ## Profiling checks pros and cons
 
 ### **When to use profiling checks**
 Use the data profiling checks for:
 
-- assessing the initial data quality score of new tables
-- experimenting with data quality checks, DQOps has 150+ [built-in data quality checks](../../checks/index.md)
-- testing custom data quality checks, and [sensors](../definition-of-data-quality-sensors.md), and [rules](../definition-of-data-quality-rules.md).
+- assessing the initial data quality score of new tables,
+- experimenting with data quality checks, DQOps has 150+ [built-in data quality checks](../../checks/index.md),
+- testing custom data quality checks, and [sensors](../definition-of-data-quality-sensors.md), and [rules](../definition-of-data-quality-rules.md),
 - testing changes to monitored tables before [data quality monitoring](data-observability-monitoring-checks.md) checks are activated,
   and the [data quality KPI score](../definition-of-data-quality-kpis.md) is used to verify compliance with **data contracts**.
 
@@ -71,7 +69,7 @@ Data profiling checks store only one result per month, which limit their usage o
   the DQOps [check editor](../dqops-user-interface-overview.md#check-editor) presents anomaly detection checks that cannot be run,
   because there is not enough historical data to be used for prediction.
 
-![data anomaly detection by data profiling checks](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-checks-not-supported-anomaly-in-editor-min.png){ loading=lazy; width="1200px" }
+![data anomaly detection by data profiling checks](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-profiling-checks-not-supported-anomaly-in-editor-min3.png){ loading=lazy; width="1200px" }
 
 ## Profiling check configuration in DQOps YAML files
 The configuration of active data quality profiling checks is stored in the [.dqotable.yaml](../configuring-table-metadata.md#table-yaml-file-structure)

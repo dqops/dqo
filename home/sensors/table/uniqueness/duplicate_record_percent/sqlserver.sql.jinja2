@@ -7,6 +7,23 @@
     {%- endfor -%}
 {% endmacro -%}
 
+{% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+    GROUP BY
+    {%- endif -%}
+    {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+        {%- for attribute in lib.data_groupings -%}
+            {{- ',' if not loop.first -}}{{- lib.eol() }}
+            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if lib.time_series is not none -%}
+        {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+        {{ indentation }}time_period,{{ lib.eol() -}}
+        {{ indentation }}time_period_utc
+    {%- endif -%}
+{% endmacro %}
+
 SELECT
     CASE WHEN SUM(distinct_records) IS NULL THEN 0
         ELSE (1 - SUM(distinct_records) * 1.0 / SUM(records_number)) * 100.0 END
@@ -20,7 +37,6 @@ FROM (
         {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-    GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+    GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
 ) grouping_table
-{{- lib.render_group_by() -}}
-{{- lib.render_order_by() -}}
+{{ render_group_by('grouping_table') }}

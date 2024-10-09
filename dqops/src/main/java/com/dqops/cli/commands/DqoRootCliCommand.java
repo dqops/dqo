@@ -27,10 +27,12 @@ import com.dqops.cli.commands.run.RunCliCommand;
 import com.dqops.cli.commands.scheduler.SchedulerCliCommand;
 import com.dqops.cli.commands.sensor.SensorCliCommand;
 import com.dqops.cli.commands.settings.SettingsCliCommand;
+import com.dqops.cli.commands.sso.SsoCliCommand;
 import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoRuleMiningConfigurationProperties;
+import com.dqops.rest.server.authentication.DqoAuthenticationMethod;
 import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
@@ -70,7 +72,8 @@ import java.util.List;
             SchedulerCliCommand.class,
             DataCliCommand.class,
             RunCliCommand.class,
-            RuleCliCommand.class
+            RuleCliCommand.class,
+            SsoCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {
@@ -260,6 +263,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the maximum number of tables that are imported from a data source. DQOps supports importing more tables by importing additional tables specified by a different table filter.", defaultValue = "300")
     private Integer metadataImportTablesImportLimit;
 
+    @CommandLine.Option(names = {"--dqo.metadata.auto-import-tables-limit"},
+            description = "Sets the maximum number of tables that are imported from a data source by the auto import that is scheduled on the DQOps CRON scheduler.", defaultValue = "300")
+    private Integer metadataImportAutoImportTablesLimit;
+
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
             description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")
     private Boolean dqoSecretsEnableGcpSecretManager;
@@ -292,21 +299,27 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Allow starting DQOps without a DQOps Cloud API Key and without prompting to log in to DQOps Cloud.", defaultValue = "false")
     private Boolean dqoCloudStartWithoutApiKey;
 
-    @CommandLine.Option(names = {"--dqo.cloud.authenticate-with-dqo-cloud"},
-            description = "Turns on user authentication by using DQOps Cloud credentials. Users will be redirected to the DQOps Cloud login screen " +
-                    "to login and will be returned back to the local DQOps instance.", defaultValue = "false")
-    private Boolean dqoCloudAuthenticateWithDqoCloud;
-
     @CommandLine.Option(names = {"--dqo.instance.return-base-url"},
             description = "Base url of this instance that is used as a return url when authentication with DQOps Cloud credentials is forwarded and " +
                     "the user must be forwarded back to the current instance from the https://cloud.dqops.com login screen. " +
                     "When this parameter is not provided, DQOps will use the url from the \"Host\" HTTP header.")
     private String dqoInstanceReturnBaseUrl;
 
+    @CommandLine.Option(names = {"--dqo.webserver.authentication-method"},
+            description = "User authentication method. A standalone instance has no user authentication. " +
+                    "Paid versions of DQOps support federated authentication using Single-Sign-On. Please contact DQOps sales for details: https://dqops.com/contact-us/.", defaultValue = "none")
+    private DqoAuthenticationMethod dqoWebserverAuthenticationMethod;
+
     @CommandLine.Option(names = {"--dqo.instance.signature-key"},
             description = "DQOps local instance signature key that is used to issue and verify digital signatures on API keys. It is a base64 encoded byte array (32 bytes). " +
                     "When not configured, DQOps will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
     private String dqoInstanceSignatureKey;
+
+    @CommandLine.Option(names = {"--dqo.instance.name"},
+            description = "DQOps instance name. DQOps uses this instance name when finding which data quality checks should be run on this DQOps instance. " +
+                    "When a connection is limited to run scheduled data quality checks only on a named instance, the instance name must math. " +
+                    "This parameter can be overwritten in the instance's local settings file.")
+    private String dqoInstanceName;
 
     @CommandLine.Option(names = {"--dqo.smtp-server.host"},
             description = "Sets the  host name of the SMTP server that is used to send email notifications.")
@@ -327,6 +340,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.smtp-server.password"},
             description = "Sets the password of the SMTP server that is used to send email notifications.")
     private String dqoSmtpServerPassword;
+
+    @CommandLine.Option(names = {"--dqo.integrations.table-health-webhook-urls"},
+            description = "A comma separated list of webhook URLs where DQOps sends updates of the table data quality status changes.")
+    private Integer dqoIntegrationsTableHealthWebhookUrls;
 
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
             description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). " +

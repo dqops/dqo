@@ -46,7 +46,11 @@ export default function QualityDimensionStatuses({
             key={`Dimensionindex${dimType}`}
             content={
               <QualityDimensionTooltip
-                data={dimensions?.[dimensionKey as any]}
+                data={
+                  dimensions?.[dimensionKey as any]
+                    ? dimensions?.[dimensionKey as any]
+                    : { dimension: dimType }
+                }
               />
             }
           >

@@ -75,14 +75,14 @@ public class DuckdbQueriesProvider {
 
     /**
      * Provides query to set extension directory.
-     * @param dqoHomePath The dqo home path with local extensions for DuckDB
+     * @param homePath The dqo home path with local extensions for DuckDB
      * @return Ready to execute query string.
      */
-    public static String provideSetExtensionsQuery(String dqoHomePath){
+    public static String provideSetExtensionsQuery(String homePath){
         StringBuilder setCustomRepository = new StringBuilder();
         setCustomRepository.append("SET extension_directory = ");
         setCustomRepository.append("'");
-        setCustomRepository.append(dqoHomePath);
+        setCustomRepository.append(homePath);
         setCustomRepository.append("/bin/.duckdb/extensions");  // use only "/bin" for DuckDB < 0.10
         setCustomRepository.append("'");
         return setCustomRepository.toString();

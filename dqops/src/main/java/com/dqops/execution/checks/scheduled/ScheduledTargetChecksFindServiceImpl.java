@@ -17,16 +17,15 @@ package com.dqops.execution.checks.scheduled;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
-import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.search.*;
+import com.dqops.metadata.settings.instancename.InstanceNameProvider;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
-import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -45,18 +43,22 @@ import java.util.Set;
 public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChecksFindService {
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
     private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private InstanceNameProvider instanceNameProvider;
 
     /**
      * Creates an instance.
      * @param hierarchyNodeTreeSearcher Hierarchy node searcher used to find target checks.
      * @param defaultObservabilityConfigurationService Service that activates default checks configured as check patterns.
+     * @param instanceNameProvider DQOps instance name provider.
      */
     @Autowired
     public ScheduledTargetChecksFindServiceImpl(
             HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
-            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+            InstanceNameProvider instanceNameProvider) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.instanceNameProvider = instanceNameProvider;
     }
 
     /**
@@ -67,12 +69,14 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
      * @return List of target checks, grouped by a target table.
      */
     @Override
-    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, MonitoringScheduleSpec schedule) {
+    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, CronScheduleSpec schedule) {
         ScheduledChecksCollection scheduledChecksCollection = new ScheduledChecksCollection();
 
         ScheduleRootsSearchFilters scheduleRootsSearchFilters = new ScheduleRootsSearchFilters();
         scheduleRootsSearchFilters.setEnabled(true);
         scheduleRootsSearchFilters.setSchedule(schedule);
+        scheduleRootsSearchFilters.setLocalInstanceName(this.instanceNameProvider.getInstanceName());
+
         FoundResultsCollector<ScheduleRootResult> scheduleRoots = this.hierarchyNodeTreeSearcher.findScheduleRoots(
                 userHome.getConnections(), scheduleRootsSearchFilters);
 
@@ -88,7 +92,7 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
                     this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(scheduledConnectionWrapper.getSpec(), clonedTableSpec, userHome);
 
                     Set<CheckRunScheduleGroup> schedulingGroupsForTable = scheduleRoot.getSchedulingGroups();
-                    DefaultSchedulesSpec tableSchedulesOverride = clonedTableSpec.getSchedulesOverride();
+                    CronSchedulesSpec tableSchedulesOverride = clonedTableSpec.getSchedulesOverride();
                     if (tableSchedulesOverride != null && !tableSchedulesOverride.isDefault()) {
                         schedulingGroupsForTable = new HashSet<>(schedulingGroupsForTable);
 

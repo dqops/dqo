@@ -98,9 +98,17 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
      */
     protected void updateListOfSchedulesInQuartzScheduler(String dataDomainName) {
         if (this.jobSchedulerService.isStarted()) {
-            UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS, dataDomainName);
-            JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules, dataDomainName);
-            this.jobSchedulerService.applyScheduleDeltaToJob(schedulesToAddOrRemove, JobKeys.RUN_CHECKS, dataDomainName);
+            UniqueSchedulesCollection activeRunChecksSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS, dataDomainName);
+            JobSchedulesDelta runChecksSchedulesToAddOrRemove = this.scheduleChangeFinderService.findRunChecksSchedulesToAddOrRemove(activeRunChecksSchedules, dataDomainName);
+            this.jobSchedulerService.applyScheduleDeltaToJob(runChecksSchedulesToAddOrRemove, JobKeys.RUN_CHECKS, dataDomainName);
+
+            UniqueSchedulesCollection activeCollectStatisticsSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.COLLECT_STATISTICS, dataDomainName);
+            JobSchedulesDelta collectStatisticsSchedulesToAddOrRemove = this.scheduleChangeFinderService.findProfilingSchedulesToAddOrRemove(activeCollectStatisticsSchedules, dataDomainName);
+            this.jobSchedulerService.applyScheduleDeltaToJob(collectStatisticsSchedulesToAddOrRemove, JobKeys.COLLECT_STATISTICS, dataDomainName);
+
+            UniqueSchedulesCollection activeImportTablesSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.IMPORT_TABLES, dataDomainName);
+            JobSchedulesDelta collectImportTablesToAddOrRemove = this.scheduleChangeFinderService.findImportTablesSchedulesToAddOrRemove(activeImportTablesSchedules, dataDomainName);
+            this.jobSchedulerService.applyScheduleDeltaToJob(collectImportTablesToAddOrRemove, JobKeys.IMPORT_TABLES, dataDomainName);
         }
     }
 

@@ -1,0 +1,28 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run app with paid extensions" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <classpathModifications>
+      <entry path="$PROJECT_DIR$/userhome/jars/paid/dqops-paid-bin.jar" />
+    </classpathModifications>
+    <envs>
+      <env name="DQO_HOME" value="$PROJECT_DIR$/home" />
+      <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
+      <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
+      <env name="AZURE_ENABLE_HTTP_CLIENT_SHARING" value="true" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.dqops.cli.CliApplication" />
+    <module name="dqo-dqops" />
+    <option name="PROGRAM_PARAMETERS" value="--server.port=8888 --dqo.webserver.authentication-method=oauth2" />
+    <shortenClasspath name="ARGS_FILE" />
+    <option name="VM_PARAMETERS" value="-XX:MaxRAMPercentage=60.0 --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED" />
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="false" />
+    </method>
+  </configuration>
+</component>

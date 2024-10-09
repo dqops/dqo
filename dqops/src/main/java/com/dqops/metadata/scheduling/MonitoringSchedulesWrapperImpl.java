@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Monitoring schedules spec wrapper.
  */
-public class MonitoringSchedulesWrapperImpl extends AbstractElementWrapper<String, DefaultSchedulesSpec>
+public class MonitoringSchedulesWrapperImpl extends AbstractElementWrapper<String, CronSchedulesSpec>
         implements MonitoringSchedulesWrapper {
 
     @JsonIgnore

@@ -11,6 +11,9 @@
         <fileSet>
             <directory>${project.basedir}/../home/bin</directory>
             <outputDirectory>/bin</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/../home/lib</directory>

@@ -19,7 +19,7 @@ import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
 import {
   CheckResultEntryModel,
-  IncidentIssueHistogramModel,
+  IssueHistogramModel,
   IncidentModel,
   IncidentsPerConnectionModel
 } from '../../api';
@@ -210,7 +210,7 @@ export const getIncidentsHistogramsRequest = () => ({
 });
 
 export const getIncidentsHistogramsSuccess = (
-  data: IncidentIssueHistogramModel
+  data: IssueHistogramModel
 ) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS,
   data
@@ -236,7 +236,7 @@ export const getIncidentsHistograms =
   async (dispatch: Dispatch) => {
     dispatch(getIncidentsHistogramsRequest());
     try {
-      const res: AxiosResponse<IncidentIssueHistogramModel> =
+      const res: AxiosResponse<IssueHistogramModel> =
         await IncidentsApi.getIncidentHistogram(
           connection,
           year,
@@ -266,7 +266,7 @@ export const addSelectedConnection = (data: { [key: string]: string }) => ({
   data
 });
 
-export const setIncidentsHistogram = (data: IncidentIssueHistogramModel) => ({
+export const setIncidentsHistogram = (data: IssueHistogramModel) => ({
   type: INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM,
   data
 });

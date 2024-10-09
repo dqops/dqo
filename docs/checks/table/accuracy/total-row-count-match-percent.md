@@ -226,6 +226,33 @@ spec:
                 COUNT(*) AS actual_value
             FROM  AS analyzed_table
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -725,6 +752,33 @@ spec:
                 COUNT(*) AS actual_value
             FROM  AS analyzed_table
             ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1223,6 +1277,33 @@ spec:
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM  AS analyzed_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 

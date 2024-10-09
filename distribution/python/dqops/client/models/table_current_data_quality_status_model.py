@@ -29,9 +29,14 @@ class TableCurrentDataQualityStatusModel:
     detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.
 
         Attributes:
+            data_domain (Union[Unset, str]): Data domain name.
             connection_name (Union[Unset, str]): The connection name in DQOps.
             schema_name (Union[Unset, str]): The schema name.
             table_name (Union[Unset, str]): The table name.
+            total_row_count (Union[Unset, int]): Most recent row count. Returned only when the status of the monitoring or
+                profiling checks was requested.
+            data_freshness_delay_days (Union[Unset, float]): The last measured data freshness delay in days. Requires any of
+                the data freshness checks in the monitoring section configured and up to date.
             current_severity (Union[Unset, RuleSeverityLevel]):
             highest_historical_severity (Union[Unset, RuleSeverityLevel]):
             last_check_executed_at (Union[Unset, int]): The UTC timestamp when the most recent data quality check was
@@ -64,9 +69,12 @@ class TableCurrentDataQualityStatusModel:
                 imported data lineage source tables.
     """
 
+    data_domain: Union[Unset, str] = UNSET
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
+    total_row_count: Union[Unset, int] = UNSET
+    data_freshness_delay_days: Union[Unset, float] = UNSET
     current_severity: Union[Unset, RuleSeverityLevel] = UNSET
     highest_historical_severity: Union[Unset, RuleSeverityLevel] = UNSET
     last_check_executed_at: Union[Unset, int] = UNSET
@@ -84,9 +92,12 @@ class TableCurrentDataQualityStatusModel:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        data_domain = self.data_domain
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
+        total_row_count = self.total_row_count
+        data_freshness_delay_days = self.data_freshness_delay_days
         current_severity: Union[Unset, str] = UNSET
         if not isinstance(self.current_severity, Unset):
             current_severity = self.current_severity.value
@@ -120,12 +131,18 @@ class TableCurrentDataQualityStatusModel:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if data_domain is not UNSET:
+            field_dict["data_domain"] = data_domain
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
             field_dict["schema_name"] = schema_name
         if table_name is not UNSET:
             field_dict["table_name"] = table_name
+        if total_row_count is not UNSET:
+            field_dict["total_row_count"] = total_row_count
+        if data_freshness_delay_days is not UNSET:
+            field_dict["data_freshness_delay_days"] = data_freshness_delay_days
         if current_severity is not UNSET:
             field_dict["current_severity"] = current_severity
         if highest_historical_severity is not UNSET:
@@ -170,11 +187,17 @@ class TableCurrentDataQualityStatusModel:
         )
 
         d = src_dict.copy()
+        data_domain = d.pop("data_domain", UNSET)
+
         connection_name = d.pop("connection_name", UNSET)
 
         schema_name = d.pop("schema_name", UNSET)
 
         table_name = d.pop("table_name", UNSET)
+
+        total_row_count = d.pop("total_row_count", UNSET)
+
+        data_freshness_delay_days = d.pop("data_freshness_delay_days", UNSET)
 
         _current_severity = d.pop("current_severity", UNSET)
         current_severity: Union[Unset, RuleSeverityLevel]
@@ -234,9 +257,12 @@ class TableCurrentDataQualityStatusModel:
         table_exist = d.pop("table_exist", UNSET)
 
         table_current_data_quality_status_model = cls(
+            data_domain=data_domain,
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,
+            total_row_count=total_row_count,
+            data_freshness_delay_days=data_freshness_delay_days,
             current_severity=current_severity,
             highest_historical_severity=highest_historical_severity,
             last_check_executed_at=last_check_executed_at,

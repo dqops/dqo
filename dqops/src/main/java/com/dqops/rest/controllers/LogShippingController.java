@@ -19,6 +19,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.rest.models.platform.ExternalLogEntry;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
@@ -64,7 +65,7 @@ public class LogShippingController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (log.isDebugEnabled()) {
                 String fullLogMessage = createLogMessage(logEntry);
                 log.debug(fullLogMessage);
@@ -94,7 +95,7 @@ public class LogShippingController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (log.isInfoEnabled()) {
                 String fullLogMessage = createLogMessage(logEntry);
                 log.info(fullLogMessage);
@@ -124,7 +125,7 @@ public class LogShippingController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (log.isWarnEnabled()) {
                 String fullLogMessage = createLogMessage(logEntry);
                 log.warn(fullLogMessage);
@@ -154,7 +155,7 @@ public class LogShippingController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (log.isErrorEnabled()) {
                 String fullLogMessage = createLogMessage(logEntry);
                 log.error(fullLogMessage);

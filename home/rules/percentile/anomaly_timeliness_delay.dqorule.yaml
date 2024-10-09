@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 90
+    min_periods_with_readouts: 30
+    historic_data_point_grouping: day
+  fields:
+  - field_name: anomaly_percent
+    display_name: anomaly_percent
+    help_text: "The probability (in percent) that the current data delay is an anomaly\
+      \ because the value is outside the regular range of previous delays. The default\
+      \ time window of 90 time periods (days, etc.) is used, but at least 30 readouts\
+      \ must exist to run the calculation."
+    data_type: double
+    required: true
+    default_value: 0.5
+  parameters:
+    degrees_of_freedom: 5

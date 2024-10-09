@@ -25,7 +25,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -74,7 +74,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringScheduleSpec scheduleOverride;
+    private CronScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -111,6 +111,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean alwaysCollectErrorSamples;
 
+    @JsonPropertyDescription("Disables running this check by a DQOps CRON scheduler. When a check is disabled from scheduling, it can be only triggered from the user interface or by submitting \"run checks\" job.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean doNotSchedule;
+
     /**
      * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
      */
@@ -121,7 +125,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Returns the schedule configuration for running the checks automatically.
      * @return Schedule configuration.
      */
-    public MonitoringScheduleSpec getScheduleOverride() {
+    public CronScheduleSpec getScheduleOverride() {
         return scheduleOverride;
     }
 
@@ -129,7 +133,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Stores a new schedule configuration.
      * @param scheduleOverride New schedule configuration.
      */
-    public void setScheduleOverride(MonitoringScheduleSpec scheduleOverride) {
+    public void setScheduleOverride(CronScheduleSpec scheduleOverride) {
         setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
         this.scheduleOverride = scheduleOverride;
         propagateHierarchyIdToField(scheduleOverride, "schedule_override");
@@ -270,6 +274,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public void setAlwaysCollectErrorSamples(boolean alwaysCollectErrorSamples) {
         this.setDirtyIf(this.alwaysCollectErrorSamples != alwaysCollectErrorSamples);
         this.alwaysCollectErrorSamples = alwaysCollectErrorSamples;
+    }
+
+    /**
+     * Returns true if this check is excluded from running by a job scheduler.
+     * @return True when this job should not be run by a job scheduler.
+     */
+    public boolean isDoNotSchedule() {
+        return doNotSchedule;
+    }
+
+    /**
+     * Sets a flag to disable running this check by a job scheduler.
+     * @param doNotSchedule True when excluded from the CRON scheduler.
+     */
+    public void setDoNotSchedule(boolean doNotSchedule) {
+        this.setDirtyIf(this.doNotSchedule != doNotSchedule);
+        this.doNotSchedule = doNotSchedule;
     }
 
     /**

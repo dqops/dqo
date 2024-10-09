@@ -225,6 +225,65 @@ spec:
                 GROUP BY `id`, `created_at`
             ) grouping_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    FROM (
+                        SELECT
+                            "id", "created_at"
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -271,6 +330,65 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    FROM (
+                        SELECT
+                            "id", "created_at"
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at"
             ) grouping_table
             ```
@@ -644,11 +762,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -664,10 +799,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -683,7 +817,7 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -896,6 +1030,75 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                    analyzed_table_nested.grouping_level_1,
+            
+                                    analyzed_table_nested.grouping_level_2
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -946,6 +1149,75 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table."state" AS grouping_level_2
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                analyzed_table_nested.grouping_level_1,
+            
+                                analyzed_table_nested.grouping_level_2
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -1374,11 +1646,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -1394,10 +1683,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -1418,14 +1706,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -1716,6 +2003,65 @@ spec:
                 GROUP BY `id`, `created_at`
             ) grouping_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    FROM (
+                        SELECT
+                            "id", "created_at"
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -1762,6 +2108,65 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    FROM (
+                        SELECT
+                            "id", "created_at"
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at"
             ) grouping_table
             ```
@@ -2135,11 +2540,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -2155,10 +2577,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -2174,7 +2595,7 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -2388,6 +2809,75 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                    analyzed_table_nested.grouping_level_1,
+            
+                                    analyzed_table_nested.grouping_level_2
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -2438,6 +2928,75 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table."state" AS grouping_level_2
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                analyzed_table_nested.grouping_level_1,
+            
+                                analyzed_table_nested.grouping_level_2
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -2866,11 +3425,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -2886,10 +3462,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -2910,14 +3485,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -3208,6 +3782,65 @@ spec:
                 GROUP BY `id`, `created_at`
             ) grouping_table
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    FROM (
+                        SELECT
+                            "id", "created_at"
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -3254,6 +3887,65 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at"
+            ) grouping_table
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    FROM (
+                        SELECT
+                            "id", "created_at"
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at"
             ) grouping_table
             ```
@@ -3627,11 +4319,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -3647,10 +4356,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -3666,7 +4374,7 @@ spec:
                 SELECT COUNT(*) AS duplicated_count
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at]
+                GROUP BY [id], [created_at]
             ) grouping_table
             ```
     ??? example "Trino"
@@ -3880,6 +4588,75 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                    analyzed_table_nested.grouping_level_1,
+            
+                                    analyzed_table_nested.grouping_level_2
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -3930,6 +4707,75 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table."state" AS grouping_level_2
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                analyzed_table_nested.grouping_level_1,
+            
+                                analyzed_table_nested.grouping_level_2
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -4358,11 +5204,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -4378,10 +5241,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -4402,14 +5264,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     analyzed_table.[state] AS grouping_level_2
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state]
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state]
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state]
-            ORDER BY level_1, level_2
-                    , 
-                
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
             ```
     ??? example "Trino"
 
@@ -4722,6 +5583,73 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+                        time_period,
+                        time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        CAST(analyzed_table_nested."date_column" AS DATE) AS time_period,
+                        TIMESTAMP(CAST(analyzed_table_nested."date_column" AS DATE)) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -4772,6 +5700,73 @@ spec:
                     CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        CAST(analyzed_table_nested."date_column" AS DATE) AS time_period,
+                        TO_TIMESTAMP(CAST(analyzed_table_nested."date_column" AS DATE)) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", time_period, time_period_utc
             ) grouping_table
             GROUP BY time_period, time_period_utc
@@ -5193,11 +6188,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -5213,10 +6225,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -5236,12 +6247,11 @@ spec:
                     CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+                GROUP BY [id], [created_at], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ) grouping_table
-            GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-            ORDER BY CAST(analyzed_table.[date_column] AS date)
-            
-                
+            GROUP BY
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -5480,6 +6490,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                    analyzed_table_nested.grouping_level_1,
+            
+                                    analyzed_table_nested.grouping_level_2,
+                        time_period,
+                        time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2,
+                        CAST(analyzed_table_nested."date_column" AS DATE) AS time_period,
+                        TIMESTAMP(CAST(analyzed_table_nested."date_column" AS DATE)) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -5534,6 +6619,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                analyzed_table_nested.grouping_level_1,
+            
+                                analyzed_table_nested.grouping_level_2,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2,
+                        CAST(analyzed_table_nested."date_column" AS DATE) AS time_period,
+                        TO_TIMESTAMP(CAST(analyzed_table_nested."date_column" AS DATE)) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5994,11 +7154,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -6014,10 +7191,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -6042,12 +7218,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-            ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -6366,6 +7545,73 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+                        time_period,
+                        time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        DATE_TRUNC('MONTH', CAST(analyzed_table_nested."date_column" AS DATE)) AS time_period,
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table_nested."date_column" AS DATE))) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -6416,6 +7662,73 @@ spec:
                     CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        SERIES_ROUND(CAST(analyzed_table_nested."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
+                        TO_TIMESTAMP(SERIES_ROUND(CAST(analyzed_table_nested."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", time_period, time_period_utc
             ) grouping_table
             GROUP BY time_period, time_period_utc
@@ -6837,11 +8150,28 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -6857,10 +8187,9 @@ spec:
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
 
@@ -6880,12 +8209,11 @@ spec:
                     CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+                GROUP BY [id], [created_at], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ) grouping_table
-            GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-            ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
-            
-                
+            GROUP BY
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 
@@ -7124,6 +8452,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DB2"
+
+        === "Sensor template for DB2"
+            ```sql+jinja
+            {% import '/dialects/db2.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='            ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='            ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='            ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR(4000))') ~ ') IS NOT NULL') }}
+                ) analyzed_table
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DB2"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                    analyzed_table_nested.grouping_level_1,
+            
+                                    analyzed_table_nested.grouping_level_2,
+                        time_period,
+                        time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2,
+                        DATE_TRUNC('MONTH', CAST(analyzed_table_nested."date_column" AS DATE)) AS time_period,
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table_nested."date_column" AS DATE))) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" analyzed_table_nested
+                        WHERE (COALESCE(CAST("id" AS VARCHAR(4000)), CAST("created_at" AS VARCHAR(4000))) IS NOT NULL)
+                ) analyzed_table
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "DuckDB"
 
         === "Sensor template for DuckDB"
@@ -7178,6 +8581,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM  AS analyzed_table
                 WHERE (COALESCE(CAST( "id" AS VARCHAR), CAST( "created_at" AS VARCHAR)) IS NOT NULL)
+                GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "HANA"
+
+        === "Sensor template for HANA"
+            ```sql+jinja
+            {% import '/dialects/hana.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table_nested', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table_nested', indentation='        ') }}
+                    FROM (
+                        SELECT
+                            {{ extract_in_list(parameters.columns) -}}
+                            {{- lib.render_data_grouping_projections('analyzed_table_nested', indentation='            ') }}
+                            {{- lib.render_time_dimension_projection('analyzed_table_nested', indentation='            ') }}
+                        FROM {{ lib.render_target_table() }} AS analyzed_table_nested
+                        {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
+                )
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for HANA"
+            ```sql
+            
+            
+            SELECT
+                CASE
+                    WHEN SUM(duplicated_count) IS NULL THEN 0
+                    ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+                    END AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT COUNT(*) AS duplicated_count,
+            
+                                analyzed_table_nested.grouping_level_1,
+            
+                                analyzed_table_nested.grouping_level_2,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            "id", "created_at",
+                        analyzed_table_nested."country" AS grouping_level_1,
+                        analyzed_table_nested."state" AS grouping_level_2,
+                        SERIES_ROUND(CAST(analyzed_table_nested."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
+                        TO_TIMESTAMP(SERIES_ROUND(CAST(analyzed_table_nested."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
+                        FROM "<target_schema>"."<target_table>" AS analyzed_table_nested
+                    WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
+                )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7638,11 +9116,28 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+            {%- macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
                 {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
                 {%- for item in column_names -%}
                     {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
                 {%- endfor -%}
+            {% endmacro -%}
+            
+            {% macro render_group_by(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+                GROUP BY
+                {%- endif -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{- ',' if not loop.first -}}{{- lib.eol() }}
+                        {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute -}}
+                    {%- endfor -%}
+                {%- endif -%}
+                {%- if lib.time_series is not none -%}
+                    {{ ',' if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}{{- lib.eol() -}}
+                    {{ indentation }}time_period,{{ lib.eol() -}}
+                    {{ indentation }}time_period_utc
+                {%- endif -%}
             {% endmacro %}
             
             SELECT
@@ -7658,10 +9153,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
-                GROUP BY {{- extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
             ) grouping_table
-            {{- lib.render_group_by() -}}
-            {{- lib.render_order_by() -}}
+            {{ render_group_by('grouping_table') }}
             ```
         === "Rendered SQL for SQL Server"
             ```sql
@@ -7686,12 +9180,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 WHERE (COALESCE(CAST([id] AS VARCHAR), CAST([created_at] AS VARCHAR)) IS NOT NULL)
-                GROUP BY[id], [created_at], analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+                GROUP BY [id], [created_at], analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ) grouping_table
-            GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-            ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
+            GROUP BY
             
-                
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
             ```
     ??? example "Trino"
 

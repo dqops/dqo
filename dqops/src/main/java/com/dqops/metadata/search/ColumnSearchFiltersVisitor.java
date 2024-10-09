@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.search;
 
+import com.dqops.connectors.*;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
@@ -31,6 +32,7 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
+import com.dqops.utils.StaticBeanFactory;
 import com.google.common.base.Strings;
 
 import java.util.Objects;
@@ -88,13 +90,30 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         String connectionNameFilter = this.filters.getConnectionName();
 
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-        labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
-
-        if (Strings.isNullOrEmpty(connectionNameFilter)) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+        if (connectionSpec == null) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        if (StringPatternComparer.matchSearchPattern(connectionWrapper.getName(), connectionNameFilter)) {
+        labelsSearcherObject.setConnectionLabels(connectionSpec.getLabels());
+
+        boolean traverseChildren = false;
+
+        if (Strings.isNullOrEmpty(connectionNameFilter)) {
+            traverseChildren = true;
+        } else if (StringPatternComparer.matchSearchPattern(connectionWrapper.getName(), connectionNameFilter)) {
+            traverseChildren = true;
+        }
+
+        if (traverseChildren) {
+            ConnectionProviderRegistry connectionProviderRegistry = StaticBeanFactory.getBeanFactory().getBean(ConnectionProviderRegistry.class);
+            ProviderType providerType = connectionSpec.getProviderType();
+            if (providerType != null) {
+                ConnectionProvider connectionProvider = connectionProviderRegistry.getConnectionProvider(providerType);
+                ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
+                this.filters.setConnectionDialectSettings(dialectSettings);
+            }
+
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
@@ -238,6 +257,13 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         if (this.filters.getNullable() != null
                 && !Objects.equals(this.filters.getNullable(), columnIsNullable)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (this.filters.getDataTypeCategory() != null) {
+            DataTypeCategory detectedDataTypeCategory = this.filters.getConnectionDialectSettings().detectColumnType(columnSpec.getTypeSnapshot());
+            if (detectedDataTypeCategory != this.filters.getDataTypeCategory()) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
         }
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());

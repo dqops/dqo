@@ -19,6 +19,7 @@ package com.dqops.metadata.lineage.lineagecache;
 import com.dqops.core.configuration.DqoQueueConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
+import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
 import com.dqops.metadata.lineage.TableLineageSourceSpec;
 import com.dqops.metadata.lineage.TableLineageSourceSpecList;
 import com.dqops.metadata.sources.*;
@@ -49,12 +50,12 @@ import java.util.concurrent.TimeUnit;
 public class TableLineageCacheImpl implements TableLineageCache {
     public static int SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE = 1000000; // the number of awaiting operations in the backpressure buffer (queue)
 
-    private final Map<TableLineageCacheKey, TableLineageCacheEntry> tableCache = new LinkedHashMap<>();
+    private final Map<DomainConnectionTableKey, TableLineageCacheEntry> tableCache = new LinkedHashMap<>();
     private final DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
     private final UserHomeContextFactory userHomeContextFactory;
     private final UserDomainIdentityFactory userDomainIdentityFactory;
     private boolean started;
-    private Sinks.Many<TableLineageCacheKey> loadObjectRequestSink;
+    private Sinks.Many<DomainConnectionTableKey> loadObjectRequestSink;
     private Disposable subscription;
     private int queuedOperationsCount;
     private final Object lock = new Object();
@@ -83,7 +84,7 @@ public class TableLineageCacheImpl implements TableLineageCache {
      * @return Table entry node or null when the lineage for the table was not retrieved.
      */
     @Override
-    public TableLineageCacheEntry getTableLineageEntry(TableLineageCacheKey tableLineageCacheKey) {
+    public TableLineageCacheEntry getTableLineageEntry(DomainConnectionTableKey tableLineageCacheKey) {
         TableLineageCacheEntry tableLineageCacheEntry;
 
         synchronized (this.lock) {
@@ -111,7 +112,7 @@ public class TableLineageCacheImpl implements TableLineageCache {
      * @param targetKey Entry key.
      * @return Current entry instance.
      */
-    protected TableLineageCacheEntry loadEntryCore(TableLineageCacheKey targetKey) {
+    protected TableLineageCacheEntry loadEntryCore(DomainConnectionTableKey targetKey) {
         TableLineageCacheEntry lineageLoadEntry = new TableLineageCacheEntry(targetKey, TableLineageRefreshStatus.LOADING_QUEUED);
         if (this.loadObjectRequestSink != null) {
             this.loadObjectRequestSink.emitNext(targetKey, createFailureHandler());
@@ -127,7 +128,7 @@ public class TableLineageCacheImpl implements TableLineageCache {
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     @Override
-    public void invalidateObject(TableLineageCacheKey tableLineageKey, boolean replacingCachedFile) {
+    public void invalidateObject(DomainConnectionTableKey tableLineageKey, boolean replacingCachedFile) {
         synchronized (this.lock) {
             TableLineageCacheEntry currentTableLineageEntry = this.tableCache.get(tableLineageKey);
             if (currentTableLineageEntry == null) {
@@ -199,10 +200,10 @@ public class TableLineageCacheImpl implements TableLineageCache {
      * Loads all tables, scans them for all data lineages. The source and target tables are updated in the cache.
      * @param targetKeys A list of target objects that should be analyzed to find all labels.
      */
-    public void onRequestLoadLabelsForObjects(List<TableLineageCacheKey> targetKeys) {
-        Map<String, List<TableLineageCacheKey>> targetsPerDomain = new LinkedHashMap<>();
-        for (TableLineageCacheKey tableRefreshKey : targetKeys) {
-            List<TableLineageCacheKey> dataDomainTargetList = targetsPerDomain.get(tableRefreshKey.getDataDomain());
+    public void onRequestLoadLabelsForObjects(List<DomainConnectionTableKey> targetKeys) {
+        Map<String, List<DomainConnectionTableKey>> targetsPerDomain = new LinkedHashMap<>();
+        for (DomainConnectionTableKey tableRefreshKey : targetKeys) {
+            List<DomainConnectionTableKey> dataDomainTargetList = targetsPerDomain.get(tableRefreshKey.getDataDomain());
             if (dataDomainTargetList == null) {
                 dataDomainTargetList = new ArrayList<>();
                 targetsPerDomain.put(tableRefreshKey.getDataDomain(), dataDomainTargetList);
@@ -210,7 +211,7 @@ public class TableLineageCacheImpl implements TableLineageCache {
             dataDomainTargetList.add(tableRefreshKey);
         }
 
-        for (List<TableLineageCacheKey> targetsByDataDomain : targetsPerDomain.values()) {
+        for (List<DomainConnectionTableKey> targetsByDataDomain : targetsPerDomain.values()) {
             String dataDomainName = targetsByDataDomain.get(0).getDataDomain();
 
             try {
@@ -227,11 +228,11 @@ public class TableLineageCacheImpl implements TableLineageCache {
      * @param dataDomainName Data domain name.
      * @param targetsByDataDomain List of target tables in that data domain.
      */
-    public void importDataLineageForDataDomain(String dataDomainName, List<TableLineageCacheKey> targetsByDataDomain) {
+    public void importDataLineageForDataDomain(String dataDomainName, List<DomainConnectionTableKey> targetsByDataDomain) {
         UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentityForCloudDomain(dataDomainName);
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(domainIdentity, true);
 
-        for (TableLineageCacheKey targetTableKey : targetsByDataDomain) {
+        for (DomainConnectionTableKey targetTableKey : targetsByDataDomain) {
             TableLineageCacheEntry currentTableLineageCacheEntry;
 
             synchronized (this.lock) {
@@ -246,19 +247,19 @@ public class TableLineageCacheImpl implements TableLineageCache {
                     TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(targetTableKey.getPhysicalTableName(), true);
                     if (tableWrapper != null && tableWrapper.getSpec() != null) {
                         TableSpec targetTableSpec = tableWrapper.getSpec();
-                        Set<TableLineageCacheKey> previousSourceTables = currentTableLineageCacheEntry.getUpstreamSourceTables();
-                        Set<TableLineageCacheKey> newSourceTables = new LinkedHashSet<>();
+                        Set<DomainConnectionTableKey> previousSourceTables = currentTableLineageCacheEntry.getUpstreamSourceTables();
+                        Set<DomainConnectionTableKey> newSourceTables = new LinkedHashSet<>();
 
                         TableLineageSourceSpecList sourceTables = targetTableSpec.getSourceTables();
                         if (sourceTables != null) {
                             for (TableLineageSourceSpec sourceTableSpec : sourceTables) {
-                                TableLineageCacheKey sourceTableKey = new TableLineageCacheKey(dataDomainName, sourceTableSpec.getSourceConnection(),
+                                DomainConnectionTableKey sourceTableKey = new DomainConnectionTableKey(dataDomainName, sourceTableSpec.getSourceConnection(),
                                         new PhysicalTableName(sourceTableSpec.getSourceSchema(), sourceTableSpec.getSourceTable()));
                                 newSourceTables.add(sourceTableKey);
                             }
                         }
 
-                        for (TableLineageCacheKey newSourceTableKey : newSourceTables) {
+                        for (DomainConnectionTableKey newSourceTableKey : newSourceTables) {
                             if (previousSourceTables.contains(newSourceTableKey)) {
                                 continue;  // no changes
                             }
@@ -277,7 +278,7 @@ public class TableLineageCacheImpl implements TableLineageCache {
                             sourceTableLineageCacheEntry.addDownstreamTargetTable(targetTableKey);
                         }
 
-                        for (TableLineageCacheKey deletedSourceTableKey : previousSourceTables) {
+                        for (DomainConnectionTableKey deletedSourceTableKey : previousSourceTables) {
                             if (newSourceTables.contains(deletedSourceTableKey)) {
                                 continue;  // no changes
                             }
@@ -323,15 +324,15 @@ public class TableLineageCacheImpl implements TableLineageCache {
         this.queueEmptyFuture.complete(0);
 
         this.loadObjectRequestSink = Sinks.many().multicast().onBackpressureBuffer();
-        Flux<List<TableLineageCacheKey>> requestLoadFlux = this.loadObjectRequestSink.asFlux()
+        Flux<List<DomainConnectionTableKey>> requestLoadFlux = this.loadObjectRequestSink.asFlux()
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
                 .buffer(Duration.ofMillis(50))  // wait 50 millis, maybe multiple file system updates are made, we want to merge all file changes
                 .publishOn(Schedulers.parallel());
         int concurrency = Runtime.getRuntime().availableProcessors();
         this.subscription = requestLoadFlux
-                .flatMap((List<TableLineageCacheKey> targetKeys) -> Mono.just(targetKeys)) // single thread forwarder
+                .flatMap((List<DomainConnectionTableKey> targetKeys) -> Mono.just(targetKeys)) // single thread forwarder
                 .parallel(concurrency)
-                .flatMap((List<TableLineageCacheKey> targetKeys) -> {
+                .flatMap((List<DomainConnectionTableKey> targetKeys) -> {
                     onRequestLoadLabelsForObjects(targetKeys);
                     return Mono.empty();
                 })

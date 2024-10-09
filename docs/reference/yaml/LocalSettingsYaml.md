@@ -16,7 +16,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
-|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|settings| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*connection_similarity_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|settings| |
 |<span class="no-wrap-code ">[`spec`](./LocalSettingsYaml.md#localsettingsspec)</span>|The object that stores the configuration settings of a local DQOps instance|*[LocalSettingsSpec](./LocalSettingsYaml.md#localsettingsspec)*| | | |
 
 
@@ -33,12 +33,14 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`editor_name`</span>|Editor name spec (VSC, Eclipse, Intellij)|*string*| | | |
 |<span class="no-wrap-code ">`editor_path`</span>|Editor path on user&#x27;s computer|*string*| | | |
-|<span class="no-wrap-code ">`api_key`</span>|DQOps CLoud API key|*string*| | | |
+|<span class="no-wrap-code ">`api_key`</span>|DQOps Cloud API Key|*string*| | | |
 |<span class="no-wrap-code ">`disable_cloud_sync`</span>|Disable synchronization with DQOps Cloud|*boolean*| | | |
 |<span class="no-wrap-code ">`instance_signature_key`</span>|DQOps instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.|*string*| | | |
 |<span class="no-wrap-code ">`time_zone`</span>|Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQOps server instance.|*string*| | | |
+|<span class="no-wrap-code ">`instance_name`</span>|DQOps instance name assigned to this server instance. DQOps supports scheduling data quality checks only on selected instances. If this parameter is not set, DQOps will use a name passed as a parameter or environment variable. The fallback value is the host name.|*string*| | | |
 |<span class="no-wrap-code ">[`smtp_server_configuration`](./LocalSettingsYaml.md#smtpserverconfigurationspec)</span>|SMTP server configuration for incident notifications.|*[SmtpServerConfigurationSpec](./LocalSettingsYaml.md#smtpserverconfigurationspec)*| | | |
-|<span class="no-wrap-code ">[`data_domains`](./LocalSettingsYaml.md#localdatadomainspecmap)</span>|The dictionary containing the configuration of local data domains.|*[LocalDataDomainSpecMap](./LocalSettingsYaml.md#localdatadomainspecmap)*| | | |
+|<span class="no-wrap-code ">[`data_domains`](./LocalSettingsYaml.md#localdatadomainspecmap)</span>|A dictionary containing the configuration of local data domains managed by this instance.|*[LocalDataDomainSpecMap](./LocalSettingsYaml.md#localdatadomainspecmap)*| | | |
+|<span class="no-wrap-code ">[`data_catalog_urls`](./LocalSettingsYaml.md#datacatalogurlssetspec)</span>|A list of urls of special REST API services that will transform DQOps data quality health models to a format supported by a target data catalog platform. These services are called to push the health status of tables.|*[DataCatalogUrlsSetSpec](./LocalSettingsYaml.md#datacatalogurlssetspec)*| | | |
 
 
 
@@ -86,6 +88,13 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`display_name`</span>|Data domain display name, which is a user-friendly name to be shown in the UI|*string*| | | |
 |<span class="no-wrap-code ">`enable_scheduler`</span>|Enables the job scheduler for this domain.|*boolean*| | | |
+
+
+
+___
+
+## DataCatalogUrlsSetSpec
+A collection of unique urls of data catalog synchronization endpoints where DQOps sends updated data quality health statuses of tables.
 
 
 

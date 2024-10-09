@@ -19,7 +19,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckContainerListModel*](./common.md#checkcontainerlistmodel)|Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.|
 |[*RuleThresholdsModel*](./common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
 |[*DefaultRuleSeverityLevel*](./common.md#defaultruleseveritylevel)|Default rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
-|[*MonitoringScheduleSpec*](./common.md#monitoringschedulespec)|Monitoring job schedule specification.|
+|[*CronScheduleSpec*](./common.md#cronschedulespec)|Cron job schedule specification.|
 |[*CheckRunScheduleGroup*](./common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
 |[*EffectiveScheduleLevelModel*](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule can be configured.|
 |[*EffectiveScheduleModel*](./common.md#effectiveschedulemodel)|Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.|
@@ -44,6 +44,8 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ProviderType*](./common.md#providertype)|Data source provider type (dialect type). We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.|
 |[*ConnectionModel*](./common.md#connectionmodel)|Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 |[*DqoQueueJobId*](./common.md#dqoqueuejobid)|Identifies a single job.|
+|[*HistogramDailyIssuesCount*](./common.md#histogramdailyissuescount)|A model that stores a daily number of incidents.|
+|[*IssueHistogramModel*](./common.md#issuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident or a table. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*ProfilingTimePeriodTruncation*](./common.md#profilingtimeperiodtruncation)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
 |[*TableListModel*](./common.md#tablelistmodel)|Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 
@@ -52,6 +54,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
+|[*CheckResultsDetailedLoadMode*](./check_results.md#checkresultsdetailedloadmode)|The mode of loading a list of detailed check results: the most recent values for each data group, or all results of the first group.|
 |[*CheckResultsListModel*](./check_results.md#checkresultslistmodel)|Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.|
 |[*TableCurrentDataQualityStatusModel*](./check_results.md#tablecurrentdataqualitystatusmodel)|The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.|
 
@@ -77,7 +80,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*DataTypeCategory*](./column_quality_policies.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
 |[*TargetColumnPatternSpec*](./column_quality_policies.md#targetcolumnpatternspec)|The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.|
 |[*ColumnQualityPolicyListModel*](./column_quality_policies.md#columnqualitypolicylistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
 |[*ColumnMonitoringCheckCategoriesSpec*](./column_quality_policies.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
@@ -146,11 +148,14 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*TableLineageSourceListModel*](./data_lineage.md#tablelineagesourcelistmodel)|Data lineage model that describes one source table of the current table.|
+|[*DomainConnectionTableKey*](./data_lineage.md#domainconnectiontablekey)|A key object that identifies every table. These keys are used in a cache to store the most recent table quality status for each table or a data lineage cache.|
+|[*TableLineageFlowModel*](./data_lineage.md#tablelineageflowmodel)|Table lineage flow model that describes the data flow from one table to another table, and the data quality status of the source table.|
+|[*TableLineageModel*](./data_lineage.md#tablelineagemodel)|The table lineage model that returns all upstream tables, downstream tables, or both.|
 |[*SourceColumnsSetSpec*](./data_lineage.md#sourcecolumnssetspec)|A collection of unique names of source columns from which the current column receives data. This information is used to track column-level data lineage.|
 |[*ColumnLineageSourceSpec*](./data_lineage.md#columnlineagesourcespec)|Describes the list of source columns for a column in the current table.|
 |[*ColumnLineageSourceSpecMap*](./data_lineage.md#columnlineagesourcespecmap)|Dictionary of mapping of source columns to the columns in the current table. The keys in this dictionary are the column names in the current table.|
 |[*TableLineageSourceSpec*](./data_lineage.md#tablelineagesourcespec)|Data lineage specification for a table to identify a source table of the current table where this object is stored.|
+|[*TableLineageTableListModel*](./data_lineage.md#tablelineagetablelistmodel)|Data lineage model that describes one source or target table of the current table.|
 
 
 ## data_sources
@@ -211,8 +216,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |------------|---------------------------------|
 |[*CheckResultEntryModel*](./incidents.md#checkresultentrymodel)|Detailed results for a single check. Represent one row in the check results table.|
 |[*CheckResultSortOrder*](./incidents.md#checkresultsortorder)|Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that can be sorted.|
-|[*IncidentDailyIssuesCount*](./incidents.md#incidentdailyissuescount)|A model that stores a daily number of incidents.|
-|[*IncidentIssueHistogramModel*](./incidents.md#incidentissuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*IncidentStatus*](./incidents.md#incidentstatus)|Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.|
 |[*IncidentFilteredNotificationLocation*](./incidents.md#incidentfilterednotificationlocation)|Enumeration that says where a filtered notification for an incident is defined. Is it defined on a connection level, or on the global level.|
 |[*IncidentModel*](./incidents.md#incidentmodel)|Data quality incident model shown on an incident details screen.|
@@ -317,6 +320,13 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SchemaModel*](./schemas.md#schemamodel)|Schema model that is returned by the REST API. Describes a single unique schema name.|
 
 
+## search
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*DataTypeCategory*](./search.md#datatypecategory)|Enumeration of common data type categories of data types. The providers will use this information to answer which of their native data types matches a category. Some sensors (and profilers) cannot operate on some data types.|
+
+
 ## sensor_readouts
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -381,6 +391,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
+|[*SimilarTableModel*](./tables.md#similartablemodel)|Model that describes a table that is similar to a reference table. Similar tables are used to build the data lineage graph.|
 |[*TableComparisonDailyMonitoringChecksSpecMap*](./tables.md#tablecomparisondailymonitoringchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains the daily monitoring comparison checks for each configured reference table.|
 |[*CustomCheckSpecMap*](./tables.md#customcheckspecmap)|Dictionary of custom checks indexed by a check name.|
 |[*TableDailyMonitoringCheckCategoriesSpec*](./tables.md#tabledailymonitoringcheckcategoriesspec)|Container of table level daily monitoring. Contains categories of daily monitoring.|

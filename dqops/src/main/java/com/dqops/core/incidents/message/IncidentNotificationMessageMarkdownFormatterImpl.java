@@ -103,7 +103,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      */
     private String prepareUrlToIncident(IncidentNotificationMessage notificationMessage){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "/incidents/"
+                + "incidents/"
                 + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8) + "/"
                 + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getYear() + "/"
                 + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getMonthValue() + "/"
@@ -117,7 +117,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      */
     private String prepareUrlToTable(IncidentNotificationMessage notificationMessage){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "/sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
+                + "sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
                 + "/schema/" + URLEncoder.encode(notificationMessage.getSchema(), StandardCharsets.UTF_8)
                 + "/table/" + URLEncoder.encode(notificationMessage.getTable(), StandardCharsets.UTF_8)
                 + "/detail";
@@ -159,7 +159,11 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      * @param incidentsColumnName Column name used for extraction.
      * @return A formatted date time with GMT from selected column.
      */
-    private String extractInstantWithFormatting(Instant instant, String incidentsColumnName){
+    private String extractInstantWithFormatting(Instant instant, String incidentsColumnName) {
+        if (instant == null) {
+            return "";
+        }
+
         ZonedDateTime zonedDateTime = instant.atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId());
         ZoneOffset zoneOffset = this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(instant);
         int hours = zoneOffset.getTotalSeconds() / 3600;
@@ -176,8 +180,8 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      * @param incidentsColumnName
      * @return A formatted int from selected column. If contains a negative value a blank string is returned.
      */
-    private String extractIntWithFormatting(int value, String incidentsColumnName){
-        if(value > 0){
+    private String extractIntWithFormatting(Integer value, String incidentsColumnName){
+        if (value != null && value > 0) {
             return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                     readableColumnName(incidentsColumnName),
                     value);

@@ -1423,7 +1423,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 ___
 ## get_incident_histogram
-Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.
+Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.
 
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_histogram.py) to see the source code on GitHub.
 
@@ -1437,7 +1437,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`incident_issue_histogram_model`](../models/incidents.md#incidentissuehistogrammodel)</span>||*[IncidentIssueHistogramModel](../models/incidents.md#incidentissuehistogrammodel)*|
+|<span class="no-wrap-code">[`issue_histogram_model`](../models/common.md#issuehistogrammodel)</span>||*[IssueHistogramModel](../models/common.md#issuehistogrammodel)*|
 
 
 
@@ -1519,7 +1519,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentIssueHistogramModel(
+        IssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
 			has_monthly_monitoring_issues=False,
@@ -1567,7 +1567,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentIssueHistogramModel(
+        IssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
 			has_monthly_monitoring_issues=False,
@@ -1618,7 +1618,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentIssueHistogramModel(
+        IssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
 			has_monthly_monitoring_issues=False,
@@ -1669,7 +1669,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentIssueHistogramModel(
+        IssueHistogramModel(
 			has_profiling_issues=False,
 			has_daily_monitoring_issues=False,
 			has_monthly_monitoring_issues=False,

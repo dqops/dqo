@@ -46,8 +46,8 @@ def sync_detailed(
 ) -> Response[Any]:
     """synchronizeDataDomains
 
-     Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created
-    locally.
+     Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be
+    created locally.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -72,8 +72,8 @@ async def asyncio_detailed(
 ) -> Response[Any]:
     """synchronizeDataDomains
 
-     Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created
-    locally.
+     Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be
+    created locally.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

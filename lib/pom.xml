@@ -11,7 +11,7 @@
 
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-lib</artifactId>
-    <version>1.8.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.9.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<name>lib</name>
 	<description>POM for a list of dependencies to libraries that should be distributed in the "lib" folder, especially all JDBC drivers.</description>
 	<packaging>jar</packaging>
@@ -19,7 +19,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<license.licenseName>apache_v2</license.licenseName>
-		<duckdb.version>1.0.0</duckdb.version>
+		<duckdb.version>1.1.1</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -92,11 +92,6 @@
 		<dependency>
 			<groupId>com.amazon.redshift</groupId>
 			<artifactId>redshift-jdbc42</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.snowflake</groupId>
-			<artifactId>snowflake-jdbc</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -188,13 +183,6 @@
 <!--				</exclusion>-->
 <!--			</exclusions>-->
 <!--		</dependency>-->
-
-		<dependency>
-			<groupId>com.databricks</groupId>
-			<artifactId>databricks-jdbc</artifactId>
-			<version>2.6.25</version>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.singlestore</groupId>
 			<artifactId>singlestore-jdbc-client</artifactId>

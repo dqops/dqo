@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from ..models.collect_statistics_queue_job_parameters import (
         CollectStatisticsQueueJobParameters,
     )
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
@@ -25,7 +26,6 @@ if TYPE_CHECKING:
     from ..models.import_tables_queue_job_parameters import (
         ImportTablesQueueJobParameters,
     )
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.repair_stored_data_queue_job_parameters import (
         RepairStoredDataQueueJobParameters,
     )
@@ -48,7 +48,9 @@ class DqoJobEntryParametersModel:
     Attributes:
         synchronize_root_folder_parameters (Union[Unset, SynchronizeRootFolderDqoQueueJobParameters]):
         synchronize_multiple_folders_parameters (Union[Unset, SynchronizeMultipleFoldersDqoQueueJobParameters]):
-        run_scheduled_checks_parameters (Union[Unset, MonitoringScheduleSpec]):
+        run_scheduled_checks_parameters (Union[Unset, CronScheduleSpec]):
+        collect_scheduled_statistics_parameters (Union[Unset, CronScheduleSpec]):
+        auto_import_tables_parameters (Union[Unset, CronScheduleSpec]):
         run_checks_parameters (Union[Unset, RunChecksParameters]): Run checks configuration, specifies the target checks
             that should be executed and an optional time window.
         run_checks_on_table_parameters (Union[Unset, RunChecksOnTableParameters]): Run checks configuration for a job
@@ -72,7 +74,9 @@ class DqoJobEntryParametersModel:
     synchronize_multiple_folders_parameters: Union[
         Unset, "SynchronizeMultipleFoldersDqoQueueJobParameters"
     ] = UNSET
-    run_scheduled_checks_parameters: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    run_scheduled_checks_parameters: Union[Unset, "CronScheduleSpec"] = UNSET
+    collect_scheduled_statistics_parameters: Union[Unset, "CronScheduleSpec"] = UNSET
+    auto_import_tables_parameters: Union[Unset, "CronScheduleSpec"] = UNSET
     run_checks_parameters: Union[Unset, "RunChecksParameters"] = UNSET
     run_checks_on_table_parameters: Union[Unset, "RunChecksOnTableParameters"] = UNSET
     collect_statistics_parameters: Union[
@@ -115,6 +119,16 @@ class DqoJobEntryParametersModel:
             run_scheduled_checks_parameters = (
                 self.run_scheduled_checks_parameters.to_dict()
             )
+
+        collect_scheduled_statistics_parameters: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.collect_scheduled_statistics_parameters, Unset):
+            collect_scheduled_statistics_parameters = (
+                self.collect_scheduled_statistics_parameters.to_dict()
+            )
+
+        auto_import_tables_parameters: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.auto_import_tables_parameters, Unset):
+            auto_import_tables_parameters = self.auto_import_tables_parameters.to_dict()
 
         run_checks_parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_parameters, Unset):
@@ -177,6 +191,12 @@ class DqoJobEntryParametersModel:
             )
         if run_scheduled_checks_parameters is not UNSET:
             field_dict["runScheduledChecksParameters"] = run_scheduled_checks_parameters
+        if collect_scheduled_statistics_parameters is not UNSET:
+            field_dict["collectScheduledStatisticsParameters"] = (
+                collect_scheduled_statistics_parameters
+            )
+        if auto_import_tables_parameters is not UNSET:
+            field_dict["autoImportTablesParameters"] = auto_import_tables_parameters
         if run_checks_parameters is not UNSET:
             field_dict["runChecksParameters"] = run_checks_parameters
         if run_checks_on_table_parameters is not UNSET:
@@ -220,6 +240,7 @@ class DqoJobEntryParametersModel:
         from ..models.collect_statistics_queue_job_parameters import (
             CollectStatisticsQueueJobParameters,
         )
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
         )
@@ -229,7 +250,6 @@ class DqoJobEntryParametersModel:
         from ..models.import_tables_queue_job_parameters import (
             ImportTablesQueueJobParameters,
         )
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.repair_stored_data_queue_job_parameters import (
             RepairStoredDataQueueJobParameters,
         )
@@ -274,12 +294,32 @@ class DqoJobEntryParametersModel:
             )
 
         _run_scheduled_checks_parameters = d.pop("runScheduledChecksParameters", UNSET)
-        run_scheduled_checks_parameters: Union[Unset, MonitoringScheduleSpec]
+        run_scheduled_checks_parameters: Union[Unset, CronScheduleSpec]
         if isinstance(_run_scheduled_checks_parameters, Unset):
             run_scheduled_checks_parameters = UNSET
         else:
-            run_scheduled_checks_parameters = MonitoringScheduleSpec.from_dict(
+            run_scheduled_checks_parameters = CronScheduleSpec.from_dict(
                 _run_scheduled_checks_parameters
+            )
+
+        _collect_scheduled_statistics_parameters = d.pop(
+            "collectScheduledStatisticsParameters", UNSET
+        )
+        collect_scheduled_statistics_parameters: Union[Unset, CronScheduleSpec]
+        if isinstance(_collect_scheduled_statistics_parameters, Unset):
+            collect_scheduled_statistics_parameters = UNSET
+        else:
+            collect_scheduled_statistics_parameters = CronScheduleSpec.from_dict(
+                _collect_scheduled_statistics_parameters
+            )
+
+        _auto_import_tables_parameters = d.pop("autoImportTablesParameters", UNSET)
+        auto_import_tables_parameters: Union[Unset, CronScheduleSpec]
+        if isinstance(_auto_import_tables_parameters, Unset):
+            auto_import_tables_parameters = UNSET
+        else:
+            auto_import_tables_parameters = CronScheduleSpec.from_dict(
+                _auto_import_tables_parameters
             )
 
         _run_checks_parameters = d.pop("runChecksParameters", UNSET)
@@ -396,6 +436,8 @@ class DqoJobEntryParametersModel:
             synchronize_root_folder_parameters=synchronize_root_folder_parameters,
             synchronize_multiple_folders_parameters=synchronize_multiple_folders_parameters,
             run_scheduled_checks_parameters=run_scheduled_checks_parameters,
+            collect_scheduled_statistics_parameters=collect_scheduled_statistics_parameters,
+            auto_import_tables_parameters=auto_import_tables_parameters,
             run_checks_parameters=run_checks_parameters,
             run_checks_on_table_parameters=run_checks_on_table_parameters,
             collect_statistics_parameters=collect_statistics_parameters,

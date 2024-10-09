@@ -102,6 +102,11 @@ public enum DqoRoot {
     _indexes,
 
     /**
+     * Table similarity indexes.
+     */
+    _indexes_sources,
+
+    /**
      * Local settings file that is not synchronized.
      */
     _local_settings;
@@ -150,7 +155,12 @@ public enum DqoRoot {
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {
-            return _indexes;
+            String folder2 = folderPath.size() > 1 ? folderPath.get(1).getObjectName() : null;
+            if (folder2 == null) {
+                return _indexes;
+            } else if (Objects.equals(folder2, BuiltInFolderNames.CONNECTION_SIMILARITY_INDEX)) {
+                return _indexes_sources;
+            }
         }
 
         if (Objects.equals(folder1, SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML)) {
@@ -186,7 +196,7 @@ public enum DqoRoot {
      * Checks if the given root is a data folder, with a parquet organized table.
      * @return True when it is a table folder, otherwise false.
      */
-    public boolean isTableFolder() {
+    public boolean isDataFolder() {
         if (this == data_sensor_readouts ||
             this == data_check_results ||
             this == data_errors ||

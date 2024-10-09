@@ -5,6 +5,19 @@ title: DQOps REST API check_results models reference
 The references of all objects used by [check_results](../operations/check_results.md) REST API operations are listed below.
 
 
+## CheckResultsDetailedLoadMode
+The mode of loading a list of detailed check results: the most recent values for each data group, or all results of the first group.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|first_data_group<br/>most_recent_per_group<br/>|
+
+___
+
 ## CheckResultsListModel
 Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.
 
@@ -35,9 +48,12 @@ The table validity status. It is a summary of the results of the most recently e
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`data_domain`</span>|Data domain name.|*string*|
 |<span class="no-wrap-code">`connection_name`</span>|The connection name in DQOps.|*string*|
 |<span class="no-wrap-code">`schema_name`</span>|The schema name.|*string*|
 |<span class="no-wrap-code">`table_name`</span>|The table name.|*string*|
+|<span class="no-wrap-code">`total_row_count`</span>|Most recent row count. Returned only when the status of the monitoring or profiling checks was requested.|*long*|
+|<span class="no-wrap-code">`data_freshness_delay_days`</span>|The last measured data freshness delay in days. Requires any of the data freshness checks in the monitoring section configured and up to date.|*double*|
 |<span class="no-wrap-code">[`current_severity`](./common.md#ruleseveritylevel)</span>|The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">[`highest_historical_severity`](./common.md#ruleseveritylevel)</span>|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">`executed_checks`</span>|The total number of most recent checks that were executed on the table. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|*integer*|

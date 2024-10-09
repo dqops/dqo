@@ -80,4 +80,11 @@ public class CheckResultsDetailedFilterParameters {
      */
     @JsonPropertyDescription("End month to load. Loads the data for the whole month identified by the date.")
     private LocalDate endMonth = null;
+
+    /**
+     * The mode of loading data. The default mode is to find the most recent result from each check,
+     * identify its data group and load remaining results only for that group. An alternative method loads the most recent value from all data groups.
+     */
+    @JsonPropertyDescription("The mode of loading data. The default mode is to find the most recent result from each check, identify its data group and load remaining results only for that group. An alternative method loads the most recent value from all data groups.")
+    private CheckResultsDetailedLoadMode loadMode = CheckResultsDetailedLoadMode.first_data_group;
 }

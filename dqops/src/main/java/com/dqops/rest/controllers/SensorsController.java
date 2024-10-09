@@ -30,6 +30,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.*;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class SensorsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<SensorListModel>>> getAllSensors(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             SensorFolderModel sensorFolderModel = createSensorTreeModel(principal);
             List<SensorListModel> allSensors = sensorFolderModel.getAllSensors();
             allSensors.sort(Comparator.comparing(model -> model.getFullSensorName()));
@@ -120,7 +121,7 @@ public class SensorsController {
     public Mono<ResponseEntity<Mono<SensorModel>>> getSensor(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullSensorName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -210,7 +211,7 @@ public class SensorsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName,
             @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullSensorName) || sensorModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -266,7 +267,7 @@ public class SensorsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName,
             @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullSensorName) || sensorModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -382,7 +383,7 @@ public class SensorsController {
     public Mono<ResponseEntity<Mono<Void>>> deleteSensor(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(fullSensorName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -423,7 +424,7 @@ public class SensorsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Mono<SensorFolderModel>>> getSensorFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             SensorFolderModel sensorFolderModel = createSensorTreeModel(principal);
 
             return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);

@@ -16,6 +16,7 @@
 package com.dqops.metadata.userhome;
 
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.similarity.SimilarTableModel;
 import com.dqops.metadata.basespecs.Flushable;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
@@ -30,11 +31,11 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.SettingsWrapper;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.ConnectionList;
-import com.dqops.metadata.sources.ConnectionWrapper;
-import com.dqops.metadata.sources.TableWrapper;
+import com.dqops.metadata.similarity.ConnectionSimilarityIndexList;
+import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
+
+import java.util.List;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,
@@ -96,6 +97,12 @@ public interface UserHome extends Flushable, HierarchyNode {
     FileIndexList getFileIndices();
 
     /**
+     * Returns a list of connection similarity indices for each connection.
+     * @return List of connection similarity indices.
+     */
+    ConnectionSimilarityIndexList getConnectionSimilarityIndices();
+
+    /**
      * Finds a connection wrapper on the given hierarchy path.
      * @param nestedHierarchyId Hierarchy id path to a check or any other element inside a connection.
      * @return Connection wrapper on the path to the node.
@@ -135,6 +142,15 @@ public interface UserHome extends Flushable, HierarchyNode {
     <T extends HierarchyNode> T findNodeOnPathOfType(HierarchyNode leafNode, Class<T> parentType);
 
     /**
+     * Finds tables that are similar to a given table.
+     * @param connectionName Connection name where the table is present.
+     * @param referenceTable Reference table to find similar tables.
+     * @param maxResults Maximum number of results to return.
+     * @return List of tables that are similar.
+     */
+    List<SimilarTableModel> findTablesSimilarTo(String connectionName, PhysicalTableName referenceTable, int maxResults);
+
+    /**
      * Returns a list of dashboards definitions.
      * @return Collection of dashboards definitions.
      */
@@ -163,4 +179,16 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of default observability checks definitions.
      */
     DefaultIncidentNotificationsWrapper getDefaultIncidentNotifications();
+
+    /**
+     * Initiates loading all connections to cache them and let label and other services find relevant data.
+     * Loading will continue in the background.
+     */
+    void warmUpConnections();
+
+    /**
+     * Initiates loading all connections to cache them and let label, quality status, data lineage and other services find relevant information.
+     * Loading will continue in the background.
+     */
+    void warmUpTables();
 }

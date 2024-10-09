@@ -300,87 +300,189 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     public CheckResultsListModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                              CheckResultsDetailedFilterParameters loadParameters,
                                                              UserDomainIdentity userDomainIdentity) {
-        Map<Long, CheckResultsListModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table ruleResultsTable = loadRecentRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
-        if (ruleResultsTable == null || ruleResultsTable.isEmpty()) {
-            return new CheckResultsListModel[0]; // empty array
+        List<Table> loadedPartitionTables = loadRecentRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
+
+        if (loadParameters.getLoadMode() == CheckResultsDetailedLoadMode.most_recent_per_group) {
+            return extractMostRecentCheckResultsForEachDataGroup(rootChecksContainerSpec, loadParameters, loadedPartitionTables);
         }
 
-        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, ruleResultsTable, loadParameters);
-        if (filteredTable.isEmpty()) {
-            return new CheckResultsListModel[0]; // empty array
-        }
-        Table filteredTableByDataGroup = filteredTable;
-        if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
-        }
+        // default mode - results for one data group only
+        return extractCheckResultsFromTheMostRecentDataGroup(rootChecksContainerSpec, loadParameters, loadedPartitionTables);
+    }
 
-        if (filteredTableByDataGroup.isEmpty()) {
-            return new CheckResultsListModel[0]; // empty array
-        }
-
-        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
-                SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
-                CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
-        CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
-
-        LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-
-        int rowCount = sortedTable.rowCount();
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            Long checkHash = checkHashColumn.get(rowIndex);
-            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
-            CheckResultsListModel checkResultsListModel = resultMap.get(checkHash);
-
-            CheckResultEntryModel singleModel = null;
-
-            if (checkResultsListModel != null) {
-                if (checkResultsListModel.getCheckResultEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
-                    continue; // enough results loaded
-                }
-
-                if (!Objects.equals(dataGroupNameForCheck, checkResultsListModel.getDataGroup())) {
-                    continue; // we are not mixing groups, results for a different group were already loaded
-                }
-            } else {
-                singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
-                checkResultsListModel = new CheckResultsListModel();
-                checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
-                checkResultsListModel.setCheckName(singleModel.getCheckName());
-                checkResultsListModel.setCheckHash(singleModel.getCheckHash());
-                checkResultsListModel.setCheckType(singleModel.getCheckType());
-                checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
-                checkResultsListModel.setDataGroup(dataGroupNameForCheck);
-
-                Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
-                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
-
-                if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
-                    dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-                    dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-                }
-
-                checkResultsListModel.setDataGroups(dataGroupsForCheck);
-                resultMap.put(singleModel.getCheckHash(), checkResultsListModel);
+    /**
+     * Extract check results for each matching check, collecting results only from the first data group that had the most recent values.
+     * Results from other groups for the same checks are ignored. This method returns data that is shown in the check results panels
+     * on the check result's user interface.
+     * @param rootChecksContainerSpec Root check container to identify the type of checks.
+     * @param loadParameters Filters.
+     * @param loadedPartitionTables A list of partitions loaded for that time period, from the newest to the oldest partition.
+     * @return An array of check results to be returned to the user.
+     */
+    protected CheckResultsListModel[] extractCheckResultsFromTheMostRecentDataGroup(
+            AbstractRootChecksContainerSpec rootChecksContainerSpec,
+            CheckResultsDetailedFilterParameters loadParameters,
+            List<Table> loadedPartitionTables) {
+        Map<Long, CheckResultsListModel> resultMap = new LinkedHashMap<>();
+        for (Table checkResultsTable : loadedPartitionTables) {
+            if (checkResultsTable == null || checkResultsTable.isEmpty()) {
+                continue;
             }
 
-            if (singleModel == null) {
-                singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+            Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, checkResultsTable, loadParameters);
+            if (filteredTable.isEmpty()) {
+                continue;
+            }
+            Table filteredTableByDataGroup = filteredTable;
+            if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
-            checkResultsListModel.getCheckResultEntries().add(singleModel);
+            if (filteredTableByDataGroup.isEmpty()) {
+                continue;
+            }
+
+            Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
+                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+                    SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
+                    CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
+            CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
+
+            LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+            LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+            TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+            int rowCount = sortedTable.rowCount();
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                Long checkHash = checkHashColumn.get(rowIndex);
+                String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
+                CheckResultsListModel checkResultsListModel = resultMap.get(checkHash);
+
+                CheckResultEntryModel singleModel = null;
+
+                if (checkResultsListModel != null) {
+                    if (checkResultsListModel.getCheckResultEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
+                        continue; // enough results loaded
+                    }
+
+                    if (!Objects.equals(dataGroupNameForCheck, checkResultsListModel.getDataGroup())) {
+                        continue; // we are not mixing groups, results for a different group were already loaded
+                    }
+                } else {
+                    singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+                    checkResultsListModel = new CheckResultsListModel();
+                    checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
+                    checkResultsListModel.setCheckName(singleModel.getCheckName());
+                    checkResultsListModel.setCheckHash(singleModel.getCheckHash());
+                    checkResultsListModel.setCheckType(singleModel.getCheckType());
+                    checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
+                    checkResultsListModel.setDataGroup(dataGroupNameForCheck);
+
+                    Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
+                    List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
+
+                    if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+                        dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                        dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                    }
+
+                    checkResultsListModel.setDataGroups(dataGroupsForCheck);
+                    resultMap.put(singleModel.getCheckHash(), checkResultsListModel);
+                }
+
+                if (singleModel == null) {
+                    singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+                }
+
+                checkResultsListModel.getCheckResultEntries().add(singleModel);
+            }
         }
 
         return resultMap.values().toArray(CheckResultsListModel[]::new);
+    }
+
+    /**
+     * Extract check results, returning results from all data groups for matching check, but only the most recent result for
+     * each data group is returned.
+     * @param rootChecksContainerSpec Root check container to identify the type of checks.
+     * @param loadParameters Filters.
+     * @param loadedPartitionTables A list of partitions loaded for that time period, from the newest to the oldest partition.
+     * @return An array of check results to be returned to the user.
+     */
+    protected CheckResultsListModel[] extractMostRecentCheckResultsForEachDataGroup(
+            AbstractRootChecksContainerSpec rootChecksContainerSpec,
+            CheckResultsDetailedFilterParameters loadParameters,
+            List<Table> loadedPartitionTables) {
+        Map<Long, Map<String, CheckResultsListModel>> resultMap = new LinkedHashMap<>();
+        for (Table checkResultsTable : loadedPartitionTables) {
+            if (checkResultsTable == null || checkResultsTable.isEmpty()) {
+                continue;
+            }
+
+            Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, checkResultsTable, loadParameters);
+            if (filteredTable.isEmpty()) {
+                continue;
+            }
+            Table filteredTableByDataGroup = filteredTable;
+            if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            }
+
+            if (filteredTableByDataGroup.isEmpty()) {
+                continue;
+            }
+
+            Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
+                    SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+                    SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
+                    CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
+            CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
+
+            LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
+            TextColumn allDataGroupColumn = sortedTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+            int rowCount = sortedTable.rowCount();
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                Long checkHash = checkHashColumn.get(rowIndex);
+                String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
+                Map<String, CheckResultsListModel> checkResultsPerDataGroup = resultMap.get(checkHash);
+                if (checkResultsPerDataGroup == null) {
+                    checkResultsPerDataGroup = new LinkedHashMap<>();
+                    resultMap.put(checkHash, checkResultsPerDataGroup);
+                } else {
+                    if (checkResultsPerDataGroup.size() >= loadParameters.getMaxResultsPerCheck()) {
+                        continue; // enough results loaded
+                    }
+                }
+
+                CheckResultsListModel checkResultsListModel = checkResultsPerDataGroup.get(dataGroupNameForCheck);
+
+                if (checkResultsListModel == null) {
+                    CheckResultEntryModel singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
+                    checkResultsListModel = new CheckResultsListModel();
+                    checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
+                    checkResultsListModel.setCheckName(singleModel.getCheckName());
+                    checkResultsListModel.setCheckHash(singleModel.getCheckHash());
+                    checkResultsListModel.setCheckType(singleModel.getCheckType());
+                    checkResultsListModel.setCheckDisplayName(singleModel.getCheckDisplayName());
+                    checkResultsListModel.setDataGroup(dataGroupNameForCheck);
+                    checkResultsListModel.getCheckResultEntries().add(singleModel);
+                    checkResultsPerDataGroup.put(dataGroupNameForCheck, checkResultsListModel);
+                }
+            }
+        }
+
+        return resultMap.values()
+                        .stream()
+                        .flatMap(groups -> groups.values().stream())
+                        .toArray(CheckResultsListModel[]::new);
     }
 
     /**
@@ -601,27 +703,27 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param incidentHash      Incident hash.
-     * @param firstSeen         The timestamp when the incident was first seen.
-     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param executedAtSince         The timestamp when the incident was first seen.
+     * @param executedAtUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
      * @param filterParameters  Optional filter to limit the issues included in the histogram.
      * @param userDomainIdentity User identity with the data domain.
      * @return Daily histogram of failed data quality checks.
      */
     @Override
-    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
-                                                                            PhysicalTableName physicalTableName,
-                                                                            long incidentHash,
-                                                                            Instant firstSeen,
-                                                                            Instant incidentUntil,
-                                                                            int minSeverity,
-                                                                            IncidentHistogramFilterParameters filterParameters,
-                                                                            UserDomainIdentity userDomainIdentity) {
+    public IssueHistogramModel buildDailyIssuesHistogram(String connectionName,
+                                                         PhysicalTableName physicalTableName,
+                                                         Long incidentHash,
+                                                         Instant executedAtSince,
+                                                         Instant executedAtUntil,
+                                                         int minSeverity,
+                                                         HistogramFilterParameters filterParameters,
+                                                         UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.CHECK_RESULTS_COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
-        LocalDate startDay = firstSeen.atZone(defaultTimeZoneId).toLocalDate()
+        LocalDate startDay = executedAtSince.atZone(defaultTimeZoneId).toLocalDate()
                 .minus(this.dqoIncidentsConfigurationProperties.getPartitionedChecksTimeWindowDays(), ChronoUnit.DAYS);
 
         if (filterParameters.getDays() != null) {
@@ -631,24 +733,28 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 startDay = earliestRequestedDate;
             }
         }
+
+        if (executedAtUntil == null) {
+            executedAtUntil = Instant.now().plus(1L, ChronoUnit.DAYS);
+        }
         
-        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
+        LocalDate endMonth = executedAtUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startDay, endMonth)) {
-            return new IncidentIssueHistogramModel();
+            return new IssueHistogramModel();
         }
 
-        Instant startTimestamp = firstSeen;
+        Instant startTimestamp = executedAtSince;
         if (filterParameters.getDays() != null) {
             startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
                     .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
                     .toInstant();
 
-            if (startTimestamp.isBefore(firstSeen)) {
-                startTimestamp = firstSeen;
+            if (startTimestamp.isBefore(executedAtSince)) {
+                startTimestamp = executedAtSince;
             }
         }
 
-        IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
+        IssueHistogramModel histogramModel = new IssueHistogramModel();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -663,18 +769,24 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
 
             TextColumn checkTypeColumn = checkResultsNormalizedResult.getCheckTypeColumn();
-            Selection notProfilingSelection = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
+            Selection checkTypeSelection =
+                    filterParameters.getCheckType() != null ? checkTypeColumn.isEqualTo(filterParameters.getCheckType().getDisplayName()) :
+                    checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName()); // by default, we are snowing monitoring and partition checks, excluding profiling checks, but user can pick a different check type
 
             InstantColumn executedAtColumn = checkResultsNormalizedResult.getExecutedAtColumn();
+            DateTimeColumn timePeriodColumn = checkResultsNormalizedResult.getTimePeriodColumn();
 
             Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
-                    PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
-            Selection incidentHashSelection = checkResultsNormalizedResult.getIncidentHashColumn().isIn(incidentHash);
+                    PackedInstant.pack(startTimestamp), PackedInstant.pack(executedAtUntil));
+            Selection incidentHashSelection = incidentHash != null ? checkResultsNormalizedResult.getIncidentHashColumn().isIn(incidentHash) : null;
 
             Selection selectionOfMatchingIssues = minSeveritySelection
-                    .and(notProfilingSelection)
-                    .and(issuesInTimeRange)
-                    .and(incidentHashSelection);
+                    .and(checkTypeSelection)
+                    .and(issuesInTimeRange);
+            if (incidentHashSelection != null) {
+                selectionOfMatchingIssues = selectionOfMatchingIssues.and(incidentHashSelection);
+            }
+
             if (selectionOfMatchingIssues.size() == 0) {
                 continue;
             }
@@ -692,8 +804,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 }
 
                 Integer severity = severityColumn.get(rowIndex);
-                Instant executedAt = executedAtColumn.get(rowIndex);
-                LocalDate executedAtDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
+                LocalDateTime timePeriod = timePeriodColumn.get(rowIndex);
+                LocalDate timePeriodDate = timePeriod.toLocalDate();
                 String columnName = columnNameColumn.get(rowIndex);
                 String checkName = checkNameColumn.get(rowIndex);
                 String checkTypeString = checkTypeColumn.get(rowIndex);
@@ -704,12 +816,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     columnName = CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER;
                 }
 
-                boolean dateMatch = filterParameters.getDate() == null || Objects.equals(filterParameters.getDate(), executedAtDate);
+                boolean dateMatch = filterParameters.getDate() == null || Objects.equals(filterParameters.getDate(), timePeriodDate);
                 boolean columnMatch = Strings.isNullOrEmpty(filterParameters.getColumn()) || Objects.equals(filterParameters.getColumn(), columnName);
                 boolean checkMatch = Strings.isNullOrEmpty(filterParameters.getCheck()) || Objects.equals(filterParameters.getCheck(), checkName);
 
                 if (columnMatch && checkMatch) {
-                    histogramModel.incrementSeverityForDay(executedAtDate, severity);
+                    histogramModel.incrementSeverityForDay(timePeriodDate, severity);
                 }
 
                 if (dateMatch && checkMatch) {
@@ -746,6 +858,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         PhysicalTableName physicalTableName = tableCurrentDataQualityStatusFilterParameters.getPhysicalTableName();
 
         TableCurrentDataQualityStatusModel statusModel = new TableCurrentDataQualityStatusModel();
+        statusModel.setDataDomain(userDomainIdentity.getDataDomainCloud());
         statusModel.setConnectionName(connectionName);
         statusModel.setSchemaName(physicalTableName.getSchemaName());
         statusModel.setTableName(physicalTableName.getTableName());
@@ -793,6 +906,14 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
+
+                if (statusModel.getTotalRowCount() == null) {
+                    statusModel.setTotalRowCount(extractMostRecentRowCount(filteredTable));
+                }
+
+                if (statusModel.getDataFreshnessDelayDays() == null) {
+                    statusModel.setDataFreshnessDelayDays(extractMostRecentDataFreshnessDelay(filteredTable));
+                }
             }
         }
 
@@ -827,12 +948,115 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     }
 
     /**
+     * Finds the most recent row count in the table.
+     * @param checkResultsTable Check results table.
+     * @return Most recent row count returned from any check containing the total row count.
+     */
+    private Long extractMostRecentRowCount(Table checkResultsTable) {
+        InstantColumn executedAtColumn = checkResultsTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        TextColumn checkNameColumn = checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        DoubleColumn actualValueColumn = checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        String[] rowCountCheckNames = new String[] { "daily_row_count", "daily_row_count_anomaly", "profile_row_count", "profile_row_count_anomaly" };
+        Instant mostRecentExecutedAt = null;
+        Long totalRowCount = null;
+
+        for (String checkName : rowCountCheckNames) {
+            Selection checkResultColumn = checkNameColumn.isEqualTo(checkName);
+            int[] checkResultsRowIndexes = checkResultColumn.toArray();
+
+            for (int i = checkResultsRowIndexes.length - 1; i >= 0 ; i--) {
+                int rowIndex = checkResultsRowIndexes[i];
+                if (actualValueColumn.isMissing(rowIndex)) {
+                    continue;
+                }
+
+                Instant executedAt = executedAtColumn.get(rowIndex);
+                long actualValue = (long)actualValueColumn.getDouble(rowIndex);
+
+                if (mostRecentExecutedAt != null && executedAt.isAfter(mostRecentExecutedAt)) {
+                    mostRecentExecutedAt = executedAt;
+                    totalRowCount = null; // the results are in mixed order, we found more recent results
+                }
+
+                if (mostRecentExecutedAt == null || mostRecentExecutedAt.equals(executedAt)) {
+                    if (totalRowCount == null) {
+                        totalRowCount = actualValue;
+                    } else {
+                        totalRowCount = totalRowCount + actualValue; // add up all values in case that the table is analyzed by data groups and we have to sum values up
+                    }
+
+                    mostRecentExecutedAt = executedAt;
+                }
+                else {
+                    break; // older results
+                }
+            }
+
+            if (totalRowCount != null) {
+                break;
+            }
+        }
+
+        return totalRowCount;
+    }
+
+    /**
+     * Finds the most recent data freshness delay in the table.
+     * @param checkResultsTable Check results table.
+     * @return Most recent data freshness returned from any check containing the total row count.
+     */
+    private Double extractMostRecentDataFreshnessDelay(Table checkResultsTable) {
+        InstantColumn executedAtColumn = checkResultsTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        TextColumn checkNameColumn = checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        DoubleColumn actualValueColumn = checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        String[] rowCountCheckNames = new String[] { "daily_data_freshness", "daily_data_freshness_anomaly", "profile_data_freshness", "profile_data_freshness_anomaly" };
+        Instant mostRecentExecutedAt = null;
+        Double mostRecentFreshnessDelay = null;
+
+        for (String checkName : rowCountCheckNames) {
+            Selection checkResultColumn = checkNameColumn.isEqualTo(checkName);
+            int[] checkResultsRowIndexes = checkResultColumn.toArray();
+
+            for (int i = checkResultsRowIndexes.length - 1; i >= 0 ; i--) {
+                int rowIndex = checkResultsRowIndexes[i];
+                if (actualValueColumn.isMissing(rowIndex)) {
+                    continue;
+                }
+
+                Instant executedAt = executedAtColumn.get(rowIndex);
+                double actualValue = actualValueColumn.getDouble(rowIndex);
+
+                if (mostRecentExecutedAt != null && executedAt.isAfter(mostRecentExecutedAt)) {
+                    mostRecentExecutedAt = executedAt;
+                }
+
+                if (mostRecentExecutedAt == null || mostRecentExecutedAt.equals(executedAt)) {
+                    if (mostRecentFreshnessDelay == null) {
+                        mostRecentFreshnessDelay = actualValue;
+                    } else {
+                        if (actualValue < mostRecentFreshnessDelay) {
+                            mostRecentFreshnessDelay = actualValue; // a different data group has most recent data
+                        }
+                    }
+
+                    mostRecentExecutedAt = executedAt;
+                }
+                else {
+                    break; // older results
+                }
+            }
+        }
+
+        return mostRecentFreshnessDelay;
+    }
+
+    /**
      * Calculates status for the table. Completes the TableDataQualityStatusModel with total severity data.
      * @param sourceTable Source table to be filtered.
      * @param tableStatusModel Target current table status model to update and fill with the status.
      * @return Complete TableDataQualityStatusModel
      */
-    protected TableCurrentDataQualityStatusModel calculateStatus(Table sourceTable, TableCurrentDataQualityStatusModel tableStatusModel){
+    protected TableCurrentDataQualityStatusModel calculateStatus(Table sourceTable, TableCurrentDataQualityStatusModel tableStatusModel) {
         InstantColumn executedAtColumn = sourceTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = (IntColumn)TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // when there is no severity column, it is the "errors" table and the severity is 4 as an execution error
         TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
@@ -1240,7 +1464,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param userDomainIdentity User identity with the data domain.
      * @return Table with rule results for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters,
+    protected List<Table> loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters,
                                           String connectionName,
                                           PhysicalTableName physicalTableName,
                                           UserDomainIdentity userDomainIdentity) {
@@ -1258,8 +1482,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         checkResultsSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), maxMonthsToLoad);
-        Table ruleResultsData = checkResultsSnapshot.getAllData();
-        return ruleResultsData;
+        List<Table> loadedTables = checkResultsSnapshot.getLoadedMonthlyPartitions().values()
+                .stream()
+                .filter(p -> p != null && p.getData() != null)
+                .map(p -> p.getData())
+                .collect(Collectors.toList());
+
+        return loadedTables;
     }
 
     /**

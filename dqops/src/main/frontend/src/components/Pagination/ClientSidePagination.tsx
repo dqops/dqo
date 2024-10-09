@@ -6,12 +6,14 @@ interface IClientSidePaginationProps<T> {
   items: T[];
   onChangeItems: (items: T[]) => void;
   className?: string;
+  hidden?: boolean;
 }
 
 export default function ClientSidePagination<T>({
   items,
   onChangeItems,
-  className
+  className,
+  hidden
 }: IClientSidePaginationProps<T>) {
   const [filters, setFilters] = React.useState({
     page: 1,
@@ -38,18 +40,20 @@ export default function ClientSidePagination<T>({
 
   return (
     <div className={clsx('px-4 py-4', className)}>
-      <Pagination
-        page={filters.page}
-        pageSize={filters.pageSize}
-        isEnd={filters.page >= totalPages}
-        totalPages={totalPages}
-        onChange={(page, pageSize) => {
-          onChangeFilters({
-            page,
-            pageSize
-          });
-        }}
-      />
+      {!hidden && (
+        <Pagination
+          page={filters.page}
+          pageSize={filters.pageSize}
+          isEnd={filters.page >= totalPages}
+          totalPages={totalPages}
+          onChange={(page, pageSize) => {
+            onChangeFilters({
+              page,
+              pageSize
+            });
+          }}
+        />
+      )}
     </div>
   );
 }

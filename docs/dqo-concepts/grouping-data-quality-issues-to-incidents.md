@@ -253,7 +253,7 @@ Incident notifications allow you to receive alerts via email or webhook whenever
 There are two levels of notification configuration in DQOps:
 
 1. **Global notifications:** This configuration applies to all incidents unless overridden. You can access it through the Configuration section > Global incident notifications.
-2. **Connection notifications:** These configurations take precedence over global notifications and are specific to individual data sources.
+2. **Connection-level notifications:** These configurations take precedence over global notifications and are specific to individual data sources.
     You can access them by navigating to a specific data source under the Data sources section > [Connection name] > Notifications tab.
 
 **Default notification configuration**
@@ -288,8 +288,8 @@ You can also use multiple email addresses separated by the comma character (,). 
 
 The address field for the specific status can also be left as empty so no notifications will be received for that incident status.
 
-### Configuring Connection notifications configuration
-To access the **Connection notifications** configuration:
+### Configuring Connection-level notifications
+To access the notifications configuration at the connection level:
 
 1. Click on the **Data sources** .
 2. Select the connection of choice from the tree view on the left.
@@ -305,11 +305,11 @@ Fill in the **email address** and/or **webhook URL** to the appropriate status f
 
 ### Notification filters
 
-You have the option to further refine notifications by setting filters based on various criteria. Filters can be added to both Global and Connection notifications.
+You have the option to further refine notifications by setting filters based on various criteria. Filters can be added to both Global and Connection-level notifications.
 
 To add a new filter on the Global or Connection configuration:
 
-1. Navigate to the Global or Connection configuration. 
+1. Navigate to the Global or Connection-level configuration. 
 2. Click the **Add notification filter button**.
 
     ![Add filter to global incident notifications](https://dqops.com/docs/images/concepts/grouping-data-quality-issues-to-incidents/global-incident-notifications-add-filter.png){ loading=lazy; width="1200px" }

@@ -67,11 +67,11 @@ parameters and data quality rule thresholds before applying the proposed configu
 
 You can also customize the rule miner proposals with the following options:
 
-- **Filtering by check category, check name and column name:** You can use these filtering options no narrow down the
-list of proposals by specifying check category, check name, or column name.
+- **Filtering by check category, check name and column name:** You can use these filtering options to narrow down the
+    list of proposals by specifying check category, check name, or column name.
 - **Error rate (% of rows):** The most critical configuration parameter of the rule miner to control its sensitivity.
-It represents the percentage of errors that can contain invalid values. By default, it is set to 2%, but you can change this value.
-DQOps will attempt to configure data quality checks to detect data quality issues in 2% of records containing the most outstanding values.
+    It represents the percentage of errors that can contain invalid values. By default, it is set to 2%, but you can change this value.
+    DQOps will attempt to configure data quality checks to detect data quality issues in 2% of records containing the most outstanding values.
 - **Default severity level:** This is used to set the initial severity level for proposed checks, which can be later modified individually.
 - **Advanced parameters:** These parameters contains checkboxes that allows control how the rule mining engine handles 
     already configured data quality checks and select data quality check categories that you want to include

@@ -48,6 +48,26 @@ public enum CheckResultStatus {
     }
 
     /**
+     * Finds the maximum severity level from two check results. Execution errors are not compared, because they are not issues.
+     * @param first First severity level.
+     * @param second Second severity level.
+     * @return The maximum severity level detected.
+     */
+    public static CheckResultStatus max(CheckResultStatus first, CheckResultStatus second) {
+        if (first == null || first == execution_error) {
+            return second;
+        } else  if (second == null || second == execution_error) {
+            return first;
+        }
+
+        if (first.getSeverity() >= second.getSeverity()) {
+            return first;
+        }
+
+        return second;
+    }
+
+    /**
      * Creates a result status object from a severity number.
      * @param severity Severity value (0..4).
      * @return Matching result status.

@@ -28,8 +28,8 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -43,6 +43,7 @@ import com.dqops.services.check.models.AllChecksPatchParameters;
 import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import com.dqops.services.locking.RestApiLockService;
 import com.dqops.services.metadata.ConnectionService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -105,7 +105,7 @@ public class ConnectionsController {
     })
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<ConnectionModel>>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -140,7 +140,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<ConnectionSpecificationModel>>> getConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -183,7 +183,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<ConnectionModel>>> getConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -204,28 +204,26 @@ public class ConnectionsController {
     }
 
     /**
-     * Retrieves a named schedule of a connection for a requested connection identified by the connection name.
+     * Retrieves the configuration of table auto import for a requested connection identified by the connection name.
      * @param connectionName  Connection name.
-     * @param schedulingGroup Scheduling group.
-     * @return Connection's schedule specification.
+     * @return Connection's auto import configuration.
      */
-    @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
-    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = MonitoringScheduleSpec.class,
+    @GetMapping(value = "/{connectionName}/autoimport", produces = "application/json")
+    @ApiOperation(value = "getConnectionAutoImport", notes = "Return the configuration of the table auto import for a connection", response = AutoImportTablesSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's schedule returned", response = MonitoringScheduleSpec.class),
+            @ApiResponse(code = 200, message = "Connection's table auto import returned", response = AutoImportTablesSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getConnectionSchedulingGroup(
+    public Mono<ResponseEntity<Mono<AutoImportTablesSpec>>> getConnectionAutoImport(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -236,12 +234,54 @@ public class ConnectionsController {
             }
             ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-            DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
+            AutoImportTablesSpec autoImportTables = connectionSpec.getAutoImportTables();
+            if (autoImportTables == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
+
+            return new ResponseEntity<>(Mono.justOrEmpty(autoImportTables), HttpStatus.OK); // 200
+        }));
+    }
+
+    /**
+     * Retrieves a named schedule of a connection for a requested connection identified by the connection name.
+     * @param connectionName  Connection name.
+     * @param schedulingGroup Scheduling group.
+     * @return Connection's schedule specification.
+     */
+    @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
+    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = CronScheduleSpec.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Connection's schedule returned", response = CronScheduleSpec.class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public Mono<ResponseEntity<Mono<CronScheduleSpec>>> getConnectionSchedulingGroup(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+
+            CronSchedulesSpec schedules = connectionSpec.getSchedules();
             if (schedules == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
             }
 
-            MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+            CronScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
             return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
         }));
@@ -267,7 +307,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<CommentsListSpec>>> getConnectionComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -304,7 +344,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<LabelSetSpec>>> getConnectionLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -342,7 +382,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<DataGroupingConfigurationSpec>>> getConnectionDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -380,7 +420,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<ConnectionIncidentGroupingSpec>>> getConnectionIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -418,7 +458,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Flux<CommonColumnModel>>> getConnectionCommonColumns(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -475,7 +515,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) || connectionSpec == null || connectionSpec.getProviderType() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
@@ -525,7 +565,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Basic connection model") @RequestBody ConnectionModel connectionModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(connectionName) || connectionModel == null || connectionModel.getProviderType() == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
             }
@@ -575,7 +615,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -619,7 +659,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection basic details") @RequestBody ConnectionModel connectionModel) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (!Objects.equals(connectionName, connectionModel.getConnectionName())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
             }
@@ -647,9 +687,60 @@ public class ConnectionsController {
     }
 
     /**
+     * Updates the configuration of the table auto import on an existing connection.
+     * @param connectionName        Connection name.
+     * @param autoImportTablesSpec  Table auto import specification.
+     * @return Empty response.
+     */
+    @PutMapping(value = "/{connectionName}/autoimport", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateConnectionAutoImport",
+            notes = "Updates the configuration of the table auto import on a connection. The auto import specifies the table filters and a CRON schedule.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Connection's auto import settings successfully updated", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionAutoImport(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Auto import settings to store") @RequestBody AutoImportTablesSpec autoImportTablesSpec) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
+
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
+
+                        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                        existingConnectionSpec.setAutoImportTables(autoImportTablesSpec);
+
+                        boolean scheduleChanged = existingConnectionSpec.isDirty();
+                        userHomeContext.flush();
+
+                        if (scheduleChanged) {
+                            this.jobSchedulerService.triggerMetadataSynchronization(principal.getDataDomainIdentity().getDataDomainCloud());
+                        }
+
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
+    }
+
+    /**
      * Updates the configuration of a check run schedule for a scheduling group (named schedule) of an existing connection.
      * @param connectionName        Connection name.
-     * @param monitoringScheduleSpec Schedule specification.
+     * @param cronScheduleSpec Schedule specification.
      * @param schedulingGroup       Scheduling group.
      * @return Empty response.
      */
@@ -671,8 +762,8 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
-            @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @ApiParam("Monitoring schedule definition to store") @RequestBody CronScheduleSpec cronScheduleSpec) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -686,31 +777,31 @@ public class ConnectionsController {
 
                         ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
 
-                        DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+                        CronSchedulesSpec schedules = existingConnectionSpec.getSchedules();
                         if (schedules == null) {
-                            schedules = new DefaultSchedulesSpec();
+                            schedules = new CronSchedulesSpec();
                             existingConnectionSpec.setSchedules(schedules);
                         }
 
                         switch (schedulingGroup) {
                             case profiling:
-                                schedules.setProfiling(monitoringScheduleSpec);
+                                schedules.setProfiling(cronScheduleSpec);
                                 break;
 
                             case monitoring_daily:
-                                schedules.setMonitoringDaily(monitoringScheduleSpec);
+                                schedules.setMonitoringDaily(cronScheduleSpec);
                                 break;
 
                             case monitoring_monthly:
-                                schedules.setMonitoringMonthly(monitoringScheduleSpec);
+                                schedules.setMonitoringMonthly(cronScheduleSpec);
                                 break;
 
                             case partitioned_daily:
-                                schedules.setPartitionedDaily(monitoringScheduleSpec);
+                                schedules.setPartitionedDaily(cronScheduleSpec);
                                 break;
 
                             case partitioned_monthly:
-                                schedules.setPartitionedMonthly(monitoringScheduleSpec);
+                                schedules.setPartitionedMonthly(cronScheduleSpec);
                                 break;
 
                             default:
@@ -721,7 +812,7 @@ public class ConnectionsController {
                         userHomeContext.flush();
 
                         if (scheduleChanged) {
-                            this.jobSchedulerService.triggerMetadataSynchronization();
+                            this.jobSchedulerService.triggerMetadataSynchronization(principal.getDataDomainIdentity().getDataDomainCloud());
                         }
 
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -752,7 +843,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of labels") @RequestBody LabelSetSpec labelSetSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -795,7 +886,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of comments") @RequestBody CommentsListSpec commentsListSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -839,7 +930,7 @@ public class ConnectionsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Default data grouping configuration to be assigned to a connection")
                 @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -883,7 +974,7 @@ public class ConnectionsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Incident grouping and notification configuration") @RequestBody ConnectionIncidentGroupingSpec incidentGroupingSpec) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -930,7 +1021,7 @@ public class ConnectionsController {
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
             @RequestBody AllChecksPatchParameters updatePatchParameters) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (updatePatchParameters == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
@@ -982,7 +1073,7 @@ public class ConnectionsController {
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and table/column selectors.")
             @RequestBody BulkCheckDeactivateParameters bulkDeactivateParameters) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
@@ -1023,7 +1114,7 @@ public class ConnectionsController {
     public Mono<ResponseEntity<Mono<DqoQueueJobId>>> deleteConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             return this.lockService.callSynchronouslyOnConnection(connectionName,
                     () -> {
                         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);

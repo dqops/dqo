@@ -13,13 +13,17 @@ import {
   DataSourcesApi,
   SharedCredentialsApi
 } from '../../../services/apiClient';
-import { filterPropertiesDirectories } from '../../../utils';
+import {
+  filterPropertiesDirectories,
+  getProviderTypeTitle
+} from '../../../utils';
 import Button from '../../Button';
 import Input from '../../Input';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
 import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
+import Db2Logo from '../../SvgIcon/svg/ibm-db2.svg';
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
@@ -29,11 +33,15 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
+import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
 import DatabricksConnection from './DatabricksConnection';
+import Db2Connection from './Db2Connection';
 import DuckDBConnection from './DuckDBConnection';
 import ErrorModal from './ErrorModal';
+import HanaConnection from './HanaConnection';
+import JdbcPropertiesView from './JdbcProperties';
 import MySQLConnection from './MySQLConnection';
 import OracleConnection from './OracleConnection';
 import PostgreSQLConnection from './PostgreSQLConnection';
@@ -62,6 +70,7 @@ const DatabaseConnection = ({
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
+  const [showAdvancedProperties, setShowAdvancedProperties] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionTestModel>();
   const [showError, setShowError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -80,7 +89,7 @@ const DatabaseConnection = ({
     setIsSaving(true);
     await ConnectionApiClient.createConnectionBasic(
       database?.connection_name ?? '',
- filterPropertiesDirectories(database)
+      filterPropertiesDirectories(database)
     );
     const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
@@ -118,7 +127,7 @@ const DatabaseConnection = ({
       testRes = (
         await DataSourcesApi.testConnection(
           true,
-filterPropertiesDirectories(database)
+          filterPropertiesDirectories(database)
         )
       ).data;
       setIsTesting(false);
@@ -135,13 +144,12 @@ filterPropertiesDirectories(database)
         ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS
       ) {
         setMessage(testRes?.errorMessage);
-      }
-      else if (
+      } else if (
         testRes?.connectionTestResult ===
         ConnectionTestModelConnectionTestResultEnum.FAILURE
       ) {
         setMessage(testRes?.errorMessage);
-        setShowConfirm(true)
+        setShowConfirm(true);
       }
     }
   };
@@ -150,7 +158,8 @@ filterPropertiesDirectories(database)
     try {
       setIsTesting(true);
       const res = await DataSourcesApi.testConnection(
-        true, filterPropertiesDirectories(database)
+        true,
+        filterPropertiesDirectories(database)
       );
       setTestResult(res.data);
     } catch (err) {
@@ -164,37 +173,12 @@ filterPropertiesDirectories(database)
     setShowError(true);
   };
 
-  const getTitle = (database?: ConnectionModel): string => {
+  const getTitle = (): string => {
     if (nameOfDatabase) {
-      return nameOfDatabase + ' Connection Settings';
+      return nameOfDatabase + ' connection settings';
     }
 
-    switch (database?.provider_type) {
-      case ConnectionModelProviderTypeEnum.bigquery:
-        return 'Google BigQuery Connection Settings';
-      case ConnectionModelProviderTypeEnum.snowflake:
-        return 'Snowflake Connection Settings';
-      case ConnectionModelProviderTypeEnum.postgresql:
-        return 'PostgreSQL Connection Settings';
-      case ConnectionModelProviderTypeEnum.redshift:
-        return 'Amazon Redshift Connection Settings';
-      case ConnectionModelProviderTypeEnum.sqlserver:
-        return 'Microsoft SQL Server Connection Settings';
-      case ConnectionModelProviderTypeEnum.presto:
-        return 'PrestoDB Connection Settings';
-      case ConnectionModelProviderTypeEnum.trino:
-        return 'Trino Connection Settings';
-      case ConnectionModelProviderTypeEnum.mysql:
-        return 'MySQL Connection Settings';
-      case ConnectionModelProviderTypeEnum.oracle:
-        return 'Oracle Database Connection Settings';
-      case ConnectionModelProviderTypeEnum.spark:
-        return 'Spark Connection Settings';
-      case ConnectionModelProviderTypeEnum.databricks:
-        return 'Databricks Connection Settings';
-      default:
-        return 'Database Connection Settings';
-    }
+    return 'Database connection settings';
   };
 
   const getIcon = () => {
@@ -317,6 +301,20 @@ filterPropertiesDirectories(database)
         onChange={(databricks) => onChange({ ...database, databricks })}
         sharedCredentials={sharedCredentials}
       />
+    ),
+    [ConnectionModelProviderTypeEnum.hana]: (
+      <HanaConnection
+        hana={database.hana}
+        onChange={(hana) => onChange({ ...database, hana })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.db2]: (
+      <Db2Connection
+        db2={database.db2}
+        onChange={(db2) => onChange({ ...database, db2 })}
+        sharedCredentials={sharedCredentials}
+      />
     )
   };
 
@@ -344,6 +342,8 @@ filterPropertiesDirectories(database)
         return SparkLogo;
       case ConnectionModelProviderTypeEnum.databricks:
         return DatabricksLogo;
+      case ConnectionModelProviderTypeEnum.db2:
+        return Db2Logo;
       default:
         return '';
     }
@@ -362,7 +362,7 @@ filterPropertiesDirectories(database)
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
-          <div>{getTitle(database)}</div>
+          <div>{getTitle()}</div>
         </div>
         {getIcon()}
       </div>
@@ -371,7 +371,7 @@ filterPropertiesDirectories(database)
         <Input
           label="Connection name"
           className={clsx(
-            'mb-4',
+            'mb-8',
             (database.connection_name?.length === 0 ||
               !database.connection_name) &&
               'border border-red-500'
@@ -383,24 +383,74 @@ filterPropertiesDirectories(database)
           error={!!nameError}
           helperText={nameError}
         />
-        <Input
-          label="Parallel jobs limit"
-          value={database.parallel_jobs_limit}
-          onChange={(e) => {
-            if (!isNaN(Number(e.target.value))) {
-              onChange({
-                ...database,
-                parallel_jobs_limit:
-                  String(e.target.value).length === 0
-                    ? undefined
-                    : Number(e.target.value)
-              });
-            }
-          }}
-        />
-        <div className="mt-6">
-          {database.provider_type ? components[database.provider_type] : ''}
-        </div>
+        <SectionWrapper
+          title={
+            getProviderTypeTitle(database.provider_type) +
+            ' connection parameters'
+          }
+          className="mb-4 mt-4"
+        >
+          <div className="mb-6">
+            {database.provider_type ? components[database.provider_type] : ''}
+          </div>
+          {showAdvancedProperties ? (
+            <SectionWrapper
+              title="Advanced properties"
+              svgIcon
+              onClick={() => setShowAdvancedProperties(false)}
+              className="!pb-1 !pt-1 !mt-1 !mb-4"
+            >
+              <div className="mt-4">
+                <Input
+                  label="Parallel jobs limit"
+                  value={database.parallel_jobs_limit}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      onChange({
+                        ...database,
+                        parallel_jobs_limit:
+                          String(e.target.value).length === 0
+                            ? undefined
+                            : Number(e.target.value)
+                      });
+                    }
+                  }}
+                  className="!mb-3"
+                />
+              </div>
+              <Input
+                label="Schedule only on DQOps instance"
+                value={database.schedule_on_instance}
+                placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
+                onChange={(e) => {
+                  onChange({
+                    ...database,
+                    schedule_on_instance: String(e.target.value)
+                  });
+                }}
+                className="!mb-3"
+              />
+              <div className="ml-2">
+                <JdbcPropertiesView
+                  properties={database?.advanced_properties}
+                  onChange={(properties) =>
+                    onChange({ advanced_properties: properties })
+                  }
+                  title="Advanced property name"
+                  sharedCredentials={sharedCredentials}
+                />
+              </div>
+            </SectionWrapper>
+          ) : (
+            <div
+              className="flex items-center mb-4 text-sm font-bold cursor-pointer mt-0"
+              onClick={() => setShowAdvancedProperties(true)}
+            >
+              <SvgIcon name="chevron-right" className="w-5 h-5" />
+              Advanced properties
+            </div>
+          )}
+        </SectionWrapper>
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (

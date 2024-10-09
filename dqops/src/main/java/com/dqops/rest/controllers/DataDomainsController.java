@@ -17,10 +17,13 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.domains.DataDomainsService;
+import com.dqops.core.domains.DqoDataDomainException;
 import com.dqops.core.domains.LocalDataDomainModel;
 import com.dqops.core.domains.LocalDataDomainRegistry;
 import com.dqops.core.dqocloud.login.DqoUserRole;
+import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -33,6 +36,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.server.LocalUrlAddressesProvider;
 import com.dqops.rest.server.authentication.AuthenticateWithDqoCloudWebFilter;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -64,6 +69,7 @@ public class DataDomainsController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final LocalDataDomainRegistry localDataDomainRegistry;
     private final DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
+    private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
 
 
@@ -74,6 +80,7 @@ public class DataDomainsController {
      * @param userHomeContextFactory User home context factory.
      * @param localDataDomainRegistry Local data domain registry.
      * @param dqoInstanceConfigurationProperties DQOps instance configuration - the cookie expiration time.
+     * @param dqoUserConfigurationProperties DQO User Home configuration - to identify the default data domain.
      * @param instanceCloudLoginService Cloud login controller.
      */
     @Autowired
@@ -81,11 +88,13 @@ public class DataDomainsController {
                                  UserHomeContextFactory userHomeContextFactory,
                                  LocalDataDomainRegistry localDataDomainRegistry,
                                  DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
+                                 DqoUserConfigurationProperties dqoUserConfigurationProperties,
                                  InstanceCloudLoginService instanceCloudLoginService) {
         this.dataDomainsService = dataDomainsService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.localDataDomainRegistry = localDataDomainRegistry;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
     }
 
@@ -107,23 +116,28 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<LocalDataDomainModel>>> getLocalDataDomains(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             List<LocalDataDomainModel> allDataDomains = this.dataDomainsService.getAllDataDomains();
-            LinkedHashMap<String, DqoUserRole> allowedUserRoles = principal.getUserTokenPayload().getDomainRoles();
+            LinkedHashMap<String, DqoUserRole> domainRoles = principal.getDomainRoles();
+            if (domainRoles == null) {
+                ArrayList<LocalDataDomainModel> rootDomainList = new ArrayList<>();
+                boolean isRootDomain = Objects.equals(dqoUserConfigurationProperties.getDefaultDataDomain(), UserDomainIdentity.ROOT_DATA_DOMAIN);
+                rootDomainList.add(new LocalDataDomainModel() {{
+                    setDomainName(isRootDomain ? UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME : dqoUserConfigurationProperties.getDefaultDataDomain());
+                    setDisplayName(isRootDomain ? UserDomainIdentity.ROOT_DOMAIN_DISPLAY_NAME : dqoUserConfigurationProperties.getDefaultDataDomain());
+                }});
+                return new ResponseEntity<>(Flux.fromStream(rootDomainList.stream()), HttpStatus.OK);
+            }
 
             if (principal.getAccountRole() == DqoUserRole.NONE) {
                 allDataDomains.removeIf(model -> {
-                    if (allowedUserRoles == null) {
-                        return true;
-                    }
-
                     String domainName = model.getDomainName();
                     if (Objects.equals(domainName, UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME)) {
                         domainName = UserDomainIdentity.ROOT_DATA_DOMAIN;
                     }
 
-                    return !allowedUserRoles.containsKey(domainName) ||
-                            allowedUserRoles.get(domainName) == DqoUserRole.NONE;
+                    return !domainRoles.containsKey(domainName) ||
+                            domainRoles.get(domainName) == DqoUserRole.NONE;
                 });
             }
 
@@ -136,14 +150,14 @@ public class DataDomainsController {
      * @param dataDomainDisplayName Data domain display name.
      * @return Empty response.
      */
-    @PostMapping(value = "/", consumes = "text/plain", produces = "application/json")
+    @PostMapping(value = "/{dataDomainDisplayName}", produces = "application/json")
     @ApiOperation(value = "createDataDomain", notes = "Creates a new data domain given a data domain display name.", response = LocalDataDomainModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New data domain successfully created", response = LocalDataDomainModel.class),
+            @ApiResponse(code = 200, message = "New data domain successfully created", response = LocalDataDomainModel.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 409, message = "Data domain with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -151,8 +165,8 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
     public Mono<ResponseEntity<Mono<LocalDataDomainModel>>> createDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Data domain display name") @RequestBody String dataDomainDisplayName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            @ApiParam("Data domain display name") @PathVariable String dataDomainDisplayName) {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             if (Strings.isNullOrEmpty(dataDomainDisplayName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
@@ -166,9 +180,13 @@ public class DataDomainsController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
             }
 
-            LocalDataDomainModel localDataDomainModel = this.dataDomainsService.createDataDomain(dataDomainDisplayName);
-
-            return new ResponseEntity<>(Mono.justOrEmpty(localDataDomainModel), HttpStatus.CREATED);
+            try {
+                LocalDataDomainModel localDataDomainModel = this.dataDomainsService.createDataDomain(dataDomainDisplayName);
+                return new ResponseEntity<>(Mono.justOrEmpty(localDataDomainModel), HttpStatus.OK);
+            }
+            catch (DqoDataDomainException ddex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+            }
         }));
     }
 
@@ -185,6 +203,7 @@ public class DataDomainsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data domain successfully deleted", response = Void.class),
+            @ApiResponse(code = 400, message = "Data domain cannot be deleted"),
             @ApiResponse(code = 404, message = "Data domain not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -192,7 +211,7 @@ public class DataDomainsController {
     public Mono<ResponseEntity<Mono<Void>>> deleteDataDomain(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data domain name") @PathVariable String dataDomainName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dataDomainName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -206,9 +225,14 @@ public class DataDomainsController {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            this.dataDomainsService.deleteDataDomain(dataDomainName);
+            try {
+                this.dataDomainsService.deleteDataDomain(dataDomainName);
 
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            }
+            catch (DqoDataDomainException ddex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+            }
         }));
     }
 
@@ -217,7 +241,7 @@ public class DataDomainsController {
      * @return Empty response.
      */
     @PatchMapping(value = "/", produces = "application/json")
-    @ApiOperation(value = "synchronizeDataDomains", notes = "Synchronizes the domains in the SaaS cloud to this instance. All data domains will be created locally.", response = Void.class,
+    @ApiOperation(value = "synchronizeDataDomains", notes = "Synchronizes the data domains in the SaaS DQOps Cloud to this instance. All data domains will be created locally.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -229,7 +253,7 @@ public class DataDomainsController {
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
     public Mono<ResponseEntity<Mono<Void>>> synchronizeDataDomains(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             this.dataDomainsService.synchronizeDataDomainList(false);
 
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -258,7 +282,7 @@ public class DataDomainsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             ServerHttpRequest httpRequest,
             @ApiParam("Data domain name") @PathVariable String dataDomainName) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
 
             if (Strings.isNullOrEmpty(dataDomainName)) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);

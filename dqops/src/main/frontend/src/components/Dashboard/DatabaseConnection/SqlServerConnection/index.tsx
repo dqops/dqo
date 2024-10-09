@@ -8,7 +8,6 @@ import {
 import Checkbox from '../../../Checkbox';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
 import JdbcPropertiesView from '../JdbcProperties';
 
 interface ISqlServerConnectionProps {
@@ -55,10 +54,7 @@ const SqlServerConnection = ({
   };
 
   return (
-    <SectionWrapper
-      title="Microsoft SQL Server/SQL Server connection parameters"
-      className="mb-4"
-    >
+    <div>
       <FieldTypeInput
         data={sharedCredentials}
         label="Host"
@@ -125,7 +121,7 @@ const SqlServerConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

@@ -99,6 +99,12 @@ All command-line commands supported from the DQOps shell or directly from the sy
  | <span class="no-wrap-code">[`dqo settings smtp set`](./settings.md#dqo-settings-smtp-set)</span> | Set SMTP server configuration for incident notifications. |
  | <span class="no-wrap-code">[`dqo settings smtp remove`](./settings.md#dqo-settings-smtp-remove)</span> | Remove the API key used for accessing external services. |
  | <span class="no-wrap-code">[`dqo settings smtp show`](./settings.md#dqo-settings-smtp-show)</span> | Display the current SMTP server configuration for incident notifications. |
+ | <span class="no-wrap-code">[`dqo settings catalog list`](./settings.md#dqo-settings-catalog-list)</span> | Shows a list of urls of REST API endpoints that receive updates of data quality health for tables having new results. |
+ | <span class="no-wrap-code">[`dqo settings catalog add`](./settings.md#dqo-settings-catalog-add)</span> | Adds a url to a data catalog wrapper that receives updates of the table&#x27;s health. |
+ | <span class="no-wrap-code">[`dqo settings catalog remove`](./settings.md#dqo-settings-catalog-remove)</span> | Removes a url to a data catalog wrapper that receives updates of the table&#x27;s health. |
+ | <span class="no-wrap-code">[`dqo settings instancename set`](./settings.md#dqo-settings-instancename-set)</span> | Set the DQOps instance name of this instance. |
+ | <span class="no-wrap-code">[`dqo settings instancename remove`](./settings.md#dqo-settings-instancename-remove)</span> | Remove the DQOps instance name of this instance. |
+ | <span class="no-wrap-code">[`dqo settings instancename show`](./settings.md#dqo-settings-instancename-show)</span> | Display the DQOps instance name stored the local settings of this DQOps instance. |
 
 
 
@@ -162,6 +168,14 @@ All command-line commands supported from the DQOps shell or directly from the sy
 | Command&nbsp;name | Description |
 |--------------|-------------|
  | <span class="no-wrap-code">[`dqo rule edit`](./rule.md#dqo-rule-edit)</span> | This command can be used to update the rule. It is important to use caution when using this command, as it can impact the execution of data quality checks. |
+
+
+
+
+## sso
+| Command&nbsp;name | Description |
+|--------------|-------------|
+ | <span class="no-wrap-code">[`dqo sso provision`](./sso.md#dqo-sso-provision)</span> | Creates and configures a new realm in Keycloak, configuring all required settings. This command is supported only in paid versions of DQOps. Please contact DQOps sales for details. |
 
 
 

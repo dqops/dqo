@@ -22,19 +22,13 @@ We want to verify the number of null values on `source` column.
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
 [nulls_count](../../checks/column/nulls/nulls-count.md) column check.
-Our goal is to verify that the number of null values in the `source` column does not exceed the set thresholds.
-
-In this example, we will set three maximum number thresholds levels for the check:
-
-- warning: 5
-- error: 10
-- fatal: 15
+Our goal is to verify that the number of null values in the `source` column does not exceed the set threshold.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the number of not nulls values exceed 5, a warning alert will be triggered.
+If the number of nulls values exceed the set threshold, a error alert will be triggered.
 
 ## Data structure
 
@@ -58,26 +52,80 @@ The `source` column of interest contains NULL values.
 
 A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-### **Navigate to a list of checks**
+### **Navigate to a profiling section to collect basic statistics**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
+To navigate to the profiling section using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks2.png){ loading=lazy; width="1200px" }
+To propose a configuration of data quality checks, the rule miner requires basic data statistics.
 
-1. Go to the **Monitoring** section.
-    
-    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+Follow these steps to collect basic data statistics:
 
+1. Navigate to the **Profiling section**.
+2. Select the `ahr` table from the tree view on the left. This will open the **Basic data statistics** tab.
+3. Click on the **Collect statistics**.
 
-2. Select the table or column mentioned in the example description from the **tree view** on the left.
+This will collect the basic statistics for the table and all columns.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md). 
+![Navigating to the profiling](https://dqops.com/docs/images/examples/daily-null-count-navigating-to-the-profiling1.png){ loading=lazy; width="1200px" }
 
+Learn more about [basic statistics in the Working with DQOps section](../../working-with-dqo/collecting-basic-data-statistics.md).
 
-3. Select the **Daily checks** tab.
+### **Propose a configuration of data quality check using rule mining**
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
+After collecting the basic statistics, the rule mining screen can propose a configuration of data quality checks.
+To navigate to the rule miner, click on the **Data quality rule mining** tab in the **Profiling section**.
 
+The rule mining screen allows you to view and select the automatically proposed configuration of data quality checks.
+DQOps proposes a list of data quality checks instantly upon entering the rule mining screen.
+
+You can use filters to narrow down the list of data quality check proposals.
+Filter the results to include only checks from the **nulls** category by entering "nulls" in the Check category input field and **source** in the Column name field.
+
+![Propose a configuration of volume checks using rule miner](https://dqops.com/docs/images/examples/daily-null-count-propose_configuration-checks-using-rule-miner2.PNG){ loading=lazy; width="1200px" }
+
+After clicking the Propose button, select checks from the proposed list for the selected columns using the switches. In the example, profile_nulls_count was selected for the source and source_data columns.
+Selected checks will throw an error if the number of null values ​​exceeds 0.
+
+Pressing the **Apply** button saves the configuration of data quality checks and their rules.
+A popup window will appear, notifying you that the checks have been activated and that you can run the activated check by
+clicking on the **Confirm** button.
+
+### **Review Table quality status**
+
+After the **Run checks** job finishes, you can review the summary of the identified data quality issues
+on the **Table quality status** screen. Click on the **Table quality status** tab to navigate to that screen.
+
+![Reviewing the data quality health status of tables after using the rule miner](https://dqops.com/docs/images/examples/daily-null-count-review-table-quality-status2.PNG){ loading=lazy; width="1200px" }
+
+The **Table quality status** screen summarizes data quality issues identified for each column and each category of data quality checks.
+It includes the number of executed checks and detailed results per table and columns grouped by check categories or [data quality dimensions](../../dqo-concepts/data-quality-dimensions.md).
+DQOps calculates a [data quality KPI score](../../dqo-concepts/definition-of-data-quality-kpis.md), which is measured as the percentage of data quality checks that passed successfully.
+
+At the bottom of the screen, you will find a table that displays the check results per category, table, and column.
+
+The colored boxes indicate the current or the highest severity status: green for a correct result, yellow for a warning,
+orange for an error, red for a fatal error, and grey stripes for an execution error.
+
+You can click on the colored box to view a list of checks that contribute to the result. Hovering over the check name will provide more details.
+
+In this example, we have demonstrated how to use DQOps to verify that the **source** column contains the nulls values.
+By using the [nulls_count](../../checks/column/nulls/nulls-count.md) column check, we can monitor if the number of nulls in a column exceeds a set threshold.
+If it does, DQOps will create an incident and can send a notification.
+
+Follow the link to learn [how to configure notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
+
+### Copy the verified profiling check to the monitoring checks
+
+To start monitoring data quality using a newly configured check we need to copy the configuration of the [nulls_count](../../checks/column/nulls/nulls-count.md)
+check in the Profiling section to the Monitoring checks:
+
+1. Navigate to the **Monitoring checks** section.
+2. Select the table from the tree view on the left.
+3. Click on the **Copy verified profiling checks** tab.
+4. Click the **Apply** button.
+5. Click the **Confirm** button in the popup to run configured checks.
+
+![Copy verified profiling checks to monitoring section](https://dqops.com/docs/images/examples/daily-null-count-copy-profiling-checks-to-monitoring-section3.png){ loading=lazy; width="1200px" }
 
 ### **Run checks**
 
@@ -85,14 +133,14 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks2.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks3.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png){ loading=lazy; width="1200px" }
+![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results2.png){ loading=lazy; width="1200px" }
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -110,31 +158,7 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
- 
-Below you can see the results displayed on the **Current completeness issues on columns** dashboard located in Data Quality Dimensions/Completeness group.
-This dashboard displays results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
-[not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
-
-This dashboard allows filtering data by:
-    
-* time window (from last 7 days to last 3 months)
-* connection,
-* schema,
-* data group,
-* data quality dimension,
-* check category,
-* check name,
-* stages,
-* priorities,
-* table,
-* column,
-* issue severity
-
-![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png){ loading=lazy; width="1200px" }
+ges/examples/current-completeness-issues-on-columns-dashboard.png){ loading=lazy; width="1200px" }
 
 ## Change a schedule at the connection level
 
@@ -143,7 +167,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/daily-null-count-change-shedule3.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -172,121 +196,72 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three maximum number thresholds levels for the check:
+In this example, we set the maximum number of thresholds for checks to 0.
 
-- warning: 5
-- error: 10
-- fatal: 15
-
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_nulls_count` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_nulls_count` checks are configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="20-33"
+```yaml hl_lines="40-57"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  columns:
-    edition:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    report_type:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    measure_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    source:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-      monitoring_checks:
-        daily:
-          nulls:
-            daily_nulls_count:
-              warning:
-                max_count: 5
-              error:
-                max_count: 10
-              fatal:
-                max_count: 15
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The number of null values in the `source` column is above 5 and the check raised warning.
-
-```
-Check evaluation summary per table:
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection             |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|america_health_rankings|america_health_rankings.ahr|1     |1             |1            |1       |0     |0           |0               |
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   columns:
+      edition:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      report_type:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      measure_name:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      state_name:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      subpopulation:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      value:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      lower_ci:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      upper_ci:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      source:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         profiling_checks:
+            nulls:
+               profile_nulls_count:
+                  error:
+                     max_count: 0
+      source_date:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         profiling_checks:
+            nulls:
+               profile_nulls_count:
+                  error:
+                     max_count: 0
 
 ```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection america_health_rankings (bigquery)
-SQL to be executed on the connection:
-SELECT
-    SUM(
-        CASE
-            WHEN analyzed_table.`source` IS NULL THEN 1
-            ELSE 0
-        END
-    ) AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value in this example is 8, which is above the maximum 
-threshold level set in the warning (5).
-
-```
-**************************************************
-Finished executing a sensor for a check nulls_count on the table america_health_rankings.ahr using a sensor definition column/nulls/nulls_count, sensor result count: 1
-
-Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|8           |2023-05-08T12:05:28.996Z|2023-05-08T12:05:28.996Z|
-+------------+------------------------+------------------------+
-**************************************************
-```
-
-In this example, we have demonstrated how to use DQOps to verify the completeness of data in a column. 
-By using the [nulls_count](../../checks/column/nulls/nulls-count.md) column check, we can monitor that the number of
-null values in a column does not exceed the minimum accepted count. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

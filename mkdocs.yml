@@ -57,6 +57,7 @@ nav:
       - BigQuery: "data-sources/bigquery.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
+      - Db2: "data-sources/db2.md"
       - Delta Lake: "data-sources/deltalake.md"
       - DuckDB: "data-sources/duckdb.md"
       - GCP: "data-sources/gcp.md"
@@ -68,6 +69,7 @@ nav:
       - PostgreSQL: "data-sources/postgresql.md"
       - Presto: "data-sources/presto.md"
       - Redshift: "data-sources/redshift.md"
+      - SAP HANA: "data-sources/hana.md"
       - SingleStoreDB: "data-sources/single-store.md"
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
@@ -162,6 +164,9 @@ nav:
           - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
           - Run checks use case: "integrations/airflow/run-checks-use-case.md"
       - Azure Data Factory: "integrations/azure-data-factory/index.md"
+      - Data lineage:
+        - "integrations/data-lineage/index.md"
+        - Marquez: "integrations/data-lineage/marquez/index.md"
       - Dbt:
           - "integrations/dbt/index.md"
           - Dbt cloud with run checks use case: "integrations/dbt/dbt-cloud-run-checks-use-case.md"
@@ -188,6 +193,7 @@ nav:
     - data: 'command-line-interface/data.md'
     - run: 'command-line-interface/run.md'
     - rule: 'command-line-interface/rule.md'
+    - sso: 'command-line-interface/sso.md'
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - REST API Python client:
@@ -220,6 +226,7 @@ nav:
       - rule_mining: 'client/models/rule_mining.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
+      - search: 'client/models/search.md'
       - sensor_readouts: 'client/models/sensor_readouts.md'
       - sensors: 'client/models/sensors.md'
       - shared_credentials: 'client/models/shared_credentials.md'
@@ -237,6 +244,7 @@ nav:
       - columns: 'client/operations/columns.md'
       - connections: 'client/operations/connections.md'
       - dashboards: 'client/operations/dashboards.md'
+      - data_catalog_synchronization: 'client/operations/data_catalog_synchronization.md'
       - data_domains: 'client/operations/data_domains.md'
       - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
       - data_lineage: 'client/operations/data_lineage.md'
@@ -569,8 +577,8 @@ nav:
       - RuleDefinitionYaml: 'reference/yaml/RuleDefinitionYaml.md'
       - CheckDefinitionYaml: 'reference/yaml/CheckDefinitionYaml.md'
       - DefaultNotificationsYaml: 'reference/yaml/DefaultNotificationsYaml.md'
-      - TableDefaultChecksPatternYaml: 'reference/yaml/TableDefaultChecksPatternYaml.md'
-      - ColumnDefaultChecksPatternYaml: 'reference/yaml/ColumnDefaultChecksPatternYaml.md'
+      - TableLevelDataQualityPolicyYaml: 'reference/yaml/TableLevelDataQualityPolicyYaml.md'
+      - ColumnLevelDataQualityPolicyYaml: 'reference/yaml/ColumnLevelDataQualityPolicyYaml.md'
       - DefaultSchedulesYaml: 'reference/yaml/DefaultSchedulesYaml.md'
       - LocalSettingsYaml: 'reference/yaml/LocalSettingsYaml.md'
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'

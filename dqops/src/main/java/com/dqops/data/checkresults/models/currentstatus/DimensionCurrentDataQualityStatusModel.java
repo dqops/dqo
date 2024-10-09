@@ -17,6 +17,7 @@
 package com.dqops.data.checkresults.models.currentstatus;
 
 import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,6 +26,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -34,7 +37,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "DimensionCurrentDataQualityStatusModel", description = "The summary of the current data quality status for one data quality dimension")
 @Data
-public class DimensionCurrentDataQualityStatusModel {
+public class DimensionCurrentDataQualityStatusModel implements Cloneable {
     /**
      * Data quality dimension name. The most popular dimensions are: Completeness, Uniqueness, Timeliness, Validity, Consistency, Accuracy, Availability.
      */
@@ -121,6 +124,19 @@ public class DimensionCurrentDataQualityStatusModel {
         Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
                 (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
         this.setDataQualityKpi(dataQualityKpi);
+    }
+
+    /**
+     * Makes a shallow clone of the object.
+     * @return Shallow clone of the object.
+     */
+    public DimensionCurrentDataQualityStatusModel clone() {
+        try {
+            return (DimensionCurrentDataQualityStatusModel)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 
     /**

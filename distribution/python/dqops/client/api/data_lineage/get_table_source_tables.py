@@ -6,7 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_type import CheckType
-from ...models.table_lineage_source_list_model import TableLineageSourceListModel
+from ...models.table_lineage_table_list_model import TableLineageTableListModel
 from ...types import UNSET, Response, Unset
 
 
@@ -31,7 +31,7 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage".format(
+        "url": "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/lineage/sources".format(
             connectionName=connection_name,
             schemaName=schema_name,
             tableName=table_name,
@@ -42,12 +42,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[List["TableLineageSourceListModel"]]:
+) -> Optional[List["TableLineageTableListModel"]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = TableLineageSourceListModel.from_dict(
+            response_200_item = TableLineageTableListModel.from_dict(
                 response_200_item_data
             )
 
@@ -62,7 +62,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[List["TableLineageSourceListModel"]]:
+) -> Response[List["TableLineageTableListModel"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -78,7 +78,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     check_type: Union[Unset, None, CheckType] = UNSET,
-) -> Response[List["TableLineageSourceListModel"]]:
+) -> Response[List["TableLineageTableListModel"]]:
     """getTableSourceTables
 
      Returns a list of source tables on the data lineage that are sources of the given table.
@@ -94,7 +94,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['TableLineageSourceListModel']]
+        Response[List['TableLineageTableListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -118,7 +118,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     check_type: Union[Unset, None, CheckType] = UNSET,
-) -> Optional[List["TableLineageSourceListModel"]]:
+) -> Optional[List["TableLineageTableListModel"]]:
     """getTableSourceTables
 
      Returns a list of source tables on the data lineage that are sources of the given table.
@@ -134,7 +134,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['TableLineageSourceListModel']
+        List['TableLineageTableListModel']
     """
 
     return sync_detailed(
@@ -153,7 +153,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     check_type: Union[Unset, None, CheckType] = UNSET,
-) -> Response[List["TableLineageSourceListModel"]]:
+) -> Response[List["TableLineageTableListModel"]]:
     """getTableSourceTables
 
      Returns a list of source tables on the data lineage that are sources of the given table.
@@ -169,7 +169,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[List['TableLineageSourceListModel']]
+        Response[List['TableLineageTableListModel']]
     """
 
     kwargs = _get_kwargs(
@@ -191,7 +191,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     check_type: Union[Unset, None, CheckType] = UNSET,
-) -> Optional[List["TableLineageSourceListModel"]]:
+) -> Optional[List["TableLineageTableListModel"]]:
     """getTableSourceTables
 
      Returns a list of source tables on the data lineage that are sources of the given table.
@@ -207,7 +207,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        List['TableLineageSourceListModel']
+        List['TableLineageTableListModel']
     """
 
     return (

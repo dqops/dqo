@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoInstanceConfigurationProperties implements Cloneable {
     private String signatureKey;
     private String returnBaseUrl;
+    private String name;
     private boolean validateReturnBaseUrl = false;
     private int authenticationTokenExpirationMinutes = 24 * 60 * 7; // 7 days
 
@@ -62,6 +63,22 @@ public class DqoInstanceConfigurationProperties implements Cloneable {
      */
     public void setReturnBaseUrl(String returnBaseUrl) {
         this.returnBaseUrl = returnBaseUrl;
+    }
+
+    /**
+     * Returns an assigned DQOps instance name.
+     * @return Instance name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the DQOps instance name.
+     * @param name Instance name.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

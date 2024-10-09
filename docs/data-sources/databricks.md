@@ -15,6 +15,13 @@ To add Databricks data source connection to DQOps you need a Databricks SQL Ware
 It is also recommended to use an access token to connect an instance, so a permission to generate access token or a 
 possession of a previously generated token is necessary.
 
+!!! note "DQOps free version limits"
+
+    Databricks drivers are not provided in an open-source version.
+
+    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
+
+
 ## Add a Databricks connection using the user interface
 
 ### **Navigate to the connection settings**

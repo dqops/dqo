@@ -57,7 +57,7 @@ jobs:
           key: 'npm'
 
       - name: Build with Maven
-        run: mvn package -DskipTests -Pbuild-with-jdk-11 -Pdevelopment-build -Prun-npm
+        run: mvn package -DskipTests -Pbuild-with-jdk-11 -Pdisable-duckdb-extensions-download -Pdevelopment-build -Prun-npm
 
       - name: Save cached npm packages
         id: save-cached-npm-packages
@@ -68,7 +68,9 @@ jobs:
             dqops/src/main/frontend/node_modules
           key: 'npm'
 
-      - uses: docker-practice/actions-setup-docker@master
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/setup-buildx-action@v3
 
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build and Push Docker Image

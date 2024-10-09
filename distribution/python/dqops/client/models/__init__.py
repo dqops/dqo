@@ -13,6 +13,33 @@ from .anomaly_differencing_percentile_moving_average_rule_fatal_01_pct_parameter
 from .anomaly_differencing_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
     AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
+from .anomaly_partition_row_count_rule_error_05_pct_parameters_spec import (
+    AnomalyPartitionRowCountRuleError05PctParametersSpec,
+)
+from .anomaly_partition_row_count_rule_fatal_01_pct_parameters_spec import (
+    AnomalyPartitionRowCountRuleFatal01PctParametersSpec,
+)
+from .anomaly_partition_row_count_rule_warning_1_pct_parameters_spec import (
+    AnomalyPartitionRowCountRuleWarning1PctParametersSpec,
+)
+from .anomaly_stationary_count_values_rule_error_05_pct_parameters_spec import (
+    AnomalyStationaryCountValuesRuleError05PctParametersSpec,
+)
+from .anomaly_stationary_count_values_rule_fatal_01_pct_parameters_spec import (
+    AnomalyStationaryCountValuesRuleFatal01PctParametersSpec,
+)
+from .anomaly_stationary_count_values_rule_warning_1_pct_parameters_spec import (
+    AnomalyStationaryCountValuesRuleWarning1PctParametersSpec,
+)
+from .anomaly_stationary_percent_values_rule_error_05_pct_parameters_spec import (
+    AnomalyStationaryPercentValuesRuleError05PctParametersSpec,
+)
+from .anomaly_stationary_percent_values_rule_fatal_01_pct_parameters_spec import (
+    AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec,
+)
+from .anomaly_stationary_percent_values_rule_warning_1_pct_parameters_spec import (
+    AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec,
+)
 from .anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
 )
@@ -22,7 +49,17 @@ from .anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_
 from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
+from .anomaly_timeliness_delay_rule_error_05_pct_parameters_spec import (
+    AnomalyTimelinessDelayRuleError05PctParametersSpec,
+)
+from .anomaly_timeliness_delay_rule_fatal_01_pct_parameters_spec import (
+    AnomalyTimelinessDelayRuleFatal01PctParametersSpec,
+)
+from .anomaly_timeliness_delay_rule_warning_1_pct_parameters_spec import (
+    AnomalyTimelinessDelayRuleWarning1PctParametersSpec,
+)
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
+from .auto_import_tables_spec import AutoImportTablesSpec
 from .aws_authentication_mode import AwsAuthenticationMode
 from .azure_authentication_mode import AzureAuthenticationMode
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
@@ -84,6 +121,7 @@ from .check_model import CheckModel
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
 from .check_result_status import CheckResultStatus
+from .check_results_detailed_load_mode import CheckResultsDetailedLoadMode
 from .check_results_list_model import CheckResultsListModel
 from .check_results_overview_data_model import CheckResultsOverviewDataModel
 from .check_run_schedule_group import CheckRunScheduleGroup
@@ -1388,6 +1426,8 @@ from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
 from .count_between_rule_parameters_spec import CountBetweenRuleParametersSpec
 from .credential_type import CredentialType
+from .cron_schedule_spec import CronScheduleSpec
+from .cron_schedules_spec import CronSchedulesSpec
 from .csv_file_format_spec import CsvFileFormatSpec
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
@@ -1410,8 +1450,10 @@ from .data_type_category import DataTypeCategory
 from .databricks_parameters_spec import DatabricksParametersSpec
 from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
+from .db_2_parameters_spec import Db2ParametersSpec
+from .db_2_parameters_spec_properties import Db2ParametersSpecProperties
+from .db_2_platform_type import Db2PlatformType
 from .default_rule_severity_level import DefaultRuleSeverityLevel
-from .default_schedules_spec import DefaultSchedulesSpec
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
 from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
@@ -1427,6 +1469,7 @@ from .dimension_current_data_quality_status_model import (
     DimensionCurrentDataQualityStatusModel,
 )
 from .display_hint import DisplayHint
+from .domain_connection_table_key import DomainConnectionTableKey
 from .dqo_job_change_model import DqoJobChangeModel
 from .dqo_job_entry_parameters_model import DqoJobEntryParametersModel
 from .dqo_job_history_entry_model import DqoJobHistoryEntryModel
@@ -1473,8 +1516,11 @@ from .file_synchronization_direction import FileSynchronizationDirection
 from .filtered_notification_model import FilteredNotificationModel
 from .filtered_notification_spec import FilteredNotificationSpec
 from .folder_synchronization_status import FolderSynchronizationStatus
+from .hana_parameters_spec import HanaParametersSpec
+from .hana_parameters_spec_properties import HanaParametersSpecProperties
 from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
+from .histogram_daily_issues_count import HistogramDailyIssuesCount
 from .historic_data_points_grouping import HistoricDataPointsGrouping
 from .iceberg_file_format_spec import IcebergFileFormatSpec
 from .import_schema_queue_job_parameters import ImportSchemaQueueJobParameters
@@ -1483,15 +1529,10 @@ from .import_tables_queue_job_parameters import ImportTablesQueueJobParameters
 from .import_tables_queue_job_result import ImportTablesQueueJobResult
 from .import_tables_result import ImportTablesResult
 from .incident_counts_model import IncidentCountsModel
-from .incident_daily_issues_count import IncidentDailyIssuesCount
 from .incident_filtered_notification_location import (
     IncidentFilteredNotificationLocation,
 )
 from .incident_grouping_level import IncidentGroupingLevel
-from .incident_issue_histogram_model import IncidentIssueHistogramModel
-from .incident_issue_histogram_model_checks import IncidentIssueHistogramModelChecks
-from .incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
-from .incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
 from .incident_model import IncidentModel
 from .incident_notification_spec import IncidentNotificationSpec
 from .incident_notification_spec_filtered_notifications import (
@@ -1502,6 +1543,10 @@ from .incident_severity_level_counts_model import IncidentSeverityLevelCountsMod
 from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
 from .incidents_per_connection_model import IncidentsPerConnectionModel
+from .issue_histogram_model import IssueHistogramModel
+from .issue_histogram_model_checks import IssueHistogramModelChecks
+from .issue_histogram_model_columns import IssueHistogramModelColumns
+from .issue_histogram_model_days import IssueHistogramModelDays
 from .json_file_format_spec import JsonFileFormatSpec
 from .json_format_type import JsonFormatType
 from .json_records_type import JsonRecordsType
@@ -1541,7 +1586,6 @@ from .min_percent_rule_100_warning_parameters_spec import (
     MinPercentRule100WarningParametersSpec,
 )
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
-from .monitoring_schedule_spec import MonitoringScheduleSpec
 from .mono import Mono
 from .mono_response_entity_mono_dqo_queue_job_id import (
     MonoResponseEntityMonoDqoQueueJobId,
@@ -1555,8 +1599,8 @@ from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .new_line_character_type import NewLineCharacterType
 from .notification_filter_spec import NotificationFilterSpec
 from .optional import Optional
+from .optional_cron_schedule_spec import OptionalCronScheduleSpec
 from .optional_incident_notification_spec import OptionalIncidentNotificationSpec
-from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_data_type import ParameterDataType
@@ -1613,6 +1657,7 @@ from .sensor_readouts_list_model import SensorReadoutsListModel
 from .shared_credential_list_model import SharedCredentialListModel
 from .shared_credential_model import SharedCredentialModel
 from .similar_check_model import SimilarCheckModel
+from .similar_table_model import SimilarTableModel
 from .single_store_db_load_balancing_mode import SingleStoreDbLoadBalancingMode
 from .single_store_db_parameters_spec import SingleStoreDbParametersSpec
 from .snowflake_parameters_spec import SnowflakeParametersSpec
@@ -1822,13 +1867,15 @@ from .table_duplicate_record_percent_sensor_parameters_spec import (
     TableDuplicateRecordPercentSensorParametersSpec,
 )
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
-from .table_lineage_source_list_model import TableLineageSourceListModel
-from .table_lineage_source_list_model_properties import (
-    TableLineageSourceListModelProperties,
-)
+from .table_lineage_flow_model import TableLineageFlowModel
+from .table_lineage_model import TableLineageModel
 from .table_lineage_source_spec import TableLineageSourceSpec
 from .table_lineage_source_spec_columns import TableLineageSourceSpecColumns
 from .table_lineage_source_spec_properties import TableLineageSourceSpecProperties
+from .table_lineage_table_list_model import TableLineageTableListModel
+from .table_lineage_table_list_model_properties import (
+    TableLineageTableListModelProperties,
+)
 from .table_list_model import TableListModel
 from .table_list_model_advanced_properties import TableListModelAdvancedProperties
 from .table_model import TableModel
@@ -2068,10 +2115,23 @@ __all__ = (
     "AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+    "AnomalyPartitionRowCountRuleError05PctParametersSpec",
+    "AnomalyPartitionRowCountRuleFatal01PctParametersSpec",
+    "AnomalyPartitionRowCountRuleWarning1PctParametersSpec",
+    "AnomalyStationaryCountValuesRuleError05PctParametersSpec",
+    "AnomalyStationaryCountValuesRuleFatal01PctParametersSpec",
+    "AnomalyStationaryCountValuesRuleWarning1PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+    "AnomalyStationaryPercentValuesRuleError05PctParametersSpec",
+    "AnomalyStationaryPercentValuesRuleFatal01PctParametersSpec",
+    "AnomalyStationaryPercentValuesRuleWarning1PctParametersSpec",
+    "AnomalyTimelinessDelayRuleError05PctParametersSpec",
+    "AnomalyTimelinessDelayRuleFatal01PctParametersSpec",
+    "AnomalyTimelinessDelayRuleWarning1PctParametersSpec",
     "AuthenticatedDashboardModel",
+    "AutoImportTablesSpec",
     "AwsAuthenticationMode",
     "AzureAuthenticationMode",
     "BetweenFloatsRuleParametersSpec",
@@ -2109,6 +2169,7 @@ __all__ = (
     "CheckMiningProposalModelColumnChecks",
     "CheckModel",
     "CheckResultEntryModel",
+    "CheckResultsDetailedLoadMode",
     "CheckResultsListModel",
     "CheckResultSortOrder",
     "CheckResultsOverviewDataModel",
@@ -2625,6 +2686,8 @@ __all__ = (
     "ConnectionTestStatus",
     "CountBetweenRuleParametersSpec",
     "CredentialType",
+    "CronScheduleSpec",
+    "CronSchedulesSpec",
     "CsvFileFormatSpec",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
@@ -2645,8 +2708,10 @@ __all__ = (
     "DataGroupingDimensionSpec",
     "DataTypeCategory",
     "DatetimeBuiltInDateFormats",
+    "Db2ParametersSpec",
+    "Db2ParametersSpecProperties",
+    "Db2PlatformType",
     "DefaultRuleSeverityLevel",
-    "DefaultSchedulesSpec",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
@@ -2656,6 +2721,7 @@ __all__ = (
     "DetectedDatatypeEqualsRuleParametersSpec",
     "DimensionCurrentDataQualityStatusModel",
     "DisplayHint",
+    "DomainConnectionTableKey",
     "DqoJobChangeModel",
     "DqoJobEntryParametersModel",
     "DqoJobHistoryEntryModel",
@@ -2698,8 +2764,11 @@ __all__ = (
     "FilteredNotificationModel",
     "FilteredNotificationSpec",
     "FolderSynchronizationStatus",
+    "HanaParametersSpec",
+    "HanaParametersSpecProperties",
     "HierarchyIdModel",
     "HierarchyIdModelPathItem",
+    "HistogramDailyIssuesCount",
     "HistoricDataPointsGrouping",
     "IcebergFileFormatSpec",
     "ImportSchemaQueueJobParameters",
@@ -2708,13 +2777,8 @@ __all__ = (
     "ImportTablesQueueJobResult",
     "ImportTablesResult",
     "IncidentCountsModel",
-    "IncidentDailyIssuesCount",
     "IncidentFilteredNotificationLocation",
     "IncidentGroupingLevel",
-    "IncidentIssueHistogramModel",
-    "IncidentIssueHistogramModelChecks",
-    "IncidentIssueHistogramModelColumns",
-    "IncidentIssueHistogramModelDays",
     "IncidentModel",
     "IncidentNotificationSpec",
     "IncidentNotificationSpecFilteredNotifications",
@@ -2723,6 +2787,10 @@ __all__ = (
     "IncidentSortOrder",
     "IncidentsPerConnectionModel",
     "IncidentStatus",
+    "IssueHistogramModel",
+    "IssueHistogramModelChecks",
+    "IssueHistogramModelColumns",
+    "IssueHistogramModelDays",
     "JsonFileFormatSpec",
     "JsonFormatType",
     "JsonRecordsType",
@@ -2752,7 +2820,6 @@ __all__ = (
     "MinPercentRule100ErrorParametersSpec",
     "MinPercentRule100WarningParametersSpec",
     "MinPercentRule95ParametersSpec",
-    "MonitoringScheduleSpec",
     "Mono",
     "MonoResponseEntityMonoDqoQueueJobId",
     "MonoResponseEntityMonoObject",
@@ -2764,8 +2831,8 @@ __all__ = (
     "NewLineCharacterType",
     "NotificationFilterSpec",
     "Optional",
+    "OptionalCronScheduleSpec",
     "OptionalIncidentNotificationSpec",
-    "OptionalMonitoringScheduleSpec",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",
     "ParameterDataType",
@@ -2820,6 +2887,7 @@ __all__ = (
     "SharedCredentialListModel",
     "SharedCredentialModel",
     "SimilarCheckModel",
+    "SimilarTableModel",
     "SingleStoreDbLoadBalancingMode",
     "SingleStoreDbParametersSpec",
     "SnowflakeParametersSpec",
@@ -2913,11 +2981,13 @@ __all__ = (
     "TableDuplicateRecordPercentCheckSpec",
     "TableDuplicateRecordPercentSensorParametersSpec",
     "TableIncidentGroupingSpec",
-    "TableLineageSourceListModel",
-    "TableLineageSourceListModelProperties",
+    "TableLineageFlowModel",
+    "TableLineageModel",
     "TableLineageSourceSpec",
     "TableLineageSourceSpecColumns",
     "TableLineageSourceSpecProperties",
+    "TableLineageTableListModel",
+    "TableLineageTableListModelProperties",
     "TableListModel",
     "TableListModelAdvancedProperties",
     "TableModel",

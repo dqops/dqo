@@ -177,6 +177,10 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
+    {
       label: 'Table quality status',
       value: 'table-quality-status'
     },
@@ -194,6 +198,10 @@ export const TABLE_LEVEL_TABS: {
     }
   ],
   [CheckTypes.MONITORING]: [
+    {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
     {
       label: 'Table quality status',
       value: 'table-quality-status'
@@ -242,6 +250,10 @@ export const COLUMN_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
+    {
       label: 'Daily checks',
       value: 'daily'
     },
@@ -251,6 +263,10 @@ export const COLUMN_LEVEL_TABS: {
     }
   ],
   [CheckTypes.MONITORING]: [
+    {
+      label: 'Observability status',
+      value: 'observability-status'
+    },
     {
       label: 'Daily checks',
       value: 'daily'
@@ -337,7 +353,7 @@ export const databaseOptions: IDatabaseOption[] = [
   },
   {
     type: ConnectionModelProviderTypeEnum.bigquery,
-    name: 'BigQuery',
+    name: 'Google BigQuery',
     iconName: 'bigquery',
     displayName: 'Bigquery'
   },
@@ -378,6 +394,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Databricks'
   },
   {
+    type: ConnectionModelProviderTypeEnum.db2,
+    name: 'IBM DB2',
+    iconName: 'ibm_db2',
+    displayName: 'DB2'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'Delta Lake',
     iconName: 'deltalake',
@@ -406,6 +428,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'MariaDB',
     iconName: 'mariadb',
     displayName: 'MariaDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.hana,
+    name: 'SAP HANA',
+    iconName: '',
+    displayName: 'SAP HANA'
   },
   {
     type: ConnectionModelProviderTypeEnum.sqlserver,

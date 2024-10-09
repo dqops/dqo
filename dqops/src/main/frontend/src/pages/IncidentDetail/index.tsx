@@ -4,14 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  IncidentIssueHistogramModel,
   IncidentModel,
   IncidentModelNotificationLocationEnum,
-  IncidentModelStatusEnum
+  IncidentModelStatusEnum,
+  IssueHistogramModel
 } from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import DataLineageGraph from '../../components/DataLineageGraph/DataLineageGraph';
 import Input from '../../components/Input';
 import { Pagination } from '../../components/Pagination';
 import Select from '../../components/Select';
@@ -99,12 +100,14 @@ export const IncidentDetail = () => {
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
   const [createNotificationDialogOpen, setCreateNotificationDialogOpen] =
     useState(false);
+  const [showDataLineage, setShowDataLineage] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
-  const { histograms }: { histograms: IncidentIssueHistogramModel } =
-    useSelector(getFirstLevelIncidentsState);
+  const { histograms }: { histograms: IssueHistogramModel } = useSelector(
+    getFirstLevelIncidentsState
+  );
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(
       (res) => {
@@ -352,6 +355,34 @@ export const IncidentDetail = () => {
     );
   };
 
+  const configureSourceTables = () => {
+    const schema = incidentDetail?.schema || '';
+    const table = incidentDetail?.table || '';
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'source_tables'
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {
+          showSourceTables: true
+        },
+        label: 'Source tables'
+      })
+    );
+    history.push(url);
+  };
+
   return (
     <>
       <div className="relative">
@@ -433,7 +464,7 @@ export const IncidentDetail = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center p-4 gap-6 mb-4 text-sm">
+        <div className="flex items-center p-4 gap-6 text-sm">
           <div className="grow">
             <Input
               value={searchTerm}
@@ -454,6 +485,32 @@ export const IncidentDetail = () => {
               />
             ))}
           </div>
+        </div>
+        <div className="pb-5 px-4 overflow-y-auto">
+          {showDataLineage ? (
+            <SectionWrapper
+              title={'Collapse data lineage'}
+              svgIcon
+              onClick={() => setShowDataLineage(false)}
+              className="mt-2"
+            >
+              <DataLineageGraph
+                connection={incidentDetail?.connection || ''}
+                schema={incidentDetail?.schema || ''}
+                table={incidentDetail?.table || ''}
+                configureSourceTables={configureSourceTables}
+              />
+            </SectionWrapper>
+          ) : (
+            <div className="flex items-center text-sm">
+              <SvgIcon
+                name="chevron-down"
+                className="w-5 h-5"
+                onClick={() => setShowDataLineage(true)}
+              />
+              <div> Expand data lineage</div>
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-4 gap-4 px-4 text-sm">
           <SectionWrapper title="Table">

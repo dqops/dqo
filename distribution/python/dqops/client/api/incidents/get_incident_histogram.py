@@ -6,7 +6,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.incident_issue_histogram_model import IncidentIssueHistogramModel
+from ...models.issue_histogram_model import IssueHistogramModel
 from ...types import UNSET, Response, Unset
 
 
@@ -56,9 +56,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[IncidentIssueHistogramModel]:
+) -> Optional[IssueHistogramModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = IncidentIssueHistogramModel.from_dict(response.json())
+        response_200 = IssueHistogramModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -69,7 +69,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[IncidentIssueHistogramModel]:
+) -> Response[IssueHistogramModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -90,10 +90,10 @@ def sync_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-) -> Response[IncidentIssueHistogramModel]:
+) -> Response[IssueHistogramModel]:
     """getIncidentHistogram
 
-     Generates histograms of data quality issues for each day, returning the number of data quality
+     Generates a histogram of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
 
     Args:
@@ -112,7 +112,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[IncidentIssueHistogramModel]
+        Response[IssueHistogramModel]
     """
 
     kwargs = _get_kwargs(
@@ -146,10 +146,10 @@ def sync(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-) -> Optional[IncidentIssueHistogramModel]:
+) -> Optional[IssueHistogramModel]:
     """getIncidentHistogram
 
-     Generates histograms of data quality issues for each day, returning the number of data quality
+     Generates a histogram of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
 
     Args:
@@ -168,7 +168,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        IncidentIssueHistogramModel
+        IssueHistogramModel
     """
 
     return sync_detailed(
@@ -197,10 +197,10 @@ async def asyncio_detailed(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-) -> Response[IncidentIssueHistogramModel]:
+) -> Response[IssueHistogramModel]:
     """getIncidentHistogram
 
-     Generates histograms of data quality issues for each day, returning the number of data quality
+     Generates a histogram of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
 
     Args:
@@ -219,7 +219,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[IncidentIssueHistogramModel]
+        Response[IssueHistogramModel]
     """
 
     kwargs = _get_kwargs(
@@ -251,10 +251,10 @@ async def asyncio(
     date: Union[Unset, None, datetime.date] = UNSET,
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
-) -> Optional[IncidentIssueHistogramModel]:
+) -> Optional[IssueHistogramModel]:
     """getIncidentHistogram
 
-     Generates histograms of data quality issues for each day, returning the number of data quality
+     Generates a histogram of data quality issues for each day, returning the number of data quality
     issues on that day. The other histograms are by a column name and by a check name.
 
     Args:
@@ -273,7 +273,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        IncidentIssueHistogramModel
+        IssueHistogramModel
     """
 
     return (

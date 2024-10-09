@@ -31,7 +31,13 @@ public class DqoMetadataImportConfigurationProperties implements Cloneable {
      */
     public static final int DEFAULT_TABLE_LIMIT = 300;
 
+    /**
+     * The default limit for the maximum number of tables that are imported from a data source by the auto import feature.
+     */
+    public static final int DEFAULT_TABLE_LIMIT_AUTO_IMPORT = 300;
+
     private int tablesImportLimit = DEFAULT_TABLE_LIMIT;
+    private int autoImportTablesLimit = DEFAULT_TABLE_LIMIT_AUTO_IMPORT;
 
     /**
      * Returns the default limit of the number of tables that are imported from a data source.
@@ -47,6 +53,22 @@ public class DqoMetadataImportConfigurationProperties implements Cloneable {
      */
     public void setTablesImportLimit(int tablesImportLimit) {
         this.tablesImportLimit = tablesImportLimit;
+    }
+
+    /**
+     * Returns the limit of tables imported by the auto import performed on a scheduler.
+     * @return Auto import limit.
+     */
+    public int getAutoImportTablesLimit() {
+        return autoImportTablesLimit;
+    }
+
+    /**
+     * Sets the limit of tables imported by the auto import.
+     * @param autoImportTablesLimit Auto import limit.
+     */
+    public void setAutoImportTablesLimit(int autoImportTablesLimit) {
+        this.autoImportTablesLimit = autoImportTablesLimit;
     }
 
     /**

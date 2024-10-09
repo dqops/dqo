@@ -35,6 +35,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.calibration.CheckCalibrationService;
+import com.dqops.utils.threading.CompletableFutureRunner;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,6 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Data quality incidents REST API controller.
@@ -116,7 +116,7 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
 
             if (incidentModel == null) {
@@ -181,7 +181,7 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<CheckResultSortOrder> order,
             @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
             @RequestParam(required = false) Optional<SortDirection> direction) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             CheckResultListFilterParameters filterParameters = new CheckResultListFilterParameters();
 
             if (page.isPresent()) {
@@ -238,19 +238,19 @@ public class IncidentsController {
      * @return Incident histogram of data quality issues.
      */
     @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", produces = "application/json")
-    @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
-            response = IncidentIssueHistogramModel.class,
+    @ApiOperation(value = "getIncidentHistogram", notes = "Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
+            response = IssueHistogramModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Incidents' histograms returned", response = IncidentIssueHistogramModel.class),
+            @ApiResponse(code = 200, message = "Incident's histogram returned", response = IssueHistogramModel.class),
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<IncidentIssueHistogramModel>>> getIncidentHistogram(
+    public Mono<ResponseEntity<Mono<IssueHistogramModel>>> getIncidentHistogram(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
@@ -266,8 +266,8 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<String> column,
             @ApiParam(name = "check", value = "Optional check name filter", required = false)
             @RequestParam(required = false) Optional<String> check) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
+            HistogramFilterParameters filterParameters = new HistogramFilterParameters();
             if (filter.isPresent()) {
                 filterParameters.setFilter(filter.get());
             }
@@ -284,7 +284,7 @@ public class IncidentsController {
                 filterParameters.setCheck(check.get());
             }
 
-            IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
+            IssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
                     connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
 
             if (histogramModel == null) {
@@ -351,7 +351,7 @@ public class IncidentsController {
                 @RequestParam(required = false) Optional<IncidentSortOrder> order,
             @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
                @RequestParam(required = false) Optional<SortDirection> direction) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             IncidentListFilterParameters filterParameters = new IncidentListFilterParameters();
             filterParameters.setRecentMonths(months.orElse(3));
             filterParameters.setOpen(open.orElse(Boolean.TRUE));
@@ -406,7 +406,7 @@ public class IncidentsController {
     @Secured({DqoPermissionNames.VIEW})
     public Mono<ResponseEntity<Flux<IncidentsPerConnectionModel>>> findConnectionIncidentStats(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats(principal.getDataDomainIdentity());
             return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
         }));
@@ -438,7 +438,7 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "days", value = "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.", required = false)
             @RequestParam(required = false) Optional<Integer> months) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             TopIncidentsModel topIncidentsModel = this.incidentsDataService.findTopIncidents(
                     groupBy.orElse(TopIncidentGrouping.category),
                     status.orElse(IncidentStatus.open),
@@ -479,7 +479,7 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
                 @RequestParam IncidentStatus status) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -525,7 +525,7 @@ public class IncidentsController {
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "issueUrl", value = "New incident's issueUrl") @RequestParam String issueUrl) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
             this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
 
@@ -560,7 +560,7 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
             UserHome userHome = userHomeContext.getUserHome();
 
@@ -611,7 +611,7 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+        return Mono.fromFuture(CompletableFutureRunner.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
             UserHome userHome = userHomeContext.getUserHome();
 

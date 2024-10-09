@@ -20,7 +20,7 @@ import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -79,7 +79,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      */
     @Override
     public Collection<AbstractStatisticsCollectorSpec<?>> findStatisticsCollectors(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
-        StatisticsCollectorSearchFiltersVisitor searchFilterVisitor = statisticsCollectorSearchFilters.createProfilerSearchFilterVisitor();
+        StatisticsCollectorSearchFiltersVisitor searchFilterVisitor = statisticsCollectorSearchFilters.createCollectorSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
         DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
@@ -88,6 +88,26 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
                 searchParameterObject));
 
         return (List<AbstractStatisticsCollectorSpec<?>>)(ArrayList<?>)matchingNodes;
+    }
+
+    /**
+     * Search for tables that for which statistics should be collected.
+     *
+     * @param startNode                        Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param statisticsCollectorSearchFilters Search filters.
+     * @return Collection of tables that passed the filter and will be analyzed to collect statistics.
+     */
+    @Override
+    public Collection<TableWrapper> findTablesForStatisticsCollection(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
+        StatisticsCollectorTargetTableSearchFiltersVisitor searchFilterVisitor = statisticsCollectorSearchFilters.createTargetTableCollectorSearchFilterVisitor();
+        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DataGroupingConfigurationSearcherObject dataGroupingConfigurationSearcherObject = new DataGroupingConfigurationSearcherObject();
+        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataGroupingConfigurationSearcherObject, labelsSearcherObject);
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
+                searchParameterObject));
+
+        return (List<TableWrapper>)(ArrayList<?>)matchingNodes;
     }
 
     /**
@@ -179,17 +199,17 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * Search for monitoring schedules specs in the tree.
      *
      * @param startNode                      Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
-     * @param monitoringScheduleSearchFilters Search filters.
+     * @param cronScheduleSearchFilters Search filters.
      * @return Collection of monitoring schedules specs nodes that passed the filter.
      */
     @Override
-    public Collection<MonitoringScheduleSpec> findSchedules(HierarchyNode startNode, MonitoringScheduleSearchFilters monitoringScheduleSearchFilters) {
-        MonitoringScheduleSearchFiltersVisitor searchFilterVisitor = monitoringScheduleSearchFilters.createSearchFilterVisitor();
+    public Collection<CronScheduleSpec> findSchedules(HierarchyNode startNode, CronScheduleSearchFilters cronScheduleSearchFilters) {
+        CronScheduleSearchFiltersVisitor searchFilterVisitor = cronScheduleSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 new SearchParameterObject(matchingNodes, null, null)));
 
-        return (List<MonitoringScheduleSpec>)(ArrayList<?>)matchingNodes;
+        return (List<CronScheduleSpec>)(ArrayList<?>)matchingNodes;
     }
 
     /**

@@ -5,6 +5,23 @@ title: DQOps REST API tables models reference
 The references of all objects used by [tables](../operations/tables.md) REST API operations are listed below.
 
 
+## SimilarTableModel
+Model that describes a table that is similar to a reference table. Similar tables are used to build the data lineage graph.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`difference`</span>|Table similarity score. Lower numbers indicate higher similarity.|*integer*|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|
+
+
+___
+
 ## TableComparisonDailyMonitoringChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.

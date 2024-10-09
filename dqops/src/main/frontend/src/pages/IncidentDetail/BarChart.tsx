@@ -1,20 +1,18 @@
 import moment from 'moment/moment';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import {
-  IncidentDailyIssuesCount,
-  IncidentIssueHistogramModel
-} from '../../api';
+import { HistogramDailyIssuesCount, IssueHistogramModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setIncidentsHistogram } from '../../redux/actions/incidents.actions';
 
 type BarChartProps = {
-  histograms: IncidentIssueHistogramModel;
+  histograms: IssueHistogramModel;
+  setHistograms?: (histograms: IssueHistogramModel) => void;
 };
 
-export const BarChart = ({ histograms }: BarChartProps) => {
+export const BarChart = ({ histograms, setHistograms }: BarChartProps) => {
   const [savedHistograms, setSavedHistograms] =
-    useState<IncidentIssueHistogramModel | null>(null);
+    useState<IssueHistogramModel | null>(null);
   const dispatch = useActionDispatch();
   const data = {
     labels: Object.keys(histograms?.days || {}).map((item) =>
@@ -24,7 +22,7 @@ export const BarChart = ({ histograms }: BarChartProps) => {
       {
         label: 'Warnings',
         data: Object.values(histograms?.days || {}).map(
-          (item: IncidentDailyIssuesCount) => item.warnings
+          (item: HistogramDailyIssuesCount) => item.warnings
         ),
         backgroundColor: '#EBE51E',
         barPercentage: 0.9
@@ -32,7 +30,7 @@ export const BarChart = ({ histograms }: BarChartProps) => {
       {
         label: 'Errors',
         data: Object.values(histograms?.days || {}).map(
-          (item: IncidentDailyIssuesCount) => item.errors
+          (item: HistogramDailyIssuesCount) => item.errors
         ),
         backgroundColor: '#FF9900',
         barPercentage: 0.9
@@ -40,7 +38,7 @@ export const BarChart = ({ histograms }: BarChartProps) => {
       {
         label: 'Fatals',
         data: Object.values(histograms?.days || {}).map(
-          (item: IncidentDailyIssuesCount) => item.fatals
+          (item: HistogramDailyIssuesCount) => item.fatals
         ),
         backgroundColor: '#E3170A',
         barPercentage: 0.9
@@ -91,7 +89,11 @@ export const BarChart = ({ histograms }: BarChartProps) => {
           Object.keys(histograms?.days ?? {})?.length === 1 &&
           savedHistograms
         ) {
-          dispatch(setIncidentsHistogram(savedHistograms));
+          if (setHistograms) {
+            setHistograms(savedHistograms);
+          } else {
+            dispatch(setIncidentsHistogram(savedHistograms));
+          }
           setSavedHistograms(null);
           return;
         }
@@ -100,7 +102,11 @@ export const BarChart = ({ histograms }: BarChartProps) => {
           ...histograms,
           days: { [formattedDate]: histograms?.days?.[formattedDate] ?? {} }
         };
-        dispatch(setIncidentsHistogram(filteredHistorgrams));
+        if (setHistograms) {
+          setHistograms(filteredHistorgrams);
+        } else {
+          dispatch(setIncidentsHistogram(filteredHistorgrams));
+        }
       }
     }
   };

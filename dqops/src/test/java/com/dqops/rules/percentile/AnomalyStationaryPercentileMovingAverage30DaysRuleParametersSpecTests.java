@@ -59,14 +59,10 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentChangeOnOddDays_thenReturnsPassed() {
-        this.sut.setAnomalyPercent(20.0);
+        this.sut.setAnomalyPercent(15.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
-            if(i % 2 == 0) {
-                this.sensorReadouts[i] = 15.0;
-            } else {
-                this.sensorReadouts[i] = 25.0;
-            }
+            this.sensorReadouts[i] = 20.0 + (i % 4);
         }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
@@ -76,21 +72,17 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(12.49, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(27.50, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(21.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(19.91, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(22.95, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
     void executeRule_whenActualValueIsAboveMaxValueAndAllPastValuesArePresentAndChangeOnOddDays_thenReturnsPassed() {
-        this.sut.setAnomalyPercent(20.0);
+        this.sut.setAnomalyPercent(15.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
-            if(i % 2 == 0) {
-                this.sensorReadouts[i] = 15.0;
-            } else {
-                this.sensorReadouts[i] = 25.0;
-            }
+            this.sensorReadouts[i] = 20.0 + (i % 4);
         }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
@@ -100,21 +92,17 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(12.49, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(27.50, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(21.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(19.91, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(22.97, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
     void executeRule_whenActualValueIsBelowMinValueAndAllPastValuesArePresentAndChangeOnOddDays_thenReturnsPassed() {
-        this.sut.setAnomalyPercent(20.0);
+        this.sut.setAnomalyPercent(15.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
-            if(i % 2 == 0) {
-                this.sensorReadouts[i] = 15.0;
-            } else {
-                this.sensorReadouts[i] = 25.0;
-            }
+            this.sensorReadouts[i] = 20.0 + (i % 4);
         }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
@@ -124,9 +112,9 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(12.49, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(27.50, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(21.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(19.91, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(22.97, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

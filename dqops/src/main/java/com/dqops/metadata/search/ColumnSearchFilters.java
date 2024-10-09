@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.search;
 
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -47,6 +49,9 @@ public class ColumnSearchFilters {
             "[columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private Boolean nullable;
 
+    @JsonPropertyDescription("Data type category filter that will find only columns from this category, such as boolean or text fields.")
+    private DataTypeCategory dataTypeCategory;
+
     @JsonPropertyDescription("An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
             "The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.")
     private String[] tags;
@@ -74,6 +79,8 @@ public class ColumnSearchFilters {
     private SearchPattern[] labelsSearchPatterns;
     @JsonIgnore
     private SearchPattern[] columnLabelSearchPatterns;
+    @JsonIgnore
+    private ProviderDialectSettings connectionDialectSettings;
 
 
     /**
@@ -183,6 +190,22 @@ public class ColumnSearchFilters {
     }
 
     /**
+     * Returns the data type category filter.
+     * @return Data type category.
+     */
+    public DataTypeCategory getDataTypeCategory() {
+        return dataTypeCategory;
+    }
+
+    /**
+     * Sets the data type category filter.
+     * @param dataTypeCategory Data type category filter.
+     */
+    public void setDataTypeCategory(DataTypeCategory dataTypeCategory) {
+        this.dataTypeCategory = dataTypeCategory;
+    }
+
+    /**
      * Returns the dimension name search patterns.
      * @return Dimension search patterns.
      */
@@ -228,6 +251,22 @@ public class ColumnSearchFilters {
      */
     public void setColumnLabels(String[] columnLabels) {
         this.columnLabels = columnLabels;
+    }
+
+    /**
+     * The connection dialect extracted from the parent connection. The column search visitor replaces this object for each visited connection.
+     * @return Dialect from the connection.
+     */
+    public ProviderDialectSettings getConnectionDialectSettings() {
+        return connectionDialectSettings;
+    }
+
+    /**
+     * Stores the dialect extracted from the connection on which this filter was run.
+     * @param connectionDialectSettings Connection dialect.
+     */
+    public void setConnectionDialectSettings(ProviderDialectSettings connectionDialectSettings) {
+        this.connectionDialectSettings = connectionDialectSettings;
     }
 
     /**

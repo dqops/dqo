@@ -41,6 +41,9 @@ public class ImportTablesQueueJobParameters {
     @JsonPropertyDescription("Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.")
     private List<String> tableNames;
 
+    @JsonPropertyDescription("Optional parameter to configure the limit of tables that are imported from a single schema. Leave this parameter blank to use the default limit (300 tables).")
+    private Integer tablesImportLimit;
+
     public ImportTablesQueueJobParameters() {
     }
 
@@ -120,6 +123,22 @@ public class ImportTablesQueueJobParameters {
      */
     public void setTableNames(List<String> tableNames) {
         this.tableNames = tableNames;
+    }
+
+    /**
+     * Returns the limit of tables imported from a schema.
+     * @return Limit of tables or null if using the default configuration.
+     */
+    public Integer getTablesImportLimit() {
+        return tablesImportLimit;
+    }
+
+    /**
+     * Sets the limit of tables imported from a schema.
+     * @param tablesImportLimit New limit of tables.
+     */
+    public void setTablesImportLimit(Integer tablesImportLimit) {
+        this.tablesImportLimit = tablesImportLimit;
     }
 
     public static class ImportTablesQueueJobParametersSampleFactory implements SampleValueFactory<ImportTablesQueueJobParameters> {

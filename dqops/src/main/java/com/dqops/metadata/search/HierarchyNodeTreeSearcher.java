@@ -20,7 +20,7 @@ import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -48,6 +48,14 @@ public interface HierarchyNodeTreeSearcher {
      * @return Collection of profilers nodes that passed the filter.
      */
     Collection<AbstractStatisticsCollectorSpec<?>> findStatisticsCollectors(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters);
+
+    /**
+     * Search for tables that for which statistics should be collected.
+     * @param startNode Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param statisticsCollectorSearchFilters Search filters.
+     * @return Collection of tables that passed the filter and will be analyzed to collect statistics.
+     */
+    Collection<TableWrapper> findTablesForStatisticsCollection(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters);
 
     /**
      * Search for connection in the tree.
@@ -92,10 +100,10 @@ public interface HierarchyNodeTreeSearcher {
     /**
      * Search for monitoring schedules specs in the tree.
      * @param startNode Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
-     * @param monitoringScheduleSearchFilters Search filters.
+     * @param cronScheduleSearchFilters Search filters.
      * @return Collection of monitoring schedules specs nodes that passed the filter.
      */
-    Collection<MonitoringScheduleSpec> findSchedules(HierarchyNode startNode, MonitoringScheduleSearchFilters monitoringScheduleSearchFilters);
+    Collection<CronScheduleSpec> findSchedules(HierarchyNode startNode, CronScheduleSearchFilters cronScheduleSearchFilters);
 
     /**
      * Search for all nodes that have a schedule defined and are not disabled. Schedule roots are nodes that have a schedule, so all nested checks should be executed

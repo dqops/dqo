@@ -25,6 +25,8 @@ import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.similarity.DummyTableSimilarityRefreshService;
+import com.dqops.core.similarity.TableSimilarityRefreshServiceProviderImpl;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheProviderImpl;
 import com.dqops.metadata.labels.labelloader.DummyLabelsIndexer;
 import com.dqops.metadata.labels.labelloader.LabelsIndexerProviderImpl;
@@ -56,6 +58,7 @@ public class DqoHomeDirectFactory {
                 new TableStatusCacheProviderImpl(StaticBeanFactory.getBeanFactory()),
                 new LabelsIndexerProviderImpl(StaticBeanFactory.getBeanFactory(), new DummyLabelsIndexer()),
                 new TableLineageCacheProviderImpl(StaticBeanFactory.getBeanFactory(), new DummyTableLineageCache()),
+                new TableSimilarityRefreshServiceProviderImpl(StaticBeanFactory.getBeanFactory(), new DummyTableSimilarityRefreshService()),
                 new HomeLocationFindServiceImpl(new DqoUserConfigurationProperties(), new DqoConfigurationProperties()));
         LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);

@@ -13,10 +13,12 @@ if TYPE_CHECKING:
         ConnectionModelAdvancedProperties,
     )
     from ..models.databricks_parameters_spec import DatabricksParametersSpec
+    from ..models.db_2_parameters_spec import Db2ParametersSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
     from ..models.duckdb_parameters_spec import DuckdbParametersSpec
+    from ..models.hana_parameters_spec import HanaParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -43,6 +45,10 @@ class ConnectionModel:
         connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
+        schedule_on_instance (Union[Unset, str]): Limits running scheduled checks (started by a CRON job scheduler) to
+            run only on a named DQOps instance. When this field is empty, data quality checks are run on all DQOps
+            instances. Set a DQOps instance name to run checks on a named instance only. The default name of the DQOps Cloud
+            SaaS instance is "cloud".
         provider_type (Union[Unset, ProviderType]):
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
@@ -56,6 +62,8 @@ class ConnectionModel:
         oracle (Union[Unset, OracleParametersSpec]):
         spark (Union[Unset, SparkParametersSpec]):
         databricks (Union[Unset, DatabricksParametersSpec]):
+        hana (Union[Unset, HanaParametersSpec]):
+        db2 (Union[Unset, Db2ParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -82,6 +90,7 @@ class ConnectionModel:
     connection_name: Union[Unset, str] = UNSET
     connection_hash: Union[Unset, int] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
+    schedule_on_instance: Union[Unset, str] = UNSET
     provider_type: Union[Unset, ProviderType] = UNSET
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
@@ -95,6 +104,8 @@ class ConnectionModel:
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     spark: Union[Unset, "SparkParametersSpec"] = UNSET
     databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
+    hana: Union[Unset, "HanaParametersSpec"] = UNSET
+    db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -115,6 +126,7 @@ class ConnectionModel:
         connection_name = self.connection_name
         connection_hash = self.connection_hash
         parallel_jobs_limit = self.parallel_jobs_limit
+        schedule_on_instance = self.schedule_on_instance
         provider_type: Union[Unset, str] = UNSET
         if not isinstance(self.provider_type, Unset):
             provider_type = self.provider_type.value
@@ -167,6 +179,14 @@ class ConnectionModel:
         if not isinstance(self.databricks, Unset):
             databricks = self.databricks.to_dict()
 
+        hana: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.hana, Unset):
+            hana = self.hana.to_dict()
+
+        db2: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.db2, Unset):
+            db2 = self.db2.to_dict()
+
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
             run_checks_job_template = self.run_checks_job_template.to_dict()
@@ -218,6 +238,8 @@ class ConnectionModel:
             field_dict["connection_hash"] = connection_hash
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
+        if schedule_on_instance is not UNSET:
+            field_dict["schedule_on_instance"] = schedule_on_instance
         if provider_type is not UNSET:
             field_dict["provider_type"] = provider_type
         if bigquery is not UNSET:
@@ -244,6 +266,10 @@ class ConnectionModel:
             field_dict["spark"] = spark
         if databricks is not UNSET:
             field_dict["databricks"] = databricks
+        if hana is not UNSET:
+            field_dict["hana"] = hana
+        if db2 is not UNSET:
+            field_dict["db2"] = db2
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -287,10 +313,12 @@ class ConnectionModel:
             ConnectionModelAdvancedProperties,
         )
         from ..models.databricks_parameters_spec import DatabricksParametersSpec
+        from ..models.db_2_parameters_spec import Db2ParametersSpec
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
         )
         from ..models.duckdb_parameters_spec import DuckdbParametersSpec
+        from ..models.hana_parameters_spec import HanaParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -310,6 +338,8 @@ class ConnectionModel:
         connection_hash = d.pop("connection_hash", UNSET)
 
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
+
+        schedule_on_instance = d.pop("schedule_on_instance", UNSET)
 
         _provider_type = d.pop("provider_type", UNSET)
         provider_type: Union[Unset, ProviderType]
@@ -402,6 +432,20 @@ class ConnectionModel:
         else:
             databricks = DatabricksParametersSpec.from_dict(_databricks)
 
+        _hana = d.pop("hana", UNSET)
+        hana: Union[Unset, HanaParametersSpec]
+        if isinstance(_hana, Unset):
+            hana = UNSET
+        else:
+            hana = HanaParametersSpec.from_dict(_hana)
+
+        _db2 = d.pop("db2", UNSET)
+        db2: Union[Unset, Db2ParametersSpec]
+        if isinstance(_db2, Unset):
+            db2 = UNSET
+        else:
+            db2 = Db2ParametersSpec.from_dict(_db2)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -489,6 +533,7 @@ class ConnectionModel:
             connection_name=connection_name,
             connection_hash=connection_hash,
             parallel_jobs_limit=parallel_jobs_limit,
+            schedule_on_instance=schedule_on_instance,
             provider_type=provider_type,
             bigquery=bigquery,
             snowflake=snowflake,
@@ -502,6 +547,8 @@ class ConnectionModel:
             oracle=oracle,
             spark=spark,
             databricks=databricks,
+            hana=hana,
+            db2=db2,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

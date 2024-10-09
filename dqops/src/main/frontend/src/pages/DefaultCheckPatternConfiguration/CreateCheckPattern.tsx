@@ -6,7 +6,6 @@ import {
   TargetTablePatternSpec
 } from '../../api';
 import Button from '../../components/Button';
-import SvgIcon from '../../components/SvgIcon';
 import { useDefinition } from '../../contexts/definitionContext';
 import {
   ColumnQualityPoliciesApiClient,
@@ -18,9 +17,7 @@ type TCreateCheckPatternProps = {
   type: 'table' | 'column';
 };
 
-type TTarget =
-  | ColumnQualityPolicyListModel
-  | TableQualityPolicyListModel;
+type TTarget = ColumnQualityPolicyListModel | TableQualityPolicyListModel;
 
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 
@@ -72,13 +69,10 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
 
   return (
     <>
-      <div className="px-4">
+      <div>
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
-          <div className="flex items-center space-x-2 max-w-full">
-            <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-            <div className="text-lg font-semibold truncate">
-              Create {type} check pattern
-            </div>
+          <div className="flex items-center space-x-2 max-w-full text-lg font-semibold truncate">
+            Create {type} check pattern
           </div>
           <Button
             label="Save"
@@ -88,12 +82,14 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
             disabled={!target.policy_name}
           />
         </div>
-        <DefaultCheckTargetConfiguration
-          type={type}
-          target={target}
-          onChangeTarget={onChangeTarget}
-          create={true}
-        />
+        <div className="px-4 pt-2">
+          <DefaultCheckTargetConfiguration
+            type={type}
+            target={target}
+            onChangeTarget={onChangeTarget}
+            create={true}
+          />
+        </div>
       </div>
     </>
   );

@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.8.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.9.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -36,7 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
-		<duckdb.version>1.0.0</duckdb.version>
+		<duckdb.version>1.1.1</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -84,22 +84,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<!-- Exclude the Tomcat dependency -->
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -477,13 +470,13 @@
 			<artifactId>lang-tag</artifactId>
 			<version>1.7</version>
 		</dependency>
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-admin-client</artifactId>
+			<version>26.0.0</version>
+		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
-<!--		<dependency>-->
-<!--			<groupId>com.ibm.db2</groupId>-->
-<!--			<artifactId>jcc</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -510,10 +503,6 @@
 		<dependency>
 			<groupId>com.amazon.redshift</groupId>
 			<artifactId>redshift-jdbc42</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.snowflake</groupId>
-			<artifactId>snowflake-jdbc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.facebook.presto</groupId>
@@ -668,11 +657,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.databricks</groupId>
-			<artifactId>databricks-jdbc</artifactId>
-			<version>2.6.25</version>
-		</dependency>
-		<dependency>
 			<groupId>com-amazon-athena</groupId>
 			<artifactId>athena-jdbc</artifactId>
 			<version>3.0.0</version>
@@ -756,6 +740,11 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>trino</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>db2</artifactId>
 			<scope>test</scope>
 		</dependency>
     </dependencies>
@@ -1447,6 +1436,30 @@
 			<properties>
 				<npm.build.script>build:profile</npm.build.script>
 			</properties>
+		</profile>
+		<profile>
+			<id>include-license-drivers</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.sap.cloud.db.jdbc</groupId>
+					<artifactId>ngdbc</artifactId>
+					<version>2.22.11</version>
+				</dependency>
+				<dependency>
+					<groupId>net.snowflake</groupId>
+					<artifactId>snowflake-jdbc</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.databricks</groupId>
+					<artifactId>databricks-jdbc</artifactId>
+					<version>2.6.25</version>
+				</dependency>
+				<dependency>
+					<groupId>com.ibm.db2</groupId>
+					<artifactId>jcc</artifactId>
+					<version>11.5.9.0</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 </project>

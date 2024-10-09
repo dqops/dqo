@@ -16,7 +16,7 @@
 package com.dqops.core.scheduler.quartz;
 
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import com.dqops.utils.serialization.JsonSerializer;
 import org.quartz.JobDataMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class JobDataMapAdapterImpl implements JobDataMapAdapter {
      * @param dataMap Target data map to store the schedule.
      * @param monitoringSchedule Schedule specification to store.
      */
-    public void setSchedule(JobDataMap dataMap, MonitoringScheduleSpec monitoringSchedule) {
+    public void setSchedule(JobDataMap dataMap, CronScheduleSpec monitoringSchedule) {
         String jsonString = this.jsonSerializer.serialize(monitoringSchedule);
         dataMap.put(KEY_SCHEDULE, jsonString);
     }
@@ -68,13 +68,13 @@ public class JobDataMapAdapterImpl implements JobDataMapAdapter {
      * @param jobDataMap Job data map to read.
      * @return Deserialized monitoring schedule specification.
      */
-    public MonitoringScheduleSpec getSchedule(JobDataMap jobDataMap) {
+    public CronScheduleSpec getSchedule(JobDataMap jobDataMap) {
         if (jobDataMap == null || !jobDataMap.containsKey(KEY_SCHEDULE)) {
             return null;
         }
 
         String scheduleJson = jobDataMap.getString(KEY_SCHEDULE);
-        MonitoringScheduleSpec monitoringSchedule = this.jsonSerializer.deserialize(scheduleJson, MonitoringScheduleSpec.class);
+        CronScheduleSpec monitoringSchedule = this.jsonSerializer.deserialize(scheduleJson, CronScheduleSpec.class);
         return monitoringSchedule;
     }
 

@@ -15,7 +15,7 @@
  */
 package com.dqops.core.scheduler.quartz;
 
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
 import org.quartz.JobDataMap;
 
 /**
@@ -28,14 +28,14 @@ public interface JobDataMapAdapter {
      * @param dataMap Target data map to store the schedule.
      * @param monitoringSchedule Schedule specification to store.
      */
-    void setSchedule(JobDataMap dataMap, MonitoringScheduleSpec monitoringSchedule);
+    void setSchedule(JobDataMap dataMap, CronScheduleSpec monitoringSchedule);
 
     /**
      * Retrieves a serialized schedule specification from the job data map.
      * @param jobDataMap Job data map to read.
      * @return Deserialized monitoring schedule specification.
      */
-    MonitoringScheduleSpec getSchedule(JobDataMap jobDataMap);
+    CronScheduleSpec getSchedule(JobDataMap jobDataMap);
 
     /**
      * Sets the name of the data domain on which this job is executed. Selects the DQOps data domain specific user home.

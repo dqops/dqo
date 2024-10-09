@@ -16,6 +16,7 @@ def _get_kwargs(
     *,
     category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
+    results_count: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
 
     pass
@@ -24,6 +25,8 @@ def _get_kwargs(
     params["category"] = category
 
     params["checkName"] = check_name
+
+    params["resultsCount"] = results_count
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -77,6 +80,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
+    results_count: Union[Unset, None, int] = UNSET,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getTableProfilingChecksOverview
 
@@ -89,6 +93,7 @@ def sync_detailed(
         table_name (str):
         category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
+        results_count (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,6 +109,7 @@ def sync_detailed(
         table_name=table_name,
         category=category,
         check_name=check_name,
+        results_count=results_count,
     )
 
     response = client.get_httpx_client().request(
@@ -121,6 +127,7 @@ def sync(
     client: AuthenticatedClient,
     category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
+    results_count: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getTableProfilingChecksOverview
 
@@ -133,6 +140,7 @@ def sync(
         table_name (str):
         category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
+        results_count (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -149,6 +157,7 @@ def sync(
         client=client,
         category=category,
         check_name=check_name,
+        results_count=results_count,
     ).parsed
 
 
@@ -160,6 +169,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
+    results_count: Union[Unset, None, int] = UNSET,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getTableProfilingChecksOverview
 
@@ -172,6 +182,7 @@ async def asyncio_detailed(
         table_name (str):
         category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
+        results_count (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,6 +198,7 @@ async def asyncio_detailed(
         table_name=table_name,
         category=category,
         check_name=check_name,
+        results_count=results_count,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -202,6 +214,7 @@ async def asyncio(
     client: AuthenticatedClient,
     category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
+    results_count: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getTableProfilingChecksOverview
 
@@ -214,6 +227,7 @@ async def asyncio(
         table_name (str):
         category (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
+        results_count (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -231,5 +245,6 @@ async def asyncio(
             client=client,
             category=category,
             check_name=check_name,
+            results_count=results_count,
         )
     ).parsed

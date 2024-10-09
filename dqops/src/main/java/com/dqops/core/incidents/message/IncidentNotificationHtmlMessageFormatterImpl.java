@@ -33,7 +33,7 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
      */
     @Autowired
     public IncidentNotificationHtmlMessageFormatterImpl(InstanceCloudLoginService instanceCloudLoginService,
-                                                            DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                                        DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
@@ -106,7 +106,9 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
         return wrapInHtml(stringBuilder.toString());
     }
 
-    private String wrapInHtml(String mainMessage){
+    private String wrapInHtml(String mainMessage) {
+        String logoUrl = this.instanceCloudLoginService.getReturnBaseUrl() + "logo.png";
+
         String htmlMessage = ("<!DOCTYPE html>\n" +
                               "<html>\n" +
                               "    <head>\n" +
@@ -151,7 +153,7 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
                               "    <body>\n" +
                               "        <div class=\"container\">\n" +
                               "            <div class=\"logo\">\n" +
-                              "                <img src=\"https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png\" alt=\"Company Logo\">\n" +
+                              "                <img src=\"" + logoUrl + "\" alt=\"Company Logo\">\n" +
                               "            </div>\n" +
                               "            <div class=\"content\">\n" +
                               "%s\n" +
@@ -174,7 +176,7 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
      */
     private String prepareUrlToIncident(IncidentNotificationMessage notificationMessage){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "/incidents/"
+                + "incidents/"
                 + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8) + "/"
                 + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getYear() + "/"
                 + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getMonthValue() + "/"
@@ -188,7 +190,7 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
      */
     private String prepareUrlToTable(IncidentNotificationMessage notificationMessage){
         return instanceCloudLoginService.getReturnBaseUrl()
-                + "/sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
+                + "sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
                 + "/schema/" + URLEncoder.encode(notificationMessage.getSchema(), StandardCharsets.UTF_8)
                 + "/table/" + URLEncoder.encode(notificationMessage.getTable(), StandardCharsets.UTF_8)
                 + "/detail";

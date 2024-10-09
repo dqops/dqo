@@ -155,7 +155,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
     @Override
     public Collection<LocalDataDomainSpec> getNestedDataDomains() {
         if (this.localDataDomainManager == null) {
-            throw new DqoRuntimeException("Data domain registry not initialized yet");
+            return null; // cannot return null yet, because of race conditions when the web server starts before services
         }
 
         synchronized (this.lock) {
@@ -182,7 +182,7 @@ public class LocalDataDomainRegistryImpl implements LocalDataDomainRegistry {
         ArrayList<LocalDataDomainSpec> allDomains = new ArrayList<>();
         allDomains.add(new LocalDataDomainSpec() {{
             setDataDomainName(UserDomainIdentity.ROOT_DOMAIN_ALTERNATE_NAME);
-            setDisplayName("Root data domain");
+            setDisplayName(UserDomainIdentity.ROOT_DOMAIN_DISPLAY_NAME);
         }});
 
         allDomains.addAll(nestedDataDomains);

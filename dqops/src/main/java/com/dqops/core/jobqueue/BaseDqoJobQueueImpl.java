@@ -351,7 +351,12 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                                                DqoQueueJobId parentJobId,
                                                DqoUserPrincipal principal) {
         if (this.stopped || this.stopInProgress) {
-            job.getCancellationToken().cancel();
+            try {
+                job.getCancellationToken().cancel();
+            }
+            catch (Exception ex) {
+                // ignore, race condition was once seen in the Java runtime libraries during shutdown
+            }
             return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
         }
 

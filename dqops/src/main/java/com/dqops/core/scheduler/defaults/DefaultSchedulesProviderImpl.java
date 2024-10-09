@@ -17,8 +17,8 @@
 package com.dqops.core.scheduler.defaults;
 
 import com.dqops.core.configuration.DqoSchedulerDefaultSchedulesConfigurationProperties;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.CronScheduleSpec;
+import com.dqops.metadata.scheduling.CronSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -51,27 +51,27 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return Schedules configuration with the default schedules (only configured ones) or null when no schedules are configured.
      */
     @Override
-    public DefaultSchedulesSpec createDefaultSchedules() {
-        DefaultSchedulesSpec schedules = new DefaultSchedulesSpec();
+    public CronSchedulesSpec createDefaultSchedules() {
+        CronSchedulesSpec schedules = new CronSchedulesSpec();
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getProfiling())) {
-            schedules.setProfiling(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getProfiling()));
+            schedules.setProfiling(new CronScheduleSpec(this.defaultSchedulesConfigurationProperties.getProfiling()));
         }
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getMonitoringDaily())) {
-            schedules.setMonitoringDaily(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getMonitoringDaily()));
+            schedules.setMonitoringDaily(new CronScheduleSpec(this.defaultSchedulesConfigurationProperties.getMonitoringDaily()));
         }
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getMonitoringMonthly())) {
-            schedules.setMonitoringMonthly(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getMonitoringMonthly()));
+            schedules.setMonitoringMonthly(new CronScheduleSpec(this.defaultSchedulesConfigurationProperties.getMonitoringMonthly()));
         }
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getPartitionedDaily())) {
-            schedules.setPartitionedDaily(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedDaily()));
+            schedules.setPartitionedDaily(new CronScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedDaily()));
         }
 
         if (!Strings.isNullOrEmpty(this.defaultSchedulesConfigurationProperties.getPartitionedMonthly())) {
-            schedules.setPartitionedMonthly(new MonitoringScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedMonthly()));
+            schedules.setPartitionedMonthly(new CronScheduleSpec(this.defaultSchedulesConfigurationProperties.getPartitionedMonthly()));
         }
 
         if (schedules.isDefault()) {
@@ -86,7 +86,7 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
      * @return New monitoring schedule configuration for a new connection.
      */
     @Override
-    public DefaultSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
+    public CronSchedulesSpec createMonitoringSchedulesSpecForNewConnection(UserHome userHome) {
         MonitoringSchedulesWrapper schedulesWrapper = userHome.getDefaultSchedules();
         if (schedulesWrapper == null || schedulesWrapper.getSpec() == null) {
             return createDefaultSchedules();
@@ -96,8 +96,8 @@ public class DefaultSchedulesProviderImpl implements DefaultSchedulesProvider {
             return null;
         }
 
-        DefaultSchedulesSpec defaultSchedules = schedulesWrapper.getSpec();
-        DefaultSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
+        CronSchedulesSpec defaultSchedules = schedulesWrapper.getSpec();
+        CronSchedulesSpec clonedSchedules = defaultSchedules.deepClone();
 
         return clonedSchedules;
     }

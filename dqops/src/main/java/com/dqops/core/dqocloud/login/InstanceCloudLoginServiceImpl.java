@@ -92,7 +92,11 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
     @Override
     public String getReturnBaseUrl() {
         if (!Strings.isNullOrEmpty(this.dqoInstanceConfigurationProperties.getReturnBaseUrl())) {
-            return this.dqoInstanceConfigurationProperties.getReturnBaseUrl();
+            if (this.dqoInstanceConfigurationProperties.getReturnBaseUrl().endsWith("/")) {
+                return this.dqoInstanceConfigurationProperties.getReturnBaseUrl();
+            } else {
+                return this.dqoInstanceConfigurationProperties.getReturnBaseUrl() + "/";
+            }
         }
 
         StringBuilder urlBuilder = new StringBuilder();

@@ -7,7 +7,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
+    from ..models.cron_schedule_spec import CronScheduleSpec
     from ..models.table_column_types_hash_sensor_parameters_spec import (
         TableColumnTypesHashSensorParametersSpec,
     )
@@ -23,7 +23,7 @@ T = TypeVar("T", bound="TableSchemaColumnTypesChangedCheckSpec")
 class TableSchemaColumnTypesChangedCheckSpec:
     """
     Attributes:
-        schedule_override (Union[Unset, MonitoringScheduleSpec]):
+        schedule_override (Union[Unset, CronScheduleSpec]):
         comments (Union[Unset, List['CommentSpec']]): Comments for change tracking. Please put comments in this
             collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and
             deserialization will remove non tracked comments).
@@ -47,13 +47,15 @@ class TableSchemaColumnTypesChangedCheckSpec:
         always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
             fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
             error samples will impose additional load on the data source.
+        do_not_schedule (Union[Unset, bool]): Disables running this check by a DQOps CRON scheduler. When a check is
+            disabled from scheduling, it can be only triggered from the user interface or by submitting "run checks" job.
         parameters (Union[Unset, TableColumnTypesHashSensorParametersSpec]):
         warning (Union[Unset, ValueChangedRuleParametersSpec]):
         error (Union[Unset, ValueChangedRuleParametersSpec]):
         fatal (Union[Unset, ValueChangedRuleParametersSpec]):
     """
 
-    schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
+    schedule_override: Union[Unset, "CronScheduleSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
     disabled: Union[Unset, bool] = UNSET
     exclude_from_kpi: Union[Unset, bool] = UNSET
@@ -62,6 +64,7 @@ class TableSchemaColumnTypesChangedCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     always_collect_error_samples: Union[Unset, bool] = UNSET
+    do_not_schedule: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "TableColumnTypesHashSensorParametersSpec"] = UNSET
     warning: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
     error: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
@@ -88,6 +91,7 @@ class TableSchemaColumnTypesChangedCheckSpec:
         display_name = self.display_name
         data_grouping = self.data_grouping
         always_collect_error_samples = self.always_collect_error_samples
+        do_not_schedule = self.do_not_schedule
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -125,6 +129,8 @@ class TableSchemaColumnTypesChangedCheckSpec:
             field_dict["data_grouping"] = data_grouping
         if always_collect_error_samples is not UNSET:
             field_dict["always_collect_error_samples"] = always_collect_error_samples
+        if do_not_schedule is not UNSET:
+            field_dict["do_not_schedule"] = do_not_schedule
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
         if warning is not UNSET:
@@ -139,7 +145,7 @@ class TableSchemaColumnTypesChangedCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
+        from ..models.cron_schedule_spec import CronScheduleSpec
         from ..models.table_column_types_hash_sensor_parameters_spec import (
             TableColumnTypesHashSensorParametersSpec,
         )
@@ -149,11 +155,11 @@ class TableSchemaColumnTypesChangedCheckSpec:
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
-        schedule_override: Union[Unset, MonitoringScheduleSpec]
+        schedule_override: Union[Unset, CronScheduleSpec]
         if isinstance(_schedule_override, Unset):
             schedule_override = UNSET
         else:
-            schedule_override = MonitoringScheduleSpec.from_dict(_schedule_override)
+            schedule_override = CronScheduleSpec.from_dict(_schedule_override)
 
         comments = []
         _comments = d.pop("comments", UNSET)
@@ -175,6 +181,8 @@ class TableSchemaColumnTypesChangedCheckSpec:
         data_grouping = d.pop("data_grouping", UNSET)
 
         always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
+
+        do_not_schedule = d.pop("do_not_schedule", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, TableColumnTypesHashSensorParametersSpec]
@@ -214,6 +222,7 @@ class TableSchemaColumnTypesChangedCheckSpec:
             display_name=display_name,
             data_grouping=data_grouping,
             always_collect_error_samples=always_collect_error_samples,
+            do_not_schedule=do_not_schedule,
             parameters=parameters,
             warning=warning,
             error=error,

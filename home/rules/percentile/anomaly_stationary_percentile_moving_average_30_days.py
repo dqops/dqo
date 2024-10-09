@@ -43,8 +43,11 @@ class AnomalyConfigurationParameters:
     degrees_of_freedom: float
 
 
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
+    """
+    Rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+    """
+
     actual_value: float
     parameters: AnomalyStationaryPercentileMovingAverageRuleParametersSpec
     time_period_local: datetime
@@ -53,9 +56,12 @@ class RuleExecutionRunParameters:
     configuration_parameters: AnomalyConfigurationParameters
 
 
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
 class RuleExecutionResult:
+    """
+    The default object that should be returned to the DQOps engine, specifies if the rule has passed or failed,
+    what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional).
+    """
+
     passed: bool
     expected_value: float
     lower_bound: float
@@ -70,33 +76,98 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
+    """
+    Rule evaluation method that validates the rule result.
+    :param rule_parameters: Rule parameters, containing the current value to assess and optionally
+                            an array of historical measures.
+    :return: Object with the decision to accept or reject the value.
+    """
+
+    if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'anomaly_percent'):
         return RuleExecutionResult()
 
-    extracted = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
+    extracted = [(float(readouts.sensor_readout) if hasattr(readouts, 'sensor_readout') else None) for readouts in
+                 rule_parameters.previous_readouts if readouts is not None]
 
     if len(extracted) == 0:
         return RuleExecutionResult()
 
     filtered = np.array(extracted, dtype=float)
+    filtered_median = np.median(filtered)
+    filtered_median_float = float(filtered_median)
     filtered_std = scipy.stats.tstd(filtered)
-    filtered_mean = np.mean(filtered)
+
+    if float(filtered_std) == 0:
+        return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+                                   filtered_median_float, filtered_median_float, filtered_median_float)
+
     degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
+    tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    if filtered_std == 0:
-        threshold_lower = float(filtered_mean)
-        threshold_upper = float(filtered_mean)
+    if all(readout > 0 for readout in extracted):
+        # using a 0-based calculation (scale from 0)
+        upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
+        upper_multiples = np.array(upper_median_multiples_array, dtype=float)
+        upper_multiples_median = np.median(upper_multiples)
+        upper_multiples_std = scipy.stats.tstd(upper_multiples)
+
+        if float(upper_multiples_std) == 0:
+            threshold_upper = filtered_median_float
+        else:
+            # Assumption: the historical data follows t-student distribution
+            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
+            threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+            threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
+
+        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted if readout <= filtered_median_float if readout != 0]
+        lower_multiples = np.array(lower_median_multiples_array, dtype=float)
+        lower_multiples_median = np.median(lower_multiples)
+        lower_multiples_std = scipy.stats.tstd(lower_multiples)
+
+        if float(lower_multiples_std) == 0:
+            threshold_lower = filtered_median_float
+        else:
+            # Assumption: the historical data follows t-student distribution
+            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
+            threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
+            threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+
+        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+
+        expected_value = filtered_median_float
+        lower_bound = threshold_lower
+        upper_bound = threshold_upper
+        return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
     else:
-        # Assumption: the historical data follows t-student distribution
-        readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=filtered_mean, scale=filtered_std)
-        one_sided_tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2
+        # using unrestricted method
+        upper_half_filtered = [readout for readout in extracted if readout >= filtered_median_float]
+        upper_half = np.array(upper_half_filtered, dtype=float)
+        upper_half_median = np.median(upper_half)
+        upper_half_std = scipy.stats.tstd(upper_half)
 
-        threshold_lower = float(readout_distribution.ppf(one_sided_tail))
-        threshold_upper = float(readout_distribution.ppf(1 - one_sided_tail))
+        if float(upper_half_std) == 0:
+            threshold_upper = filtered_median_float
+        else:
+            # Assumption: the historical data follows t-student distribution
+            upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_half_median, scale=upper_half_std)
+            threshold_upper = float(upper_readout_distribution.ppf(1 - tail))
 
-    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+        lower_half_list = [readout for readout in extracted if readout <= filtered_median_float]
+        lower_half = np.array(lower_half_list, dtype=float)
+        lower_half_median = np.median(lower_half)
+        lower_half_std = scipy.stats.tstd(lower_half)
 
-    expected_value = float(filtered_mean)
-    lower_bound = threshold_lower
-    upper_bound = threshold_upper
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+        if float(lower_half_std) == 0:
+            threshold_lower = filtered_median_float
+        else:
+            # Assumption: the historical data follows t-student distribution
+            lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_half_median, scale=lower_half_std)
+            threshold_lower = float(lower_readout_distribution.ppf(tail))
+
+        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+
+        expected_value = filtered_median_float
+        lower_bound = threshold_lower
+        upper_bound = threshold_upper
+        return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

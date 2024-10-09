@@ -80,9 +80,9 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecT
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(165.01, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(161.56, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(168.46, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(164.85, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(161.97, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(168.20, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

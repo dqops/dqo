@@ -105,7 +105,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -178,7 +179,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -254,7 +256,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -330,7 +333,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -552,6 +556,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			job_id=123456789,
 			created_at='2007-10-11T13:42:00Z'
 		)
+        ```
+    
+    
+    
+
+
+
+___
+## find_similar_tables
+Finds a list of tables that are most similar to a given table
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/find_similar_tables.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/similar
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`similar_table_model`</span>||*List[[SimilarTableModel](../models/tables.md#similartablemodel)]*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`limit`</span>|The maximum number of similar tables to return. The default result is 50 similar tables.|*long*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/similar^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        [ {
+		  "difference" : 0
+		}, {
+		  "difference" : 0
+		}, {
+		  "difference" : 0
+		} ]
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_similar_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_similar_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_similar_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import find_similar_tables
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_similar_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        [
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0),
+			SimilarTableModel(difference=0)
+		]
         ```
     
     
@@ -2500,7 +2719,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2544,7 +2764,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2591,7 +2812,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2638,7 +2860,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -2748,7 +2971,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -2792,7 +3016,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -2839,7 +3064,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -2886,7 +3112,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -4078,6 +4305,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4146,6 +4374,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4217,6 +4446,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4288,6 +4518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4444,6 +4675,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4514,6 +4746,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4587,6 +4820,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4660,6 +4894,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -4776,7 +5011,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -4820,7 +5056,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -4867,7 +5104,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -4914,7 +5152,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -5737,6 +5976,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -5805,6 +6045,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -5876,6 +6117,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -5947,6 +6189,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6103,6 +6346,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6173,6 +6417,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6246,6 +6491,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6319,6 +6565,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -6435,7 +6682,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -6479,7 +6727,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -6526,7 +6775,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -6573,7 +6823,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			),
 			comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -7232,7 +7483,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		)
@@ -7275,7 +7527,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		)
@@ -7321,7 +7574,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		)
@@ -7367,7 +7621,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		)
@@ -7904,6 +8159,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -7970,6 +8226,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8039,6 +8296,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8108,6 +8366,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8261,6 +8520,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8329,6 +8589,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8400,6 +8661,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -8471,6 +8733,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							include_in_sla=False,
 							configured=False,
 							always_collect_error_samples=False,
+							do_not_schedule=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -9016,7 +9279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`monitoring_schedule_spec`](../models/common.md#monitoringschedulespec)</span>||*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`cron_schedule_spec`](../models/common.md#cronschedulespec)</span>||*[CronScheduleSpec](../models/common.md#cronschedulespec)*|
 
 
 
@@ -9087,7 +9350,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -9124,7 +9387,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -9164,7 +9427,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -9204,7 +9467,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ??? example "Expand to see the returned result"
     
         ```
-        MonitoringScheduleSpec(
+        CronScheduleSpec(
 			cron_expression='0 12 1 * *',
 			disabled=False
 		)
@@ -10543,7 +10806,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -10616,7 +10880,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -10692,7 +10957,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -10768,7 +11034,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False,
-					always_collect_error_samples=False
+					always_collect_error_samples=False,
+					do_not_schedule=False
 				)
 			)
 		),
@@ -11505,7 +11772,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11549,7 +11817,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11596,7 +11865,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -11643,7 +11913,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
@@ -12326,6 +12597,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12393,6 +12665,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12463,6 +12736,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12533,6 +12807,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -12637,7 +12912,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12681,7 +12957,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12728,7 +13005,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12775,7 +13053,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
@@ -12872,7 +13151,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -12916,7 +13196,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -12963,7 +13244,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -13010,7 +13292,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
@@ -13124,6 +13407,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13191,6 +13475,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13261,6 +13546,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13331,6 +13617,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -13435,7 +13722,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13479,7 +13767,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13526,7 +13815,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13573,7 +13863,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		),
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
@@ -13916,7 +14207,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		)
 	)
@@ -13958,7 +14250,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		)
 	)
@@ -14003,7 +14296,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		)
 	)
@@ -14048,7 +14342,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False,
-				always_collect_error_samples=False
+				always_collect_error_samples=False,
+				do_not_schedule=False
 			)
 		)
 	)
@@ -14159,6 +14454,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -14224,6 +14520,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -14292,6 +14589,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -14360,6 +14658,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=False,
 						configured=False,
 						always_collect_error_samples=False,
+						do_not_schedule=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -14416,7 +14715,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|*[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)*| |
+|Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|*[CronScheduleSpec](../models/common.md#cronschedulespec)*| |
 
 
 
@@ -14446,13 +14745,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -14478,13 +14777,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -14510,7 +14809,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -14519,7 +14818,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)
@@ -14545,7 +14844,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_scheduling_group_override
 	from dqops.client.models import CheckRunScheduleGroup, \
-	                                MonitoringScheduleSpec
+	                                CronScheduleSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -14554,7 +14853,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	request_body = MonitoringScheduleSpec(
+	request_body = CronScheduleSpec(
 		cron_expression='0 12 1 * *',
 		disabled=False
 	)

@@ -7,7 +7,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.default_schedules_spec import DefaultSchedulesSpec
+    from ..models.cron_schedules_spec import CronSchedulesSpec
     from ..models.file_format_spec import FileFormatSpec
     from ..models.partition_incremental_time_window_spec import (
         PartitionIncrementalTimeWindowSpec,
@@ -85,7 +85,7 @@ class TableSpec:
         monitoring_checks (Union[Unset, TableMonitoringCheckCategoriesSpec]):
         partitioned_checks (Union[Unset, TablePartitionedCheckCategoriesSpec]):
         statistics (Union[Unset, TableStatisticsCollectorsRootCategoriesSpec]):
-        schedules_override (Union[Unset, DefaultSchedulesSpec]):
+        schedules_override (Union[Unset, CronSchedulesSpec]):
         columns (Union[Unset, TableSpecColumns]): Dictionary of columns, indexed by a physical column name. Column
             specification contains the expected column data type and a list of column level data quality checks that are
             enabled for a column.
@@ -117,7 +117,7 @@ class TableSpec:
     monitoring_checks: Union[Unset, "TableMonitoringCheckCategoriesSpec"] = UNSET
     partitioned_checks: Union[Unset, "TablePartitionedCheckCategoriesSpec"] = UNSET
     statistics: Union[Unset, "TableStatisticsCollectorsRootCategoriesSpec"] = UNSET
-    schedules_override: Union[Unset, "DefaultSchedulesSpec"] = UNSET
+    schedules_override: Union[Unset, "CronSchedulesSpec"] = UNSET
     columns: Union[Unset, "TableSpecColumns"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -275,7 +275,7 @@ class TableSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.default_schedules_spec import DefaultSchedulesSpec
+        from ..models.cron_schedules_spec import CronSchedulesSpec
         from ..models.file_format_spec import FileFormatSpec
         from ..models.partition_incremental_time_window_spec import (
             PartitionIncrementalTimeWindowSpec,
@@ -401,11 +401,11 @@ class TableSpec:
             )
 
         _schedules_override = d.pop("schedules_override", UNSET)
-        schedules_override: Union[Unset, DefaultSchedulesSpec]
+        schedules_override: Union[Unset, CronSchedulesSpec]
         if isinstance(_schedules_override, Unset):
             schedules_override = UNSET
         else:
-            schedules_override = DefaultSchedulesSpec.from_dict(_schedules_override)
+            schedules_override = CronSchedulesSpec.from_dict(_schedules_override)
 
         _columns = d.pop("columns", UNSET)
         columns: Union[Unset, TableSpecColumns]
