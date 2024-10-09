@@ -121,10 +121,13 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'FLOAT';
   }
   if (Number(numberForFile) === 3) {
-    return 'DATETIME';
+    return 'DATE';
   }
   if (Number(numberForFile) === 4) {
     return 'DATETIME';
+  }
+  if (Number(numberForFile) === 5) {
+    return 'TIMESTAMP';
   }
   if (Number(numberForFile) === 6) {
     return 'BOOLEAN';
