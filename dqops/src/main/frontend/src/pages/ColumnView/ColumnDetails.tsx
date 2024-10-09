@@ -222,11 +222,13 @@ const TableDetails = ({
           </tr>
         </tbody>
       </table>
-      <AdvancedProperties
-        properties={columnBasic?.advanced_properties}
-        handleChange={handleChange}
-        sharedCredentials={sharedCredentials}
-      />
+      <div className="py-2">
+        <AdvancedProperties
+          properties={columnBasic?.advanced_properties}
+          handleChange={handleChange}
+          sharedCredentials={sharedCredentials}
+        />
+      </div>
     </div>
   );
 };

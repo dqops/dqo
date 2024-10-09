@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
-import clsx from 'clsx';
 import {
   Db2ParametersSpec,
   Db2ParametersSpecDb2PlatformTypeEnum,
-  SharedCredentialListModel,
+  SharedCredentialListModel
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
 import JdbcPropertiesView from '../JdbcProperties';
 
 interface IDb2ParametersSpec {
@@ -47,19 +45,20 @@ const Db2Connection = ({
   };
 
   return (
-    <SectionWrapper title="DB2 connection parameters" className="mb-4">
+    <div className="mb-4">
       <Select
         label="DB2 platform type"
         options={options}
         className={'mb-4'}
         value={
-           db2?.db2_platform_type ||
-           (nameOfDatabase &&
-            (nameOfDatabase.toLowerCase() as Db2ParametersSpecDb2PlatformTypeEnum) )
+          db2?.db2_platform_type ||
+          (nameOfDatabase &&
+            (nameOfDatabase.toLowerCase() as Db2ParametersSpecDb2PlatformTypeEnum))
         }
         onChange={(value) => {
           handleChange({ db2_platform_type: value }),
-            value && onNameOfDatabaseChange &&
+            value &&
+              onNameOfDatabaseChange &&
               onNameOfDatabaseChange(
                 String(value).replace(/\w/, (x) => x.toUpperCase())
               );
@@ -110,7 +109,7 @@ const Db2Connection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

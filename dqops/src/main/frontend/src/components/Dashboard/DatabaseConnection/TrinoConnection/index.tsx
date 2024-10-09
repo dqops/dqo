@@ -9,7 +9,6 @@ import {
 } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
 import JdbcPropertiesView from '../JdbcProperties';
 
 interface ITrinoConnectionProps {
@@ -59,7 +58,7 @@ const TrinoConnection = ({
   };
 
   return (
-    <SectionWrapper title="Trino connection parameters" className="mb-4">
+    <div>
       <Select
         label="Trino engine type"
         options={options}
@@ -201,7 +200,7 @@ const TrinoConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

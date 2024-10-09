@@ -1,12 +1,8 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
-import {
-  HanaParametersSpec,
-  SharedCredentialListModel
-} from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
+import { HanaParametersSpec, SharedCredentialListModel } from '../../../../api';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IHanaConnectionProps {
   hana?: HanaParametersSpec;
@@ -29,7 +25,7 @@ const HanaConnection = ({
   };
 
   return (
-    <SectionWrapper title="HANA connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         data={sharedCredentials}
         label="Host"
@@ -72,7 +68,7 @@ const HanaConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

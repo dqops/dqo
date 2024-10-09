@@ -13,7 +13,6 @@ import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import Select from '../../../Select';
-import SectionWrapper from '../../SectionWrapper';
 import JdbcPropertiesView from '../JdbcProperties';
 
 interface IDuckdbConnectionProps {
@@ -321,10 +320,7 @@ const DuckdbConnection = ({
   };
 
   return (
-    <SectionWrapper
-      title="DuckDB connection parameters"
-      className="mb-4 text-sm"
-    >
+    <div className=" text-sm">
       <Select
         label="Files location"
         options={storageTypeOptions}
@@ -373,7 +369,7 @@ const DuckdbConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

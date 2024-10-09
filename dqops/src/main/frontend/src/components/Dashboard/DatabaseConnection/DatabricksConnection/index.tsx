@@ -1,12 +1,11 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
   DatabricksParametersSpec,
   SharedCredentialListModel
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IDatabricksConnectionProps {
   databricks?: DatabricksParametersSpec;
@@ -29,7 +28,7 @@ const DatabricksConnection = ({
   };
 
   return (
-    <SectionWrapper title="Databricks connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         data={sharedCredentials}
         label="Host"
@@ -78,7 +77,7 @@ const DatabricksConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

@@ -13,7 +13,10 @@ import {
   DataSourcesApi,
   SharedCredentialsApi
 } from '../../../services/apiClient';
-import { filterPropertiesDirectories } from '../../../utils';
+import {
+  filterPropertiesDirectories,
+  getProviderTypeTitle
+} from '../../../utils';
 import Button from '../../Button';
 import Input from '../../Input';
 import Loader from '../../Loader';
@@ -38,6 +41,7 @@ import Db2Connection from './Db2Connection';
 import DuckDBConnection from './DuckDBConnection';
 import ErrorModal from './ErrorModal';
 import HanaConnection from './HanaConnection';
+import JdbcPropertiesView from './JdbcProperties';
 import MySQLConnection from './MySQLConnection';
 import OracleConnection from './OracleConnection';
 import PostgreSQLConnection from './PostgreSQLConnection';
@@ -367,7 +371,7 @@ const DatabaseConnection = ({
         <Input
           label="Connection name"
           className={clsx(
-            'mb-4',
+            'mb-8',
             (database.connection_name?.length === 0 ||
               !database.connection_name) &&
               'border border-red-500'
@@ -379,56 +383,74 @@ const DatabaseConnection = ({
           error={!!nameError}
           helperText={nameError}
         />
-        {showAdvancedProperties ? (
-          <SectionWrapper
-            title="Advanced properties"
-            svgIcon
-            onClick={() => setShowAdvancedProperties(false)}
-            className="!pb-1 !pt-1 !mt-6 !mb-4"
-          >
-            <div className="mt-4">
+        <SectionWrapper
+          title={
+            getProviderTypeTitle(database.provider_type) +
+            ' connection parameters'
+          }
+          className="mb-4 mt-4"
+        >
+          <div className="mb-6">
+            {database.provider_type ? components[database.provider_type] : ''}
+          </div>
+          {showAdvancedProperties ? (
+            <SectionWrapper
+              title="Advanced properties"
+              svgIcon
+              onClick={() => setShowAdvancedProperties(false)}
+              className="!pb-1 !pt-1 !mt-1 !mb-4"
+            >
+              <div className="mt-4">
+                <Input
+                  label="Parallel jobs limit"
+                  value={database.parallel_jobs_limit}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      onChange({
+                        ...database,
+                        parallel_jobs_limit:
+                          String(e.target.value).length === 0
+                            ? undefined
+                            : Number(e.target.value)
+                      });
+                    }
+                  }}
+                  className="!mb-3"
+                />
+              </div>
               <Input
-                label="Parallel jobs limit"
-                value={database.parallel_jobs_limit}
+                label="Schedule only on DQOps instance"
+                value={database.schedule_on_instance}
+                placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
                 onChange={(e) => {
-                  if (!isNaN(Number(e.target.value))) {
-                    onChange({
-                      ...database,
-                      parallel_jobs_limit:
-                        String(e.target.value).length === 0
-                          ? undefined
-                          : Number(e.target.value)
-                    });
-                  }
+                  onChange({
+                    ...database,
+                    schedule_on_instance: String(e.target.value)
+                  });
                 }}
                 className="!mb-3"
               />
+              <div className="ml-2">
+                <JdbcPropertiesView
+                  properties={database?.advanced_properties}
+                  onChange={(properties) =>
+                    onChange({ advanced_properties: properties })
+                  }
+                  title="Advanced property name"
+                  sharedCredentials={sharedCredentials}
+                />
+              </div>
+            </SectionWrapper>
+          ) : (
+            <div
+              className="flex items-center mb-4 text-sm font-bold cursor-pointer mt-0"
+              onClick={() => setShowAdvancedProperties(true)}
+            >
+              <SvgIcon name="chevron-right" className="w-5 h-5" />
+              Advanced properties
             </div>
-            <Input
-              label="Schedule only on DQOps instance"
-              value={database.schedule_on_instance}
-              placeholder="Enter the name of a DQOps named instance which will run data scheduled data quality checks"
-              onChange={(e) => {
-                onChange({
-                  ...database,
-                  schedule_on_instance: String(e.target.value)
-                });
-              }}
-              className="!mb-3"
-            />
-          </SectionWrapper>
-        ) : (
-          <div
-            className="flex items-center mb-4 text-sm font-bold cursor-pointer mt-2"
-            onClick={() => setShowAdvancedProperties(true)}
-          >
-            <SvgIcon name="chevron-right" className="w-5 h-5" />
-            Advanced properties
-          </div>
-        )}
-        <div className="mt-6">
-          {database.provider_type ? components[database.provider_type] : ''}
-        </div>
+          )}
+        </SectionWrapper>
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (

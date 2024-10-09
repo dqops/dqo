@@ -25,14 +25,16 @@ import {
   SharedCredentialsApi
 } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
-import { useDecodedParams } from '../../../utils';
-import AdvancedProperties from '../../AdvancedProperties/AdvancedProperties';
+import { getProviderTypeTitle, useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import ConfirmErrorModal from '../../Dashboard/DatabaseConnection/ConfirmErrorModal';
 import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksConnection';
+import Db2Connection from '../../Dashboard/DatabaseConnection/Db2Connection';
 import DuckdbConnection from '../../Dashboard/DatabaseConnection/DuckDBConnection';
 import ErrorModal from '../../Dashboard/DatabaseConnection/ErrorModal';
+import HanaConnection from '../../Dashboard/DatabaseConnection/HanaConnection';
+import JdbcPropertiesView from '../../Dashboard/DatabaseConnection/JdbcProperties';
 import MySQLConnection from '../../Dashboard/DatabaseConnection/MySQLConnection';
 import OracleConnection from '../../Dashboard/DatabaseConnection/OracleConnection';
 import PostgreSQLConnection from '../../Dashboard/DatabaseConnection/PostgreSQLConnection';
@@ -47,8 +49,6 @@ import Input from '../../Input';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import HanaConnection from '../../Dashboard/DatabaseConnection/HanaConnection';
-import Db2Connection from '../../Dashboard/DatabaseConnection/Db2Connection';
 
 const ConnectionDetail = () => {
   const {
@@ -176,7 +176,129 @@ const ConnectionDetail = () => {
           <div>Connection name</div>
           <div className="ml-4">{connectionBasic?.connection_name}</div>
         </div>
-
+      </div>
+      <SectionWrapper
+        title={
+          getProviderTypeTitle(connectionBasic?.provider_type) +
+          ' connection parameters'
+        }
+        className="mb-4 mt-4"
+      >
+        <div className="px-4 !mt-2 mb-6">
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.bigquery && (
+            <BigqueryConnection
+              bigquery={connectionBasic?.bigquery}
+              onChange={(bigquery) => onChange({ bigquery })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.snowflake && (
+            <SnowflakeConnection
+              snowflake={connectionBasic?.snowflake}
+              onChange={(snowflake) => onChange({ snowflake })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.redshift && (
+            <RedshiftConnection
+              redshift={connectionBasic?.redshift}
+              onChange={(redshift) => onChange({ redshift })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.sqlserver && (
+            <SqlServerConnection
+              sqlserver={connectionBasic?.sqlserver}
+              onChange={(sqlserver) => onChange({ sqlserver })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.postgresql && (
+            <PostgreSQLConnection
+              postgresql={connectionBasic?.postgresql}
+              onChange={(postgresql) => onChange({ postgresql })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.mysql && (
+            <MySQLConnection
+              mysql={connectionBasic?.mysql}
+              onChange={(mysql) => onChange({ mysql })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.oracle && (
+            <OracleConnection
+              oracle={connectionBasic?.oracle}
+              onChange={(oracle) => onChange({ oracle })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.databricks && (
+            <DatabricksConnection
+              databricks={connectionBasic?.databricks}
+              onChange={(databricks) => onChange({ databricks })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.presto && (
+            <PrestoConnection
+              presto={connectionBasic?.presto}
+              onChange={(presto) => onChange({ presto })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.spark && (
+            <SparkConnection
+              spark={connectionBasic?.spark}
+              onChange={(spark) => onChange({ spark })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.trino && (
+            <TrinoConnection
+              trino={connectionBasic?.trino}
+              onChange={(trino) => onChange({ trino })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb && (
+            <DuckdbConnection
+              duckdb={connectionBasic?.duckdb}
+              onChange={(duckdb) => onChange({ duckdb })}
+              sharedCredentials={sharedCredentials}
+              freezeFileType
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.hana && (
+            <HanaConnection
+              hana={connectionBasic?.hana}
+              onChange={(hana) => onChange({ hana })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+          {connectionBasic?.provider_type ===
+            ConnectionSpecProviderTypeEnum.db2 && (
+            <Db2Connection
+              db2={connectionBasic?.db2}
+              onChange={(db2) => onChange({ db2 })}
+              sharedCredentials={sharedCredentials}
+            />
+          )}
+        </div>
         {showAdvancedProperties ? (
           <SectionWrapper
             title="Advanced properties"
@@ -220,6 +342,16 @@ const ConnectionDetail = () => {
                 />
               </div>
             </div>
+            <div className="ml-4">
+              <JdbcPropertiesView
+                properties={connectionBasic?.advanced_properties}
+                onChange={(properties) =>
+                  onChange({ advanced_properties: properties })
+                }
+                title="Advanced property name"
+                sharedCredentials={sharedCredentials}
+              />
+            </div>
           </SectionWrapper>
         ) : (
           <div
@@ -230,129 +362,7 @@ const ConnectionDetail = () => {
             Advanced properties
           </div>
         )}
-      </div>
-
-      <AdvancedProperties
-        properties={connectionBasic?.advanced_properties}
-        handleChange={onChange}
-        sharedCredentials={sharedCredentials}
-        title="Data source connection properties"
-      />
-
-      <div className="px-4 !mt-6">
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.bigquery && (
-          <BigqueryConnection
-            bigquery={connectionBasic?.bigquery}
-            onChange={(bigquery) => onChange({ bigquery })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.snowflake && (
-          <SnowflakeConnection
-            snowflake={connectionBasic?.snowflake}
-            onChange={(snowflake) => onChange({ snowflake })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.redshift && (
-          <RedshiftConnection
-            redshift={connectionBasic?.redshift}
-            onChange={(redshift) => onChange({ redshift })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.sqlserver && (
-          <SqlServerConnection
-            sqlserver={connectionBasic?.sqlserver}
-            onChange={(sqlserver) => onChange({ sqlserver })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.postgresql && (
-          <PostgreSQLConnection
-            postgresql={connectionBasic?.postgresql}
-            onChange={(postgresql) => onChange({ postgresql })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.mysql && (
-          <MySQLConnection
-            mysql={connectionBasic?.mysql}
-            onChange={(mysql) => onChange({ mysql })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.oracle && (
-          <OracleConnection
-            oracle={connectionBasic?.oracle}
-            onChange={(oracle) => onChange({ oracle })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.databricks && (
-          <DatabricksConnection
-            databricks={connectionBasic?.databricks}
-            onChange={(databricks) => onChange({ databricks })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.presto && (
-          <PrestoConnection
-            presto={connectionBasic?.presto}
-            onChange={(presto) => onChange({ presto })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.spark && (
-          <SparkConnection
-            spark={connectionBasic?.spark}
-            onChange={(spark) => onChange({ spark })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.trino && (
-          <TrinoConnection
-            trino={connectionBasic?.trino}
-            onChange={(trino) => onChange({ trino })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.duckdb && (
-          <DuckdbConnection
-            duckdb={connectionBasic?.duckdb}
-            onChange={(duckdb) => onChange({ duckdb })}
-            sharedCredentials={sharedCredentials}
-            freezeFileType
-          />
-        )}
-        {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.hana && (
-          <HanaConnection
-            hana={connectionBasic?.hana}
-            onChange={(hana) => onChange({ hana })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}{connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.db2 && (
-          <Db2Connection
-            db2={connectionBasic?.db2}
-            onChange={(db2) => onChange({ db2 })}
-            sharedCredentials={sharedCredentials}
-          />
-        )}
-      </div>
+      </SectionWrapper>
 
       <div className="flex space-x-4 justify-end items-center mt-6 px-4 mb-5">
         {isTesting && (

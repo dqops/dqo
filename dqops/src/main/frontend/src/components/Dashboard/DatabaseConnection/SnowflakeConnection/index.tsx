@@ -1,12 +1,11 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
   SharedCredentialListModel,
   SnowflakeParametersSpec
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface ISnowflakeConnectionProps {
   snowflake?: SnowflakeParametersSpec;
@@ -29,7 +28,7 @@ const SnowflakeConnection = ({
   };
 
   return (
-    <SectionWrapper title="Snowflake connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         label="Account"
         className="mb-4"
@@ -79,7 +78,7 @@ const SnowflakeConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 

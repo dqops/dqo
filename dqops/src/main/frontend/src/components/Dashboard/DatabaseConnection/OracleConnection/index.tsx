@@ -1,12 +1,11 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
   OracleParametersSpec,
   SharedCredentialListModel
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IOracleConnectionProps {
   oracle?: OracleParametersSpec;
@@ -29,7 +28,7 @@ const OracleConnection = ({
   };
 
   return (
-    <SectionWrapper title="Oracle connection parameters" className="mb-4">
+    <div>
       <FieldTypeInput
         data={sharedCredentials}
         label="Host"
@@ -79,7 +78,7 @@ const OracleConnection = ({
         onChange={(properties) => handleChange({ properties })}
         sharedCredentials={sharedCredentials}
       />
-    </SectionWrapper>
+    </div>
   );
 };
 
