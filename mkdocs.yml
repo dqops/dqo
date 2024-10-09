@@ -57,6 +57,7 @@ nav:
       - BigQuery: "data-sources/bigquery.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
+      - Db2: "data-sources/db2.md"
       - Delta Lake: "data-sources/deltalake.md"
       - DuckDB: "data-sources/duckdb.md"
       - GCP: "data-sources/gcp.md"

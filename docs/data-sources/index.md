@@ -119,6 +119,11 @@ DQOps supports the following data sources.
     <p>Databricks</p>
   </a>
 
+  <a href="Db2/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/ibm-db2.svg">
+    <p>IBM Db2</p>
+  </a>
+
   <a href="deltalake/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/delta-lake2.svg">
     <p>Delta Lake</p>
