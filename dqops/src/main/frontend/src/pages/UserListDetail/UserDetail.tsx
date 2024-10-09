@@ -24,7 +24,7 @@ export default function UserDetail() {
         [key: string]: string;
       }
     | undefined
-  >({});
+  >({ '(default)': 'none' });
   const [isUpdated, setIsUpdated] = useState(false);
   const [message, setMessage] = useState<string>();
   const [creating, setCreating] = useState(false);
