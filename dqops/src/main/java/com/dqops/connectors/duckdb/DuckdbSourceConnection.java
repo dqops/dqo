@@ -282,10 +282,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     private void registerExtensions() {
         try {
-            File userLocationFile = Path.of(this.homeLocationFindService.getUserHomePath()).resolve("bin/.duckdb/extensions").toFile();
+            File userLocationFile = Path.of(this.homeLocationFindService.getRootUserHomePath()).resolve("bin/.duckdb/extensions").toFile();
             String setExtensionsQuery =
                     userLocationFile.exists() && userLocationFile.isDirectory() ?
-                            DuckdbQueriesProvider.provideSetExtensionsQuery(this.homeLocationFindService.getUserHomePath()) :
+                            DuckdbQueriesProvider.provideSetExtensionsQuery(this.homeLocationFindService.getRootUserHomePath()) :
                             DuckdbQueriesProvider.provideSetExtensionsQuery(this.homeLocationFindService.getDqoHomePath());
             this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
 

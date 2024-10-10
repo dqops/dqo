@@ -49,6 +49,8 @@ class PythonRuleCallInput:
     data_domain_module: str
     rule_module_path: str
     home_path: str
+    dqo_home_path: str
+    dqo_root_user_home_path: str
     rule_parameters: any
     rule_module_last_modified: datetime
 
@@ -113,7 +115,15 @@ class RuleRunner:
 def main():
     try:
         rule_runner = RuleRunner()
+        home_paths_configured = False
+
+        request: PythonRuleCallInput
         for request, duration_millis in streaming.stream_json_objects(sys.stdin):
+            if not home_paths_configured:
+                sys.path.append(request.dqo_home_path)
+                sys.path.append(request.dqo_root_user_home_path)
+                home_paths_configured = True
+
             response = rule_runner.process_rule_request(request)
             sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
             sys.stdout.write("\n")

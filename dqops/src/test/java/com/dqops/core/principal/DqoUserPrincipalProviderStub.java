@@ -19,14 +19,14 @@ package com.dqops.core.principal;
 /**
  * Test stub for returning a user principal.
  */
-public class DqoDqoUserPrincipalProviderStub implements DqoUserPrincipalProvider {
+public class DqoUserPrincipalProviderStub implements DqoUserPrincipalProvider {
     private DqoUserPrincipal principal;
 
     /**
      * Creates a test stub instance that returns a hardcoded user principal.
      * @param principal User principal to return.
      */
-    public DqoDqoUserPrincipalProviderStub(DqoUserPrincipal principal) {
+    public DqoUserPrincipalProviderStub(DqoUserPrincipal principal) {
         this.principal = principal;
     }
 

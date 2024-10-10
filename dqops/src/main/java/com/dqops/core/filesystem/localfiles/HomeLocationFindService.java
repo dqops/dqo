@@ -15,6 +15,7 @@
  */
 package com.dqops.core.filesystem.localfiles;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.HomeType;
 
 /**
@@ -25,9 +26,16 @@ public interface HomeLocationFindService {
 
     /**
      * Returns an absolute path to the user home.
+     * @param userDomainIdentity User home identity to identify the data domain.
      * @return Absolute path to the user home. May return null if the user home is not enabled.
      */
-    String getUserHomePath();
+    String getUserHomePath(UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Returns an absolute path to the root user home.
+     * @return Absolute path to the user home. May return null if the user home is not enabled.
+     */
+    String getRootUserHomePath();
 
     /**
      * Returns an absolute path to the dqo home.
@@ -38,7 +46,8 @@ public interface HomeLocationFindService {
     /**
      * Returns the absolute path to a home of choice (user home or DQO_HOME).
      * @param homeType Home type (user home or dqo system home).
+     * @param userDomainIdentity User domain identity to identify the data domain when the user home is requested.
      * @return Absolute path to home.
      */
-    String getHomePath(HomeType homeType);
+    String getHomePath(HomeType homeType, UserDomainIdentity userDomainIdentity);
 }

@@ -33,6 +33,8 @@ public class PythonRuleCallInput {
     private String dataDomainModule;
     private String ruleModulePath;
     private String homePath;
+    private String dqoHomePath;
+    private String dqoRootUserHomePath;
     private Instant ruleModuleLastModified;
     private RuleExecutionRunParameters ruleParameters;
 
@@ -82,6 +84,38 @@ public class PythonRuleCallInput {
      */
     public void setHomePath(String homePath) {
         this.homePath = homePath;
+    }
+
+    /**
+     * Returns the path to the DQOps Home folder.
+     * @return DQOps home folder path.
+     */
+    public String getDqoHomePath() {
+        return dqoHomePath;
+    }
+
+    /**
+     * Sets a path to the DQOps home folder.
+     * @param dqoHomePath Path to the DQOps home folder.
+     */
+    public void setDqoHomePath(String dqoHomePath) {
+        this.dqoHomePath = dqoHomePath;
+    }
+
+    /**
+     * Returns the path to the root DQOps user home folder.
+     * @return Path to the root user folder.
+     */
+    public String getDqoRootUserHomePath() {
+        return dqoRootUserHomePath;
+    }
+
+    /**
+     * Sets a path to a root DQOps user home folder that is used to resolve additional python packages.
+     * @param dqoRootUserHomePath DQOps root user home path.
+     */
+    public void setDqoRootUserHomePath(String dqoRootUserHomePath) {
+        this.dqoRootUserHomePath = dqoRootUserHomePath;
     }
 
     /**

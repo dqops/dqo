@@ -78,7 +78,7 @@ public class LocalDataDomainManagerImpl implements LocalDataDomainManager {
     public void initializeLocalDataDomain(LocalDataDomainSpec dataDomainSpec) {
         String dataDomainName = dataDomainSpec.getDataDomainName();
         HomeFolderPath domainRootVirtualFolder = new HomeFolderPath(dataDomainName);
-        Path pathToRootUserHome = Path.of(this.homeLocationFindService.getUserHomePath());
+        Path pathToRootUserHome = Path.of(this.homeLocationFindService.getRootUserHomePath());
         Path dataDomainRootFolder = pathToRootUserHome.resolve(domainRootVirtualFolder.toRelativePath());
         String pathToDataDomainFolder = dataDomainRootFolder.toString();
 

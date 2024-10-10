@@ -17,6 +17,8 @@ package com.dqops.core.filesystem.localfiles;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * Simple service that returns the location of the user home or the DQO_HOME system home.
@@ -70,10 +73,36 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
 
     /**
      * Returns an absolute path to the user home.
+     * @param userDomainIdentity User domain identity to identify a data domain.
      * @return Absolute path to the user home. May return null if the user home is not enabled.
      */
     @Override
-    public String getUserHomePath() {
+    public String getUserHomePath(UserDomainIdentity userDomainIdentity) {
+        String rootUserHomePath = this.getRootUserHomePath();
+
+        if (rootUserHomePath == null) {
+            return null;
+        }
+
+        if (Objects.equals(userDomainIdentity.getDataDomainFolder(), UserDomainIdentity.ROOT_DATA_DOMAIN)) {
+            return rootUserHomePath;
+        }
+
+        String nestedDataDomainUserHomePath = Path.of(rootUserHomePath)
+                .resolve(BuiltInFolderNames.DATA_DOMAINS)
+                .resolve(userDomainIdentity.getDataDomainFolder())
+                .toString();
+
+        return nestedDataDomainUserHomePath;
+    }
+
+    /**
+     * Returns an absolute path to the root user home.
+     *
+     * @return Absolute path to the user home. May return null if the user home is not enabled.
+     */
+    @Override
+    public String getRootUserHomePath() {
         if (this.userConfigurationProperties.isHasLocalHome()) {
             if (this.userHomePath != null) {
                 return this.userHomePath;
@@ -129,13 +158,14 @@ public class HomeLocationFindServiceImpl implements HomeLocationFindService {
     /**
      * Returns the absolute path to a home of choice (user home or DQO_HOME).
      * @param homeType Home type (user home or dqo system home).
+     * @param userDomainIdentity User domain identity.
      * @return Absolute path to home.
      */
     @Override
-    public String getHomePath(HomeType homeType) {
+    public String getHomePath(HomeType homeType, UserDomainIdentity userDomainIdentity) {
         switch (homeType) {
             case USER_HOME:
-                return getUserHomePath();
+                return getUserHomePath(userDomainIdentity);
             case DQO_HOME:
                 return getDqoHomePath();
             default:

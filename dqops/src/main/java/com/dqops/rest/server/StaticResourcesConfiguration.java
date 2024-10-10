@@ -67,7 +67,7 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String userHomePathString = this.homeLocationFindService.getUserHomePath();
+        String userHomePathString = this.homeLocationFindService.getRootUserHomePath();
         if (!Strings.isNullOrEmpty(userHomePathString)) {
             Path pathToLogoFile = Path.of(userHomePathString).resolve(BuiltInFolderNames.SETTINGS).resolve(LOGO_ICON_FILE_NAME);
             if (pathToLogoFile.toFile().exists()) {

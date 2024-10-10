@@ -23,6 +23,9 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.similarity.TableSimilarityRefreshService;
 import com.dqops.core.similarity.TableSimilarityRefreshServiceProvider;
 import com.dqops.data.checkresults.statuscache.DomainConnectionTableKey;
@@ -79,7 +82,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     private final TableLineageCacheProvider tableLineageCacheProvider;
     private final TableSimilarityRefreshServiceProvider tableSimilarityRefreshServiceProvider;
     private final HomeLocationFindService homeLocationFindService;
-    private final Path userHomeRootPath;
+    private Path userHomeRootPath;
     private Instant nextFileChangeDetectionAt = Instant.now().minus(100L, ChronoUnit.MILLIS);
     private boolean wasRecentlyInvalidated;
 
@@ -105,17 +108,6 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
         this.tableLineageCacheProvider = tableLineageCacheProvider;
         this.tableSimilarityRefreshServiceProvider = tableSimilarityRefreshServiceProvider;
         this.homeLocationFindService = homeLocationFindService;
-        this.userHomeRootPath = homeLocationFindService.getUserHomePath() != null ? Path.of(homeLocationFindService.getUserHomePath()) : Path.of(".");
-
-        WatchService newWatchService = null;
-        if (dqoCacheConfigurationProperties.isEnable() && dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
-            try {
-                newWatchService = FileSystems.getDefault().newWatchService();
-            } catch (IOException ioe) {
-                throw new DqoRuntimeException("Cannot create a watch service.");
-            }
-        }
-        this.watchService = newWatchService;
 
         this.folderListsCache = Caffeine.newBuilder()
                 .maximumSize(dqoCacheConfigurationProperties.getYamlFilesLimit())
@@ -141,6 +133,25 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
     }
 
     /**
+     * Starts a local file system cache.
+     */
+    @Override
+    public void start() {
+        this.userHomeRootPath = homeLocationFindService.getRootUserHomePath() != null ?
+                Path.of(homeLocationFindService.getRootUserHomePath()) : Path.of(".");
+
+        WatchService newWatchService = null;
+        if (dqoCacheConfigurationProperties.isEnable() && dqoCacheConfigurationProperties.isWatchFileSystemChanges()) {
+            try {
+                newWatchService = FileSystems.getDefault().newWatchService();
+            } catch (IOException ioe) {
+                throw new DqoRuntimeException("Cannot create a watch service.");
+            }
+        }
+        this.watchService = newWatchService;
+    }
+
+    /**
      * Called when the object is destroyed. Stops the watcher.
      * @throws Exception
      */
@@ -157,7 +168,7 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      * @param folderPath Folder path.
      */
     public void startFolderWatcher(Path folderPath) {
-        if (folderPath == null) {
+        if (folderPath == null || this.watchService == null) {
             return;
         }
 
@@ -481,6 +492,10 @@ public class LocalFileSystemCacheImpl implements LocalFileSystemCache, Disposabl
      *                            and it is not a real invalidation, but just a notification that a file was just cached.
      */
     public void invalidateTableCaches(Path filePath, boolean replacingCachedFile) {
+        if (this.userHomeRootPath == null) {
+            return; // not initialized
+        }
+
         if (!filePath.startsWith(this.userHomeRootPath)) {
             return;
         }

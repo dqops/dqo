@@ -31,7 +31,7 @@ import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.*;
-import com.dqops.core.principal.DqoDqoUserPrincipalProviderStub;
+import com.dqops.core.principal.DqoUserPrincipalProviderStub;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
@@ -113,7 +113,7 @@ public class CheckCliServiceImplTests extends BaseTest {
                 parentDqoJobQueue,
                 userHomeContextFactory);
 
-        DqoDqoUserPrincipalProviderStub principalProviderStub = new DqoDqoUserPrincipalProviderStub(
+        DqoUserPrincipalProviderStub principalProviderStub = new DqoUserPrincipalProviderStub(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin());
 
         this.sut = new CheckCliServiceImpl(

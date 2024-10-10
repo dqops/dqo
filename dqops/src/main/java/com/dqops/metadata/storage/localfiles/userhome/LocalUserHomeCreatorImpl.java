@@ -159,7 +159,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      */
     @Override
     public boolean initializeDefaultDqoUserHome() {
-        String userHomePathString = this.homeLocationFindService.getUserHomePath();
+        String userHomePathString = this.homeLocationFindService.getRootUserHomePath();
         if (userHomePathString == null) {
             return false;
         }
@@ -196,7 +196,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      */
     @Override
     public boolean isDefaultDqoUserHomeInitialized() {
-        String userHomePathString = this.homeLocationFindService.getUserHomePath();
+        String userHomePathString = this.homeLocationFindService.getRootUserHomePath();
 
         if (userHomePathString == null) {
             return false;
@@ -409,7 +409,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      */
     @Override
     public boolean ensureDefaultUserHomeIsInitialized(boolean isHeadless) {
-        String userHomePathString = this.homeLocationFindService.getUserHomePath();
+        String userHomePathString = this.homeLocationFindService.getRootUserHomePath();
         if (userHomePathString == null) {
             return false; // the dqo user home is not required for some reason (configurable)
         }
@@ -577,7 +577,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             return;
         }
 
-        String userHomePath = this.homeLocationFindService.getUserHomePath();
+        String userHomePath = this.homeLocationFindService.getRootUserHomePath();
         Path logsFolderPath = Path.of(userHomePath).resolve(BuiltInFolderNames.LOGS);
         if (!Files.exists(logsFolderPath)) {
             initializeEmptyFolder(logsFolderPath);

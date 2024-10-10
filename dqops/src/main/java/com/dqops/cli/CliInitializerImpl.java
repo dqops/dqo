@@ -26,6 +26,7 @@ import com.dqops.core.domains.DataDomainsService;
 import com.dqops.core.domains.LocalDataDomainManager;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
@@ -81,6 +82,7 @@ public class CliInitializerImpl implements CliInitializer {
     private DataDomainsService dataDomainsService;
     private TableSimilarityReconciliationService tableSimilarityReconciliationService;
     private TableSimilarityRefreshService tableSimilarityRefreshService;
+    private LocalFileSystemCache localFileSystemCache;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -108,6 +110,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param dataDomainsService Data domains service to synchronize domains from the SaaS backend.
      * @param tableSimilarityReconciliationService Table similarity reindexing service.
      * @param tableSimilarityRefreshService Table similarity dynamic refresh service.
+     * @param localFileSystemCache Local file system cache.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -133,7 +136,8 @@ public class CliInitializerImpl implements CliInitializer {
                               LocalDataDomainManager localDataDomainManager,
                               DataDomainsService dataDomainsService,
                               TableSimilarityReconciliationService tableSimilarityReconciliationService,
-                              TableSimilarityRefreshService tableSimilarityRefreshService) {
+                              TableSimilarityRefreshService tableSimilarityRefreshService,
+                              LocalFileSystemCache localFileSystemCache) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -158,6 +162,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.dataDomainsService = dataDomainsService;
         this.tableSimilarityReconciliationService = tableSimilarityReconciliationService;
         this.tableSimilarityRefreshService = tableSimilarityRefreshService;
+        this.localFileSystemCache = localFileSystemCache;
     }
 
     /**
@@ -220,6 +225,7 @@ public class CliInitializerImpl implements CliInitializer {
         JdbcTypeColumnMapping.ensureInitializedJdbc();
 
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
+        this.localFileSystemCache.start();
         this.labelsIndexer.start();
         this.tableStatusCache.start();
         this.tableLineageCache.start();

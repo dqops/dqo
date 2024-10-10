@@ -52,12 +52,16 @@ public class LocalFileSystemCacheObjectMother {
      * @return New file system cache.
      */
     public static LocalFileSystemCache createNewCache() {
-        return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.getWithCacheEnabledButNoFileSystemWatching(),
+        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(
+                DqoCacheSpecConfigurationPropertiesObjectMother.getWithCacheEnabledButNoFileSystemWatching(),
                 new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
                 new LabelsIndexerProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyLabelsIndexer()),
                 new TableLineageCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableLineageCache()),
                 new TableSimilarityRefreshServiceProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableSimilarityRefreshService()),
                 HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
+        localFileSystemCache.start();
+
+        return localFileSystemCache;
     }
 
     /**
@@ -65,11 +69,13 @@ public class LocalFileSystemCacheObjectMother {
      * @return Caching service that works only as a read-through caching.
      */
     public static LocalFileSystemCache createNewWithCachingDisabled() {
-        return new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.createWithDisabledCache(),
+        LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(DqoCacheSpecConfigurationPropertiesObjectMother.createWithDisabledCache(),
                 new TableStatusCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory()),
                 new LabelsIndexerProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyLabelsIndexer()),
                 new TableLineageCacheProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableLineageCache()),
                 new TableSimilarityRefreshServiceProviderImpl(BeanFactoryObjectMother.getBeanFactory(), new DummyTableSimilarityRefreshService()),
                 HomeLocationFindServiceObjectMother.getDefaultHomeFinder());
+        localFileSystemCache.start();
+        return localFileSystemCache;
     }
 }

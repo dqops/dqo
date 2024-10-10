@@ -18,6 +18,7 @@ package com.dqops.execution.rules.runners.python;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.rules.RuleExecutionResult;
 import com.dqops.execution.rules.RuleExecutionRunParameters;
@@ -79,10 +80,14 @@ public class PythonRuleRunner extends AbstractRuleRunner {
         String dataDomainModule = Strings.isNullOrEmpty(dataDomainFolder) ? "default" : dataDomainFolder.replace(' ', '_');
         ruleInput.setDataDomainModule(dataDomainModule);
         ruleInput.setRuleParameters(ruleRunParameters);
-        String pathToHome = this.homeLocationFindService.getHomePath(ruleDefinitionFindResult.getHome());
+
+        UserDomainIdentity userIdentity = executionContext.getUserHomeContext() != null ? executionContext.getUserHomeContext().getUserIdentity() : null;
+        String pathToHome = this.homeLocationFindService.getHomePath(ruleDefinitionFindResult.getHome(), userIdentity);
         String absolutePathToPythonRule = Path.of(pathToHome).resolve(ruleHomeRelativePath.toRelativePath()).toAbsolutePath().toString();
         ruleInput.setRuleModulePath(absolutePathToPythonRule);
         ruleInput.setHomePath(pathToHome);
+        ruleInput.setDqoHomePath(this.homeLocationFindService.getDqoHomePath());
+        ruleInput.setDqoRootUserHomePath(this.homeLocationFindService.getRootUserHomePath());
         ruleInput.setRuleModuleLastModified(ruleDefinitionFindResult.getRulePythonFileLastModified());
 
         PythonRuleCallOutput output = this.pythonCallerService.executePythonHomeScript(ruleInput, evaluateRulesModule, PythonRuleCallOutput.class);

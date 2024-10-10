@@ -15,6 +15,7 @@
  */
 package com.dqops.testutils;
 
+import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.data.storage.TablesawParquetSupportFix;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -40,8 +41,10 @@ public class BeforeAllTestExtension implements BeforeAllCallback, ExtensionConte
         BeanFactory beanFactory = SpringExtension.getApplicationContext(extensionContext);
         BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
         TablesawParquetSupportFix.ensureInitialized();
+        LocalFileSystemCacheObjectMother.getRealCache().start();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         DqoJobQueueObjectMother.ensureJobQueueIsStarted();
+
         // to be extended in the future when the need appears
     }
 
