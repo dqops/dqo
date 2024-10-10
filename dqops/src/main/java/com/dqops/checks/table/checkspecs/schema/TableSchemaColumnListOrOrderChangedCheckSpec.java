@@ -163,7 +163,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Detect if column list or order has changed";
+        return "Detect if the column list or order has changed";
     }
 
     /**
