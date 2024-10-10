@@ -92,7 +92,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                             <body>
                                 <div class="container">
                                     <div class="logo">
-                                        <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
+                                        <img src="http://localhost:8888/logo.png" alt="Company Logo">
                                     </div>
                                     <div class="content">
                                         <p><b>New incident detected in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table.</b></p>
@@ -176,7 +176,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                             <body>
                                 <div class="container">
                                     <div class="logo">
-                                        <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
+                                        <img src="http://localhost:8888/logo.png" alt="Company Logo">
                                     </div>
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
@@ -261,7 +261,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                             <body>
                                 <div class="container">
                                     <div class="logo">
-                                        <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
+                                        <img src="http://localhost:8888/logo.png" alt="Company Logo">
                                     </div>
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
@@ -347,7 +347,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                             <body>
                                 <div class="container">
                                     <div class="logo">
-                                        <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
+                                        <img src="http://localhost:8888/logo.png" alt="Company Logo">
                                     </div>
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>
@@ -433,7 +433,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                             <body>
                                 <div class="container">
                                     <div class="logo">
-                                        <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
+                                        <img src="http://localhost:8888/logo.png" alt="Company Logo">
                                     </div>
                                     <div class="content">
                                         <p><b>The incident in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table has been acknowledged.</b></p>

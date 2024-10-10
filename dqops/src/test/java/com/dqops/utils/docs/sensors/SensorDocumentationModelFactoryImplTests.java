@@ -62,7 +62,7 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream()
                 .map(ProviderTypeModel::getProviderTypeName)
                 .anyMatch(provider -> provider.equals("bigquery")));
-        Assertions.assertEquals(13,sensorDocumentation.getSqlTemplates().values().size());
+        Assertions.assertEquals(15,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());
