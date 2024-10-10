@@ -424,7 +424,7 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'JSON'
   },
   {
-    type: ConnectionModelProviderTypeEnum.mysql,
+    type: ConnectionModelProviderTypeEnum.mariadb,
     name: 'MariaDB',
     iconName: 'mariadb',
     displayName: 'MariaDB'

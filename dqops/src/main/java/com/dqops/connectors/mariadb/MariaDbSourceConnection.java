@@ -207,37 +207,37 @@ public class MariaDbSourceConnection extends AbstractJdbcSourceConnection {
 //        }
 //    }
 
-//    /**
-//     * Creates an SQL for listing columns in the given tables.
-//     * @param schemaName Schema name (bigquery dataset name).
-//     * @param tableNames Table names to list.
-//     * @return SQL of the INFORMATION_SCHEMA query.
-//     */
-//    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
-//        StringBuilder sqlBuilder = new StringBuilder();
-//        sqlBuilder.append("SELECT * FROM ");
-//
-//        sqlBuilder.append(getInformationSchemaName());
-//        sqlBuilder.append(".COLUMNS ");
-//        sqlBuilder.append("WHERE TABLE_SCHEMA='");
-//        sqlBuilder.append(schemaName.replace("'", "''"));
-//        sqlBuilder.append("'");
-//
-//        if (tableNames != null && tableNames.size() > 0) {
-//            sqlBuilder.append(" AND TABLE_NAME IN (");
-//            for (int ti = 0; ti < tableNames.size(); ti++) {
-//                String tableName = tableNames.get(ti);
-//                if (ti > 0) {
-//                    sqlBuilder.append(",");
-//                }
-//                sqlBuilder.append('\'');
-//                sqlBuilder.append(tableName.replace("'", "''"));
-//                sqlBuilder.append('\'');
-//            }
-//            sqlBuilder.append(") ");
-//        }
-//        sqlBuilder.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION");
-//        String sql = sqlBuilder.toString();
-//        return sql;
-//    }
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT * FROM ");
+
+        sqlBuilder.append(getInformationSchemaName());
+        sqlBuilder.append(".COLUMNS ");
+        sqlBuilder.append("WHERE TABLE_SCHEMA='");
+        sqlBuilder.append(schemaName.replace("'", "''"));
+        sqlBuilder.append("'");
+
+        if (tableNames != null && tableNames.size() > 0) {
+            sqlBuilder.append(" AND TABLE_NAME IN (");
+            for (int ti = 0; ti < tableNames.size(); ti++) {
+                String tableName = tableNames.get(ti);
+                if (ti > 0) {
+                    sqlBuilder.append(",");
+                }
+                sqlBuilder.append('\'');
+                sqlBuilder.append(tableName.replace("'", "''"));
+                sqlBuilder.append('\'');
+            }
+            sqlBuilder.append(") ");
+        }
+        sqlBuilder.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION");
+        String sql = sqlBuilder.toString();
+        return sql;
+    }
 }
