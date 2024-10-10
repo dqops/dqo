@@ -22,6 +22,7 @@ import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.hana.HanaParametersSpec;
+import com.dqops.connectors.mariadb.MariaDbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -160,10 +161,16 @@ public class ConnectionModel {
     private HanaParametersSpec hana;
 
     /**
-     * HANA connection parameters.
+     * DB2 connection parameters.
      */
     @JsonPropertyDescription("DB2 connection parameters.")
     private Db2ParametersSpec db2;
+
+    /**
+     * MariaDB connection parameters.
+     */
+    @JsonPropertyDescription("MariaDB connection parameters.")
+    private MariaDbParametersSpec mariadb;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
@@ -272,6 +279,7 @@ public class ConnectionModel {
             setDatabricks(connectionSpec.getDatabricks());
             setHana(connectionSpec.getHana());
             setDb2(connectionSpec.getDb2());
+            setMariadb(connectionSpec.getMariadb());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -345,6 +353,7 @@ public class ConnectionModel {
         targetConnectionSpec.setDatabricks(this.getDatabricks());
         targetConnectionSpec.setHana(this.getHana());
         targetConnectionSpec.setDb2(this.getDb2());
+        targetConnectionSpec.setMariadb(this.getMariadb());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

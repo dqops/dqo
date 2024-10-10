@@ -51,6 +51,7 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
+import MariaDbConnection from './MariaDbConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -313,6 +314,13 @@ const DatabaseConnection = ({
       <Db2Connection
         db2={database.db2}
         onChange={(db2) => onChange({ ...database, db2 })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.mariadb]: (
+      <MariaDbConnection
+        mariadb={database.mariadb}
+        onChange={(mariadb) => onChange({ ...database, mariadb })}
         sharedCredentials={sharedCredentials}
       />
     )

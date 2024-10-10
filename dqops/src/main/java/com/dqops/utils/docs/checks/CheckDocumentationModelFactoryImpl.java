@@ -31,6 +31,7 @@ import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
 import com.dqops.connectors.db2.Db2ProviderDialectSettings;
 import com.dqops.connectors.duckdb.DuckdbProviderDialectSettings;
 import com.dqops.connectors.hana.HanaProviderDialectSettings;
+import com.dqops.connectors.mariadb.MariaDbProviderDialectSettings;
 import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
@@ -767,6 +768,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new HanaProviderDialectSettings();
             case db2:
                 return new Db2ProviderDialectSettings();
+            case mariadb:
+                return new MariaDbProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

@@ -22,6 +22,7 @@ import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.hana.HanaParametersSpec;
+import com.dqops.connectors.mariadb.MariaDbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -86,6 +87,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("databricks", o -> o.databricks);
             put("hana", o -> o.hana);
             put("db2", o -> o.db2);
+            put("mariadb", o -> o.mariadb);
 
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
@@ -180,6 +182,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Db2ParametersSpec db2;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("MariaDB connection parameters. Specify parameters in the mariadb section or set the url (which is the MariaDB JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MariaDbParametersSpec mariadb;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -537,6 +545,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns the connection parameters for MariaDB.
+     * @return MariaDB connection parameters.
+     */
+    public MariaDbParametersSpec getMariadb() {
+        return mariadb;
+    }
+
+    /**
+     * Sets the MariaDB connection parameters.
+     * @param mariadb New MariaDB connection parameters.
+     */
+    public void setMariadb(MariaDbParametersSpec mariadb) {
+        setDirtyIf(!Objects.equals(this.mariadb, mariadb));
+        this.mariadb = mariadb;
+        propagateHierarchyIdToField(mariadb, "mariadb");
+    }
+
+    /**
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
@@ -777,6 +803,9 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             if (cloned.db2 != null) {
                 cloned.db2 = cloned.db2.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.mariadb != null) {
+                cloned.mariadb = cloned.mariadb.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);

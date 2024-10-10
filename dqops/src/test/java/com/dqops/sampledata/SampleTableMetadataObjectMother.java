@@ -24,6 +24,7 @@ import com.dqops.connectors.db2.Db2ConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckDbTypesMappings;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.hana.HanaConnectionSpecObjectMother;
+import com.dqops.connectors.mariadb.MariaDbConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
@@ -105,6 +106,9 @@ public class SampleTableMetadataObjectMother {
             case db2:
                 return Db2ConnectionSpecObjectMother.create();
 
+            case mariadb:
+                return MariaDbConnectionSpecObjectMother.create();
+
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -163,6 +167,9 @@ public class SampleTableMetadataObjectMother {
 
             case db2:
                 return Db2ConnectionSpecObjectMother.getSchemaName();
+
+            case mariadb:
+                return MariaDbConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());
