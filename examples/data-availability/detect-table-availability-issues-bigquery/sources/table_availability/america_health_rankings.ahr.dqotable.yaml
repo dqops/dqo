@@ -11,10 +11,6 @@ spec:
         daily_table_availability:
           warning:
             max_failures: 0
-          error:
-            max_failures: 5
-          fatal:
-            max_failures: 10
   columns:
     edition:
       type_snapshot:
