@@ -164,6 +164,10 @@ const CreateConnection = () => {
           properties: { '': '' } };
         break;
       }
+      case ConnectionModelProviderTypeEnum.mariadb: {
+        copiedDatabase.mariadb = { port: '3306', properties: { '': '' } };
+        break;
+      }
     }
     setDatabase(copiedDatabase);
   };
