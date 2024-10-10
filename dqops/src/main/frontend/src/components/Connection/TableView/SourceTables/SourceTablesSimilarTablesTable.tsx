@@ -73,7 +73,7 @@ export default function SourceTablesSimilarTablesTable({
       )
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, [connection, schema, table]);
+  }, [connection, schema, table, existingTables]);
 
   if (loading) {
     return (
@@ -82,7 +82,6 @@ export default function SourceTablesSimilarTablesTable({
       </div>
     );
   }
-  console.log('tables', existingTables);
 
   return (
     <div className="text-sm">

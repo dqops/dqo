@@ -1,4 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
+import { getFirstLevelState } from '../../../../redux/selectors';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import Button from '../../../Button';
 import SvgIcon from '../../../SvgIcon';
 import TableActionGroup from '../TableActionGroup';
@@ -7,6 +14,15 @@ import SourceTablesSimilarTablesTable from './SourceTablesSimilarTablesTable';
 import SourceTablesTable from './SourceTablesTable';
 
 export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
+  const history = useHistory();
+  const { sourceTableEditProp } = useSelector(
+    getFirstLevelState(CheckTypes.SOURCES)
+  );
   const [addSourceTable, setAddSourceTable] = React.useState(false);
   const [sourceTableEdit, setSourceTableEdit] = React.useState<{
     connection: string;
@@ -16,10 +32,32 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
   const [existingTables, setExistingTables] = React.useState<
     { connection: string; schema: string; table: string }[]
   >([]);
-
+  const dispatch = useActionDispatch();
   const onBack = () => {
     setAddSourceTable(false);
     setSourceTableEdit(null);
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
+      'source_tables'
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          CheckTypes.SOURCES,
+          connection ?? '',
+          schema ?? '',
+          table ?? ''
+        ),
+        state: {},
+        label: table ?? ''
+      })
+    );
+    history.push(url);
+    return;
   };
   const addSimilarTable = (
     obj: {
@@ -28,9 +66,43 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
       table: string;
     } | null
   ) => {
+    if (isTarget) {
+      const url = ROUTES.TABLE_LEVEL_PAGE(
+        CheckTypes.SOURCES,
+        obj?.connection ?? '',
+        obj?.schema ?? '',
+        obj?.table ?? '',
+        'source_tables'
+      );
+      dispatch(
+        addFirstLevelTab(CheckTypes.SOURCES, {
+          url,
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            CheckTypes.SOURCES,
+            obj?.connection ?? '',
+            obj?.schema ?? '',
+            obj?.table ?? ''
+          ),
+          state: {
+            showSourceTables: true,
+            sourceTableEditProp: { connection, schema, table }
+          },
+          label: obj?.table ?? ''
+        })
+      );
+      history.push(url);
+      return;
+    }
     setSourceTableEdit(obj);
     setAddSourceTable(true);
   };
+
+  useEffect(() => {
+    if (sourceTableEditProp) {
+      setSourceTableEdit(sourceTableEditProp);
+      setAddSourceTable(true);
+    }
+  }, [sourceTableEditProp]);
 
   return (
     <div className="p-2">

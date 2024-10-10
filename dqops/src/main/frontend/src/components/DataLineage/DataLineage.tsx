@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
@@ -23,6 +23,14 @@ export default function DataLineage() {
   const [activeTab, setActiveTab] = React.useState(
     showSourceTables ? 'data-lineage' : 'data-lineage-graph'
   );
+
+  useEffect(() => {
+    if (showSourceTables) {
+      setActiveTab('data-lineage');
+    } else {
+      setActiveTab('data-lineage-graph');
+    }
+  }, [showSourceTables]);
 
   return (
     <div className="py-2">
