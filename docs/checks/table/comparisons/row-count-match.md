@@ -270,6 +270,28 @@ spec:
                 SELECT 1 AS actual_value
                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value
+            FROM `<target_table>` AS analyzed_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -753,6 +775,28 @@ spec:
                 SELECT 1 AS actual_value
                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value
+            FROM `<target_table>` AS analyzed_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1235,6 +1279,28 @@ spec:
             FROM (
                 SELECT 1 AS actual_value
                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1750,6 +1816,32 @@ spec:
                 CAST(analyzed_table."date_column" AS DATE) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS DATE)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2311,6 +2403,32 @@ spec:
                 SERIES_ROUND(CAST(analyzed_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN) AS time_period,
                 TO_TIMESTAMP(SERIES_ROUND(CAST(analyzed_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```

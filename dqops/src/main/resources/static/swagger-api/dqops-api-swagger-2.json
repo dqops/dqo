@@ -37731,7 +37731,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -37788,6 +37788,10 @@
         "db2" : {
           "description" : "DB2 connection parameters.",
           "$ref" : "#/definitions/Db2ParametersSpec"
+        },
+        "mariadb" : {
+          "description" : "MariaDB connection parameters.",
+          "$ref" : "#/definitions/MariaDbParametersSpec"
         },
         "run_checks_job_template" : {
           "description" : "Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.",
@@ -37849,7 +37853,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required).",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -37906,6 +37910,10 @@
         "db2" : {
           "description" : "DB2 connection parameters. Specify parameters in the db2 section or set the url (which is the DB2 JDBC url).",
           "$ref" : "#/definitions/Db2ParametersSpec"
+        },
+        "mariadb" : {
+          "description" : "MariaDB connection parameters. Specify parameters in the mariadb section or set the url (which is the MariaDB JDBC url).",
+          "$ref" : "#/definitions/MariaDbParametersSpec"
         },
         "parallel_jobs_limit" : {
           "type" : "integer",
@@ -40352,6 +40360,38 @@
       },
       "description" : "Model that describes a local data domain. It is also used to create new data domains."
     },
+    "MariaDbParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "host" : {
+          "type" : "string",
+          "description" : "MariaDB host name. Supports also a ${MARIADB_HOST} configuration with a custom environment variable."
+        },
+        "port" : {
+          "type" : "string",
+          "description" : "MariaDB port number. The default port is 3306. Supports also a ${MARIADB_PORT} configuration with a custom environment variable."
+        },
+        "database" : {
+          "type" : "string",
+          "description" : "MariaDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "user" : {
+          "type" : "string",
+          "description" : "MariaDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "password" : {
+          "type" : "string",
+          "description" : "MariaDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "properties" : {
+          "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
     "MaxCountRule0ErrorParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -40975,7 +41015,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -40998,7 +41038,7 @@
         "providerType" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "duckdb", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino", "hana", "db2", "mariadb" ]
         },
         "providerSensorDefinitionSpec" : {
           "description" : "Provider specific sensor definition specification",

@@ -196,6 +196,36 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+        {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+        {%- for item in column_names -%}
+            {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+        {%- endfor -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN SUM(duplicated_count) IS NULL THEN 0
+            ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
+            END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+    FROM (
+        SELECT COUNT(*) AS duplicated_count
+        {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+        {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+        GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+    ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -688,6 +718,36 @@ The templates used to generate the SQL query for each data source supported by D
             FROM {{ lib.render_target_table() }} AS analyzed_table_nested
             {{- lib.render_where_clause(table_alias_prefix = 'analyzed_table_nested', indentation='        ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST(', column_suffix=' AS VARCHAR)') ~ ') IS NOT NULL') }}
         )
+        GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+    ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+        {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+        {%- for item in column_names -%}
+            {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+        {%- endfor -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE WHEN SUM(distinct_records) IS NULL THEN 0
+            ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+            AS actual_value
+        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+    FROM (
+        SELECT COUNT(*) AS records_number,
+            COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+            {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+            {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
         GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
     ) grouping_table
     {{- lib.render_group_by() -}}

@@ -253,6 +253,41 @@ spec:
                 COUNT(*) AS actual_value
             FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM `<target_table>` AS analyzed_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -779,6 +814,41 @@ spec:
                 COUNT(*) AS actual_value
             FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM `<target_table>` AS analyzed_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1304,6 +1374,41 @@ spec:
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM `<target_table>` AS analyzed_table
             ```
     ??? example "MySQL"
 

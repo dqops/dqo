@@ -493,6 +493,78 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DATEDIFF(
+                    DAY,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                        CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0 AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1525,6 +1597,78 @@ Expand the *Configure with data grouping* section to see additional examples for
                 TO_TIMESTAMP(CAST(original_table."date_column" AS DATE)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DATEDIFF(
+                    DAY,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                        CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0 AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2644,6 +2788,78 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DATEDIFF(
+                    DAY,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            SELECT
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                        CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0 AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3676,6 +3892,78 @@ Expand the *Configure with data grouping* section to see additional examples for
                 TO_TIMESTAMP(SERIES_ROUND(CAST(original_table."date_column" AS DATE), 'INTERVAL 1 MONTH', ROUND_DOWN)) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro render_ingestion_event_diff() -%}
+                {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    DATEDIFF(
+                    DAY,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                )
+                {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
+                and lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
+                MAX(
+                    TIMESTAMPDIFF(
+                        SECOND,
+                        {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+                        {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}
+                    )
+                ) / 24.0 / 3600.0
+                {%- else -%}
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+                        CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                {{ render_ingestion_event_diff() }} AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            SELECT
+                MAX(
+                     TIMESTAMPDIFF(
+                        SECOND,
+                        CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                        CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                    )
+                ) / 24.0 / 3600.0 AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

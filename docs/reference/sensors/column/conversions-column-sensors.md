@@ -150,6 +150,28 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -552,6 +574,39 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE WHEN 
+                {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9][0-9])?[0-9]{2})$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9][0-9])?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(0?[1-9]|1[0-9]|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9][0-9])?[0-9]{2})$') }}
+                            OR
+                            {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9][0-9])?[0-9]{2})$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9][0-9])?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1[0-9]|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9][0-9])?[0-9]{2})$') }}
+                            OR
+                            {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((1[6-9]|[2-9][0-9])?[0-9]{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((1[6-9]|[2-9][0-9])?[0-9]{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1[0-9]|2[0-8]))$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(((1[6-9]|[2-9][0-9])?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$') }}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -975,6 +1030,24 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^([0-9]+\.?[0-9]*|\.[0-9]+)$') }}
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -1280,6 +1353,24 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
     ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MariaDB"
+
+    ```sql+jinja
+    {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}

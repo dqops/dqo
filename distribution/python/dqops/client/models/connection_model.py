@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     )
     from ..models.duckdb_parameters_spec import DuckdbParametersSpec
     from ..models.hana_parameters_spec import HanaParametersSpec
+    from ..models.maria_db_parameters_spec import MariaDbParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -64,6 +65,7 @@ class ConnectionModel:
         databricks (Union[Unset, DatabricksParametersSpec]):
         hana (Union[Unset, HanaParametersSpec]):
         db2 (Union[Unset, Db2ParametersSpec]):
+        mariadb (Union[Unset, MariaDbParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -106,6 +108,7 @@ class ConnectionModel:
     databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
     hana: Union[Unset, "HanaParametersSpec"] = UNSET
     db2: Union[Unset, "Db2ParametersSpec"] = UNSET
+    mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -186,6 +189,10 @@ class ConnectionModel:
         db2: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.db2, Unset):
             db2 = self.db2.to_dict()
+
+        mariadb: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.mariadb, Unset):
+            mariadb = self.mariadb.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -270,6 +277,8 @@ class ConnectionModel:
             field_dict["hana"] = hana
         if db2 is not UNSET:
             field_dict["db2"] = db2
+        if mariadb is not UNSET:
+            field_dict["mariadb"] = mariadb
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -319,6 +328,7 @@ class ConnectionModel:
         )
         from ..models.duckdb_parameters_spec import DuckdbParametersSpec
         from ..models.hana_parameters_spec import HanaParametersSpec
+        from ..models.maria_db_parameters_spec import MariaDbParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -446,6 +456,13 @@ class ConnectionModel:
         else:
             db2 = Db2ParametersSpec.from_dict(_db2)
 
+        _mariadb = d.pop("mariadb", UNSET)
+        mariadb: Union[Unset, MariaDbParametersSpec]
+        if isinstance(_mariadb, Unset):
+            mariadb = UNSET
+        else:
+            mariadb = MariaDbParametersSpec.from_dict(_mariadb)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -549,6 +566,7 @@ class ConnectionModel:
             databricks=databricks,
             hana=hana,
             db2=db2,
+            mariadb=mariadb,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

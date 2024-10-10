@@ -1552,6 +1552,8 @@ from .json_format_type import JsonFormatType
 from .json_records_type import JsonRecordsType
 from .label_model import LabelModel
 from .local_data_domain_model import LocalDataDomainModel
+from .maria_db_parameters_spec import MariaDbParametersSpec
+from .maria_db_parameters_spec_properties import MariaDbParametersSpecProperties
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -2796,6 +2798,8 @@ __all__ = (
     "JsonRecordsType",
     "LabelModel",
     "LocalDataDomainModel",
+    "MariaDbParametersSpec",
+    "MariaDbParametersSpecProperties",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",

@@ -29,7 +29,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>| | |
+|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>| | |
 |<span class="no-wrap-code ">[`bigquery`](./ConnectionYaml.md#bigqueryparametersspec)</span>|BigQuery connection parameters. Specify parameters in the bigquery section.|*[BigQueryParametersSpec](./ConnectionYaml.md#bigqueryparametersspec)*| | | |
 |<span class="no-wrap-code ">[`snowflake`](./ConnectionYaml.md#snowflakeparametersspec)</span>|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|*[SnowflakeParametersSpec](./ConnectionYaml.md#snowflakeparametersspec)*| | | |
 |<span class="no-wrap-code ">[`postgresql`](./ConnectionYaml.md#postgresqlparametersspec)</span>|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|*[PostgresqlParametersSpec](./ConnectionYaml.md#postgresqlparametersspec)*| | | |
@@ -44,6 +44,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`databricks`](./ConnectionYaml.md#databricksparametersspec)</span>|Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).|*[DatabricksParametersSpec](./ConnectionYaml.md#databricksparametersspec)*| | | |
 |<span class="no-wrap-code ">[`hana`](./ConnectionYaml.md#hanaparametersspec)</span>|HANA connection parameters. Specify parameters in the hana section or set the url (which is the HANA JDBC url).|*[HanaParametersSpec](./ConnectionYaml.md#hanaparametersspec)*| | | |
 |<span class="no-wrap-code ">[`db2`](./ConnectionYaml.md#db2parametersspec)</span>|DB2 connection parameters. Specify parameters in the db2 section or set the url (which is the DB2 JDBC url).|*[Db2ParametersSpec](./ConnectionYaml.md#db2parametersspec)*| | | |
+|<span class="no-wrap-code ">[`mariadb`](./ConnectionYaml.md#mariadbparametersspec)</span>|MariaDB connection parameters. Specify parameters in the mariadb section or set the url (which is the MariaDB JDBC url).|*[MariaDbParametersSpec](./ConnectionYaml.md#mariadbparametersspec)*| | | |
 |<span class="no-wrap-code ">`parallel_jobs_limit`</span>|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|*integer*| | | |
 |<span class="no-wrap-code ">[`default_grouping_configuration`](./ConnectionYaml.md#datagroupingconfigurationspec)</span>|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](./ConnectionYaml.md#datagroupingconfigurationspec)*| | | |
 |<span class="no-wrap-code ">[`schedules`](./ConnectionYaml.md#cronschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[CronSchedulesSpec](./ConnectionYaml.md#cronschedulesspec)*| | | |
@@ -467,6 +468,25 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|DB2 database name. Supports also a ${DB2_DATABASE} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|DB2 user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|DB2 database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
+
+
+
+___
+
+## MariaDbParametersSpec
+MariaDB connection parameters.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`host`</span>|MariaDB host name. Supports also a ${MARIADB_HOST} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`port`</span>|MariaDB port number. The default port is 3306. Supports also a ${MARIADB_PORT} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`database`</span>|MariaDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`user`</span>|MariaDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|MariaDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 

@@ -111,7 +111,10 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                 [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
                 [--hana-password=<password>] [--hana-port=<port>]
-                [--hana-user=<user>] [--mysql-database=<database>]
+                [--hana-user=<user>] [--mariadb-database=<database>]
+                [--mariadb-host=<host>] [--mariadb-password=<password>]
+                [--mariadb-port=<port>] [--mariadb-user=<user>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-password=<password>] [--mysql-port=<port>]
                 [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
@@ -148,9 +151,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [-Duck=<String=String>]... [-E=<String=String>]...
                 [-F=<String=String>]... [-H=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
-                [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-MA=<String=String>]... [-O=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -192,7 +195,10 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--duckdb-storage-type=<storageType>] [--duckdb-user=<user>]
                 [--hana-host=<host>] [--hana-instance-number=<instanceNumber>]
                 [--hana-password=<password>] [--hana-port=<port>]
-                [--hana-user=<user>] [--mysql-database=<database>]
+                [--hana-user=<user>] [--mariadb-database=<database>]
+                [--mariadb-host=<host>] [--mariadb-password=<password>]
+                [--mariadb-port=<port>] [--mariadb-user=<user>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-password=<password>] [--mysql-port=<port>]
                 [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
@@ -229,9 +235,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [-Duck=<String=String>]... [-E=<String=String>]...
                 [-F=<String=String>]... [-H=<String=String>]...
                 [-K=<String=String>]... [-M=<String=String>]...
-                [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-MA=<String=String>]... [-O=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -290,6 +296,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--hana-user" class="no-wrap-code">`--hana-user`</div>|Hana user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection add--mariadb-database" class="no-wrap-code">`--mariadb-database`</div>|MariaDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mariadb-host" class="no-wrap-code">`--mariadb-host`</div>|MariaDB host name| ||
+|<div id="connection add--mariadb-password" class="no-wrap-code">`--mariadb-password`</div>|MariaDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mariadb-port" class="no-wrap-code">`--mariadb-port`</div>|MariaDB port number| ||
+|<div id="connection add--mariadb-user" class="no-wrap-code">`--mariadb-user`</div>|MariaDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection add--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
@@ -317,7 +328,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>|
 |<div id="connection add--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -356,6 +367,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add-H" class="no-wrap-code">`-H`</div>|Hana additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-MA" class="no-wrap-code">`-MA`</div>|MariaDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
@@ -470,7 +482,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--hana-host=<host>]
                    [--hana-instance-number=<instanceNumber>]
                    [--hana-password=<password>] [--hana-port=<port>]
-                   [--hana-user=<user>] [--mysql-database=<database>]
+                   [--hana-user=<user>] [--mariadb-database=<database>]
+                   [--mariadb-host=<host>] [--mariadb-password=<password>]
+                   [--mariadb-port=<port>] [--mariadb-user=<user>]
+                   [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-password=<password>] [--mysql-port=<port>]
                    [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
@@ -507,9 +522,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [-DB2=<String=String>]... [-Duck=<String=String>]...
                    [-E=<String=String>]... [-F=<String=String>]...
                    [-H=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [-M=<String=String>]... [-MA=<String=String>]...
+                   [-O=<String=String>]... [-P=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 
@@ -553,7 +569,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--hana-host=<host>]
                    [--hana-instance-number=<instanceNumber>]
                    [--hana-password=<password>] [--hana-port=<port>]
-                   [--hana-user=<user>] [--mysql-database=<database>]
+                   [--hana-user=<user>] [--mariadb-database=<database>]
+                   [--mariadb-host=<host>] [--mariadb-password=<password>]
+                   [--mariadb-port=<port>] [--mariadb-user=<user>]
+                   [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-password=<password>] [--mysql-port=<port>]
                    [--mysql-sslmode=<sslmode>] [--mysql-user=<user>]
@@ -590,9 +609,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [-DB2=<String=String>]... [-Duck=<String=String>]...
                    [-E=<String=String>]... [-F=<String=String>]...
                    [-H=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [-M=<String=String>]... [-MA=<String=String>]...
+                   [-O=<String=String>]... [-P=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 
@@ -651,6 +671,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--hana-user" class="no-wrap-code">`--hana-user`</div>|Hana user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection update--mariadb-database" class="no-wrap-code">`--mariadb-database`</div>|MariaDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mariadb-host" class="no-wrap-code">`--mariadb-host`</div>|MariaDB host name| ||
+|<div id="connection update--mariadb-password" class="no-wrap-code">`--mariadb-password`</div>|MariaDB database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mariadb-port" class="no-wrap-code">`--mariadb-port`</div>|MariaDB port number| ||
+|<div id="connection update--mariadb-user" class="no-wrap-code">`--mariadb-user`</div>|MariaDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection update--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
@@ -716,6 +741,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update-H" class="no-wrap-code">`-H`</div>|Hana additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-MA" class="no-wrap-code">`-MA`</div>|MariaDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-O" class="no-wrap-code">`-O`</div>|Oracle's additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||

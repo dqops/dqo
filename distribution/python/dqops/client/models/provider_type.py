@@ -7,6 +7,7 @@ class ProviderType(str, Enum):
     DB2 = "db2"
     DUCKDB = "duckdb"
     HANA = "hana"
+    MARIADB = "mariadb"
     MYSQL = "mysql"
     ORACLE = "oracle"
     POSTGRESQL = "postgresql"

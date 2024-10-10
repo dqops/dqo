@@ -390,6 +390,55 @@ spec:
                 GROUP BY "id", "created_at"
             ) grouping_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`
+            ) grouping_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1215,6 +1264,61 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
                 )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    analyzed_table.`country` AS grouping_level_1,
+                    analyzed_table.`state` AS grouping_level_2
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -2164,6 +2268,55 @@ spec:
                 GROUP BY "id", "created_at"
             ) grouping_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`
+            ) grouping_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2990,6 +3143,61 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
                 )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    analyzed_table.`country` AS grouping_level_1,
+                    analyzed_table.`state` AS grouping_level_2
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -3939,6 +4147,55 @@ spec:
                 GROUP BY "id", "created_at"
             ) grouping_table
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`
+            ) grouping_table
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4765,6 +5022,61 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
                 )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    analyzed_table.`country` AS grouping_level_1,
+                    analyzed_table.`state` AS grouping_level_2
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
@@ -5758,6 +6070,61 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -6679,6 +7046,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
                 )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    analyzed_table.`country` AS grouping_level_1,
+                    analyzed_table.`state` AS grouping_level_2,
+                    DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2, time_period, time_period_utc
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7716,6 +8142,61 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -8637,6 +9118,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHERE (COALESCE(CAST("id" AS VARCHAR), CAST("created_at" AS VARCHAR)) IS NOT NULL)
                 )
                 GROUP BY "id", "created_at", grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MariaDB"
+
+        === "Sensor template for MariaDB"
+            ```sql+jinja
+            {% import '/dialects/mariadb.sql.jinja2' as lib with context -%}
+            
+            {% macro extract_in_list(values_list, column_prefix = none, column_suffix = none, separate_by_comma = false) %}
+                {%- set column_names = table.columns if values_list is none or (values_list | length()) == 0 else values_list -%}
+                {%- for item in column_names -%}
+                    {{ (column_prefix) if column_prefix is not none -}} {{- lib.quote_identifier(item) -}} {{- (column_suffix) if column_suffix is not none -}} {{- ", " if not loop.last }} {{- "', ', " if separate_by_comma and not loop.last }}
+                {%- endfor -%}
+            {% endmacro %}
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY {{ extract_in_list(parameters.columns) -}} ) AS distinct_records
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation='        ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation='    ', extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns) ~ ') IS NOT NULL') }}
+                GROUP BY {{ extract_in_list(parameters.columns) -}} {{- (", " ~ lib.render_grouping_column_names()) if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none }}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MariaDB"
+            ```sql
+            
+            
+            SELECT
+                CASE WHEN SUM(distinct_records) IS NULL THEN 0
+                    ELSE (1 - SUM(distinct_records) / SUM(records_number)) * 100.0 END
+                    AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT COUNT(*) AS records_number,
+                    COUNT(*) OVER (PARTITION BY `id`, `created_at`) AS distinct_records,
+                    analyzed_table.`country` AS grouping_level_1,
+                    analyzed_table.`state` AS grouping_level_2,
+                    DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                    FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                WHERE (COALESCE(`id`, `created_at`) IS NOT NULL)
+                GROUP BY `id`, `created_at`, grouping_level_1, grouping_level_2, time_period, time_period_utc
             ) grouping_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
