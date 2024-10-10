@@ -51,6 +51,17 @@ export const setActiveFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   data
 });
 
+export const setActiveTabState = (
+  checkType: CheckTypes,
+  activeTab: string,
+  data: any
+) => ({
+  type: SOURCE_ACTION.SET_ACTIVE_TAB_STATE,
+  checkType,
+  activeTab,
+  data
+});
+
 export const setActiveFirstLevelUrl = (
   checkType: CheckTypes,
   activeTab: string,

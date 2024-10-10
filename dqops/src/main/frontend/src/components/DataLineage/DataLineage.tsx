@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../redux/selectors';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setActiveTabState } from '../../redux/actions/source.actions';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import SourceTables from '../Connection/TableView/SourceTables/SourceTables';
@@ -17,6 +22,10 @@ export default function DataLineage() {
     schema,
     table
   }: { connection: string; schema: string; table: string } = useDecodedParams();
+  const firstLevelActiveTab = useSelector(
+    getFirstLevelActiveTab(CheckTypes.SOURCES)
+  );
+  const dispatch = useActionDispatch();
   const { showSourceTables } = useSelector(
     getFirstLevelState(CheckTypes.SOURCES)
   );
@@ -24,18 +33,21 @@ export default function DataLineage() {
     showSourceTables ? 'data-lineage' : 'data-lineage-graph'
   );
 
+  const onChangeActiveTab = (tab: string) => {
+    dispatch(setActiveTabState(CheckTypes.SOURCES, firstLevelActiveTab, {}));
+    setActiveTab(tab);
+  };
+
   useEffect(() => {
     if (showSourceTables) {
       setActiveTab('data-lineage');
-    } else {
-      setActiveTab('data-lineage-graph');
     }
   }, [showSourceTables]);
 
   return (
     <div className="py-2">
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeActiveTab} />
       </div>
       {activeTab === 'data-lineage' && <SourceTables />}
       {activeTab === 'target-tables' && <SourceTables isTarget />}

@@ -2,8 +2,14 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { getFirstLevelState } from '../../../../redux/selectors';
+import {
+  addFirstLevelTab,
+  setActiveTabState
+} from '../../../../redux/actions/source.actions';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
 import Button from '../../../Button';
@@ -20,6 +26,10 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
     table
   }: { connection: string; schema: string; table: string } = useDecodedParams();
   const history = useHistory();
+  const firstLevelActiveTab = useSelector(
+    getFirstLevelActiveTab(CheckTypes.SOURCES)
+  );
+
   const { sourceTableEditProp } = useSelector(
     getFirstLevelState(CheckTypes.SOURCES)
   );
@@ -36,28 +46,7 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
   const onBack = () => {
     setAddSourceTable(false);
     setSourceTableEdit(null);
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      connection ?? '',
-      schema ?? '',
-      table ?? '',
-      'source_tables'
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value: ROUTES.TABLE_LEVEL_VALUE(
-          CheckTypes.SOURCES,
-          connection ?? '',
-          schema ?? '',
-          table ?? ''
-        ),
-        state: {},
-        label: table ?? ''
-      })
-    );
-    history.push(url);
-    return;
+    dispatch(setActiveTabState(CheckTypes.SOURCES, firstLevelActiveTab, {}));
   };
   const addSimilarTable = (
     obj: {

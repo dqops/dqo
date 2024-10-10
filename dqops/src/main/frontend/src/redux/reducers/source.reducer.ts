@@ -147,6 +147,21 @@ const connectionReducer = (state = initialState, action: Action) => {
         }
       };
     }
+    case SOURCE_ACTION.SET_ACTIVE_TAB_STATE:
+      return {
+        ...state,
+        [action.checkType]: {
+          ...state[action.checkType],
+          tabs: state[action.checkType]?.tabs.map((item) =>
+            item.value === action.activeTab
+              ? {
+                  ...item,
+                  state: action.data
+                }
+              : item
+          )
+        }
+      };
     case SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_TAB:
       return {
         ...state,
