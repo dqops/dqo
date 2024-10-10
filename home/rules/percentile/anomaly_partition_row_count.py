@@ -95,7 +95,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = scipy.stats.tstd(filtered)
 
     if float(filtered_std) == 0:
-        return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float,
+        return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                    filtered_median_float, filtered_median_float, filtered_median_float)
 
     degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)

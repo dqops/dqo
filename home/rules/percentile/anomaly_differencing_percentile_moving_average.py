@@ -101,7 +101,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     actual_difference = rule_parameters.actual_value - last_readout
 
     if float(differences_std) == 0:
-        return RuleExecutionResult(actual_difference == differences_median_float,
+        return RuleExecutionResult(None if actual_difference == differences_median_float else False,
                                    last_readout + differences_median_float, last_readout + differences_median_float,
                                    last_readout + differences_median_float)
 

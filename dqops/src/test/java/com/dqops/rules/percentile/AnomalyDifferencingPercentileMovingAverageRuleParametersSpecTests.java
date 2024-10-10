@@ -167,7 +167,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteadyFrom1_thenReturnsPassed() {
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteadyFrom1_thenReturnsNull() {
         this.sut.setAnomalyPercent(20.0);
 
         Double increment = 7.0;
@@ -183,14 +183,11 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(actualValue, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(actualValue, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(actualValue, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteadyFrom0_thenReturnsPassed() {
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteadyFrom0_thenReturnsNull() {
         this.sut.setAnomalyPercent(20.0);
 
         Double increment = 7.0;
@@ -206,10 +203,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(actualValue, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(actualValue, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(actualValue, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
     }
 
     @Test
@@ -233,7 +227,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsPassed() {
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsNull() {
         this.sut.setAnomalyPercent(20.0);
 
         Arrays.fill(this.sensorReadouts, 10.0);
@@ -244,10 +238,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
     }
 
     @Test

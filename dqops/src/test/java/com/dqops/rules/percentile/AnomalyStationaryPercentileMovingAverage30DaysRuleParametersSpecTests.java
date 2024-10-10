@@ -118,7 +118,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
     }
 
     @Test
-    void executeRule_whenActualValueIsEqualToLastValueAndAllPastValuesArePresentChangeAndEqual_thenReturnsPassed() {
+    void executeRule_whenActualValueIsEqualToLastValueAndAllPastValuesArePresentChangeAndEqual_thenReturnsNull() {
         this.sut.setAnomalyPercent(20.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
@@ -131,10 +131,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertNull(ruleExecutionResult.getPassed());
     }
 
     @Test
@@ -158,7 +155,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsPassed() {
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsNull() {
         this.sut.setAnomalyPercent(20.0);
 
         Arrays.fill(this.sensorReadouts, 10.0);
@@ -169,10 +166,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
-        Assertions.assertTrue(ruleExecutionResult.getPassed());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(10.0, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getPassed());
     }
 
     @Test

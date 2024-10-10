@@ -96,9 +96,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = scipy.stats.tstd(filtered)
 
     if float(filtered_std) == 0.0:
-        return RuleExecutionResult(rule_parameters.actual_value == filtered_median_float or
+        return RuleExecutionResult(None if (rule_parameters.actual_value == filtered_median_float or
                                    (rule_parameters.actual_value == 0.0 and 0.0 in all_extracted) or
-                                   (rule_parameters.actual_value == 100.0 and 100.0 in all_extracted),
+                                   (rule_parameters.actual_value == 100.0 and 100.0 in all_extracted)) else False,
                                    filtered_median_float,
                                    filtered_median_float if 0.0 not in all_extracted else 0.0,
                                    filtered_median_float if 100.0 not in all_extracted else 100.0)
