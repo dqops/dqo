@@ -164,7 +164,7 @@ public class TableSchemaColumnTypesChangedCheckSpec extends AbstractCheckSpec<Ta
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Detect if column list or data type has changed";
+        return "Detect if the column list or data type has changed";
     }
 
     /**
