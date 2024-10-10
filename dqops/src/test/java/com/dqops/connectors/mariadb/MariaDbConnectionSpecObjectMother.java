@@ -37,7 +37,8 @@ public class MariaDbConnectionSpecObjectMother {
                     .withDatabaseName("public")
                     .withUsername("test")
                     .withPassword("test")
-                    .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
+                    .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers())
+                    .withCommand("--sort_buffer_size=262144000");
             sharedContainer.start();
         }
 
