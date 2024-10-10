@@ -133,7 +133,7 @@ export default function SourceTables({ isTarget }: { isTarget?: boolean }) {
             />
           )}
           <div className="broder-t border-gray-100">
-            <div className="font-bold text-lg ml-4 mb-4">
+            <div className="font-bold text-lg ml-4 mb-4 mt-4">
               Most similar tables
             </div>
             <SourceTablesSimilarTablesTable

@@ -319,9 +319,11 @@ export default function SourceTablesTable({
         )}
         <tbody className={clsx('', showHeader && 'border-t border-gray-100')}>
           {displayedTables && tables.length === 0 && (
-            <tr className="!h-6">
+            <tr className="!h-6 ml-4">
               <td>
-                This table has no {isTarget ? 'target' : 'source'} tables.
+                <div className="ml-4">
+                  This table has no {isTarget ? 'target' : 'source'} tables.
+                </div>
               </td>
             </tr>
           )}
