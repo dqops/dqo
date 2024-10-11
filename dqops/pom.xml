@@ -752,6 +752,11 @@
 			<artifactId>mariadb</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>clickhouse</artifactId>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 	<build>
@@ -1463,6 +1468,11 @@
 					<groupId>com.ibm.db2</groupId>
 					<artifactId>jcc</artifactId>
 					<version>11.5.9.0</version>
+				</dependency>
+				<dependency>
+					<groupId>com.clickhouse</groupId>
+					<artifactId>clickhouse-jdbc</artifactId>
+					<version>0.6.5</version>
 				</dependency>
 			</dependencies>
 		</profile>
