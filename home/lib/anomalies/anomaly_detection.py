@@ -51,7 +51,7 @@ def detect_upper_bound_anomaly(values_above_median: list[float], degrees_of_free
     values_std = scipy.stats.tstd(values_array)
 
     if float(values_std) == 0:
-        return values_median
+        return float(values_median)
     else:
         # Assumption: the historical data follows t-student distribution
         upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=values_median,
@@ -65,7 +65,7 @@ def detect_lower_bound_anomaly(values_below_median: list[float], degrees_of_free
     values_std = scipy.stats.tstd(values_array)
 
     if float(values_std) == 0:
-        return values_median
+        return float(values_median)
     else:
         # Assumption: the historical data follows t-student distribution
         lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=values_median,
