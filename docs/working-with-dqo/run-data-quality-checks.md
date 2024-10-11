@@ -31,7 +31,7 @@ To navigate to the Check editor:
     ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest4.png){ loading=lazy; width="1200px" }
    
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks)
+can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../categories-of-data-quality-checks/index.md)
 
 By clicking on the **Show advanced checks** checkbox, located at the top of the table, you can view all checks available in DQOps.
    
@@ -43,13 +43,18 @@ To access the Advanced mode, select the **Multiple levels** option from the Issu
 
 The Check editor screen in the paid version of DQOps has additional subtabs that allow you to switch between Daily and Monthly checks.
 
+!!! tip "Configure partitioning column to run partition checks"
+
+    To run partition checks, you need to configure a date or datetime columns, which will be used as the time partitioning key for the table.
+    Follow the link to learn how to [configure partitioning column](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md#setting-up-date-partitioning-column).
+
 ### **Run a check from a check editor**
 
 To run a check:
 
 1. Activate the check of interest by clicking the toggle button next to the check name in the list on the right.
 
-    The gray color indicates that the check is not activated, light green indicates [default checks](../dqo-concepts/data-observability.md#default-table-level-checks) that are activated, and darker green indicates manually activated checks.
+    The gray color indicates that the check is not activated, light green indicates [checks activated by data quality policies](../dqo-concepts/data-observability.md#data-quality-policies), and darker green indicates manually activated checks.
 
     ![Activate check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check4.png){ loading=lazy; width="1200px" }
 
