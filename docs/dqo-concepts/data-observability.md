@@ -20,7 +20,7 @@ and maintain data integrity throughout the entire data lifecycle.
 
 DQOps enables data observability by automatically activating selected data quality checks on data sources.
 
-## How DQOps activates data observability
+## How DQOps activates data observability?
 DQOps applies data observability by automatically activating data quality checks on monitored data sources. 
 
 Upon installation, DQOps creates **Data quality policy** configuration files. These policies automatically 
@@ -155,6 +155,77 @@ spec:
 ```
 
 1.  The priority (order) of activating the pattern files.
+
+## Observability status in UI
+DQOps automatically activates monitoring checks to track various aspects of your data health.
+The **Observability status** screen provides a quick overview of any data quality problems for the selected
+table or column. This allows you to proactively identify potential issues before they impact downstream processes.
+
+With that screen, you can analyze trends in schema changes, volume, and freshness anomalies at table level
+and distinct count and null percent anomalies at the column level. The screen also displays a summary of data quality issues 
+for the table or columns of choice. 
+
+### Table-level observability status
+
+To access **Observability status** at the table level, click on the **Monitoring checks** or **Partition checks** sections,
+select the table of interest and select the **Observability status** tab.
+
+The screen below  provides an example of the **Observability status** screen at the table level in the **Monitoring section**.
+
+![Table-level Observability status](https://dqops.com/docs/images/concepts/data-observability/table-level-observability-status1.png){ loading=lazy; width="1200px" }
+
+The 5 blocks at the top of the screen show the last 15 results from checks run in 5 schema category:
+
+- **Detect if the column list or data type has changed** ([daily_column_types_changed](../checks/table/schema/column-types-changed.md#daily-column-types-changed) check)
+- **Detect if column list or order has changed** ([daily_column_list_or_order_changed](../checks/table/schema/column-list-or-order-changed.md#daily-column-list-or-order-changed) check)
+- **Detect if columns were added or removed** ([daily_column_list_changed](../checks/table/schema/column-list-changed.md#daily-column-list-changed) check)
+- **Detect change of column count** ([daily_column_count_changed](../checks/table/schema/column-count-changed.md#daily-column-count-changed) check)
+- **Expected column count** ([daily_column_count](../checks/table/schema/column-count.md#daily-column-count) check)
+
+The results are displayed as squares with colors indicating the result of the run check:
+
+- Green for a correct result
+- Yellow for a warning
+- Orange for an error
+- Red for a fatal error
+- Black for execution error
+
+Below are line graphs that display table freshness and volume anomalies:
+
+- **Table freshness anomaly** ([daily_data_freshness_anomaly](../checks/table/timeliness/data-freshness.md#daily-data-freshness) check)
+- **Row count anomaly** ([daily_row_count_anomaly](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly) check)
+
+Towards the bottom of the screen, there is a column chart that provides a summary of data quality issues for the selected table.
+
+The **Observability status** screen at the table level in the Partition checks section displays a line graph showing 
+**Partition row count anomaly** with data from the [daily_partition_row_count_anomaly](../checks/table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)
+check and a column chart showing data quality issues.
+
+### Column-level observability status
+
+To access **Observability status** at the column level, click on the **Monitoring checks** or **Partition checks** sections.
+Then, select the column of interest and select the **Observability status** tab.
+
+The screen below provides an example of the **Observability status** screen at the column level in the **Monitoring section**.
+
+![Column-level Observability status](https://dqops.com/docs/images/concepts/data-observability/column-level-observability-status1.png){ loading=lazy; width="1200px" }
+
+The two blocks at the top of the screen display the last 15 results from the checks on two schema categories:
+
+- **Verify if the column exists** ([daily_column_exists](../checks/column/schema/column-exists.md#daily-column-exists) check)
+- **Verify if the column data type has changed** ([daily_column_type_changed](../checks/column/schema/column-type-changed.md#daily-column-type-changed) check)
+
+Below, there are line graphs that show anomalies in distinct count and null percentage:
+
+- **Null percent anomaly** ([daily_nulls_percent_anomaly](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly) check)
+- **Distinct count anomaly** ([daily_distinct_count_anomaly](../checks/column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly) check)
+
+At the bottom of the screen, there is a column chart summarizing data quality issues for the selected column.
+
+The **Observability status** screen at the column level in the **Partition checks** section displays
+two line graphs for **Null percent anomaly** ([daily_partition_nulls_percent_anomaly](../checks/column/nulls/nulls-percent-anomaly.md#daily-partition-nulls-percent-anomaly) check) and 
+**Distinct count anomaly** ([daily_partition_distinct_count_anomaly](../checks/column/uniqueness/distinct-count-anomaly.md#daily-partition-distinct-count-anomaly) check), as well as a column chart 
+showing data quality issues.
 
 
 ## Target tables and columns
