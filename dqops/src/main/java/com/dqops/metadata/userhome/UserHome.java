@@ -146,9 +146,13 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @param connectionName Connection name where the table is present.
      * @param referenceTable Reference table to find similar tables.
      * @param maxResults Maximum number of results to return.
+     * @param maxDifferencesPercent The maximum difference percent.
      * @return List of tables that are similar.
      */
-    List<SimilarTableModel> findTablesSimilarTo(String connectionName, PhysicalTableName referenceTable, int maxResults);
+    List<SimilarTableModel> findTablesSimilarTo(String connectionName,
+                                                PhysicalTableName referenceTable,
+                                                int maxResults,
+                                                double maxDifferencesPercent);
 
     /**
      * Returns a list of dashboards definitions.

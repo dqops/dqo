@@ -41,6 +41,12 @@ public class SimilarTableModel {
     private int difference;
 
     /**
+     * A similarity score as a percentage. A value 100.0 means that the tables are probably equal.
+     */
+    @JsonPropertyDescription("A similarity score as a percentage. A value 100.0 means that the tables are probably equal.")
+    private double similarityPct;
+
+    /**
      * Connection name
      */
     @JsonPropertyDescription("Connection name")
@@ -63,6 +69,7 @@ public class SimilarTableModel {
 
     public SimilarTableModel(int difference, String connectionName, PhysicalTableName physicalTableName) {
         this.difference = difference;
+        this.similarityPct = ((DataSimilarityFormula.WORD_COUNT * 64) - difference) * 100.0 / (DataSimilarityFormula.WORD_COUNT * 64);
         this.connectionName = connectionName;
         this.schemaName = physicalTableName.getSchemaName();
         this.tableName = physicalTableName.getTableName();
