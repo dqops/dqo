@@ -154,9 +154,65 @@ Below is the example of raw text message in the Markdown language which you can 
 
 ## Linking incidents to external ticketing systems
 
-A notification has a special field called **issue URL**, which allows user to add an URL from an external ticketing system. 
+A notification has a special field called **issue URL**, which allows user to add a URL from an external ticketing system. 
 The issue URL can be added at any time. 
 Adding an Issue URL to an incident provides easy access to the issue in the ticketing system.
+
+### Manipulate the notification incidents with Python webhook service
+
+The incident notification message can be pushed to a microservice webhook that handles the notification in an approachable way.
+This allows you to apply a custom logic according to your business requirements.
+
+DQOps provides an example of the Python Flask REST API application that works as a webhook service for incident notifications.
+
+The below example shows how to retrieve the table name, the incident notification status and additional data about the incident notification.
+
+```python
+from flask import Flask, request
+from dqops.client.models.table_current_data_quality_status_model import (
+    TableCurrentDataQualityStatusModel
+)
+from incident_notification_message import IncidentNotificationMessage
+
+app = Flask(__name__)
+
+@app.post("/pushnotification")
+def sent_incident_notification():
+
+    json_body = request.get_json()
+    incident_notification_message: IncidentNotificationMessage = IncidentNotificationMessage().from_dict(json_body)
+
+    print("The table's " + incident_notification_message.connection + "." + incident_notification_message.schema + "." + incident_notification_message.table + " incident status is " + incident_notification_message.status + "\n" +
+        "First seen: " + incident_notification_message.first_seen + "\n" +
+        "Last seen: " + incident_notification_message.last_seen + "\n" +
+        "Quality dimension: " + incident_notification_message.quality_dimension + "\n" +
+        "Check category: " + incident_notification_message.check_category + "\n" +
+        "Highest severity: " + str(incident_notification_message.highest_severity) + "\n" +
+        "Total data quality issues: " + str(incident_notification_message.failed_checks_count))
+
+    return ""
+
+if __name__ == '__main__':
+    app.run()
+```
+
+When the webhook is configured in DQOps by providing the Flask address on the notification configuration page, 
+e.g. http://localhost:5000/pushnotification, the received notification will show a similar to the below message:   
+
+```text
+The table's bigquery-public-data.country_codes.country_codes incident status is acknowledged
+First seen: 2024-09-10T07:00:45.034Z
+Last seen: 2024-10-04T07:00:43.598Z
+Quality dimension: Validity
+Check category: patterns
+Highest severity: 2
+Total data quality issues: 10
+```
+
+The complete solution of the example is available at the DQOps' repository in Github.
+
+https://github.com/dqops/dqo/tree/develop/examples/incident-notification/incident-notification-wrapper-template
+
 
 ## Next steps
 
