@@ -174,7 +174,8 @@ The screen below  provides an example of the **Observability status** screen at 
 
 ![Table-level Observability status](https://dqops.com/docs/images/concepts/data-observability/table-level-observability-status1.png){ loading=lazy; width="1200px" }
 
-The 5 blocks at the top of the screen show the last 15 results from checks run in 5 schema category:
+The number of elements on the screen depends on which checks have been activated.
+The 5 blocks at the top of the screen show the last 15 results from 5 checks in the schema category:
 
 - **Detect if the column list or data type has changed** ([daily_column_types_changed](../checks/table/schema/column-types-changed.md#daily-column-types-changed) check)
 - **Detect if column list or order has changed** ([daily_column_list_or_order_changed](../checks/table/schema/column-list-or-order-changed.md#daily-column-list-or-order-changed) check)
@@ -210,15 +211,15 @@ The screen below provides an example of the **Observability status** screen at t
 
 ![Column-level Observability status](https://dqops.com/docs/images/concepts/data-observability/column-level-observability-status1.png){ loading=lazy; width="1200px" }
 
-The two blocks at the top of the screen display the last 15 results from the checks on two schema categories:
+The two blocks at the top of the screen display the last 15 results from two checks in the schema category:
 
 - **Verify if the column exists** ([daily_column_exists](../checks/column/schema/column-exists.md#daily-column-exists) check)
 - **Verify if the column data type has changed** ([daily_column_type_changed](../checks/column/schema/column-type-changed.md#daily-column-type-changed) check)
 
-Below, there are line graphs that show anomalies in distinct count and null percentage:
+Below, there are line graphs that show anomalies in distinct count and nulls percent:
 
-- **Null percent anomaly** ([daily_nulls_percent_anomaly](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly) check)
 - **Distinct count anomaly** ([daily_distinct_count_anomaly](../checks/column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly) check)
+- **Null percent anomaly** ([daily_nulls_percent_anomaly](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly) check)
 
 At the bottom of the screen, there is a column chart summarizing data quality issues for the selected column.
 
