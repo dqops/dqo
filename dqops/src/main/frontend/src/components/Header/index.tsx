@@ -371,8 +371,8 @@ const Header = () => {
         </div>
       </div>
       <div className="flex">
-        <DomainSwitch />
         <HelpMenu />
+        <DomainSwitch />
         <SynchronizeButton />
         <NotificationMenu />
         <UserProfile />

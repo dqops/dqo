@@ -25,19 +25,21 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
               className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
               onClick={() => onSelect(option.type, option.name)}
             >
-            {option.type === ConnectionModelProviderTypeEnum.hana
-              ? <p className='p-8 font-bold text-xl'>
-                  <span style={{ color: '#008FD3', }}>SAP </span>
-                  <span style={{ color: '#debb00', }}>HANA</span>
+              {option.type === ConnectionModelProviderTypeEnum.hana ? (
+                <p className="p-8 font-bold text-xl">
+                  <span style={{ color: '#008FD3' }}>SAP </span>
+                  <span style={{ color: '#debb00' }}>HANA</span>
                 </p>
-              : <SvgIcon
+              ) : (
+                <SvgIcon
                   name={option.iconName}
                   className={clsx(
                     'mb-3 text-blue-500',
-                    option.name === 'Spark' && 'w-30'
+                    option.name === 'Spark' && 'w-30',
+                    option.iconName === 'perconaserverformysql' && 'w-20'
                   )}
                 />
-              }
+              )}
               <div className="text-lg font-semibold text-gray-700">
                 {option.displayName}
               </div>
