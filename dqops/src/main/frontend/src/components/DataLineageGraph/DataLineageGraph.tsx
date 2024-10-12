@@ -3,12 +3,14 @@ import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import {
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
+  DimensionCurrentDataQualityStatusModel,
   DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
   TableLineageFlowModel,
   TableLineageModel
 } from '../../api';
 import { DataLineageApiClient } from '../../services/apiClient';
 import Button from '../Button';
+import Checkbox from '../Checkbox';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import Loader from '../Loader';
 import DataLineageDetailsDialog from './DataLineageDetailsDialog';
@@ -18,7 +20,9 @@ declare global {
     showDataLineage: ((index: number) => void) | null;
   }
 }
-
+type DimensionCheck = DimensionCurrentDataQualityStatusModel & {
+  checked?: boolean;
+};
 export default function DataLineageGraph({
   connection,
   schema,
@@ -33,6 +37,9 @@ export default function DataLineageGraph({
   const [graphArray, setGraphArray] = useState<
     (string | number | undefined)[][]
   >([]);
+  const [dimensions, setDimensions] = useState<{
+    [key: string]: DimensionCheck;
+  }>({});
   const [loading, setLoading] = useState(false);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
@@ -50,7 +57,7 @@ export default function DataLineageGraph({
 
   useEffect(() => {
     window.showDataLineage = showDataLineage;
-    let timer : NodeJS.Timeout;
+    let timer: NodeJS.Timeout;
 
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
@@ -62,7 +69,18 @@ export default function DataLineageGraph({
         );
         const data = response.data;
 
-
+        const dimensions: { [key: string]: DimensionCheck } = {};
+        Object.keys(
+          data.relative_table_cumulative_quality_status?.dimensions ?? {}
+        ).forEach((dimension) => {
+          dimensions[dimension] = {
+            ...data.relative_table_cumulative_quality_status?.dimensions?.[
+              dimension
+            ],
+            checked: true
+          };
+        });
+        setDimensions(dimensions);
         tableDataLineageRef.current = data;
 
         if (!data.data_lineage_fully_loaded) {
@@ -124,6 +142,34 @@ export default function DataLineageGraph({
 
   return (
     <div className="relative w-full h-full">
+      <div>
+        {Object.keys(dimensions).map((dimension, index) => (
+          <div key={index} className="flex items-center gap-x-4">
+            <Checkbox
+              checked={dimensions[dimension].checked}
+              onChange={(value) =>
+                setDimensions({
+                  ...dimensions,
+                  [dimension]: {
+                    ...dimensions[dimension],
+                    checked: value
+                  }
+                })
+              }
+              className="mr-4"
+            />
+            <div
+              className="w-5 h-5"
+              style={{
+                backgroundColor: getColor(
+                  dimensions[dimension].current_severity
+                )
+              }}
+            ></div>
+            <div>{dimension}</div>
+          </div>
+        ))}
+      </div>
       {loading && (
         <div className="absolute inset-0 z-10 flex justify-center items-center bg-white bg-opacity-70">
           <Loader isFull={false} className="w-8 h-8 fill-green-700" />
