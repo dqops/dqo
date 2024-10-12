@@ -33,6 +33,7 @@ type DeleteOnlyDataDialogProps = {
   columnBool?: boolean;
   nameOfCol?: string;
   nodeId?: string;
+  isIncident?: boolean;
 };
 
 type TParams = DeleteStoredDataQueueJobParameters & { schema?: string } & {
@@ -42,7 +43,8 @@ const DeleteStoredDataExtendedPopUp = ({
   open,
   onClose,
   onDelete,
-  nodeId
+  nodeId,
+  isIncident
 }: DeleteOnlyDataDialogProps) => {
   const hierarchiArray = nodeId?.split('.');
 
@@ -58,11 +60,11 @@ const DeleteStoredDataExtendedPopUp = ({
     columnNames: urlencodeEncoder(hierarchiArray?.[4])
       ? [urlencodeEncoder(hierarchiArray?.[4])]
       : [],
-    deleteErrors: true,
-    deleteStatistics: true,
-    deleteCheckResults: true,
-    deleteSensorReadouts: true,
-    deleteErrorSamples: true,
+    deleteErrors: !isIncident,
+    deleteStatistics: !isIncident,
+    deleteCheckResults: !isIncident,
+    deleteSensorReadouts: !isIncident,
+    deleteErrorSamples: !isIncident,
     deleteIncidents: true,
     checkType: checkTypes === 'sources' ? undefined : checkTypes,
     incidentStatusName: undefined
