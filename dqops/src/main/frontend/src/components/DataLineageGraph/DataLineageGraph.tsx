@@ -198,24 +198,26 @@ export default function DataLineageGraph({
   return (
     <div className="relative w-full h-full">
       <div className="flex flex-wrap gap-x-6 mb-4">
-        {Object.keys(dimensions).map((dimension, index) => (
-          <div key={index} className="flex items-center gap-x-1">
-            <Checkbox
-              checked={dimensions[dimension].checked}
-              onChange={(value) => handleDimensionChange(dimension, value)}
-              className="mr-4 "
-            />
-            <div
-              className="w-4 h-4"
-              style={{
-                backgroundColor: getColor(
-                  dimensions[dimension].current_severity
-                )
-              }}
-            ></div>
-            <div>{dimension}</div>
-          </div>
-        ))}
+        {Object.keys(dimensions)
+          .sort()
+          .map((dimension, index) => (
+            <div key={index} className="flex items-center gap-x-1">
+              <Checkbox
+                checked={dimensions[dimension].checked}
+                onChange={(value) => handleDimensionChange(dimension, value)}
+                className="mr-4 "
+              />
+              <div
+                className="w-4 h-4"
+                style={{
+                  backgroundColor: getColor(
+                    dimensions[dimension].current_severity
+                  )
+                }}
+              ></div>
+              <div>{dimension}</div>
+            </div>
+          ))}
       </div>
       {loading && (
         <div className="absolute inset-0 z-10 flex justify-center items-center bg-white bg-opacity-70">
