@@ -102,6 +102,7 @@ const Header = () => {
       history.push(url);
     }
 
+    dispatch(setIncidentNavigation(undefined));
     if (match.path === ROUTES.PATTERNS.CONNECTION) {
       const newTab = getFirstLevelConnectionTab(newCheckTypes);
 
