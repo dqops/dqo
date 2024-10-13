@@ -23,6 +23,7 @@ import useDebounce from '../../hooks/useDebounce';
 import { addFirstLevelTab as addFirstLevelConfigurationTab } from '../../redux/actions/definition.actions';
 import {
   getIncidentsIssues,
+  setIncidentNavigation,
   setIncidentsFilter
 } from '../../redux/actions/incidents.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
@@ -124,6 +125,16 @@ export const IncidentDetail = () => {
       })
     );
   }, [connection, year, month, incidentId]);
+
+  useEffect(() => {
+    dispatch(
+      setIncidentNavigation({
+        connection: incidentDetail?.connection ?? '',
+        schema: incidentDetail?.schema ?? '',
+        table: incidentDetail?.table ?? ''
+      })
+    );
+  }, [incidentDetail]);
 
   const onChangeIncidentStatus = async (status: IncidentModelStatusEnum) => {
     if (!incidentDetail) return;
