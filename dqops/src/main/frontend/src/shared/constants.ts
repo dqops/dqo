@@ -354,7 +354,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.bigquery,
     name: 'Google BigQuery',
-    iconName: 'bigquery',
+    iconName: 'googlebigquery',
     displayName: 'Bigquery'
   },
   {
@@ -396,7 +396,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.db2,
     name: 'IBM DB2',
-    iconName: 'ibm_db2',
+    iconName: 'ibmdb2',
     displayName: 'DB2'
   },
   {
