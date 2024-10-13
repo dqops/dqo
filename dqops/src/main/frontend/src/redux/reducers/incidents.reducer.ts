@@ -94,6 +94,7 @@ export interface IIncidentsState {
   tabs: INestTab[];
   activeTab?: string;
   selectedConnections?: { [key: string]: string };
+  incidentNavigation?: { connection: string; schema: string; table: string };
 }
 
 const initialState: IIncidentsState = {
@@ -272,6 +273,12 @@ const incidentsReducer = (state = initialState, action: any) => {
       return {
         ...state,
         selectedConnections: { ...state.selectedConnections, ...action.data }
+      };
+    }
+    case INCIDENTS_ACTION.SET_INCIDENT_NAVIGATION: {
+      return {
+        ...state,
+        incidentNavigation: action.data
       };
     }
 

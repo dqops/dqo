@@ -19,9 +19,9 @@ import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
 import {
   CheckResultEntryModel,
-  IssueHistogramModel,
   IncidentModel,
-  IncidentsPerConnectionModel
+  IncidentsPerConnectionModel,
+  IssueHistogramModel
 } from '../../api';
 import { IncidentsApi } from '../../services/apiClient';
 import {
@@ -209,9 +209,7 @@ export const getIncidentsHistogramsRequest = () => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS
 });
 
-export const getIncidentsHistogramsSuccess = (
-  data: IssueHistogramModel
-) => ({
+export const getIncidentsHistogramsSuccess = (data: IssueHistogramModel) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS,
   data
 });
@@ -268,5 +266,18 @@ export const addSelectedConnection = (data: { [key: string]: string }) => ({
 
 export const setIncidentsHistogram = (data: IssueHistogramModel) => ({
   type: INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM,
+  data
+});
+
+export const setIncidentNavigation = (
+  data:
+    | {
+        connection: string;
+        schema: string;
+        table: string;
+      }
+    | undefined
+) => ({
+  type: INCIDENTS_ACTION.SET_INCIDENT_NAVIGATION,
   data
 });
