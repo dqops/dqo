@@ -35,7 +35,8 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
                   name={option.iconName}
                   className={clsx(
                     'mb-3 text-blue-500',
-                    option.name === 'Spark' && 'w-30'
+                    option.name === 'Spark' && 'w-30',
+                    option.iconName === 'perconaserverformysql' && 'w-20'
                   )}
                 />
               )}
