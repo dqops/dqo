@@ -12,9 +12,10 @@ import {
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
+import { getParamsFromURL, getSeverity } from '../../utils';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
-import { getParamsFromURL, getSeverity } from '../../utils';
+import IncidentsContextMenu from './IncidentsContextMenu';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
@@ -31,6 +32,7 @@ const IncidentsTree = () => {
     page: 1,
     pageSize: 10
   };
+
   useEffect(() => {
     dispatch(getConnections());
   }, []);
@@ -194,6 +196,7 @@ const IncidentsTree = () => {
             {connection.openIncidents ? (
               <div>({connection.openIncidents})</div>
             ) : null}
+            <IncidentsContextMenu connection={connection.connection ?? ''} />
           </div>
         ))}
       </div>
