@@ -228,34 +228,6 @@ export const IncidentDetail = () => {
     history.push(url);
   };
 
-  const tableQualityStatusOptions: Array<{
-    checkType: CheckTypes;
-    timeScale?: 'daily' | 'monthly';
-    show?: boolean;
-  }> = histograms && [
-    { checkType: CheckTypes.PROFILING, show: histograms?.hasProfilingIssues },
-    {
-      checkType: CheckTypes.PARTITIONED,
-      timeScale: 'daily',
-      show: histograms?.hasDailyPartitionedIssues
-    },
-    {
-      checkType: CheckTypes.PARTITIONED,
-      timeScale: 'monthly',
-      show: histograms?.hasMonthlyPartitionedIssues
-    },
-    {
-      checkType: CheckTypes.MONITORING,
-      timeScale: 'daily',
-      show: histograms?.hasDailyMonitoringIssues
-    },
-    {
-      checkType: CheckTypes.MONITORING,
-      timeScale: 'monthly',
-      show: histograms?.hasMonthlyMonitoringIssues
-    }
-  ];
-
   const disableIncident = async () => {
     IncidentsApi.disableChecksForIncident(connection, year, month, incidentId);
     setDisableDialog(false);
@@ -321,51 +293,6 @@ export const IncidentDetail = () => {
     }
   };
 
-  const routeTableQualityStatus = (
-    checkType: CheckTypes,
-    timeScale?: 'daily' | 'monthly'
-  ) => {
-    const redirectTableQualityStatus = () => {
-      const schema = incidentDetail?.schema || '';
-      const table = incidentDetail?.table || '';
-      dispatch(
-        addFirstLevelTab(checkType, {
-          url: ROUTES.TABLE_LEVEL_PAGE(
-            checkType,
-            connection,
-            schema,
-            table,
-            timeScale ?? 'advanced'
-          ),
-          value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
-          state: {},
-          label: table
-        })
-      );
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          checkType,
-          connection,
-          schema,
-          table,
-          timeScale ?? 'advanced'
-        )
-      );
-    };
-
-    return (
-      <div className="flex items-center">
-        <Button
-          label={checkType + ' ' + (timeScale !== undefined ? timeScale : '')}
-          variant="text"
-          onClick={redirectTableQualityStatus}
-          className="m-0 p-0 px-1 text-black font-bold"
-        />
-        <SvgIcon name="chevron-right" className="w-4 h-4" />
-      </div>
-    );
-  };
-
   const configureSourceTables = () => {
     const schema = incidentDetail?.schema || '';
     const table = incidentDetail?.table || '';
@@ -405,9 +332,6 @@ export const IncidentDetail = () => {
             </div>
           </div>
           <div className="flex space-x-3">
-            {tableQualityStatusOptions
-              ?.filter((y) => y.show)
-              .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <div className="flex items-center gap-x-2">
               <Tooltip
                 content={
