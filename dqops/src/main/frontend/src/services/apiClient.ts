@@ -25,6 +25,7 @@ import {
   Configuration,
   ConnectionsApiFactory,
   DashboardsApiFactory,
+  DataCatalogSynchronizationApiFactory,
   DataDomainsApiFactory,
   DataGroupingConfigurationsApiFactory,
   DataLineageApiFactory,
@@ -203,3 +204,6 @@ export const DataDomainApiClient = DataDomainsApiFactory(
   '',
   axios
 );
+
+export const DataCatalogSynchronizationApiClient =
+  DataCatalogSynchronizationApiFactory(new Configuration(), '', axios);
