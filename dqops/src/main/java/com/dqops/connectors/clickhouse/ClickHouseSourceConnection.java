@@ -244,15 +244,16 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
                 sqlBuilder.append(")");
             }
 
-            if (typeSnapshot.getNullable() != null) {
-                boolean isNullable = typeSnapshot.getNullable();
-                if (isNullable) {
-                    sqlBuilder.append(" NULL");
-                }
-                else {
-                    sqlBuilder.append(" NOT NULL");
-                }
-            }
+            sqlBuilder.append(" NULL");
+//            if (typeSnapshot.getNullable() != null) {
+//                boolean isNullable = typeSnapshot.getNullable();
+//                if (isNullable) {
+//                    sqlBuilder.append(" NULL");
+//                }
+//                else {
+//                    sqlBuilder.append(" NOT NULL");
+//                }
+//            }
         }
 
         sqlBuilder.append("\n)");
