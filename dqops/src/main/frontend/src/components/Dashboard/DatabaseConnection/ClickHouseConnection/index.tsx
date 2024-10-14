@@ -52,13 +52,6 @@ const ClickHouseConnection = ({
       />
       <FieldTypeInput
         data={sharedCredentials}
-        label="Database"
-        className="mb-4"
-        value={clickhouse?.database}
-        onChange={(value) => handleChange({ database: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
         label="User name"
         className="mb-4"
         value={clickhouse?.user}
@@ -66,7 +59,7 @@ const ClickHouseConnection = ({
       />
       <FieldTypeInput
         data={sharedCredentials}
-        label="AWS SecretAccessKey"
+        label="Password"
         className="mb-4"
         value={clickhouse?.password}
         onChange={(value) => handleChange({ password: value })}

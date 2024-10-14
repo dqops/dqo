@@ -18,6 +18,7 @@ package com.dqops.rest.models.metadata;
 import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.clickhouse.ClickHouseParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.db2.Db2ParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
@@ -172,6 +173,13 @@ public class ConnectionModel {
     @JsonPropertyDescription("MariaDB connection parameters.")
     private MariaDbParametersSpec mariadb;
 
+
+    /**
+     * ClickHouse connection parameters.
+     */
+    @JsonPropertyDescription("ClickHouse connection parameters.")
+    private ClickHouseParametersSpec clickhouse;
+
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
      */
@@ -280,6 +288,7 @@ public class ConnectionModel {
             setHana(connectionSpec.getHana());
             setDb2(connectionSpec.getDb2());
             setMariadb(connectionSpec.getMariadb());
+            setClickhouse(connectionSpec.getClickhouse());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -354,6 +363,7 @@ public class ConnectionModel {
         targetConnectionSpec.setHana(this.getHana());
         targetConnectionSpec.setDb2(this.getDb2());
         targetConnectionSpec.setMariadb(this.getMariadb());
+        targetConnectionSpec.setClickhouse(this.getClickhouse());
         targetConnectionSpec.setAdvancedProperties(this.getAdvancedProperties());
     }
 

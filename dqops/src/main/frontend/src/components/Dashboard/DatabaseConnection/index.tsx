@@ -33,6 +33,7 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
+import ClickHouseLogo from '../../SvgIcon/svg/clickhouse.svg';
 import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
 import ConfirmErrorModal from './ConfirmErrorModal';
@@ -52,6 +53,7 @@ import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
 import MariaDbConnection from './MariaDbConnection';
+import ClickHouseConnection from './ClickHouseConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -323,6 +325,13 @@ const DatabaseConnection = ({
         onChange={(mariadb) => onChange({ ...database, mariadb })}
         sharedCredentials={sharedCredentials}
       />
+    ),
+    [ConnectionModelProviderTypeEnum.clickhouse]: (
+      <ClickHouseConnection
+        clickhouse={database.clickhouse}
+        onChange={(clickhouse) => onChange({ ...database, clickhouse })}
+        sharedCredentials={sharedCredentials}
+      />
     )
   };
 
@@ -352,6 +361,8 @@ const DatabaseConnection = ({
         return DatabricksLogo;
       case ConnectionModelProviderTypeEnum.db2:
         return Db2Logo;
+        case ConnectionModelProviderTypeEnum.clickhouse:
+        return ClickHouseLogo;
       default:
         return '';
     }

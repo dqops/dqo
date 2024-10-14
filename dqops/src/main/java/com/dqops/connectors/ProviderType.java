@@ -67,6 +67,9 @@ public enum ProviderType {
     @JsonProperty("mariadb")
     mariadb,
 
+    @JsonProperty("clickhouse")
+    clickhouse,
+
     // TODO: add more connectors
 
     ;
@@ -102,6 +105,8 @@ public enum ProviderType {
                 return "DB2";
             case mariadb:
                 return "MariaDB";
+            case clickhouse:
+                return "ClickHouse";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }

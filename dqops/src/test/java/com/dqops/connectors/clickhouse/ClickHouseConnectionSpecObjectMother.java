@@ -60,7 +60,6 @@ public class ClickHouseConnectionSpecObjectMother {
             {{
                 setHost("localhost");
                 setPort(testContainer.getMappedPort(PORT).toString());
-//                setDatabase(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
             }});

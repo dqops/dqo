@@ -2,6 +2,6 @@
 {%- call lib.render_error_sampler() -%}
     REGEXP_CONTAINS(
                         CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        r"(^|[ \t.,:;\"'`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;\"'`|\n\r]|$)"
+                        "(^|[ \t.,:;\"'`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;\"'`|\n\r]|$)"
                     )
 {%- endcall -%}

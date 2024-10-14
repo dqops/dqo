@@ -2,7 +2,7 @@
 SELECT
     SUM(
         CASE
-            WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+            WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                 THEN 1
             ELSE 0
         END

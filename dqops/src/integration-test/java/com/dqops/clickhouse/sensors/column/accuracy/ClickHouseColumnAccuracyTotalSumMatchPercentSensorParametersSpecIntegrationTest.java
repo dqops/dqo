@@ -122,7 +122,7 @@ public class ClickHouseColumnAccuracyTotalSumMatchPercentSensorParametersSpecInt
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(15L, ValueConverter.toLong(resultTable.column(0).get(0)));
         Assertions.assertEquals(15L, resultTable.column(1).get(0));
     }
 
@@ -140,7 +140,7 @@ public class ClickHouseColumnAccuracyTotalSumMatchPercentSensorParametersSpecInt
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(15L, ValueConverter.toLong(resultTable.column(0).get(0)));
         Assertions.assertEquals(15L, resultTable.column(1).get(0));
     }
 
@@ -158,7 +158,7 @@ public class ClickHouseColumnAccuracyTotalSumMatchPercentSensorParametersSpecInt
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(15L, ValueConverter.toLong(resultTable.column(0).get(0)));
         Assertions.assertEquals(15L, resultTable.column(1).get(0));
     }
 }
