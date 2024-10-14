@@ -99,23 +99,19 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                    filtered_median_float, 0.0, filtered_median_float)
 
-    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-    threshold_upper_multiple = detect_upper_bound_anomaly(values_above_median=upper_median_multiples_array,
-                                                          degrees_of_freedom=degrees_of_freedom, tail=tail)
+    threshold_upper_multiple = detect_upper_bound_anomaly(values=extracted, median=filtered_median_float,
+                                                          tail=tail, parameters=rule_parameters)
 
+    passed = True
     if threshold_upper_multiple is not None:
-        threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
+        threshold_upper = threshold_upper_multiple
+        passed = rule_parameters.actual_value <= threshold_upper
     else:
-        threshold_upper = rule_parameters.actual_value
-
-    threshold_lower = 0.0  # always, our target is to have a delay of 0.0 days
-
-    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+        threshold_upper = None
 
     expected_value = filtered_median_float
-    lower_bound = threshold_lower
+    lower_bound = 0.0  # always, our target is to have a delay of 0.0 days
     upper_bound = threshold_upper
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
