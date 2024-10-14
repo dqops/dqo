@@ -104,16 +104,15 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
                                    filtered_median_float if 0.0 not in all_extracted else 0.0,
                                    filtered_median_float if 100.0 not in all_extracted else 100.0)
 
-    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-    tail = rule_parameters.parameters.anomaly_percent / 100.0
+    tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
 
     if 100.0 in all_extracted:
         threshold_upper = 100.0
     else:
-        upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted
-                                        if readout >= filtered_median_float]
-        threshold_upper_multiple = detect_upper_bound_anomaly(values_above_median=upper_median_multiples_array,
-                                                              degrees_of_freedom=degrees_of_freedom, tail=tail)
+        upper_median_multiples_array = [1.0 / (1.0 - readout / 100.0) for readout in extracted]
+        threshold_upper_multiple = detect_upper_bound_anomaly(values=upper_median_multiples_array,
+                                                              median=1.0 / (1.0 - filtered_median_float / 100.0),
+                                                              tail=tail, parameters=rule_parameters)
 
         if threshold_upper_multiple is not None:
             threshold_upper = 100.0 - 100.0 * (1.0 / threshold_upper_multiple)
@@ -123,10 +122,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if 0.0 in all_extracted:
         threshold_lower = 0.0
     else:
-        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
-                                        if readout <= filtered_median_float]
-        threshold_lower_multiple = detect_lower_bound_anomaly(values_below_median=lower_median_multiples_array,
-                                                              degrees_of_freedom=degrees_of_freedom, tail=tail)
+        lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted]
+        threshold_lower_multiple = detect_lower_bound_anomaly(values=lower_median_multiples_array,
+                                                              median=-1.0,
+                                                              tail=tail, parameters=rule_parameters)
 
         if threshold_lower_multiple is not None:
             threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
