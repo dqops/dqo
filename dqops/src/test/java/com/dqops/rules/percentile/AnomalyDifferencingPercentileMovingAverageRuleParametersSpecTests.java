@@ -179,7 +179,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
-        Double actualValue = this.sensorReadouts[0] + this.sensorReadouts.length * increment;
+        Double actualValue = this.sensorReadouts[this.sensorReadouts.length - 1] + increment;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
@@ -199,7 +199,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
-        Double actualValue = this.sensorReadouts[0] + this.sensorReadouts.length * increment;
+        Double actualValue = this.sensorReadouts[this.sensorReadouts.length - 1] + increment;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
@@ -224,6 +224,29 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.0, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(20.0, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreAlwaysIncreasingFrom1ButDifferentIncreases_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        Double increment = 7.0;
+        this.sensorReadouts[0] = 1.0;
+        for (int i = 1; i < this.sensorReadouts.length; ++i) {
+            this.sensorReadouts[i] = this.sensorReadouts[i - 1] + increment + (i % 2);
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        Double actualValue = this.sensorReadouts[this.sensorReadouts.length - 1] + increment;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(677.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(676.50, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(677.0, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

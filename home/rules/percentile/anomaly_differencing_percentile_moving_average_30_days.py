@@ -108,55 +108,69 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     if all(difference > 0 for difference in differences_list):
         # using a 0-based calculation (scale from 0)
-        upper_median_multiples_array = [(difference / differences_median_float - 1.0) for difference
-                                        in differences_list if difference >= differences_median_float]
-        threshold_upper_multiple = detect_upper_bound_anomaly(values_above_median=upper_median_multiples_array,
-                                                              degrees_of_freedom=degrees_of_freedom, tail=tail)
+        scaled_multiples_array = [(readout / differences_median_float - 1.0 if readout >= differences_median_float else
+                                   (-1.0 / (readout / differences_median_float)) + 1.0) for readout in differences_list]
 
+        threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+                                                              tail=tail, parameters=rule_parameters)
+
+        passed = True
         if threshold_upper_multiple is not None:
             threshold_upper = (threshold_upper_multiple + 1.0) * differences_median_float
+            passed = actual_difference <= threshold_upper
         else:
-            threshold_upper = rule_parameters.actual_value
+            threshold_upper = None
 
-        lower_median_multiples_array = [(-1.0 / (difference / differences_median_float)) for difference
-                                        in differences_list if difference <= differences_median_float if difference != 0]
-        threshold_lower_multiple = detect_lower_bound_anomaly(values_below_median=lower_median_multiples_array,
-                                                              degrees_of_freedom=degrees_of_freedom, tail=tail)
+        threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+                                                              tail=tail, parameters=rule_parameters)
 
         if threshold_lower_multiple is not None:
-            threshold_lower = differences_median_float * (-1.0 / threshold_lower_multiple)
+            threshold_lower = differences_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+            passed = passed and threshold_lower <= actual_difference
         else:
-            threshold_lower = rule_parameters.actual_value
-
-        passed = threshold_lower <= actual_difference <= threshold_upper
+            threshold_lower = None
 
         expected_value = last_readout + differences_median_float
-        lower_bound = last_readout + threshold_lower
-        upper_bound = last_readout + threshold_upper
+
+        if threshold_lower is not None:
+            lower_bound = last_readout + threshold_lower
+        else:
+            lower_bound = None
+
+        if threshold_upper is not None:
+            upper_bound = last_readout + threshold_upper
+        else:
+            upper_bound = None
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
     else:
         # using unrestricted method for both positive and negative values
-        upper_half_filtered = [difference for difference in differences_list if difference >= differences_median_float]
-        threshold_upper_result = detect_upper_bound_anomaly(values_above_median=upper_half_filtered,
-                                                            degrees_of_freedom=degrees_of_freedom, tail=tail)
+        threshold_upper_result = detect_upper_bound_anomaly(values=differences_list, median=differences_median_float,
+                                                            tail=tail, parameters=rule_parameters)
 
+        passed = True
         if threshold_upper_result is not None:
             threshold_upper = threshold_upper_result
+            passed = actual_difference <= threshold_upper
         else:
-            threshold_upper = rule_parameters.actual_value
+            threshold_upper = None
 
-        lower_half_list = [difference for difference in differences_list if difference <= differences_median_float]
-        threshold_lower_result = detect_lower_bound_anomaly(values_below_median=lower_half_list,
-                                                            degrees_of_freedom=degrees_of_freedom, tail=tail)
+        threshold_lower_result = detect_lower_bound_anomaly(values=differences_list, median=differences_median_float,
+                                                            tail=tail, parameters=rule_parameters)
         if threshold_lower_result is not None:
             threshold_lower = threshold_lower_result
+            passed = passed and threshold_lower <= actual_difference
         else:
-            threshold_lower = rule_parameters.actual_value
-
-        passed = threshold_lower <= actual_difference <= threshold_upper
+            threshold_lower = None
 
         expected_value = last_readout + differences_median_float
-        lower_bound = last_readout + threshold_lower
-        upper_bound = last_readout + threshold_upper
+        if threshold_lower is not None:
+            lower_bound = last_readout + threshold_lower
+        else:
+            lower_bound = None
+
+        if threshold_upper is not None:
+            upper_bound = last_readout + threshold_upper
+        else:
+            upper_bound = None
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
