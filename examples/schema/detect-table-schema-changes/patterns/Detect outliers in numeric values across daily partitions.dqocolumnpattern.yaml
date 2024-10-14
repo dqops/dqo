@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  disabled: true
+  description: Monitors numeric columns to detect new smallest (min) or biggest (max)
+    value for each daily partition. Raises a data quality issue when the partition
+    contains a big or small value that exceeds regular ranges.
+  partitioned_checks:
+    daily:
+      anomaly:
+        daily_partition_min_anomaly:
+          warning:
+            anomaly_percent: 0.1
+        daily_partition_max_anomaly:
+          warning:
+            anomaly_percent: 0.1
