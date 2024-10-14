@@ -106,15 +106,15 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     if all(readout > 0 for readout in extracted):
         # using a 0-based calculation (scale from 0)
-        scaled_multiples_array = [(readout / filtered_median_float if readout >= filtered_median_float else
-                                   (-1.0 / (readout / filtered_median_float))) for readout in extracted]
+        scaled_multiples_array = [(readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                                   (-1.0 / (readout / filtered_median_float)) + 1.0) for readout in extracted]
 
         threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
                                                               tail=tail, parameters=rule_parameters)
 
         passed = True
         if threshold_upper_multiple is not None:
-            threshold_upper = threshold_upper_multiple * filtered_median_float
+            threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
             passed = rule_parameters.actual_value <= threshold_upper
         else:
             threshold_upper = None
@@ -123,7 +123,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
                                                               tail=tail, parameters=rule_parameters)
 
         if threshold_lower_multiple is not None:
-            threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+            threshold_lower = filtered_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
             passed = passed and threshold_lower <= rule_parameters.actual_value
         else:
             threshold_lower = None
