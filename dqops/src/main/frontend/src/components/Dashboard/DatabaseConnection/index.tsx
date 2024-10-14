@@ -42,6 +42,7 @@ import DuckDBConnection from './DuckDBConnection';
 import ErrorModal from './ErrorModal';
 import HanaConnection from './HanaConnection';
 import JdbcPropertiesView from './JdbcProperties';
+import MariaDbConnection from './MariaDbConnection';
 import MySQLConnection from './MySQLConnection';
 import OracleConnection from './OracleConnection';
 import PostgreSQLConnection from './PostgreSQLConnection';
@@ -51,7 +52,6 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
-import MariaDbConnection from './MariaDbConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -183,6 +183,14 @@ const DatabaseConnection = ({
   };
 
   const getIcon = () => {
+    if (nameOfDatabase === 'SAP HANA') {
+      return (
+        <p className="p-8 font-bold text-xl">
+          <span style={{ color: '#008FD3' }}>SAP </span>
+          <span style={{ color: '#debb00' }}>HANA</span>
+        </p>
+      );
+    }
     if (nameOfDatabase) {
       return (
         <SvgIcon

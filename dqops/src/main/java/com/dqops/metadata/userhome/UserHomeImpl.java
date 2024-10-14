@@ -16,6 +16,7 @@
 package com.dqops.metadata.userhome;
 
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.similarity.DataSimilarityFormula;
 import com.dqops.core.similarity.DataSimilarityMatch;
 import com.dqops.core.similarity.SimilarTableModel;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
@@ -858,10 +859,16 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param connectionName Connection name where the table is present.
      * @param referenceTableName Reference table to find similar tables.
      * @param maxResults     Maximum number of results to return.
+     * @param maxDifferencesPercent The maximum difference percent.
      * @return List of tables that are similar.
      */
     @Override
-    public List<SimilarTableModel> findTablesSimilarTo(String connectionName, PhysicalTableName referenceTableName, int maxResults) {
+    public List<SimilarTableModel> findTablesSimilarTo(String connectionName,
+                                                       PhysicalTableName referenceTableName,
+                                                       int maxResults,
+                                                       double maxDifferencesPercent) {
+        int maxDifference = (int)(maxDifferencesPercent / 100.0 * DataSimilarityFormula.WORD_COUNT * 64);
+
         ConnectionWrapper connectionWrapper = this.getConnections().getByObjectName(connectionName, true);
         if (connectionWrapper == null) {
             return new ArrayList<>();
@@ -901,6 +908,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
 
                     TableSimilarityContainer similarTableScore = tableSimilarityContainerEntry.getValue();
                     int matchScore = DataSimilarityMatch.calculateMatch(referenceTableSimilarityScore.getTs(), similarTableScore.getTs());
+                    if (matchScore > maxDifference) {
+                        continue;
+                    }
 
                     if (mostSimilarTables.size() == maxResults) {
                         SimilarTableModel last = mostSimilarTables.last();

@@ -41920,6 +41920,11 @@
           "format" : "int32",
           "description" : "Table similarity score. Lower numbers indicate higher similarity."
         },
+        "similarity_pct" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "A similarity score as a percentage. A value 100.0 means that the tables are probably equal."
+        },
         "connection_name" : {
           "type" : "string",
           "description" : "Connection name"

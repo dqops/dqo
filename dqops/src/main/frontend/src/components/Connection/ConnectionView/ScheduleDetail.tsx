@@ -2,6 +2,7 @@ import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import { AutoImportTablesSpec, CronScheduleSpec } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionSchedulingGroup,
@@ -15,9 +16,11 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
+import { ConnectionApiClient } from '../../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
+import Input from '../../Input';
 import ScheduleView from '../../ScheduleView';
 import Tabs from '../../Tabs';
 import ConnectionActionGroup from './ConnectionActionGroup';
@@ -108,6 +111,10 @@ const ScheduleDetail = () => {
               {
                 label: 'Partition Monthly',
                 value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+              },
+              {
+                label: 'Import tables',
+                value: 'import_tables'
               }
             ]
           : [
@@ -123,6 +130,10 @@ const ScheduleDetail = () => {
               {
                 label: 'Partition',
                 value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              },
+              {
+                label: 'Import tables',
+                value: 'import_tables'
               }
             ];
       }
@@ -130,6 +141,25 @@ const ScheduleDetail = () => {
   };
 
   const [tabs, setTabs] = useState(getPageTabs());
+  const [autoImportParameters, setAutoImportParameters] =
+    useState<AutoImportTablesSpec>({});
+  const [tableImportLimit, setTableImportLimit] = useState<number | undefined>(
+    0
+  );
+  const updateCron = (schedule: CronScheduleSpec) => {
+    setAutoImportParameters({
+      ...autoImportParameters,
+      schedule
+    });
+    dispatch(
+      setIsUpdatedSchedulingGroup(
+        checkTypes,
+        firstLevelActiveTab,
+        activeTab,
+        true
+      )
+    );
+  };
   const dispatch = useActionDispatch();
   const location = useLocation() as any;
   const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(
@@ -172,8 +202,44 @@ const ScheduleDetail = () => {
   };
 
   useEffect(() => {
-    if (updatedSchedule === null || updatedSchedule === undefined) {
-      dispatch(
+    if (activeTab === 'import_tables') {
+      ConnectionApiClient.getConnectionAutoImport(connection).then((res) => {
+        setAutoImportParameters(res.data);
+      });
+    } else {
+      if (updatedSchedule === null || updatedSchedule === undefined) {
+        dispatch(
+          getConnectionSchedulingGroup(
+            checkTypes,
+            firstLevelActiveTab,
+            connection,
+            activeTab
+          )
+        );
+      }
+    }
+  }, [connection, activeTab, updatedSchedule]);
+
+  const onUpdate = async () => {
+    if (activeTab === 'import_tables') {
+      await ConnectionApiClient.updateConnectionAutoImport(
+        connection,
+        autoImportParameters
+      );
+    } else {
+      if (updatedSchedule === null || updatedSchedule === undefined) {
+        return;
+      }
+      await dispatch(
+        updateConnectionSchedulingGroup(
+          checkTypes,
+          firstLevelActiveTab,
+          connection,
+          activeTab,
+          updatedSchedule
+        )
+      );
+      await dispatch(
         getConnectionSchedulingGroup(
           checkTypes,
           firstLevelActiveTab,
@@ -182,29 +248,6 @@ const ScheduleDetail = () => {
         )
       );
     }
-  }, [connection, activeTab, updatedSchedule]);
-
-  const onUpdate = async () => {
-    if (updatedSchedule === null || updatedSchedule === undefined) {
-      return;
-    }
-    await dispatch(
-      updateConnectionSchedulingGroup(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        activeTab,
-        updatedSchedule
-      )
-    );
-    await dispatch(
-      getConnectionSchedulingGroup(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        activeTab
-      )
-    );
     dispatch(
       setIsUpdatedSchedulingGroup(
         checkTypes,
@@ -239,7 +282,84 @@ const ScheduleDetail = () => {
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       <div className="px-8">
-        <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
+        {activeTab === 'import_tables' && (
+          <div className="flex flex-col gap-y-4 text-sm mt-4">
+            <div className="flex items-center">
+              <div className="w-41">Schema filter</div>
+              <Input
+                value={autoImportParameters.schema_filter}
+                onChange={(e) => {
+                  setAutoImportParameters({
+                    ...autoImportParameters,
+                    schema_filter: e.target.value
+                  });
+                  dispatch(
+                    setIsUpdatedSchedulingGroup(
+                      checkTypes,
+                      firstLevelActiveTab,
+                      activeTab,
+                      true
+                    )
+                  );
+                }}
+              />
+            </div>
+            <div className="flex items-center">
+              <div className="w-41">Table name contains</div>
+              <Input
+                value={autoImportParameters.table_name_contains}
+                onChange={(e) => {
+                  setAutoImportParameters({
+                    ...autoImportParameters,
+                    table_name_contains: e.target.value
+                  });
+                  dispatch(
+                    setIsUpdatedSchedulingGroup(
+                      checkTypes,
+                      firstLevelActiveTab,
+                      activeTab,
+                      true
+                    )
+                  );
+                }}
+              />
+            </div>
+            {/* <div className="flex items-center">
+              <div className="w-41">Table import limit</div>
+              <Input
+                value={tableImportLimit}
+                onChange={(e) => {
+                  setTableImportLimit(
+                    e.target.value.length !== 0
+                      ? Number(e.target.value)
+                      : undefined
+                  );
+                  dispatch(
+                    setIsUpdatedSchedulingGroup(
+                      checkTypes,
+                      firstLevelActiveTab,
+                      activeTab,
+                      true
+                    )
+                  );
+                }}
+              />
+            </div> */}
+          </div>
+        )}
+        {activeTab !== 'import_tables' ? (
+          <ScheduleView
+            handleChange={handleChange}
+            schedule={updatedSchedule}
+            importTables={activeTab === 'import_tables'}
+          />
+        ) : (
+          <ScheduleView
+            handleChange={updateCron}
+            schedule={autoImportParameters.schedule}
+            importTables
+          />
+        )}
       </div>
     </div>
   );
