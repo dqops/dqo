@@ -96,7 +96,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     differences_median = np.median(differences)
     differences_median_float = float(differences_median)
     degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-    tail = rule_parameters.parameters.anomaly_percent / 100.0
+    tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
 
     last_readout = float(filtered[-1])
     actual_difference = rule_parameters.actual_value - last_readout

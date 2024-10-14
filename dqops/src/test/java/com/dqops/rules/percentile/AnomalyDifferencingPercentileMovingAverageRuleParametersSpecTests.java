@@ -81,8 +81,8 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(478.45, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(475.28, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(482.37, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(474.30, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(483.40, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
@@ -108,8 +108,8 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(479.45, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(476.28, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(483.37, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(475.30, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(484.40, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
@@ -135,8 +135,8 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
 
         Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(478.45, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(475.28, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(482.37, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(474.30, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(483.40, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
@@ -162,8 +162,8 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
 
         Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(479.45, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(476.28, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(483.37, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(475.30, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(484.40, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
@@ -245,7 +245,7 @@ public class AnomalyDifferencingPercentileMovingAverageRuleParametersSpecTests e
 
         Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(677.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(676.50, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(676.23, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(677.0, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
