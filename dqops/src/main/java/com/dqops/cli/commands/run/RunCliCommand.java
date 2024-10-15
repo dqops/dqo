@@ -27,7 +27,6 @@ import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReporti
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.utils.datetime.DurationParseUtility;
 import com.dqops.utils.datetime.InvalidDurationFormatException;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -53,6 +52,7 @@ public class RunCliCommand extends BaseCommand implements ICommand {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+    private RootConfigurationProperties rootConfigurationProperties;
 
     public RunCliCommand() {
     }
@@ -86,7 +86,6 @@ public class RunCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "silent")
     private CheckRunReportingMode checkRunMode = CheckRunReportingMode.silent;
-    private RootConfigurationProperties rootConfigurationProperties;
 
     @CommandLine.Option(names = {"-t", "--time-limit"}, description = "Optional execution time limit. DQOps will run for the given duration and gracefully shut down. " +
             "Supported values are in the following format: 300s (300 seconds), 10m (10 minutes), 2h (run for up to 2 hours) or just a number that is the time limit in seconds.")

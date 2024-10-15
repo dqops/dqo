@@ -18,6 +18,7 @@ package com.dqops.cli.commands.check.impl;
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
 import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
@@ -38,13 +39,15 @@ public interface CheckCliService {
      * @param collectErrorSamples Collect error samples for failed checks.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @param executionTarget Execution target (sensor, rule, both).
      * @return Check execution summary.
      */
     CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
                                     TimeWindowFilterParameters timeWindowFilterParameters,
                                     boolean collectErrorSamples,
                                     CheckExecutionProgressListener checkExecutionProgressListener,
-                                    boolean dummyRun);
+                                    boolean dummyRun,
+                                    RunChecksTarget executionTarget);
 
     /**
      * Collects error samples for data quality checks identified by filters.

@@ -20,6 +20,7 @@ import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
 import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
@@ -68,6 +69,7 @@ public class CheckCliServiceImpl implements CheckCliService {
      * @param collectErrorSamples Collect error samples for failed checks.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @param executionTarget Execution target (sensor, rule, both).
      * @return Check execution summary.
      */
     @Override
@@ -75,9 +77,11 @@ public class CheckCliServiceImpl implements CheckCliService {
                                            TimeWindowFilterParameters timeWindowFilterParameters,
                                            boolean collectErrorSamples,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
-										   boolean dummyRun) {
+										   boolean dummyRun,
+                                           RunChecksTarget executionTarget) {
         DqoUserPrincipal principal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
-        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, collectErrorSamples, checkExecutionProgressListener, dummyRun, principal);
+        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, collectErrorSamples,
+                checkExecutionProgressListener, dummyRun, executionTarget, principal);
     }
 
     /**

@@ -18,6 +18,7 @@ package com.dqops.services.check;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
 import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
@@ -48,6 +49,7 @@ public interface CheckService {
                                     boolean collectErrorSamples,
                                     CheckExecutionProgressListener checkExecutionProgressListener,
                                     boolean dummyRun,
+                                    RunChecksTarget executionTarget,
                                     DqoUserPrincipal principal);
 
     /**
