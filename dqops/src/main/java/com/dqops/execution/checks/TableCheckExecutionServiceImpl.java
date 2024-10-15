@@ -39,6 +39,7 @@ import com.dqops.data.errors.normalization.ErrorsNormalizedResult;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
+import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationService;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -80,16 +81,17 @@ import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.logging.UserErrorLogger;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -240,13 +242,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<AbstractCheckSpec<?, ?, ?, ?>> singleTableChecks = checks.stream().filter(c -> !c.isTableComparisonCheck())
                 .collect(Collectors.toList());
-        executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, jobCancellationToken,
+        executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
                 checkExecutionSummary, singleTableChecks, tableSpec, sensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples);
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
-        executeTableComparisonChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, jobCancellationToken,
+        executeTableComparisonChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
                 checkExecutionSummary, tableComparisonChecks, tableSpec, sensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
 
@@ -307,6 +309,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             TimeWindowFilterParameters userTimeWindowFilters,
             CheckExecutionProgressListener progressListener,
             boolean dummySensorExecution,
+            RunChecksTarget executionTarget,
             JobCancellationToken jobCancellationToken,
             CheckExecutionSummary checkExecutionSummary,
             Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
@@ -332,7 +335,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(
                 groupedSensorsCollection, executionContext, progressListener, allErrorsTable,
-                checkExecutionSummary, executionStatistics, dummySensorExecution, jobCancellationToken);
+                checkExecutionSummary, executionStatistics, dummySensorExecution || executionTarget == RunChecksTarget.only_rules,
+                executionTarget, jobCancellationToken);
+
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId(executionContext.getUserHomeContext());
 
         for (SensorExecutionResult sensorExecutionResult : sensorExecutionResults) {
             if (jobCancellationToken.isCancelled()) {
@@ -346,10 +352,49 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             try {
                 SensorExecutionRunParameters sensorRunParameters = sensorExecutionResult.getSensorRunParameters();
 
+                if (executionTarget == RunChecksTarget.only_rules) {
+                    TimeWindowFilterParameters effectiveTimeWindowFilter = sensorRunParameters.getTimeWindowFilter();
+                    LocalDateTime timePeriodStart = effectiveTimeWindowFilter.calculateTimePeriodStart(sensorRunParameters.getCheckType(), sensorRunParameters.getTimePeriodGradient(), defaultTimeZoneId);
+                    LocalDateTime timePeriodEnd = effectiveTimeWindowFilter.calculateTimePeriodEnd(sensorRunParameters.getCheckType(), sensorRunParameters.getTimePeriodGradient(), defaultTimeZoneId);
+                    long checkHash = sensorRunParameters.getCheck().getHierarchyId().hashCode64();
+
+                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(timePeriodStart.toLocalDate(), timePeriodEnd.toLocalDate());
+                    Table allOldSensorReadouts = sensorReadoutsSnapshot.getAllData();
+                    Table sensorReadoutColumns = TableCopyUtility.extractColumns(allOldSensorReadouts, SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_RETURNED_BY_SENSORS);
+
+                    LongColumn checkHashColumn = sensorReadoutColumns.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+                    DateTimeColumn timePeriodColumn = sensorReadoutColumns.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+                    Table filteredResults = sensorReadoutColumns.where(checkHashColumn.isIn(checkHash).and(
+                            timePeriodColumn.isBetweenIncluding(timePeriodStart, timePeriodEnd)));
+                    if (filteredResults.rowCount() == 0) {
+                        continue; // no past data
+                    }
+
+                    for (int i = 9; i >= 1; i--) {
+                        Column<?> dataGroupingColumn = filteredResults.column(SensorReadoutsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + i);
+                        if (dataGroupingColumn.isNotMissing().isEmpty()) {
+                            filteredResults.removeColumns(dataGroupingColumn);
+                        } else {
+                            break;
+                        }
+                    }
+
+                    executionStatistics.incrementSensorReadoutsCount(filteredResults.rowCount());
+                    sensorExecutionResult.setResultTable(filteredResults); // replace results with historic results
+                }
+
                 SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorReadoutsNormalizationService.normalizeResults(
                         sensorExecutionResult, sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorExecutionResult, normalizedSensorResults));
+
+                if (executionTarget != RunChecksTarget.only_rules) {
+                    allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
+                }
+
+                if (executionTarget == RunChecksTarget.only_sensors) {
+                    continue;
+                }
 
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period that was captured
@@ -406,8 +451,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResult, ex, ruleDefinitionName));
                     checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, sensorRunParameters.getCheckSearchFilter()));
                 }
-
-                allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable());
             }
             catch (DqoQueueJobCancelledException cex) {
                 // ignore the error, just stop running checks
@@ -429,6 +472,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             TimeWindowFilterParameters userTimeWindowFilters,
             CheckExecutionProgressListener progressListener,
             boolean dummySensorExecution,
+            RunChecksTarget executionTarget,
             JobCancellationToken jobCancellationToken,
             CheckExecutionSummary checkExecutionSummary,
             Collection<AbstractCheckSpec<?, ?, ?, ?>> checks,
@@ -443,6 +487,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             return;
         }
 
+        if (executionTarget == RunChecksTarget.only_rules) {
+            return; // not supported
+        }
+
         List<SensorPrepareResult> allPreparedSensorsOnComparedTable = this.prepareSensors(
                 checks, executionContext, userHome, tableSpec, userTimeWindowFilters, progressListener,
                 allErrorsTable, checkExecutionSummary, executionStatistics, jobCancellationToken);
@@ -452,7 +500,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<SensorExecutionResult> sensorExecutionResultsOnComparedTable = this.executeSensors(
                 groupedSensorsCollectionOnComparedTable, executionContext, progressListener, allErrorsTable,
-                checkExecutionSummary, executionStatistics, dummySensorExecution, jobCancellationToken);
+                checkExecutionSummary, executionStatistics, dummySensorExecution, executionTarget, jobCancellationToken);
 
         List<SensorPrepareResult> allPreparedSensorsOnReferenceTables = this.prepareComparisonSensorsOnReferenceTable(
                 checks, executionContext, userHome, userTimeWindowFilters, progressListener,
@@ -463,7 +511,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         List<SensorExecutionResult> sensorExecutionResultsOnReferenceTables = this.executeSensors(
                 groupedSensorsCollectionOnReferenceTables, executionContext, progressListener, null,
-                checkExecutionSummary, executionStatistics, dummySensorExecution, jobCancellationToken);
+                checkExecutionSummary, executionStatistics, dummySensorExecution, executionTarget, jobCancellationToken);
 
         Map<HierarchyId, SensorExecutionResult> referenceDataResultsPerCheck = sensorExecutionResultsOnReferenceTables.stream()
                 .collect(Collectors.toMap(r -> r.getSensorRunParameters().getCheck().getHierarchyId(), r -> r));
@@ -805,6 +853,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param checkExecutionSummary Check execution summary where results are added.
      * @param executionStatistics Execution statistics - counts of checks and errors.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param executionTarget Check execution mode.
      * @param jobCancellationToken Job cancellation token - to cancel the preparation by the user.
      * @return List of sensor execution results.
      */
@@ -815,6 +864,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                       CheckExecutionSummary checkExecutionSummary,
                                                       TableChecksExecutionStatistics executionStatistics,
                                                       boolean dummySensorExecution,
+                                                      RunChecksTarget executionTarget,
                                                       JobCancellationToken jobCancellationToken) {
         List<SensorExecutionResult> sensorExecuteResults = new ArrayList<>();
         Collection<PreparedSensorsGroup> preparedSensorGroups = groupedSensorsCollection.getPreparedSensorGroups();
@@ -869,7 +919,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         }
 
                         progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorExecuteResult));
-                        executionStatistics.incrementSensorReadoutsCount(sensorExecuteResult.getResultTable().rowCount());
+                        if (executionTarget != RunChecksTarget.only_rules) {
+                            executionStatistics.incrementSensorReadoutsCount(sensorExecuteResult.getResultTable().rowCount());
+                        }
                         sensorExecuteResults.add(sensorExecuteResult);
                     }
                 }
