@@ -25,10 +25,10 @@
     {%- else -%}
     TIMESTAMP_DIFF(
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}), 3)
         ),
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}, 3)
         ),
         MILLISECOND
     ) / 24.0 / 3600.0 / 1000.0

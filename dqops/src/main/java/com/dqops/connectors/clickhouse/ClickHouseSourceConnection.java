@@ -18,15 +18,11 @@ package com.dqops.connectors.clickhouse;
 import com.dqops.connectors.*;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
-import com.dqops.connectors.jdbc.JdbcQueryFailedException;
-import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
-import com.dqops.utils.conversion.NumericTypeConverter;
 import com.dqops.utils.exceptions.DqoRuntimeException;
-import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -34,11 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
 
-import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -135,6 +130,21 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
+     * @return Tabular result captured from the query.
+     * @throws SQLException
+     */
+    @Override
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        try (ClickHouseResultSet clickHouseResultSet = new ClickHouseResultSet(results)) {
+            Table resultTable = Table.read().db(clickHouseResultSet, sqlQueryStatement);
+            return resultTable;
+        }
     }
 
 //    /**

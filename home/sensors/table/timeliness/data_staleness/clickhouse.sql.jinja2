@@ -3,27 +3,27 @@
 {% macro render_current_ingestion_diff() -%}
     {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
     TIMESTAMP_DIFF(
-        CURRENT_TIMESTAMP(),
+        toDateTime64(now(), 3),
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
         MILLISECOND
     ) / 24.0 / 3600.0 / 1000.0
     {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
     DATE_DIFF(
-        CURRENT_DATE(),
+        toDate(now()),
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
         DAY
     )
     {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
     DATETIME_DIFF(
-        CURRENT_DATETIME(),
+        toDateTime(now()),
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
         MILLISECOND
     ) / 24.0 / 3600.0 / 1000.0
     {%- else -%}
     TIMESTAMP_DIFF(
-        CURRENT_TIMESTAMP(),
+        toDateTime64(now(), 3),
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            toDateTime64OrNull({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}, 3)
         ),
         MILLISECOND
     ) / 24.0 / 3600.0 / 1000.0

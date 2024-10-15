@@ -16,7 +16,7 @@
 {%- endmacro %}
 
 {%- macro render_regex(regex) -%}
-     r{{ '\'' }}{{ regex }}{{ '\'' }}
+     {{ '\'' }}{{ regex }}{{ '\'' }}
 {%- endmacro -%}
 
 {% macro eol() -%}
@@ -121,13 +121,13 @@
 
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        DATE_TRUNC(CAST({{value}} AS DATE), YEAR)
+        DATE_TRUNC('year', CAST({{value}} AS DATE))
     {%- elif part == 'quarter' -%}
-        DATE_TRUNC(CAST({{value}} AS DATE), QUARTER)
+        DATE_TRUNC('quarter', CAST({{value}} AS DATE))
     {%- elif part == 'month' -%}
-        DATE_TRUNC(CAST({{value}} AS DATE), MONTH)
+        DATE_TRUNC('month', CAST({{value}} AS DATE))
     {%- elif part == 'week' -%}
-        DATE_TRUNC(CAST({{value}} AS DATE), WEEK)
+        DATE_TRUNC('week', CAST({{value}} AS DATE))
     {%- elif part == 'day' -%}
         {%- if datatype | upper == 'DATE' -%}
             {{value}}
@@ -135,7 +135,7 @@
             CAST({{value}} AS DATE)
         {%- endif -%}
     {%- elif part == 'hour' -%}
-        DATETIME_TRUNC(CAST({{value}} AS DATETIME), HOUR)
+        DATETIME_TRUNC('hour', CAST({{value}} AS DATETIME))
     {%- elif part == 'millisecond' -%}
         CAST({{value}} AS DATETIME)
     {%- else -%}
@@ -187,7 +187,7 @@
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
+        {{ indentation }}toDateTime64({{ render_time_dimension_expression(table_alias_prefix) }}, 3) AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 
@@ -211,31 +211,31 @@
             {{ prefix_to_render -}}
             {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST(CURRENT_DATE() AS TIMESTAMP)
+                toDateTime64(now(), 3)
             {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CURRENT_DATE()
+                toDate(now())
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST(CURRENT_DATE() AS DATETIME)
+                toDateTime(now())
             {%- else -%}
                 CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' < ' -}}
-                CURRENT_DATE()
+                toDate(now())
             {%- endif -%}
         {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
             {{ prefix_to_render -}}
             {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }} AS TIMESTAMP)
+                CAST({{ date_trunc('now()', 'month', timestamp_column_data_type) }} AS TIMESTAMP)
             {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                {{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}
+                {{ date_trunc('now()', 'month', timestamp_column_data_type) }}
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }} AS DATETIME)
+                CAST({{ date_trunc('now()', 'month', timestamp_column_data_type) }} AS DATETIME)
             {%- else -%}
                 CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' < ' -}}
-                {{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}
+                {{ date_trunc('now()', 'month', timestamp_column_data_type) }}
             {%- endif -%}
         {%- endif -%}
     {%- endif -%}
@@ -257,32 +257,32 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY) AS TIMESTAMP)
+                     toDateTime64(now() - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY, 3)
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY)
+                     toDate(now() - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY)
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY) AS DATETIME)
+                     toDateTime(now() - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY)
                 {%- else -%}
                      CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' >= ' -}}
-                     DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY)
+                     now() - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS TIMESTAMP)
+                     CAST({{ date_trunc('now()', 'month', timestamp_column_data_type) }} - INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH AS TIMESTAMP)
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
+                     {{ date_trunc('now()', 'month', timestamp_column_data_type) }} - INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
+                     CAST({{ date_trunc('now()', 'month', timestamp_column_data_type) }} - INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH AS DATETIME)
                 {%- else -%}
                      CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' >= ' -}}
-                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
+                     {{ date_trunc('now()', 'month', timestamp_column_data_type) }} - INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- else -%}
@@ -341,42 +341,8 @@
 {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
     {%- if (target_column_data_type == 'STRING') -%}
         {{ render_target_column(analyzed_table_to_render) }}
-    {%- elif (target_column_data_type == 'BIGNUMERIC') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'DECIMAL') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'BIGDECIMAL') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'FLOAT64') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'INT64') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'NUMERIC') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'INT') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'SMALLINT') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'INTEGER') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'BIGINT') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'TINYINT') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'BYTEINT') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'DATE') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'DATETIME') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'TIME') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'TIMESTAMP') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- elif (target_column_data_type == 'BOOLEAN') -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- else -%}
-        {{ render_target_column(analyzed_table_to_render) }}
+        toString({{ render_target_column(analyzed_table_to_render) }})
     {%- endif -%}
 {% endmacro -%}
 
@@ -396,15 +362,15 @@
 
 {% macro render_date_format_regex(date_format) %}
     {%- if date_format == 'DD/MM/YYYY'-%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
     {%- elif date_format == 'DD-MM-YYYY' -%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
     {%- elif date_format == 'DD.MM.YYYY' -%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
     {%- elif date_format == 'YYYY-MM-DD' -%}
-        "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+        '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
     {%- elif date_format == 'MM/DD/YYYY'-%}
-        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
     {%- endif -%}
 {% endmacro -%}
 
@@ -414,7 +380,7 @@
     {%- elif is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
     CAST({{ render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
-    SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    toDateOrNull({{ render_target_column('analyzed_table') }})
     {%- endif -%}
 {%- endmacro -%}
 

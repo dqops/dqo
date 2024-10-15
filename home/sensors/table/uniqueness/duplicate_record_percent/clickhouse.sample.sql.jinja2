@@ -42,7 +42,7 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='CAST( ', column_suffix=' AS STRING)') ~ ') IS NOT NULL',
+        {{- lib.render_where_clause(extra_filter = 'COALESCE(' ~ extract_in_list(parameters.columns, column_prefix='toString( ', column_suffix=')') ~ ') IS NOT NULL',
             table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
 SELECT
