@@ -36,6 +36,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           placeholder="Search"
           onChange={handleFilterChange}
           value={filter}
+          className="!min-w-100 !max-w-100"
         />
       </div>
       <div className="flex content-center">
