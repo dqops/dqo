@@ -414,7 +414,7 @@ const Tree = () => {
                     node.hasCheck ? 'font-bold' : ''
                   )}
                 >
-                  {node.id}
+                  {node.label}
                 </div>
                 {(node.level === TREE_LEVEL.SCHEMA ||
                   node.level === TREE_LEVEL.COLUMNS) && (
