@@ -2,7 +2,7 @@
 
 SELECT
     CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0
         ELSE SUM(
             CASE
                 WHEN NOT match({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})

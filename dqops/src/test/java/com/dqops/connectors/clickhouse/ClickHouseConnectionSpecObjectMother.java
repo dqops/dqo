@@ -24,6 +24,7 @@ import org.testcontainers.containers.ClickHouseContainer;
 public class ClickHouseConnectionSpecObjectMother {
     private static ClickHouseContainer sharedContainer;
     private static final int PORT = 8123;
+    private static final String IMAGE = "clickhouse/clickhouse-server:24.8";
 
     /**
      * Creates a shared ClickHouse container using Testcontainers. The container will be stopped when the unit/integration session will finish.
@@ -32,7 +33,7 @@ public class ClickHouseConnectionSpecObjectMother {
     public static ClickHouseContainer getSharedContainer() {
         if (sharedContainer == null) {
             //noinspection resource
-            sharedContainer = new ClickHouseContainer(ClickHouseContainer.IMAGE)
+            sharedContainer = new ClickHouseContainer(IMAGE)
                     .withExposedPorts(PORT)
                     .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
