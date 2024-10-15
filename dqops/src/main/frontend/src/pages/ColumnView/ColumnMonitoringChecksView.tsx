@@ -41,6 +41,17 @@ const initTabs = [
   }
 ];
 
+const freeInitTabs = [
+  {
+    label: 'Observability status',
+    value: 'observability-status'
+  },
+  {
+    label: 'Daily checkpoints',
+    value: 'daily'
+  }
+];
+
 const ColumnMonitoringChecksView = () => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
@@ -59,7 +70,6 @@ const ColumnMonitoringChecksView = () => {
     column: string;
     tab: 'observability-status' | 'daily' | 'monthly';
   } = useDecodedParams();
-  const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -73,10 +83,15 @@ const ColumnMonitoringChecksView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const activeTab = getSecondLevelTab(checkTypes, tab);
-
+  const isPremiumAcount =
+    userProfile &&
+    userProfile.license_type &&
+    userProfile.license_type?.toLowerCase() !== 'free' &&
+    !userProfile.trial_period_expires_at;
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
   >([]);
+  const [tabs, setTabs] = useState(isPremiumAcount ? initTabs : freeInitTabs);
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnMonitoringChecksOverview(
@@ -89,6 +104,10 @@ const ColumnMonitoringChecksView = () => {
       setCheckResultsOverview(res.data);
     });
   };
+
+  useEffect(() => {
+    setTabs(isPremiumAcount ? initTabs : freeInitTabs);
+  }, [userProfile]);
 
   useEffect(() => {
     dispatch(
@@ -234,19 +253,14 @@ const ColumnMonitoringChecksView = () => {
         isUpdated={isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring}
         isUpdating={isUpdating}
       />
-      {userProfile &&
-        userProfile.license_type &&
-        userProfile.license_type?.toLowerCase() !== 'free' &&
-        !userProfile.trial_period_expires_at && (
-          <div className="border-b border-gray-300">
-            <Tabs
-              tabs={tabs}
-              activeTab={tab}
-              onChange={onChangeTab}
-              className="w-full overflow-hidden max-w-full"
-            />
-          </div>
-        )}
+      <div className="border-b border-gray-300">
+        <Tabs
+          tabs={tabs}
+          activeTab={tab}
+          onChange={onChangeTab}
+          className="w-full overflow-hidden max-w-full"
+        />
+      </div>
       {tab === 'observability-status' && <ObservabilityStatus />}
       {tab === 'daily' && (
         <DataQualityChecks
