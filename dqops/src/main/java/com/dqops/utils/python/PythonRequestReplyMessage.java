@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
  * The object also contains a completable future to wait for the response.
  */
 public class PythonRequestReplyMessage<I, O> {
-    private final I request;
+    private I request;
     private final Class<O> responseType;
     private final CompletableFuture<O> responseFuture;
 
@@ -57,6 +57,14 @@ public class PythonRequestReplyMessage<I, O> {
      */
     public I getRequest() {
         return request;
+    }
+
+    /**
+     * Sets the request
+     * @param request Request.
+     */
+    public void setRequest(I request) {
+        this.request = request;
     }
 
     /**

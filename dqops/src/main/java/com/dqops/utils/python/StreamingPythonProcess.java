@@ -140,6 +140,9 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                     catch (Throwable ex) {
                         requestReplyMessage.getResponseFuture().completeExceptionally(ex);
                     }
+                    finally {
+                        requestReplyMessage.setRequest(null);
+                    }
                 }
                 catch (InterruptedException ex) {
                     return;

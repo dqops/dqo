@@ -198,6 +198,8 @@ dqo:
   cli:
     terminal:
       width: 150
+  duckdb:
+    memory-limit: 4GB
   ui:
     application-name: "DQOps Data Quality Operations Center"
     home-page:

@@ -15,6 +15,13 @@
  */
 package com.dqops.data.readouts.snapshot;
 
+import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
+import com.dqops.utils.tables.TableColumnUtility;
+import tech.tablesaw.api.LongColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.index.LongIndex;
+import tech.tablesaw.selection.Selection;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -27,15 +34,26 @@ public class SensorReadoutsTimeSeriesMap {
     private final Map<SensorReadoutTimeSeriesKey, SensorReadoutsTimeSeriesData> entries = new LinkedHashMap<>();
     private LocalDate firstLoadedMonth;
     private LocalDate lastLoadedMonth;
+    private Table allLoadedData;
+    private LongColumn checkHashColumn;
+    private LongColumn dataStreamHashColumn;
+    private LongIndex checkHashIndex;
+    private LongIndex dataStreamHashIndex;
 
     /**
      * Create a time series map.
      * @param firstLoadedMonth The date of the first loaded month.
      * @param lastLoadedMonth The date of the last loaded month.
      */
-    public SensorReadoutsTimeSeriesMap(LocalDate firstLoadedMonth, LocalDate lastLoadedMonth) {
+    public SensorReadoutsTimeSeriesMap(LocalDate firstLoadedMonth, LocalDate lastLoadedMonth, Table allLoadedData) {
         this.firstLoadedMonth = firstLoadedMonth;
         this.lastLoadedMonth = lastLoadedMonth;
+        this.allLoadedData = allLoadedData;
+        this.checkHashColumn = (LongColumn) allLoadedData.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        this.dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(allLoadedData,
+                SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
+        this.checkHashIndex = new LongIndex(this.checkHashColumn);
+        this.dataStreamHashIndex = new LongIndex(this.dataStreamHashColumn);
     }
 
     /**
@@ -54,14 +72,14 @@ public class SensorReadoutsTimeSeriesMap {
         return lastLoadedMonth;
     }
 
-    /**
-     * Returns a known time series for the given key or null when no historic data for this time series is present.
-     * @param key Time series key.
-     * @return Time series data or null.
-     */
-    public SensorReadoutsTimeSeriesData findTimeSeriesData(SensorReadoutTimeSeriesKey key) {
-        return this.entries.get(key);
-    }
+//    /**
+//     * Returns a known time series for the given key or null when no historic data for this time series is present.
+//     * @param key Time series key.
+//     * @return Time series data or null.
+//     */
+//    public SensorReadoutsTimeSeriesData findTimeSeriesData(SensorReadoutTimeSeriesKey key) {
+//        return this.entries.get(key);
+//    }
 
     /**
      * Returns a known time series for the given key (check and dimension) or null when no historic data for this time series is present.
@@ -70,7 +88,20 @@ public class SensorReadoutsTimeSeriesMap {
      * @return Time series data or null.
      */
     public SensorReadoutsTimeSeriesData findTimeSeriesData(long checkHashId, long dimensionId) {
-        return this.entries.get(new SensorReadoutTimeSeriesKey(checkHashId, dimensionId));
+        SensorReadoutTimeSeriesKey key = new SensorReadoutTimeSeriesKey(checkHashId, dimensionId);
+        SensorReadoutsTimeSeriesData sensorReadoutsTimeSeriesData = this.entries.get(key);
+        if (sensorReadoutsTimeSeriesData != null) {
+            return sensorReadoutsTimeSeriesData;
+        }
+
+        Selection checkHashRows = this.checkHashIndex.get(checkHashId);
+        Selection groupHashRows = this.dataStreamHashIndex.get(dimensionId);
+
+        Table filteredRows = this.allLoadedData.where(checkHashRows.and(groupHashRows));
+        Table sortedTimeSeriesTable = filteredRows.sortOn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+
+        SensorReadoutsTimeSeriesData newSubset = new SensorReadoutsTimeSeriesData(key, sortedTimeSeriesTable);
+        return newSubset;
     }
 
     /**
