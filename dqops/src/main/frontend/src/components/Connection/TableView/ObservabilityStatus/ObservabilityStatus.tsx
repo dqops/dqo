@@ -97,9 +97,7 @@ export default function ObservabilityStatus() {
           );
           setCheckResultsEntry(updatedResults);
         } else {
-          setCheckResultsEntry([
-            ...checkResultsEntry
-          ]);
+          setCheckResultsEntry([...checkResultsEntry]);
         }
       } else {
         setCheckResultsEntry(newResults);
@@ -516,6 +514,21 @@ export default function ObservabilityStatus() {
   };
   return (
     <div className="p-4 mt-2">
+      {(!checkResultsOverview || checkResultsOverview.length === 0) && (
+        <div
+          className="flex items-center gap-x-4 p-4"
+          style={{ border: '3px solid #ff9800' }}
+        >
+          <div>
+            <SvgIcon name="warning_orange" className="w-6 h-6" />
+          </div>
+          <div className="font-bold text-lg">
+            The data observability status is empty because no data quality
+            checks have been run. Please configure some checks or run the checks
+            that are applied by data quality policies.
+          </div>
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-x-4 mt-4">
         {checkResultsOverview.map((result, index) => (
           <SectionWrapper

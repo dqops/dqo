@@ -124,6 +124,7 @@ import { ReactComponent as UserSvg } from './svg/user.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
 import { ReactComponent as WarningGenericSvg } from './svg/warning-generic.svg';
+import { ReactComponent as WarningOrange } from './svg/warning-orange.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
@@ -263,7 +264,8 @@ const iconsMap: any = {
   definitions_policies: DefinitionsPoliciesSvg,
   domain: DomainSvg,
   password_change: PasswordChange,
-  ibmdb2: Db2Svg
+  ibmdb2: Db2Svg,
+  warning_orange: WarningOrange
 };
 
 interface SvgIconProps {
