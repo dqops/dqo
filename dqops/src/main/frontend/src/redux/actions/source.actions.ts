@@ -326,7 +326,8 @@ export const getCheckResults =
       endDate,
       timeScale,
       category,
-      comparisonName
+      comparisonName,
+      loadMore
     }: {
       connection: string;
       schema: string;
@@ -340,6 +341,7 @@ export const getCheckResults =
       runCheckType?: string;
       category?: string;
       comparisonName?: string;
+      loadMore?: 'first_data_group' | 'most_recent_per_group';
     }
   ) =>
   (dispatch: any) => {
@@ -383,7 +385,8 @@ export const getCheckResults =
             endDate,
             checkName,
             category,
-            comparisonName
+            comparisonName,
+            loadMore
           )
             .then(successCallback)
             .catch(errCallback);
@@ -401,7 +404,8 @@ export const getCheckResults =
             endDate,
             checkName,
             category,
-            comparisonName
+            comparisonName,
+            loadMore
           )
             .then(successCallback)
             .catch(errCallback);
@@ -419,7 +423,8 @@ export const getCheckResults =
             endDate,
             checkName,
             category,
-            comparisonName
+            comparisonName,
+            loadMore
           )
             .then(successCallback)
             .catch(errCallback);
@@ -435,7 +440,8 @@ export const getCheckResults =
             endDate,
             checkName,
             category,
-            comparisonName
+            comparisonName,
+            loadMore
           )
             .then(successCallback)
             .catch(errCallback);
@@ -452,7 +458,8 @@ export const getCheckResults =
             endDate,
             checkName,
             category,
-            comparisonName
+            comparisonName,
+            loadMore
           )
             .then(successCallback)
             .catch(errCallback);
@@ -469,7 +476,8 @@ export const getCheckResults =
             endDate,
             checkName,
             category,
-            comparisonName
+            comparisonName,
+            loadMore
           )
             .then(successCallback)
             .catch(errCallback);

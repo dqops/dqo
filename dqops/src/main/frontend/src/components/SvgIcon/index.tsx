@@ -62,6 +62,7 @@ import { ReactComponent as FolderSvg } from './svg/folder.svg';
 import { ReactComponent as Funnel } from './svg/funnel.svg';
 import { ReactComponent as GoogleSvg } from './svg/google.svg';
 import { ReactComponent as GridSvg } from './svg/grid.svg';
+import { ReactComponent as GroupingSvg } from './svg/grouping.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 import { ReactComponent as HouseSvg } from './svg/house.svg';
@@ -263,7 +264,8 @@ const iconsMap: any = {
   definitions_policies: DefinitionsPoliciesSvg,
   domain: DomainSvg,
   password_change: PasswordChange,
-  ibmdb2: Db2Svg
+  ibmdb2: Db2Svg,
+  grouping: GroupingSvg
 };
 
 interface SvgIconProps {
