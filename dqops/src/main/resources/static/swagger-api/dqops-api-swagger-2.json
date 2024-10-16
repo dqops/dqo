@@ -41403,6 +41403,11 @@
           "type" : "boolean",
           "description" : "Set the value to true to collect error samples for failed data quality checks."
         },
+        "execution_target" : {
+          "type" : "string",
+          "description" : "Set the data quality check execution mode. The default mode sensors_and_rules will both collect metrics and validate them with rules. Alternatively, it is possible to run only sensors, or validate existing data with rules.",
+          "enum" : [ "sensors_and_rules", "only_sensors", "only_rules" ]
+        },
         "run_checks_result" : {
           "description" : "The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.",
           "$ref" : "#/definitions/RunChecksResult"
@@ -41424,6 +41429,11 @@
         "collect_error_samples" : {
           "type" : "boolean",
           "description" : "Set the value to true to collect error samples for failed data quality checks. Set the value to false to disable error sampling collection despite any other settings on the table or check level."
+        },
+        "execution_target" : {
+          "type" : "string",
+          "description" : "Set the data quality check execution mode. The default mode sensors_and_rules will both collect metrics and validate them with rules. Alternatively, it is possible to run only sensors, or validate existing data with rules.",
+          "enum" : [ "sensors_and_rules", "only_sensors", "only_rules" ]
         },
         "dummy_execution" : {
           "type" : "boolean",

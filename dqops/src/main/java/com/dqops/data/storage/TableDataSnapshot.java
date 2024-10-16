@@ -54,6 +54,7 @@ public class TableDataSnapshot {
     private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
     private LocalDate firstLoadedMonth;
     private LocalDate lastLoadedMonth;
+    private Table cachedAllData;
 
     /**
      * Creates a new writable snapshot of data for a single parquet table with results for one connection and physical table.
@@ -187,8 +188,12 @@ public class TableDataSnapshot {
      * @return Table with the data from all partitions or null when no partitions were loaded or all loaded partitions were empty.
      */
     public Table getAllData() {
+        if (this.cachedAllData != null) {
+            return this.cachedAllData;
+        }
+
         Table allData = null;
-        if (loadedMonthlyPartitions != null) {
+        if (this.loadedMonthlyPartitions != null) {
             for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
                 if (loadedMonthlyPartition.getData() != null) {
                     if (allData == null) {
@@ -201,6 +206,7 @@ public class TableDataSnapshot {
             }
         }
 
+        this.cachedAllData = allData;
         return allData;
     }
 
@@ -346,6 +352,7 @@ public class TableDataSnapshot {
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
+                this.cachedAllData = null;
                 return true;
             }
         }
@@ -361,6 +368,7 @@ public class TableDataSnapshot {
             if (loadedEarlierPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+                this.cachedAllData = null;
                 anyMonthLoaded = true;
             }
         }
@@ -376,6 +384,7 @@ public class TableDataSnapshot {
             if (loadedLaterPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+                this.cachedAllData = null;
                 anyMonthLoaded = true;
             }
         }
@@ -419,6 +428,7 @@ public class TableDataSnapshot {
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
+                this.cachedAllData = null;
             }
         }
         else {
@@ -438,6 +448,7 @@ public class TableDataSnapshot {
                 this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+                this.cachedAllData = null;
             }
             currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
             needToLoad = maxRecentMonthsToLoad - currentlyLoadedPartitions;
@@ -461,6 +472,7 @@ public class TableDataSnapshot {
                 this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+                this.cachedAllData = null;
             }
         }
     }

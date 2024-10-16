@@ -23,6 +23,7 @@ import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.jobs.RunChecksQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
@@ -98,6 +99,7 @@ public class CheckServiceImpl implements CheckService {
      * @param collectErrorSamples Collect error samples while running checks.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @param executionTarget Execution target (sensor, rule, both).
      * @param principal Principal that will be used to run the job.
      * @return Check execution summary.
      */
@@ -107,10 +109,11 @@ public class CheckServiceImpl implements CheckService {
                                            boolean collectErrorSamples,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun,
+                                           RunChecksTarget executionTarget,
                                            DqoUserPrincipal principal) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         RunChecksParameters parameters = new RunChecksParameters(checkSearchFilters, timeWindowFilterParameters,
-                collectErrorSamples, checkExecutionProgressListener, dummyRun);
+                collectErrorSamples, checkExecutionProgressListener, dummyRun, executionTarget);
         runChecksJob.setParameters(parameters);
 
         this.parentDqoJobQueue.pushJob(runChecksJob, principal);

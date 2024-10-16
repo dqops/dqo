@@ -198,7 +198,8 @@ const DatabaseConnection = ({
           className={clsx(
             'mb-3 w-20 text-blue-500',
             nameOfDatabase === 'Spark' && 'w-35',
-            nameOfDatabase === 'Trino' && 'max-w-11'
+            nameOfDatabase === 'Trino' && 'max-w-11',
+            nameOfDatabase.includes('Cloud SQL for ') && 'w-18'
           )}
         />
       );

@@ -37,6 +37,7 @@ public interface CheckExecutionService {
      * @param collectErrorSamples Collect error samples for failed checks. Can disable or enable sample collection independent of other parameters.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param executionTarget Check execution mode (sensors, rules, or both).
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
      * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token.
@@ -49,6 +50,7 @@ public interface CheckExecutionService {
                                         Boolean collectErrorSamples,
                                         CheckExecutionProgressListener progressListener,
                                         boolean dummySensorExecution,
+                                        RunChecksTarget executionTarget,
                                         boolean startChildJobsPerTable,
                                         DqoQueueJobId parentJobId,
                                         JobCancellationToken jobCancellationToken,
@@ -82,6 +84,7 @@ public interface CheckExecutionService {
      * @param collectErrorSamples Collect error samples for failed checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param executionTarget Check execution mode (sensors, rules, or both).
      * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table, but containing only one row for the target table. The result may be empty if the table was not found.
      */
@@ -93,5 +96,6 @@ public interface CheckExecutionService {
                                                        Boolean collectErrorSamples,
                                                        CheckExecutionProgressListener progressListener,
                                                        boolean dummySensorExecution,
+                                                       RunChecksTarget executionTarget,
                                                        JobCancellationToken jobCancellationToken);
 }

@@ -38,6 +38,7 @@ import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.TableCheckExecutionServiceImpl;
 import com.dqops.execution.checks.TableCheckExecutionServiceObjectMother;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerStub;
@@ -143,6 +144,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -182,6 +184,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -224,6 +227,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -259,6 +263,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -293,6 +298,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -332,6 +338,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -367,6 +374,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -401,6 +409,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
@@ -433,6 +442,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 false,
                 new CheckExecutionProgressListenerStub(),
                 false,
+                RunChecksTarget.sensors_and_rules,
                 JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNull(checkExecutionSummary.getCheckExecutionErrorSummary(),
