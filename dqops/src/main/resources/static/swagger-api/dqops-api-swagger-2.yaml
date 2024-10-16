@@ -18519,6 +18519,35 @@ definitions:
           $ref: "#/definitions/ParameterDefinitionSpec"
     description: "Model depicting a named data quality check that can potentially\
       \ be enabled, regardless to its position in hierarchy tree."
+  ClickHouseParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "ClickHouse host name. Supports also a ${CLICKHOUSE_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "ClickHouse port number. The default port is 30015. Supports\
+          \ also a ${CLICKHOUSE_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "ClickHouse instance number. Supports also a ${CLICKHOUSE_DATABASE_NAME}\
+          \ configuration with a custom environment variable."
+      user:
+        type: "string"
+        description: "ClickHouse user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "ClickHouse database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   CloudSynchronizationFoldersStatusModel:
     type: "object"
     properties:
@@ -36402,6 +36431,7 @@ definitions:
         - "hana"
         - "db2"
         - "mariadb"
+        - "clickhouse"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36448,6 +36478,9 @@ definitions:
       mariadb:
         description: "MariaDB connection parameters."
         $ref: "#/definitions/MariaDbParametersSpec"
+      clickhouse:
+        description: "ClickHouse connection parameters."
+        $ref: "#/definitions/ClickHouseParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -36527,6 +36560,7 @@ definitions:
         - "hana"
         - "db2"
         - "mariadb"
+        - "clickhouse"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -36587,6 +36621,10 @@ definitions:
         description: "MariaDB connection parameters. Specify parameters in the mariadb\
           \ section or set the url (which is the MariaDB JDBC url)."
         $ref: "#/definitions/MariaDbParametersSpec"
+      clickhouse:
+        description: "ClickHouse connection parameters. Specify parameters in the\
+          \ clickhouse section or set the url (which is the ClickHouse JDBC url)."
+        $ref: "#/definitions/ClickHouseParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -39579,6 +39617,7 @@ definitions:
         - "hana"
         - "db2"
         - "mariadb"
+        - "clickhouse"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -39614,6 +39653,7 @@ definitions:
         - "hana"
         - "db2"
         - "mariadb"
+        - "clickhouse"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
