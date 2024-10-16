@@ -64,6 +64,7 @@ nav:
       - GCP: "data-sources/gcp.md"
       - Iceberg: "data-sources/iceberg.md"
       - JSON: "data-sources/json.md"
+      - MariaDB: "data-sources/mariadb.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
       - Parquet: "data-sources/parquet.md"

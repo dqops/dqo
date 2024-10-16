@@ -1,49 +1,44 @@
 ---
-title: How to activate data observability for ClickHouse
+title: How to activate data observability for MariaDB
 ---
-# How to activate data observability for ClickHouse
-Read this guide to learn how to connect DQOps to ClickHouse from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to activate data observability for MariaDB
+Read this guide to learn how to connect DQOps to MariaDB from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
-ClickHouse is the fastest and most resource efficient real-time data warehouse and open-source database.
+MariaDB is the fastest and most resource efficient real-time data warehouse and open-source database.
 
-!!! note "DQOps free version limits"
-
-    ClickHouse drivers are not provided in an open-source version.
-
-    For more details, please [contact DQOps sales](https://dqops.com/contact-us/).
-
-## Add a ClickHouse connection using the user interface
+## Add a MariaDB connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the ClickHouse connection settings:
+To navigate to the MariaDB connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
-2. Select ClickHouse database type.
+2. Select MariaDB database type.
 
-    ![Selecting ClickHouse database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-clickhouse.png){ loading=lazy; }
+    ![Selecting MariaDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-mariadb.png){ loading=lazy; }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the ClickHouse connection settings, you will need to fill in its details.
+After navigating to the MariaDB connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-clickhouse.png){ loading=lazy; }
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-mariadb.png){ loading=lazy; }
 
-| ClickHouse connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name              |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit          |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
-| Host                         | `host`                                   | ClickHouse host name. Supports also a ${CLICKHOUSE_HOST} configuration with a custom environment variable.                                                                                                                                |
-| Port                         | `port`                                   | ClickHouse port number. The default port is 8123. Supports also a ${CLICKHOUSE_PORT} configuration with a custom environment variable.                                                                                                    |
-| User name                    | `user`                                   | ClickHouse user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
-| Password                     | `password`                               | ClickHouse database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
-| JDBC connection property     |                                          | Optional setting. DQOps supports using JDBC driver to access ClickHouse.                                                                                                                                                                 |
+| MariaDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|-----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name             |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit         |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
+| Host                        | `host`                                   | MariaDB host name. Supports also a ${MARIADB_HOST} configuration with a custom environment variable.                                                                                                                                      |
+| Port                        | `port`                                   | MariaDB port number. The default port is 3306. Supports also a ${MARIADB_PORT} configuration with a custom environment variable.                                                                                                       |
+| Database                    | `database`                               | MariaDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                           |
+| User name                   | `user`                                   | MariaDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                               |
+| Password                    | `password`                               | MariaDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                       |
+| JDBC connection property    |                                          | Optional setting. DQOps supports using JDBC driver to access MariaDB.                                                                                                                                                                  |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -99,7 +94,7 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Add a ClickHouse connection using DQOps Shell
+## Add a MariaDB connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -128,11 +123,12 @@ Database provider type (--provider):
  [14] db2
  [15] mariadb
  [16] clickhouse
-Please enter one of the [] values: 16
-ClickHouse host name (--clickhouse-host) [${CLICKHOUSE_HOST}]: localhost
-ClickHouse port number (--clickhouse-port) [${CLICKHOUSE_PORT}]: 8123
-ClickHouse user name (--clickhouse-user) [${CLICKHOUSE_USER}]: default
-ClickHouse user password (--clickhouse-password) [${CLICKHOUSE_PASSWORD}]: default
+Please enter one of the [] values: 15
+MariaDB host name (--mariadb-host) [${MARIADB_HOST}]: localhost
+MariaDB port number (--mariadb-port) [${MARIADB_PORT}]: 8123
+MariaDB database(--mariadb-database) [${MARIADB_DATABASE}]: testing
+MariaDB user name (--mariadb-user) [${MARIADB_USER}]: default
+MariaDB user password (--mariadb-password) [${MARIADB_PASSWORD}]: default
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -141,11 +137,12 @@ You can also run the command with parameters to add a connection in just a singl
 
 ```
 dqo> connection add --name=connection1
---provider=clickhouse
---clickhouse-host=localhost
---clickhouse-port=8123
---clickhouse-user=default
---clickhouse-password=default
+--provider=mariadb
+--mariadb-host=localhost
+--mariadb-port=3306
+--mariadb-database=testing
+--mariadb-user=test
+--mariadb-password=test
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -169,18 +166,19 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of a ClickHouse data source connection.
+Below is a sample YAML file showing an example configuration of a MariaDB data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
 kind: source
 spec:
-  provider_type: clickhouse
-  clickhouse:
+  provider_type: mariadb
+  mariadb:
     host: localhost
-    port: 8123
-    user: default
-    password: default
+    port: 3306
+    database: testing
+    user: test
+    password: test
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
@@ -189,8 +187,8 @@ spec:
 ```
 
 ### **Reference of all connection parameters**
-Complete documentation of all connection parameters used in the `spec.clickhouse` node is
-described in the reference section of the [ClickHouseParametersSpec](../reference/yaml/ConnectionYaml.md#clickhouseparametersspec)
+Complete documentation of all connection parameters used in the `spec.mariadb` node is
+described in the reference section of the [MariaDbParametersSpec](../reference/yaml/ConnectionYaml.md#mariadbparametersspec)
 YAML file format.
 
 ## Next steps
