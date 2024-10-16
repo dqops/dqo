@@ -55,6 +55,7 @@ nav:
       - AWS: "data-sources/aws.md"
       - Azure: "data-sources/azure.md"
       - BigQuery: "data-sources/bigquery.md"
+      - ClickHouse: "data-sources/clickhouse.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
       - Db2: "data-sources/db2.md"
