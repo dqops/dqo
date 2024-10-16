@@ -24,6 +24,7 @@ import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ChevronLeftSvg } from './svg/chevron-left.svg';
 import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
 import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
+import { ReactComponent as ClickHouseSvg } from './svg/clickhouse.svg';
 import { ReactComponent as ClockOffSvg } from './svg/clock-off.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
 import { ReactComponent as ClosedFolderSvg } from './svg/close-folder.svg';
@@ -125,6 +126,7 @@ import { ReactComponent as UserSvg } from './svg/user.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
 import { ReactComponent as WarningGenericSvg } from './svg/warning-generic.svg';
+import { ReactComponent as WarningOrange } from './svg/warning-orange.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
@@ -265,7 +267,9 @@ const iconsMap: any = {
   domain: DomainSvg,
   password_change: PasswordChange,
   ibmdb2: Db2Svg,
-  grouping: GroupingSvg
+  grouping: GroupingSvg,
+  clickhouse: ClickHouseSvg,
+  warning_orange: WarningOrange
 };
 
 interface SvgIconProps {

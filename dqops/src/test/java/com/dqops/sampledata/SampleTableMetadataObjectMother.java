@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.connectors.clickhouse.ClickHouseConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.db2.Db2ConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckDbTypesMappings;
@@ -109,6 +110,9 @@ public class SampleTableMetadataObjectMother {
             case mariadb:
                 return MariaDbConnectionSpecObjectMother.create();
 
+            case clickhouse:
+                return ClickHouseConnectionSpecObjectMother.create();
+
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -170,6 +174,9 @@ public class SampleTableMetadataObjectMother {
 
             case mariadb:
                 return MariaDbConnectionSpecObjectMother.getSchemaName();
+
+            case clickhouse:
+                return ClickHouseConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

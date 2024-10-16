@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  description: "Monitors the schema of columns registered in DQOps. Raises a data\
+    \ quality issue when the column is missing, or its data has changed."
+  monitoring_checks:
+    daily:
+      schema:
+        daily_column_exists:
+          warning: {}
+        daily_column_type_changed:
+          warning: {}
