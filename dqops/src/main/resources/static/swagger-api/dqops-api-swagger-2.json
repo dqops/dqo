@@ -39260,9 +39260,6 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "zero" : {
-          "type" : "boolean"
-        },
         "nano" : {
           "type" : "integer",
           "format" : "int32"
@@ -39270,7 +39267,7 @@
         "negative" : {
           "type" : "boolean"
         },
-        "positive" : {
+        "zero" : {
           "type" : "boolean"
         },
         "units" : {
@@ -46471,16 +46468,16 @@
     "TemporalUnit" : {
       "type" : "object",
       "properties" : {
-        "durationEstimated" : {
+        "dateBased" : {
+          "type" : "boolean"
+        },
+        "timeBased" : {
           "type" : "boolean"
         },
         "duration" : {
           "$ref" : "#/definitions/Duration"
         },
-        "timeBased" : {
-          "type" : "boolean"
-        },
-        "dateBased" : {
+        "durationEstimated" : {
           "type" : "boolean"
         }
       }
