@@ -65,6 +65,7 @@ export default function ObservabilityStatus() {
   }>({ checkTypes, column });
   const [groupingOptions, setGroupingOptions] = useState<string[]>([]);
   const [mode, setMode] = useState<'chart' | 'table'>('chart');
+  const [isResultsOverviewEmpty, setIsResultsOverviewEmpty] = useState(false);
 
   const onChangeFilter = (obj: Partial<{ column: string; check: string }>) => {
     setHistogramFilter({ ...histogramFilter, ...obj });
@@ -213,10 +214,20 @@ export default function ObservabilityStatus() {
     };
 
     const filterColumnChecks = (data: CheckResultsOverviewDataModel[]) => {
+      if (data.length === 0 || !column) {
+        setIsResultsOverviewEmpty(true);
+      } else {
+        setIsResultsOverviewEmpty(false);
+      }
       return data.filter((x) => x.checkCategory === 'schema');
     };
 
     const filterTableChecks = (data: CheckResultsOverviewDataModel[]) => {
+      if (data.length === 0 || !column) {
+        setIsResultsOverviewEmpty(true);
+      } else {
+        setIsResultsOverviewEmpty(false);
+      }
       return data.filter((x) => x.checkCategory === 'schema');
     };
     const getOverviewData = () => {
@@ -514,7 +525,7 @@ export default function ObservabilityStatus() {
   };
   return (
     <div className="p-4 mt-2">
-      {(!checkResultsOverview || checkResultsOverview.length === 0) && (
+      {isResultsOverviewEmpty && (
         <div
           className="flex items-center gap-x-4 p-4"
           style={{ border: '3px solid #ff9800' }}
