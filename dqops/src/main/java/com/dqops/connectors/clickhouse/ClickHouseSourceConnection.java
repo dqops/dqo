@@ -147,6 +147,49 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, COLUMN_DEFAULT, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, CHARACTER_OCTET_LENGTH, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX, NUMERIC_SCALE, DATETIME_PRECISION, CHARACTER_SET_CATALOG, CHARACTER_SET_SCHEMA, CHARACTER_SET_NAME, COLLATION_CATALOG, COLLATION_SCHEMA, COLLATION_NAME, DOMAIN_CATALOG, DOMAIN_SCHEMA, DOMAIN_NAME, EXTRA, COLUMN_COMMENT, COLUMN_TYPE ");
+        sqlBuilder.append("FROM ");
+        String databaseName = providerSpecificConfiguration.getDatabase();
+        sqlBuilder.append(getInformationSchemaName());
+        sqlBuilder.append(".COLUMNS ");
+        sqlBuilder.append("WHERE TABLE_SCHEMA='");
+        sqlBuilder.append(schemaName.replace("'", "''"));
+        sqlBuilder.append("'");
+
+        if (!Strings.isNullOrEmpty(databaseName)) {
+            sqlBuilder.append(" AND TABLE_CATALOG='");
+            sqlBuilder.append(databaseName.replace("'", "''"));
+            sqlBuilder.append("'");
+        }
+
+        if (tableNames != null && tableNames.size() > 0) {
+            sqlBuilder.append(" AND TABLE_NAME IN (");
+            for (int ti = 0; ti < tableNames.size(); ti++) {
+                String tableName = tableNames.get(ti);
+                if (ti > 0) {
+                    sqlBuilder.append(",");
+                }
+                sqlBuilder.append('\'');
+                sqlBuilder.append(tableName.replace("'", "''"));
+                sqlBuilder.append('\'');
+            }
+            sqlBuilder.append(") ");
+        }
+        sqlBuilder.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION");
+        String sql = sqlBuilder.toString();
+        return sql;
+    }
+
 //    /**
 //     * Returns a list of schemas from the source.
 //     *

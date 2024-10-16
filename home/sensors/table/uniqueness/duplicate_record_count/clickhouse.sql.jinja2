@@ -9,7 +9,7 @@
 
 SELECT
     CASE
-        WHEN SUM(duplicated_count) IS NULL THEN 0
+        WHEN sumOrNull(duplicated_count) IS NULL THEN 0
         ELSE SUM(CASE WHEN duplicated_count > 1 THEN 1 ELSE 0 END)
         END AS actual_value
     {{- lib.render_data_grouping_projections_reference('grouping_table') }}

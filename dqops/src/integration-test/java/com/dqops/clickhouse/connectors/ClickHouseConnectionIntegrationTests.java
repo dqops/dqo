@@ -66,7 +66,7 @@ public class ClickHouseConnectionIntegrationTests extends BaseClickHouseIntegrat
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
         Assertions.assertEquals(1, schemas.size());
-        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "public")));
+        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "default")));
     }
 
     @Test

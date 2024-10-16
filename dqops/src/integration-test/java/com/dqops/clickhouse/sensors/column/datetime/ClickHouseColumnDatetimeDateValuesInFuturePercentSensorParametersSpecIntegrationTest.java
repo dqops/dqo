@@ -179,7 +179,8 @@ public class ClickHouseColumnDatetimeDateValuesInFuturePercentSensorParametersSp
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        // The date in sample data is 2999-02-01, but clickhouse does not support that far future date, instead it uses 2149-06-06 for Date type
+        Assertions.assertTrue(sampleValues.contains("2149-06-06"));
     }
 
     @Test
@@ -201,7 +202,8 @@ public class ClickHouseColumnDatetimeDateValuesInFuturePercentSensorParametersSp
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        // The date in sample data is 2999-02-01, but clickhouse does not support that far future date, instead it uses 2149-06-06 for Date type
+        Assertions.assertTrue(sampleValues.contains("2149-06-06"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -237,7 +239,8 @@ public class ClickHouseColumnDatetimeDateValuesInFuturePercentSensorParametersSp
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        // The date in sample data is 2999-02-01, but clickhouse does not support that far future date, instead it uses 2149-06-06 for Date type
+        Assertions.assertTrue(sampleValues.contains("2149-06-06"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 Stream.of(resultTable.column("grouping_level_1").asObjectArray())
