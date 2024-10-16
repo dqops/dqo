@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckResultEntryModel, CheckResultsListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
@@ -290,10 +290,11 @@ const CheckResultsTab = ({
         endDate,
         category,
         comparisonName,
+        dataGrouping: mode === 'group' ? undefined : dataGroup,
         loadMore: mode === 'group' ? 'most_recent_per_group' : undefined
       })
     );
-  }, [mode]);
+  }, [mode, dataGroup, month]);
 
   const allResults = results
     .map((result) =>
@@ -309,6 +310,26 @@ const CheckResultsTab = ({
       }))
     )
     .reduce((arr, el) => [...arr, ...el], []);
+
+  const checkResultsForTable = useCallback(
+    (results: CheckResultsListModel[]) => {
+      const newResults: any[] = [];
+      results.forEach((result) => {
+        (result?.checkResultEntries ?? []).forEach((entry) => {
+          newResults.push({
+            ...entry,
+            checkName: result.checkName,
+            executedAt: moment(
+              getLocalDateInUserTimeZone(new Date(String(entry.executedAt)))
+            ).format('YYYY-MM-DD HH:mm:ss'),
+            timePeriod: entry.timePeriod?.replace(/T/g, ' ')
+          });
+        });
+      });
+      return newResults;
+    },
+    [results]
+  )(results);
 
   return (
     <div
@@ -433,14 +454,7 @@ const CheckResultsTab = ({
             <Table
               className="mt-1 w-full"
               columns={columns}
-              data={(results[0].checkResultEntries || []).map((item) => ({
-                ...item,
-                checkName: results[0].checkName,
-                executedAt: moment(
-                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
-                ).format('YYYY-MM-DD HH:mm:ss'),
-                timePeriod: item.timePeriod?.replace(/T/g, ' ')
-              }))}
+              data={checkResultsForTable}
               emptyMessage="No data"
               getRowClass={getSeverityClass}
             />
