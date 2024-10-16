@@ -33,7 +33,7 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
-import MariaDbLogo from '../../SvgIcon/svg/mariadb.svg';
+import MariaDbLogo from '../../SvgIcon/svg/maria-db.svg';
 import ClickHouseLogo from '../../SvgIcon/svg/clickhouse.svg';
 import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
