@@ -266,7 +266,7 @@ const iconsMap: any = {
   domain: DomainSvg,
   password_change: PasswordChange,
   ibmdb2: Db2Svg,
-  clickhouse: ClickHouseSvg
+  clickhouse: ClickHouseSvg,
   warning_orange: WarningOrange
 };
 
