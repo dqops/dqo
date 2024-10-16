@@ -1,0 +1,7 @@
+{% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    match(
+        toString({{ lib.render_target_column('analyzed_table') }}),
+        '(^|[ \t.,:;\"\'`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;\"\'`|\n\r]|$)'
+    )
+{%- endcall -%}

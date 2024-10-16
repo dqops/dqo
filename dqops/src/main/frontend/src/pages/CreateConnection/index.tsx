@@ -168,6 +168,10 @@ const CreateConnection = () => {
         copiedDatabase.mariadb = { port: '3306', properties: { '': '' } };
         break;
       }
+      case ConnectionModelProviderTypeEnum.clickhouse: {
+        copiedDatabase.clickhouse = { port: '8123', properties: { '': '' } };
+        break;
+      }
     }
     setDatabase(copiedDatabase);
   };

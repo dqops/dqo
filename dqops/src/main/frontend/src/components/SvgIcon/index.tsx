@@ -24,6 +24,7 @@ import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ChevronLeftSvg } from './svg/chevron-left.svg';
 import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
 import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
+import { ReactComponent as ClickHouseSvg } from './svg/clickhouse.svg';
 import { ReactComponent as ClockOffSvg } from './svg/clock-off.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
 import { ReactComponent as ClosedFolderSvg } from './svg/close-folder.svg';
@@ -265,6 +266,7 @@ const iconsMap: any = {
   domain: DomainSvg,
   password_change: PasswordChange,
   ibmdb2: Db2Svg,
+  clickhouse: ClickHouseSvg,
   warning_orange: WarningOrange
 };
 

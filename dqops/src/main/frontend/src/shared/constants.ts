@@ -358,6 +358,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Bigquery'
   },
   {
+    type: ConnectionModelProviderTypeEnum.clickhouse,
+    name: 'ClickHouse',
+    iconName: 'clickhouse',
+    displayName: 'ClickHouse'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.mysql,
     name: 'Cloud SQL for MySQL',
     iconName: 'cloudsqlformysql',
