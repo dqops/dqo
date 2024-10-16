@@ -15,6 +15,7 @@
  */
 package com.dqops.execution.checks.jobs;
 
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.SilentCheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -88,6 +89,12 @@ public class RunChecksOnTableParameters implements Cloneable {
     private Boolean collectErrorSamples;
 
     /**
+     * Set the data quality check execution mode. The default mode sensors_and_rules will both collect metrics and validate them with rules. Alternatively, it is possible to run only sensors, or validate existing data with rules.
+     */
+    @JsonPropertyDescription("Set the data quality check execution mode. The default mode sensors_and_rules will both collect metrics and validate them with rules. Alternatively, it is possible to run only sensors, or validate existing data with rules.")
+    private RunChecksTarget executionTarget;
+
+    /**
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
@@ -109,6 +116,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * @param collectErrorSamples Collect error samples.
      * @param progressListener Progress listener to receive events during the check execution.
      * @param dummyExecution True when it is a dummy run, only for showing rendered sensor queries.
+     * @param executionTarget Execution mode (sensor, rule, both).
      */
     public RunChecksOnTableParameters(String connection,
                                       Integer maxJobsPerConnection,
@@ -117,7 +125,8 @@ public class RunChecksOnTableParameters implements Cloneable {
                                       TimeWindowFilterParameters timeWindowFilter,
                                       boolean collectErrorSamples,
                                       CheckExecutionProgressListener progressListener,
-                                      boolean dummyExecution) {
+                                      boolean dummyExecution,
+                                      RunChecksTarget executionTarget) {
         this.connection = connection;
         this.maxJobsPerConnection = maxJobsPerConnection;
         this.table = table;
@@ -126,6 +135,7 @@ public class RunChecksOnTableParameters implements Cloneable {
         this.progressListener = progressListener;
         this.dummyExecution = dummyExecution;
         this.collectErrorSamples = collectErrorSamples;
+        this.executionTarget = executionTarget;
     }
 
     /**
@@ -254,6 +264,22 @@ public class RunChecksOnTableParameters implements Cloneable {
      */
     public void setDummyExecution(boolean dummyExecution) {
         this.dummyExecution = dummyExecution;
+    }
+
+    /**
+     * Returns the check execution mode (sensor only, rule only, check and rule - the default).
+     * @return Run check execution mode.
+     */
+    public RunChecksTarget getExecutionTarget() {
+        return executionTarget;
+    }
+
+    /**
+     * Sets the check execution mode - only the sensor, only the rule, or both the sensor and rule.
+     * @param executionTarget Check execution target.
+     */
+    public void setExecutionTarget(RunChecksTarget executionTarget) {
+        this.executionTarget = executionTarget;
     }
 
     /**

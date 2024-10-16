@@ -19,6 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -101,37 +102,29 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
                                    filtered_median_float, filtered_median_float if 0 not in all_extracted else 0,
                                    filtered_median_float)
 
-    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
-    tail = rule_parameters.parameters.anomaly_percent / 100.0
+    tail = rule_parameters.parameters.anomaly_percent / 100.0 / 2.0
 
-    upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-    upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-    upper_multiples_median = np.median(upper_multiples)
-    upper_multiples_std = scipy.stats.tstd(upper_multiples)
+    scaled_multiples_array = [(readout / filtered_median_float - 1.0 if readout >= filtered_median_float else
+                               (-1.0 / (readout / filtered_median_float)) + 1.0) for readout in extracted]
 
-    if float(upper_multiples_std) == 0:
-        threshold_upper = filtered_median_float
-    else:
-        # Assumption: the historical data follows t-student distribution
-        upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-        threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
+    threshold_upper_multiple = detect_upper_bound_anomaly(values=scaled_multiples_array, median=0.0,
+                                                          tail=tail, parameters=rule_parameters)
+
+    passed = True
+    if threshold_upper_multiple is not None:
         threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
-
-    lower_median_multiples_array = [(-1.0 / (readout / filtered_median_float)) for readout in extracted
-                                    if readout <= filtered_median_float if readout != 0]
-    lower_multiples = np.array(lower_median_multiples_array, dtype=float)
-    lower_multiples_median = np.median(lower_multiples)
-    lower_multiples_std = scipy.stats.tstd(lower_multiples)
-
-    if float(lower_multiples_std) == 0:
-        threshold_lower = filtered_median_float
+        passed = rule_parameters.actual_value <= threshold_upper
     else:
-        # Assumption: the historical data follows t-student distribution
-        lower_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=lower_multiples_median, scale=lower_multiples_std)
-        threshold_lower_multiple = float(lower_readout_distribution.ppf(tail))
-        threshold_lower = filtered_median_float * (-1.0 / threshold_lower_multiple)
+        threshold_upper = None
 
-    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+    threshold_lower_multiple = detect_lower_bound_anomaly(values=scaled_multiples_array, median=0.0,
+                                                          tail=tail, parameters=rule_parameters)
+
+    if threshold_lower_multiple is not None:
+        threshold_lower = filtered_median_float * (-1.0 / (threshold_lower_multiple - 1.0))
+        passed = passed and threshold_lower <= rule_parameters.actual_value
+    else:
+        threshold_lower = None
 
     expected_value = filtered_median_float
     lower_bound = threshold_lower

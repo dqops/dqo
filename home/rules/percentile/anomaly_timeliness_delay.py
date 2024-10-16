@@ -19,6 +19,7 @@ from typing import Sequence
 import numpy as np
 import scipy
 import scipy.stats
+from lib.anomalies.anomaly_detection import detect_upper_bound_anomaly, detect_lower_bound_anomaly
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -98,27 +99,19 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(None if rule_parameters.actual_value == filtered_median_float else False,
                                    filtered_median_float, 0.0, filtered_median_float)
 
-    degrees_of_freedom = float(rule_parameters.configuration_parameters.degrees_of_freedom)
     tail = rule_parameters.parameters.anomaly_percent / 100.0
 
-    upper_median_multiples_array = [(readout / filtered_median_float - 1.0) for readout in extracted if readout >= filtered_median_float]
-    upper_multiples = np.array(upper_median_multiples_array, dtype=float)
-    upper_multiples_median = np.median(upper_multiples)
-    upper_multiples_std = scipy.stats.tstd(upper_multiples)
+    threshold_upper_multiple = detect_upper_bound_anomaly(values=extracted, median=filtered_median_float,
+                                                          tail=tail, parameters=rule_parameters)
 
-    if float(upper_multiples_std) == 0:
-        threshold_upper = filtered_median_float
+    passed = True
+    if threshold_upper_multiple is not None:
+        threshold_upper = threshold_upper_multiple
+        passed = rule_parameters.actual_value <= threshold_upper
     else:
-        # Assumption: the historical data follows t-student distribution
-        upper_readout_distribution = scipy.stats.t(df=degrees_of_freedom, loc=upper_multiples_median, scale=upper_multiples_std)
-        threshold_upper_multiple = float(upper_readout_distribution.ppf(1 - tail))
-        threshold_upper = (threshold_upper_multiple + 1.0) * filtered_median_float
-
-    threshold_lower = 0.0  # always, our target is to have a delay of 0.0 days
-
-    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+        threshold_upper = None
 
     expected_value = filtered_median_float
-    lower_bound = threshold_lower
+    lower_bound = 0.0  # always, our target is to have a delay of 0.0 days
     upper_bound = threshold_upper
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

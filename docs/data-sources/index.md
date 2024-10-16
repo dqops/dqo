@@ -145,17 +145,17 @@ DQOps supports the following data sources.
   </a>
 
   <a href="mysql/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/maria-db.svg">
+    <img src="https://dqops.com/docs/images/data-sources/maria-db2.svg">
     <p>MariaDB</p>
   </a>
 
   <a href="sql-server/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/mssql-server.svg">
+    <img src="https://dqops.com/docs/images/data-sources/sql-server.svg">
     <p>Microsoft SQL Server</p>
   </a>
 
   <a href="mysql/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/mysql.svg">
+    <img src="https://dqops.com/docs/images/data-sources/mysql2.svg">
     <p>MySQL</p>
   </a>
 
@@ -165,7 +165,7 @@ DQOps supports the following data sources.
   </a>
 
   <a href="mysql/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/percona-server.svg">
+    <img src="https://dqops.com/docs/images/data-sources/percona-server2.svg">
     <p>Percona Server for MySQL</p>
   </a>
 
@@ -185,7 +185,7 @@ DQOps supports the following data sources.
   </a>
 
   <a href="hana/" class="four-divs-element">
-    <img src="https://dqops.com/docs/images/data-sources/sap-hana.svg">
+    <img src="https://dqops.com/docs/images/data-sources/sap-hana2.svg">
     <p>SAP HANA</p>
   </a>
 

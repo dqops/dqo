@@ -40,6 +40,17 @@ const initTabs = [
   }
 ];
 
+const freeInitTabs = [
+  {
+    label: 'Observability status',
+    value: 'observability-status'
+  },
+  {
+    label: 'Daily checkpoints',
+    value: 'daily'
+  }
+];
+
 const ColumnPartitionedChecksView = () => {
   const {
     connection,
@@ -56,12 +67,17 @@ const ColumnPartitionedChecksView = () => {
     column: string;
     tab: 'observability-status' | 'daily' | 'monthly';
   } = useDecodedParams();
-  const [tabs, setTabs] = useState(initTabs);
 
   const dispatch = useActionDispatch();
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const isPremiumAcount =
+    userProfile &&
+    userProfile.license_type &&
+    userProfile.license_type?.toLowerCase() !== 'free' &&
+    !userProfile.trial_period_expires_at;
+  const [tabs, setTabs] = useState(isPremiumAcount ? initTabs : freeInitTabs);
 
   const {
     dailyPartitionedChecks,
@@ -75,6 +91,10 @@ const ColumnPartitionedChecksView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
   >([]);
+
+  useEffect(() => {
+    setTabs(isPremiumAcount ? initTabs : freeInitTabs);
+  }, [userProfile]);
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnPartitionedChecksOverview(
@@ -236,14 +256,9 @@ const ColumnPartitionedChecksView = () => {
         }
         isUpdating={isUpdating}
       />
-      {userProfile &&
-        userProfile.license_type &&
-        userProfile.license_type?.toLowerCase() !== 'free' &&
-        !userProfile.trial_period_expires_at && (
-          <div className="border-b border-gray-300">
-            <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
-          </div>
-        )}
+      <div className="border-b border-gray-300">
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+      </div>
       {tab === 'observability-status' && <ObservabilityStatus />}
 
       {tab === 'daily' && (

@@ -39959,6 +39959,16 @@ definitions:
         type: "boolean"
         description: "Set the value to true to collect error samples for failed data\
           \ quality checks."
+      execution_target:
+        type: "string"
+        description: "Set the data quality check execution mode. The default mode\
+          \ sensors_and_rules will both collect metrics and validate them with rules.\
+          \ Alternatively, it is possible to run only sensors, or validate existing\
+          \ data with rules."
+        enum:
+        - "sensors_and_rules"
+        - "only_sensors"
+        - "only_rules"
       run_checks_result:
         description: "The result of running the check, updated when the run checks\
           \ job finishes. Contains the count of executed checks."
@@ -39982,6 +39992,16 @@ definitions:
         description: "Set the value to true to collect error samples for failed data\
           \ quality checks. Set the value to false to disable error sampling collection\
           \ despite any other settings on the table or check level."
+      execution_target:
+        type: "string"
+        description: "Set the data quality check execution mode. The default mode\
+          \ sensors_and_rules will both collect metrics and validate them with rules.\
+          \ Alternatively, it is possible to run only sensors, or validate existing\
+          \ data with rules."
+        enum:
+        - "sensors_and_rules"
+        - "only_sensors"
+        - "only_rules"
       dummy_execution:
         type: "boolean"
         description: "Set the value to true when the data quality checks should be\
@@ -40466,6 +40486,11 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Table similarity score. Lower numbers indicate higher similarity."
+      similarity_pct:
+        type: "number"
+        format: "double"
+        description: "A similarity score as a percentage. A value 100.0 means that\
+          \ the tables are probably equal."
       connection_name:
         type: "string"
         description: "Connection name"

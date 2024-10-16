@@ -39,6 +39,7 @@ public interface TableCheckExecutionService {
      * @param collectErrorSamples Collect error samples for failed checks. Can disable or enable sample collection independent of other parameters.
      * @param progressListener Progress listener.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param executionTarget Check execution mode (sensors, rules, or both).
      * @param jobCancellationToken Job cancellation token.
      * @return Check execution summary that has an overview information about executed checks.
      */
@@ -51,5 +52,6 @@ public interface TableCheckExecutionService {
                                                Boolean collectErrorSamples,
                                                CheckExecutionProgressListener progressListener,
                                                boolean dummySensorExecution,
+                                               RunChecksTarget executionTarget,
                                                JobCancellationToken jobCancellationToken);
 }

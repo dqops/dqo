@@ -28,35 +28,29 @@ negatively impact our business, we want to monitor various data quality aspects 
 We will set six data quality monitoring checks on `bigquery-public-data.thelook_ecommerce.users` dataset:
 
 1. [daily_table_availability](../../checks/table/availability/table-availability.md) check on `users` table with max failures thresholds levels:
-    - warning: 1
-    - error: 5
-    - fatal: 10
 
+    - error: 5
+ 
 2. [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md) check on `id` column with minimum percent thresholds levels
-    - warning: 99.0%
+ 
     - error: 98.0%
-    - fatal: 95.0%
 
 3. [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md) check on `email` column with minimum percent thresholds levels
-    - warning: 99.0%
+ 
     - error: 98.0%
-    - fatal: 95.0%
-
+ 
 4. [daily_contains_email_percent](../../checks/column/pii/contains-email-percent.md) check on `email` column with minimum percent thresholds levels
-    - warning: 99.0%
+
     - error: 98.0%
-    - fatal: 95.0%
 
 5.  [daily_text_found_in_set_percent](../../checks/column/accepted_values/text-found-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
-    - warning: 99.0%
+
     - error: 98.0%
-    - fatal: 95.0%
 
 6. [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check on `age` column with values parameters "min_value=10" and "max_value=80" and minimum percent thresholds levels
-    - warning: 99.0%
+ 
     - error: 98.0%
-    - fatal: 95.0%
-
+ 
 We will modify the default connection level schedule that apply to all activated checks from 12:00 AM to 8:00 AM. For two 
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
 The schedule for the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check will be temporarily disabled.
@@ -81,26 +75,26 @@ To view the connection-level schedule:
 1. Go to the **Data Source** section and select the "thelook_ecommerce" connection from the tree view on the left. 
 
 2. In the main workspace select the **Schedule** tab and the **Monitoring Daily** tab. 
-    Here, you can see that a schedule has been set to **Run every day at 12:00**.
+    Here, you can see that a schedule has been set as unix crone expression to **At 12:00 on day-of-month 1**.
 
-    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule1.png){ loading=lazy; width="1200px" }
+    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule2.png){ loading=lazy; width="1200px" }
 
 
-In the example, we want to change the default schedule configration for Monitoring checks to 8:00 AM. 
+In the example, we want to change the default schedule configuration for Monitoring checks to every day at 8:00 AM . 
 To do this simply change the value in the **Run every day at** and click the **Save** button.
 
-![Changing the default schedule for daily monitoring](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-changing-the-default-schedule.png){ loading=lazy; width="1200px" }
+![Changing the default schedule for daily monitoring](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-changing-the-default-schedule2.png){ loading=lazy; width="1200px" }
 
 
 ### **Set the check-level schedule**
 
 We also wanted to verify the availability of the `users` table every 30 minutes using the table-level
-[daily_table_availability](../../checks/table/availability/table-availability.md) check. DQOps allows to set check-level
+[Table availability](../../checks/table/availability/table-availability.md) check. DQOps allows to set check-level
 schedules and override the connection level settings.
 
 To view and modify individual check-level schedules:
 
-![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule1.png){ loading=lazy; width="1200px" }
+![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule2.png){ loading=lazy; width="1200px" }
 
 1. Go to the section with a list of checks. In our example, we have set monitoring checks, so go to the **Monitoring Checks** section.
 
@@ -110,24 +104,24 @@ To view and modify individual check-level schedules:
 
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
-3. Select the **Daily checks** tab on the check editor.
+3. Select the **Data quality checks editor** tab on the check editor.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 4. Find the [daily_table_availability](../../checks/table/availability/table-availability.md) check in the Availability group, and click on the **Settings** icon.
 
-    ![Access the check-level schedule settings](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-access-check-level-settings.png){ loading=lazy; width="1200px" }
+    ![Access the check-level schedule settings](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-access-check-level-settings2.png){ loading=lazy; width="1200px" }
 
 5. Select the **Schedule Override** tab and change the option from
    **Use scheduling configuration from the connection levels** to **Run every 30 minutes**. Click the **Save** button to save the changes.
 
-    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override1.png){ loading=lazy; width="1200px" }
+    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override3.png){ loading=lazy; width="1200px" }
 
 
 Similarly, we change the schedule of the uniqueness check [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md)
 activated on the `id` column for **Run 15 minutes past every hour**.
 
-![Check-level schedule override on daily-distinct-percent check](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override2.png){ loading=lazy; width="1200px" }
+![Check-level schedule override on daily-distinct-percent check](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override4.png){ loading=lazy; width="1200px" }
 
 ### **Disable check-level schedule**
 
@@ -143,7 +137,7 @@ To disable the check scheduling:
 
 3. Check the **Disable schedule** checkbutton and click the **Save** button.
 
-    ![Disable check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-disable-check-level-schedule.png){ loading=lazy; width="1200px" }
+    ![Disable check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-disable-check-level-schedule2.png){ loading=lazy; width="1200px" }
 
 ## Start and stop a scheduler
 
@@ -152,7 +146,7 @@ In DQOps, the scheduler is started as a default. Data synchronization take place
 To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
 on the [right upper right corner of the navigation bar](../../dqo-concepts/dqops-user-interface-overview.md).
 
-![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png){ loading=lazy }
+![Start and stop a scheduler](https://dqops.com/docs/images/examples/navigating-the-graphical-interface-notification-panel2.png){ loading=lazy }
 
 
 ## YAML configuration file
@@ -202,123 +196,118 @@ The remaining monitoring checks will be run every day at 8:00 AM (0 8 * * *) as 
 The [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check activated
 on the `age` column will not be run since the "disabled:" parameter has been set to "true" in the "schedule_override" section.
 
-```yaml hl_lines="10-13 27-30 73-76"
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+```yaml hl_lines="9-12 22-25 57-59"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      availability:
-        daily_table_availability:
-          schedule_override:
-            cron_expression: '*/30 * * * *'
-          warning:
-            max_failures: 1
-          error:
-            max_failures: 5
-          fatal:
-            max_failures: 10
-  columns:
-    id:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-      monitoring_checks:
-        daily:
-          uniqueness:
-            daily_distinct_percent:
-              schedule_override:
-                cron_expression: 15 * * * *
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-    first_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    last_name:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    email:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-      monitoring_checks:
-        daily:
-          uniqueness:
-            daily_distinct_percent:
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-          pii:
-            daily_contains_email_percent:
-              warning:
-                max_percent: 0.0
-              error:
-                max_percent: 1.0
-              fatal:
-                max_percent: 5.0
-    age:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-      monitoring_checks:
-        daily:
-          numeric:
-            daily_number_in_range_percent:
-              schedule_override:
-                disabled: true
-              parameters:
-                min_value: 10.0
-                max_value: 80.0
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-    gender:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-      monitoring_checks:
-        daily:
-          accepted_values:
-            daily_text_found_in_set_percent:
-              warning:
-                min_percent: 99.0
-              error:
-                min_percent: 98.0
-              fatal:
-                min_percent: 95.0
-    state:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   monitoring_checks:
+      daily:
+         availability:
+            daily_table_availability:
+               schedule_override:
+                  cron_expression: '*/30 * * * *'
+               warning:
+                  max_failures: 1
+   columns:
+      id:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+         monitoring_checks:
+            daily:
+               uniqueness:
+                  daily_distinct_percent:
+                     schedule_override:
+                        cron_expression: 15 * * * *
+                     error:
+                        min_percent: 98.0
+      first_name:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      last_name:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      email:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         monitoring_checks:
+            daily:
+               uniqueness:
+                  daily_distinct_percent:
+                     error:
+                        min_percent: 98.0
+               pii:
+                  daily_contains_email_percent:
+                     error:
+                        max_percent: 1.0
+      age:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+         monitoring_checks:
+            daily:
+               numeric:
+                  daily_number_in_range_percent:
+                     schedule_override:
+                        disabled: true
+                     parameters:
+                        min_value: 10.0
+                        max_value: 80.0
+                     error:
+                        min_percent: 98.0
+      gender:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+         monitoring_checks:
+            daily:
+               accepted_values:
+                  daily_text_found_in_set_percent:
+                     error:
+                        min_percent: 98.0
+      state:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      street_address:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      postal_code:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      city:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      country:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      latitude:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      longitude:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      traffic_source:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      created_at:
+         type_snapshot:
+            column_type: TIMESTAMP
+            nullable: true
 ```
-
-
-## Starting a scheduler using the user interface
-
-To start a scheduler using the user interface, simply select the **Notification** icon in the upper right corner and
-toggle the button next to the **Jobs scheduler**.
-
-![Starting scheduler](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-starting-scheduler.png){ loading=lazy; width="1200px" }
-
-The scheduler has been initiated and will run checks based on the set schedules. Data synchronization will
-take place every 10 minutes.
-
 
 ## Next step
 - Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 

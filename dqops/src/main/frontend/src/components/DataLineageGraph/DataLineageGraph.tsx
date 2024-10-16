@@ -3,12 +3,14 @@ import ReactDOMServer from 'react-dom/server';
 import Chart from 'react-google-charts';
 import {
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
+  DimensionCurrentDataQualityStatusModel,
   DimensionCurrentDataQualityStatusModelCurrentSeverityEnum,
   TableLineageFlowModel,
   TableLineageModel
 } from '../../api';
 import { DataLineageApiClient } from '../../services/apiClient';
 import Button from '../Button';
+import Checkbox from '../Checkbox';
 import QualityDimensionStatuses from '../DataQualityChecks/QualityDimension/QualityDimensionStatuses';
 import Loader from '../Loader';
 import DataLineageDetailsDialog from './DataLineageDetailsDialog';
@@ -18,6 +20,9 @@ declare global {
     showDataLineage: ((index: number) => void) | null;
   }
 }
+type DimensionCheck = DimensionCurrentDataQualityStatusModel & {
+  checked?: boolean;
+};
 
 export default function DataLineageGraph({
   connection,
@@ -33,6 +38,9 @@ export default function DataLineageGraph({
   const [graphArray, setGraphArray] = useState<
     (string | number | undefined)[][]
   >([]);
+  const [dimensions, setDimensions] = useState<{
+    [key: string]: DimensionCheck;
+  }>({});
   const [loading, setLoading] = useState(false);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [flow, setFlow] = useState<TableLineageFlowModel>({});
@@ -50,7 +58,7 @@ export default function DataLineageGraph({
 
   useEffect(() => {
     window.showDataLineage = showDataLineage;
-    let timer : NodeJS.Timeout;
+    let timer: NodeJS.Timeout;
 
     const fetchTableDataLineageGraph = async () => {
       setLoading(true);
@@ -62,7 +70,18 @@ export default function DataLineageGraph({
         );
         const data = response.data;
 
-
+        const dimensions: { [key: string]: DimensionCheck } = {};
+        Object.keys(
+          data.relative_table_cumulative_quality_status?.dimensions ?? {}
+        ).forEach((dimension) => {
+          dimensions[dimension] = {
+            ...data.relative_table_cumulative_quality_status?.dimensions?.[
+              dimension
+            ],
+            checked: true
+          };
+        });
+        setDimensions(dimensions);
         tableDataLineageRef.current = data;
 
         if (!data.data_lineage_fully_loaded) {
@@ -101,6 +120,7 @@ export default function DataLineageGraph({
       }
     };
 
+    // Initial fetch
     fetchTableDataLineageGraph();
 
     return () => {
@@ -110,6 +130,59 @@ export default function DataLineageGraph({
       }
     };
   }, [connection, schema, table]);
+
+  const filterBasedOnDimensions = (checkedDimensions: string[]) => {
+    const filteredFlows = tableDataLineageRef.current?.flows
+      ?.reverse()
+      .filter((flow) => {
+        return checkedDimensions.some(
+          (dimension) =>
+            flow.upstream_combined_quality_status?.dimensions?.[dimension]
+        );
+      });
+
+    const graph = (filteredFlows ?? []).map((flow, index) => {
+      const fromTable = flow.source_table?.compact_key;
+      const toTable = flow.target_table?.compact_key;
+      const weight =
+        flow.row_count && flow.row_count > 10000
+          ? Math.sqrt(Math.sqrt(flow.row_count))
+          : 1;
+
+      const tooltip = ReactDOMServer.renderToString(renderTooltip(flow, index));
+      const color = getColor(
+        flow.upstream_combined_quality_status?.current_severity
+      );
+      return [
+        fromTable,
+        toTable,
+        weight,
+        tooltip,
+        'fill-color: ' + color + ';'
+      ];
+    });
+
+    setGraphArray(graph);
+  };
+
+  const handleDimensionChange = (dimension: string, checked: boolean) => {
+    const updatedDimensions = {
+      ...dimensions,
+      [dimension]: {
+        ...dimensions[dimension],
+        checked
+      }
+    };
+    setDimensions(updatedDimensions);
+
+    // Get all dimensions that are currently checked
+    const checkedDimensions = Object.keys(updatedDimensions).filter(
+      (key) => updatedDimensions[key].checked
+    );
+
+    // Refetch the filtered data based on the checked dimensions
+    filterBasedOnDimensions(checkedDimensions);
+  };
 
   const options = {
     tooltip: { isHtml: true },
@@ -124,6 +197,28 @@ export default function DataLineageGraph({
 
   return (
     <div className="relative w-full h-full">
+      <div className="flex flex-wrap gap-x-6 mb-4">
+        {Object.keys(dimensions)
+          .sort()
+          .map((dimension, index) => (
+            <div key={index} className="flex items-center gap-x-1">
+              <Checkbox
+                checked={dimensions[dimension].checked}
+                onChange={(value) => handleDimensionChange(dimension, value)}
+                className="mr-4 "
+              />
+              <div
+                className="w-4 h-4"
+                style={{
+                  backgroundColor: getColor(
+                    dimensions[dimension].current_severity
+                  )
+                }}
+              ></div>
+              <div>{dimension}</div>
+            </div>
+          ))}
+      </div>
       {loading && (
         <div className="absolute inset-0 z-10 flex justify-center items-center bg-white bg-opacity-70">
           <Loader isFull={false} className="w-8 h-8 fill-green-700" />
@@ -196,27 +291,12 @@ const renderTooltip = (flow: TableLineageFlowModel, index: number) => {
           />
         </div>
       </div>
-      <div className="flex items-center py-1">
-        <div className="w-60">Source table quality status</div>
-        <div>
-          <QualityDimensionStatuses
-            dimensions={flow.source_table_quality_status?.dimensions}
-          />
-        </div>
-      </div>
-      <div className="flex items-center py-1">
-        <div className="w-60">Target table quality status</div>
-        <div>
-          <QualityDimensionStatuses
-            dimensions={flow.target_table_quality_status?.dimensions}
-          />
-        </div>
-      </div>
-      <div className="flex items-center py-1 underline ">
-        <a href={`javascript:window.showDataLineage(${index})`}>
-          Show Data Lineage Details
-        </a>
-      </div>
+      <button
+        className="text-blue-600 w-full"
+        onClick={() => window.showDataLineage?.(index)}
+      >
+        View details
+      </button>
     </div>
   );
 };

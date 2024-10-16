@@ -48,7 +48,6 @@ const Tree = () => {
   const [flag, setFlag] = useState(false);
   const [search, setSearch] = useState<Record<string, string>>({});
   const [funnel, setFunnel] = useState<Record<string, boolean>>({});
-
   const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -146,7 +145,6 @@ const Tree = () => {
       if (match.path === ROUTES.PATTERNS.SCHEMA) {
         setActiveTab(schemaNode?.id || '');
       }
-
       if (match.path === ROUTES.PATTERNS.TABLE) {
         setActiveTab(tableNode?.id || '');
       }
@@ -260,7 +258,7 @@ const Tree = () => {
 
       setFlag((prev) => !prev);
     })();
-  }, [firstLevelActiveTab]);
+  }, [firstLevelActiveTab, match.path]);
 
   const groupedData = groupBy(treeData, 'parentId');
 

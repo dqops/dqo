@@ -311,7 +311,9 @@ public class TablesController {
                 return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            List<SimilarTableModel> tablesSimilarTo = userHome.findTablesSimilarTo(connectionName, physicalTableName, limit.orElse(50));
+            final double MAX_DIFFERENCE_PERCENT = 40.0; // the maximum difference
+            List<SimilarTableModel> tablesSimilarTo = userHome.findTablesSimilarTo(
+                    connectionName, physicalTableName, limit.orElse(50), MAX_DIFFERENCE_PERCENT);
 
             return new ResponseEntity<>(Flux.fromIterable(tablesSimilarTo), HttpStatus.OK); // 200
         }));

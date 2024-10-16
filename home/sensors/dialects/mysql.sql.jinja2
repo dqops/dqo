@@ -49,7 +49,7 @@
 
 {%- macro render_column(column_name, table_alias_prefix = 'analyzed_table') -%}
     {%- if table.columns[column_name].sql_expression | default('', true) != '' -%}
-        ({{ table.columns[column_name].sql_expression | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
+        ({{ table.columns[column_name].sql_expression | replace('{column}', table_alias_prefix ~ '.' ~ quote_identifier(column_name)) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
     {%- else -%}
         {%- if table_alias_prefix != '' -%}
             {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}

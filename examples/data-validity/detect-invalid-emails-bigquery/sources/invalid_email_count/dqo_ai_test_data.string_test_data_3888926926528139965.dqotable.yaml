@@ -20,10 +20,6 @@ spec:
             daily_invalid_email_format_found:
               warning:
                 max_count: 0
-              error:
-                max_count: 10
-              fatal:
-                max_count: 15
     email_ok:
       type_snapshot:
         column_type: INT64

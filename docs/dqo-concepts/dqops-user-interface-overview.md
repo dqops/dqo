@@ -45,7 +45,7 @@ The Tables summary screen displays the following information for each table:
   
     ![Table summary - deta quality dimension results details](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-summary-tooltip.png){ loading=lazy; width="500px" }
 
-- **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data Source, Profiling, Monitoring Checks, or Partition Checks section screens.
+- **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data sources, Profiling, Monitoring checks, or Partition checks section screens.
 
 
 ### **Columns summary**
@@ -72,7 +72,7 @@ The table summary screen displays the following information for each table:
   
     ![Table summary - deta quality dimension results details](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-summary-tooltip.png){ loading=lazy; width="500px" }
 
-- **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data Source, Profiling, Monitoring Checks, or Partition Checks section screens.
+- **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data sources, Profiling, Monitoring checks, or Partition checks section screens.
 
 ### **Incidents summary**
 
@@ -113,16 +113,16 @@ The navigation bar allows you to select the specific sections that you want to f
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar2.png)
 
 - The **Home screen** section, which you can access by clicking on the DQOps logo. It allows you to view the Welcome page, as well as summaries of Tables and Columns.
-- The **Data Sources** section allows you to [add new connections](../data-sources/index.md), import schemas and 
+- The **Data sources** section allows you to [add new connections](../data-sources/index.md), import schemas and 
     tables, [set up schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md), add comments and labels, [configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md),
-    [set the date and time columns for partition checks](../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
+    [set the date and time columns for partition checks](definition-of-data-quality-checks/partition-checks.md#setting-up-date-partitioning-column), 
     and [modify the settings of the incidents and notifications](../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../working-with-dqo/collecting-basic-data-statistics.md),
     as well as [enable and run profiling data quality checks](../working-with-dqo/run-data-quality-checks.md)
     that should be used to profile data and run experiments to see which check would be most appropriate for monitoring the quality of data. 
-- The **Monitoring Checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../working-with-dqo/run-data-quality-checks.md)
+- The **Monitoring checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../working-with-dqo/run-data-quality-checks.md)
     that are standard checks that monitor data quality.
-- The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../working-with-dqo/run-data-quality-checks.md)
+- The **Partition checks** section allows you to [enable and run daily or monthly partition data quality checks](../working-with-dqo/run-data-quality-checks.md)
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
 - The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../getting-started/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
 - The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
@@ -145,10 +145,10 @@ The right side of the navigation bar provides access to the main settings and so
 The tree view changes depending on the section chosen in the navigation bar.
 
 
-### **Data Source, Profiling, Monitoring Checks and Partition Checks tree view**
+### **Data sources, Profiling, Monitoring checks and Partition checks tree view**
 
-The tree view at the **Data Source**, **Profiling**, **Monitoring Checks** and **Partition Checks** displays all the added sources and allows
-expanding its schemas, tables, and columns. Additionally, in the Profiling, Monitoring Checks and Partition Checks sections, the three view
+The tree view at the **Data sources**, **Profiling**, **Monitoring checks** and **Partition checks** displays all the added sources and allows
+expanding its schemas, tables, and columns. Additionally, in the Profiling, Monitoring checks and Partition checks sections, the three view
 contains the list of checks.
 
 ![DQOps tree view - monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view1.png){ loading=lazy }
@@ -160,9 +160,9 @@ a filter dialog opens, allowing users to refine the list based on table or colum
 
 **Visual cues for check configuration in the tree view**
 
-- In the **Data Source** section, a table or column with a bold font indicates a configured check on any category.
-- In the **Profiling**, **Monitoring Checks**, and **Partition Checks** sections, tables or columns with configured checks are displayed in bold font.
-- In the **Partition Checks** section, tables without configured data or a datetime column needed to run partition checks are displayed in orange font to highlight potential issues.
+- In the **Data sources** section, a table or column with a bold font indicates a configured check on any category.
+- In the **Profiling**, **Monitoring checks**, and **Partition checks** sections, tables or columns with configured checks are displayed in bold font.
+- In the **Partition checks** section, tables without configured data or a datetime column needed to run partition checks are displayed in orange font to highlight potential issues.
 
 **Tree view context menu**
 
@@ -205,7 +205,7 @@ In the **Configuration** section, the tree view displays a list of all built-in 
 
 The tree view in this section also provides access to the configuration of the following:
 
-- **Default checks configuration:** This allows you to configure default data quality checks patterns that are automatically activated after importing new tables. [Learn how to configure check patterns](data-observability.md#configuring-check-patterns-in-ui).
+- **Default checks configuration:** This allows you to configure default data quality checks patterns that are automatically activated after importing new tables. [Learn how to configure check patterns](data-observability.md#configuring-check-policies-in-ui).
 - **Manage users:** This allows you to add new users and manage their roles.
 - **Default schedules:** This allows you to [configure schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) that are automatically set after importing new tables.
 - **Default notifications:** This allows you to [configure webhooks](../integrations/webhooks/index.md).
@@ -225,7 +225,7 @@ Clicking on an object in the tree view always opens a new tab in the main worksp
 ### **Tabbed interface**
 
 When you select an item from the tree view, it opens a new tab in the main workspace. You can open and close tabs within each section 
-such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Checks**, **Data Quality Dashboards**, **Incidents** and **Configuration**.
+such as **Data sources**, **Profiling**, **Monitoring checks**, **Partition checks**, **Data Quality Dashboards**, **Incidents** and **Configuration**.
 Each section can have a maximum of seven tabs open at a time.  If you try to add an eighth tab, the first one will be automatically removed to maintain the limit. 
 These tabs are stored locally, which means that you can always return to them even after closing the application.
 
@@ -237,12 +237,12 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 ### **Main workspace tabs**
 
-Below we explain the main tabs of the workspace in the **Data Source**, **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
+Below we explain the main tabs of the workspace in the **Data sources**, **Profiling**, **Monitoring checks** and **Partition checks** sections.
 The number of tabs differs depending on the selected element from the tree on the left. 
 
-![Main workspace tabs - Data Source](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-data-source1.png){ loading=lazy; width="1200px" }
+![Main workspace tabs - Data sources at the connection level](https://dqops.com/docs/images/concepts/navigating-the-graphical-interface/main-workspace-tabs-data-source2.png){ loading=lazy; width="1200px" }
 
-In the **Data Source** section, you can access:
+In the **Data sources** section, at the connection level, you can access:
 
 - **Connection:** Provides details about the connection parameters.
 - **Schedule:** Allows you to [configure of the check execution schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) at the connection level.
@@ -256,20 +256,36 @@ In the **Data Source** section, you can access:
 - **Incident grouping**: Allows configuring incidents grouping level. [Learn more about incidents](../dqo-concepts/grouping-data-quality-issues-to-incidents.md) that let you keep track of the issues that arise during data quality monitoring.
 - **Notifications:** Allows configuring incidents and Webhooks for notifications. [Learn how to configure notifications](../dqo-concepts/grouping-data-quality-issues-to-incidents.md#configure-notification-for-an-incident) whenever a new incident is created or modified.
 
-![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling2.png){ loading=lazy; width="1200px" }
+![Main workspace tabs - Data sources at the table level](https://dqops.com/docs/images/concepts/navigating-the-graphical-interface/main-workspace-tabs-data-source2.png){ loading=lazy; width="1200px" }
 
-In the **Profiling** section you can access:
+In the **Data sources** section, at the table level, you can access:
+
+- **Table:** Provides details about the table and parameters concerning disabling check, error samples collection, filters, priority and stage.
+- **Schedule:** Allows you to [configure of the check execution schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) at the table level.
+- **Comments:** Allows adding comments to your connection.
+- **Labels:** Allows adding labels to your connection.
+- **Default grouping:** Allows setting up data grouping at the table level. [Learn how to configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
+- **Incident configuration**: Allows configuring incidents grouping level. [Learn more about incidents](../dqo-concepts/grouping-data-quality-issues-to-incidents.md) that let you keep track of the issues that arise during data quality monitoring.
+- **Data lineage**: Allows configuring data lineage. [Learn more about data lineage](../integrations/data-lineage/marquez/index.md) that simplifies data tracing and helping identify the root cause of data quality issues.
+
+
+![Main workspace tabs - Profiling](https://dqops.com/docs/images/concepts/navigating-the-graphical-interface/main-workspace-tabs-profiling3.png){ loading=lazy; width="1200px" }
+
+In the **Profiling** section, at the table level, you can access:
 
 - **Basic data statistics:** Allows you to [collect basic statistics](../working-with-dqo/collecting-basic-data-statistics.md) about data sources during the data profiling stage.
 - **Table preview:** Provides a summary preview of the table. 
 - **Table quality status:** Provides a summary of the results of the executed profiling checks.
 - **Profiling checks editor:** Gives access to the Check editor of profiling checks.
 - **Table comparison:** Enables you to [identify differences between two tables (accuracy issues)](../working-with-dqo/compare-tables-between-data-sources.md) using profiling checks.
+- **Data quality rule mining:** - Gives access to the [data quality rule mining engine](data-quality-rule-mining.md), which allows you to automatically configure data quality checks.
 
-![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring2.png){ loading=lazy; width="1200px" }
+![Main workspace tabs - Monitoring](https://dqops.com/docs/images/concepts/navigating-the-graphical-interface/main-workspace-tabs-monitoring3.png){ loading=lazy; width="1200px" }
 
-In the **Monitoring Checks** section you can access
+In the **Monitoring checks** section, at the table level, you can access:
 
+- **Observability status:** Provides a quick overview of trends and issues in schema changes, volume, and freshness anomalies at table level
+   and distinct count and null percent anomalies at the column level. Follow the link to learn more about the [Observability status](data-observability.md#observability-status-in-ui).
 - **Table quality status:** Provides a summary of the results of the executed monitoring checks.
     * Free version: Summary of daily monitoring checks only.
     * Paid versions: Summary of both daily and monthly monitoring checks.
@@ -277,11 +293,16 @@ In the **Monitoring Checks** section you can access
     * Free version: Limited to running daily monitoring checks.
     * Paid versions: Enables running both daily and monthly monitoring checks. 
 - **Table comparisons:** Enables you to [identify differences between two tables (accuracy issues)](../working-with-dqo/compare-tables-between-data-sources.md) using monitoring checks.
+- **Copy verified profiling checks:** Allows to automatically replicate data quality checks and their parameters that 
+    were previously configured and activated within the Profiling section to Monitoring checks to continuously monitor data quality.
+    Follow the link to [learn more about copying the verified profiling check to the monitoring checks](data-quality-rule-mining.md#data-quality-monitoring).
 
-![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition2.png){ loading=lazy; width="1200px" }
+![Main workspace tabs - Partition](https://dqops.com/docs/images/concepts/navigating-the-graphical-interface/main-workspace-tabs-partition3.png){ loading=lazy; width="1200px" }
 
-In the **Partition Checks** section you can access
+In the **Partition checks** section, at the table level, you can access:
 
+- **Observability status:** Provides a quick overview of trends and issues in partition volume at table level
+    and partition distinct count and null percent anomalies at the column level. Follow the link to learn more about the [Observability status](data-observability.md#observability-status-in-ui).
 - **Table quality status:** Provides a summary of the results of the executed partition checks.
     * Free version: Summary of daily partition checks only.
     * Paid versions: Summary of both daily and monthly partition checks. 
@@ -289,6 +310,62 @@ In the **Partition Checks** section you can access
     * Free version: Limited to running daily partition checks.
     * Paid versions: Enables running both daily and monthly partition checks.
 - **Table comparisons:** Enables you to [identify differences between two tables (accuracy issues) using partition checks](../working-with-dqo/compare-tables-between-data-sources.md) using partition checks.
+- **Copy verified profiling checks:** Allows to automatically replicate data quality checks and their parameters that
+    were previously configured and activated within the Profiling section to Partition checks to continuously monitor data quality.
+    Follow the link to [learn more about copying the verified profiling check to the partition checks](data-quality-rule-mining.md#data-quality-monitoring).
+
+### **Observability status**
+
+The **Observability status** screen provides a quick overview of any data quality problems for the selected
+table or column. This allows you to proactively identify potential issues before they impact downstream processes.
+
+With that screen, you can analyze trends in schema changes, volume, and freshness anomalies at table level
+and distinct count and null percent anomalies at the column level. The screen also displays a summary of data quality issues
+for the table or columns of choice.
+
+The screen below provides an example of the **Observability status** screen at the table level in the **Monitoring section**.
+
+![Table-level Observability status](https://dqops.com/docs/images/concepts/data-observability/table-level-observability-status1.png){ loading=lazy; width="1200px" }
+
+The number of elements on the screen depends on which checks have been activated. At the top of the screen, 
+there are 5 blocks showing the last 15 results from 5 checks in the schema category. These results are displayed as 
+squares with colors indicating the check's result.
+
+Below, there are line graphs that display table freshness and volume anomalies.
+
+Towards the bottom of the screen, there is a column chart that provides a summary of data quality issues for the selected table.
+
+For more details, please visit the [data observability documentation](data-observability.md#observability-status-in-ui).
+
+### **Table quality status**
+
+In the **Profiling**, **Monitoring checks**, and **Partition checks**, there is a tab called **Table quality status**.
+This tab provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
+
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status3.png){ loading=lazy; width="1200px" }
+
+
+By using the radio buttons in the upper right corner of the screen, you can view the results for the **Current month**,
+**Last 3 months**, or select a specific starting date. You can also switch between viewing the **Current severity status**
+and the **Highest severity status**.
+
+There are two tables on the left-hand side of the screen, which show the **Current table status** and the summary of the
+**Total checks executed**.
+
+Below these tables, there is a table with the severity statuses divided by the check category or data quality
+dimension, depending on the selected option. The first row displays the results from the table-level checks executed
+on the table, while the following rows show the column names and the results from the executed column-level checks.
+The color indicate the current or the highest severity status:
+
+- Green for a correct result
+- Yellow for a warning
+- Orange for an error
+- Red for a fatal error
+
+You can view the list of executed checks by clicking on the arrow on the left. Hovering over a check name will display more details.
+
+![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view3.png){ loading=lazy; width="1200px" }
+
 
 ### **Check editor**
 
@@ -298,7 +375,7 @@ checks, viewing results, and accessing additional settings.
 
 The primary difference lies in the ability to define multiple severity levels in the Advanced mode. [Learn more about threshold levels ](definition-of-data-quality-checks/index.md#issue-severity-levels)
 
-To open the check editor, simply click on the **Profiling**, **Monitoring Checks**, or **Partition Checks** section. 
+To open the check editor, simply click on the **Profiling**, **Monitoring checks**, or **Partition checks** section. 
 Then, select a table from the tree view on the left, and choose the **Data quality checks editor** tab in the workspace. 
 To access the check editor for the column-level checks, click on the column in the tree view, and the check editor will open in the workspace.
 
@@ -334,7 +411,7 @@ At the top of the check editor, you will find information about the type of chec
 and the full path name containing connection, schema, table name, and column name for the column-level check editor.
 
 Below this, you will find information about the schedule configuration with the time of the next check execution. 
-Additionally, in the **Partition Checks** section, there is additional information about the configuration of the date 
+Additionally, in the **Partition checks** section, there is additional information about the configuration of the date 
 partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories.
@@ -370,35 +447,6 @@ The buttons and icons located on the left side of each check name allow you to p
     - Orange for an error
     - Red for a fatal error
     - Black for execution error.
-
-### **Table quality status**
-
-In the **Profiling**, **Monitoring Checks**, and **Partition Checks**, there is a tab called **Table quality status**.
-This tab provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
-
-![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status3.png){ loading=lazy; width="1200px" }
-
-
-By using the radio buttons in the upper right corner of the screen, you can view the results for the **Current month**,
-**Last 3 months**, or select a specific starting date. You can also switch between viewing the **Current severity status**
-and the **Highest severity status**.
-
-There are two tables on the left-hand side of the screen, which show the **Current table status** and the summary of the
-**Total checks executed**. 
-
-Below these tables, there is a table with the severity statuses divided by the check category or data quality 
-dimension, depending on the selected option. The first row displays the results from the table-level checks executed 
-on the table, while the following rows show the column names and the results from the executed column-level checks. 
-The color indicate the current or the highest severity status:
-
-- Green for a correct result
-- Yellow for a warning
-- Orange for an error
-- Red for a fatal error
-
-You can view the list of executed checks by clicking on the arrow on the left. Hovering over a check name will display more details.
-
-![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view3.png){ loading=lazy; width="1200px" }
 
 ## Notifications
 

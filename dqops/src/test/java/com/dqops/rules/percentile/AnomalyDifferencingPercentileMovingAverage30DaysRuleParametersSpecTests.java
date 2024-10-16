@@ -81,8 +81,8 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecT
 
         Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(164.85, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(161.97, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(168.20, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(161.14, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(169.05, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecT
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
-        Double actualValue = this.sensorReadouts[0] + this.sensorReadouts.length * increment;
+        Double actualValue = this.sensorReadouts[this.sensorReadouts.length - 1] + increment;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
@@ -152,5 +152,51 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecT
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreAlwaysIncreasingFrom1ButDifferentIncreases_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(2.0);
+
+        Double increment = 7.0;
+        this.sensorReadouts[0] = 1.0;
+        for (int i = 1; i < this.sensorReadouts.length; ++i) {
+            this.sensorReadouts[i] = this.sensorReadouts[i - 1] + increment + (i % 2);
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        Double actualValue = this.sensorReadouts[this.sensorReadouts.length - 1] + increment;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(227.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(225.42, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(227.0, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreAlwaysIncreasingFrom1ButDifferentIncreasesLastValueIncreasesMore_thenReturnsPassed() {
+        this.sut.setAnomalyPercent(20.0);
+
+        Double increment = 7.0;
+        this.sensorReadouts[0] = 1.0;
+        for (int i = 1; i < this.sensorReadouts.length; ++i) {
+            this.sensorReadouts[i] = this.sensorReadouts[i - 1] + increment + (i % 2);
+        }
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
+
+        Double actualValue = this.sensorReadouts[this.sensorReadouts.length - 1] + increment + 1.0;
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(227.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(226.22, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(227.0, ruleExecutionResult.getUpperBound(), 0.1);
     }
 }

@@ -30,6 +30,7 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.execution.checks.CheckExecutionErrorSummary;
 import com.dqops.execution.checks.CheckExecutionSummary;
+import com.dqops.execution.checks.RunChecksTarget;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
@@ -118,6 +119,10 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
+
+
+    @CommandLine.Option(names = {"-tr", "--target"}, description = "Configures the data quality execution mode. The default option is to run both the sensor to collect metrics, and validate the results with data quality rules. Alternatively, it is possible to only run the sensors to collect metrics, or only run rules on existing data.", defaultValue = "sensors_and_rules")
+    private RunChecksTarget executionTarget = RunChecksTarget.sensors_and_rules;
 
     @CommandLine.Option(names = {"-ces", "--collect-error-samples"}, description = "Collects error samples for failed data quality checks", defaultValue = "false")
     private Boolean collectErrorSamples;
@@ -334,6 +339,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns the target executor (sensor, rule or both) to run.
+     * @return Mode of running checks.
+     */
+    public RunChecksTarget getExecutionTarget() {
+        return executionTarget;
+    }
+
+    /**
+     * Sets the mode of running the checks.
+     * @param executionTarget Target.
+     */
+    public void setExecutionTarget(RunChecksTarget executionTarget) {
+        this.executionTarget = executionTarget;
+    }
+
+    /**
      * Returns true if error samples should be collected while running checks.
      * @return Collect error samples.
      */
@@ -403,7 +424,8 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, this.collectErrorSamples, progressListener, this.dummyRun);
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, this.collectErrorSamples,
+                progressListener, this.dummyRun, this.executionTarget);
 
         if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
             this.terminalFactory.getWriter().writeLine("No checks with these filters were found.");

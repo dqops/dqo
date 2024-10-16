@@ -33,6 +33,7 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import TrinoLogo from '../../SvgIcon/svg/trino.svg';
+import MariaDbLogo from '../../SvgIcon/svg/mariadb.svg';
 import ClickHouseLogo from '../../SvgIcon/svg/clickhouse.svg';
 import SectionWrapper from '../SectionWrapper';
 import BigqueryConnection from './BigqueryConnection';
@@ -43,6 +44,7 @@ import DuckDBConnection from './DuckDBConnection';
 import ErrorModal from './ErrorModal';
 import HanaConnection from './HanaConnection';
 import JdbcPropertiesView from './JdbcProperties';
+import MariaDbConnection from './MariaDbConnection';
 import MySQLConnection from './MySQLConnection';
 import OracleConnection from './OracleConnection';
 import PostgreSQLConnection from './PostgreSQLConnection';
@@ -52,7 +54,6 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SparkConnection from './SparkConnection';
 import SqlServerConnection from './SqlServerConnection';
 import TrinoConnection from './TrinoConnection';
-import MariaDbConnection from './MariaDbConnection';
 import ClickHouseConnection from './ClickHouseConnection';
 
 interface IDatabaseConnectionProps {
@@ -185,6 +186,14 @@ const DatabaseConnection = ({
   };
 
   const getIcon = () => {
+    if (nameOfDatabase === 'SAP HANA') {
+      return (
+        <p className="p-8 font-bold text-xl">
+          <span style={{ color: '#008FD3' }}>SAP </span>
+          <span style={{ color: '#debb00' }}>HANA</span>
+        </p>
+      );
+    }
     if (nameOfDatabase) {
       return (
         <SvgIcon
@@ -192,7 +201,8 @@ const DatabaseConnection = ({
           className={clsx(
             'mb-3 w-20 text-blue-500',
             nameOfDatabase === 'Spark' && 'w-35',
-            nameOfDatabase === 'Trino' && 'max-w-11'
+            nameOfDatabase === 'Trino' && 'max-w-11',
+            nameOfDatabase.includes('Cloud SQL for ') && 'w-18'
           )}
         />
       );
@@ -361,7 +371,9 @@ const DatabaseConnection = ({
         return DatabricksLogo;
       case ConnectionModelProviderTypeEnum.db2:
         return Db2Logo;
-        case ConnectionModelProviderTypeEnum.clickhouse:
+      case ConnectionModelProviderTypeEnum.mariadb:
+        return MariaDbLogo;
+      case ConnectionModelProviderTypeEnum.clickhouse:
         return ClickHouseLogo;
       default:
         return '';

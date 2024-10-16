@@ -93,6 +93,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
                 this.parameters.getCollectErrorSamples(),
                 this.parameters.getProgressListener(),
                 this.parameters.isDummyExecution(),
+                this.parameters.getExecutionTarget(),
                 jobExecutionContext.getCancellationToken());
 
         RunChecksResult jobResultSummary = RunChecksResult.fromCheckExecutionSummary(checkExecutionSummary);

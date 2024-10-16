@@ -77,6 +77,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param collectErrorSamples Collect error samples for failed checks. Can disable or enable sample collection independent of other parameters.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param executionTarget Check execution mode (sensors, rules, or both).
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
      * @param parentJobId Parent job id for the parent job.
      * @param jobCancellationToken Job cancellation token.
@@ -90,6 +91,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                                Boolean collectErrorSamples,
                                                CheckExecutionProgressListener progressListener,
                                                boolean dummySensorExecution,
+                                               RunChecksTarget executionTarget,
                                                boolean startChildJobsPerTable,
                                                DqoQueueJobId parentJobId,
                                                JobCancellationToken jobCancellationToken,
@@ -114,6 +116,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                    setProgressListener(progressListener);
                    setDummyExecution(dummySensorExecution);
                    setCollectErrorSamples(collectErrorSamples);
+                   setExecutionTarget(executionTarget);
                 }};
                 RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
                 runChecksOnTableJob.setParameters(runChecksOnTableParameters);
@@ -130,7 +133,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 CheckExecutionSummary tableCheckExecutionSummary = this.tableCheckExecutionService.executeChecksOnTable(
                         executionContext, userHome, connectionWrapper, targetTable,
                         checkSearchFilters, userTimeWindowFilters, collectErrorSamples, progressListener,
-                        dummySensorExecution, jobCancellationToken);
+                        dummySensorExecution, executionTarget, jobCancellationToken);
                 checkExecutionSummary.append(tableCheckExecutionSummary);
             }
         }
@@ -180,6 +183,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 setCheckSearchFilters(checkSearchFilters);
                 setTimeWindowFilter(null);
                 setProgressListener(progressListener);
+                setExecutionTarget(RunChecksTarget.sensors_and_rules);
             }};
             RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
             runChecksOnTableJob.setParameters(runChecksOnTableParameters);
@@ -206,6 +210,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param collectErrorSamples Collect error samples for failed checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param executionTarget Check execution mode (sensors, rules, or both).
      * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table, but containing only one row for the target table. The result may be empty if the table was not found.
      */
@@ -218,6 +223,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                                               Boolean collectErrorSamples,
                                                               CheckExecutionProgressListener progressListener,
                                                               boolean dummySensorExecution,
+                                                              RunChecksTarget executionTarget,
                                                               JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
 
@@ -234,7 +240,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         CheckExecutionSummary checkExecutionSummary = this.tableCheckExecutionService.executeChecksOnTable(
                 executionContext, userHome, connectionWrapper, tableWrapper,
                 checkSearchFilters, userTimeWindowFilters, collectErrorSamples, progressListener,
-                dummySensorExecution, jobCancellationToken);
+                dummySensorExecution, executionTarget, jobCancellationToken);
 
         return checkExecutionSummary;
     }

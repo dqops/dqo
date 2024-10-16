@@ -81,6 +81,7 @@ const FieldTypeInput = ({
 
   useEffect(() => {
     if (value === undefined) {
+      setText('');
       return;
     }
 
