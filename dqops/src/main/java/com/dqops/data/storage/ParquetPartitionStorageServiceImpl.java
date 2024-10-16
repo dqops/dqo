@@ -66,7 +66,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * The number of retries to write a parquet file when another thread was trying to write the same file.
      * When a change was detected, new changes will be merged into the most current parquet file.
      */
-    public static final int MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION = 3;
+    public static final int MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION = 10;
 
     private final ParquetPartitionMetadataService parquetPartitionMetadataService;
     private final LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
@@ -404,6 +404,10 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             }
 
             for (int i = 0; i < MAX_WRITE_RETRY_ON_WRITE_RACE_CONDITION ; i++) {
+                if (i > 0) {
+                    Thread.sleep(i * 1000L); // add a sleep, in case of a race condition
+                }
+
                 Table partitionDataOld;
                 Long beforeReadFileLastModifiedTimestamp = null;
 
