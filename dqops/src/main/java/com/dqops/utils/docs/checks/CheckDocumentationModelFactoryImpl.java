@@ -26,6 +26,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
+import com.dqops.connectors.clickhouse.ClickHouseProviderDialectSettings;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
 import com.dqops.connectors.db2.Db2ProviderDialectSettings;
@@ -770,6 +771,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new Db2ProviderDialectSettings();
             case mariadb:
                 return new MariaDbProviderDialectSettings();
+            case clickhouse:
+                return new ClickHouseProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

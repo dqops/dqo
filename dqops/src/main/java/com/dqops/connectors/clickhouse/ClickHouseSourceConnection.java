@@ -73,7 +73,7 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
         }
         try {
             synchronized (driverRegisterLock){
-                Class.forName("com.sap.db.jdbc.Driver");
+                Class.forName("com.clickhouse.jdbc.ClickHouseDriver");
                 driverRegistered = true;
             }
         } catch (ClassNotFoundException e) {
@@ -193,32 +193,6 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
         return sql;
     }
 
-//    /**
-//     * Returns a list of schemas from the source.
-//     *
-//     * @return List of schemas.
-//     */
-//    @Override
-//    public List<SourceSchemaModel> listSchemas() {
-//        StringBuilder sqlBuilder = new StringBuilder();
-//        sqlBuilder.append("SELECT SCHEMA_NAME as schema_name FROM ");
-//        sqlBuilder.append(getInformationSchemaName());
-//        sqlBuilder.append(".M_TABLES ");
-//        sqlBuilder.append("WHERE schema_name NOT IN ('SYS', '_SYS_EPM', '_SYS_RT', '_SYS_REPO', '_SYS_STATISTICS', '_SYS_TELEMETRY', '_SYS_AFL', '_SYS_WORKLOAD_REPLAY', '_SYS_PLAN_STABILITY', '_SYS_DI', '_SYS_BI', '_SYS_SECURITY', '_SYS_AUDIT', '_SYS_TASK', '_SYS_XS', '_SYS_SQL_ANALYZER', '_SYS_ADVISOR', '_SYS_DATA_ANONYMIZATION') ");
-//        sqlBuilder.append("GROUP BY SCHEMA_NAME");
-//        String listSchemataSql = sqlBuilder.toString();
-//        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
-//
-//        List<SourceSchemaModel> results = new ArrayList<>();
-//        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
-//            String schemaName = schemaRows.getString(rowIndex, "schema_name");
-//            SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
-//            results.add(schemaModel);
-//        }
-//
-//        return results;
-//    }
-
     /**
      * Generates an SQL statement that lists tables.
      * @param schemaName Schema name.
@@ -301,15 +275,6 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
             }
 
             sqlBuilder.append(" NULL");
-//            if (typeSnapshot.getNullable() != null) {
-//                boolean isNullable = typeSnapshot.getNullable();
-//                if (isNullable) {
-//                    sqlBuilder.append(" NULL");
-//                }
-//                else {
-//                    sqlBuilder.append(" NOT NULL");
-//                }
-//            }
         }
 
         sqlBuilder.append("\n)");
@@ -319,42 +284,6 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
         this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 
-//    /**
-//     * Creates an SQL for listing columns in the given tables.
-//     * @param schemaName Schema name (bigquery dataset name).
-//     * @param tableNames Table names to list.
-//     * @return SQL of the INFORMATION_SCHEMA query.
-//     */
-//    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
-//        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-//
-//        StringBuilder sqlBuilder = new StringBuilder();
-//        sqlBuilder.append("SELECT * FROM ");
-//
-//        sqlBuilder.append(getInformationSchemaName());
-//        sqlBuilder.append(".COLUMNS ");
-//        sqlBuilder.append("WHERE SCHEMA_NAME='");
-//        sqlBuilder.append(schemaName.replace("'", "''"));
-//        sqlBuilder.append("'");
-//
-//        if (tableNames != null && tableNames.size() > 0) {
-//            sqlBuilder.append(" AND TABLE_NAME IN (");
-//            for (int ti = 0; ti < tableNames.size(); ti++) {
-//                String tableName = tableNames.get(ti);
-//                if (ti > 0) {
-//                    sqlBuilder.append(",");
-//                }
-//                sqlBuilder.append('\'');
-//                sqlBuilder.append(tableName.replace("'", "''"));
-//                sqlBuilder.append('\'');
-//            }
-//            sqlBuilder.append(") ");
-//        }
-//        sqlBuilder.append("ORDER BY SCHEMA_NAME, TABLE_NAME, POSITION");
-//        String sql = sqlBuilder.toString();
-//        return sql;
-//    }
-//
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
@@ -427,11 +356,6 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
 
                 ColumnSpec columnSpec = new ColumnSpec();
                 ColumnTypeSnapshotSpec columnType = ClickHouseColumnTypeSnapshotReader.fromType(dataType);
-//
-//                if (tableResult.containsColumn("LENGTH") &&
-//                        !colRow.isMissing("LENGTH")) {
-//                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("LENGTH")));
-//                }
 
                 if (tableResult.containsColumn("NUMERIC_SCALE") &&
                         !colRow.isMissing("NUMERIC_SCALE")) {
@@ -453,92 +377,5 @@ public class ClickHouseSourceConnection extends AbstractJdbcSourceConnection {
             throw new ConnectionQueryException(ex);
         }
     }
-//
-//    /**
-//     * Returns the schema name of the INFORMATION_SCHEMA equivalent.
-//     * @return Information schema name.
-//     */
-//    public String getInformationSchemaName() {
-//        return "SYS";
-//    }
-//
-//    /**
-//     * Executes a provider specific SQL that runs a command DML/DDL command.
-//     *
-//     * @param sqlStatement SQL DDL or DML statement.
-//     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
-//     */
-//    @Override
-//    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
-//        try {
-//            try (Statement statement = this.getJdbcConnection().createStatement()) {
-//                try (JobCancellationListenerHandle cancellationListenerHandle =
-//                             jobCancellationToken.registerCancellationListener(
-//                                     cancellationToken -> RunSilently.run(statement::cancel))) {
-//                    statement.execute(sqlStatement);
-//                    return 0;
-//                }
-//                finally {
-//                    jobCancellationToken.throwIfCancelled();
-//                }
-//            }
-//        }
-//        catch (Exception ex) {
-//            String connectionName = this.getConnectionSpec().getConnectionName();
-//            throw new JdbcQueryFailedException(
-//                    String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
-//                    ex, sqlStatement, connectionName);
-//        }
-//    }
-//
-//    /**
-//     * Loads data into a table <code>tableSpec</code>.
-//     *
-//     * @param tableSpec Target table specification.
-//     * @param data      Dataset with the expected data.
-//     */
-//    @Override
-//    public void loadData(TableSpec tableSpec, Table data) {
-//        if (data.rowCount() == 0) {
-//            return;
-//        }
-//
-//        ProviderDialectSettings dialectSettings = this.clickHouseConnectionProvider.getDialectSettings(this.getConnectionSpec());
-//
-//        for (int rowIndex = 0; rowIndex < data.rowCount() ; rowIndex++) {
-//            StringBuilder sqlBuilder = new StringBuilder();
-//            sqlBuilder.append("INSERT INTO ");
-//            sqlBuilder.append(makeFullyQualifiedTableName(tableSpec));
-//            sqlBuilder.append("(");
-//            for (int i = 0; i < data.columnCount() ; i++) {
-//                if (i > 0) {
-//                    sqlBuilder.append(",");
-//                }
-//                sqlBuilder.append(dialectSettings.quoteIdentifier(data.column(i).name()));
-//            }
-//            sqlBuilder.append(")");
-//            sqlBuilder.append(" VALUES ");
-//
-//            sqlBuilder.append('(');
-//            for (int colIndex = 0; colIndex < data.columnCount() ; colIndex++) {
-//                if (colIndex > 0) {
-//                    sqlBuilder.append(", ");
-//                }
-//
-//                Column<?> column = data.column(colIndex);
-//                Object cellValue = column.isMissing(rowIndex) ? null : data.get(rowIndex, colIndex);
-//                ColumnSpec columnSpec = tableSpec.getColumns().get(column.name());
-//
-//                String formattedConstant = this.clickHouseConnectionProvider.formatConstant(cellValue, columnSpec.getTypeSnapshot());
-//                sqlBuilder.append(formattedConstant);
-//            }
-//
-//            sqlBuilder.append(");\n");
-//
-//            String insertValueSql = sqlBuilder.toString();
-//            this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
-//        }
-//    }
-
 
 }
