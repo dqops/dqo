@@ -74,6 +74,7 @@ public class HistoricDataPoint {
         this.localDatetime = localDatetime;
         this.backPeriodsIndex = backPeriodsIndex;
         this.sensorReadout = sensorReadout;
+        this.expectedValue = expectedValue;
     }
 
     /**

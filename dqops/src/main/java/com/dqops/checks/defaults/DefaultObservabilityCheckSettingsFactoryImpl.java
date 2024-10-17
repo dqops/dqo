@@ -375,6 +375,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         policies.add(new ColumnQualityPolicySpec() {{
             setPolicyName("Detect significant changes in the percentage of null values");
             setDescription("Monitors the percentage of null values in columns and raises an issue when the day-to-day change is above a threshold.");
+            setDisabled(true);
             setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec() {{
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setNulls(new ColumnNullsDailyMonitoringChecksSpec() {{

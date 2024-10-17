@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  priority: 1000
+  description: Monitors data freshness anomalies daily.
+  monitoring_checks:
+    daily:
+      timeliness:
+        daily_data_freshness_anomaly:
+          warning:
+            anomaly_percent: 0.1
