@@ -23,6 +23,7 @@ import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionMetadataService;
+import com.dqops.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,10 +62,10 @@ public class IncidentsDeleteServiceImpl implements IncidentsDeleteService {
         }
 
         String fullTableName = filter.getTableSearchFilters().getFullTableName();
-        if(fullTableName != null && fullTableName.contains(".")){
-            String[] split = fullTableName.split("\\.");
-            String schemaName = split[0];
-            String tableName = split[1];
+        if (fullTableName != null) {
+            PhysicalTableName tableSearchFilterParsed = PhysicalTableName.fromSchemaTableFilter(fullTableName);
+            String schemaName = tableSearchFilterParsed.getSchemaName();
+            String tableName = tableSearchFilterParsed.getTableName();
 
             conditions.put(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, new LinkedHashSet<>(Set.of(schemaName)));
             conditions.put(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, new LinkedHashSet<>(Set.of(tableName)));

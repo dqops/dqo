@@ -49,11 +49,14 @@ public class SensorReadoutsTimeSeriesMap {
         this.firstLoadedMonth = firstLoadedMonth;
         this.lastLoadedMonth = lastLoadedMonth;
         this.allLoadedData = allLoadedData;
-        this.checkHashColumn = (LongColumn) allLoadedData.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        this.dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(allLoadedData,
-                SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
-        this.checkHashIndex = new LongIndex(this.checkHashColumn);
-        this.dataStreamHashIndex = new LongIndex(this.dataStreamHashColumn);
+        
+        if (allLoadedData != null) {
+            this.checkHashColumn = (LongColumn) allLoadedData.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+            this.dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(allLoadedData,
+                    SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
+            this.checkHashIndex = new LongIndex(this.checkHashColumn);
+            this.dataStreamHashIndex = new LongIndex(this.dataStreamHashColumn);
+        }
     }
 
     /**
@@ -92,6 +95,10 @@ public class SensorReadoutsTimeSeriesMap {
         SensorReadoutsTimeSeriesData sensorReadoutsTimeSeriesData = this.entries.get(key);
         if (sensorReadoutsTimeSeriesData != null) {
             return sensorReadoutsTimeSeriesData;
+        }
+
+        if (this.checkHashIndex == null) {
+            return null;
         }
 
         Selection checkHashRows = this.checkHashIndex.get(checkHashId);
