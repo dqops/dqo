@@ -99,6 +99,6 @@ public class JsonSerializerImplTests extends BaseTest {
         String json = this.sut.serialize(dataPoint);
 
         Assertions.assertEquals("""
-                   {"timestamp_utc":"2022-03-07T20:15:10Z","local_datetime":"2022-03-07T22:15:10","back_periods_index":-2,"sensor_readout":10.5}""", json);
+                   {"timestamp_utc_epoch":1646684110,"local_datetime_epoch":1646691310,"back_periods_index":-2,"sensor_readout":10.5}""", json);
     }
 }
