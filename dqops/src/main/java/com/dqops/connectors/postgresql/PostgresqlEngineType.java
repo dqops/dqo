@@ -16,7 +16,7 @@ public enum PostgresqlEngineType {
     public String getDisplayName() {
         switch (this) {
             case postgresql:
-                return "Postgresql";
+                return "PostgreSQL";
             case timescale:
                 return "Timescale";
             default:

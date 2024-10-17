@@ -32,6 +32,7 @@ import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
+import com.dqops.connectors.questdb.QuestDbConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
@@ -113,6 +114,9 @@ public class SampleTableMetadataObjectMother {
             case clickhouse:
                 return ClickHouseConnectionSpecObjectMother.create();
 
+            case questdb:
+                return QuestDbConnectionSpecObjectMother.create();
+
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -177,6 +181,9 @@ public class SampleTableMetadataObjectMother {
 
             case clickhouse:
                 return ClickHouseConnectionSpecObjectMother.getSchemaName();
+
+            case questdb:
+                return QuestDbConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

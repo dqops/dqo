@@ -15,14 +15,19 @@
  */
 package com.dqops.connectors.postgresql;
 
+import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +36,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -152,10 +154,8 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public List<SourceSchemaModel> listSchemas() {
-
         PostgresqlParametersSpec postgresqlSpec = this.getConnectionSpec().getPostgresql();
-
-        if (postgresqlSpec.getPostgresqlEngineType().equals(PostgresqlEngineType.postgresql)){
+        if (!postgresqlSpec.getPostgresqlEngineType().equals(PostgresqlEngineType.timescale)){
             return super.listSchemas();
         }
 

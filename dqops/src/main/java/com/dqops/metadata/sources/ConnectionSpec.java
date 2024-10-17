@@ -28,6 +28,7 @@ import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.presto.PrestoParametersSpec;
+import com.dqops.connectors.questdb.QuestDbParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
@@ -90,6 +91,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("db2", o -> o.db2);
             put("mariadb", o -> o.mariadb);
             put("clickhouse", o -> o.clickhouse);
+            put("questdb", o -> o.questdb);
 
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
@@ -196,6 +198,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ClickHouseParametersSpec clickhouse;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("QuestDB connection parameters. Specify parameters in the questdb section or set the url (which is the QuestDB JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private QuestDbParametersSpec questdb;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -586,6 +594,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         setDirtyIf(!Objects.equals(this.clickhouse, clickhouse));
         this.clickhouse = clickhouse;
         propagateHierarchyIdToField(clickhouse, "clickhouse");
+    }
+
+    /**
+     * Returns the connection parameters for QuestDB.
+     * @return QuestDB connection parameters.
+     */
+    public QuestDbParametersSpec getQuestdb() {
+        return questdb;
+    }
+
+    /**
+     * Sets the QuestDB connection parameters.
+     * @param questdb New QuestDB connection parameters.
+     */
+    public void setQuestdb(QuestDbParametersSpec questdb) {
+        setDirtyIf(!Objects.equals(this.questdb, questdb));
+        this.questdb = questdb;
+        propagateHierarchyIdToField(questdb, "questdb");
     }
 
     /**
