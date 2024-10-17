@@ -628,7 +628,13 @@ function renderIncidentHighestSeveritySquare(severity: number) {
 
   return (
     <div className="flex items-center justify-center">
-      <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>
+      <Tooltip
+        content={
+          severity === 1 ? 'Warning' : severity === 2 ? 'Error' : 'Fatal error'
+        }
+      >
+        <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>
+      </Tooltip>
     </div>
   );
 }
