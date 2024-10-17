@@ -15,11 +15,9 @@
  */
 package com.dqops.postgresql.connection;
 
-import com.dqops.connectors.ConnectionProvider;
-import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
-import com.dqops.connectors.ProviderType;
-import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.*;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
+import com.dqops.connectors.postgresql.PostgresqlEngineType;
 import com.dqops.connectors.postgresql.PostgresqlSourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -102,6 +100,20 @@ public class PostgresqlSourceConnectionIntegrationTests extends BasePostgresqlIn
         Assertions.assertTrue(tableSpec.getColumns().get("id").isId());
         Assertions.assertFalse(tableSpec.getColumns().get("date").isId());
         Assertions.assertFalse(tableSpec.getColumns().get("value").isId());
+    }
+
+    @Test
+    void listSchemas_whenEngineTypeIsTimescale_returnsNotSystemSchemas() {
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+
+        this.sut.open(this.secretValueLookupContext);
+
+        this.connectionSpec.getPostgresql().setPostgresqlEngineType(PostgresqlEngineType.timescale);
+        List<SourceSchemaModel> schemas = this.sut.listSchemas();
+
+        Assertions.assertEquals(1, schemas.size());
+        Assertions.assertEquals("public", schemas.get(0).getSchemaName());
     }
 
 }

@@ -83,10 +83,7 @@ const PostgreSQLConnection = ({
       <Select
         label="PostgreSQL Engine Type"
         options={postgresqlEngineType}
-        className={clsx(
-          'mb-4',
-          postgresql?.postgresql_engine_type ? 'border border-red-500' : ''
-        )}
+        className={clsx('mb-4')}
         value={
           postgresql?.postgresql_engine_type ||
           (nameOfDatabase
