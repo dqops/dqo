@@ -121,7 +121,7 @@ export default function ObservabilityStatus() {
             undefined,
             undefined,
             undefined,
-            15
+            month === 'Last 15 results' ? 15 : undefined
           ).then((res) => {
             setGroupingOptions(
               res.data.map((item) => item.dataGroup ?? '') ?? []
@@ -142,7 +142,7 @@ export default function ObservabilityStatus() {
             undefined,
             undefined,
             undefined,
-            15
+            month === 'Last 15 results' ? 15 : undefined
           ).then((res) => {
             setGroupingOptions(
               res.data.map((item) => item.dataGroup ?? '') ?? []
@@ -167,7 +167,7 @@ export default function ObservabilityStatus() {
             undefined,
             undefined,
             undefined,
-            15
+            month === 'Last 15 results' ? 15 : undefined
           ).then((res) => {
             setGroupingOptions(
               res.data.map((item) => item.dataGroup ?? '') ?? []
@@ -188,7 +188,7 @@ export default function ObservabilityStatus() {
             undefined,
             undefined,
             undefined,
-            15
+            month === 'Last 15 results' ? 15 : undefined
           ).then((res) => {
             setGroupingOptions(
               res.data.map((item) => item.dataGroup ?? '') ?? []
@@ -210,11 +210,11 @@ export default function ObservabilityStatus() {
       if (!hasAnyKnownCheck) {
         return;
       }
-      getChecksForChart('Last 3 months');
+      getChecksForChart('Last 15 results');
     };
 
     const filterColumnChecks = (data: CheckResultsOverviewDataModel[]) => {
-      if (data.length === 0 || !column) {
+      if (data.length === 0 || !data) {
         setIsResultsOverviewEmpty(true);
       } else {
         setIsResultsOverviewEmpty(false);
@@ -223,7 +223,7 @@ export default function ObservabilityStatus() {
     };
 
     const filterTableChecks = (data: CheckResultsOverviewDataModel[]) => {
-      if (data.length === 0 || !column) {
+      if (data.length === 0 || !data) {
         setIsResultsOverviewEmpty(true);
       } else {
         setIsResultsOverviewEmpty(false);
@@ -309,8 +309,8 @@ export default function ObservabilityStatus() {
   const monthOptions = useMemo(() => {
     return [
       {
-        label: 'Last 3 months',
-        value: 'Last 3 months'
+        label: 'Last 15 results',
+        value: 'Last 15 results'
       },
       ...Array(24)
         .fill('')
@@ -622,7 +622,7 @@ export default function ObservabilityStatus() {
                   />
                 </div>
                 <div className="flex space-x-4 items-center">
-                  <div className="text-sm">Month</div>
+                  <div className="text-sm">Timeframe</div>
                   <SelectTailwind
                     value={result.month}
                     options={monthOptions}
