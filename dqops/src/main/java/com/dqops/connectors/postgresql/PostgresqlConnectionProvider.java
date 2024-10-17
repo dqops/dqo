@@ -104,6 +104,13 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
             connectionSpec.setPostgresql(postgresqlSpec);
         }
 
+        if (postgresqlSpec.getPostgresqlEngineType() == null) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--postgresql-engine");
+            }
+            postgresqlSpec.setPostgresqlEngineType(terminalReader.promptEnum("PostgreSQL engine type (--postgresql-engine)", PostgresqlEngineType.class,null, false));
+        }
+
         if (Strings.isNullOrEmpty(postgresqlSpec.getHost())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--postgresql-host");

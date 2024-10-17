@@ -41,10 +41,12 @@ After navigating to the PostgreSQL connection settings, you will need to fill in
 | PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
 |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Engine Type                    | `postgresql_engine_type`                 | PostgreSQL engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.                                                                                                                            |
 | Host                           | `host`                                   | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
 | Port                           | `port`                                   | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
+| Database                       | `database`                               | PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                           |
 | Password                       | `password`                               | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
-| sslmode                        | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
+| SSL mode                       | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
 | JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access PostgreSQL. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
@@ -124,8 +126,13 @@ Database provider type (--provider):
  [11] sqlserver
  [12] trino
 Please enter one of the [] values: 5
+PostgreSQL engine type (--postgresql-engine):
+ [ 1] postgresql
+ [ 2] timescale
+Please enter one of the [] values: 1
 PostgreSQL host (--postgresql-host)[${POSTGRESQL_HOST}]: localhost
 PostgreSQL port (--postgresql-port) [${POSTGRESQL_PORT}]: 65234
+PostgreSQL database(--postgresql-database) [${POSTGRESQL_DATABASE}]: testing
 PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: testing
 PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
@@ -137,8 +144,10 @@ You can also run the command with parameters to add a connection in just a singl
 ```
 dqo> connection add --name=connection1
 --provider=postgresql
+--postgresql-engine=postgresql
 --postgresql-host=localhost
 --postgresql-port=65234
+--postgresql-database=testing
 --postgresql-user=testing
 --postgresql-password=xxx
 ```
@@ -174,8 +183,11 @@ spec:
   postgresql:
     host: localhost
     port: 65234
+    database: testing
     user: testing
     password: xxx
+    sslmode: disable
+    postgresql_engine_type: postgresql
     properties:
       'connectTimeout ': 12
   incident_grouping:
