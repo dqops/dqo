@@ -524,8 +524,8 @@ export default function ObservabilityStatus() {
           </div>
           <div className="font-bold text-lg">
             The data observability status is empty because no data quality
-            checks have been run. Please configure some checks or run the checks
-            that are applied by data quality policies.
+            checks have been run. Please configure some checks or run those
+            that are applied by the data quality policies.
           </div>
         </div>
       )}

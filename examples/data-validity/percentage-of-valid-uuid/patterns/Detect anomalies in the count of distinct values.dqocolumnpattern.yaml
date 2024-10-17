@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  description: Monitors the count of distinct values in a column and raises an issue
+    when an anomaly is detected.
+  monitoring_checks:
+    daily:
+      uniqueness:
+        daily_distinct_count_anomaly:
+          warning:
+            anomaly_percent: 0.1
+  partitioned_checks:
+    daily:
+      uniqueness:
+        daily_partition_distinct_count_anomaly:
+          warning:
+            anomaly_percent: 0.1

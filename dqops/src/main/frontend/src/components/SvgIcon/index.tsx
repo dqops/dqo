@@ -117,6 +117,7 @@ import { ReactComponent as SuccessSvg } from './svg/success.svg';
 import { ReactComponent as SyncSvg } from './svg/sync.svg';
 import { ReactComponent as TableCheckSvg } from './svg/table-check.svg';
 import { ReactComponent as TableSvg } from './svg/table.svg';
+import { ReactComponent as TimescaleSvg } from './svg/timescale.svg';
 import { ReactComponent as TrinoSvg } from './svg/trino.svg';
 import { ReactComponent as UploadSvg } from './svg/upload.svg';
 import { ReactComponent as UserAddSvg } from './svg/user-add.svg';
@@ -269,7 +270,8 @@ const iconsMap: any = {
   ibmdb2: Db2Svg,
   grouping: GroupingSvg,
   clickhouse: ClickHouseSvg,
-  warning_orange: WarningOrange
+  warning_orange: WarningOrange,
+  timescale: TimescaleSvg,
 };
 
 interface SvgIconProps {
