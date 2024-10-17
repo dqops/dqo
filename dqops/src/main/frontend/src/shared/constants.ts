@@ -355,7 +355,7 @@ export const databaseOptions: IDatabaseOption[] = [
     type: ConnectionModelProviderTypeEnum.bigquery,
     name: 'Google BigQuery',
     iconName: 'googlebigquery',
-    displayName: 'Bigquery'
+    displayName: 'BigQuery'
   },
   {
     type: ConnectionModelProviderTypeEnum.clickhouse,
