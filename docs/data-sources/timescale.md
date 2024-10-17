@@ -1,53 +1,44 @@
 ---
-title: How to activate data observability for PostgreSQL
+title: How to activate data observability for TimescaleDB
 ---
-# How to activate data observability for PostgreSQL
-Read this guide to learn how to connect DQOps to PostgreSQL from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to activate data observability for TimescaleDB
+Read this guide to learn how to connect DQOps to Timescale from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
-PostgreSQL is a powerful, open source object-relational database system that uses and extends the SQL language combined 
-with many features that safely store and scale the most complicated data workloads.
+TimescaleDB is an open-source database designed to make SQL scalable for time-series data. 
+It is engineered up from PostgreSQL and packaged as a PostgreSQL extension, providing automatic partitioning across time and space (partitioning key), as well as full SQL support.
 
-## Prerequisite credentials
-
-To add PostgreSQL data source connection to DQOps you need a PostgreSQL account. 
-
-By default, PostgreSQL restricts connections to hosts and networks included in the 
-pg_hba.conf file. In case of restrictions you need to add the IP address used by DQOps to
-[Allowed IP Addresses in PostgreSQL Network Policies](https://www.postgresql.org/docs/9.1/auth-pg-hba-conf.html).
-
-## Add a PostgreSQL connection using the user interface
+## Add a TimescaleDB connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the PostgreSQL connection settings:
+To navigate to the TimescaleDB connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection2.png){ loading=lazy; width="1200px" }
 
-2. Select PostgreSQL database type.
+2. Select TimescaleDB database type.
 
-    ![Selecting PostgreSQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-postgresql.png){ loading=lazy; width="1200px" }
+    ![Selecting TimescaleDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-timescale.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the PostgreSQL connection settings, you will need to fill in its details.
+After navigating to the TimescaleDB connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.png){ loading=lazy; width="1200px" }
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-timescale.png){ loading=lazy; width="1200px" }
 
-| PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
-|--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Engine Type                    | `postgresql_engine_type`                 | PostgreSQL engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.                                                                                                                            |
-| Host                           | `host`                                   | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
-| Port                           | `port`                                   | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
-| Database                       | `database`                               | PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                           |
-| Password                       | `password`                               | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
-| SSL mode                       | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
-| JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access PostgreSQL. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
+| TimescaleDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
+|---------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name                 |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Engine Type                     | `postgresql_engine_type`                 | PostgreSQL engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.                                                                                                                            |
+| Host                            | `host`                                   | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
+| Port                            | `port`                                   | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
+| Password                        | `password`                               | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
+| SSL mode                        | `sslmode`                                | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
+| JDBC connection property        |                                          | Optional setting. DQOps supports using JDBC driver to access TimescaleDB. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                    |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -100,7 +91,7 @@ and profiling data by running default data profiling checks. Simply click on the
     standard checks that monitor the data quality of a table or column. They can also be referred to as **Data Observability** checks.
     These checks capture a single data quality result for the entire table or column.
 
-## Add a PostgreSQL connection using DQOps Shell
+## Add a TimescaleDB connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -129,10 +120,9 @@ Please enter one of the [] values: 5
 PostgreSQL engine type (--postgresql-engine):
  [ 1] postgresql
  [ 2] timescale
-Please enter one of the [] values: 1
+Please enter one of the [] values: 2
 PostgreSQL host (--postgresql-host)[${POSTGRESQL_HOST}]: localhost
 PostgreSQL port (--postgresql-port) [${POSTGRESQL_PORT}]: 65234
-PostgreSQL database(--postgresql-database) [${POSTGRESQL_DATABASE}]: testing
 PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: testing
 PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
@@ -144,10 +134,9 @@ You can also run the command with parameters to add a connection in just a singl
 ```
 dqo> connection add --name=connection1
 --provider=postgresql
---postgresql-engine=postgresql
+--postgresql-engine=timescale
 --postgresql-host=localhost
 --postgresql-port=65234
---postgresql-database=testing
 --postgresql-user=testing
 --postgresql-password=xxx
 ```
@@ -173,7 +162,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the PostgreSQL data source connection.
+Below is a sample YAML file showing an example configuration of the TimescaleDB data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
@@ -181,13 +170,11 @@ kind: source
 spec:
   provider_type: postgresql
   postgresql:
+    postgresql_engine_type: postgresql
     host: localhost
     port: 65234
-    database: testing
     user: testing
     password: xxx
-    sslmode: disable
-    postgresql_engine_type: postgresql
     properties:
       'connectTimeout ': 12
   incident_grouping:

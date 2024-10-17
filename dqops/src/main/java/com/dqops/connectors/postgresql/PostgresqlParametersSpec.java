@@ -77,7 +77,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--postgresql-engine"}, description = "Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.")
     @JsonPropertyDescription("Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.")
-    private PostgresqlEngineType postgresqlEngineType = PostgresqlEngineType.postgresql;
+    private PostgresqlEngineType postgresqlEngineType;
 
     @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
