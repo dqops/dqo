@@ -19,10 +19,7 @@ import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
-import com.dqops.data.storage.FileStorageSettings;
-import com.dqops.data.storage.ParquetPartitionStorageService;
-import com.dqops.data.storage.TableDataSnapshot;
-import com.dqops.data.storage.TablePartitioningPattern;
+import com.dqops.data.storage.*;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.reflection.ObjectMemorySizeUtility;
 import com.dqops.utils.tables.TableColumnUtility;
@@ -39,7 +36,6 @@ import java.util.Objects;
  */
 public class SensorReadoutsSnapshot extends TableDataSnapshot {
     public static String PARQUET_FILE_NAME = "sensor_readout.0.parquet";
-    public static boolean ENABLE_PRE_FILLING_TIME_SERIES_CACHE = false;
     private SensorReadoutsTimeSeriesMap timeSeriesMap;
 
     /**
@@ -101,30 +97,8 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
             return this.timeSeriesMap;
         }
 
-        Table allLoadedData = this.getAllData();
-		this.timeSeriesMap = new SensorReadoutsTimeSeriesMap(this.getFirstLoadedMonth(), this.getLastLoadedMonth(), allLoadedData);
-
-        if (allLoadedData != null && ENABLE_PRE_FILLING_TIME_SERIES_CACHE) {
-            // THIS SECTION is disabled for the moment in favor of using an index and searching for time series on demand
-
-            TableSliceGroup tableSlices = allLoadedData.splitOn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME,
-                    SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
-            
-            for (TableSlice tableSlice : tableSlices) {
-                Table timeSeriesTable = tableSlice.asTable();
-                LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-                LongColumn dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(timeSeriesTable,
-                        SensorReadoutsColumnNames.DATA_GROUP_HASH_COLUMN_NAME);
-                long checkHashId = checkHashColumn.get(0); // the first row has the value
-                long dataStreamHash = dataStreamHashColumn.isMissing(0) ? 0L : dataStreamHashColumn.get(0);
-
-                SensorReadoutTimeSeriesKey timeSeriesKey = new SensorReadoutTimeSeriesKey(checkHashId, dataStreamHash);
-                Table sortedTimeSeriesTable = timeSeriesTable.sortOn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-                SensorReadoutsTimeSeriesData timeSeriesData = new SensorReadoutsTimeSeriesData(timeSeriesKey, sortedTimeSeriesTable);
-				this.timeSeriesMap.add(timeSeriesData);
-            }
-        }
-
+		this.timeSeriesMap = new SensorReadoutsTimeSeriesMap(this.getFirstLoadedMonth(), this.getLastLoadedMonth(),
+                this.getLoadedMonthlyPartitions());
         return this.timeSeriesMap;
     }
 }
