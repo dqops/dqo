@@ -341,7 +341,7 @@ spec:
 ```
 
 ## Deactivating the policy
-The configurations of data quality policies can be deactivated. DQOps does not apply the deactivated policies.
+The configurations of data quality policies can be disabled. DQOps does not apply the disabled policies.
 Each checks configuration file has a *disabled* boolean flag. The following examples show how to turn off a policy.
 
 The following example shows how to disable a table-level policy.
@@ -422,7 +422,7 @@ file directly or
 ### Detect big day-to-day data volume changes
 Monitors data volume of the whole table daily and raises an issue when the volume has increased of decreased significantly.
 
-This policy is activated by default.
+This policy is disabled by default.
 
 The table below provides a description of the checks activated by this policy.
 
