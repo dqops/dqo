@@ -135,13 +135,13 @@ export default function TablePreview({ statistics }: tablePreviewProps) {
       <table className="w-full">
         <thead className="border-b border-b-gray-400">
           <tr>
-            <th className="px-6 py-4 text-left text-sm border border-gray-300 bg-gray-300 max-w-60 whitespace-normal">
+            <th className="px-2 py-4 text-left text-sm !text-[13px] border border-gray-300 bg-gray-300 max-w-60 whitespace-normal">
               Column name
             </th>
             {statistics.column_statistics?.map((x, index) => (
               <th
                 key={index}
-                className="px-6 py-4 text-left text-sm border border-gray-300 bg-gray-300 max-w-60 whitespace-normal break-all"
+                className="px-2 py-4 text-left text-sm !text-[13px] border border-gray-300 bg-gray-300 max-w-60 whitespace-normal break-all"
               >
                 {x.column_name}
               </th>
@@ -151,13 +151,13 @@ export default function TablePreview({ statistics }: tablePreviewProps) {
         <tbody>
           {firstColumnObjects.map((x, index) => (
             <tr key={index}>
-              <td className="px-6 py-2 text-left text-sm border border-gray-300 font-semibold bg-gray-50 min-w-50 max-w-60 whitespace-normal break-all">
+              <td className="px-2 py-2 text-left text-sm !text-[13px] border border-gray-300 font-semibold bg-gray-50 min-w-50 max-w-60 whitespace-normal break-all">
                 {x.label}
               </td>
               {dataArray.map((y, jIndex) => (
                 <td
                   key={jIndex}
-                  className="px-6 py-2 text-left text-sm border border-gray-300 bg-gray-50 min-w-30 max-w-60 whitespace-normal break-all"
+                  className="px-2 py-2 text-left text-sm !text-[13px] border border-gray-300 bg-gray-50 min-w-30 max-w-60 whitespace-normal break-all"
                 >
                   {renderValue(y[x.value as keyof MyData])}{' '}
                   {x.label.includes('percent') && y[x.value as keyof MyData]
@@ -170,7 +170,7 @@ export default function TablePreview({ statistics }: tablePreviewProps) {
 
           <tr className="w-full h-12">
             <td
-              className="px-6 py-2 text-left text-sm font-semibold"
+              className="px-2 py-2 text-left text-sm !text-[13px] font-semibold"
               style={{ whiteSpace: 'nowrap' }}
             >
               Sample values
@@ -180,7 +180,7 @@ export default function TablePreview({ statistics }: tablePreviewProps) {
           {arrayOfSamplesIndexes?.map((x, index) => (
             <tr key={index}>
               <td
-                className="px-6 py-2 text-left text-sm border border-gray-300 font-semibold"
+                className="px-2 py-2 text-left text-sm !text-[13px] border border-gray-300 font-semibold"
                 style={{ whiteSpace: 'nowrap' }}
               >
                 # {Number(index) + 1}
@@ -188,7 +188,7 @@ export default function TablePreview({ statistics }: tablePreviewProps) {
               {arrayOfSamples?.map((y, jIndex) => (
                 <td
                   key={jIndex}
-                  className="px-6 py-2 text-left text-sm border border-gray-300 max-w-60 whitespace-normal break-all"
+                  className="px-2 py-2 text-left text-sm !text-[13px] border border-gray-300 max-w-60 whitespace-normal break-all"
                 >
                   {renderValue(
                     y.sampleArray?.at(index)
