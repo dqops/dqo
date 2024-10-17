@@ -502,6 +502,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Snowflake'
   },
   {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Timescale',
+    iconName: 'timescale',
+    displayName: 'Timescale'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.trino,
     name: 'Trino',
     iconName: 'trino',
