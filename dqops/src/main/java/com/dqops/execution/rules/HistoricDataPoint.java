@@ -32,22 +32,12 @@ import java.time.ZoneOffset;
 @EqualsAndHashCode(callSuper = false)
 public class HistoricDataPoint {
     /**
-     * Timestamp (based on UTC timezone) of the previous readout.
-     */
-    private Instant timestampUtc;
-
-    /**
-     * Timestamp (based on UTC timezone) of the previous readout as a Linux epoch time.
+     * Timestamp (based on UTC timezone) of the previous readout as a Linux epoch time (seconds).
      */
     private long timestampUtcEpoch;
 
     /**
-     * Local date time of the previous readout (when the time zone is not important).
-     */
-    private LocalDateTime localDatetime;
-
-    /**
-     * Local date time of the previous readout (when the time zone is not important) as a Linux epoch time, but with time zone shift applied.
+     * Local date time of the previous readout (when the time zone is not important) as a Linux epoch time (seconds), but with time zone shift applied.
      */
     private long localDatetimeEpoch;
 
@@ -81,36 +71,16 @@ public class HistoricDataPoint {
      * @param expectedValue Previously predicted expected value.
      */
     public HistoricDataPoint(Instant timestampUtc, LocalDateTime localDatetime, int backPeriodsIndex, Double sensorReadout, Double expectedValue) {
-        // no longer returned
-
-//        this.timestampUtc = timestampUtc;
-//        this.localDatetime = localDatetime;
         if (timestampUtc != null) {
-            this.timestampUtcEpoch = timestampUtc.toEpochMilli();
+            this.timestampUtcEpoch = timestampUtc.toEpochMilli() / 1000L;
         }
         if (localDatetime != null) {
-            this.localDatetimeEpoch = localDatetime.toEpochSecond(ZoneOffset.UTC) * 1000L;
+            this.localDatetimeEpoch = localDatetime.toEpochSecond(ZoneOffset.UTC);
         }
 
         this.backPeriodsIndex = backPeriodsIndex;
         this.sensorReadout = sensorReadout;
         this.expectedValue = expectedValue;
-    }
-
-    /**
-     * Absolute (UTC based) timestamp of the previous sensor readout.
-     * @return Absolute timestamp of the previous sensor readout.
-     */
-    public Instant getTimestampUtc() {
-        return timestampUtc;
-    }
-
-    /**
-     * Sets the timestamp of the previous readout.
-     * @param timestampUtc Timestamp of the previous readout.
-     */
-    public void setTimestampUtc(Instant timestampUtc) {
-        this.timestampUtc = timestampUtc;
     }
 
     /**
@@ -130,24 +100,8 @@ public class HistoricDataPoint {
     }
 
     /**
-     * Returns a local date time of the previous readout.
-     * @return Local date time of the readout.
-     */
-    public LocalDateTime getLocalDatetime() {
-        return localDatetime;
-    }
-
-    /**
-     * Sets the local date time of the readout.
-     * @param localDatetime Local date time of the readout.
-     */
-    public void setLocalDatetime(LocalDateTime localDatetime) {
-        this.localDatetime = localDatetime;
-    }
-
-    /**
      * Returns the time period as a Linux epoch time, but shifted by a time zone.
-     * @return Time period shifted by a time period.
+     * @return Time period shifted by a time period, as an epoch (seconds).
      */
     public long getLocalDatetimeEpoch() {
         return localDatetimeEpoch;
@@ -155,7 +109,7 @@ public class HistoricDataPoint {
 
     /**
      * Sets the time period as an epoch time, but shifted by the time zone.
-     * @param localDatetimeEpoch Time period local time, as an epoch (millis).
+     * @param localDatetimeEpoch Time period local time, as an epoch (seconds).
      */
     public void setLocalDatetimeEpoch(long localDatetimeEpoch) {
         this.localDatetimeEpoch = localDatetimeEpoch;

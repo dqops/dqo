@@ -88,6 +88,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
+                [--clickhouse-database=<database>] [--clickhouse-host=<host>]
+                [--clickhouse-password=<password>] [--clickhouse-port=<port>]
+                [--clickhouse-user=<user>]
                 [--databricks-access-token=<accessToken>]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
@@ -123,6 +126,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-password=<password>] [--oracle-port=<port>]
                 [--oracle-user=<user>] [--postgresql-database=<database>]
+                [--postgresql-engine=<postgresqlEngineType>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
@@ -147,13 +151,14 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-DB2=<String=String>]...
-                [-Duck=<String=String>]... [-E=<String=String>]...
-                [-F=<String=String>]... [-H=<String=String>]...
-                [-K=<String=String>]... [-M=<String=String>]...
-                [-MA=<String=String>]... [-O=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]... [-T=<String=String>]...
+                [-C=<String=String>]... [-D=<String=String>]...
+                [-DB2=<String=String>]... [-Duck=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-H=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-MA=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 
@@ -172,6 +177,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
+                [--clickhouse-database=<database>] [--clickhouse-host=<host>]
+                [--clickhouse-password=<password>] [--clickhouse-port=<port>]
+                [--clickhouse-user=<user>]
                 [--databricks-access-token=<accessToken>]
                 [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                 [--databricks-http-path=<httpPath>]
@@ -207,6 +215,7 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-password=<password>] [--oracle-port=<port>]
                 [--oracle-user=<user>] [--postgresql-database=<database>]
+                [--postgresql-engine=<postgresqlEngineType>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
@@ -231,13 +240,14 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-DB2=<String=String>]...
-                [-Duck=<String=String>]... [-E=<String=String>]...
-                [-F=<String=String>]... [-H=<String=String>]...
-                [-K=<String=String>]... [-M=<String=String>]...
-                [-MA=<String=String>]... [-O=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]... [-T=<String=String>]...
+                [-C=<String=String>]... [-D=<String=String>]...
+                [-DB2=<String=String>]... [-Duck=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-H=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-MA=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 
@@ -260,6 +270,11 @@ All parameters supported by the command are listed below.
 |<div id="connection add--bigquery-json-key-path" class="no-wrap-code">`--bigquery-json-key-path`</div>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |<div id="connection add--bigquery-quota-project-id" class="no-wrap-code">`--bigquery-quota-project-id`</div>|Bigquery quota GCP project id.| ||
 |<div id="connection add--bigquery-source-project-id" class="no-wrap-code">`--bigquery-source-project-id`</div>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<div id="connection add--clickhouse-database" class="no-wrap-code">`--clickhouse-database`</div>|ClickHouse database name| ||
+|<div id="connection add--clickhouse-host" class="no-wrap-code">`--clickhouse-host`</div>|ClickHouse host name| ||
+|<div id="connection add--clickhouse-password" class="no-wrap-code">`--clickhouse-password`</div>|ClickHouse database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--clickhouse-port" class="no-wrap-code">`--clickhouse-port`</div>|ClickHouse port number| ||
+|<div id="connection add--clickhouse-user" class="no-wrap-code">`--clickhouse-user`</div>|ClickHouse user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--databricks-access-token" class="no-wrap-code">`--databricks-access-token`</div>|Databricks access token for the warehouse.| ||
 |<div id="connection add--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
 |<div id="connection add--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
@@ -317,6 +332,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-of" class="no-wrap-code">`-of`</div><div id="connection add--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="connection add--postgresql-database" class="no-wrap-code">`--postgresql-database`</div>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--postgresql-engine" class="no-wrap-code">`--postgresql-engine`</div>|Postgresql engine type. Supports also a null configuration with a custom environment variable.| |*postgresql*<br/>*timescale*<br/>|
 |<div id="connection add--postgresql-host" class="no-wrap-code">`--postgresql-host`</div>|PostgreSQL host name| ||
 |<div id="connection add--postgresql-options" class="no-wrap-code">`--postgresql-options`</div>|PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--postgresql-password" class="no-wrap-code">`--postgresql-password`</div>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
@@ -328,7 +344,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>*hana*<br/>*db2*<br/>*mariadb*<br/>*clickhouse*<br/>|
 |<div id="connection add--redshift-authentication-mode" class="no-wrap-code">`--redshift-authentication-mode`</div>|The authentication mode for AWS. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>*user_password*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
@@ -359,6 +375,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--trino-password" class="no-wrap-code">`--trino-password`</div>|Trino database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection add--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add-C" class="no-wrap-code">`-C`</div>|ClickHouse additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-DB2" class="no-wrap-code">`-DB2`</div>|DB2 additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
@@ -457,6 +474,10 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--clickhouse-database=<database>]
+                   [--clickhouse-host=<host>]
+                   [--clickhouse-password=<password>]
+                   [--clickhouse-port=<port>] [--clickhouse-user=<user>]
                    [--databricks-access-token=<accessToken>]
                    [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                    [--databricks-http-path=<httpPath>]
@@ -494,6 +515,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--oracle-initialization-sql=<initializationSql>]
                    [--oracle-password=<password>] [--oracle-port=<port>]
                    [--oracle-user=<user>] [--postgresql-database=<database>]
+                   [--postgresql-engine=<postgresqlEngineType>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
@@ -518,14 +540,14 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
-                   [--trino-user=<user>] [-D=<String=String>]...
-                   [-DB2=<String=String>]... [-Duck=<String=String>]...
-                   [-E=<String=String>]... [-F=<String=String>]...
-                   [-H=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-MA=<String=String>]...
-                   [-O=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [--trino-user=<user>] [-C=<String=String>]...
+                   [-D=<String=String>]... [-DB2=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-H=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-MA=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -544,6 +566,10 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--clickhouse-database=<database>]
+                   [--clickhouse-host=<host>]
+                   [--clickhouse-password=<password>]
+                   [--clickhouse-port=<port>] [--clickhouse-user=<user>]
                    [--databricks-access-token=<accessToken>]
                    [--databricks-catalog=<catalog>] [--databricks-host=<host>]
                    [--databricks-http-path=<httpPath>]
@@ -581,6 +607,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--oracle-initialization-sql=<initializationSql>]
                    [--oracle-password=<password>] [--oracle-port=<port>]
                    [--oracle-user=<user>] [--postgresql-database=<database>]
+                   [--postgresql-engine=<postgresqlEngineType>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
@@ -605,14 +632,14 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
-                   [--trino-user=<user>] [-D=<String=String>]...
-                   [-DB2=<String=String>]... [-Duck=<String=String>]...
-                   [-E=<String=String>]... [-F=<String=String>]...
-                   [-H=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-MA=<String=String>]...
-                   [-O=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [--trino-user=<user>] [-C=<String=String>]...
+                   [-D=<String=String>]... [-DB2=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-H=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-MA=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -635,6 +662,11 @@ All parameters supported by the command are listed below.
 |<div id="connection update--bigquery-json-key-path" class="no-wrap-code">`--bigquery-json-key-path`</div>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |<div id="connection update--bigquery-quota-project-id" class="no-wrap-code">`--bigquery-quota-project-id`</div>|Bigquery quota GCP project id.| ||
 |<div id="connection update--bigquery-source-project-id" class="no-wrap-code">`--bigquery-source-project-id`</div>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<div id="connection update--clickhouse-database" class="no-wrap-code">`--clickhouse-database`</div>|ClickHouse database name| ||
+|<div id="connection update--clickhouse-host" class="no-wrap-code">`--clickhouse-host`</div>|ClickHouse host name| ||
+|<div id="connection update--clickhouse-password" class="no-wrap-code">`--clickhouse-password`</div>|ClickHouse database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--clickhouse-port" class="no-wrap-code">`--clickhouse-port`</div>|ClickHouse port number| ||
+|<div id="connection update--clickhouse-user" class="no-wrap-code">`--clickhouse-user`</div>|ClickHouse user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--databricks-access-token" class="no-wrap-code">`--databricks-access-token`</div>|Databricks access token for the warehouse.| ||
 |<div id="connection update--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
 |<div id="connection update--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
@@ -692,6 +724,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-of" class="no-wrap-code">`-of`</div><div id="connection update--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="connection update--postgresql-database" class="no-wrap-code">`--postgresql-database`</div>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--postgresql-engine" class="no-wrap-code">`--postgresql-engine`</div>|Postgresql engine type. Supports also a null configuration with a custom environment variable.| |*postgresql*<br/>*timescale*<br/>|
 |<div id="connection update--postgresql-host" class="no-wrap-code">`--postgresql-host`</div>|PostgreSQL host name| ||
 |<div id="connection update--postgresql-options" class="no-wrap-code">`--postgresql-options`</div>|PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--postgresql-password" class="no-wrap-code">`--postgresql-password`</div>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
@@ -733,6 +766,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--trino-password" class="no-wrap-code">`--trino-password`</div>|Trino database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection update--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update-C" class="no-wrap-code">`-C`</div>|ClickHouse additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-DB2" class="no-wrap-code">`-DB2`</div>|DB2 additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||

@@ -191,6 +191,61 @@ spec:
                 MAX(3) AS expected_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -1181,6 +1236,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -2305,6 +2417,61 @@ spec:
                 MAX(3) AS expected_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -3296,6 +3463,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -4420,6 +4644,61 @@ spec:
                 MAX(3) AS expected_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -5411,6 +5690,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -6549,6 +6885,65 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -7620,6 +8015,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8794,6 +9248,65 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -9865,6 +10378,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro actual_value() -%}
+                {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+                0
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                {{ actual_value() }} AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

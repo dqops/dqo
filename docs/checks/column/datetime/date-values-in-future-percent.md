@@ -180,6 +180,55 @@ spec:
                 END AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -1044,6 +1093,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -2042,6 +2142,55 @@ spec:
                 END AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -2907,6 +3056,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -3905,6 +4105,55 @@ spec:
                 END AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -4770,6 +5019,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2
             ```
@@ -5782,6 +6082,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -6727,6 +7080,59 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS DATE) AS time_period,
+                toDateTime64(CAST(analyzed_table."date_column" AS DATE), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -7775,6 +8181,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Databricks"
 
         === "Sensor template for Databricks"
@@ -8720,6 +9179,59 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "ClickHouse"
+
+        === "Sensor template for ClickHouse"
+            ```sql+jinja
+            {% import '/dialects/clickhouse.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDate(now()) + INTERVAL CAST({{(parameters.max_future_days)}} AS Int64) DAY
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > toDateTime(now()) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% else -%}
+                                    toDateTime64({{ lib.render_target_column('analyzed_table') }}, 3) > toDateTime64(now(), 3) + INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS Int64) SECOND
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for ClickHouse"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN toDateTime64(analyzed_table."target_column", 3) > toDateTime64(now(), 3) + INTERVAL CAST(0.0 * 86400 AS Int64) SECOND
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)) AS time_period,
+                toDateTime64(DATE_TRUNC('month', CAST(analyzed_table."date_column" AS DATE)), 3) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

@@ -45,6 +45,7 @@ import tech.tablesaw.table.TableSliceGroup;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -202,7 +203,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                             continue;
                         }
 
-                        Double previouslyPredictedExpectedValue = previousExpectedValues.get(previousDataPoint.getLocalDatetime());
+                        LocalDateTime previousDataPointTimePeriod = LocalDateTime.ofEpochSecond(previousDataPoint.getLocalDatetimeEpoch(), 0, ZoneOffset.UTC);
+                        Double previouslyPredictedExpectedValue = previousExpectedValues.get(previousDataPointTimePeriod);
                         if (previouslyPredictedExpectedValue != null) {
                             previousDataPoint.setExpectedValue(previouslyPredictedExpectedValue);
                         }

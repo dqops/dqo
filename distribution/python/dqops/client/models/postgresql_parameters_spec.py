@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.postgresql_engine_type import PostgresqlEngineType
 from ..models.postgresql_ssl_mode import PostgresqlSslMode
 from ..types import UNSET, Unset
 
@@ -33,6 +34,7 @@ class PostgresqlParametersSpec:
             to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
             also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.
         sslmode (Union[Unset, PostgresqlSslMode]):
+        postgresql_engine_type (Union[Unset, PostgresqlEngineType]):
         properties (Union[Unset, PostgresqlParametersSpecProperties]): A dictionary of custom JDBC parameters that are
             added to the JDBC connection string, a key/value dictionary.
     """
@@ -44,6 +46,7 @@ class PostgresqlParametersSpec:
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     sslmode: Union[Unset, PostgresqlSslMode] = UNSET
+    postgresql_engine_type: Union[Unset, PostgresqlEngineType] = UNSET
     properties: Union[Unset, "PostgresqlParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -57,6 +60,10 @@ class PostgresqlParametersSpec:
         sslmode: Union[Unset, str] = UNSET
         if not isinstance(self.sslmode, Unset):
             sslmode = self.sslmode.value
+
+        postgresql_engine_type: Union[Unset, str] = UNSET
+        if not isinstance(self.postgresql_engine_type, Unset):
+            postgresql_engine_type = self.postgresql_engine_type.value
 
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
@@ -79,6 +86,8 @@ class PostgresqlParametersSpec:
             field_dict["options"] = options
         if sslmode is not UNSET:
             field_dict["sslmode"] = sslmode
+        if postgresql_engine_type is not UNSET:
+            field_dict["postgresql_engine_type"] = postgresql_engine_type
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -110,6 +119,13 @@ class PostgresqlParametersSpec:
         else:
             sslmode = PostgresqlSslMode(_sslmode)
 
+        _postgresql_engine_type = d.pop("postgresql_engine_type", UNSET)
+        postgresql_engine_type: Union[Unset, PostgresqlEngineType]
+        if isinstance(_postgresql_engine_type, Unset):
+            postgresql_engine_type = UNSET
+        else:
+            postgresql_engine_type = PostgresqlEngineType(_postgresql_engine_type)
+
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, PostgresqlParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -125,6 +141,7 @@ class PostgresqlParametersSpec:
             password=password,
             options=options,
             sslmode=sslmode,
+            postgresql_engine_type=postgresql_engine_type,
             properties=properties,
         )
 

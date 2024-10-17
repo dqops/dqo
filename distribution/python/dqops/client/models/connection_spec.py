@@ -9,6 +9,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.auto_import_tables_spec import AutoImportTablesSpec
     from ..models.big_query_parameters_spec import BigQueryParametersSpec
+    from ..models.click_house_parameters_spec import ClickHouseParametersSpec
     from ..models.comment_spec import CommentSpec
     from ..models.connection_incident_grouping_spec import (
         ConnectionIncidentGroupingSpec,
@@ -57,6 +58,7 @@ class ConnectionSpec:
         hana (Union[Unset, HanaParametersSpec]):
         db2 (Union[Unset, Db2ParametersSpec]):
         mariadb (Union[Unset, MariaDbParametersSpec]):
+        clickhouse (Union[Unset, ClickHouseParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
@@ -92,6 +94,7 @@ class ConnectionSpec:
     hana: Union[Unset, "HanaParametersSpec"] = UNSET
     db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
+    clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[Unset, "DataGroupingConfigurationSpec"] = (
         UNSET
@@ -170,6 +173,10 @@ class ConnectionSpec:
         if not isinstance(self.mariadb, Unset):
             mariadb = self.mariadb.to_dict()
 
+        clickhouse: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.clickhouse, Unset):
+            clickhouse = self.clickhouse.to_dict()
+
         parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
@@ -241,6 +248,8 @@ class ConnectionSpec:
             field_dict["db2"] = db2
         if mariadb is not UNSET:
             field_dict["mariadb"] = mariadb
+        if clickhouse is not UNSET:
+            field_dict["clickhouse"] = clickhouse
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
@@ -268,6 +277,7 @@ class ConnectionSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.auto_import_tables_spec import AutoImportTablesSpec
         from ..models.big_query_parameters_spec import BigQueryParametersSpec
+        from ..models.click_house_parameters_spec import ClickHouseParametersSpec
         from ..models.comment_spec import CommentSpec
         from ..models.connection_incident_grouping_spec import (
             ConnectionIncidentGroupingSpec,
@@ -407,6 +417,13 @@ class ConnectionSpec:
         else:
             mariadb = MariaDbParametersSpec.from_dict(_mariadb)
 
+        _clickhouse = d.pop("clickhouse", UNSET)
+        clickhouse: Union[Unset, ClickHouseParametersSpec]
+        if isinstance(_clickhouse, Unset):
+            clickhouse = UNSET
+        else:
+            clickhouse = ClickHouseParametersSpec.from_dict(_clickhouse)
+
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
@@ -478,6 +495,7 @@ class ConnectionSpec:
             hana=hana,
             db2=db2,
             mariadb=mariadb,
+            clickhouse=clickhouse,
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,

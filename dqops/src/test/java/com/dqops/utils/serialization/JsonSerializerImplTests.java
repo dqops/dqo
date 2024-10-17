@@ -91,12 +91,10 @@ public class JsonSerializerImplTests extends BaseTest {
 
     @Test
     void serialize_whenHistoricDataPointWithDatesSerialized_thenDateFormatIsCorrect() {
-        HistoricDataPoint dataPoint = new HistoricDataPoint();
+        LocalDateTime localDateTime = LocalDateTime.of(2022, 03, 07, 22, 15, 10);
+        HistoricDataPoint dataPoint = new HistoricDataPoint(localDateTime.toInstant(ZoneOffset.ofHours(2)), localDateTime, -2, 10.5, null);
         dataPoint.setBackPeriodsIndex(-2);
         dataPoint.setSensorReadout(10.5);
-        LocalDateTime localDateTime = LocalDateTime.of(2022, 03, 07, 22, 15, 10);
-        dataPoint.setLocalDatetime(localDateTime);
-        dataPoint.setTimestampUtc(localDateTime.toInstant(ZoneOffset.ofHours(2)));
 
         String json = this.sut.serialize(dataPoint);
 

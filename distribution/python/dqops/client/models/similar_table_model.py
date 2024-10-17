@@ -15,12 +15,15 @@ class SimilarTableModel:
 
         Attributes:
             difference (Union[Unset, int]): Table similarity score. Lower numbers indicate higher similarity.
+            similarity_pct (Union[Unset, float]): A similarity score as a percentage. A value 100.0 means that the tables
+                are probably equal.
             connection_name (Union[Unset, str]): Connection name
             schema_name (Union[Unset, str]): Schema name
             table_name (Union[Unset, str]): Table name
     """
 
     difference: Union[Unset, int] = UNSET
+    similarity_pct: Union[Unset, float] = UNSET
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
@@ -28,6 +31,7 @@ class SimilarTableModel:
 
     def to_dict(self) -> Dict[str, Any]:
         difference = self.difference
+        similarity_pct = self.similarity_pct
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
@@ -37,6 +41,8 @@ class SimilarTableModel:
         field_dict.update({})
         if difference is not UNSET:
             field_dict["difference"] = difference
+        if similarity_pct is not UNSET:
+            field_dict["similarity_pct"] = similarity_pct
         if connection_name is not UNSET:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
@@ -51,6 +57,8 @@ class SimilarTableModel:
         d = src_dict.copy()
         difference = d.pop("difference", UNSET)
 
+        similarity_pct = d.pop("similarity_pct", UNSET)
+
         connection_name = d.pop("connection_name", UNSET)
 
         schema_name = d.pop("schema_name", UNSET)
@@ -59,6 +67,7 @@ class SimilarTableModel:
 
         similar_table_model = cls(
             difference=difference,
+            similarity_pct=similarity_pct,
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,

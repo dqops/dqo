@@ -9,6 +9,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.big_query_parameters_spec import BigQueryParametersSpec
     from ..models.check_search_filters import CheckSearchFilters
+    from ..models.click_house_parameters_spec import ClickHouseParametersSpec
     from ..models.connection_model_advanced_properties import (
         ConnectionModelAdvancedProperties,
     )
@@ -66,6 +67,7 @@ class ConnectionModel:
         hana (Union[Unset, HanaParametersSpec]):
         db2 (Union[Unset, Db2ParametersSpec]):
         mariadb (Union[Unset, MariaDbParametersSpec]):
+        clickhouse (Union[Unset, ClickHouseParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -109,6 +111,7 @@ class ConnectionModel:
     hana: Union[Unset, "HanaParametersSpec"] = UNSET
     db2: Union[Unset, "Db2ParametersSpec"] = UNSET
     mariadb: Union[Unset, "MariaDbParametersSpec"] = UNSET
+    clickhouse: Union[Unset, "ClickHouseParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -193,6 +196,10 @@ class ConnectionModel:
         mariadb: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.mariadb, Unset):
             mariadb = self.mariadb.to_dict()
+
+        clickhouse: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.clickhouse, Unset):
+            clickhouse = self.clickhouse.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -279,6 +286,8 @@ class ConnectionModel:
             field_dict["db2"] = db2
         if mariadb is not UNSET:
             field_dict["mariadb"] = mariadb
+        if clickhouse is not UNSET:
+            field_dict["clickhouse"] = clickhouse
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -318,6 +327,7 @@ class ConnectionModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.big_query_parameters_spec import BigQueryParametersSpec
         from ..models.check_search_filters import CheckSearchFilters
+        from ..models.click_house_parameters_spec import ClickHouseParametersSpec
         from ..models.connection_model_advanced_properties import (
             ConnectionModelAdvancedProperties,
         )
@@ -463,6 +473,13 @@ class ConnectionModel:
         else:
             mariadb = MariaDbParametersSpec.from_dict(_mariadb)
 
+        _clickhouse = d.pop("clickhouse", UNSET)
+        clickhouse: Union[Unset, ClickHouseParametersSpec]
+        if isinstance(_clickhouse, Unset):
+            clickhouse = UNSET
+        else:
+            clickhouse = ClickHouseParametersSpec.from_dict(_clickhouse)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -567,6 +584,7 @@ class ConnectionModel:
             hana=hana,
             db2=db2,
             mariadb=mariadb,
+            clickhouse=clickhouse,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

@@ -35,8 +35,9 @@ $ dqo [dqo options...] check run [-deh] [-ces] [--daily-partitioning-include-tod
            [--monthly-partitioning-recent-months=<monthlyPartitioningRecentMonth
            s>] [-of=<outputFormat>] [-s=<sensor>] [-t=<table>]
            [--to-date=<toDate>] [--to-date-time=<toDateTime>]
-           [--to-date-time-offset=<toDateTimeOffset>] [-ts=<timeScale>]
-           [--where-filter=<whereFilter>] [-l=<labels>]... [-tag=<tags>]...
+           [--to-date-time-offset=<toDateTimeOffset>] [-tr=<executionTarget>]
+           [-ts=<timeScale>] [--where-filter=<whereFilter>] [-l=<labels>]...
+           [-tag=<tags>]...
 
 ```
 
@@ -54,8 +55,9 @@ dqo> check run [-deh] [-ces] [--daily-partitioning-include-today] [-fe] [-fw] [-
            [--monthly-partitioning-recent-months=<monthlyPartitioningRecentMonth
            s>] [-of=<outputFormat>] [-s=<sensor>] [-t=<table>]
            [--to-date=<toDate>] [--to-date-time=<toDateTime>]
-           [--to-date-time-offset=<toDateTimeOffset>] [-ts=<timeScale>]
-           [--where-filter=<whereFilter>] [-l=<labels>]... [-tag=<tags>]...
+           [--to-date-time-offset=<toDateTimeOffset>] [-tr=<executionTarget>]
+           [-ts=<timeScale>] [--where-filter=<whereFilter>] [-l=<labels>]...
+           [-tag=<tags>]...
 
 ```
 
@@ -93,6 +95,7 @@ All parameters supported by the command are listed below.
 |<div id="check run--monthly-partitioning-recent-months" class="no-wrap-code">`--monthly-partitioning-recent-months`</div>|The number of recent months to analyze incrementally by monthly partitioned data quality checks.| ||
 |<div id="check run-of" class="no-wrap-code">`-of`</div><div id="check run--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="check run-s" class="no-wrap-code">`-s`</div><div id="check run--sensor" class="no-wrap-code">`--sensor`</div>|Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'| ||
+|<div id="check run-tr" class="no-wrap-code">`-tr`</div><div id="check run--target" class="no-wrap-code">`--target`</div>|Configures the data quality execution mode. The default option is to run both the sensor to collect metrics, and validate the results with data quality rules. Alternatively, it is possible to only run the sensors to collect metrics, or only run rules on existing data.| |*sensors_and_rules*<br/>*only_sensors*<br/>*only_rules*<br/>|
 |<div id="check run-ts" class="no-wrap-code">`-ts`</div><div id="check run--time-scale" class="no-wrap-code">`--time-scale`</div>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |*daily*<br/>*monthly*<br/>|
 |<div id="check run--to-date" class="no-wrap-code">`--to-date`</div>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.| ||
 |<div id="check run--to-date-time" class="no-wrap-code">`--to-date-time`</div>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||

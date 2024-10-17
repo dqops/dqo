@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.run_checks_target import RunChecksTarget
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -34,6 +35,7 @@ class RunChecksOnTableParameters:
                 be rendered.
             collect_error_samples (Union[Unset, bool]): Set the value to true to collect error samples for failed data
                 quality checks.
+            execution_target (Union[Unset, RunChecksTarget]):
             run_checks_result (Union[Unset, RunChecksResult]): Returns the result (highest data quality check severity and
                 the finished checks count) for the checks that were recently executed.
     """
@@ -45,6 +47,7 @@ class RunChecksOnTableParameters:
     time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
     collect_error_samples: Union[Unset, bool] = UNSET
+    execution_target: Union[Unset, RunChecksTarget] = UNSET
     run_checks_result: Union[Unset, "RunChecksResult"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -65,6 +68,10 @@ class RunChecksOnTableParameters:
 
         dummy_execution = self.dummy_execution
         collect_error_samples = self.collect_error_samples
+        execution_target: Union[Unset, str] = UNSET
+        if not isinstance(self.execution_target, Unset):
+            execution_target = self.execution_target.value
+
         run_checks_result: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_result, Unset):
             run_checks_result = self.run_checks_result.to_dict()
@@ -86,6 +93,8 @@ class RunChecksOnTableParameters:
             field_dict["dummy_execution"] = dummy_execution
         if collect_error_samples is not UNSET:
             field_dict["collect_error_samples"] = collect_error_samples
+        if execution_target is not UNSET:
+            field_dict["execution_target"] = execution_target
         if run_checks_result is not UNSET:
             field_dict["run_checks_result"] = run_checks_result
 
@@ -130,6 +139,13 @@ class RunChecksOnTableParameters:
 
         collect_error_samples = d.pop("collect_error_samples", UNSET)
 
+        _execution_target = d.pop("execution_target", UNSET)
+        execution_target: Union[Unset, RunChecksTarget]
+        if isinstance(_execution_target, Unset):
+            execution_target = UNSET
+        else:
+            execution_target = RunChecksTarget(_execution_target)
+
         _run_checks_result = d.pop("run_checks_result", UNSET)
         run_checks_result: Union[Unset, RunChecksResult]
         if isinstance(_run_checks_result, Unset):
@@ -145,6 +161,7 @@ class RunChecksOnTableParameters:
             time_window_filter=time_window_filter,
             dummy_execution=dummy_execution,
             collect_error_samples=collect_error_samples,
+            execution_target=execution_target,
             run_checks_result=run_checks_result,
         )
 
