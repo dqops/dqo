@@ -355,7 +355,7 @@ export const databaseOptions: IDatabaseOption[] = [
     type: ConnectionModelProviderTypeEnum.bigquery,
     name: 'Google BigQuery',
     iconName: 'googlebigquery',
-    displayName: 'Bigquery'
+    displayName: 'BigQuery'
   },
   {
     type: ConnectionModelProviderTypeEnum.clickhouse,
@@ -500,6 +500,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Snowflake',
     iconName: 'snowflake',
     displayName: 'Snowflake'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Timescale',
+    iconName: 'timescale',
+    displayName: 'Timescale'
   },
   {
     type: ConnectionModelProviderTypeEnum.trino,

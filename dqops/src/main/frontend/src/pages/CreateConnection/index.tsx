@@ -9,6 +9,7 @@ import {
   DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
+  PostgresqlParametersSpecPostgresqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAwsAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum
@@ -50,7 +51,22 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.postgresql: {
-        copiedDatabase.postgresql = { port: '5432', properties: { '': '' } };
+        if (
+          nameOfDatabase?.toLowerCase() ===
+          PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql
+        ) {
+          copiedDatabase.postgresql = {
+            port: '5432',
+            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.postgresql,
+            properties: { '': '' }
+          };
+        } else {
+          copiedDatabase.postgresql = {
+            port: '5432',
+            postgresql_engine_type: PostgresqlParametersSpecPostgresqlEngineTypeEnum.timescale,
+            properties: { '': '' }
+          };
+        }
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {

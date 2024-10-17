@@ -75,6 +75,10 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Sslmode PostgreSQL connection parameter. The default value is disabled.")
     private PostgresqlSslMode sslmode = PostgresqlSslMode.disable;
 
+    @CommandLine.Option(names = {"--postgresql-engine"}, description = "Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE} configuration with a custom environment variable.")
+    private PostgresqlEngineType postgresqlEngineType;
+
     @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -197,6 +201,23 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     public void setSslmode(PostgresqlSslMode sslmode) {
         setDirtyIf(!Objects.equals(this.sslmode, sslmode));
         this.sslmode = sslmode;
+    }
+
+    /**
+     * Returns the Postgresql engine type.
+     * @return Postgresql engine type.
+     */
+    public PostgresqlEngineType getPostgresqlEngineType() {
+        return postgresqlEngineType;
+    }
+
+    /**
+     * Sets a Postgresql engine type.
+     * @param postgresqlEngineType Postgresql engine type.
+     */
+    public void setPostgresqlEngineType(PostgresqlEngineType postgresqlEngineType) {
+        setDirtyIf(!Objects.equals(this.postgresqlEngineType, postgresqlEngineType));
+        this.postgresqlEngineType = postgresqlEngineType;
     }
 
     /**
