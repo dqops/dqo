@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Historic data point that is passed to the rule when a rule requires past values.
@@ -36,9 +37,19 @@ public class HistoricDataPoint {
     private Instant timestampUtc;
 
     /**
+     * Timestamp (based on UTC timezone) of the previous readout as a Linux epoch time.
+     */
+    private long timestampUtcEpoch;
+
+    /**
      * Local date time of the previous readout (when the time zone is not important).
      */
     private LocalDateTime localDatetime;
+
+    /**
+     * Local date time of the previous readout (when the time zone is not important) as a Linux epoch time, but with time zone shift applied.
+     */
+    private long localDatetimeEpoch;
 
     /**
      * Negative index (like -1, -2...) of this value. This value says that the historic data point is -1, -2 or more time periods (e.q. days, hours) before the time window of the current sensor readout that is evaluated by a rule.
@@ -70,8 +81,17 @@ public class HistoricDataPoint {
      * @param expectedValue Previously predicted expected value.
      */
     public HistoricDataPoint(Instant timestampUtc, LocalDateTime localDatetime, int backPeriodsIndex, Double sensorReadout, Double expectedValue) {
-        this.timestampUtc = timestampUtc;
-        this.localDatetime = localDatetime;
+        // no longer returned
+
+//        this.timestampUtc = timestampUtc;
+//        this.localDatetime = localDatetime;
+        if (timestampUtc != null) {
+            this.timestampUtcEpoch = timestampUtc.toEpochMilli();
+        }
+        if (localDatetime != null) {
+            this.localDatetimeEpoch = localDatetime.toEpochSecond(ZoneOffset.UTC) * 1000L;
+        }
+
         this.backPeriodsIndex = backPeriodsIndex;
         this.sensorReadout = sensorReadout;
         this.expectedValue = expectedValue;
@@ -94,6 +114,22 @@ public class HistoricDataPoint {
     }
 
     /**
+     * Returns the time period as an UTC timestamp, in a form of an epoch.
+     * @return Time series.
+     */
+    public long getTimestampUtcEpoch() {
+        return timestampUtcEpoch;
+    }
+
+    /**
+     * Sets the time as an UTC timestamp (epoch).
+     * @param timestampUtcEpoch Timestamp as an UTC epoch.
+     */
+    public void setTimestampUtcEpoch(long timestampUtcEpoch) {
+        this.timestampUtcEpoch = timestampUtcEpoch;
+    }
+
+    /**
      * Returns a local date time of the previous readout.
      * @return Local date time of the readout.
      */
@@ -107,6 +143,22 @@ public class HistoricDataPoint {
      */
     public void setLocalDatetime(LocalDateTime localDatetime) {
         this.localDatetime = localDatetime;
+    }
+
+    /**
+     * Returns the time period as a Linux epoch time, but shifted by a time zone.
+     * @return Time period shifted by a time period.
+     */
+    public long getLocalDatetimeEpoch() {
+        return localDatetimeEpoch;
+    }
+
+    /**
+     * Sets the time period as an epoch time, but shifted by the time zone.
+     * @param localDatetimeEpoch Time period local time, as an epoch (millis).
+     */
+    public void setLocalDatetimeEpoch(long localDatetimeEpoch) {
+        this.localDatetimeEpoch = localDatetimeEpoch;
     }
 
     /**

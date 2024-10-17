@@ -26,8 +26,8 @@ import streaming
 
 
 class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
+    timestamp_utc_epoch: int
+    local_datetime_epoch: int
     back_periods_index: int
     sensor_readout: float
 
@@ -40,7 +40,7 @@ class RuleTimeWindowSettingsSpec:
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: any
-    time_period_local: datetime
+    time_period_local_epoch: int
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
@@ -52,7 +52,7 @@ class PythonRuleCallInput:
     dqo_home_path: str
     dqo_root_user_home_path: str
     rule_parameters: any
-    rule_module_last_modified: datetime
+    rule_module_last_modified_epoch: int
 
 
 class PythonRuleCallOutput:
@@ -68,7 +68,7 @@ class PythonRuleCallOutput:
 
 class LoadedModule:
     rule_module: any
-    rule_module_last_modified: datetime
+    rule_module_last_modified: int
 
     def __init__(self, rule_module, rule_module_last_modified):
         self.rule_module = rule_module
@@ -94,7 +94,7 @@ class RuleRunner:
         try:
             rule_module_path = request.rule_module_path
             rule_parameters = request.rule_parameters
-            rule_module_last_modified = request.rule_module_last_modified
+            rule_module_last_modified = request.rule_module_last_modified_epoch
 
             if rule_module_path not in self.rule_modules or self.rule_modules[rule_module_path].rule_module_last_modified != rule_module_last_modified:
                 rules_folder_index = rule_module_path.rfind('rules')

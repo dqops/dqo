@@ -35,7 +35,7 @@ public class PythonRuleCallInput {
     private String homePath;
     private String dqoHomePath;
     private String dqoRootUserHomePath;
-    private Instant ruleModuleLastModified;
+    private long ruleModuleLastModifiedEpoch;
     private RuleExecutionRunParameters ruleParameters;
 
     /**
@@ -122,16 +122,16 @@ public class PythonRuleCallInput {
      * Returns the timestamp when the Python rule file was last modified.
      * @return The last modification timestamp of the rule module.
      */
-    public Instant getRuleModuleLastModified() {
-        return ruleModuleLastModified;
+    public long getRuleModuleLastModifiedEpoch() {
+        return ruleModuleLastModifiedEpoch;
     }
 
     /**
      * Sets the timestamp when the rule module was modified for the last time.
-     * @param ruleModuleLastModified Rule module last modification timestamp.
+     * @param ruleModuleLastModifiedEpoch Rule module last modification timestamp.
      */
-    public void setRuleModuleLastModified(Instant ruleModuleLastModified) {
-        this.ruleModuleLastModified = ruleModuleLastModified;
+    public void setRuleModuleLastModifiedEpoch(long ruleModuleLastModifiedEpoch) {
+        this.ruleModuleLastModifiedEpoch = ruleModuleLastModifiedEpoch;
     }
 
     /**

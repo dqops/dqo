@@ -25,33 +25,33 @@ NOT_WHITESPACE = re.compile(r'[^\s]')
 
 class ObjectHook(object):
     def __init__(self, dict_):
-        if isinstance(self, datetime):
-            return
+        # if isinstance(self, datetime):
+        #     return
         self.__dict__.update(dict_)
-        for attr, value in dict_.items():
-            if isinstance(value, str):
-                try:
-                    instant_value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S%z')
-                    self.__setattr__(attr, instant_value)
-                    continue
-                except ValueError:
-                    pass
-
-                try:
-                    datetime_value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
-                    self.__setattr__(attr, datetime_value)
-                    continue
-                except ValueError:
-                    pass
+        # for attr, value in dict_.items():
+        #     if isinstance(value, str):
+        #         try:
+        #             instant_value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S%z')
+        #             self.__setattr__(attr, instant_value)
+        #             continue
+        #         except ValueError:
+        #             pass
+        #
+        #         try:
+        #             datetime_value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
+        #             self.__setattr__(attr, datetime_value)
+        #             continue
+        #         except ValueError:
+        #             pass
 
 
 class ObjectEncoder(JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, datetime):
-            if obj.tzinfo is None:
-                return obj.strftime('%Y-%m-%dT%H:%M:%S')
-            else:
-                return obj.strftime('%Y-%m-%dT%H:%M:%S%z')
+        # if isinstance(obj, datetime):
+        #     if obj.tzinfo is None:
+        #         return obj.strftime('%Y-%m-%dT%H:%M:%S')
+        #     else:
+        #         return obj.strftime('%Y-%m-%dT%H:%M:%S%z')
         return obj.__dict__
 
 
@@ -73,6 +73,10 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
             started_at = datetime.now()
         buf += block
         pos = 0
+
+        if block[-1] != ' ':
+            continue
+
         while True:
             match = NOT_WHITESPACE.search(buf, pos)
             if not match:

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Map;
 
 /**
@@ -35,7 +36,7 @@ public class RuleExecutionRunParameters {
     private Double actualValue;
     private Double expectedValue;
     private AbstractRuleParametersSpec parameters;
-    private LocalDateTime timePeriodLocal;
+    private long timePeriodLocalEpoch;
     private HistoricDataPoint[] previousReadouts;
     private RuleTimeWindowSettingsSpec timeWindow;
     private Map<String, String> configurationParameters;
@@ -66,7 +67,7 @@ public class RuleExecutionRunParameters {
         this.actualValue = actualValue;
         this.expectedValue = expectedValue;
         this.parameters = parameters;
-        this.timePeriodLocal = timePeriodLocal;
+        this.timePeriodLocalEpoch = timePeriodLocal != null ? timePeriodLocal.toEpochSecond(ZoneOffset.UTC) : 0L;
         this.previousReadouts = previousReadouts;
         this.timeWindow = timeWindow;
         this.configurationParameters = configurationParameters;
@@ -124,16 +125,16 @@ public class RuleExecutionRunParameters {
      * Returns the time period of the readout.
      * @return Timestamp (in the local time zone) of the readout.
      */
-    public LocalDateTime getTimePeriodLocal() {
-        return timePeriodLocal;
+    public long getTimePeriodLocalEpoch() {
+        return timePeriodLocalEpoch;
     }
 
     /**
      * Sets the local date time of the readout (without the time zone).
-     * @param timePeriodLocal Local date time of the readout.
+     * @param timePeriodLocalEpoch Local date time of the readout.
      */
-    public void setTimePeriodLocal(LocalDateTime timePeriodLocal) {
-        this.timePeriodLocal = timePeriodLocal;
+    public void setTimePeriodLocalEpoch(long timePeriodLocalEpoch) {
+        this.timePeriodLocalEpoch = timePeriodLocalEpoch;
     }
 
     /**
