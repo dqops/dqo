@@ -74,9 +74,10 @@ const JobItem = ({
                     ? 'pointer-events-none cursor-not-allowed'
                     : ''
                 )}
-                onClick={() =>
-                  cancelJob(job?.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
-                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  cancelJob(job?.jobId?.jobId ? Number(job.jobId?.jobId) : 0);
+                }}
               >
                 <SvgIcon name="canceljobs" />
               </div>
