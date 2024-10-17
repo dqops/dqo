@@ -126,7 +126,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT CATALOG_NAME AS catalog_name, SCHEMA_NAME as schema_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME NOT IN ('INFORMATION_SCHEMA', 'information_schema', 'system')");
+        sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME <> 'INFORMATION_SCHEMA'");
         String listSchemataSql = sqlBuilder.toString();
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
