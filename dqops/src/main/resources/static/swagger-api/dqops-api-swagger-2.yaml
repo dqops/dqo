@@ -39524,6 +39524,13 @@ definitions:
         - "require"
         - "verify-ca"
         - "verify-full"
+      postgresql_engine_type:
+        type: "string"
+        description: "Postgresql engine type. Supports also a ${POSTGRESQL_ENGINE}\
+          \ configuration with a custom environment variable."
+        enum:
+        - "postgresql"
+        - "timescale"
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\

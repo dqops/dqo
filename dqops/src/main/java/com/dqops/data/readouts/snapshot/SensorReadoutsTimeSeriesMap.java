@@ -49,7 +49,7 @@ public class SensorReadoutsTimeSeriesMap {
         this.firstLoadedMonth = firstLoadedMonth;
         this.lastLoadedMonth = lastLoadedMonth;
         this.allLoadedData = allLoadedData;
-        
+
         if (allLoadedData != null) {
             this.checkHashColumn = (LongColumn) allLoadedData.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
             this.dataStreamHashColumn = (LongColumn) TableColumnUtility.findColumn(allLoadedData,
@@ -74,15 +74,6 @@ public class SensorReadoutsTimeSeriesMap {
     public LocalDate getLastLoadedMonth() {
         return lastLoadedMonth;
     }
-
-//    /**
-//     * Returns a known time series for the given key or null when no historic data for this time series is present.
-//     * @param key Time series key.
-//     * @return Time series data or null.
-//     */
-//    public SensorReadoutsTimeSeriesData findTimeSeriesData(SensorReadoutTimeSeriesKey key) {
-//        return this.entries.get(key);
-//    }
 
     /**
      * Returns a known time series for the given key (check and dimension) or null when no historic data for this time series is present.
