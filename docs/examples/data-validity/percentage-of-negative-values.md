@@ -26,17 +26,15 @@ We want to verify the percentage of negative values on `Migrants__net_` column.
 We will verify the data using monitoring [negative_values_percent](../../checks/column/numeric/negative-values-percent.md) column check.
 Our goal is to verify that the percent of negative values in the `Migrants__net_` column does not exceed the set thresholds.
 
-In this example, we will set three maximum percentage thresholds levels for the check:
+In this example, we will set the maximum percentage threshold level for the check:
 
-- warning: 45.0
-- error: 55.0
-- fatal: 60.0
+- warning: 50.0
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of negative values exceed 45.0, a warning alert will be triggered.
+If the percentage of negative values exceed 50.0, a warning alert will be triggered.
 
 ## Data structure
 
@@ -64,7 +62,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-negative-percent-checks1.png){ loading=lazy; width="1200px" }
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-negative-percent-checks2.png){ loading=lazy; width="1200px" }
 
 1. Go to the **Monitoring** section.
 
@@ -76,7 +74,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Daily checks** tab.
+3. Select the **Daily checkpoints** tab.
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
@@ -87,21 +85,22 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-negative-percent-run-checks1.png){ loading=lazy; width="1200px" }
+![Run check](https://dqops.com/docs/images/examples/daily-negative-percent-run-checks2.png){ loading=lazy; width="1200px" }
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![Negative-percent check results](https://dqops.com/docs/images/examples/daily-negative-percent-checks-results1.png){ loading=lazy; width="1200px" }
+![Negative-percent check results](https://dqops.com/docs/images/examples/daily-negative-percent-checks-results2.png){ loading=lazy; width="1200px" }
 
-Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+Within the Results window, you will see four categories: **Check results**, **Sensor readouts**, **Execution errors**, and **Error sampling**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
+The Error sampling category displays examples of invalid values in the column.
 
-The actual value in this example is 48%, which is above the maximum threshold level set in the warning (45.0%).
+The actual value in this example is 56%, which is above the maximum threshold level set in the warning (50.0%).
 The check gives a warning result (notice the yellow square to the left of the check name).
 
 
@@ -112,30 +111,6 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-### **Review the results on the data quality dashboards**
-
-To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
-go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
-
-Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
-This dashboard summarizes results from executed checks categorized to Validity dimension.
- 
-This dashboard allows filtering data by:
- 
-* time window (from last 7 days to last 3 months)
-* connection,
-* schema,
-* data group,
-* check category,
-* check name,
-* stages,
-* priorities,
-* table,
-* column,
-* issue severity.
-
-![Negative-percent check results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-negative-percent-checks-results-on-current-validity-issues-dashboard.png){ loading=lazy; width="1200px" }
-
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
@@ -143,7 +118,7 @@ table, or individual check.
 
 After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
-![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png){ loading=lazy; width="1200px" }
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection2.png){ loading=lazy; width="1200px" }
 
 1. Navigate to the **Data Source** section.
 
@@ -151,7 +126,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 
 3. Click on the **Schedule** tab.
 
-4. Select the **Monitoring daily** tab
+4. Select the **Monitoring** tab
 
 5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
 
@@ -172,120 +147,65 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 
 The YAML configuration file stores both the table details and checks configurations.
 
-In this example, we have set three maximum percentage thresholds levels for the check:
+In this example, we have set the maximum percentage threshold level for the check:
 
-- warning: 45.0
-- error: 55.0
-- fatal: 60.0
+- warning: 50.0
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_negative_values_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="16-29"
+```yaml hl_lines="36-41"
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  columns:
-    Country__or_dependency_:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    Land_Area__Km___:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-    Migrants__net_:
-      type_snapshot:
-        column_type: INT64
-        nullable: true
-      monitoring_checks:
-        daily:
-          numeric:
-            daily_negative_values_percent:
-              warning:
-                max_percent: 45.0
-              error:
-                max_percent: 55.0
-              fatal:
-                max_percent: 60.0
-```
-
-## Run the checks in the example using the DQOps Shell
-
-A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-The percentage of negative values in the `Migrants__net_` column is above 45.0 and the check raised warning.
-
-```
-Check evaluation summary per table:
-+----------------+-----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection      |Table                                          |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+----------------+-----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|negative_values_percent|kaggle_worldpopulation.world_population_dataset|1     |1             |1            |1       |0     |0           |0               |
-+----------------+-----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection negative_values_percent (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`Migrants__net_` < 0 THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `dqo-ai-testing`.`kaggle_worldpopulation`.`world_population_dataset` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-
-You can also see the results returned by the sensor. The actual value in this example is 48.08510638297872, which is above the maximum 
-threshold level set in the warning (45.0).
-
-```
-**************************************************
-Finished executing a sensor for a check negative_values_percent on the table kaggle_worldpopulation.world_population_dataset using a sensor definition column/numeric/negative_values_percent, sensor result count: 1
-
-Results returned by the sensor:
-+-----------------+------------------------+------------------------+
-|actual_value     |time_period             |time_period_utc         |
-+-----------------+------------------------+------------------------+
-|48.08510638297872|2023-05-16T08:45:11.722Z|2023-05-16T08:45:11.722Z|
-+-----------------+------------------------+------------------------+
-**************************************************
+   incremental_time_window:
+      daily_partitioning_recent_days: 7
+      monthly_partitioning_recent_months: 1
+   columns:
+      Country__or_dependency_:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
+      Population__2022_:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      Yearly_change:
+         type_snapshot:
+            column_type: FLOAT64
+            nullable: true
+      Net_change:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      Density__P_Km___:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      Land_Area__Km___:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+      Migrants__net_:
+         type_snapshot:
+            column_type: INT64
+            nullable: true
+         monitoring_checks:
+            daily:
+               numeric:
+                  daily_negative_values_percent:
+                     warning:
+                        max_percent: 50.0
+      Fert__Rate:
+         type_snapshot:
+            column_type: STRING
+            nullable: true
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
 By using the [negative_values_percent](../../checks/column/numeric/negative-values-percent.md) column check, we can monitor that
-the percentage of negative values in a column does not exceed the maximum accepted percentage. If it does, you will get a warning, error or fatal result.
+the percentage of negative values in a column does not exceed the maximum accepted percentage. If it does, you will get a warning result.
 
 ## Next steps
 
