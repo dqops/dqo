@@ -197,10 +197,10 @@ public class QuestDbConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("date");
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("time without time zone");
+            return new ColumnTypeSnapshotSpec("time");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("timestamp without time zone");
+            return new ColumnTypeSnapshotSpec("timestamp");
         }
         else if (columnType == ColumnType.INSTANT) {
             return new ColumnTypeSnapshotSpec("timestamp with time zone");

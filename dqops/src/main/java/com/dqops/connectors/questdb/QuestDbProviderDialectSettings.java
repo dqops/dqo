@@ -47,21 +47,21 @@ public class QuestDbProviderDialectSettings extends ProviderDialectSettings {
      * @param columnTypeSnapshot Column type snapshot.
      * @return Data type category.
      */
-    @Override
-    public DataTypeCategory detectColumnType(ColumnTypeSnapshotSpec columnTypeSnapshot) {
-        if (columnTypeSnapshot == null || columnTypeSnapshot.getColumnType() == null) {
-            return null;
-        }
-
-        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
-        if (StringCheckUtility.containsAny(columnType, "timestamp with time zone")) {
-            return DataTypeCategory.datetime_timestamp;
-        }
-
-        if (StringCheckUtility.containsAny(columnType, "timestamp without time zone")) {
-            return DataTypeCategory.datetime_datetime;
-        }
-
-        return super.detectColumnType(columnTypeSnapshot);
-    }
+//    @Override
+//    public DataTypeCategory detectColumnType(ColumnTypeSnapshotSpec columnTypeSnapshot) {
+//        if (columnTypeSnapshot == null || columnTypeSnapshot.getColumnType() == null) {
+//            return null;
+//        }
+//
+//        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
+//        if (StringCheckUtility.containsAny(columnType, "timestamp with time zone")) {
+//            return DataTypeCategory.datetime_timestamp;
+//        }
+//
+//        if (StringCheckUtility.containsAny(columnType, "timestamp without time zone")) {
+//            return DataTypeCategory.datetime_datetime;
+//        }
+//
+//        return super.detectColumnType(columnTypeSnapshot);
+//    }
 }
