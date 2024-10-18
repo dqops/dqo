@@ -225,8 +225,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
 
         SensorReadoutsSnapshot outputSensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
-        SensorReadoutsSnapshot historicSensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName, physicalTableName,
-                SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_HISTORIC_DATA, userDomainIdentity);
 
         Table allNormalizedSensorResultsTable = outputSensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
         IntColumn severityColumnTemporary = IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
@@ -246,13 +244,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         List<AbstractCheckSpec<?, ?, ?, ?>> singleTableChecks = checks.stream().filter(c -> !c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
-                checkExecutionSummary, singleTableChecks, tableSpec, historicSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
+                checkExecutionSummary, singleTableChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples);
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeTableComparisonChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
-                checkExecutionSummary, tableComparisonChecks, tableSpec, historicSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
+                checkExecutionSummary, tableComparisonChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
 
         if (outputSensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
