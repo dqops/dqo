@@ -1,6 +1,6 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
 SELECT
-    SUM(
+    COALESCE(SUM(
         CASE
             WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
             AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -8,7 +8,7 @@ SELECT
                 THEN 1
             ELSE 0
         END
-    ) AS actual_value
+    ), 0) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM(

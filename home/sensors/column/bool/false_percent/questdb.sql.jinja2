@@ -1,33 +1,22 @@
 {% import '/dialects/questdb.sql.jinja2' as lib with context -%}
-WITH data_table AS (
-  SELECT 100.0 * SUM(
-              CASE
-                  WHEN NOT {{ lib.render_target_column('analyzed_table') }}
-                      THEN 1
-                  ELSE 0
-              END
-          ) / COUNT(CASE WHEN {{ lib.render_target_column('analyzed_table') }} = true THEN 1 ELSE 0 END) AS actual_value
-      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-  FROM (
+
+SELECT
+    COALESCE(100.0 * SUM(
+            CASE WHEN NOT {{ lib.render_target_column('analyzed_table') }}
+                THEN 1
+                ELSE 0
+            END
+        ) / COUNT(CASE WHEN {{ lib.render_target_column('analyzed_table') }} = true THEN 1 ELSE 0 END), 100.0)
+        AS actual_value
+    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+FROM (
       SELECT
           original_table.*
           {{- lib.render_data_grouping_projections('original_table') }}
           {{- lib.render_time_dimension_projection('original_table') }}
       FROM {{ lib.render_target_table() }} original_table
-  ) AS analyzed_table
-  {{- lib.render_where_clause() -}}
-  {{- lib.render_group_by() -}}
-  {{- lib.render_order_by() -}}
-),
-condition_table AS (
-    SELECT COUNT(CASE WHEN {{ lib.render_target_column('analyzed_table') }} = true THEN 1 ELSE 0 END) AS actual_value
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-)
-SELECT
-    CASE
-        WHEN t2.actual_value = 0 THEN 100.0
-        ELSE t1.actual_value
-    END AS actual_value
-FROM data_table as t1
-cross join condition_table as t2
+) AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
