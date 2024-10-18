@@ -125,9 +125,11 @@ public class SensorReadoutsTimeSeriesMap {
             }
         }
 
-        SensorReadoutsTimeSeriesData timeSeriesDataSlice = new SensorReadoutsTimeSeriesData(key, allTimeSeriesData);
+        if (allTimeSeriesData == null) {
+            return null;
+        }
 
-        // TODO: we could store it in the cache.. but not for the moment, maybe for a different use case
+        SensorReadoutsTimeSeriesData timeSeriesDataSlice = new SensorReadoutsTimeSeriesData(key, allTimeSeriesData);  // TODO: we could store it in the cache.. but not for the moment, maybe for a different use case
         return timeSeriesDataSlice;
     }
 

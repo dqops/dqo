@@ -21,3 +21,4 @@ spec:
     default_value: 0.5
   parameters:
     degrees_of_freedom: 5
+    anderson_darling_significance_level: 1.0
