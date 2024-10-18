@@ -428,10 +428,10 @@ const ContextMenu = ({ node }: ContextMenuProps) => {
             checkTypes === CheckTypes.SOURCES && (
               <div
                 className={clsx(
-                  'text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded',
+                  'cursor-pointer hover:bg-gray-100 hover:text-gray-900 px-4 py-2 rounded',
                   userProfile &&
-                    !userProfile.can_synchronize_to_data_catalog &&
-                    'bg-gray-100'
+                    !userProfile.can_synchronize_to_data_catalog ? 
+                    'text-gray-500' : 'text-gray-900'
                 )}
                 onClick={() =>
                   userProfile.can_synchronize_to_data_catalog

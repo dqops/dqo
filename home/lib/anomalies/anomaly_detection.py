@@ -45,10 +45,34 @@ def find_first_index_greater_or_equal(data, x):
     return len(data) - 1
 
 
-def test_significance(values_array, significance_level):
+def test_significance_anderson(values_array, significance_level):
     result = scipy.stats.anderson(values_array, dist='norm')
     index = find_first_index_greater_or_equal(result.significance_level.tolist(), significance_level)
     return result.statistic <= result.critical_values[index]
+
+
+def test_significance_kolmogorov(values_array, significance_level):
+    statistic, p_value = scipy.stats.kstest(values_array, 'norm')
+    return p_value >= significance_level / 100.0
+
+
+def test_significance(values: list[float], parameters: RuleExecutionRunParameters):
+    anderson_significance_level = float(parameters.configuration_parameters.anderson_significance_level) \
+        if hasattr(parameters.configuration_parameters, 'anderson_significance_level') else None
+    kolmogorov_significance_level = float(parameters.configuration_parameters.kolmogorov_significance_level) \
+        if hasattr(parameters.configuration_parameters, 'kolmogorov_significance_level') else None
+    if anderson_significance_level is None and kolmogorov_significance_level is None:
+        return True
+
+    values_array = np.array(values, dtype=float)
+
+    if anderson_significance_level is not None:
+        return test_significance_anderson(values_array, anderson_significance_level)
+
+    if kolmogorov_significance_level is not None:
+        return test_significance_kolmogorov(values_array, kolmogorov_significance_level)
+
+    return True
 
 
 def detect_upper_bound_anomaly(values: list[float], median: float, tail: float,
@@ -58,13 +82,11 @@ def detect_upper_bound_anomaly(values: list[float], median: float, tail: float,
     values_median = np.median(values_array)
     values_std = scipy.stats.tstd(values_array)
     df = float(parameters.configuration_parameters.degrees_of_freedom)
-    significance_level = float(parameters.configuration_parameters.anderson_darling_significance_level) \
-        if hasattr(parameters.configuration_parameters, 'anderson_darling_significance_level') else None
 
     if float(values_std) == 0:
         return float(values_median)
     else:
-        if significance_level is not None and not test_significance(values_array, significance_level):
+        if not test_significance(values, parameters):
             return None
 
         # Assumption: the historical data follows t-student distribution
@@ -78,13 +100,11 @@ def detect_lower_bound_anomaly(values: list[float], median: float, tail: float,
     values_median = np.median(values_array)
     values_std = scipy.stats.tstd(values_array)
     df = float(parameters.configuration_parameters.degrees_of_freedom)
-    significance_level = float(parameters.configuration_parameters.anderson_darling_significance_level) \
-        if hasattr(parameters.configuration_parameters, 'anderson_darling_significance_level') else None
 
     if float(values_std) == 0:
         return float(values_median)
     else:
-        if significance_level is not None and not test_significance(values_array, significance_level):
+        if not test_significance(values, parameters):
             return None
 
         # Assumption: the historical data follows t-student distribution

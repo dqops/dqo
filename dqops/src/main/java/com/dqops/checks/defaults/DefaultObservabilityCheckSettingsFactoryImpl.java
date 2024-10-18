@@ -72,9 +72,14 @@ import java.util.List;
 @Component
 public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObservabilityCheckSettingsFactory {
     /**
-     * The default percentage of anomalies that are configured for anomaly detection checks.
+     * The default percentage of anomalies that are configured for anomaly detection checks (nulls, distinct).
      */
     public static double DEFAULT_ANOMALY_PERCENT_WARNING = 0.1;
+
+    /**
+     * The default percentage of anomalies that are configured for anomaly detection checks of numeric values.
+     */
+    public static double DEFAULT_NUMERIC_ANOMALY_PERCENT_WARNING = 0.05;
 
 
     /**
@@ -305,10 +310,10 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyMonitoringCheckCategoriesSpec() {{
                     setAnomaly(new ColumnAnomalyDailyMonitoringChecksSpec() {{
                         setDailyMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_NUMERIC_ANOMALY_PERCENT_WARNING));
                         }});
                         setDailySumAnomaly(new ColumnSumAnomalyDifferencingCheckSpec() {{
-                            setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_NUMERIC_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});
@@ -322,10 +327,10 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
                 setDaily(new ColumnDailyPartitionedCheckCategoriesSpec() {{
                     setAnomaly(new ColumnAnomalyDailyPartitionedChecksSpec() {{
                         setDailyPartitionMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_NUMERIC_ANOMALY_PERCENT_WARNING));
                         }});
                         setDailyPartitionSumAnomaly(new ColumnSumAnomalyStationaryPartitionCheckSpec() {{
-                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_ANOMALY_PERCENT_WARNING));
+                            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec(DEFAULT_NUMERIC_ANOMALY_PERCENT_WARNING));
                         }});
                     }});
                 }});

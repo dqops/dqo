@@ -36,7 +36,8 @@ class RuleTimeWindowSettingsSpec:
 
 class AnomalyConfigurationParameters:
     degrees_of_freedom: float
-    significance_level: float
+    anderson_significance_level: float
+    kolmogorov_significance_level: float
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
