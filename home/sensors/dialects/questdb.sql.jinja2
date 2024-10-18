@@ -122,13 +122,13 @@
 
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        DATE_TRUNC('YEAR', CAST({{value}} AS date))
+        DATE_TRUNC('year', CAST({{value}} AS date))
     {%- elif part == 'quarter' -%}
-        DATE_TRUNC('QUARTER', CAST({{value}} AS date))
+        DATE_TRUNC('quarter', CAST({{value}} AS date))
     {%- elif part == 'month' -%}
-        DATE_TRUNC('MONTH', CAST({{value}} AS date))
+        DATE_TRUNC('month', CAST({{value}} AS date))
     {%- elif part == 'week' -%}
-        DATE_TRUNC('WEEK', CAST({{value}} AS date))
+        DATE_TRUNC('week', CAST({{value}} AS date))
     {%- elif part == 'day' -%}
         {%- if datatype | upper == 'DATE' -%}
             {{value}}
@@ -136,7 +136,7 @@
             CAST({{value}} AS date)
         {%- endif -%}
     {%- elif part == 'hour' -%}
-        DATE_TRUNC('HOUR', CAST({{value}} AS datetime))
+        DATE_TRUNC('hour', CAST({{value}} AS datetime))
     {%- elif part == 'millisecond' -%}
         CAST({{value}} AS datetime)
     {%- else -%}
@@ -172,9 +172,9 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
+                {{ date_trunc('NOW()', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
             {%- else -%}
-                LOCALTIMESTAMP
+                NOW()
             {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(render_column(time_series.timestamp_column, table_alias_prefix), time_series.time_gradient, timestamp_column_data_type) }}
@@ -188,9 +188,9 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
+                {{ date_trunc_utc('NOW()', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
             {%- else -%}
-                LOCALTIMESTAMP
+                NOW()
             {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc_utc(render_column(time_series.timestamp_column, table_alias_prefix), time_series.time_gradient, timestamp_column_data_type) }}
@@ -252,31 +252,31 @@
             {{ prefix_to_render -}}
             {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                {{ date_trunc_utc('LOCALTIMESTAMP', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+                {{ date_trunc_utc('NOW()', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
             {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST(LOCALTIMESTAMP AS DATE)
+                CAST(NOW() AS DATE)
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST(LOCALTIMESTAMP AS TIMESTAMP WITHOUT TIME ZONE)
+                CAST(NOW() AS TIMESTAMP)
             {%- else -%}
                 CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' < ' -}}
-                CAST(LOCALTIMESTAMP AS DATE)
+                CAST(NOW() AS DATE)
             {%- endif -%}
         {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
             {{ prefix_to_render -}}
             {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS TIMESTAMP WITH TIME ZONE)
+                CAST({{ date_trunc('NOW()', 'month', timestamp_column_data_type) }} AS TIMESTAMP) -- questdb does not store timezone in timestamp
             {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS DATE)
+                CAST({{ date_trunc('NOW()', 'month', timestamp_column_data_type) }} AS DATE)
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS TIMESTAMP WITHOUT TIME ZONE)
+                CAST({{ date_trunc('NOW()', 'month', timestamp_column_data_type) }} AS TIMESTAMP)
             {%- else -%}
                 CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS DATE)
+                CAST({{ date_trunc('NOW()', 'month', timestamp_column_data_type) }} AS DATE)
             {%- endif -%}
         {%- endif -%}
     {%- endif -%}
@@ -298,32 +298,32 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITH TIME ZONE)
+                     DATEADD('d', -{{time_window_filter.daily_partitioning_recent_days}}, CAST(CAST(NOW() AS DATE)) AS TIMESTAMP)  -- timezone is not stored in questdb
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}}
+                     DATEADD('d', -{{time_window_filter.daily_partitioning_recent_days}}, CAST(NOW() AS DATE))
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST(CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITHOUT TIME ZONE)
+                     CAST(DATEADD('d', -{{time_window_filter.daily_partitioning_recent_days}}, CAST(NOW() AS DATE)) AS TIMESTAMP)
                 {%- else -%}
                      CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' >= ' -}}
-                     CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}}
+                     CAST(DATEADD('d', -{{time_window_filter.daily_partitioning_recent_days}}, NOW()) AS DATE)
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
+                     CAST(DATEADD('M', -{{time_window_filter.monthly_partitioning_recent_months}}, {{ date_trunc('NOW()', 'month', timestamp_column_data_type) }}) AS TIMESTAMP) -- timezone is not stored in questdb
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
+                     CAST(DATEADD('M', -{{time_window_filter.monthly_partitioning_recent_months}}, {{ date_trunc('NOW()', 'month', timestamp_column_data_type) }}) AS DATE)
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ render_column(time_series.timestamp_column, table_alias_prefix) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
+                     CAST(DATEADD('M', -{{time_window_filter.monthly_partitioning_recent_months}}, {{ date_trunc('NOW()', 'month', timestamp_column_data_type) }}) AS TIMESTAMP)
                 {%- else -%}
                      CAST({{ render_column(time_series.timestamp_column, table_alias_prefix) }} AS DATE){{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
+                     CAST(DATEADD('M', -{{time_window_filter.monthly_partitioning_recent_months}}, {{ date_trunc('NOW()', 'month', timestamp_column_data_type) }}) AS DATE)
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- else -%}
