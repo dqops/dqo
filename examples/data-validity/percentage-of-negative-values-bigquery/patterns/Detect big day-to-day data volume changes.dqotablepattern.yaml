@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableLevelDataQualityPolicyYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  priority: 1000
+  description: Monitors data volume of the whole table daily and raises an issue when
+    the volume has increased of decreased significantly.
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count_change:
+          warning:
+            max_percent: 10.0
