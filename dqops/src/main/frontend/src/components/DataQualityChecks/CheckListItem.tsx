@@ -155,29 +155,31 @@ const CheckListItem = ({
     }
     if (check?.configured) {
       toggleExpand();
-      const initTabs = isDefaultEditing ? [
-        {
-          label: 'Check Settings',
-          value: 'check-settings'
-        },
-        {
-          label: 'Comments',
-          value: 'comments'
-        }
-      ] : [
-        {
-          label: 'Check Settings',
-          value: 'check-settings'
-        },
-        {
-          label: 'Schedule override',
-          value: 'schedule'
-        },
-        {
-          label: 'Comments',
-          value: 'comments'
-        }
-      ];
+      const initTabs = isDefaultEditing
+        ? [
+            {
+              label: 'Check Settings',
+              value: 'check-settings'
+            },
+            {
+              label: 'Comments',
+              value: 'comments'
+            }
+          ]
+        : [
+            {
+              label: 'Check Settings',
+              value: 'check-settings'
+            },
+            {
+              label: 'Schedule override',
+              value: 'schedule'
+            },
+            {
+              label: 'Comments',
+              value: 'comments'
+            }
+          ];
       setTabs(initTabs);
       if (typeof activeTab === 'string') {
         setActiveTab(activeTab);
@@ -408,13 +410,26 @@ const CheckListItem = ({
                   )}
                 </div>
               ) : (
-                <div>
-                  <Switch
-                    checked={!!check?.configured}
-                    checkedByDefault={!!check?.default_check}
-                    onChange={onChangeConfigured}
-                  />
-                </div>
+                <Tooltip
+                  content={
+                    check?.configured ? (
+                      'Check activated manually or with rule miner'
+                    ) : check?.default_check ? (
+                      <div>Check activated with data quality policy</div>
+                    ) : (
+                      'Deactivated check'
+                    )
+                  }
+                  // add link to data policies
+                >
+                  <div>
+                    <Switch
+                      checked={!!check?.configured}
+                      checkedByDefault={!!check?.default_check}
+                      onChange={onChangeConfigured}
+                    />
+                  </div>
+                </Tooltip>
               ))}
             {isAlreadyDeleted !== true && (
               <Tooltip
