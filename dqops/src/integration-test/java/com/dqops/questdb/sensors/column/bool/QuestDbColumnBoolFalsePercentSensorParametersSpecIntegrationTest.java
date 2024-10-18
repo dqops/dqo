@@ -48,7 +48,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.connectors.questdb.QuestDbConnectionSpecObjectMother;
 
 @SpringBootTest
-public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest  extends BaseQuestDbIntegrationTest {
+public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends BaseQuestDbIntegrationTest {
     private ColumnBoolFalsePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnFalsePercentCheckSpec checkSpec;
@@ -95,7 +95,8 @@ public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest  e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0),0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(87.096, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -108,7 +109,8 @@ public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest  e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0),0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(87.096, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -121,7 +123,8 @@ public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest  e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0),0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(87.096, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -134,7 +137,8 @@ public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest  e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(85.714, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -147,7 +151,8 @@ public class QuestDbColumnBoolFalsePercentSensorParametersSpecIntegrationTest  e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0),0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(87.096, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test

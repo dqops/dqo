@@ -95,7 +95,8 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(12.903, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -108,7 +109,8 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(12.903, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -121,7 +123,8 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(12.903, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -134,7 +137,8 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, (double) resultTable.column(0).get(0), 0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(14.285, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -147,7 +151,8 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
+        // boolean is not nullable, nulls are converted as false values
+        Assertions.assertEquals(12.903, ValueConverter.toDouble(resultTable.column(0).get(0)),0.001);
     }
 
     @Test
@@ -158,7 +163,7 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals(27, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
@@ -179,7 +184,7 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals(27, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -213,7 +218,7 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals(27, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -229,7 +234,7 @@ public class QuestDbColumnBoolTruePercentSensorParametersSpecIntegrationTest ext
                 Stream.of(resultTable.column("grouping_level_1").asObjectArray())
                         .map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(2, groupingLevel1Values.size());
+        Assertions.assertEquals(3, groupingLevel1Values.size());
         Assertions.assertTrue(groupingLevel1Values.contains(0));
         Assertions.assertTrue(groupingLevel1Values.contains(1));
 
