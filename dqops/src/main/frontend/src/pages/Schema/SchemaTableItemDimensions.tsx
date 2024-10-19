@@ -45,16 +45,18 @@ export default function SchemaTableItemDimensions({
     <>
       {' '}
       <td className="pl-4 text-[10px]">
-        <div
-          className={clsx(
-            'w-[35px] h-4.5 text-center flex items-center justify-center',
-            getColor(item.data_quality_status?.current_severity)
-          )}
-        >
-          {item.data_quality_status?.data_quality_kpi !== undefined
-            ? Math.round(item.data_quality_status?.data_quality_kpi) + '%'
-            : ''}
-        </div>
+        <Tooltip content={renderSecondLevelTooltip(item.data_quality_status)}>
+          <div
+            className={clsx(
+              'w-[35px] h-4.5 text-center flex items-center justify-center',
+              getColor(item.data_quality_status?.current_severity)
+            )}
+          >
+            {item.data_quality_status?.data_quality_kpi !== undefined
+              ? Math.round(item.data_quality_status?.data_quality_kpi) + '%'
+              : ''}
+          </div>
+        </Tooltip>
       </td>
       {basicDimensionTypes.map((dimType) => {
         const dimensionKey = getBasicDimmensionsKeys(
@@ -176,7 +178,7 @@ const renderSecondLevelTooltip = (
 ) => {
   if (data && data.last_check_executed_at) {
     return (
-      <div>
+      <div className="w-85">
         <div className="flex gap-x-2">
           <div className="w-49">Last executed at:</div>
           <div>
@@ -201,10 +203,12 @@ const renderSecondLevelTooltip = (
                 : '-')}
           </div>
         </div>
-        <div className="flex gap-x-2">
-          <div className="w-49">Quality dimension:</div>
-          <div>{data?.dimension}</div>
-        </div>
+        {data.dimension && (
+          <div className="flex gap-x-2">
+            <div className="w-49">Quality dimension:</div>
+            <div>{data?.dimension}</div>
+          </div>
+        )}
         <div className="flex gap-x-2">
           <div className="w-49">Data quality KPI:</div>
           <div>
