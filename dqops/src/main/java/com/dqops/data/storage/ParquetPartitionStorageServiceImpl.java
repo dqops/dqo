@@ -497,12 +497,15 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     try {
                         Files.write(targetParquetFilePath, parquetFileContent);
                     } catch (Exception ex) {
+                        this.localFileSystemCache.removeFile(targetParquetFilePath);
                         if (targetParquetFile.exists()) {
                             targetParquetFile.delete();
                         }
                         throw ex;
                     } finally {
-                        this.localFileSystemCache.removeFile(targetParquetFilePath);
+                        long lastSavedTimestamp = targetParquetFile.lastModified();
+                        LoadedMonthlyPartition newPartitionObject = new LoadedMonthlyPartition(loadedPartition.getPartitionId(), lastSavedTimestamp, dataToSave);
+                        this.localFileSystemCache.storeParquetFile(targetParquetFilePath, newPartitionObject);
                     }
 
                     return true;

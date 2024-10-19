@@ -863,7 +863,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         statusModel.setSchemaName(physicalTableName.getSchemaName());
         statusModel.setTableName(physicalTableName.getTableName());
 
-        int lastMonths = tableCurrentDataQualityStatusFilterParameters.getLastMonths() == null ? 3 :
+        int lastMonths = tableCurrentDataQualityStatusFilterParameters.getLastMonths() == null ?
+                TableCurrentDataQualityStatusFilterParameters.DEFAULT_PREVIOUS_MONTHS :
                 tableCurrentDataQualityStatusFilterParameters.getLastMonths();
         if (tableCurrentDataQualityStatusFilterParameters.getSince() != null) {
             ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();

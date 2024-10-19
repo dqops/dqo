@@ -308,9 +308,11 @@ public class TableDataSnapshot {
             return this.columnNames;
         }
 
-        Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
-        String[] columnNamesInFullTable = emptyTableSample.columnNames().toArray(String[]::new);
-        return columnNamesInFullTable;
+        return null;
+
+//        Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
+//        String[] columnNamesInFullTable = emptyTableSample.columnNames().toArray(String[]::new);
+//        return columnNamesInFullTable;
     }
 
     /**
