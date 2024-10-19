@@ -23,6 +23,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.progress.*;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.utils.serialization.JsonSerializer;
+import com.dqops.utils.tables.TableCopyUtility;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -116,7 +117,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
 
         this.terminalWriter.writeLine("");
         this.terminalWriter.writeLine("Rule evaluation results:");
-        Table tableSample = (evaluatedRulesCount > 10) ? ruleResultsTable.first(10) : ruleResultsTable.copy();
+        Table tableSample = (evaluatedRulesCount > 10) ? ruleResultsTable.first(10) : TableCopyUtility.fastTableCopy(ruleResultsTable);
         tableSample.removeColumnsWithMissingValues();
         this.terminalWriter.writeTable(tableSample, true);
 

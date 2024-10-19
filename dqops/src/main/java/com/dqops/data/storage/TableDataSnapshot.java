@@ -23,6 +23,7 @@ import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import jakarta.validation.constraints.NotNull;
@@ -51,6 +52,7 @@ public class TableDataSnapshot {
     private final TableDataChanges tableDataChanges;
     private final Table newResultsTable;
     private final String[] columnNames;
+    private final String[] allColumnNames;
     private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
     private LocalDate firstLoadedMonth;
     private LocalDate lastLoadedMonth;
@@ -79,6 +81,7 @@ public class TableDataSnapshot {
         this.newResultsTable = newResults;
         this.tableDataChanges = new TableDataChanges(newResults);
         this.columnNames = null;
+        this.allColumnNames = newResults != null ? newResults.columnNames().toArray(String[]::new) : null;
     }
 
     /**
@@ -107,6 +110,7 @@ public class TableDataSnapshot {
         this.newResultsTable = newResultsTemplate;
         this.tableDataChanges = null;
         this.columnNames = columnNames;
+        this.allColumnNames = null;
     }
 
     /**
@@ -197,7 +201,7 @@ public class TableDataSnapshot {
             for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
                 if (loadedMonthlyPartition.getData() != null) {
                     if (allData == null) {
-                        allData = loadedMonthlyPartition.getData().copy();
+                        allData = TableCopyUtility.fastTableCopy(loadedMonthlyPartition.getData());
                     }
                     else {
                         allData.append(loadedMonthlyPartition.getData());
@@ -266,25 +270,29 @@ public class TableDataSnapshot {
                 Table updatedPartitionData = null;
 
                 Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
-                for (Column<?> expectedColumn : emptyTableSample.columns()) {
-                    if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
+                for (String columnName : this.allColumnNames) {
+                    if (!columnNamesInPartitionData.contains(columnName)) {
+                        Column<?> expectedColumn = emptyTableSample.column(columnName);
                         Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
                         if (updatedPartitionData == null) {
-                            updatedPartitionData = partitionData.copy();
+                            updatedPartitionData = TableCopyUtility.fastTableCopy(partitionData);
                         }
                         updatedPartitionData.addColumns(emptyColumnToAdd);
                     }
                 }
 
-                if ((updatedPartitionData == null && partitionData.columnCount() != emptyTableSample.columnCount()) ||
-                        (updatedPartitionData != null && updatedPartitionData.columnCount() != emptyTableSample.columnCount())) {
+                if ((updatedPartitionData == null && partitionData.columnCount() != this.allColumnNames.length) ||
+                        (updatedPartitionData != null && updatedPartitionData.columnCount() != this.allColumnNames.length)) {
                     // remove old columns
-                    Set<String> expectedColumnNames = new LinkedHashSet<>(emptyTableSample.columnNames());
+                    Set<String> expectedColumnNames = new LinkedHashSet<>();
+                    for (String columnName : this.allColumnNames) {
+                        expectedColumnNames.add(columnName);
+                    }
 
                     for (Column<?> existingColumn : new ArrayList<>(partitionData.columns())) {
                         if (!expectedColumnNames.contains(existingColumn.name())) {
                             if (updatedPartitionData == null) {
-                                updatedPartitionData = partitionData.copy();
+                                updatedPartitionData = TableCopyUtility.fastTableCopy(partitionData);
                             }
                             updatedPartitionData.removeColumns(existingColumn);
                         }
@@ -309,10 +317,6 @@ public class TableDataSnapshot {
         }
 
         return null;
-
-//        Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
-//        String[] columnNamesInFullTable = emptyTableSample.columnNames().toArray(String[]::new);
-//        return columnNamesInFullTable;
     }
 
     /**

@@ -34,6 +34,7 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -107,7 +108,8 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
             Table filteredTableByDataGroup = filteredTable;
             if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
                 TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+                filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                        dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
             if (filteredTableByDataGroup.isEmpty()) {
@@ -295,7 +297,7 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
         TextColumn columnNameColumn = sourceTable.textColumn(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -343,7 +345,7 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
             rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 

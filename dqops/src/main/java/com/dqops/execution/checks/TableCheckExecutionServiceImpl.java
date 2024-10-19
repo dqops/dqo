@@ -365,7 +365,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     LongColumn checkHashColumn = sensorReadoutColumns.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
                     DateTimeColumn timePeriodColumn = sensorReadoutColumns.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-                    Table filteredResults = sensorReadoutColumns.where(checkHashColumn.isIn(checkHash).and(
+                    Table filteredResults = TableCopyUtility.copyTableFiltered(sensorReadoutColumns, checkHashColumn.isIn(checkHash).and(
                             timePeriodColumn.isBetweenIncluding(timePeriodStart, timePeriodEnd)));
                     if (filteredResults.rowCount() == 0) {
                         continue; // no past data

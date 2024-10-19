@@ -340,7 +340,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Table filteredTableByDataGroup = filteredTable;
             if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
                 TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+                filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                        dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
             if (filteredTableByDataGroup.isEmpty()) {
@@ -432,7 +433,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Table filteredTableByDataGroup = filteredTable;
             if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
                 TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+                filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                        dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
             }
 
             if (filteredTableByDataGroup.isEmpty()) {
@@ -903,7 +905,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Table filteredTableByDataGroup = filteredTable;
                 if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
                     TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                    filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+                    filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                            dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
@@ -938,7 +941,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Table filteredTableByDataGroup = filteredTable;
                 if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
                     TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-                    filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+                    filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTable,
+                            dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
                 }
 
                 calculateStatus(filteredTableByDataGroup, statusModel);
@@ -1230,7 +1234,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -1289,7 +1293,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             rowSelection = rowSelection.and(dimensionColumn.isEqualTo(qualityDimension));
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -1361,7 +1365,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         rowSelection = filterCategoryAndTableComparison(sourceTable, rowSelection, checkCategory, tableComparison);
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -1400,7 +1404,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 

@@ -37,6 +37,7 @@ import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageSe
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.tables.TableCompressUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
@@ -394,7 +395,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                         .and(timePeriodColumn.isBefore(startOfNextMonth));
 
                 if (selectionOfRowsInPartitionMonth.size() > 0) {
-                    newOrChangedDataPartitionMonth = tableDataChanges.getNewOrChangedRows().where(selectionOfRowsInPartitionMonth);
+                    newOrChangedDataPartitionMonth = TableCopyUtility.copyTableFiltered(tableDataChanges.getNewOrChangedRows(), selectionOfRowsInPartitionMonth);
                 }
             }
 
@@ -425,7 +426,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                 .build();
                         partitionDataOld = new TablesawParquetReader().read(readOptions); // load the data
                     } else {
-                        partitionDataOld = loadedPartition.getData() != null ? loadedPartition.getData().copy() : null;
+                        partitionDataOld = loadedPartition.getData() != null ? TableCopyUtility.fastTableCopy(loadedPartition.getData()) : null;
                     }
                 }
 

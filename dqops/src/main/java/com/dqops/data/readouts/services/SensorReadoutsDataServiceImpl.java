@@ -31,6 +31,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -90,7 +91,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         Table filteredTableByDataGroup = filteredTableWithAllDataGroups;
         if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
             TextColumn dataGroupNameFilteredColumn = filteredTableWithAllDataGroups.textColumn(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTableByDataGroup = filteredTableWithAllDataGroups.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            filteredTableByDataGroup = TableCopyUtility.copyTableFiltered(filteredTableWithAllDataGroups,
+                    dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
         }
 
         if (filteredTableByDataGroup.isEmpty()) {
@@ -242,7 +244,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 
@@ -296,7 +298,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             rowSelection = rowSelection.and(tableComparisonNameColumn.isEqualTo(tableComparison));
         }
 
-        Table filteredTable = sourceTable.where(rowSelection);
+        Table filteredTable = TableCopyUtility.copyTableFiltered(sourceTable, rowSelection);
         return filteredTable;
     }
 

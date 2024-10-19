@@ -32,6 +32,7 @@ import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.userhome.UserHome;
+import com.dqops.utils.tables.TableCopyUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -107,7 +108,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
                     CheckSearchFilters checkSearchFiltersForSingleCheck = CheckSearchFilters.fromCheckSpecInstance(targetTableSpec, checkSpec);
                     Selection checkResultsSelection = checkResultsAllChecks.findResults(checkSearchFiltersForSingleCheck);
 
-                    Table checkResultsForOneCheck = allResults.where(checkResultsSelection);
+                    Table checkResultsForOneCheck = TableCopyUtility.copyTableFiltered(allResults, checkResultsSelection);
                     if (checkResultsForOneCheck.isEmpty()) {
                         continue; // no results for this check
                     }
@@ -204,7 +205,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
                     CheckSearchFilters checkSearchFiltersForSingleCheck = CheckSearchFilters.fromCheckSpecInstance(targetTableSpec, checkSpec);
                     Selection checkResultsSelection = checkResultsAllChecks.findResults(checkSearchFiltersForSingleCheck);
 
-                    Table checkResultsForOneCheck = allResults.where(checkResultsSelection);
+                    Table checkResultsForOneCheck = TableCopyUtility.copyTableFiltered(allResults, checkResultsSelection);
                     CheckResultsNormalizedResult checkResultsSingleCheck = new CheckResultsNormalizedResult(checkResultsForOneCheck, false);
 
                     checkSpec.decreaseCheckSensitivity(checkResultsSingleCheck);

@@ -127,11 +127,11 @@ public class TableMergeUtility {
             Selection notInSelection = currentIdColumnString.isNotIn(idsInNewResultsStrings);
 
             if (notInSelection.size() < currentIdColumnString.size()) {
-                resultTable = currentResults.where(notInSelection);
+                resultTable = TableCopyUtility.copyTableFiltered(currentResults, notInSelection);
                 newResultsThatAreUpdates = newResultIdTextColumn.isIn(idsInCurrentResults);
             }
             else {
-                resultTable = currentResults.copy();
+                resultTable = TableCopyUtility.fastTableCopy(currentResults);
             }
         }
         else if (currentIdColumn instanceof LongColumn) {
@@ -143,11 +143,11 @@ public class TableMergeUtility {
             Selection notInSelection = currentIdColumnLong.isNotIn(idsInNewResultsLong);
 
             if (notInSelection.size() < currentIdColumnLong.size()) {
-                resultTable = currentResults.where(notInSelection);
+                resultTable = TableCopyUtility.copyTableFiltered(currentResults, notInSelection);
                 newResultsThatAreUpdates = newResultsIdColumnLong.isIn(idsInCurrentResultsLong);
             }
             else {
-                resultTable = currentResults.copy();
+                resultTable = TableCopyUtility.fastTableCopy(currentResults);
             }
         } else {
             throw new DqoRuntimeException("Unsupported column type " + newResultIdColumn.type());

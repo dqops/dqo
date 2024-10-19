@@ -5,3 +5,5 @@
 * ClickHouse connector
 * Small UI fixes
 * Performance improvements in the anomaly detection code
+* Other performance optimizations
+

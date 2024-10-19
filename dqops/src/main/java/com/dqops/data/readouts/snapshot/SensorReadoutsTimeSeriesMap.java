@@ -19,6 +19,7 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.data.storage.ParquetPartitionId;
 import com.dqops.utils.tables.TableColumnUtility;
+import com.dqops.utils.tables.TableCopyUtility;
 import lombok.Data;
 import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Table;
@@ -115,7 +116,7 @@ public class SensorReadoutsTimeSeriesMap {
                 continue;
             }
 
-            Table filteredPartitionRows = partitionDataTable.where(checkHashRows.and(groupHashRows));
+            Table filteredPartitionRows = TableCopyUtility.copyTableFiltered(partitionDataTable, checkHashRows.and(groupHashRows));
             Table sortedTimeSeriesTable = filteredPartitionRows.sortOn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
             if (allTimeSeriesData == null) {
