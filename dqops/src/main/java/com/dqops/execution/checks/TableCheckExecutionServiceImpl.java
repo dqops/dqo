@@ -90,6 +90,7 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -225,6 +226,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
 
         SensorReadoutsSnapshot outputSensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
+        outputSensorReadoutsSnapshot.ensureMonthsAreLoaded(LocalDate.now(), LocalDate.now()); // just load the current month, so the historic cache will not make another call
+        SensorReadoutsSnapshot historicReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName, physicalTableName,
+                SensorReadoutsColumnNames.SENSOR_READOUT_COLUMN_NAMES_HISTORIC_DATA, userDomainIdentity);
 
         Table allNormalizedSensorResultsTable = outputSensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
         IntColumn severityColumnTemporary = IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
@@ -244,13 +248,13 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         List<AbstractCheckSpec<?, ?, ?, ?>> singleTableChecks = checks.stream().filter(c -> !c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
-                checkExecutionSummary, singleTableChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
+                checkExecutionSummary, singleTableChecks, tableSpec, historicReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksForErrorSampling, collectErrorSamples);
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
         executeTableComparisonChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, executionTarget, jobCancellationToken,
-                checkExecutionSummary, tableComparisonChecks, tableSpec, outputSensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
+                checkExecutionSummary, tableComparisonChecks, tableSpec, historicReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
 
         if (outputSensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
