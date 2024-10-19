@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   CheckModel,
   CheckModelDefaultSeverityEnum,
@@ -15,11 +16,12 @@ import {
   TimeWindowFilterParameters
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { JobApiClient } from '../../services/apiClient';
-import { CheckTypes } from '../../shared/routes';
+import { CheckTypes, ROUTES } from '../../shared/routes';
 import { getLocalDateInUserTimeZone, useDecodedParams } from '../../utils';
 import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
@@ -103,6 +105,15 @@ const CheckListItem = ({
   const [enabledType, setEnabledType] = useState<
     'error' | 'warning' | 'fatal' | ''
   >('');
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsTooltipVisible(false);
+  };
 
   const [refreshCheckObject, setRefreshCheckObject] = useState<
     IRefetchResultsProps | undefined
@@ -390,6 +401,22 @@ const CheckListItem = ({
     }
   }, [enabledType]);
 
+  const history = useHistory();
+  const openDataQaulityPolicy = () => {
+    const url = ROUTES.DEFAULT_CHECKS_PATTERNS(column ? 'column' : 'table');
+    dispatch(
+      addFirstLevelTab({
+        url,
+        value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(),
+        label: (column ? 'Column' : 'Table') + '-level quality policy',
+        state: {
+          type: column ? 'column' : 'table'
+        }
+      })
+    );
+    history.push(url);
+  };
+
   return (
     <>
       <tr
@@ -400,8 +427,8 @@ const CheckListItem = ({
           'h-18'
         )}
       >
-        <td className="pl-4 pr-8 min-w-133 max-w-133 h-full ">
-          <div className="flex space-x-1 items-center">
+        <td className="pl-4 pr-8 min-w-133 max-w-133 !h-full ">
+          <div className="flex space-x-1 items-center !h-full relative">
             {isAlreadyDeleted !== true &&
               (mode ? (
                 <div className="w-5 h-5 block items-center">
@@ -410,26 +437,41 @@ const CheckListItem = ({
                   )}
                 </div>
               ) : (
-                <Tooltip
-                  content={
-                    check?.configured ? (
-                      'Check activated manually or with rule miner'
-                    ) : check?.default_check ? (
-                      <div>Check activated with data quality policy</div>
-                    ) : (
-                      'Deactivated check'
-                    )
-                  }
-                  // add link to data policies
+                <div
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative"
                 >
-                  <div>
-                    <Switch
-                      checked={!!check?.configured}
-                      checkedByDefault={!!check?.default_check}
-                      onChange={onChangeConfigured}
-                    />
-                  </div>
-                </Tooltip>
+                  <Tooltip
+                    open={isTooltipVisible} // Control the visibility with state
+                    content={
+                      check?.configured ? (
+                        'Check activated manually or with rule miner'
+                      ) : check?.default_check ? (
+                        <div className="flex items-center gap-x-1">
+                          Check activated with
+                          <div
+                            className="cursor-pointer underline"
+                            onClick={openDataQaulityPolicy}
+                          >
+                            data quality policy
+                          </div>
+                        </div>
+                      ) : (
+                        'Deactivated check'
+                      )
+                    }
+                    className="absolute max-w-80 py-2 px-2"
+                  >
+                    <div>
+                      <Switch
+                        checked={!!check?.configured}
+                        checkedByDefault={!!check?.default_check}
+                        onChange={onChangeConfigured}
+                      />
+                    </div>
+                  </Tooltip>
+                </div>
               ))}
             {isAlreadyDeleted !== true && (
               <Tooltip
